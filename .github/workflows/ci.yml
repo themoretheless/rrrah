@@ -1,0 +1,105 @@
+name: ci
+on:
+  push:
+  pull_request:
+  schedule:
+    # Keep the advisory database fresh even when the repository is quiet.
+    - cron: "17 3 * * 1"
+  workflow_dispatch:
+env:
+  CARGO_TERM_COLOR: always
+  RUSTFLAGS: "-Dwarnings"
+  RUSTDOCFLAGS: "-Dwarnings"
+permissions:
+  contents: read
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with: { components: rustfmt, clippy }
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo fmt --all -- --check
+      - run: cargo metadata --locked --format-version 1 >/dev/null
+      - run: cargo check --workspace --all-targets --all-features --locked
+      - run: cargo clippy --workspace --all-targets --all-features --locked -- -D warnings
+      - run: cargo test --workspace --all-targets --all-features --locked
+      - run: cargo doc --workspace --all-features --no-deps
+      - run: python3 -m unittest discover -s scripts -p 'test_*.py'
+
+  msrv:
+    name: MSRV (Rust 1.89)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.89.0
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo check --workspace --all-targets --all-features --locked
+      - run: cargo test --workspace --all-targets --all-features --locked
+
+  fixtures:
+    runs-on: ubuntu-latest
+    needs: checks
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - run: RRRAH_REQUIRE_FIXTURES=1 scripts/fetch-fixtures.sh --verify-only
+      - run: cargo test -p rrrah-decode --locked
+
+  security:
+    name: Dependency policy (fail closed)
+    runs-on: ubuntu-latest
+    # This job is intentionally independent from `checks`: tests and benchmark
+    # schema checks remain visible when the advisory gate is red.
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-audit
+      - name: Record security toolchain
+        shell: bash
+        run: |
+          {
+            rustc -Vv
+            cargo -V
+            cargo audit --version
+            printf 'cargo-deny action rust-version: 1.89.0\n'
+            printf '\nAdvisory database is recorded in cargo-audit.json.\n'
+          } > security-toolchain.txt
+      - name: cargo-deny (advisories, bans, licenses, sources)
+        id: deny
+        continue-on-error: true
+        uses: EmbarkStudios/cargo-deny-action@v2
+        with:
+          rust-version: "1.89.0"
+          command: check advisories bans licenses sources
+      - name: cargo-audit (RustSec)
+        id: audit
+        continue-on-error: true
+        shell: bash
+        run: |
+          set +e
+          cargo audit --deny warnings --json | tee cargo-audit.json
+          status=${PIPESTATUS[0]}
+          echo "cargo_audit_exit=${status}" >> "$GITHUB_STEP_SUMMARY"
+          exit "$status"
+      - name: Upload security reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-security-${{ github.run_id }}
+          path: |
+            cargo-audit.json
+            security-toolchain.txt
+          if-no-files-found: warn
+      - name: Enforce dependency gate
+        if: always()
+        shell: bash
+        run: |
+          if [[ "${{ steps.deny.outcome }}" != "success" || "${{ steps.audit.outcome }}" != "success" ]]; then
+            echo "Dependency policy failed. Do not add advisory ignores to make CI green." >&2
+            exit 1
+          fi

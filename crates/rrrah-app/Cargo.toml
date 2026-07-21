@@ -1,0 +1,24 @@
+[package]
+name = "rrrah"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+anyhow.workspace = true
+clap.workspace = true
+crossbeam-channel.workspace = true
+directories.workspace = true
+env_logger.workspace = true
+log.workspace = true
+pollster.workspace = true
+rrrah-cache = { path = "../rrrah-cache", version = "0.1.0" }
+rrrah-core = { path = "../rrrah-core", version = "0.1.0" }
+rrrah-decode = { path = "../rrrah-decode", version = "0.1.0" }
+rrrah-gpu = { path = "../rrrah-gpu", version = "0.1.0" }
+wgpu.workspace = true
+winit.workspace = true
+
+[lints]
+workspace = true

@@ -1,0 +1,23 @@
+[package]
+name = "rrrah-gpu"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+bytemuck.workspace = true
+log.workspace = true
+rrrah-core = { path = "../rrrah-core", version = "0.1.0" }
+thiserror.workspace = true
+wgpu.workspace = true
+
+[dev-dependencies]
+pollster.workspace = true
+# Keep shader validation on the same Naga major/minor as wgpu. This test is
+# backend-independent and catches WGSL/host-layout drift without requiring a
+# physical adapter.
+naga = { version = "=30.0.0", features = ["wgsl-in"] }
+
+[lints]
+workspace = true
