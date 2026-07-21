@@ -38,6 +38,8 @@ use winit::{
     window::{Window, WindowId},
 };
 
+mod gallery;
+
 #[derive(Debug, Parser)]
 #[command(name = "rrrah", about = "Fast full-RAW CR2/DNG viewer")]
 struct Cli {
@@ -430,7 +432,7 @@ impl App {
             return;
         }
         if file_type.is_dir() {
-            let files = scan_raw_folder(&path);
+            let files = gallery::scan_folder(&path);
             if files.is_empty() {
                 self.set_status(format!("no CR2/CR3/DNG files in {}", path.display()));
                 return;
@@ -440,7 +442,7 @@ impl App {
         } else if file_type.is_file() && is_supported_raw(&path) {
             self.gallery = path
                 .parent()
-                .map(scan_raw_folder)
+                .map(gallery::scan_folder)
                 .filter(|files| !files.is_empty())
                 .unwrap_or_else(|| vec![path.clone()]);
             let index = self
@@ -506,24 +508,6 @@ fn is_supported_raw(path: &Path) -> bool {
     path.extension()
         .and_then(|extension| extension.to_str())
         .is_some_and(|extension| matches!(extension.to_ascii_lowercase().as_str(), "cr2" | "cr3" | "dng"))
-}
-
-fn scan_raw_folder(path: &Path) -> Vec<PathBuf> {
-    const MAX_GALLERY_ITEMS: usize = 10_000;
-    let Ok(entries) = fs::read_dir(path) else {
-        return Vec::new();
-    };
-    let mut files = entries
-        .filter_map(Result::ok)
-        .filter_map(|entry| {
-            let candidate = entry.path();
-            let metadata = fs::symlink_metadata(&candidate).ok()?;
-            (metadata.file_type().is_file() && is_supported_raw(&candidate)).then_some(candidate)
-        })
-        .collect::<Vec<_>>();
-    files.sort_by_cached_key(|candidate| display_name(candidate).to_ascii_lowercase());
-    files.truncate(MAX_GALLERY_ITEMS);
-    files
 }
 
 fn display_name(path: &Path) -> String {

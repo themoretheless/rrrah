@@ -334,6 +334,38 @@ impl DecodedMosaic {
     pub fn byte_len(&self) -> usize {
         self.pixels.len() * size_of::<u16>()
     }
+
+    /// Produce a compact RGBA8 thumbnail using a deterministic box filter.
+    /// This is intentionally CPU-only and allocation-bounded; callers can run
+    /// it on the decode pool and upload the result as a small GPU texture.
+    pub fn thumbnail_rgba8(&self, max_dimension: u32) -> Vec<u8> {
+        let max_dimension = max_dimension.max(1);
+        let scale = (self.metadata.width.max(self.metadata.height) as f32 / max_dimension as f32).max(1.0);
+        let out_w = ((self.metadata.width as f32 / scale).ceil() as u32).max(1);
+        let out_h = ((self.metadata.height as f32 / scale).ceil() as u32).max(1);
+        let mut out = vec![0_u8; (out_w as usize) * (out_h as usize) * 4];
+        let white = self
+            .metadata
+            .white_level
+            .0
+            .first()
+            .copied()
+            .unwrap_or(u16::MAX as f32)
+            .max(1.0);
+        let channels = self.metadata.components_per_pixel as usize;
+        for oy in 0..out_h {
+            let y0 = ((oy as f32 * scale) as u32).min(self.metadata.height.saturating_sub(1));
+            for ox in 0..out_w {
+                let x0 = ((ox as f32 * scale) as u32).min(self.metadata.width.saturating_sub(1));
+                let src = (y0 as usize * self.metadata.width as usize + x0 as usize) * channels;
+                let value = self.pixels.get(src).copied().unwrap_or(0) as f32 / white;
+                let byte = (value.clamp(0.0, 1.0) * 255.0 + 0.5) as u8;
+                let dst = (oy as usize * out_w as usize + ox as usize) * 4;
+                out[dst..dst + 4].copy_from_slice(&[byte, byte, byte, 255]);
+            }
+        }
+        out
+    }
 }
 
 #[derive(Debug, Error, Clone, PartialEq)]
@@ -542,6 +574,21 @@ mod tests {
             result,
             Err(FrameError::InvalidPixelCount { .. } | FrameError::DimensionOverflow)
         ));
+    }
+
+    #[test]
+    fn thumbnail_is_bounded_and_rgba() {
+        let mut metadata = valid_metadata();
+        metadata.width = 4;
+        metadata.height = 2;
+        let mosaic = DecodedMosaic::new(
+            metadata,
+            Arc::from([0_u16, 100, 200, 400, 800, 1000, 2000, 4000].as_slice()),
+        )
+        .unwrap();
+        let thumb = mosaic.thumbnail_rgba8(2);
+        assert_eq!(thumb.len(), 2 * 1 * 4);
+        assert!(thumb.chunks_exact(4).all(|pixel| pixel[3] == 255));
     }
 
     #[test]
