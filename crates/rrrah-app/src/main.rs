@@ -51,7 +51,7 @@ struct Cli {
     #[arg(long)]
     cache_dir: Option<PathBuf>,
     #[arg(value_name = "RAW")]
-    path: PathBuf,
+    path: Option<PathBuf>,
 }
 
 #[derive(Debug)]
@@ -72,12 +72,16 @@ enum LoadEvent {
 fn main() -> Result<()> {
     env_logger::init();
     let cli = Cli::parse();
-    if !cli.path.is_file() {
-        bail!("RAW path is not a regular file: {}", cli.path.display());
-    }
     let cache_root = cli.cache_dir.or_else(default_cache_dir);
     if cli.inspect {
-        inspect(&cli.path, cache_root.as_deref(), cli.no_cache)
+        let path = cli
+            .path
+            .as_ref()
+            .ok_or_else(|| anyhow::anyhow!("--inspect requires a RAW path"))?;
+        if !path.is_file() {
+            bail!("RAW path is not a regular file: {}", path.display());
+        }
+        inspect(path, cache_root.as_deref(), cli.no_cache)
     } else {
         run_viewer(cli.path, cache_root, cli.no_cache)
     }
@@ -141,22 +145,34 @@ fn print_metadata(mosaic: &DecodedMosaic, cache_hit: bool, decode_time: Duration
     println!("embedded JPEG is not used by this path");
 }
 
-fn run_viewer(path: PathBuf, cache_root: Option<PathBuf>, no_cache: bool) -> Result<()> {
+fn run_viewer(path: Option<PathBuf>, cache_root: Option<PathBuf>, no_cache: bool) -> Result<()> {
     let (sender, receiver) = unbounded();
     let event_loop = EventLoop::<WakeEvent>::with_user_event()
         .build()
         .context("create event loop")?;
     let proxy = event_loop.create_proxy();
-    spawn_load(
-        path.clone(),
-        cache_root.clone(),
-        no_cache,
-        0,
-        sender.clone(),
-        proxy.clone(),
-    );
+    if let Some(path) = &path {
+        if !path.is_file() {
+            bail!("RAW path is not a regular file: {}", path.display());
+        }
+        spawn_load(
+            path.clone(),
+            cache_root.clone(),
+            no_cache,
+            0,
+            sender.clone(),
+            proxy.clone(),
+        );
+    }
     event_loop.set_control_flow(ControlFlow::Wait);
-    let mut app = App::new(path, cache_root, no_cache, receiver, sender, proxy);
+    let mut app = App::new(
+        path.unwrap_or_default(),
+        cache_root,
+        no_cache,
+        receiver,
+        sender,
+        proxy,
+    );
     event_loop.run_app(&mut app).context("run event loop")?;
     Ok(())
 }
