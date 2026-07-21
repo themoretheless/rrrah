@@ -164,11 +164,10 @@ fn percentile(samples: &[f64], fraction: f64) -> f64 {
 }
 
 fn synthetic_mosaic(width: u32, height: u32) -> Result<DecodedMosaic, Box<dyn std::error::Error>> {
-    let pixels = Arc::from(
+    let pixels = Arc::new(
         (0..width.checked_mul(height).ok_or("synthetic dimensions overflow")?)
             .map(|index| ((index.wrapping_mul(13)) % 16_384) as u16)
-            .collect::<Vec<_>>()
-            .into_boxed_slice(),
+            .collect::<Vec<_>>(),
     );
     let metadata = RawMetadata {
         make: "synthetic".into(),

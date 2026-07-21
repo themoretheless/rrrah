@@ -1,4 +1,7 @@
-use std::{collections::HashMap, hash::Hash};
+use std::{
+    collections::{HashMap, HashSet},
+    hash::Hash,
+};
 
 #[derive(Debug)]
 struct Entry<V> {
@@ -18,6 +21,10 @@ pub struct WeightedLru<K, V> {
     capacity: u64,
     resident: u64,
     clock: u64,
+    /// Entries protected from eviction while they are visible/being decoded.
+    /// This is intentionally separate from recency so background prefetch
+    /// cannot evict the current frame under memory pressure.
+    protected: HashSet<K>,
 }
 
 impl<K, V> WeightedLru<K, V>
@@ -30,6 +37,7 @@ where
             capacity,
             resident: 0,
             clock: 0,
+            protected: HashSet::new(),
         }
     }
 
@@ -47,6 +55,21 @@ where
 
     pub fn is_empty(&self) -> bool {
         self.entries.is_empty()
+    }
+
+    /// Protect an already resident key from eviction. Returns whether the key
+    /// exists; callers may pin the current frame before scheduling prefetch.
+    pub fn pin(&mut self, key: &K) -> bool {
+        if self.entries.contains_key(key) {
+            self.protected.insert(key.clone());
+            true
+        } else {
+            false
+        }
+    }
+
+    pub fn unpin(&mut self, key: &K) {
+        self.protected.remove(key);
     }
 
     pub fn get(&mut self, key: &K) -> Option<&V> {
@@ -83,6 +106,34 @@ where
         true
     }
 
+    /// Insert a speculative/background value. Pinned entries are never
+    /// evicted; if all resident bytes are pinned, the speculative value is
+    /// rejected instead of displacing the visible frame.
+    pub fn insert_prefetch(&mut self, key: K, value: V, weight: u64) -> bool {
+        if weight > self.capacity {
+            return false;
+        }
+        self.clock = self.clock.wrapping_add(1);
+        if let Some(previous) = self.entries.remove(&key) {
+            self.resident = self.resident.saturating_sub(previous.weight);
+        }
+        while self.resident.saturating_add(weight) > self.capacity {
+            if self.pop_lru_unprotected().is_none() {
+                return false;
+            }
+        }
+        self.resident += weight;
+        self.entries.insert(
+            key,
+            Entry {
+                value,
+                weight,
+                last_used: self.clock,
+            },
+        );
+        true
+    }
+
     pub fn remove(&mut self, key: &K) -> Option<V> {
         let entry = self.entries.remove(key)?;
         self.resident = self.resident.saturating_sub(entry.weight);
@@ -93,6 +144,18 @@ where
         let key = self
             .entries
             .iter()
+            .min_by_key(|(_, entry)| entry.last_used)
+            .map(|(key, _)| key.clone())?;
+        let entry = self.entries.remove(&key)?;
+        self.resident = self.resident.saturating_sub(entry.weight);
+        Some((key, entry.value))
+    }
+
+    fn pop_lru_unprotected(&mut self) -> Option<(K, V)> {
+        let key = self
+            .entries
+            .iter()
+            .filter(|(k, _)| !self.protected.contains(*k))
             .min_by_key(|(_, entry)| entry.last_used)
             .map(|(key, _)| key.clone())?;
         let entry = self.entries.remove(&key)?;
@@ -123,5 +186,16 @@ mod tests {
         let mut cache = WeightedLru::new(3);
         assert!(!cache.insert("large", 1, 4));
         assert!(cache.is_empty());
+    }
+
+    #[test]
+    fn prefetch_does_not_evict_pinned_visible_frame() {
+        let mut cache = WeightedLru::new(10);
+        assert!(cache.insert("current", 1, 6));
+        assert!(cache.pin(&"current"));
+        assert!(cache.insert_prefetch("next", 2, 4));
+        assert!(cache.insert_prefetch("far", 3, 4));
+        assert_eq!(cache.get(&"current"), Some(&1));
+        assert!(cache.get(&"next").is_none());
     }
 }

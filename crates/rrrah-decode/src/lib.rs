@@ -196,8 +196,8 @@ fn adapt_rawler_image(image: RawImage) -> Result<DecodedMosaic, DecodeError> {
         orientation: map_orientation(image.orientation),
     };
 
-    let pixels: Arc<[u16]> = match image.data {
-        RawImageData::Integer(data) => Arc::from(data.into_boxed_slice()),
+    let pixels = match image.data {
+        RawImageData::Integer(data) => Arc::new(data),
         RawImageData::Float(_) => return Err(DecodeError::UnsupportedFloatRaw),
     };
     DecodedMosaic::new(metadata, pixels).map_err(DecodeError::InvalidFrame)

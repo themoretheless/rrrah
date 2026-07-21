@@ -16,18 +16,21 @@ use std::{
     fs,
     path::{Path, PathBuf},
     process::Command,
-    sync::Arc,
+    sync::{
+        Arc,
+        atomic::{AtomicU64, Ordering},
+    },
     thread,
     time::{Duration, Instant},
 };
 
 use anyhow::{Context, Result, bail};
 use clap::Parser;
-use crossbeam_channel::{Receiver, Sender, TryRecvError, unbounded};
+use crossbeam_channel::{Receiver, Sender, TryRecvError, bounded, unbounded};
 use directories::ProjectDirs;
 use rrrah_cache::{CacheKey, DiskMosaicCache, SourceFingerprint};
 use rrrah_core::DecodedMosaic;
-use rrrah_decode::{DecodeOutput, RawDecoder, RawlerDecoder};
+use rrrah_decode::{DecodeOutput, DecodeRequest, GenerationToken, RawDecoder, RawlerDecoder};
 use rrrah_gpu::{HudRenderer, RawRenderer, ViewParameters};
 use winit::{
     application::ApplicationHandler,
@@ -38,7 +41,12 @@ use winit::{
     window::{Window, WindowId},
 };
 
+mod cache_writer;
+mod decode_gate;
 mod gallery;
+
+use cache_writer::CacheWriter;
+use decode_gate::{DecodeGate, ForegroundTicket};
 
 #[derive(Debug, Parser)]
 #[command(name = "rrrah", about = "Fast full-RAW CR2/DNG viewer")]
@@ -157,14 +165,18 @@ fn run_viewer(path: Option<PathBuf>, cache_root: Option<PathBuf>, no_cache: bool
         if !path.is_file() {
             bail!("RAW path is not a regular file: {}", path.display());
         }
-        spawn_load(
-            path.clone(),
-            cache_root.clone(),
-            no_cache,
-            0,
-            sender.clone(),
-            proxy.clone(),
-        );
+    }
+    let decode_gate = Arc::new(DecodeGate::new());
+    let foreground_loader = ForegroundLoader::new(
+        cache_root.clone(),
+        no_cache,
+        sender,
+        proxy,
+        Arc::clone(&decode_gate),
+    )
+    .context("start foreground RAW worker")?;
+    if let Some(path) = &path {
+        foreground_loader.submit_initial(path.clone())?;
     }
     event_loop.set_control_flow(ControlFlow::Wait);
     let mut app = App::new(
@@ -172,8 +184,8 @@ fn run_viewer(path: Option<PathBuf>, cache_root: Option<PathBuf>, no_cache: bool
         cache_root,
         no_cache,
         receiver,
-        sender,
-        proxy,
+        foreground_loader,
+        decode_gate,
     );
     event_loop.run_app(&mut app).context("run event loop")?;
     Ok(())
@@ -184,99 +196,221 @@ enum WakeEvent {
     LoadProgress,
 }
 
-fn spawn_load(
+#[derive(Debug)]
+struct LoadRequest {
     path: PathBuf,
-    cache_root: Option<PathBuf>,
-    no_cache: bool,
     generation: u64,
-    sender: Sender<LoadEvent>,
-    proxy: EventLoopProxy<WakeEvent>,
+    foreground: ForegroundTicket,
+}
+
+/// One persistent foreground decoder with a latest-wins queue. Rawler cannot
+/// stop during entropy decode, so serializing requests is essential: rapid
+/// navigation keeps at most one active decode and one pending path instead of
+/// spawning an unbounded set of competing decoder threads.
+struct ForegroundLoader {
+    tx: Sender<LoadRequest>,
+    pending: Receiver<LoadRequest>,
+    generation: Arc<AtomicU64>,
+    decode_gate: Arc<DecodeGate>,
+}
+
+impl ForegroundLoader {
+    fn new(
+        cache_root: Option<PathBuf>,
+        no_cache: bool,
+        sender: Sender<LoadEvent>,
+        proxy: EventLoopProxy<WakeEvent>,
+        decode_gate: Arc<DecodeGate>,
+    ) -> std::io::Result<Self> {
+        let (tx, requests) = bounded::<LoadRequest>(1);
+        let pending = requests.clone();
+        let generation = Arc::new(AtomicU64::new(0));
+        let worker_generation = Arc::clone(&generation);
+        thread::Builder::new()
+            .name("rrrah-raw-decode".into())
+            .spawn(move || {
+                let cache = cache_root.filter(|_| !no_cache).map(DiskMosaicCache::new);
+                let cache_writer = cache.as_ref().and_then(|cache| {
+                    CacheWriter::spawn(cache.clone(), Arc::clone(&worker_generation))
+                        .map_err(|error| log::warn!("failed to start cache write-back worker: {error}"))
+                        .ok()
+                });
+                while let Ok(request) = requests.recv() {
+                    execute_load(
+                        request,
+                        cache.as_ref(),
+                        cache_writer.as_ref(),
+                        Arc::clone(&worker_generation),
+                        &sender,
+                        &proxy,
+                    );
+                }
+            })?;
+        Ok(Self {
+            tx,
+            pending,
+            generation,
+            decode_gate,
+        })
+    }
+
+    fn submit_initial(&self, path: PathBuf) -> Result<()> {
+        self.replace_pending(LoadRequest {
+            path,
+            generation: self.current_generation(),
+            foreground: self.decode_gate.request_foreground(),
+        })
+    }
+
+    fn submit(&self, path: PathBuf) -> Result<u64> {
+        let generation = self.generation.fetch_add(1, Ordering::AcqRel).wrapping_add(1);
+        self.replace_pending(LoadRequest {
+            path,
+            generation,
+            foreground: self.decode_gate.request_foreground(),
+        })?;
+        Ok(generation)
+    }
+
+    fn current_generation(&self) -> u64 {
+        self.generation.load(Ordering::Acquire)
+    }
+
+    fn replace_pending(&self, request: LoadRequest) -> Result<()> {
+        while self.pending.try_recv().is_ok() {}
+        self.tx
+            .try_send(request)
+            .map_err(|error| anyhow::anyhow!("foreground RAW queue unavailable: {error}"))
+    }
+}
+
+fn execute_load(
+    request: LoadRequest,
+    cache: Option<&DiskMosaicCache>,
+    cache_writer: Option<&CacheWriter>,
+    load_generation: Arc<AtomicU64>,
+    sender: &Sender<LoadEvent>,
+    proxy: &EventLoopProxy<WakeEvent>,
 ) {
-    let worker_sender = sender.clone();
-    let worker_proxy = proxy.clone();
-    let spawn_result = thread::Builder::new()
-        .name("rrrah-raw-decode".into())
-        .spawn(move || {
-            let started = Instant::now();
-            let cache = cache_root.map(DiskMosaicCache::new);
-            let fingerprint = if no_cache {
-                None
-            } else {
-                match SourceFingerprint::from_path(&path) {
-                    Ok(value) => Some(value),
-                    Err(error) => {
-                        let _ = worker_sender.send(LoadEvent::Failed {
-                            generation,
-                            error: error.to_string(),
-                        });
-                        let _ = worker_proxy.send_event(WakeEvent::LoadProgress);
-                        return;
-                    }
-                }
-            };
-            if let (Some(cache), Some(fingerprint)) = (&cache, &fingerprint) {
-                let key = CacheKey::for_mosaic(fingerprint, 0);
-                match cache.load(key) {
-                    Ok(Some(hit)) => {
-                        let _ = worker_sender.send(LoadEvent::Ready {
-                            generation,
-                            mosaic: hit.mosaic,
-                            cache_hit: true,
-                            elapsed: started.elapsed(),
-                            decode: None,
-                        });
-                        let _ = worker_proxy.send_event(WakeEvent::LoadProgress);
-                        return;
-                    }
-                    Ok(None) => {}
-                    Err(error) => log::warn!("ignoring corrupt/unreadable cache: {error}"),
-                }
+    let LoadRequest {
+        path,
+        generation,
+        foreground,
+    } = request;
+    let token = GenerationToken::new(load_generation, generation);
+    if token.is_cancelled() {
+        return;
+    }
+    let started = Instant::now();
+    let fingerprint = match cache {
+        Some(_) => match SourceFingerprint::from_path(&path) {
+            Ok(value) => Some(value),
+            Err(error) => {
+                publish_load_failure(generation, error.to_string(), &token, sender, proxy);
+                return;
             }
-            let output = match RawlerDecoder.decode(&rrrah_decode::DecodeRequest::new(&path)) {
-                Ok(output) => output,
-                Err(error) => {
-                    let _ = worker_sender.send(LoadEvent::Failed {
-                        generation,
-                        error: error.to_string(),
-                    });
-                    let _ = worker_proxy.send_event(WakeEvent::LoadProgress);
+        },
+        None => None,
+    };
+    if token.is_cancelled() {
+        return;
+    }
+    if let (Some(cache), Some(fingerprint)) = (cache, &fingerprint) {
+        let key = CacheKey::for_mosaic(fingerprint, 0);
+        match cache.load(key) {
+            Ok(Some(hit)) => {
+                if token.is_cancelled() {
                     return;
                 }
-            };
-            if let (Some(cache), Some(fingerprint)) = (&cache, &fingerprint) {
-                let key = CacheKey::for_mosaic(fingerprint, 0);
-                if let Err(error) = cache.store(key, &output.mosaic) {
-                    log::warn!("decoded RAW is usable but cache write failed: {error}");
-                }
+                publish_load_event(
+                    LoadEvent::Ready {
+                        generation,
+                        mosaic: hit.mosaic,
+                        cache_hit: true,
+                        elapsed: started.elapsed(),
+                        decode: None,
+                    },
+                    sender,
+                    proxy,
+                );
+                return;
             }
-            let _ = worker_sender.send(LoadEvent::Ready {
-                generation,
-                mosaic: output.mosaic.clone(),
-                cache_hit: false,
-                elapsed: started.elapsed(),
-                decode: Some(output),
-            });
-            let _ = worker_proxy.send_event(WakeEvent::LoadProgress);
-        });
-    if let Err(error) = spawn_result {
-        let _ = sender.send(LoadEvent::Failed {
+            Ok(None) => {}
+            Err(error) => log::warn!("ignoring corrupt/unreadable cache: {error}"),
+        }
+    }
+    // This wait runs only on the persistent foreground worker.  The UI has
+    // already published foreground priority through the request ticket and
+    // remains free to redraw or replace the pending request.
+    let Some(decode_permit) = foreground.acquire_decode(|| token.is_cancelled()) else {
+        return;
+    };
+    if token.is_cancelled() {
+        return;
+    }
+    let mut decode_request = DecodeRequest::new(&path);
+    decode_request.cancellation = Some(token.clone());
+    let output = match RawlerDecoder.decode(&decode_request) {
+        Ok(output) => output,
+        Err(error) => {
+            publish_load_failure(generation, error.to_string(), &token, sender, proxy);
+            return;
+        }
+    };
+    // Cache persistence is intentionally outside the heavy-decode permit.
+    // A foreground request must never wait behind an fsync; the bounded
+    // write-back worker serializes persistence independently.
+    drop(decode_permit);
+    if token.is_cancelled() {
+        return;
+    }
+    let write_back = fingerprint
+        .as_ref()
+        .map(|fingerprint| (CacheKey::for_mosaic(fingerprint, 0), output.mosaic.clone()));
+    let elapsed = started.elapsed();
+    // Publish the usable frame before enqueueing persistence. Even an already
+    // active atomic store can never delay this Ready event or the next decode.
+    publish_load_event(
+        LoadEvent::Ready {
             generation,
-            error: format!("failed to spawn RAW worker: {error}"),
-        });
+            mosaic: output.mosaic.clone(),
+            cache_hit: false,
+            elapsed,
+            decode: Some(output),
+        },
+        sender,
+        proxy,
+    );
+    if let (Some(cache_writer), Some((key, mosaic))) = (cache_writer, write_back) {
+        let _ = cache_writer.submit(generation, key, mosaic);
+    }
+}
+
+fn publish_load_failure(
+    generation: u64,
+    error: String,
+    token: &GenerationToken,
+    sender: &Sender<LoadEvent>,
+    proxy: &EventLoopProxy<WakeEvent>,
+) {
+    if !token.is_cancelled() {
+        publish_load_event(LoadEvent::Failed { generation, error }, sender, proxy);
+    }
+}
+
+fn publish_load_event(event: LoadEvent, sender: &Sender<LoadEvent>, proxy: &EventLoopProxy<WakeEvent>) {
+    if sender.send(event).is_ok() {
         let _ = proxy.send_event(WakeEvent::LoadProgress);
     }
 }
 
 struct App {
     path: PathBuf,
-    cache_root: Option<PathBuf>,
-    no_cache: bool,
     receiver: Receiver<LoadEvent>,
-    sender: Sender<LoadEvent>,
-    proxy: EventLoopProxy<WakeEvent>,
-    generation: u64,
+    foreground_loader: ForegroundLoader,
     gallery: Vec<PathBuf>,
     gallery_index: Option<usize>,
+    raw_prefetcher: gallery::RawPrefetcher,
     window: Option<Arc<Window>>,
     gpu: Option<GpuState>,
     telemetry_window: Option<Arc<Window>>,
@@ -294,19 +428,20 @@ impl App {
         cache_root: Option<PathBuf>,
         no_cache: bool,
         receiver: Receiver<LoadEvent>,
-        sender: Sender<LoadEvent>,
-        proxy: EventLoopProxy<WakeEvent>,
+        foreground_loader: ForegroundLoader,
+        decode_gate: Arc<DecodeGate>,
     ) -> Self {
+        let raw_prefetcher = gallery::RawPrefetcher::new(cache_root, no_cache, decode_gate);
+        if !path.as_os_str().is_empty() {
+            raw_prefetcher.begin_foreground();
+        }
         Self {
             path,
-            cache_root,
-            no_cache,
             receiver,
-            sender,
-            proxy,
-            generation: 0,
+            foreground_loader,
             gallery: Vec::new(),
             gallery_index: None,
+            raw_prefetcher,
             window: None,
             gpu: None,
             telemetry_window: None,
@@ -333,7 +468,7 @@ impl App {
                     elapsed,
                     decode,
                 } => {
-                    if generation != self.generation {
+                    if generation != self.foreground_loader.current_generation() {
                         continue;
                     }
                     if let Some(gpu) = self.gpu.as_mut() {
@@ -399,10 +534,17 @@ impl App {
                             }
                         }
                     }
+                    if let Some(index) = self.gallery_index {
+                        self.raw_prefetcher
+                            .finish_foreground_and_submit(&self.gallery, index);
+                    } else {
+                        self.raw_prefetcher.finish_foreground_and_submit(&[], 0);
+                    }
                 }
                 LoadEvent::Failed { generation, error } => {
-                    if generation == self.generation {
+                    if generation == self.foreground_loader.current_generation() {
                         self.status = format!("RAW load failed: {error}");
+                        self.raw_prefetcher.finish_foreground_and_submit(&[], 0);
                     }
                 }
             }
@@ -461,7 +603,7 @@ impl App {
             return;
         };
         self.gallery_index = Some(index);
-        self.generation = self.generation.wrapping_add(1);
+        self.raw_prefetcher.begin_foreground();
         self.path.clone_from(&path);
         if let Some(gpu) = self.gpu.as_ref() {
             self.view = ViewParameters {
@@ -469,14 +611,10 @@ impl App {
                 ..ViewParameters::default()
             };
         }
-        spawn_load(
-            path.clone(),
-            self.cache_root.clone(),
-            self.no_cache,
-            self.generation,
-            self.sender.clone(),
-            self.proxy.clone(),
-        );
+        if let Err(error) = self.foreground_loader.submit(path.clone()) {
+            self.set_status(format!("RAW loader failed: {error}"));
+            return;
+        }
         let position = format!("{}/{}", index + 1, self.gallery.len());
         self.set_status(format!("decoding RAW {position}: {}", display_name(&path)));
     }
@@ -957,5 +1095,34 @@ impl GpuState {
         self.queue.submit([encoder.finish()]);
         self.window.pre_present_notify();
         self.queue.present(output);
+    }
+}
+
+#[cfg(test)]
+mod foreground_loader_tests {
+    use super::*;
+
+    #[test]
+    fn rapid_submissions_keep_only_the_latest_pending_request() {
+        let (tx, worker_rx) = bounded(1);
+        let loader = ForegroundLoader {
+            tx,
+            pending: worker_rx.clone(),
+            generation: Arc::new(AtomicU64::new(0)),
+            decode_gate: Arc::new(DecodeGate::new()),
+        };
+
+        loader.submit_initial(PathBuf::from("0.cr3")).unwrap();
+        let active = worker_rx.try_recv().unwrap();
+        let active_token = GenerationToken::new(Arc::clone(&loader.generation), active.generation);
+
+        loader.submit(PathBuf::from("1.cr3")).unwrap();
+        loader.submit(PathBuf::from("2.cr3")).unwrap();
+
+        assert!(active_token.is_cancelled());
+        let pending = worker_rx.try_recv().unwrap();
+        assert_eq!(pending.path, PathBuf::from("2.cr3"));
+        assert_eq!(pending.generation, loader.current_generation());
+        assert!(worker_rx.try_recv().is_err());
     }
 }

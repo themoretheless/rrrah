@@ -8,5 +8,7 @@
 mod disk;
 mod weighted_lru;
 
-pub use disk::{CacheError, CacheKey, CacheLoad, DiskMosaicCache, SourceFingerprint};
+pub use disk::{
+    CacheError, CacheKey, CacheLoad, DEFAULT_MAX_DISK_CACHE_BYTES, DiskMosaicCache, SourceFingerprint,
+};
 pub use weighted_lru::WeightedLru;

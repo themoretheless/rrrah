@@ -307,11 +307,14 @@ impl RawMetadata {
 #[derive(Debug, Clone)]
 pub struct DecodedMosaic {
     pub metadata: RawMetadata,
-    pub pixels: Arc<[u16]>,
+    /// Shared ownership keeps handoff to the UI/GPU/cache O(1). Keeping the
+    /// decoder's `Vec` allocation intact avoids a full-frame copy that an
+    /// `Arc<[u16]>` conversion would otherwise require.
+    pub pixels: Arc<Vec<u16>>,
 }
 
 impl DecodedMosaic {
-    pub fn new(metadata: RawMetadata, pixels: Arc<[u16]>) -> Result<Self, FrameError> {
+    pub fn new(metadata: RawMetadata, pixels: Arc<Vec<u16>>) -> Result<Self, FrameError> {
         metadata.validate()?;
         let expected = usize::try_from(metadata.width)
             .ok()
@@ -335,32 +338,66 @@ impl DecodedMosaic {
         self.pixels.len() * size_of::<u16>()
     }
 
-    /// Produce a compact RGBA8 thumbnail using a deterministic box filter.
+    /// Produce a compact RGBA8 thumbnail using deterministic nearest sampling.
     /// This is intentionally CPU-only and allocation-bounded; callers can run
     /// it on the decode pool and upload the result as a small GPU texture.
+    #[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)]
     pub fn thumbnail_rgba8(&self, max_dimension: u32) -> Vec<u8> {
         let max_dimension = max_dimension.max(1);
-        let scale = (self.metadata.width.max(self.metadata.height) as f32 / max_dimension as f32).max(1.0);
-        let out_w = ((self.metadata.width as f32 / scale).ceil() as u32).max(1);
-        let out_h = ((self.metadata.height as f32 / scale).ceil() as u32).max(1);
-        let mut out = vec![0_u8; (out_w as usize) * (out_h as usize) * 4];
+        let source_long_edge = self.metadata.width.max(self.metadata.height);
+        let (out_w, out_h) = if source_long_edge <= max_dimension {
+            (self.metadata.width, self.metadata.height)
+        } else {
+            let scaled = |dimension: u32| {
+                u32::try_from(
+                    u64::from(dimension)
+                        .saturating_mul(u64::from(max_dimension))
+                        .div_ceil(u64::from(source_long_edge)),
+                )
+                .unwrap_or(max_dimension)
+                .max(1)
+            };
+            (scaled(self.metadata.width), scaled(self.metadata.height))
+        };
+        let Some(output_bytes) = usize::try_from(out_w)
+            .ok()
+            .and_then(|width| {
+                usize::try_from(out_h)
+                    .ok()
+                    .and_then(|height| width.checked_mul(height))
+            })
+            .and_then(|pixels| pixels.checked_mul(4))
+        else {
+            return Vec::new();
+        };
+        let mut out = vec![0_u8; output_bytes];
         let white = self
             .metadata
             .white_level
             .0
             .first()
             .copied()
-            .unwrap_or(u16::MAX as f32)
+            .unwrap_or(f32::from(u16::MAX))
             .max(1.0);
-        let channels = self.metadata.components_per_pixel as usize;
+        let channels = usize::from(self.metadata.components_per_pixel);
+        let source_width = usize::try_from(self.metadata.width).unwrap_or(usize::MAX);
+        let output_width = usize::try_from(out_w).unwrap_or(1);
         for oy in 0..out_h {
-            let y0 = ((oy as f32 * scale) as u32).min(self.metadata.height.saturating_sub(1));
+            let y0 = u64::from(oy).saturating_mul(u64::from(self.metadata.height)) / u64::from(out_h);
             for ox in 0..out_w {
-                let x0 = ((ox as f32 * scale) as u32).min(self.metadata.width.saturating_sub(1));
-                let src = (y0 as usize * self.metadata.width as usize + x0 as usize) * channels;
-                let value = self.pixels.get(src).copied().unwrap_or(0) as f32 / white;
+                let x0 = u64::from(ox).saturating_mul(u64::from(self.metadata.width)) / u64::from(out_w);
+                let src = usize::try_from(y0)
+                    .unwrap_or(usize::MAX)
+                    .saturating_mul(source_width)
+                    .saturating_add(usize::try_from(x0).unwrap_or(usize::MAX))
+                    .saturating_mul(channels);
+                let value = f32::from(self.pixels.get(src).copied().unwrap_or(0)) / white;
                 let byte = (value.clamp(0.0, 1.0) * 255.0 + 0.5) as u8;
-                let dst = (oy as usize * out_w as usize + ox as usize) * 4;
+                let dst = usize::try_from(oy)
+                    .unwrap_or(usize::MAX)
+                    .saturating_mul(output_width)
+                    .saturating_add(usize::try_from(ox).unwrap_or(usize::MAX))
+                    .saturating_mul(4);
                 out[dst..dst + 4].copy_from_slice(&[byte, byte, byte, 255]);
             }
         }
@@ -547,7 +584,7 @@ mod tests {
     #[test]
     fn decoded_mosaic_rejects_pixel_count_and_invalid_metadata() {
         let metadata = valid_metadata();
-        let error = DecodedMosaic::new(metadata.clone(), Arc::from([1_u16, 2, 3])).unwrap_err();
+        let error = DecodedMosaic::new(metadata.clone(), Arc::new(vec![1_u16, 2, 3])).unwrap_err();
         assert!(matches!(
             error,
             FrameError::InvalidPixelCount {
@@ -558,8 +595,16 @@ mod tests {
 
         let mut invalid_crop = metadata;
         invalid_crop.crop_area = Some(Rect::new(1, 1, 2, 2));
-        let error = DecodedMosaic::new(invalid_crop, Arc::from([1_u16, 2, 3, 4])).unwrap_err();
+        let error = DecodedMosaic::new(invalid_crop, Arc::new(vec![1_u16, 2, 3, 4])).unwrap_err();
         assert!(matches!(error, FrameError::InvalidRectangle("crop area")));
+    }
+
+    #[test]
+    fn decoded_mosaic_preserves_the_decoder_pixel_allocation() {
+        let pixels = vec![1_u16, 2, 3, 4];
+        let allocation = pixels.as_ptr();
+        let mosaic = DecodedMosaic::new(valid_metadata(), Arc::new(pixels)).unwrap();
+        assert_eq!(mosaic.pixels.as_ptr(), allocation);
     }
 
     #[test]
@@ -569,7 +614,7 @@ mod tests {
         metadata.height = 2;
         // The empty pixel slice is deliberate: dimensions are attacker input,
         // so validation must fail without attempting to materialize them.
-        let result = DecodedMosaic::new(metadata, Arc::from([]));
+        let result = DecodedMosaic::new(metadata, Arc::new(Vec::new()));
         assert!(matches!(
             result,
             Err(FrameError::InvalidPixelCount { .. } | FrameError::DimensionOverflow)
@@ -583,11 +628,11 @@ mod tests {
         metadata.height = 2;
         let mosaic = DecodedMosaic::new(
             metadata,
-            Arc::from([0_u16, 100, 200, 400, 800, 1000, 2000, 4000].as_slice()),
+            Arc::new(vec![0_u16, 100, 200, 400, 800, 1000, 2000, 4000]),
         )
         .unwrap();
         let thumb = mosaic.thumbnail_rgba8(2);
-        assert_eq!(thumb.len(), 2 * 1 * 4);
+        assert_eq!(thumb.len(), 8);
         assert!(thumb.chunks_exact(4).all(|pixel| pixel[3] == 255));
     }
 
