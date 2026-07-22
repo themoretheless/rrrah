@@ -1,5 +1,44 @@
 # Benchmark protocol
 
+## Cache identity/key microbenchmark
+
+`key_hashing` measures full-content `SourceId` hashing, recipe IDs and artifact
+keys without file I/O:
+
+```bash
+cargo bench -p rrrah-cache --bench key_hashing --features bench-internals
+```
+
+This command reports p50/p95 but is informational by default. In particular,
+ordinary `cargo test` and shared GitHub-hosted CI MUST NOT fail on wall-clock
+thresholds. The regular CI job compiles every benchmark target and runs a small
+three-sample benchmark smoke with reduced byte/iteration counts; this proves
+that the executable works, not that the runner meets a performance budget.
+
+The threshold gate is explicitly opt-in:
+
+```bash
+RRRAH_KEY_BENCH_GATE=1 \
+  cargo bench -p rrrah-cache --bench key_hashing --features bench-internals
+```
+
+In Actions it is the manual `key-performance` job selected with
+`key_perf_gate=true`, and it requires a self-hosted runner labelled
+`rrrah-perf`. That runner must have a recorded CPU, memory topology, OS/kernel,
+power governor, Rust version and quiet-workload policy. A runner or toolchain
+change invalidates its baseline and requires recalibration; results from a
+shared hosted runner are observations, never pass/fail evidence.
+
+The default calibrated thresholds are source p95 >= 512 MiB/s, recipe p95 <=
+1500 ns/op and artifact-key p95 <= 2000 ns/op, over 30 measured samples after
+the explicit warm-up. A runner may supply reviewed
+positive overrides through `RRRAH_KEY_BENCH_MIN_SOURCE_MIB_S`,
+`RRRAH_KEY_BENCH_MAX_RECIPE_NS_OP` and
+`RRRAH_KEY_BENCH_MAX_ARTIFACT_NS_OP`. Workload controls are
+`RRRAH_KEY_BENCH_SOURCE_BYTES`, `RRRAH_KEY_BENCH_SOURCE_ITERS`,
+`RRRAH_KEY_BENCH_KEY_ITERS` and `RRRAH_KEY_BENCH_SAMPLES`; changing any of them
+creates a different benchmark configuration and must not reuse a baseline.
+
 ## Process-boundary harness
 
 Для воспроизводимого запуска используйте `scripts/bench-harness.py`, а не

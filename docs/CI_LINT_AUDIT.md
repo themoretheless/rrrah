@@ -16,10 +16,13 @@ DoS для `quick-xml 0.39.4` и unmaintained `ttf-parser`. См. также
 
 Workflow теперь состоит из независимых проверок:
 
-* `checks` — форматирование, all-features check, Clippy, все Rust-тесты,
-  rustdoc с `-Dwarnings` и Python-тесты схемы benchmark;
+* `checks` — форматирование, all-target/all-features check и Clippy,
+  unit/integration tests без запуска benchmark binaries, отдельный короткий
+  non-gating benchmark smoke, rustdoc с `-Dwarnings` и Python-тесты схемы;
 * `msrv` — отдельная проверка объявленного Rust 1.89 (без подмены его latest
-  stable); она запускает check и test с теми же feature/target параметрами;
+  stable); она компилирует all-targets и запускает unit/integration tests;
+* `key-performance` — ручной opt-in p95 gate только на калиброванном
+  self-hosted runner `rrrah-perf`; shared CI не принимает wall-clock решения;
 * `fixtures` — проверка fixture manifest и decoder tests после успешного
   `checks`;
 * `security` — единственный canonical `cargo-deny` job плюс `cargo audit`.
@@ -54,7 +57,8 @@ pinning — отдельный hardening task, а не основание отк
 | Format | `cargo fmt --all -- --check` | **pass** |
 | Feature/target check | `cargo check --workspace --all-targets --all-features --locked` | **pass** |
 | Lint | `cargo clippy --workspace --all-targets --all-features --locked -- -D warnings` | **pass** после исправления `manual_assert` |
-| Tests | `cargo test --workspace --all-targets --all-features --locked` | **pass**, 54 теста |
+| Tests | `cargo test --workspace --all-features --locked` | **pass**; benchmark binaries не запускаются как тесты |
+| Cache-key bench smoke | reduced-workload `cargo bench ... key_hashing` | **non-gating**; проверяет запуск, не скорость runner-а |
 | Rustdoc | `RUSTDOCFLAGS=-Dwarnings cargo doc --workspace --all-features --no-deps` | **pass** |
 | Benchmark schema | `python3 -m unittest discover -s scripts -p 'test_*.py'` | **pass**, 6 тестов |
 | Dependency policy | `cargo deny check advisories bans licenses sources` | **fail closed**: 2 quick-xml advisories + ttf-parser unmaintained |
@@ -104,8 +108,9 @@ attacker-controlled.
 
 ## Benchmark и schema gate
 
-В pre-merge выполняются только детерминированные Python schema tests: они не
-притворяются RAW performance benchmark. `scripts/bench-harness.py` требует
+В pre-merge выполняются детерминированные Python schema tests и короткий
+cache-key benchmark smoke без временных assert-ов: они не притворяются RAW
+performance benchmark. `scripts/bench-harness.py` требует
 явных CR2/DNG fixtures, сохраняет SHA-256, toolchain, CPU/OS, backend, cache
 mode и сырые samples; отсутствие fixture должно быть `skip`, а не нулевое
 время. Реальный performance job должен запускаться на labelled hardware и
@@ -146,7 +151,10 @@ cargo metadata --locked --format-version 1
 cargo fmt --all -- --check
 cargo check --workspace --all-targets --all-features --locked
 cargo clippy --workspace --all-targets --all-features --locked -- -D warnings
-cargo test --workspace --all-targets --all-features --locked
+cargo test --workspace --all-features --locked
+RRRAH_KEY_BENCH_SOURCE_BYTES=65536 RRRAH_KEY_BENCH_SOURCE_ITERS=1 \
+RRRAH_KEY_BENCH_KEY_ITERS=1000 RRRAH_KEY_BENCH_SAMPLES=3 \
+  cargo bench -p rrrah-cache --bench key_hashing --features bench-internals --locked
 RUSTDOCFLAGS=-Dwarnings cargo doc --workspace --all-features --no-deps
 python3 -m unittest discover -s scripts -p 'test_*.py'
 cargo deny check advisories bans licenses sources   # должен fail при текущем lockfile
@@ -163,7 +171,7 @@ cargo audit --deny warnings --json                  # должен fail при �
 3. **Не принимать latest stable как MSRV.** Stable job и pinned 1.89 job имеют
    разные цели. Обновление `rust-toolchain` не освобождает dependency от
    объявленного `rust-version`.
-4. **Не путать тесты с production corpus.** 54 unit/integration tests не
+4. **Не путать тесты с production corpus.** Unit/integration tests не
    доказывают поддержку всех CR2/DNG камер; нужен labelled fixture corpus и
    decoder worker quota из [`FUZZ_HARDENING_AUDIT.md`](FUZZ_HARDENING_AUDIT.md).
 5. **Не превращать lint allow в API.** Узкое исключение допустимо только с

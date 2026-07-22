@@ -1,0 +1,14 @@
+[
+  {
+    "label": "Rrrah: build",
+    "command": "cargo build -p rrrah",
+    "cwd": "$ZED_WORKTREE_ROOT",
+    "use_new_terminal": true
+  },
+  {
+    "label": "Rrrah: tests",
+    "command": "cargo test --workspace --all-targets --locked",
+    "cwd": "$ZED_WORKTREE_ROOT",
+    "use_new_terminal": true
+  }
+]

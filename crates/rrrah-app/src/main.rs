@@ -16,18 +16,21 @@ use std::{
     fs,
     path::{Path, PathBuf},
     process::Command,
-    sync::Arc,
+    sync::{
+        Arc,
+        atomic::{AtomicU64, Ordering},
+    },
     thread,
     time::{Duration, Instant},
 };
 
 use anyhow::{Context, Result, bail};
 use clap::Parser;
-use crossbeam_channel::{Receiver, Sender, TryRecvError, unbounded};
+use crossbeam_channel::{Receiver, Sender, TryRecvError, bounded, unbounded};
 use directories::ProjectDirs;
-use rrrah_cache::{CacheKey, DiskMosaicCache, SourceFingerprint};
+use rrrah_cache::{CacheKey, DEFAULT_MAX_DISK_CACHE_BYTES, DiskMosaicCache, SourceFingerprint};
 use rrrah_core::DecodedMosaic;
-use rrrah_decode::{DecodeOutput, RawDecoder, RawlerDecoder};
+use rrrah_decode::{DecodeOutput, DecodeRequest, GenerationToken, RawDecoder, RawlerDecoder};
 use rrrah_gpu::{HudRenderer, RawRenderer, ViewParameters};
 use winit::{
     application::ApplicationHandler,
@@ -37,6 +40,15 @@ use winit::{
     keyboard::{KeyCode, PhysicalKey},
     window::{Window, WindowId},
 };
+
+mod cache_telemetry;
+mod cache_writer;
+mod decode_gate;
+mod gallery;
+
+use cache_telemetry::{CacheTelemetry, CacheTelemetrySnapshot};
+use cache_writer::CacheWriter;
+use decode_gate::{DecodeGate, ForegroundTicket};
 
 #[derive(Debug, Parser)]
 #[command(name = "rrrah", about = "Fast full-RAW CR2/DNG viewer")]
@@ -51,7 +63,7 @@ struct Cli {
     #[arg(long)]
     cache_dir: Option<PathBuf>,
     #[arg(value_name = "RAW")]
-    path: PathBuf,
+    path: Option<PathBuf>,
 }
 
 #[derive(Debug)]
@@ -72,12 +84,16 @@ enum LoadEvent {
 fn main() -> Result<()> {
     env_logger::init();
     let cli = Cli::parse();
-    if !cli.path.is_file() {
-        bail!("RAW path is not a regular file: {}", cli.path.display());
-    }
     let cache_root = cli.cache_dir.or_else(default_cache_dir);
     if cli.inspect {
-        inspect(&cli.path, cache_root.as_deref(), cli.no_cache)
+        let path = cli
+            .path
+            .as_ref()
+            .ok_or_else(|| anyhow::anyhow!("--inspect requires a RAW path"))?;
+        if !path.is_file() {
+            bail!("RAW path is not a regular file: {}", path.display());
+        }
+        inspect(path, cache_root.as_deref(), cli.no_cache)
     } else {
         run_viewer(cli.path, cache_root, cli.no_cache)
     }
@@ -141,22 +157,44 @@ fn print_metadata(mosaic: &DecodedMosaic, cache_hit: bool, decode_time: Duration
     println!("embedded JPEG is not used by this path");
 }
 
-fn run_viewer(path: PathBuf, cache_root: Option<PathBuf>, no_cache: bool) -> Result<()> {
+fn run_viewer(path: Option<PathBuf>, cache_root: Option<PathBuf>, no_cache: bool) -> Result<()> {
     let (sender, receiver) = unbounded();
     let event_loop = EventLoop::<WakeEvent>::with_user_event()
         .build()
         .context("create event loop")?;
     let proxy = event_loop.create_proxy();
-    spawn_load(
-        path.clone(),
+    if let Some(path) = &path {
+        if !path.is_file() {
+            bail!("RAW path is not a regular file: {}", path.display());
+        }
+    }
+    let decode_gate = Arc::new(DecodeGate::new());
+    let cache_telemetry = Arc::new(CacheTelemetry::new(
+        cache_root.is_some() && !no_cache,
+        DEFAULT_MAX_DISK_CACHE_BYTES,
+    ));
+    let foreground_loader = ForegroundLoader::new(
         cache_root.clone(),
         no_cache,
-        0,
-        sender.clone(),
-        proxy.clone(),
-    );
+        sender,
+        proxy,
+        Arc::clone(&decode_gate),
+        Arc::clone(&cache_telemetry),
+    )
+    .context("start foreground RAW worker")?;
+    if let Some(path) = &path {
+        foreground_loader.submit_initial(path.clone())?;
+    }
     event_loop.set_control_flow(ControlFlow::Wait);
-    let mut app = App::new(path, cache_root, no_cache, receiver, sender, proxy);
+    let mut app = App::new(
+        path.unwrap_or_default(),
+        cache_root,
+        no_cache,
+        receiver,
+        foreground_loader,
+        decode_gate,
+        cache_telemetry,
+    );
     event_loop.run_app(&mut app).context("run event loop")?;
     Ok(())
 }
@@ -166,99 +204,250 @@ enum WakeEvent {
     LoadProgress,
 }
 
-fn spawn_load(
+#[derive(Debug)]
+struct LoadRequest {
     path: PathBuf,
-    cache_root: Option<PathBuf>,
-    no_cache: bool,
     generation: u64,
-    sender: Sender<LoadEvent>,
-    proxy: EventLoopProxy<WakeEvent>,
+    foreground: ForegroundTicket,
+}
+
+/// One persistent foreground decoder with a latest-wins queue. Rawler cannot
+/// stop during entropy decode, so serializing requests is essential: rapid
+/// navigation keeps at most one active decode and one pending path instead of
+/// spawning an unbounded set of competing decoder threads.
+struct ForegroundLoader {
+    tx: Sender<LoadRequest>,
+    pending: Receiver<LoadRequest>,
+    generation: Arc<AtomicU64>,
+    decode_gate: Arc<DecodeGate>,
+    telemetry: Arc<CacheTelemetry>,
+}
+
+impl ForegroundLoader {
+    fn new(
+        cache_root: Option<PathBuf>,
+        no_cache: bool,
+        sender: Sender<LoadEvent>,
+        proxy: EventLoopProxy<WakeEvent>,
+        decode_gate: Arc<DecodeGate>,
+        telemetry: Arc<CacheTelemetry>,
+    ) -> std::io::Result<Self> {
+        let (tx, requests) = bounded::<LoadRequest>(1);
+        let pending = requests.clone();
+        let generation = Arc::new(AtomicU64::new(0));
+        let worker_generation = Arc::clone(&generation);
+        let worker_telemetry = Arc::clone(&telemetry);
+        thread::Builder::new()
+            .name("rrrah-raw-decode".into())
+            .spawn(move || {
+                let cache = cache_root.filter(|_| !no_cache).map(DiskMosaicCache::new);
+                if let Some(cache) = &cache {
+                    match cache.usage() {
+                        Ok(usage) => worker_telemetry.update_disk_usage(usage),
+                        Err(_) => worker_telemetry.record_disk_scan_error(),
+                    }
+                }
+                let cache_writer = cache.as_ref().and_then(|cache| {
+                    CacheWriter::spawn(
+                        cache.clone(),
+                        Arc::clone(&worker_generation),
+                        Arc::clone(&worker_telemetry),
+                    )
+                    .map_err(|error| log::warn!("failed to start cache write-back worker: {error}"))
+                    .ok()
+                });
+                while let Ok(request) = requests.recv() {
+                    execute_load(
+                        request,
+                        cache.as_ref(),
+                        cache_writer.as_ref(),
+                        Arc::clone(&worker_generation),
+                        &sender,
+                        &proxy,
+                        &worker_telemetry,
+                    );
+                }
+            })?;
+        Ok(Self {
+            tx,
+            pending,
+            generation,
+            decode_gate,
+            telemetry,
+        })
+    }
+
+    fn submit_initial(&self, path: PathBuf) -> Result<()> {
+        let generation = self.current_generation();
+        self.telemetry.begin_lookup(generation);
+        self.replace_pending(LoadRequest {
+            path,
+            generation,
+            foreground: self.decode_gate.request_foreground(),
+        })
+    }
+
+    fn submit(&self, path: PathBuf) -> Result<u64> {
+        let generation = self.generation.fetch_add(1, Ordering::AcqRel).wrapping_add(1);
+        self.telemetry.begin_lookup(generation);
+        self.replace_pending(LoadRequest {
+            path,
+            generation,
+            foreground: self.decode_gate.request_foreground(),
+        })?;
+        Ok(generation)
+    }
+
+    fn current_generation(&self) -> u64 {
+        self.generation.load(Ordering::Acquire)
+    }
+
+    fn replace_pending(&self, request: LoadRequest) -> Result<()> {
+        while self.pending.try_recv().is_ok() {}
+        self.tx
+            .try_send(request)
+            .map_err(|error| anyhow::anyhow!("foreground RAW queue unavailable: {error}"))
+    }
+}
+
+fn execute_load(
+    request: LoadRequest,
+    cache: Option<&DiskMosaicCache>,
+    cache_writer: Option<&CacheWriter>,
+    load_generation: Arc<AtomicU64>,
+    sender: &Sender<LoadEvent>,
+    proxy: &EventLoopProxy<WakeEvent>,
+    telemetry: &CacheTelemetry,
 ) {
-    let worker_sender = sender.clone();
-    let worker_proxy = proxy.clone();
-    let spawn_result = thread::Builder::new()
-        .name("rrrah-raw-decode".into())
-        .spawn(move || {
-            let started = Instant::now();
-            let cache = cache_root.map(DiskMosaicCache::new);
-            let fingerprint = if no_cache {
-                None
-            } else {
-                match SourceFingerprint::from_path(&path) {
-                    Ok(value) => Some(value),
-                    Err(error) => {
-                        let _ = worker_sender.send(LoadEvent::Failed {
-                            generation,
-                            error: error.to_string(),
-                        });
-                        let _ = worker_proxy.send_event(WakeEvent::LoadProgress);
-                        return;
-                    }
-                }
-            };
-            if let (Some(cache), Some(fingerprint)) = (&cache, &fingerprint) {
-                let key = CacheKey::for_mosaic(fingerprint, 0);
-                match cache.load(key) {
-                    Ok(Some(hit)) => {
-                        let _ = worker_sender.send(LoadEvent::Ready {
-                            generation,
-                            mosaic: hit.mosaic,
-                            cache_hit: true,
-                            elapsed: started.elapsed(),
-                            decode: None,
-                        });
-                        let _ = worker_proxy.send_event(WakeEvent::LoadProgress);
-                        return;
-                    }
-                    Ok(None) => {}
-                    Err(error) => log::warn!("ignoring corrupt/unreadable cache: {error}"),
-                }
+    let LoadRequest {
+        path,
+        generation,
+        foreground,
+    } = request;
+    let token = GenerationToken::new(load_generation, generation);
+    if token.is_cancelled() {
+        return;
+    }
+    let started = Instant::now();
+    let fingerprint = match cache {
+        Some(_) => match SourceFingerprint::from_path(&path) {
+            Ok(value) => Some(value),
+            Err(error) => {
+                telemetry.record_read_error(generation);
+                publish_load_failure(generation, error.to_string(), &token, sender, proxy);
+                return;
             }
-            let output = match RawlerDecoder.decode(&rrrah_decode::DecodeRequest::new(&path)) {
-                Ok(output) => output,
-                Err(error) => {
-                    let _ = worker_sender.send(LoadEvent::Failed {
-                        generation,
-                        error: error.to_string(),
-                    });
-                    let _ = worker_proxy.send_event(WakeEvent::LoadProgress);
+        },
+        None => None,
+    };
+    if token.is_cancelled() {
+        return;
+    }
+    if let (Some(cache), Some(fingerprint)) = (cache, &fingerprint) {
+        let key = CacheKey::for_mosaic(fingerprint, 0);
+        match cache.load(key) {
+            Ok(Some(hit)) => {
+                if token.is_cancelled() {
                     return;
                 }
-            };
-            if let (Some(cache), Some(fingerprint)) = (&cache, &fingerprint) {
-                let key = CacheKey::for_mosaic(fingerprint, 0);
-                if let Err(error) = cache.store(key, &output.mosaic) {
-                    log::warn!("decoded RAW is usable but cache write failed: {error}");
-                }
+                telemetry.record_hit(
+                    generation,
+                    hit.elapsed,
+                    u64::try_from(hit.mosaic.byte_len()).unwrap_or(u64::MAX),
+                );
+                publish_load_event(
+                    LoadEvent::Ready {
+                        generation,
+                        mosaic: hit.mosaic,
+                        cache_hit: true,
+                        elapsed: started.elapsed(),
+                        decode: None,
+                    },
+                    sender,
+                    proxy,
+                );
+                return;
             }
-            let _ = worker_sender.send(LoadEvent::Ready {
-                generation,
-                mosaic: output.mosaic.clone(),
-                cache_hit: false,
-                elapsed: started.elapsed(),
-                decode: Some(output),
-            });
-            let _ = worker_proxy.send_event(WakeEvent::LoadProgress);
-        });
-    if let Err(error) = spawn_result {
-        let _ = sender.send(LoadEvent::Failed {
+            Ok(None) => telemetry.record_miss(generation),
+            Err(error) => {
+                telemetry.record_read_error(generation);
+                log::warn!("ignoring corrupt/unreadable cache: {error}");
+            }
+        }
+    }
+    // This wait runs only on the persistent foreground worker.  The UI has
+    // already published foreground priority through the request ticket and
+    // remains free to redraw or replace the pending request.
+    let Some(decode_permit) = foreground.acquire_decode(|| token.is_cancelled()) else {
+        return;
+    };
+    if token.is_cancelled() {
+        return;
+    }
+    let mut decode_request = DecodeRequest::new(&path);
+    decode_request.cancellation = Some(token.clone());
+    let output = match RawlerDecoder.decode(&decode_request) {
+        Ok(output) => output,
+        Err(error) => {
+            publish_load_failure(generation, error.to_string(), &token, sender, proxy);
+            return;
+        }
+    };
+    // Cache persistence is intentionally outside the heavy-decode permit.
+    // A foreground request must never wait behind an fsync; the bounded
+    // write-back worker serializes persistence independently.
+    drop(decode_permit);
+    if token.is_cancelled() {
+        return;
+    }
+    let write_back = fingerprint
+        .as_ref()
+        .map(|fingerprint| (CacheKey::for_mosaic(fingerprint, 0), output.mosaic.clone()));
+    let elapsed = started.elapsed();
+    // Publish the usable frame before enqueueing persistence. Even an already
+    // active atomic store can never delay this Ready event or the next decode.
+    publish_load_event(
+        LoadEvent::Ready {
             generation,
-            error: format!("failed to spawn RAW worker: {error}"),
-        });
+            mosaic: output.mosaic.clone(),
+            cache_hit: false,
+            elapsed,
+            decode: Some(output),
+        },
+        sender,
+        proxy,
+    );
+    if let (Some(cache_writer), Some((key, mosaic))) = (cache_writer, write_back) {
+        let _ = cache_writer.submit(generation, key, mosaic);
+    }
+}
+
+fn publish_load_failure(
+    generation: u64,
+    error: String,
+    token: &GenerationToken,
+    sender: &Sender<LoadEvent>,
+    proxy: &EventLoopProxy<WakeEvent>,
+) {
+    if !token.is_cancelled() {
+        publish_load_event(LoadEvent::Failed { generation, error }, sender, proxy);
+    }
+}
+
+fn publish_load_event(event: LoadEvent, sender: &Sender<LoadEvent>, proxy: &EventLoopProxy<WakeEvent>) {
+    if sender.send(event).is_ok() {
         let _ = proxy.send_event(WakeEvent::LoadProgress);
     }
 }
 
 struct App {
     path: PathBuf,
-    cache_root: Option<PathBuf>,
-    no_cache: bool,
     receiver: Receiver<LoadEvent>,
-    sender: Sender<LoadEvent>,
-    proxy: EventLoopProxy<WakeEvent>,
-    generation: u64,
+    foreground_loader: ForegroundLoader,
     gallery: Vec<PathBuf>,
     gallery_index: Option<usize>,
+    raw_prefetcher: gallery::RawPrefetcher,
+    cache_telemetry: Arc<CacheTelemetry>,
     window: Option<Arc<Window>>,
     gpu: Option<GpuState>,
     telemetry_window: Option<Arc<Window>>,
@@ -276,19 +465,23 @@ impl App {
         cache_root: Option<PathBuf>,
         no_cache: bool,
         receiver: Receiver<LoadEvent>,
-        sender: Sender<LoadEvent>,
-        proxy: EventLoopProxy<WakeEvent>,
+        foreground_loader: ForegroundLoader,
+        decode_gate: Arc<DecodeGate>,
+        cache_telemetry: Arc<CacheTelemetry>,
     ) -> Self {
+        let raw_prefetcher =
+            gallery::RawPrefetcher::new(cache_root, no_cache, decode_gate, Arc::clone(&cache_telemetry));
+        if !path.as_os_str().is_empty() {
+            raw_prefetcher.begin_foreground();
+        }
         Self {
             path,
-            cache_root,
-            no_cache,
             receiver,
-            sender,
-            proxy,
-            generation: 0,
+            foreground_loader,
             gallery: Vec::new(),
             gallery_index: None,
+            raw_prefetcher,
+            cache_telemetry,
             window: None,
             gpu: None,
             telemetry_window: None,
@@ -315,7 +508,7 @@ impl App {
                     elapsed,
                     decode,
                 } => {
-                    if generation != self.generation {
+                    if generation != self.foreground_loader.current_generation() {
                         continue;
                     }
                     if let Some(gpu) = self.gpu.as_mut() {
@@ -364,11 +557,15 @@ impl App {
                                 },
                             );
                             self.hud_text = format!(
-                                "RRRAH\n{}X{}\nFILE {:.2} MB\n{}\nOPEN {:.2} MS\n{}\nUPLOAD {:.2} MS\nMOSAIC RAM {:.2} MB\nGPU ATLAS {:.2} MB\nRSS CPU {:.2} MB",
+                                "RRRAH\n{}X{}\nFILE {:.2} MB\n{}\nOPEN {:.2} MS\n{}\nUPLOAD CPU {:.2} MS\nMOSAIC RAM {:.2} MB\nGPU ATLAS EST {:.2} MB\nPROCESS RSS {:.2} MB",
                                 mosaic.metadata.width,
                                 mosaic.metadata.height,
                                 megabytes(file_bytes),
-                                if cache_hit { "CACHE HIT" } else { "CACHE MISS" },
+                                if cache_hit {
+                                    "DISK MOSAIC HIT"
+                                } else {
+                                    "DISK MOSAIC MISS"
+                                },
                                 elapsed.as_secs_f64() * 1000.0,
                                 decode_lines,
                                 upload_elapsed.as_secs_f64() * 1000.0,
@@ -381,10 +578,17 @@ impl App {
                             }
                         }
                     }
+                    if let Some(index) = self.gallery_index {
+                        self.raw_prefetcher
+                            .finish_foreground_and_submit(&self.gallery, index);
+                    } else {
+                        self.raw_prefetcher.finish_foreground_and_submit(&[], 0);
+                    }
                 }
                 LoadEvent::Failed { generation, error } => {
-                    if generation == self.generation {
+                    if generation == self.foreground_loader.current_generation() {
                         self.status = format!("RAW load failed: {error}");
+                        self.raw_prefetcher.finish_foreground_and_submit(&[], 0);
                     }
                 }
             }
@@ -414,7 +618,7 @@ impl App {
             return;
         }
         if file_type.is_dir() {
-            let files = scan_raw_folder(&path);
+            let files = gallery::scan_folder(&path);
             if files.is_empty() {
                 self.set_status(format!("no CR2/CR3/DNG files in {}", path.display()));
                 return;
@@ -424,7 +628,7 @@ impl App {
         } else if file_type.is_file() && is_supported_raw(&path) {
             self.gallery = path
                 .parent()
-                .map(scan_raw_folder)
+                .map(gallery::scan_folder)
                 .filter(|files| !files.is_empty())
                 .unwrap_or_else(|| vec![path.clone()]);
             let index = self
@@ -443,7 +647,7 @@ impl App {
             return;
         };
         self.gallery_index = Some(index);
-        self.generation = self.generation.wrapping_add(1);
+        self.raw_prefetcher.begin_foreground();
         self.path.clone_from(&path);
         if let Some(gpu) = self.gpu.as_ref() {
             self.view = ViewParameters {
@@ -451,14 +655,10 @@ impl App {
                 ..ViewParameters::default()
             };
         }
-        spawn_load(
-            path.clone(),
-            self.cache_root.clone(),
-            self.no_cache,
-            self.generation,
-            self.sender.clone(),
-            self.proxy.clone(),
-        );
+        if let Err(error) = self.foreground_loader.submit(path.clone()) {
+            self.set_status(format!("RAW loader failed: {error}"));
+            return;
+        }
         let position = format!("{}/{}", index + 1, self.gallery.len());
         self.set_status(format!("decoding RAW {position}: {}", display_name(&path)));
     }
@@ -490,24 +690,6 @@ fn is_supported_raw(path: &Path) -> bool {
     path.extension()
         .and_then(|extension| extension.to_str())
         .is_some_and(|extension| matches!(extension.to_ascii_lowercase().as_str(), "cr2" | "cr3" | "dng"))
-}
-
-fn scan_raw_folder(path: &Path) -> Vec<PathBuf> {
-    const MAX_GALLERY_ITEMS: usize = 10_000;
-    let Ok(entries) = fs::read_dir(path) else {
-        return Vec::new();
-    };
-    let mut files = entries
-        .filter_map(Result::ok)
-        .filter_map(|entry| {
-            let candidate = entry.path();
-            let metadata = fs::symlink_metadata(&candidate).ok()?;
-            (metadata.file_type().is_file() && is_supported_raw(&candidate)).then_some(candidate)
-        })
-        .collect::<Vec<_>>();
-    files.sort_by_cached_key(|candidate| display_name(candidate).to_ascii_lowercase());
-    files.truncate(MAX_GALLERY_ITEMS);
-    files
 }
 
 fn display_name(path: &Path) -> String {
@@ -566,8 +748,8 @@ impl ApplicationHandler<WakeEvent> for App {
         self.gpu = Some(gpu);
         match event_loop.create_window(
             Window::default_attributes()
-                .with_title("Rrrah — timings")
-                .with_inner_size(PhysicalSize::new(720, 420)),
+                .with_title("Rrrah — timings + cache")
+                .with_inner_size(PhysicalSize::new(780, 620)),
         ) {
             Ok(telemetry_window) => {
                 let telemetry_window = Arc::new(telemetry_window);
@@ -577,6 +759,7 @@ impl ApplicationHandler<WakeEvent> for App {
                 )) {
                     Ok(mut telemetry) => {
                         telemetry.set_text(&self.hud_text);
+                        telemetry.set_cache_snapshot(self.cache_telemetry.snapshot());
                         self.telemetry_window = Some(telemetry_window);
                         self.telemetry = Some(telemetry);
                     }
@@ -622,6 +805,7 @@ impl ApplicationHandler<WakeEvent> for App {
                 }
                 WindowEvent::RedrawRequested => {
                     if let Some(telemetry) = self.telemetry.as_mut() {
+                        telemetry.set_cache_snapshot(self.cache_telemetry.snapshot());
                         telemetry.render();
                     }
                 }
@@ -724,6 +908,9 @@ struct TelemetryState {
     size: PhysicalSize<u32>,
     hud: HudRenderer,
     base_text: String,
+    cache_text: String,
+    cache_snapshot: Option<CacheTelemetrySnapshot>,
+    frame_submit_ms: Option<f64>,
     frame_counter: u64,
 }
 
@@ -779,6 +966,9 @@ impl TelemetryState {
             size,
             hud,
             base_text: "RRRAH\nWAITING FOR RAW".into(),
+            cache_text: "CACHE L2 DISK\nSTATUS WAITING".into(),
+            cache_snapshot: None,
+            frame_submit_ms: None,
             frame_counter: 0,
         })
     }
@@ -786,8 +976,25 @@ impl TelemetryState {
     fn set_text(&mut self, text: &str) {
         self.base_text.clear();
         self.base_text.push_str(text);
-        let initial = format!("{}\nFRAME -- MS", self.base_text);
-        self.hud.update(&self.device, &self.queue, &initial);
+        self.rebuild_hud();
+    }
+
+    fn set_cache_snapshot(&mut self, snapshot: CacheTelemetrySnapshot) {
+        if self.cache_snapshot == Some(snapshot) {
+            return;
+        }
+        self.cache_snapshot = Some(snapshot);
+        self.cache_text = snapshot.format_hud();
+        self.rebuild_hud();
+    }
+
+    fn rebuild_hud(&mut self) {
+        let frame_line = self.frame_submit_ms.map_or_else(
+            || "HUD SUBMIT -- MS".into(),
+            |milliseconds| format!("HUD SUBMIT {milliseconds:.2} MS"),
+        );
+        let text = format!("{}\n\n{}\n{}", self.base_text, self.cache_text, frame_line);
+        self.hud.update(&self.device, &self.queue, &text);
     }
 
     fn resize(&mut self, size: PhysicalSize<u32>) {
@@ -851,9 +1058,8 @@ impl TelemetryState {
         self.queue.present(output);
         self.frame_counter = self.frame_counter.wrapping_add(1);
         if self.frame_counter.is_multiple_of(30) {
-            let frame_ms = frame_started.elapsed().as_secs_f64() * 1000.0;
-            let text = format!("{}\nFRAME {:.2} MS", self.base_text, frame_ms);
-            self.hud.update(&self.device, &self.queue, &text);
+            self.frame_submit_ms = Some(frame_started.elapsed().as_secs_f64() * 1000.0);
+            self.rebuild_hud();
         }
         self.window.request_redraw();
     }
@@ -957,5 +1163,35 @@ impl GpuState {
         self.queue.submit([encoder.finish()]);
         self.window.pre_present_notify();
         self.queue.present(output);
+    }
+}
+
+#[cfg(test)]
+mod foreground_loader_tests {
+    use super::*;
+
+    #[test]
+    fn rapid_submissions_keep_only_the_latest_pending_request() {
+        let (tx, worker_rx) = bounded(1);
+        let loader = ForegroundLoader {
+            tx,
+            pending: worker_rx.clone(),
+            generation: Arc::new(AtomicU64::new(0)),
+            decode_gate: Arc::new(DecodeGate::new()),
+            telemetry: Arc::new(CacheTelemetry::new(true, 1024)),
+        };
+
+        loader.submit_initial(PathBuf::from("0.cr3")).unwrap();
+        let active = worker_rx.try_recv().unwrap();
+        let active_token = GenerationToken::new(Arc::clone(&loader.generation), active.generation);
+
+        loader.submit(PathBuf::from("1.cr3")).unwrap();
+        loader.submit(PathBuf::from("2.cr3")).unwrap();
+
+        assert!(active_token.is_cancelled());
+        let pending = worker_rx.try_recv().unwrap();
+        assert_eq!(pending.path, PathBuf::from("2.cr3"));
+        assert_eq!(pending.generation, loader.current_generation());
+        assert!(worker_rx.try_recv().is_err());
     }
 }

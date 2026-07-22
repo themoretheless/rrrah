@@ -306,6 +306,7 @@ fn push_quad(vertices: &mut Vec<HudVertex>, x: f32, y: f32, width: f32, height: 
 
 fn glyph_rows(character: char) -> [u8; 7] {
     match character {
+        ' ' => [0; 7],
         'A' => [0b01110, 0b10001, 0b10001, 0b11111, 0b10001, 0b10001, 0b10001],
         'B' => [0b11110, 0b10001, 0b10001, 0b11110, 0b10001, 0b10001, 0b11110],
         'C' => [0b01111, 0b10000, 0b10000, 0b10000, 0b10000, 0b10000, 0b01111],
@@ -850,7 +851,13 @@ pub enum GpuError {
 
 #[cfg(test)]
 mod tests {
-    use super::{GpuParameters, HUD_SHADER, mosaic_bytes, tile_with_halo};
+    use super::{GpuParameters, HUD_SHADER, glyph_rows, mosaic_bytes, tile_with_halo};
+
+    #[test]
+    fn hud_space_is_blank_instead_of_unknown_glyph() {
+        assert_eq!(glyph_rows(' '), [0; 7]);
+        assert_ne!(glyph_rows('?'), [0; 7]);
+    }
 
     #[test]
     fn viewport_shader_parses_and_validates_with_naga() {

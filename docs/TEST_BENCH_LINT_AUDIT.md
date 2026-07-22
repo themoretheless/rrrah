@@ -11,7 +11,8 @@
 |---|---|---|---|
 | Форматирование | `cargo fmt --all -- --check` | green | не проверяет семантику |
 | Компиляция | `cargo check --workspace --all-targets --locked` | green | не запускает тесты и не поднимает GPU |
-| Unit/invariant | `cargo test --workspace --all-targets --locked` | green, 54 теста на дату аудита | synthetic frames, без камерного корпуса |
+| Unit/invariant | `cargo test --workspace --locked` | green на дату аудита | synthetic frames, без камерного корпуса; benchmark binaries исключены |
+| Cache-key bench smoke | reduced-workload `cargo bench ... key_hashing` | non-gating | компилирует/запускает target, но не оценивает shared-runner wall clock |
 | Lint | `cargo clippy --workspace --all-targets --all-features --locked -- -D warnings` | green | локальные `#![allow]` требуют периодического пересмотра |
 | Dependency policy | `cargo deny check advisories bans licenses sources` | **не green** | см. security findings ниже |
 | Rust advisories | `cargo audit` | **не green** | две уязвимости в quick-xml и unmaintained ttf-parser |

@@ -16,5 +16,13 @@ thiserror.workspace = true
 [dev-dependencies]
 tempfile.workspace = true
 
+[features]
+bench-internals = []
+
 [lints]
 workspace = true
+
+[[bench]]
+name = "key_hashing"
+harness = false
+required-features = ["bench-internals"]

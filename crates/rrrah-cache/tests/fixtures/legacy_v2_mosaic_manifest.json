@@ -1,0 +1,38 @@
+{
+  "manifest_schema": "rrrah.cache.conformance.v1",
+  "case_id": "legacy-v2-minimal-cfa-2x2",
+  "class": "synthetic",
+  "license": "CC0-1.0",
+  "artifact": {
+    "file": "legacy_v2_mosaic.hex",
+    "encoding": "lowercase-hex-final-lf",
+    "decoded_length_dec": "763",
+    "sha256": "3eea098a30755cfa03bd91ee64431f07078ce2b640a41584342230652351e530"
+  },
+  "sections": [
+    {
+      "name": "prefix",
+      "offset_dec": "0",
+      "length_dec": "12",
+      "sha256": "90e32c3850910a3a7b514bb7d040e4f83194f837dc7b285c6247bca91176bfb4"
+    },
+    {
+      "name": "json_header",
+      "offset_dec": "12",
+      "length_dec": "743",
+      "sha256": "0c8a608b709fc6f1bed4aed698a03f708302e8f8fed2dc2ebdac6606ca4f7e01"
+    },
+    {
+      "name": "pixels",
+      "offset_dec": "755",
+      "length_dec": "8",
+      "sha256": "2957625e9b14db4d68c5c0492a391193cf873c4e153a76e639a08eeaaae9c542"
+    }
+  ],
+  "expected": {
+    "stored_schema_dec": "1",
+    "cache_key_hex": "26684fd126fdcf3fc1e2ef159e49a1fd2b7f2970f8df2b21a4b7931ba8dbdb46",
+    "payload_blake3_unkeyed": "5276dbbfca86ae5f073274261002aa66025c732d9d6c5cfa04fb41c8cbe422aa",
+    "pixels_u16_dec": ["512", "1024", "2048", "4096"]
+  }
+}

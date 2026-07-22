@@ -1,0 +1,58 @@
+{
+  "manifest_schema": "rrrah.cache.conformance.v1",
+  "case_id": "v3-envelope1-mosaic1-cfa-2x2",
+  "class": "synthetic",
+  "license": "CC0-1.0",
+  "artifact": {
+    "file": "v3_mosaic_v1_object.hex",
+    "encoding": "lowercase-hex-final-lf",
+    "decoded_length_dec": "465",
+    "sha256": "437fd88e2be1310a7132ceb48147b4d2dd96a0067f8675dabec8c3f5ab7a9335",
+    "blake3_unkeyed": "792767cd35eeef24511c390f6c19cfa6c8e93027b00d87e711c5b1e085ff51c5"
+  },
+  "sections": [
+    {
+      "name": "envelope",
+      "offset_dec": "0",
+      "length_dec": "136",
+      "sha256": "a106701d148de74af826e7cdb0f20e08aed5700b32d419f9cf841b336e50497a"
+    },
+    {
+      "name": "semantic_descriptor",
+      "offset_dec": "136",
+      "length_dec": "106",
+      "sha256": "35a00dcf6ed8678d8b27653cc8db5c381b27087854f56c471de1582127b1fad6"
+    },
+    {
+      "name": "mosaic_payload",
+      "offset_dec": "242",
+      "length_dec": "223",
+      "sha256": "a60f1340b9a378f10aca65a7369a14e08ffeb4663f6ac258dc59af300297473e"
+    }
+  ],
+  "protocol": {
+    "byte_order": "little",
+    "envelope_version_dec": "1",
+    "payload_schema_id_dec": "1",
+    "payload_schema_version_dec": "1",
+    "payload_wire_major_dec": "1",
+    "payload_wire_minor_dec": "0",
+    "artifact_key_context": "rrrah.cache.artifact-key.v1",
+    "payload_digest_context": "rrrah.cache.object-payload.v1",
+    "envelope_digest_context": "rrrah.cache.object-envelope.v1"
+  },
+  "expected": {
+    "artifact_kind_dec": "1",
+    "source_id_hex": "7b8792c318d96b870db65b324c3997769cc773ebbd4e5fb5d620a3a21ce0996b",
+    "image_index_dec": "0",
+    "artifact_variant_hex": "0000000000000000000000000000000000000000000000000000000000000000",
+    "recipe_id_hex": "932219a5b11ca7978d9e4857d92b807a155932d789d60dc5ae770a6dfb8cbf4f",
+    "artifact_key_hex": "c47466531caafd8f3926077f8f68c4ed0080a5508db791c28891b38b57ecd46e",
+    "payload_digest_hex": "44e0d1f4437d8a6f6e14fdd01eda83a289c2ad7da04c22bc66080f3e0ab4c1f1",
+    "envelope_digest_hex": "c0badc56d2e3eaa069404d4770cf03572cadf2cf8e13bc608f8733721c215ae6",
+    "metadata_prefix_bytes_dec": "215",
+    "make_utf8_hex": "43616e6f6e",
+    "model_utf8_hex": "476f6c64656e",
+    "pixels_u16_dec": ["0", "512", "8192", "16383"]
+  }
+}

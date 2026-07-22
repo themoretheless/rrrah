@@ -156,9 +156,10 @@ pan' = pan + (p-C)(1-z'/z),\quad C=viewport/2+pan.
 ### L0/L1
 
 ОС page cache обслуживает исходный RAW. Не использовать `MAP_POPULATE` в UI и не
-хешировать весь файл перед каждым открытием. `SourceFingerprint` в прототипе
-читает первые/средние/последние 64 KiB; после первого decode стоит сохранять
-полный BLAKE3, связанный с `(volume,file_id,size,mtime_ns)`.
+хешировать весь файл перед каждым открытием. Legacy V2 `SourceFingerprint`
+читает первые/средние/последние 64 KiB и не является безопасным content ID.
+V3 вычисляет полный `SourceId` из того же открытого snapshot, который декодирует,
+а проверенный результат memoize-ится по `(volume,file_id,size,mtime_ns,ctime_ns)`.
 
 RAM cache — byte-weighted LRU с обязательным pin текущего кадра. Для production
 tile cache используется 2Q/TinyLFU: 20–25% probation защищает горячие tiles от
@@ -166,10 +167,21 @@ tile cache используется 2Q/TinyLFU: 20–25% probation защища�
 
 ### Persistent mosaic blob
 
-`rrrah-cache` хранит `magic + schema + JSON metadata + little-endian u16 payload +
-BLAKE3 checksum`, пишет во временный файл в той же директории, делает `sync_data` и
-atomic rename. Ключ включает source fingerprint, frame index и `DECODE_CACHE_ABI`;
-смена exposure/tone не инвалидирует mosaic.
+Legacy V2 `rrrah-cache` хранит `magic + schema + JSON metadata + little-endian
+u16 payload + BLAKE3 checksum`, пишет во временный файл в той же директории,
+делает `sync_data` и atomic rename. Его ABI заморожен и не смешивается с V3.
+
+Новый semantic protocol разделяет полный `SourceId`, 64-byte decoder recipe и
+106-byte artifact transcript; container/layout versions не входят в semantic
+key, а exposure/tone/GPU state не инвалидируют mosaic. Нормативные byte layouts,
+registry и bump rules находятся в [CACHE_IDENTITY_SPEC.md](CACHE_IDENTITY_SPEC.md)
+и [CACHE_OBJECT_V3_SPEC.md](CACHE_OBJECT_V3_SPEC.md).
+
+Единый application-use-case для inspect, foreground и speculative prefetch,
+его typed outcomes, latest-wins mailbox и транзакционное разрешение
+файла/папки определены в [OPEN_MOSAIC_DESIGN.md](OPEN_MOSAIC_DESIGN.md).
+Временная модель этапов от чтения RAW до экрана приведена в
+[RAW_DISPLAY_PIPELINE.md](RAW_DISPLAY_PIPELINE.md).
 
 Production format следует расширить до одного immutable blob с таблицей
 512×512 tiles, независимо сжатых LZ4/Zstd. Это исключает сотни тысяч inode и

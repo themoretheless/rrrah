@@ -6,6 +6,7 @@
 #![allow(clippy::missing_errors_doc, clippy::cast_precision_loss)]
 
 use std::{
+    collections::HashMap,
     path::{Path, PathBuf},
     sync::{
         Arc,
@@ -16,18 +17,45 @@ use std::{
 
 use rawler::{
     decoders::{Orientation as RawlerOrientation, RawDecodeParams},
+    imgop::xyz::{FlatColorMatrix, Illuminant},
     rawimage::{RawImage, RawImageData, RawPhotometricInterpretation},
     rawsource::RawSource,
 };
 use rrrah_core::{
-    CfaColor, CfaPattern, DecodedMosaic, FrameError, LevelGrid, Orientation, Photometric, RawMetadata, Rect,
-    WhiteLevel,
+    CfaColor, CfaPattern, DECODE_CROP_AS_METADATA, DECODE_FULL_SENSOR_RAW, DECODE_IMAGE_INDEX_IN_KEY,
+    DECODE_INTEGER_U16, DECODE_SENSOR_COORDINATES, DecodedMosaic, FrameError, LevelGrid,
+    MosaicRecipeManifest, Orientation, Photometric, RawMetadata, Rect, WhiteLevel,
 };
 use thiserror::Error;
 
 pub trait RawDecoder: Send + Sync {
+    fn mosaic_recipe(&self) -> MosaicRecipeManifest;
     fn decode(&self, request: &DecodeRequest) -> Result<DecodeOutput, DecodeError>;
 }
+
+pub const RAWLER_BACKEND_ID: u32 = 1;
+pub const RAWLER_0_7_2_DECODE_FLAGS: u32 = DECODE_FULL_SENSOR_RAW
+    | DECODE_INTEGER_U16
+    | DECODE_SENSOR_COORDINATES
+    | DECODE_CROP_AS_METADATA
+    | DECODE_IMAGE_INDEX_IN_KEY;
+
+/// Semantic contract for Rawler 0.7.2 plus the current rrrah adapter.
+///
+/// The SHA-256 field covers Rawler's resolved dependency closure and enabled
+/// features (`scripts/recipe_lock.py`). Local adaptation changes bump the
+/// adapter revision. Every change is fixture-corpus gated.
+pub const RAWLER_0_7_2_MOSAIC_CONTRACT_1: MosaicRecipeManifest = MosaicRecipeManifest::new(
+    RAWLER_BACKEND_ID,
+    1,
+    1,
+    1,
+    RAWLER_0_7_2_DECODE_FLAGS,
+    [
+        0x0f, 0x7a, 0xb7, 0x30, 0xcb, 0x1f, 0x78, 0x0f, 0x0d, 0x3c, 0x02, 0x92, 0x5c, 0x14, 0x54, 0xc1, 0x75,
+        0x84, 0x6f, 0x2f, 0x93, 0xe5, 0x0d, 0x81, 0xf8, 0x2c, 0xff, 0xc4, 0xa3, 0x72, 0x68, 0xbe,
+    ],
+);
 
 #[derive(Debug, Clone)]
 pub struct DecodeRequest {
@@ -92,6 +120,10 @@ pub struct DecodeOutput {
 pub struct RawlerDecoder;
 
 impl RawDecoder for RawlerDecoder {
+    fn mosaic_recipe(&self) -> MosaicRecipeManifest {
+        RAWLER_0_7_2_MOSAIC_CONTRACT_1
+    }
+
     fn decode(&self, request: &DecodeRequest) -> Result<DecodeOutput, DecodeError> {
         let total_started = Instant::now();
         request.check_cancelled()?;
@@ -196,8 +228,8 @@ fn adapt_rawler_image(image: RawImage) -> Result<DecodedMosaic, DecodeError> {
         orientation: map_orientation(image.orientation),
     };
 
-    let pixels: Arc<[u16]> = match image.data {
-        RawImageData::Integer(data) => Arc::from(data.into_boxed_slice()),
+    let pixels = match image.data {
+        RawImageData::Integer(data) => Arc::new(data),
         RawImageData::Float(_) => return Err(DecodeError::UnsupportedFloatRaw),
     };
     DecodedMosaic::new(metadata, pixels).map_err(DecodeError::InvalidFrame)
@@ -208,14 +240,11 @@ fn adapt_rawler_image(image: RawImage) -> Result<DecodedMosaic, DecodeError> {
 /// cameras (including the 5DS fixture). Keep the legacy matrix only as a
 /// fallback for files without a color-matrix map.
 fn camera_matrix(image: &RawImage) -> [[f32; 3]; 4] {
-    let values = image
-        .color_matrix
-        .get(&rawler::imgop::xyz::Illuminant::D65)
-        .or_else(|| image.color_matrix.values().next());
+    let values = preferred_color_matrix(&image.color_matrix);
     let Some(values) = values else {
         return image.xyz_to_cam;
     };
-    if values.len() < 9 || values.len() % 3 != 0 {
+    if !matches!(values.len(), 9 | 12) {
         return image.xyz_to_cam;
     }
     let mut matrix = [[0.0_f32; 3]; 4];
@@ -223,6 +252,33 @@ fn camera_matrix(image: &RawImage) -> [[f32; 3]; 4] {
         matrix[row].copy_from_slice(chunk);
     }
     matrix
+}
+
+/// Chooses a matrix deterministically. `HashMap::values().next()` is not a
+/// semantic policy: its result varies with randomized insertion state and
+/// would make the same RAW produce different persisted metadata.
+fn preferred_color_matrix(matrices: &HashMap<Illuminant, FlatColorMatrix>) -> Option<&FlatColorMatrix> {
+    matrices
+        .iter()
+        .filter(|(_, matrix)| matches!(matrix.len(), 9 | 12))
+        .min_by_key(|(illuminant, _)| illuminant_preference(**illuminant))
+        .map(|(_, matrix)| matrix)
+}
+
+fn illuminant_preference(illuminant: Illuminant) -> (u8, u16) {
+    let preferred = match illuminant {
+        Illuminant::D65 => 0,
+        Illuminant::D50 => 1,
+        Illuminant::D55 => 2,
+        Illuminant::D75 => 3,
+        Illuminant::Daylight => 4,
+        Illuminant::FineWeather => 5,
+        Illuminant::CloudyWeather => 6,
+        Illuminant::Shade => 7,
+        Illuminant::Flash => 8,
+        _ => 9,
+    };
+    (preferred, u16::from(illuminant))
 }
 
 /// Rawler represents a three-channel RGB white balance as `[R, G, B, NaN]`.
@@ -307,6 +363,7 @@ pub fn decode_file(path: impl AsRef<Path>) -> Result<DecodeOutput, DecodeError> 
 #[cfg(test)]
 mod tests {
     use std::{
+        collections::HashMap,
         env,
         path::{Path, PathBuf},
     };
@@ -324,7 +381,10 @@ mod tests {
     };
     use rrrah_core::{CfaColor, FrameError, Photometric};
 
-    use super::{DecodeError, DecodeRequest, GenerationToken, RawDecoder, RawlerDecoder, adapt_rawler_image};
+    use super::{
+        DecodeError, DecodeRequest, GenerationToken, RAWLER_0_7_2_MOSAIC_CONTRACT_1, RawDecoder,
+        RawlerDecoder, adapt_rawler_image, preferred_color_matrix,
+    };
 
     fn camera(cfa: &str) -> Camera {
         let mut camera = Camera::new();
@@ -432,6 +492,62 @@ mod tests {
         {
             assert!((actual - expected).abs() < f32::EPSILON);
         }
+    }
+
+    #[test]
+    fn color_matrix_fallback_is_independent_of_hashmap_insertion_order() {
+        use rawler::imgop::xyz::Illuminant;
+
+        let tungsten = vec![3.0; 9];
+        let d50 = vec![5.0; 9];
+        let mut first = HashMap::new();
+        first.insert(Illuminant::A, tungsten.clone());
+        first.insert(Illuminant::D50, d50.clone());
+        let mut reversed = HashMap::new();
+        reversed.insert(Illuminant::D50, d50.clone());
+        reversed.insert(Illuminant::A, tungsten);
+
+        assert_eq!(preferred_color_matrix(&first), Some(&d50));
+        assert_eq!(preferred_color_matrix(&reversed), Some(&d50));
+
+        let d65 = vec![65.0; 9];
+        reversed.insert(Illuminant::D65, d65.clone());
+        assert_eq!(preferred_color_matrix(&reversed), Some(&d65));
+    }
+
+    #[test]
+    fn color_matrix_selection_skips_invalid_preferred_shapes() {
+        use rawler::imgop::xyz::Illuminant;
+
+        let d50 = vec![50.0; 9];
+        let tungsten = vec![3.0; 12];
+        let mut matrices = HashMap::from([
+            (Illuminant::D65, vec![65.0; 8]),
+            (Illuminant::D55, vec![55.0; 10]),
+            (Illuminant::D50, d50.clone()),
+            (Illuminant::A, tungsten.clone()),
+            (Illuminant::Flash, vec![4.0; 15]),
+        ]);
+        assert_eq!(preferred_color_matrix(&matrices), Some(&d50));
+
+        matrices.insert(Illuminant::D50, vec![50.0; 15]);
+        assert_eq!(preferred_color_matrix(&matrices), Some(&tungsten));
+
+        matrices.insert(Illuminant::A, vec![3.0; 10]);
+        assert_eq!(preferred_color_matrix(&matrices), None);
+    }
+
+    #[test]
+    #[allow(clippy::format_collect)]
+    fn recipe_manifest_is_bound_to_checked_semantic_dependency_closure() {
+        let manifest = RAWLER_0_7_2_MOSAIC_CONTRACT_1.canonical_bytes();
+        let actual = manifest[28..60]
+            .iter()
+            .map(|byte| format!("{byte:02x}"))
+            .collect::<String>();
+        let expected = include_str!("../../../scripts/rawler-semantic-lock.sha256").trim();
+        assert_eq!(actual, expected);
+        assert_eq!(RawlerDecoder.mosaic_recipe(), RAWLER_0_7_2_MOSAIC_CONTRACT_1);
     }
 
     #[test]
