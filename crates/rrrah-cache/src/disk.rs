@@ -8,7 +8,7 @@ use std::{
     time::{Duration, Instant, SystemTime},
 };
 
-use rrrah_core::{DecodedMosaic, FrameError, LEGACY_V2_CACHE_ABI, RawMetadata};
+use rrrah_core::{DecodedMosaic, FrameError, LEGACY_V2_CACHE_ABI, MosaicRecipeManifest, RawMetadata};
 use serde::{Deserialize, Serialize};
 use tempfile::NamedTempFile;
 use thiserror::Error;
@@ -19,6 +19,7 @@ const MAX_CACHED_PIXELS: u64 = 250_000_000;
 const SAMPLE_BYTES: u64 = 64 * 1024;
 const PAYLOAD_BUFFER_BYTES: usize = 16 * 1024;
 const WRITE_LOCK_FILE: &str = ".rrrah-cache-write.lock";
+const RECIPE_AWARE_MOSAIC_KEY_NAMESPACE_V1: &[u8] = b"rrrah/decoded-mosaic-recipe/v1\0";
 
 /// Default ceiling for decoded mosaics. Writes prune the oldest complete
 /// entries before publication, so speculative prefetch cannot grow without
@@ -95,6 +96,9 @@ fn sample_offsets(file_size: u64) -> Vec<u64> {
 pub struct CacheKey([u8; 32]);
 
 impl CacheKey {
+    /// Derives the frozen legacy V2 key. New producers should use
+    /// [`Self::for_mosaic_recipe`] so decoder semantics participate in cache
+    /// identity.
     pub fn for_mosaic(source: &SourceFingerprint, image_index: usize) -> Self {
         let mut hasher = blake3::Hasher::new();
         // Bump the namespace whenever decoded metadata or pixel semantics change.
@@ -105,6 +109,38 @@ impl CacheKey {
         hasher.update(&source.modified_ns.to_le_bytes());
         hasher.update(&source.sampled_blake3);
         hasher.update(&image_index.to_le_bytes());
+        Self(*hasher.finalize().as_bytes())
+    }
+
+    /// Derives a recipe-aware key for the transitional sampled-fingerprint
+    /// disk cache.
+    ///
+    /// This is intentionally a distinct namespace from both legacy V2 keys
+    /// and the full-content [`crate::MosaicKey`] protocol. The complete
+    /// canonical recipe manifest participates directly in the transcript, so
+    /// independent decoder backends and contract revisions cannot reuse one
+    /// another's decoded mosaics.
+    ///
+    /// # Panics
+    ///
+    /// Panics if `usize` is wider than 64 bits and `image_index` does not fit
+    /// the protocol's fixed-width `u64` field.
+    pub fn for_mosaic_recipe(
+        source: &SourceFingerprint,
+        image_index: usize,
+        recipe: MosaicRecipeManifest,
+    ) -> Self {
+        let mut hasher = blake3::Hasher::new();
+        hasher.update(RECIPE_AWARE_MOSAIC_KEY_NAMESPACE_V1);
+        hasher.update(&source.file_size.to_le_bytes());
+        hasher.update(&source.modified_ns.to_le_bytes());
+        hasher.update(&source.sampled_blake3);
+        hasher.update(
+            &u64::try_from(image_index)
+                .expect("supported target image index must fit in u64")
+                .to_le_bytes(),
+        );
+        hasher.update(&recipe.canonical_bytes());
         Self(*hasher.finalize().as_bytes())
     }
 
@@ -633,7 +669,8 @@ mod tests {
     };
 
     use rrrah_core::{
-        CfaColor, CfaPattern, DecodedMosaic, LevelGrid, Orientation, Photometric, RawMetadata, WhiteLevel,
+        CfaColor, CfaPattern, DecodedMosaic, KNOWN_MOSAIC_DECODE_FLAGS, LevelGrid, MosaicRecipeManifest,
+        Orientation, Photometric, RawMetadata, WhiteLevel,
     };
     use tempfile::tempdir;
 
@@ -1124,5 +1161,48 @@ mod tests {
         let second = CacheKey::for_mosaic(&fingerprint, 1);
         assert_ne!(first, second);
         assert_eq!(first.to_hex().len(), 64);
+    }
+
+    #[test]
+    fn recipe_aware_keys_separate_independent_backends() {
+        let fingerprint = SourceFingerprint {
+            file_size: 42,
+            modified_ns: 7,
+            sampled_blake3: [3; 32],
+        };
+        let backend_a = MosaicRecipeManifest::new(1, 1, 1, 1, KNOWN_MOSAIC_DECODE_FLAGS, [0x5a; 32]);
+        let backend_b = MosaicRecipeManifest::new(2, 1, 1, 1, KNOWN_MOSAIC_DECODE_FLAGS, [0x5a; 32]);
+
+        let first_key = CacheKey::for_mosaic_recipe(&fingerprint, 0, backend_a);
+        let second_key = CacheKey::for_mosaic_recipe(&fingerprint, 0, backend_b);
+        assert_ne!(first_key, second_key);
+        assert_ne!(first_key, CacheKey::for_mosaic(&fingerprint, 0));
+        assert_eq!(
+            first_key.to_hex(),
+            "703333e41325180a910b63e8abf2f19d03bb44ec9889661a3399a6fab9588c47"
+        );
+
+        let mut expected = blake3::Hasher::new();
+        expected.update(super::RECIPE_AWARE_MOSAIC_KEY_NAMESPACE_V1);
+        expected.update(&fingerprint.file_size.to_le_bytes());
+        expected.update(&fingerprint.modified_ns.to_le_bytes());
+        expected.update(&fingerprint.sampled_blake3);
+        expected.update(&0_u64.to_le_bytes());
+        expected.update(&backend_a.canonical_bytes());
+        assert_eq!(first_key.0, *expected.finalize().as_bytes());
+    }
+
+    #[test]
+    fn legacy_v2_key_derivation_remains_frozen() {
+        let fingerprint = SourceFingerprint {
+            file_size: 42,
+            modified_ns: 7,
+            sampled_blake3: [3; 32],
+        };
+
+        assert_eq!(
+            CacheKey::for_mosaic(&fingerprint, 0).to_hex(),
+            "73bc0c7f827b24f32dca2194ca5b186f7eba42a435bd5da33d8dc894e3ae7d88"
+        );
     }
 }

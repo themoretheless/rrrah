@@ -11,7 +11,7 @@ use crate::{
 };
 use crossbeam_channel::{Receiver, Sender, bounded};
 use rrrah_cache::{CacheKey, DiskMosaicCache, SourceFingerprint};
-use rrrah_decode::{DecodeRequest, GenerationToken, RawDecoder, RawlerDecoder};
+use rrrah_decode::{DecodeRequest, GenerationToken, NativeCr3Decoder, RawDecoder};
 use std::{
     path::{Path, PathBuf},
     sync::{
@@ -231,7 +231,11 @@ impl RawPrefetcher {
                                 worker_telemetry.record_prefetch_failure(command.generation);
                                 continue;
                             };
-                            let key = CacheKey::for_mosaic(&fingerprint, 0);
+                            let key = CacheKey::for_mosaic_recipe(
+                                &fingerprint,
+                                0,
+                                NativeCr3Decoder.mosaic_recipe(),
+                            );
                             if cache.contains(key) {
                                 // `contains` is only a presence probe. The HUD
                                 // labels this PRESENT rather than HIT because
@@ -265,7 +269,7 @@ impl RawPrefetcher {
                                 GenerationToken::new(Arc::clone(&worker_generation), command.generation);
                             let mut request = DecodeRequest::new(&path);
                             request.cancellation = Some(token);
-                            let Ok(output) = RawlerDecoder.decode(&request) else {
+                            let Ok(output) = NativeCr3Decoder.decode(&request) else {
                                 worker_telemetry.record_prefetch_failure(command.generation);
                                 continue;
                             };
@@ -328,9 +332,8 @@ impl RawPrefetcher {
         }
     }
 
-    /// Immediately invalidates queued/in-flight speculative work. Rawler
-    /// cannot be interrupted inside entropy decode, but cancellation is
-    /// checked before publishing to cache, so stale data is never admitted.
+    /// Immediately invalidates queued/in-flight speculative work. Cancellation
+    /// is checked before cache publication, so stale data is never admitted.
     pub fn begin_foreground(&self) {
         // Mark foreground first. A cache store must atomically acquire state
         // from zero, so no new speculative store can pass this point. A store
@@ -506,7 +509,7 @@ impl Prefetcher {
 pub fn is_supported(path: &Path) -> bool {
     path.extension()
         .and_then(|e| e.to_str())
-        .is_some_and(|e| matches!(e.to_ascii_lowercase().as_str(), "cr2" | "cr3" | "dng"))
+        .is_some_and(|extension| extension.eq_ignore_ascii_case("cr3"))
 }
 
 pub fn scan_folder(folder: &Path) -> Vec<PathBuf> {
@@ -574,6 +577,8 @@ mod tests {
     #[test]
     fn extension_filter_is_case_insensitive() {
         assert!(is_supported(Path::new("a.CR3")));
+        assert!(!is_supported(Path::new("a.CR2")));
+        assert!(!is_supported(Path::new("a.DNG")));
         assert!(!is_supported(Path::new("a.jpg")));
     }
     #[test]

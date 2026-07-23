@@ -1,61 +1,29 @@
-//! Decoder port and the `rawler` adapter.
+//! Native RAW decoding and domain adaptation.
 //!
-//! The adapter requests `Decoder::raw_image(..., dummy = false)`. It never asks
-//! for `thumbnail_image`, `preview_image`, or `full_image`, which makes the
-//! no-embedded-JPEG invariant explicit in code.
+//! The production path is a clean-room Canon EOS R8 CR3 decoder. It reads the
+//! full sensor mosaic and never substitutes an embedded JPEG.
 #![allow(clippy::missing_errors_doc, clippy::cast_precision_loss)]
 
+mod cr3;
+mod native_backend;
+
 use std::{
-    collections::HashMap,
     path::{Path, PathBuf},
     sync::{
         Arc,
         atomic::{AtomicU64, Ordering},
     },
-    time::{Duration, Instant},
+    time::Duration,
 };
 
-use rawler::{
-    decoders::{Orientation as RawlerOrientation, RawDecodeParams},
-    imgop::xyz::{FlatColorMatrix, Illuminant},
-    rawimage::{RawImage, RawImageData, RawPhotometricInterpretation},
-    rawsource::RawSource,
-};
-use rrrah_core::{
-    CfaColor, CfaPattern, DECODE_CROP_AS_METADATA, DECODE_FULL_SENSOR_RAW, DECODE_IMAGE_INDEX_IN_KEY,
-    DECODE_INTEGER_U16, DECODE_SENSOR_COORDINATES, DecodedMosaic, FrameError, LevelGrid,
-    MosaicRecipeManifest, Orientation, Photometric, RawMetadata, Rect, WhiteLevel,
-};
+pub use native_backend::{NATIVE_CR3_BACKEND_ID, NATIVE_EOS_R8_MOSAIC_CONTRACT_1, NativeCr3Decoder};
+use rrrah_core::{DecodedMosaic, FrameError, MosaicRecipeManifest};
 use thiserror::Error;
 
 pub trait RawDecoder: Send + Sync {
     fn mosaic_recipe(&self) -> MosaicRecipeManifest;
     fn decode(&self, request: &DecodeRequest) -> Result<DecodeOutput, DecodeError>;
 }
-
-pub const RAWLER_BACKEND_ID: u32 = 1;
-pub const RAWLER_0_7_2_DECODE_FLAGS: u32 = DECODE_FULL_SENSOR_RAW
-    | DECODE_INTEGER_U16
-    | DECODE_SENSOR_COORDINATES
-    | DECODE_CROP_AS_METADATA
-    | DECODE_IMAGE_INDEX_IN_KEY;
-
-/// Semantic contract for Rawler 0.7.2 plus the current rrrah adapter.
-///
-/// The SHA-256 field covers Rawler's resolved dependency closure and enabled
-/// features (`scripts/recipe_lock.py`). Local adaptation changes bump the
-/// adapter revision. Every change is fixture-corpus gated.
-pub const RAWLER_0_7_2_MOSAIC_CONTRACT_1: MosaicRecipeManifest = MosaicRecipeManifest::new(
-    RAWLER_BACKEND_ID,
-    1,
-    1,
-    1,
-    RAWLER_0_7_2_DECODE_FLAGS,
-    [
-        0x0f, 0x7a, 0xb7, 0x30, 0xcb, 0x1f, 0x78, 0x0f, 0x0d, 0x3c, 0x02, 0x92, 0x5c, 0x14, 0x54, 0xc1, 0x75,
-        0x84, 0x6f, 0x2f, 0x93, 0xe5, 0x0d, 0x81, 0xf8, 0x2c, 0xff, 0xc4, 0xa3, 0x72, 0x68, 0xbe,
-    ],
-);
 
 #[derive(Debug, Clone)]
 pub struct DecodeRequest {
@@ -103,235 +71,40 @@ impl GenerationToken {
 }
 
 #[derive(Debug, Clone, Copy, Default)]
+pub struct AdaptTimings {
+    pub layout_cfa: Duration,
+    pub levels: Duration,
+    pub color: Duration,
+    pub geometry: Duration,
+    pub finalize: Duration,
+    pub total: Duration,
+}
+
+#[derive(Debug, Clone, Copy, Default)]
 pub struct DecodeTimings {
     pub source_open: Duration,
+    pub decoder_select: Duration,
+    pub raw_image: Duration,
+    /// Exactly `decoder_select + raw_image`.
     pub raw_decode: Duration,
+    pub native: Option<NativeDecodeTimings>,
+    pub adapt: AdaptTimings,
     pub adapt_metadata: Duration,
     pub total: Duration,
+}
+
+#[derive(Debug, Clone, Copy, Default)]
+pub struct NativeDecodeTimings {
+    pub plane_decode: [Duration; 4],
+    pub plane_wall: Duration,
+    pub interleave: Duration,
+    pub worker_count: u8,
 }
 
 #[derive(Debug, Clone)]
 pub struct DecodeOutput {
     pub mosaic: DecodedMosaic,
     pub timings: DecodeTimings,
-}
-
-#[derive(Debug, Clone, Copy, Default)]
-pub struct RawlerDecoder;
-
-impl RawDecoder for RawlerDecoder {
-    fn mosaic_recipe(&self) -> MosaicRecipeManifest {
-        RAWLER_0_7_2_MOSAIC_CONTRACT_1
-    }
-
-    fn decode(&self, request: &DecodeRequest) -> Result<DecodeOutput, DecodeError> {
-        let total_started = Instant::now();
-        request.check_cancelled()?;
-
-        let source_started = Instant::now();
-        let source = RawSource::new(&request.path).map_err(|source| DecodeError::Io {
-            path: request.path.clone(),
-            source,
-        })?;
-        let source_open = source_started.elapsed();
-        request.check_cancelled()?;
-
-        let decode_started = Instant::now();
-        let image = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let decoder = rawler::get_decoder(&source).map_err(|error| error.to_string())?;
-            // `false` is the critical semantic choice: decode sensor samples,
-            // not a dummy image and not an embedded preview.
-            decoder
-                .raw_image(
-                    &source,
-                    &RawDecodeParams {
-                        image_index: request.image_index,
-                    },
-                    false,
-                )
-                .map_err(|error| error.to_string())
-        }))
-        .map_err(|_| DecodeError::DecoderPanicked)?
-        .map_err(DecodeError::Rawler)?;
-        let raw_decode = decode_started.elapsed();
-        request.check_cancelled()?;
-
-        let adapt_started = Instant::now();
-        let mosaic = adapt_rawler_image(image)?;
-        let adapt_metadata = adapt_started.elapsed();
-        request.check_cancelled()?;
-
-        Ok(DecodeOutput {
-            mosaic,
-            timings: DecodeTimings {
-                source_open,
-                raw_decode,
-                adapt_metadata,
-                total: total_started.elapsed(),
-            },
-        })
-    }
-}
-
-fn adapt_rawler_image(image: RawImage) -> Result<DecodedMosaic, DecodeError> {
-    let width = u32::try_from(image.width).map_err(|_| DecodeError::DimensionOverflow)?;
-    let height = u32::try_from(image.height).map_err(|_| DecodeError::DimensionOverflow)?;
-    let components_per_pixel = u8::try_from(image.cpp).map_err(|_| DecodeError::DimensionOverflow)?;
-    let bits_per_sample = u8::try_from(image.bps).map_err(|_| DecodeError::DimensionOverflow)?;
-
-    let (photometric, cfa) = match &image.photometric {
-        RawPhotometricInterpretation::Cfa(config) => {
-            let cells = config.cfa.flat_pattern().into_iter().map(map_cfa_color).collect();
-            (
-                Photometric::Cfa,
-                Some(CfaPattern {
-                    width: u8::try_from(config.cfa.width).map_err(|_| DecodeError::DimensionOverflow)?,
-                    height: u8::try_from(config.cfa.height).map_err(|_| DecodeError::DimensionOverflow)?,
-                    cells,
-                }),
-            )
-        }
-        RawPhotometricInterpretation::LinearRaw => (Photometric::LinearRaw, None),
-        RawPhotometricInterpretation::BlackIsZero => (Photometric::BlackIsZero, None),
-    };
-
-    let black_level = LevelGrid {
-        width: u8::try_from(image.blacklevel.width).map_err(|_| DecodeError::DimensionOverflow)?,
-        height: u8::try_from(image.blacklevel.height).map_err(|_| DecodeError::DimensionOverflow)?,
-        components: u8::try_from(image.blacklevel.cpp).map_err(|_| DecodeError::DimensionOverflow)?,
-        values: image
-            .blacklevel
-            .levels
-            .iter()
-            .map(rawler::formats::tiff::Rational::as_f32)
-            .collect(),
-    };
-
-    let white_balance = sanitize_white_balance(image.wb_coeffs);
-    let xyz_to_camera = camera_matrix(&image);
-
-    let metadata = RawMetadata {
-        make: image.clean_make,
-        model: image.clean_model,
-        width,
-        height,
-        components_per_pixel,
-        bits_per_sample,
-        photometric,
-        cfa,
-        black_level,
-        white_level: WhiteLevel(image.whitelevel.0.into_iter().map(|value| value as f32).collect()),
-        white_balance,
-        xyz_to_camera,
-        active_area: image.active_area.map(convert_rect).transpose()?,
-        crop_area: image.crop_area.map(convert_rect).transpose()?,
-        orientation: map_orientation(image.orientation),
-    };
-
-    let pixels = match image.data {
-        RawImageData::Integer(data) => Arc::new(data),
-        RawImageData::Float(_) => return Err(DecodeError::UnsupportedFloatRaw),
-    };
-    DecodedMosaic::new(metadata, pixels).map_err(DecodeError::InvalidFrame)
-}
-
-/// Prefer Rawler's current illuminant-tagged matrix. `xyz_to_cam` is retained
-/// by Rawler for compatibility and is zero for some otherwise profiled Canon
-/// cameras (including the 5DS fixture). Keep the legacy matrix only as a
-/// fallback for files without a color-matrix map.
-fn camera_matrix(image: &RawImage) -> [[f32; 3]; 4] {
-    let values = preferred_color_matrix(&image.color_matrix);
-    let Some(values) = values else {
-        return image.xyz_to_cam;
-    };
-    if !matches!(values.len(), 9 | 12) {
-        return image.xyz_to_cam;
-    }
-    let mut matrix = [[0.0_f32; 3]; 4];
-    for (row, chunk) in values.chunks_exact(3).take(4).enumerate() {
-        matrix[row].copy_from_slice(chunk);
-    }
-    matrix
-}
-
-/// Chooses a matrix deterministically. `HashMap::values().next()` is not a
-/// semantic policy: its result varies with randomized insertion state and
-/// would make the same RAW produce different persisted metadata.
-fn preferred_color_matrix(matrices: &HashMap<Illuminant, FlatColorMatrix>) -> Option<&FlatColorMatrix> {
-    matrices
-        .iter()
-        .filter(|(_, matrix)| matches!(matrix.len(), 9 | 12))
-        .min_by_key(|(illuminant, _)| illuminant_preference(**illuminant))
-        .map(|(_, matrix)| matrix)
-}
-
-fn illuminant_preference(illuminant: Illuminant) -> (u8, u16) {
-    let preferred = match illuminant {
-        Illuminant::D65 => 0,
-        Illuminant::D50 => 1,
-        Illuminant::D55 => 2,
-        Illuminant::D75 => 3,
-        Illuminant::Daylight => 4,
-        Illuminant::FineWeather => 5,
-        Illuminant::CloudyWeather => 6,
-        Illuminant::Shade => 7,
-        Illuminant::Flash => 8,
-        _ => 9,
-    };
-    (preferred, u16::from(illuminant))
-}
-
-/// Rawler represents a three-channel RGB white balance as `[R, G, B, NaN]`.
-/// The fourth value is an absent second green plane, not a corrupt profile.
-/// Preserve the calibrated RGB gains and make the optional slot finite for our
-/// metadata/cache invariants.
-fn sanitize_white_balance(mut white_balance: [f32; 4]) -> [f32; 4] {
-    if white_balance[..3]
-        .iter()
-        .any(|value| !value.is_finite() || *value <= 0.0)
-    {
-        return [1.0; 4];
-    }
-    if !white_balance[3].is_finite() || white_balance[3] <= 0.0 {
-        white_balance[3] = white_balance[1];
-    }
-    white_balance
-}
-
-fn convert_rect(rect: rawler::imgop::Rect) -> Result<Rect, DecodeError> {
-    Ok(Rect::new(
-        u32::try_from(rect.p.x).map_err(|_| DecodeError::DimensionOverflow)?,
-        u32::try_from(rect.p.y).map_err(|_| DecodeError::DimensionOverflow)?,
-        u32::try_from(rect.d.w).map_err(|_| DecodeError::DimensionOverflow)?,
-        u32::try_from(rect.d.h).map_err(|_| DecodeError::DimensionOverflow)?,
-    ))
-}
-
-const fn map_cfa_color(value: u8) -> CfaColor {
-    match value {
-        0 => CfaColor::Red,
-        1 => CfaColor::Green,
-        2 => CfaColor::Blue,
-        3 => CfaColor::Cyan,
-        4 => CfaColor::Magenta,
-        5 => CfaColor::Yellow,
-        6 => CfaColor::White,
-        _ => CfaColor::Unknown,
-    }
-}
-
-const fn map_orientation(value: RawlerOrientation) -> Orientation {
-    match value {
-        RawlerOrientation::Normal => Orientation::Normal,
-        RawlerOrientation::HorizontalFlip => Orientation::HorizontalFlip,
-        RawlerOrientation::Rotate180 => Orientation::Rotate180,
-        RawlerOrientation::VerticalFlip => Orientation::VerticalFlip,
-        RawlerOrientation::Transpose => Orientation::Transpose,
-        RawlerOrientation::Rotate90 => Orientation::Rotate90,
-        RawlerOrientation::Transverse => Orientation::Transverse,
-        RawlerOrientation::Rotate270 => Orientation::Rotate270,
-        RawlerOrientation::Unknown => Orientation::Unknown,
-    }
 }
 
 #[derive(Debug, Error)]
@@ -342,370 +115,54 @@ pub enum DecodeError {
         #[source]
         source: std::io::Error,
     },
-    #[error("RAW decoder failed: {0}")]
-    Rawler(String),
+    #[error("RAW source {path} has {actual} bytes, above the native decoder limit of {limit}")]
+    InputTooLarge { path: PathBuf, actual: u64, limit: u64 },
+    #[error("could not allocate {bytes} bytes for the bounded RAW input")]
+    InputAllocation { bytes: usize },
+    #[error("native EOS R8 CR3 decoder failed: {0}")]
+    NativeCr3(String),
+    #[error("native EOS R8 CR3 supports only image index 0, got {index}")]
+    UnsupportedImageIndex { index: usize },
     #[error("RAW decoder panicked; decode untrusted files in a sandboxed worker")]
     DecoderPanicked,
     #[error("decode was superseded by a newer open request")]
     Cancelled,
     #[error("RAW dimensions do not fit the domain representation")]
     DimensionOverflow,
-    #[error("floating-point/linear DNG is not supported by the Bayer fast path yet")]
-    UnsupportedFloatRaw,
     #[error("decoded frame is invalid: {0}")]
     InvalidFrame(#[from] FrameError),
 }
 
 pub fn decode_file(path: impl AsRef<Path>) -> Result<DecodeOutput, DecodeError> {
-    RawlerDecoder.decode(&DecodeRequest::new(path.as_ref()))
+    NativeCr3Decoder.decode(&DecodeRequest::new(path.as_ref()))
 }
 
 #[cfg(test)]
 mod tests {
-    use std::{
-        collections::HashMap,
-        env,
-        path::{Path, PathBuf},
-    };
-
     use std::sync::{
         Arc,
         atomic::{AtomicU64, Ordering},
     };
 
-    use rawler::{
-        CFA,
-        cfa::PlaneColor,
-        decoders::Camera,
-        rawimage::{BlackLevel, CFAConfig, RawImage, RawImageData, RawPhotometricInterpretation, WhiteLevel},
-    };
-    use rrrah_core::{CfaColor, FrameError, Photometric};
-
-    use super::{
-        DecodeError, DecodeRequest, GenerationToken, RAWLER_0_7_2_MOSAIC_CONTRACT_1, RawDecoder,
-        RawlerDecoder, adapt_rawler_image, preferred_color_matrix,
-    };
-
-    fn camera(cfa: &str) -> Camera {
-        let mut camera = Camera::new();
-        camera.make = "fixture".to_string();
-        camera.model = "deterministic".to_string();
-        camera.clean_make = camera.make.clone();
-        camera.clean_model = camera.model.clone();
-        camera.cfa = CFA::new(cfa);
-        camera.plane_color = PlaneColor::new("RGB");
-        camera.real_bps = 12;
-        camera.xyz_to_cam = [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0], [0.0, 0.0, 0.0]];
-        camera
-    }
-
-    fn raw_image(
-        cfa: &str,
-        data: RawImageData,
-        width: usize,
-        height: usize,
-        photometric: RawPhotometricInterpretation,
-    ) -> RawImage {
-        raw_image_with_camera(cfa, data, width, height, photometric, [1.0; 4], None)
-    }
-
-    fn raw_image_with_wb(
-        cfa: &str,
-        data: RawImageData,
-        width: usize,
-        height: usize,
-        photometric: RawPhotometricInterpretation,
-        wb: [f32; 4],
-    ) -> RawImage {
-        raw_image_with_camera(cfa, data, width, height, photometric, wb, None)
-    }
-
-    fn raw_image_with_camera(
-        cfa: &str,
-        data: RawImageData,
-        width: usize,
-        height: usize,
-        photometric: RawPhotometricInterpretation,
-        wb: [f32; 4],
-        color_matrix: Option<Vec<f32>>,
-    ) -> RawImage {
-        let mut camera = camera(cfa);
-        if let Some(matrix) = color_matrix {
-            camera
-                .color_matrix
-                .insert(rawler::imgop::xyz::Illuminant::D65, matrix);
-            camera.xyz_to_cam = [[0.0; 3]; 4];
-        }
-        RawImage::new_with_data(
-            camera,
-            data,
-            width,
-            height,
-            1,
-            wb,
-            photometric,
-            Some(BlackLevel::zero(1, 1, 1)),
-            Some(WhiteLevel::new([4095_u32])),
-            false,
-        )
-    }
-
-    #[test]
-    fn preserves_three_channel_wb_when_fourth_plane_is_absent() {
-        let image = raw_image_with_wb(
-            "RGGB",
-            RawImageData::Integer(vec![1, 2, 3, 4]),
-            2,
-            2,
-            RawPhotometricInterpretation::Cfa(CFAConfig::new(&CFA::new("RGGB"), &PlaneColor::new("RGB"))),
-            [2.0, 1.0, 3.0, f32::NAN],
-        );
-        let output = adapt_rawler_image(image).expect("metadata adaptation");
-        for (actual, expected) in output
-            .metadata
-            .white_balance
-            .into_iter()
-            .zip([2.0, 1.0, 3.0, 1.0])
-        {
-            assert!((actual - expected).abs() < f32::EPSILON);
-        }
-    }
-
-    #[test]
-    fn prefers_tagged_color_matrix_over_legacy_zero_matrix() {
-        let image = raw_image_with_camera(
-            "RGGB",
-            RawImageData::Integer(vec![1, 2, 3, 4]),
-            2,
-            2,
-            RawPhotometricInterpretation::Cfa(CFAConfig::new(&CFA::new("RGGB"), &PlaneColor::new("RGB"))),
-            [1.0; 4],
-            Some(vec![0.8, 0.1, 0.05, 0.1, 0.9, 0.05, 0.05, 0.1, 0.85]),
-        );
-        let output = adapt_rawler_image(image).expect("metadata adaptation");
-        for (actual, expected) in output.metadata.xyz_to_camera[0].into_iter().zip([0.8, 0.1, 0.05]) {
-            assert!((actual - expected).abs() < f32::EPSILON);
-        }
-        for (actual, expected) in output.metadata.xyz_to_camera[2]
-            .into_iter()
-            .zip([0.05, 0.1, 0.85])
-        {
-            assert!((actual - expected).abs() < f32::EPSILON);
-        }
-    }
-
-    #[test]
-    fn color_matrix_fallback_is_independent_of_hashmap_insertion_order() {
-        use rawler::imgop::xyz::Illuminant;
-
-        let tungsten = vec![3.0; 9];
-        let d50 = vec![5.0; 9];
-        let mut first = HashMap::new();
-        first.insert(Illuminant::A, tungsten.clone());
-        first.insert(Illuminant::D50, d50.clone());
-        let mut reversed = HashMap::new();
-        reversed.insert(Illuminant::D50, d50.clone());
-        reversed.insert(Illuminant::A, tungsten);
-
-        assert_eq!(preferred_color_matrix(&first), Some(&d50));
-        assert_eq!(preferred_color_matrix(&reversed), Some(&d50));
-
-        let d65 = vec![65.0; 9];
-        reversed.insert(Illuminant::D65, d65.clone());
-        assert_eq!(preferred_color_matrix(&reversed), Some(&d65));
-    }
-
-    #[test]
-    fn color_matrix_selection_skips_invalid_preferred_shapes() {
-        use rawler::imgop::xyz::Illuminant;
-
-        let d50 = vec![50.0; 9];
-        let tungsten = vec![3.0; 12];
-        let mut matrices = HashMap::from([
-            (Illuminant::D65, vec![65.0; 8]),
-            (Illuminant::D55, vec![55.0; 10]),
-            (Illuminant::D50, d50.clone()),
-            (Illuminant::A, tungsten.clone()),
-            (Illuminant::Flash, vec![4.0; 15]),
-        ]);
-        assert_eq!(preferred_color_matrix(&matrices), Some(&d50));
-
-        matrices.insert(Illuminant::D50, vec![50.0; 15]);
-        assert_eq!(preferred_color_matrix(&matrices), Some(&tungsten));
-
-        matrices.insert(Illuminant::A, vec![3.0; 10]);
-        assert_eq!(preferred_color_matrix(&matrices), None);
-    }
-
-    #[test]
-    #[allow(clippy::format_collect)]
-    fn recipe_manifest_is_bound_to_checked_semantic_dependency_closure() {
-        let manifest = RAWLER_0_7_2_MOSAIC_CONTRACT_1.canonical_bytes();
-        let actual = manifest[28..60]
-            .iter()
-            .map(|byte| format!("{byte:02x}"))
-            .collect::<String>();
-        let expected = include_str!("../../../scripts/rawler-semantic-lock.sha256").trim();
-        assert_eq!(actual, expected);
-        assert_eq!(RawlerDecoder.mosaic_recipe(), RAWLER_0_7_2_MOSAIC_CONTRACT_1);
-    }
+    use super::{DecodeError, DecodeRequest, GenerationToken};
 
     #[test]
     fn generation_token_cancels_stale_work() {
         let generation = Arc::new(AtomicU64::new(7));
-        let token = GenerationToken::new(generation.clone(), 7);
+        let token = GenerationToken::new(Arc::clone(&generation), 7);
         assert!(!token.is_cancelled());
         generation.store(8, Ordering::Release);
         assert!(token.is_cancelled());
     }
 
     #[test]
-    fn decode_request_rejects_stale_generation_before_io() {
+    fn stale_request_is_rejected_without_io() {
         let generation = Arc::new(AtomicU64::new(12));
         let request = DecodeRequest {
-            path: "does-not-exist.CR2".into(),
+            path: "does-not-exist.CR3".into(),
             image_index: 0,
-            cancellation: Some(GenerationToken::new(generation.clone(), 11)),
+            cancellation: Some(GenerationToken::new(generation, 11)),
         };
         assert!(matches!(request.check_cancelled(), Err(DecodeError::Cancelled)));
-        assert!(matches!(
-            RawlerDecoder.decode(&request),
-            Err(DecodeError::Cancelled)
-        ));
-        // A current generation remains admissible; this check exercises the
-        // same atomic ordering without opening a file or allocating pixels.
-        let current = DecodeRequest {
-            path: "does-not-exist.CR2".into(),
-            image_index: 0,
-            cancellation: Some(GenerationToken::new(generation, 12)),
-        };
-        assert!(current.check_cancelled().is_ok());
-    }
-
-    #[test]
-    fn cancellation_remains_observable_after_multiple_generation_updates() {
-        let generation = Arc::new(AtomicU64::new(31));
-        let token = GenerationToken::new(generation.clone(), 31);
-        generation.store(32, Ordering::Release);
-        assert!(token.is_cancelled());
-        generation.store(33, Ordering::Release);
-        assert!(token.is_cancelled());
-        generation.store(34, Ordering::Release);
-        assert!(token.is_cancelled());
-    }
-
-    #[test]
-    fn float_raw_is_rejected_without_quantizing_or_using_preview() {
-        let image = raw_image(
-            "RGGB",
-            RawImageData::Float(vec![0.0, 0.25, 0.5, 1.0]),
-            2,
-            2,
-            RawPhotometricInterpretation::Cfa(CFAConfig::new(&CFA::new("RGGB"), &PlaneColor::new("RGB"))),
-        );
-        assert!(matches!(
-            adapt_rawler_image(image),
-            Err(DecodeError::UnsupportedFloatRaw)
-        ));
-    }
-
-    #[test]
-    fn unsupported_cfa_is_preserved_and_rejected_by_fast_path_validation() {
-        let image = raw_image(
-            "RRGG",
-            RawImageData::Integer(vec![1, 2, 3, 4]),
-            2,
-            2,
-            RawPhotometricInterpretation::Cfa(CFAConfig::new(&CFA::new("RRGG"), &PlaneColor::new("RGB"))),
-        );
-        let output = adapt_rawler_image(image).expect("adapter must not rewrite CFA metadata");
-        let cfa = output.metadata.cfa.expect("CFA metadata");
-        assert_eq!(
-            cfa.cells,
-            vec![CfaColor::Red, CfaColor::Red, CfaColor::Green, CfaColor::Green]
-        );
-        assert!(matches!(
-            cfa.bayer_quad(),
-            Err(FrameError::UnsupportedCfa { width: 2, height: 2 })
-        ));
-    }
-
-    #[test]
-    fn non_cfa_photometric_is_explicit_and_never_substituted_with_jpeg() {
-        let image = raw_image(
-            "RGGB",
-            RawImageData::Integer(vec![1, 2, 3, 4]),
-            2,
-            2,
-            RawPhotometricInterpretation::BlackIsZero,
-        );
-        let output = adapt_rawler_image(image).expect("metadata adaptation");
-        assert_eq!(output.metadata.photometric, Photometric::BlackIsZero);
-        assert!(output.metadata.cfa.is_none());
-    }
-
-    fn configured_fixture(var: &str) -> Option<PathBuf> {
-        let path = env::var_os(var).map(PathBuf::from)?;
-        assert!(path.is_file(), "{var} points to a non-file: {}", path.display());
-        Some(path)
-    }
-
-    fn assert_full_raw_fixture(path: &Path, expected_extension: &str) {
-        assert_eq!(
-            path.extension()
-                .and_then(|value| value.to_str())
-                .map(str::to_ascii_lowercase),
-            Some(expected_extension.to_string()),
-            "fixture extension is part of the format contract"
-        );
-        let output = RawlerDecoder
-            .decode(&DecodeRequest::new(path))
-            .unwrap_or_else(|error| panic!("{expected_extension} fixture failed: {error}"));
-        assert!(output.mosaic.metadata.width > 0);
-        assert!(output.mosaic.metadata.height > 0);
-        assert!(!output.mosaic.pixels.is_empty());
-        assert_eq!(
-            output.mosaic.pixels.len(),
-            usize::try_from(output.mosaic.metadata.width).unwrap()
-                * usize::try_from(output.mosaic.metadata.height).unwrap()
-                * usize::from(output.mosaic.metadata.components_per_pixel)
-        );
-    }
-
-    #[test]
-    fn configured_cr2_fixture_decodes_sensor_samples() {
-        let Some(path) = configured_fixture("RRRAH_CR2_FIXTURE") else {
-            eprintln!("RRRAH_CR2_FIXTURE not set; skipping licensed CR2 corpus test");
-            return;
-        };
-        assert_full_raw_fixture(&path, "cr2");
-    }
-
-    #[test]
-    fn configured_dng_fixture_decodes_sensor_samples() {
-        let Some(path) = configured_fixture("RRRAH_DNG_FIXTURE") else {
-            eprintln!("RRRAH_DNG_FIXTURE not set; skipping licensed DNG corpus test");
-            return;
-        };
-        assert_full_raw_fixture(&path, "dng");
-    }
-
-    #[test]
-    fn configured_float_dng_fixture_has_an_explicit_typed_result() {
-        let Some(path) = configured_fixture("RRRAH_DNG_FLOAT_FIXTURE") else {
-            eprintln!("RRRAH_DNG_FLOAT_FIXTURE not set; skipping float DNG negative test");
-            return;
-        };
-        assert_eq!(
-            path.extension()
-                .and_then(|value| value.to_str())
-                .map(str::to_ascii_lowercase),
-            Some("dng".to_string())
-        );
-        let result = RawlerDecoder.decode(&DecodeRequest::new(&path));
-        assert!(
-            matches!(result, Err(DecodeError::UnsupportedFloatRaw)),
-            "float DNG must be rejected explicitly until the linear-float path is implemented: {result:?}"
-        );
     }
 }

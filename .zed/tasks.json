@@ -10,5 +10,11 @@
     "command": "cargo test --workspace --all-targets --locked",
     "cwd": "$ZED_WORKTREE_ROOT",
     "use_new_terminal": true
+  },
+  {
+    "label": "Rrrah: run (no cache)",
+    "command": "cargo run --release -p rrrah -- --no-cache",
+    "cwd": "$ZED_WORKTREE_ROOT",
+    "use_new_terminal": true
   }
 ]

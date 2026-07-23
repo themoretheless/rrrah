@@ -13,10 +13,6 @@ allow = [
     "CC0-1.0",
     # Required by the transitive `directories` crate (dirs-sys -> option-ext).
     "MPL-2.0",
-    # rawler 0.7.2 advertises this deprecated SPDX spelling; retain it until
-    # upstream publishes a corrected manifest. This is intentionally explicit:
-    # release packaging must ship LGPL text and relinking/source notices.
-    "LGPL-2.1",
 ]
 confidence-threshold = 0.8
 [bans]

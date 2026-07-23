@@ -1,7 +1,7 @@
 //! Foreground-priority admission for expensive full-RAW work.
 //!
-//! Rawler's entropy decoder cannot be preempted in the middle of a camera
-//! codec call.  This gate therefore prevents a foreground decode and the
+//! Native entropy decoding is cooperatively cancelled at row boundaries. This
+//! gate still prevents a foreground decode and the
 //! speculative cache warmer from running concurrently, while keeping every
 //! wait off the winit thread.  Foreground intent is published before its
 //! worker waits for the permit, so queued prefetch can never jump the line.

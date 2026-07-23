@@ -64,7 +64,7 @@ async fn run() -> Result<(), Box<dyn std::error::Error>> {
         // upload_ms still records a full eager atlas upload for this RAW size.
         let mut renderer = RawRenderer::new(&device, wgpu::TextureFormat::Rgba8UnormSrgb);
         let upload_started = Instant::now();
-        renderer.upload_mosaic(&device, &queue, &mosaic)?;
+        let _upload_timings = renderer.upload_mosaic(&device, &queue, &mosaic)?;
         // Keep queue enqueue/allocation separate from the explicit wait. The
         // latter prevents the first render's timing from absorbing pending
         // write_texture work; it is not a claim about a GPU copy timestamp.

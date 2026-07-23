@@ -115,7 +115,7 @@ pub fn invert_3x3(matrix: [[f32; 3]; 3]) -> Option<[[f32; 3]; 3]> {
     ])
 }
 
-/// Reproduces the conventional dcraw/rawler camera-to-linear-sRGB transform.
+/// Reproduces the conventional dcraw-style camera-to-linear-sRGB transform.
 ///
 /// `xyz_to_camera` is reduced to its first three camera planes. Each row of
 /// `XYZ_to_camera * linear_sRGB_to_XYZ` is normalized before inversion so that

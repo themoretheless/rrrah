@@ -3,16 +3,17 @@
 Rrrah is a native Rust viewer whose first displayed image is developed from the
 sensor mosaic itself. It never substitutes the embedded JPEG for the main view.
 
-The fast path is deliberately narrow and measurable:
+The current fast path is deliberately narrow and measurable:
 
-1. decode lossless CR2/DNG payloads into a compact `u16` mosaic;
+1. parse Canon EOS R8 CR3/CRX and decode four lossless parity planes in native Rust;
 2. cache that decoded mosaic;
 3. upload it once as an integer GPU texture;
 4. normalize, demosaic, white-balance, color-convert, and tone-map only the
    visible viewport in WGSL.
 
-The current implementation targets 2x2 RGB Bayer CR2/CR3 and DNG files. The decoder
-boundary is designed for additional RAW layouts and a LibRaw fallback.
+The current decoder accepts the confirmed full-resolution, one-tile, 14-bit
+Canon EOS R8 CR3 profile. It has no external RAW-decoder dependency. Other
+cameras and RAW formats are rejected instead of being guessed.
 
 Detailed design, equations, budgets, and benchmark protocol live in
 [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
@@ -65,21 +66,20 @@ contract are recorded in [GALLERY_ARCHITECTURE.md](docs/GALLERY_ARCHITECTURE.md)
 ## Run
 
 ```bash
-cargo run --release -- path/to/image.CR2
-cargo run --release -- --inspect path/to/image.DNG
-BENCH_REPS=9 scripts/bench-matrix.sh /path/to/image.CR2
+cargo run --release -p rrrah -- --no-cache path/to/image.CR3
+cargo run --release -p rrrah -- --no-cache --inspect path/to/image.CR3
 ```
 
-Controls: drop a CR2/CR3/DNG file or folder onto the window; a dropped folder opens
-its first RAW and `←`/`→` navigate the folder. Mouse wheel zooms, left-drag
+Controls: drop an EOS R8 CR3 file or folder onto the window; a dropped folder opens
+its first CR3 and `←`/`→` navigate the folder. Mouse wheel zooms, left-drag
 pans, `+`/`-` changes exposure, `F` returns to fit, and `R` resets the view.
 The in-image HUD reports decode/cache/adapt/upload/open timings and a live frame
 encode sample.
 
 ## Status
 
-This is an architecture-first prototype. It provides a real full-RAW decode,
+This is an architecture-first prototype. It provides a real native EOS R8 full-RAW decode,
 full-resolution tiled GPU upload for adapters with texture-array capacity,
 timing instrumentation, and warm-open cache; it is not yet a replacement for a
-color-managed production raw developer. Viewport residency and independent DNG
-tile decode are the next optimization layer.
+color-managed production raw developer. Additional camera profiles require
+separate framing, metadata and pixel-oracle validation.

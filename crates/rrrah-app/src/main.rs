@@ -15,7 +15,6 @@
 use std::{
     fs,
     path::{Path, PathBuf},
-    process::Command,
     sync::{
         Arc,
         atomic::{AtomicU64, Ordering},
@@ -30,11 +29,11 @@ use crossbeam_channel::{Receiver, Sender, TryRecvError, bounded, unbounded};
 use directories::ProjectDirs;
 use rrrah_cache::{CacheKey, DEFAULT_MAX_DISK_CACHE_BYTES, DiskMosaicCache, SourceFingerprint};
 use rrrah_core::DecodedMosaic;
-use rrrah_decode::{DecodeOutput, DecodeRequest, GenerationToken, RawDecoder, RawlerDecoder};
-use rrrah_gpu::{HudRenderer, RawRenderer, ViewParameters};
+use rrrah_decode::{DecodeRequest, DecodeTimings, GenerationToken, NativeCr3Decoder, RawDecoder};
+use rrrah_gpu::{GpuUploadTimings, HudCard, HudRenderer, RawRenderer, ViewParameters};
 use winit::{
     application::ApplicationHandler,
-    dpi::{PhysicalPosition, PhysicalSize},
+    dpi::{LogicalSize, PhysicalPosition, PhysicalSize},
     event::{ElementState, MouseButton, MouseScrollDelta, WindowEvent},
     event_loop::{ActiveEventLoop, ControlFlow, EventLoop, EventLoopProxy, OwnedDisplayHandle},
     keyboard::{KeyCode, PhysicalKey},
@@ -45,13 +44,17 @@ mod cache_telemetry;
 mod cache_writer;
 mod decode_gate;
 mod gallery;
+mod pipeline_telemetry;
 
 use cache_telemetry::{CacheTelemetry, CacheTelemetrySnapshot};
 use cache_writer::CacheWriter;
 use decode_gate::{DecodeGate, ForegroundTicket};
+use pipeline_telemetry::{
+    CacheRoute, FrameSubmitTimings, FrontendTimings, PipelineSnapshot, PipelineStageState, RawKind,
+};
 
 #[derive(Debug, Parser)]
-#[command(name = "rrrah", about = "Fast full-RAW CR2/DNG viewer")]
+#[command(name = "rrrah", about = "Native full-sensor Canon EOS R8 CR3 viewer")]
 struct Cli {
     /// Decode and print metadata/timings without opening a window.
     #[arg(long)]
@@ -68,12 +71,22 @@ struct Cli {
 
 #[derive(Debug)]
 enum LoadEvent {
+    Progress {
+        generation: u64,
+        raw_kind: RawKind,
+        cache_route: Option<CacheRoute>,
+        timings: FrontendTimings,
+    },
     Ready {
         generation: u64,
         mosaic: DecodedMosaic,
-        cache_hit: bool,
+        raw_kind: RawKind,
+        cache_route: CacheRoute,
         elapsed: Duration,
-        decode: Option<DecodeOutput>,
+        requested_at: Instant,
+        ready_published_at: Instant,
+        frontend: FrontendTimings,
+        decode: Option<DecodeTimings>,
     },
     Failed {
         generation: u64,
@@ -112,26 +125,38 @@ fn inspect(path: &PathBuf, cache_root: Option<&std::path::Path>, no_cache: bool)
         Some(SourceFingerprint::from_path(path).context("fingerprint RAW")?)
     };
     if let (Some(cache), Some(fingerprint)) = (&cache, &fingerprint) {
-        let key = CacheKey::for_mosaic(fingerprint, 0);
+        let key = CacheKey::for_mosaic_recipe(fingerprint, 0, NativeCr3Decoder.mosaic_recipe());
         if let Some(hit) = cache.load(key).context("read decoded-mosaic cache")? {
-            print_metadata(&hit.mosaic, true, hit.elapsed, started.elapsed());
+            print_metadata(&hit.mosaic, true, hit.elapsed, started.elapsed(), None);
             return Ok(());
         }
     }
-    let output = RawlerDecoder
+    let output = NativeCr3Decoder
         .decode(&rrrah_decode::DecodeRequest::new(path))
         .map_err(|error| anyhow::anyhow!(error))?;
     if let (Some(cache), Some(fingerprint)) = (&cache, &fingerprint) {
-        let key = CacheKey::for_mosaic(fingerprint, 0);
+        let key = CacheKey::for_mosaic_recipe(fingerprint, 0, NativeCr3Decoder.mosaic_recipe());
         cache
             .store(key, &output.mosaic)
             .context("write decoded-mosaic cache")?;
     }
-    print_metadata(&output.mosaic, false, output.timings.total, started.elapsed());
+    print_metadata(
+        &output.mosaic,
+        false,
+        output.timings.total,
+        started.elapsed(),
+        Some(&output.timings),
+    );
     Ok(())
 }
 
-fn print_metadata(mosaic: &DecodedMosaic, cache_hit: bool, decode_time: Duration, total: Duration) {
+fn print_metadata(
+    mosaic: &DecodedMosaic,
+    cache_hit: bool,
+    decode_time: Duration,
+    total: Duration,
+    decode: Option<&DecodeTimings>,
+) {
     let metadata = &mosaic.metadata;
     println!("source: {} {}", metadata.make, metadata.model);
     println!(
@@ -154,6 +179,22 @@ fn print_metadata(mosaic: &DecodedMosaic, cache_hit: bool, decode_time: Duration
         "cache_hit: {cache_hit}, decode_or_cache: {:.2?}, total: {:.2?}",
         decode_time, total
     );
+    if let Some(timings) = decode
+        && let Some(native) = timings.native
+    {
+        println!(
+            "native_crx: source={:.2?}, parse={:.2?}, workers={}, planes=[{:.2?}, {:.2?}, {:.2?}, {:.2?}], plane_wall={:.2?}, interleave={:.2?}",
+            timings.source_open,
+            timings.decoder_select,
+            native.worker_count,
+            native.plane_decode[0],
+            native.plane_decode[1],
+            native.plane_decode[2],
+            native.plane_decode[3],
+            native.plane_wall,
+            native.interleave,
+        );
+    }
     println!("embedded JPEG is not used by this path");
 }
 
@@ -208,11 +249,18 @@ enum WakeEvent {
 struct LoadRequest {
     path: PathBuf,
     generation: u64,
+    requested_at: Instant,
     foreground: ForegroundTicket,
 }
 
-/// One persistent foreground decoder with a latest-wins queue. Rawler cannot
-/// stop during entropy decode, so serializing requests is essential: rapid
+#[derive(Debug, Clone, Copy)]
+struct PendingFirstPresent {
+    generation: u64,
+    requested_at: Instant,
+}
+
+/// One persistent foreground decoder with a latest-wins queue. Serializing
+/// requests is essential while a plane is inside entropy decode: rapid
 /// navigation keeps at most one active decode and one pending path instead of
 /// spawning an unbounded set of competing decoder threads.
 struct ForegroundLoader {
@@ -278,21 +326,25 @@ impl ForegroundLoader {
     }
 
     fn submit_initial(&self, path: PathBuf) -> Result<()> {
+        let requested_at = Instant::now();
         let generation = self.current_generation();
         self.telemetry.begin_lookup(generation);
         self.replace_pending(LoadRequest {
             path,
             generation,
+            requested_at,
             foreground: self.decode_gate.request_foreground(),
         })
     }
 
     fn submit(&self, path: PathBuf) -> Result<u64> {
+        let requested_at = Instant::now();
         let generation = self.generation.fetch_add(1, Ordering::AcqRel).wrapping_add(1);
         self.telemetry.begin_lookup(generation);
         self.replace_pending(LoadRequest {
             path,
             generation,
+            requested_at,
             foreground: self.decode_gate.request_foreground(),
         })?;
         Ok(generation)
@@ -322,30 +374,73 @@ fn execute_load(
     let LoadRequest {
         path,
         generation,
+        requested_at,
         foreground,
     } = request;
     let token = GenerationToken::new(load_generation, generation);
     if token.is_cancelled() {
         return;
     }
-    let started = Instant::now();
-    let fingerprint = match cache {
-        Some(_) => match SourceFingerprint::from_path(&path) {
-            Ok(value) => Some(value),
-            Err(error) => {
-                telemetry.record_read_error(generation);
-                publish_load_failure(generation, error.to_string(), &token, sender, proxy);
-                return;
-            }
+    let raw_kind = RawKind::from_path(&path);
+    let mut frontend = FrontendTimings {
+        queue_wait: requested_at.elapsed(),
+        ..FrontendTimings::default()
+    };
+    publish_load_event(
+        LoadEvent::Progress {
+            generation,
+            raw_kind,
+            cache_route: cache.is_none().then_some(CacheRoute::Disabled),
+            timings: frontend,
         },
+        sender,
+        proxy,
+    );
+    let fingerprint = match cache {
+        Some(_) => {
+            let fingerprint_started = Instant::now();
+            match SourceFingerprint::from_path(&path) {
+                Ok(value) => {
+                    frontend.fingerprint = Some(fingerprint_started.elapsed());
+                    Some(value)
+                }
+                Err(error) => {
+                    telemetry.record_read_error(generation);
+                    publish_load_failure(generation, error.to_string(), &token, sender, proxy);
+                    return;
+                }
+            }
+        }
         None => None,
     };
+    if cache.is_some() {
+        publish_load_event(
+            LoadEvent::Progress {
+                generation,
+                raw_kind,
+                cache_route: None,
+                timings: frontend,
+            },
+            sender,
+            proxy,
+        );
+    }
     if token.is_cancelled() {
         return;
     }
+    let mut cache_route = if cache.is_some() {
+        CacheRoute::Miss
+    } else {
+        CacheRoute::Disabled
+    };
+    let mut cache_key = None;
     if let (Some(cache), Some(fingerprint)) = (cache, &fingerprint) {
-        let key = CacheKey::for_mosaic(fingerprint, 0);
-        match cache.load(key) {
+        let cache_lookup_started = Instant::now();
+        let key = CacheKey::for_mosaic_recipe(fingerprint, 0, NativeCr3Decoder.mosaic_recipe());
+        cache_key = Some(key);
+        let cache_result = cache.load(key);
+        frontend.cache_lookup = Some(cache_lookup_started.elapsed());
+        match cache_result {
             Ok(Some(hit)) => {
                 if token.is_cancelled() {
                     return;
@@ -359,8 +454,12 @@ fn execute_load(
                     LoadEvent::Ready {
                         generation,
                         mosaic: hit.mosaic,
-                        cache_hit: true,
-                        elapsed: started.elapsed(),
+                        raw_kind,
+                        cache_route: CacheRoute::Hit,
+                        elapsed: requested_at.elapsed(),
+                        requested_at,
+                        ready_published_at: Instant::now(),
+                        frontend,
                         decode: None,
                     },
                     sender,
@@ -370,23 +469,48 @@ fn execute_load(
             }
             Ok(None) => telemetry.record_miss(generation),
             Err(error) => {
+                cache_route = CacheRoute::ErrorFallback;
                 telemetry.record_read_error(generation);
                 log::warn!("ignoring corrupt/unreadable cache: {error}");
             }
         }
     }
+    if cache.is_some() {
+        publish_load_event(
+            LoadEvent::Progress {
+                generation,
+                raw_kind,
+                cache_route: Some(cache_route),
+                timings: frontend,
+            },
+            sender,
+            proxy,
+        );
+    }
     // This wait runs only on the persistent foreground worker.  The UI has
     // already published foreground priority through the request ticket and
     // remains free to redraw or replace the pending request.
+    let admission_started = Instant::now();
     let Some(decode_permit) = foreground.acquire_decode(|| token.is_cancelled()) else {
         return;
     };
+    frontend.admission = Some(admission_started.elapsed());
     if token.is_cancelled() {
         return;
     }
+    publish_load_event(
+        LoadEvent::Progress {
+            generation,
+            raw_kind,
+            cache_route: Some(cache_route),
+            timings: frontend,
+        },
+        sender,
+        proxy,
+    );
     let mut decode_request = DecodeRequest::new(&path);
     decode_request.cancellation = Some(token.clone());
-    let output = match RawlerDecoder.decode(&decode_request) {
+    let output = match NativeCr3Decoder.decode(&decode_request) {
         Ok(output) => output,
         Err(error) => {
             publish_load_failure(generation, error.to_string(), &token, sender, proxy);
@@ -400,19 +524,23 @@ fn execute_load(
     if token.is_cancelled() {
         return;
     }
-    let write_back = fingerprint
-        .as_ref()
-        .map(|fingerprint| (CacheKey::for_mosaic(fingerprint, 0), output.mosaic.clone()));
-    let elapsed = started.elapsed();
+    let decode_timings = output.timings;
+    let mosaic = output.mosaic;
+    let write_back = cache_key.map(|key| (key, mosaic.clone()));
+    let elapsed = requested_at.elapsed();
     // Publish the usable frame before enqueueing persistence. Even an already
     // active atomic store can never delay this Ready event or the next decode.
     publish_load_event(
         LoadEvent::Ready {
             generation,
-            mosaic: output.mosaic.clone(),
-            cache_hit: false,
+            mosaic,
+            raw_kind,
+            cache_route,
             elapsed,
-            decode: Some(output),
+            requested_at,
+            ready_published_at: Instant::now(),
+            frontend,
+            decode: Some(decode_timings),
         },
         sender,
         proxy,
@@ -456,7 +584,8 @@ struct App {
     dragging: bool,
     last_cursor: Option<PhysicalPosition<f64>>,
     status: String,
-    hud_text: String,
+    pipeline: PipelineSnapshot,
+    pending_first_present: Option<PendingFirstPresent>,
 }
 
 impl App {
@@ -471,7 +600,10 @@ impl App {
     ) -> Self {
         let raw_prefetcher =
             gallery::RawPrefetcher::new(cache_root, no_cache, decode_gate, Arc::clone(&cache_telemetry));
-        if !path.as_os_str().is_empty() {
+        let generation = foreground_loader.current_generation();
+        let has_initial_path = !path.as_os_str().is_empty();
+        let raw_kind = RawKind::from_path(&path);
+        if has_initial_path {
             raw_prefetcher.begin_foreground();
         }
         Self {
@@ -490,7 +622,12 @@ impl App {
             dragging: false,
             last_cursor: None,
             status: "decoding full RAW mosaic…".into(),
-            hud_text: "RRRAH\nWAITING FOR RAW".into(),
+            pipeline: if has_initial_path {
+                PipelineSnapshot::waiting(generation, raw_kind)
+            } else {
+                PipelineSnapshot::idle(generation)
+            },
+            pending_first_present: None,
         }
     }
 
@@ -501,82 +638,104 @@ impl App {
                 Err(TryRecvError::Empty) | Err(TryRecvError::Disconnected) => break,
             };
             match event {
+                LoadEvent::Progress {
+                    generation,
+                    raw_kind,
+                    cache_route,
+                    timings,
+                } => {
+                    if generation != self.foreground_loader.current_generation() {
+                        continue;
+                    }
+                    self.pending_first_present = None;
+                    self.pipeline =
+                        PipelineSnapshot::from_frontend(generation, raw_kind, cache_route, timings);
+                    if let Some(telemetry) = self.telemetry.as_mut() {
+                        telemetry.set_pipeline(&self.pipeline);
+                    }
+                }
                 LoadEvent::Ready {
                     generation,
                     mosaic,
-                    cache_hit,
+                    raw_kind,
+                    cache_route,
                     elapsed,
+                    requested_at,
+                    ready_published_at,
+                    frontend,
                     decode,
                 } => {
                     if generation != self.foreground_loader.current_generation() {
                         continue;
                     }
-                    if let Some(gpu) = self.gpu.as_mut() {
-                        let upload_started = Instant::now();
-                        let upload_result = gpu.renderer.upload_mosaic(&gpu.device, &gpu.queue, &mosaic);
-                        let upload_elapsed = upload_started.elapsed();
-                        if let Err(error) = upload_result {
-                            self.status = format!("GPU upload rejected RAW: {error}");
-                            self.hud_text = format!("RRRAH\nGPU UPLOAD REJECTED\n{}", error);
-                            if let Some(telemetry) = self.telemetry.as_mut() {
-                                telemetry.set_text(&self.hud_text);
+                    let cache_hit = cache_route == CacheRoute::Hit;
+                    let ui_dispatch = ready_published_at.elapsed();
+                    let mut pipeline = PipelineSnapshot::from_worker(
+                        generation,
+                        raw_kind,
+                        cache_route,
+                        frontend,
+                        decode.as_ref(),
+                        ui_dispatch,
+                    );
+                    let gpu_prepare_result: Option<Result<(GpuUploadTimings, Duration), String>> =
+                        if let Some(gpu) = self.gpu.as_mut() {
+                            match gpu.renderer.upload_mosaic(&gpu.device, &gpu.queue, &mosaic) {
+                                Ok(upload_timings) => {
+                                    self.view.viewport = [gpu.size.width as f32, gpu.size.height as f32];
+                                    let view_uniform_started = Instant::now();
+                                    gpu.renderer.update_view(&gpu.queue, self.view);
+                                    Some(Ok((upload_timings, view_uniform_started.elapsed())))
+                                }
+                                Err(error) => Some(Err(error.to_string())),
                             }
                         } else {
-                            self.view.viewport = [gpu.size.width as f32, gpu.size.height as f32];
-                            gpu.renderer.update_view(&gpu.queue, self.view);
-                            let file_bytes = fs::metadata(&self.path).map_or(0, |metadata| metadata.len());
-                            let rss_bytes = current_rss_bytes().unwrap_or(0);
-                            let mosaic_bytes = u64::try_from(mosaic.byte_len()).unwrap_or(u64::MAX);
-                            let gpu_bytes = gpu.renderer.resident_bytes();
-                            let gallery_prefix = self
-                                .gallery_index
-                                .map(|index| format!("RAW {}/{}; ", index + 1, self.gallery.len()))
-                                .unwrap_or_default();
-                            self.status = if cache_hit {
-                                format!(
-                                    "{gallery_prefix}full RAW ready from mosaic cache in {:.2?}",
-                                    elapsed
-                                )
-                            } else if let Some(decode) = decode.as_ref() {
-                                format!(
-                                    "{gallery_prefix}full RAW ready; entropy decode {:.2?}, total {:.2?}",
-                                    decode.timings.raw_decode, elapsed
-                                )
+                            None
+                        };
+
+                    let gallery_prefix = self
+                        .gallery_index
+                        .map(|index| format!("RAW {}/{}; ", index + 1, self.gallery.len()))
+                        .unwrap_or_default();
+                    self.status = if cache_hit {
+                        format!(
+                            "{gallery_prefix}full RAW ready from mosaic cache in {:.2?}",
+                            elapsed
+                        )
+                    } else if let Some(decode) = decode {
+                        format!(
+                            "{gallery_prefix}full RAW ready; native CRX decode {:.2?}, total {:.2?}",
+                            decode.raw_decode, elapsed
+                        )
+                    } else {
+                        format!("{gallery_prefix}full RAW ready in {:.2?}", elapsed)
+                    };
+
+                    match gpu_prepare_result {
+                        Some(Ok((upload_timings, view_uniform_elapsed))) => {
+                            if pipeline.complete_gpu(upload_timings, view_uniform_elapsed) {
+                                self.pending_first_present = Some(PendingFirstPresent {
+                                    generation,
+                                    requested_at,
+                                });
                             } else {
-                                format!("{gallery_prefix}full RAW ready in {:.2?}", elapsed)
-                            };
-                            let decode_lines = decode.as_ref().map_or_else(
-                                || format!("CACHE READ {:.2} MS", elapsed.as_secs_f64() * 1000.0),
-                                |decode| {
-                                    format!(
-                                        "HANDLE {:.2} MS\nREAD+DECODE {:.2} MS\nADAPT {:.2} MS",
-                                        decode.timings.source_open.as_secs_f64() * 1000.0,
-                                        decode.timings.raw_decode.as_secs_f64() * 1000.0,
-                                        decode.timings.adapt_metadata.as_secs_f64() * 1000.0
-                                    )
-                                },
-                            );
-                            self.hud_text = format!(
-                                "RRRAH\n{}X{}\nFILE {:.2} MB\n{}\nOPEN {:.2} MS\n{}\nUPLOAD CPU {:.2} MS\nMOSAIC RAM {:.2} MB\nGPU ATLAS EST {:.2} MB\nPROCESS RSS {:.2} MB",
-                                mosaic.metadata.width,
-                                mosaic.metadata.height,
-                                megabytes(file_bytes),
-                                if cache_hit {
-                                    "DISK MOSAIC HIT"
-                                } else {
-                                    "DISK MOSAIC MISS"
-                                },
-                                elapsed.as_secs_f64() * 1000.0,
-                                decode_lines,
-                                upload_elapsed.as_secs_f64() * 1000.0,
-                                megabytes(mosaic_bytes),
-                                megabytes(gpu_bytes),
-                                megabytes(rss_bytes)
-                            );
-                            if let Some(telemetry) = self.telemetry.as_mut() {
-                                telemetry.set_text(&self.hud_text);
+                                log::warn!("incomplete pipeline data for generation {generation}");
+                                self.pending_first_present = None;
+                                pipeline.mark_failed();
                             }
                         }
+                        Some(Err(error)) => {
+                            self.status = format!("GPU upload rejected RAW: {error}");
+                            self.pending_first_present = None;
+                            pipeline.mark_failed();
+                        }
+                        None => {
+                            self.pending_first_present = None;
+                        }
+                    }
+                    self.pipeline = pipeline;
+                    if let Some(telemetry) = self.telemetry.as_mut() {
+                        telemetry.set_pipeline(&self.pipeline);
                     }
                     if let Some(index) = self.gallery_index {
                         self.raw_prefetcher
@@ -588,6 +747,15 @@ impl App {
                 LoadEvent::Failed { generation, error } => {
                     if generation == self.foreground_loader.current_generation() {
                         self.status = format!("RAW load failed: {error}");
+                        self.pending_first_present = None;
+                        if self.pipeline.generation() != generation {
+                            self.pipeline =
+                                PipelineSnapshot::waiting(generation, RawKind::from_path(&self.path));
+                        }
+                        self.pipeline.mark_failed();
+                        if let Some(telemetry) = self.telemetry.as_mut() {
+                            telemetry.set_pipeline(&self.pipeline);
+                        }
                         self.raw_prefetcher.finish_foreground_and_submit(&[], 0);
                     }
                 }
@@ -620,7 +788,7 @@ impl App {
         if file_type.is_dir() {
             let files = gallery::scan_folder(&path);
             if files.is_empty() {
-                self.set_status(format!("no CR2/CR3/DNG files in {}", path.display()));
+                self.set_status(format!("no Canon EOS R8 CR3 files in {}", path.display()));
                 return;
             }
             self.gallery = files;
@@ -638,7 +806,7 @@ impl App {
                 .unwrap_or(0);
             self.open_gallery_index(index);
         } else {
-            self.set_status("drop rejected: expected a CR2, CR3 or DNG file/folder".into());
+            self.set_status("drop rejected: expected a Canon EOS R8 CR3 file/folder".into());
         }
     }
 
@@ -655,9 +823,17 @@ impl App {
                 ..ViewParameters::default()
             };
         }
-        if let Err(error) = self.foreground_loader.submit(path.clone()) {
-            self.set_status(format!("RAW loader failed: {error}"));
-            return;
+        let generation = match self.foreground_loader.submit(path.clone()) {
+            Ok(generation) => generation,
+            Err(error) => {
+                self.set_status(format!("RAW loader failed: {error}"));
+                return;
+            }
+        };
+        self.pending_first_present = None;
+        self.pipeline = PipelineSnapshot::waiting(generation, RawKind::from_path(&path));
+        if let Some(telemetry) = self.telemetry.as_mut() {
+            telemetry.set_pipeline(&self.pipeline);
         }
         let position = format!("{}/{}", index + 1, self.gallery.len());
         self.set_status(format!("decoding RAW {position}: {}", display_name(&path)));
@@ -689,7 +865,7 @@ impl App {
 fn is_supported_raw(path: &Path) -> bool {
     path.extension()
         .and_then(|extension| extension.to_str())
-        .is_some_and(|extension| matches!(extension.to_ascii_lowercase().as_str(), "cr2" | "cr3" | "dng"))
+        .is_some_and(|extension| extension.eq_ignore_ascii_case("cr3"))
 }
 
 fn display_name(path: &Path) -> String {
@@ -697,26 +873,6 @@ fn display_name(path: &Path) -> String {
         || path.display().to_string(),
         |name| name.to_string_lossy().into_owned(),
     )
-}
-
-fn megabytes(bytes: u64) -> f64 {
-    bytes as f64 / (1024.0 * 1024.0)
-}
-
-/// Best-effort process RSS for the HUD. macOS and Linux expose this through
-/// `ps`; if the platform denies the query, zero is shown rather than blocking
-/// the render path or claiming a fabricated number.
-fn current_rss_bytes() -> Option<u64> {
-    let pid = std::process::id().to_string();
-    let output = Command::new("ps")
-        .args(["-o", "rss=", "-p", &pid])
-        .output()
-        .ok()?;
-    let kib = String::from_utf8_lossy(&output.stdout)
-        .trim()
-        .parse::<u64>()
-        .ok()?;
-    kib.checked_mul(1024)
 }
 
 impl ApplicationHandler<WakeEvent> for App {
@@ -748,8 +904,9 @@ impl ApplicationHandler<WakeEvent> for App {
         self.gpu = Some(gpu);
         match event_loop.create_window(
             Window::default_attributes()
-                .with_title("Rrrah — timings + cache")
-                .with_inner_size(PhysicalSize::new(780, 620)),
+                .with_title("Rrrah — processing pipeline")
+                .with_inner_size(LogicalSize::new(1600.0, 1080.0))
+                .with_min_inner_size(LogicalSize::new(1180.0, 820.0)),
         ) {
             Ok(telemetry_window) => {
                 let telemetry_window = Arc::new(telemetry_window);
@@ -758,7 +915,7 @@ impl ApplicationHandler<WakeEvent> for App {
                     telemetry_window.clone(),
                 )) {
                     Ok(mut telemetry) => {
-                        telemetry.set_text(&self.hud_text);
+                        telemetry.set_pipeline(&self.pipeline);
                         telemetry.set_cache_snapshot(self.cache_telemetry.snapshot());
                         self.telemetry_window = Some(telemetry_window);
                         self.telemetry = Some(telemetry);
@@ -833,8 +990,21 @@ impl ApplicationHandler<WakeEvent> for App {
                 }
             }
             WindowEvent::RedrawRequested => {
-                if let Some(gpu) = self.gpu.as_mut() {
-                    gpu.render();
+                let display_submit = self.gpu.as_mut().and_then(GpuState::render);
+                if let Some(display_submit) = display_submit {
+                    if let Some(pending) = self.pending_first_present.take() {
+                        let current_generation = self.foreground_loader.current_generation();
+                        if pending.generation == current_generation
+                            && self.pipeline.generation() == pending.generation
+                            && self
+                                .pipeline
+                                .complete_display(display_submit, pending.requested_at.elapsed())
+                        {
+                            if let Some(telemetry) = self.telemetry.as_mut() {
+                                telemetry.set_pipeline(&self.pipeline);
+                            }
+                        }
+                    }
                 }
                 if let Some(telemetry_window) = &self.telemetry_window {
                     telemetry_window.request_redraw();
@@ -907,11 +1077,8 @@ struct TelemetryState {
     config: wgpu::SurfaceConfiguration,
     size: PhysicalSize<u32>,
     hud: HudRenderer,
-    base_text: String,
-    cache_text: String,
+    pipeline: PipelineSnapshot,
     cache_snapshot: Option<CacheTelemetrySnapshot>,
-    frame_submit_ms: Option<f64>,
-    frame_counter: u64,
 }
 
 impl TelemetryState {
@@ -956,7 +1123,7 @@ impl TelemetryState {
         };
         surface.configure(&device, &config);
         let hud = HudRenderer::new(&device, surface_format, [size.width as f32, size.height as f32]);
-        Ok(Self {
+        let mut state = Self {
             _instance: instance,
             window,
             surface,
@@ -965,18 +1132,20 @@ impl TelemetryState {
             config,
             size,
             hud,
-            base_text: "RRRAH\nWAITING FOR RAW".into(),
-            cache_text: "CACHE L2 DISK\nSTATUS WAITING".into(),
+            pipeline: PipelineSnapshot::idle(0),
             cache_snapshot: None,
-            frame_submit_ms: None,
-            frame_counter: 0,
-        })
+        };
+        state.rebuild_hud();
+        Ok(state)
     }
 
-    fn set_text(&mut self, text: &str) {
-        self.base_text.clear();
-        self.base_text.push_str(text);
+    fn set_pipeline(&mut self, pipeline: &PipelineSnapshot) {
+        if self.pipeline == *pipeline {
+            return;
+        }
+        self.pipeline.clone_from(pipeline);
         self.rebuild_hud();
+        self.window.request_redraw();
     }
 
     fn set_cache_snapshot(&mut self, snapshot: CacheTelemetrySnapshot) {
@@ -984,17 +1153,49 @@ impl TelemetryState {
             return;
         }
         self.cache_snapshot = Some(snapshot);
-        self.cache_text = snapshot.format_hud();
         self.rebuild_hud();
+        self.window.request_redraw();
     }
 
     fn rebuild_hud(&mut self) {
-        let frame_line = self.frame_submit_ms.map_or_else(
-            || "HUD SUBMIT -- MS".into(),
-            |milliseconds| format!("HUD SUBMIT {milliseconds:.2} MS"),
-        );
-        let text = format!("{}\n\n{}\n{}", self.base_text, self.cache_text, frame_line);
-        self.hud.update(&self.device, &self.queue, &text);
+        let pipeline_cards = self.pipeline.cards();
+        let cache_hud = self.cache_snapshot.map(CacheTelemetrySnapshot::format_hud);
+        let cache_current = cache_hud
+            .as_deref()
+            .and_then(|text| text.lines().nth(1))
+            .unwrap_or("CACHE STATUS WAITING");
+        let cache_session = cache_hud
+            .as_deref()
+            .and_then(|text| text.lines().nth(2))
+            .unwrap_or("SESSION --");
+        let cache_description = pipeline_cards
+            .iter()
+            .find(|card| card.cache_footer)
+            .map(|card| format!("{} / {} / {}", card.description, cache_current, cache_session));
+        let cards: Vec<_> = pipeline_cards
+            .iter()
+            .map(|card| {
+                let accent = match card.state {
+                    PipelineStageState::Pending => [0.36, 0.45, 0.58, 0.96],
+                    PipelineStageState::Running => [0.96, 0.64, 0.16, 0.96],
+                    PipelineStageState::Measured(_) => [0.14, 0.72, 0.48, 0.96],
+                    PipelineStageState::Shared(_) => [0.16, 0.68, 0.76, 0.96],
+                    PipelineStageState::Conditional(_) => [0.84, 0.52, 0.18, 0.96],
+                    PipelineStageState::NotTimed => [0.62, 0.42, 0.88, 0.96],
+                    PipelineStageState::Skipped => [0.32, 0.58, 0.86, 0.96],
+                    PipelineStageState::Failed => [0.88, 0.24, 0.26, 0.96],
+                };
+                let description = if card.cache_footer {
+                    cache_description.as_deref().unwrap_or(card.description)
+                } else {
+                    card.description
+                };
+                HudCard::new(&card.title, &card.time, description)
+                    .with_status(&card.status)
+                    .with_accent(accent)
+            })
+            .collect();
+        self.hud.update_cards(&self.device, &self.queue, &cards);
     }
 
     fn resize(&mut self, size: PhysicalSize<u32>) {
@@ -1007,6 +1208,7 @@ impl TelemetryState {
         self.surface.configure(&self.device, &self.config);
         self.hud
             .resize(&self.queue, [size.width as f32, size.height as f32]);
+        self.rebuild_hud();
     }
 
     fn render(&mut self) {
@@ -1020,7 +1222,6 @@ impl TelemetryState {
             wgpu::CurrentSurfaceTexture::Timeout | wgpu::CurrentSurfaceTexture::Occluded => return,
             wgpu::CurrentSurfaceTexture::Validation => return,
         };
-        let frame_started = Instant::now();
         let view = output
             .texture
             .create_view(&wgpu::TextureViewDescriptor::default());
@@ -1056,11 +1257,6 @@ impl TelemetryState {
         self.queue.submit([encoder.finish()]);
         self.window.pre_present_notify();
         self.queue.present(output);
-        self.frame_counter = self.frame_counter.wrapping_add(1);
-        if self.frame_counter.is_multiple_of(30) {
-            self.frame_submit_ms = Some(frame_started.elapsed().as_secs_f64() * 1000.0);
-            self.rebuild_hud();
-        }
         self.window.request_redraw();
     }
 }
@@ -1140,17 +1336,26 @@ impl GpuState {
         self.surface.configure(&self.device, &self.config);
     }
 
-    fn render(&mut self) {
+    fn render(&mut self) -> Option<FrameSubmitTimings> {
+        let total_started = Instant::now();
+        let surface_acquire_started = Instant::now();
         let output = match self.surface.get_current_texture() {
             wgpu::CurrentSurfaceTexture::Success(texture)
             | wgpu::CurrentSurfaceTexture::Suboptimal(texture) => texture,
             wgpu::CurrentSurfaceTexture::Outdated | wgpu::CurrentSurfaceTexture::Lost => {
                 self.surface.configure(&self.device, &self.config);
-                return;
+                self.window.request_redraw();
+                return None;
             }
-            wgpu::CurrentSurfaceTexture::Timeout | wgpu::CurrentSurfaceTexture::Occluded => return,
-            wgpu::CurrentSurfaceTexture::Validation => return,
+            wgpu::CurrentSurfaceTexture::Timeout => {
+                self.window.request_redraw();
+                return None;
+            }
+            wgpu::CurrentSurfaceTexture::Occluded => return None,
+            wgpu::CurrentSurfaceTexture::Validation => return None,
         };
+        let surface_acquire = surface_acquire_started.elapsed();
+        let frame_encode_started = Instant::now();
         let view = output
             .texture
             .create_view(&wgpu::TextureViewDescriptor::default());
@@ -1160,9 +1365,22 @@ impl GpuState {
                 label: Some("Rrrah frame encoder"),
             });
         self.renderer.encode(&mut encoder, &view);
-        self.queue.submit([encoder.finish()]);
+        let command_buffer = encoder.finish();
+        let frame_encode = frame_encode_started.elapsed();
+        let queue_submit_started = Instant::now();
+        self.queue.submit([command_buffer]);
+        let queue_submit = queue_submit_started.elapsed();
+        let present_request_started = Instant::now();
         self.window.pre_present_notify();
         self.queue.present(output);
+        let present_request = present_request_started.elapsed();
+        Some(FrameSubmitTimings {
+            surface_acquire,
+            frame_encode,
+            queue_submit,
+            present_request,
+            total: total_started.elapsed(),
+        })
     }
 }
 

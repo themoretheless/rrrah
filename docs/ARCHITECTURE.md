@@ -1,5 +1,10 @@
 # Rrrah: архитектура fast-open RAW viewer
 
+> Обновление 2026-07-23: упоминания Rawler/CR2/DNG ниже описывают прежний
+> прототип. Текущий production path — собственный EOS R8 CR3 decoder в
+> `rrrah-decode/src/cr3` и `native_backend.rs`; внешняя RAW-библиотека в
+> dependency graph отсутствует.
+
 ## Цель и инварианты
 
 Rrrah — native viewer для CR2/DNG, где первый корректный кадр строится из
