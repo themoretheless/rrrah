@@ -89,8 +89,8 @@ pub const NATIVE_EOS_R8_MOSAIC_CONTRACT_1: MosaicRecipeManifest = MosaicRecipeMa
 pub struct NativeCr3Decoder;
 
 impl RawDecoder for NativeCr3Decoder {
-    fn mosaic_recipe(&self) -> MosaicRecipeManifest {
-        NATIVE_EOS_R8_MOSAIC_CONTRACT_1
+    fn mosaic_recipe(&self, _request: &DecodeRequest) -> Result<MosaicRecipeManifest, DecodeError> {
+        Ok(NATIVE_EOS_R8_MOSAIC_CONTRACT_1)
     }
 
     fn decode(&self, request: &DecodeRequest) -> Result<DecodeOutput, DecodeError> {
@@ -134,6 +134,7 @@ impl RawDecoder for NativeCr3Decoder {
                 raw_image,
                 raw_decode,
                 native: Some(native),
+                dng: None,
                 adapt,
                 adapt_metadata,
                 total: total_started.elapsed(),
@@ -374,7 +375,12 @@ mod tests {
     #[test]
     #[allow(clippy::format_collect)]
     fn recipe_is_distinct_and_complete() {
-        assert_eq!(NativeCr3Decoder.mosaic_recipe(), NATIVE_EOS_R8_MOSAIC_CONTRACT_1);
+        assert_eq!(
+            NativeCr3Decoder
+                .mosaic_recipe(&DecodeRequest::new("fixture.CR3"))
+                .unwrap(),
+            NATIVE_EOS_R8_MOSAIC_CONTRACT_1
+        );
         assert_eq!(
             NATIVE_EOS_R8_MOSAIC_CONTRACT_1.decoder_backend_id(),
             NATIVE_CR3_BACKEND_ID

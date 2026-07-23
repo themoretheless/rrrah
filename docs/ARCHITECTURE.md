@@ -1,16 +1,15 @@
 # Rrrah: архитектура fast-open RAW viewer
 
-> Обновление 2026-07-23: упоминания Rawler/CR2/DNG ниже описывают прежний
-> прототип. Текущий production path — собственный EOS R8 CR3 decoder в
-> `rrrah-decode/src/cr3` и `native_backend.rs`; внешняя RAW-библиотека в
-> dependency graph отсутствует.
+> Обновление 2026-07-23: текущий production path состоит из собственных
+> декодеров EOS R8 CR3 и TIFF/DNG в `rrrah-decode`; внешней RAW-библиотеки в
+> dependency graph нет. Упоминания CR2 ниже относятся к будущему расширению.
 
 ## Цель и инварианты
 
-Rrrah — native viewer для CR2/DNG, где первый корректный кадр строится из
-сенсорных данных. Встроенный JPEG не является частью основного пути: декодер
-вызывает `rawler::Decoder::raw_image(..., false)`, а GPU получает исходную
-мозаику `u16`.
+Rrrah — native viewer для подтверждённого профиля EOS R8 CR3 и ограниченного
+подмножества CFA DNG, где первый корректный кадр строится из сенсорных данных.
+Встроенный JPEG не является частью основного пути: `NativeRawDecoder` направляет
+файл в собственный форматный backend, а GPU получает исходную мозаику `u16`.
 
 Целевые KPI следует измерять на конкретном железе, а не обещать универсальные
 миллисекунды:
@@ -19,7 +18,7 @@ Rrrah — native viewer для CR2/DNG, где первый корректный
 - `open → first RAW-derived pixels`;
 - `open → viewport-complete`;
 - `open → full decoded mosaic`;
-- отдельно cold/warm page cache, CR2/DNG, p50/p95;
+- отдельно cold/warm page cache, CR3/DNG, p50/p95;
 - GPU upload, shader time, dropped frames, cache byte-hit ratio.
 
 Типичный 24 MP Bayer-файл занимает `24e6 × 2 ≈ 48 MB` в `R16Uint`. Полный
@@ -32,15 +31,16 @@ Rrrah — native viewer для CR2/DNG, где первый корректный
 CLI / winit UI
     │  bounded events, generation gate
 FastOpenCoordinator
-    ├── RawDecoder port ── rawler adapter (optional LibRaw/worker fallback)
+    ├── RawDecoder port ── native CR3/DNG router
     ├── Cache port ─────── RAM weighted LRU + persistent mosaic blobs
     └── Gpu port ──────── wgpu R16Uint → WGSL demosaic/display
 ```
 
 - **S**: `rrrah-core` хранит только инварианты и математику; `rrrah-decode`
-  адаптирует rawler; `rrrah-cache` отвечает за fingerprints/атомарные blobs;
+  разбирает и адаптирует CR3/DNG; `rrrah-cache` отвечает за fingerprints/атомарные blobs;
   `rrrah-gpu` — только ресурсы и shader; app — оркестрация и ввод.
-- **O**: `RawDecoder` уже является исполняемым портом; `CachePort` и `GpuPort`
+- **O**: `RawDecoder` уже является исполняемым портом с независимыми CR3/DNG
+  backend IDs; `CachePort` и `GpuPort`
   пока задокументированы как целевые границы coordinator (MVP использует
   конкретные `DiskMosaicCache`/`RawRenderer`). Их выделение в traits — первый
   шаг перед добавлением LibRaw/Metal/Vulkan бэкендов.
@@ -88,7 +88,7 @@ B=\frac{NW+NE+SW+SE}{4}.
 
 ### 3. Цвет
 
-Rawler предоставляет `wb_coeffs` и `xyz_to_cam`. Для D65:
+Форматный backend предоставляет `white_balance` и `xyz_to_camera`. Для D65:
 
 \[
 M_{rgb\to cam}=normalize(M_{xyz\to cam}M_{sRGB\to XYZ}),\quad
@@ -194,10 +194,9 @@ Production format следует расширить до одного immutable 
 
 Полный алгоритм DNG tile planner, compression-specific параллелизм, halo
 зависимости демозаики, opcode boundaries и сравнение с последовательным CR2
-путём вынесены в [DNG_PARALLEL.md](DNG_PARALLEL.md). Важно: rawler уже
-распараллеливает tiled DNG внутри `raw_image`, но его публичный API всё равно
-материализует весь кадр. Для viewport-first открытия нужен отдельный tile API
-или upstream extension, иначе downsample/full-frame allocation остаются
+путём вынесены в [DNG_PARALLEL.md](DNG_PARALLEL.md). Текущий native DNG backend
+проверяет и декодирует strips/tiles в полную мозаику. Для viewport-first
+открытия нужен отдельный tile API; иначе full-frame allocation остаётся
 ограничением.
 
 Память для tile `T×T`:
@@ -232,7 +231,7 @@ IFD depth/count, cycle detection, tile/strip count validation и max pixel budge
 Cache header должен проверять `pixel_count == width×height×cpp`, finite metadata,
 payload length/checksum и отсутствие trailing garbage.
 
-Текущий адаптер ловит panic rawler и превращает его в ошибку. Production должен
+Текущие адаптеры ловят panic парсера/entropy decoder и превращают его в ошибку. Production должен
 вынести parser/entropy decoder в отдельный read-only worker process с лимитами CPU,
 RAM, wall time, IPC length и kill-on-hang; GPU context worker-у не передаётся.
 Fuzz corpus: CR2 generations/slices, tiled/strip DNG, LJPEG/Deflate/JXL, big/little
@@ -241,10 +240,9 @@ endian TIFF, циклические IFD, truncation и случайные offset
 
 ## Лицензии и ограничения
 
-Собственный код — MIT OR Apache-2.0. `rawler` — LGPL-2.1; LibRaw — LGPL-2.1 или
-CDDL-1.0; wgpu — MIT/Apache-2.0. Для закрытой поставки decoder лучше держать
-отдельным динамически загружаемым/IPC backend с relinkable objects и notices;
-для открытой сборки добавить LICENSE/NOTICE соответствующих компонентов.
+Собственный код — MIT OR Apache-2.0; wgpu — MIT/Apache-2.0. Rawler, LibRaw и
+RawSpeed не входят в default dependency graph. Для поставки нужно приложить
+license texts фактически распространяемых компонентов.
 
 DNG реализует технологию Adobe; в исходниках и документации должен быть заметный
 notice: `This product includes DNG technology under license by Adobe.`

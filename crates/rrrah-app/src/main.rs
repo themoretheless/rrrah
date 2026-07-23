@@ -29,7 +29,7 @@ use crossbeam_channel::{Receiver, Sender, TryRecvError, bounded, unbounded};
 use directories::ProjectDirs;
 use rrrah_cache::{CacheKey, DEFAULT_MAX_DISK_CACHE_BYTES, DiskMosaicCache, SourceFingerprint};
 use rrrah_core::DecodedMosaic;
-use rrrah_decode::{DecodeRequest, DecodeTimings, GenerationToken, NativeCr3Decoder, RawDecoder};
+use rrrah_decode::{DecodeRequest, DecodeTimings, GenerationToken, NativeRawDecoder, RawDecoder};
 use rrrah_gpu::{GpuUploadTimings, HudCard, HudRenderer, RawRenderer, ViewParameters};
 use winit::{
     application::ApplicationHandler,
@@ -54,7 +54,7 @@ use pipeline_telemetry::{
 };
 
 #[derive(Debug, Parser)]
-#[command(name = "rrrah", about = "Native full-sensor Canon EOS R8 CR3 viewer")]
+#[command(name = "rrrah", about = "Native full-sensor CR3 and DNG viewer")]
 struct Cli {
     /// Decode and print metadata/timings without opening a window.
     #[arg(long)]
@@ -118,6 +118,10 @@ fn default_cache_dir() -> Option<PathBuf> {
 
 fn inspect(path: &PathBuf, cache_root: Option<&std::path::Path>, no_cache: bool) -> Result<()> {
     let started = Instant::now();
+    let decode_request = DecodeRequest::new(path);
+    let recipe = NativeRawDecoder
+        .mosaic_recipe(&decode_request)
+        .map_err(|error| anyhow::anyhow!(error))?;
     let cache = cache_root.map(DiskMosaicCache::new);
     let fingerprint = if no_cache {
         None
@@ -125,17 +129,17 @@ fn inspect(path: &PathBuf, cache_root: Option<&std::path::Path>, no_cache: bool)
         Some(SourceFingerprint::from_path(path).context("fingerprint RAW")?)
     };
     if let (Some(cache), Some(fingerprint)) = (&cache, &fingerprint) {
-        let key = CacheKey::for_mosaic_recipe(fingerprint, 0, NativeCr3Decoder.mosaic_recipe());
+        let key = CacheKey::for_mosaic_recipe(fingerprint, 0, recipe);
         if let Some(hit) = cache.load(key).context("read decoded-mosaic cache")? {
             print_metadata(&hit.mosaic, true, hit.elapsed, started.elapsed(), None);
             return Ok(());
         }
     }
-    let output = NativeCr3Decoder
-        .decode(&rrrah_decode::DecodeRequest::new(path))
+    let output = NativeRawDecoder
+        .decode(&decode_request)
         .map_err(|error| anyhow::anyhow!(error))?;
     if let (Some(cache), Some(fingerprint)) = (&cache, &fingerprint) {
-        let key = CacheKey::for_mosaic_recipe(fingerprint, 0, NativeCr3Decoder.mosaic_recipe());
+        let key = CacheKey::for_mosaic_recipe(fingerprint, 0, recipe);
         cache
             .store(key, &output.mosaic)
             .context("write decoded-mosaic cache")?;
@@ -193,6 +197,21 @@ fn print_metadata(
             native.plane_decode[3],
             native.plane_wall,
             native.interleave,
+        );
+    }
+    if let Some(timings) = decode
+        && let Some(dng) = timings.dng
+    {
+        println!(
+            "native_dng: source={:.2?}, header={:.2?}, ifd_walk={:.2?}, raw_ifd={:.2?}, storage={:.2?}, unpack={:.2?}, linearize={:.2?}, metadata={:.2?}",
+            timings.source_open,
+            dng.tiff_header,
+            dng.ifd_walk,
+            dng.raw_ifd_select,
+            dng.storage_plan,
+            dng.pixel_unpack,
+            dng.linearization,
+            dng.metadata,
         );
     }
     println!("embedded JPEG is not used by this path");
@@ -381,6 +400,15 @@ fn execute_load(
     if token.is_cancelled() {
         return;
     }
+    let mut decode_request = DecodeRequest::new(&path);
+    decode_request.cancellation = Some(token.clone());
+    let recipe = match NativeRawDecoder.mosaic_recipe(&decode_request) {
+        Ok(recipe) => recipe,
+        Err(error) => {
+            publish_load_failure(generation, error.to_string(), &token, sender, proxy);
+            return;
+        }
+    };
     let raw_kind = RawKind::from_path(&path);
     let mut frontend = FrontendTimings {
         queue_wait: requested_at.elapsed(),
@@ -436,7 +464,7 @@ fn execute_load(
     let mut cache_key = None;
     if let (Some(cache), Some(fingerprint)) = (cache, &fingerprint) {
         let cache_lookup_started = Instant::now();
-        let key = CacheKey::for_mosaic_recipe(fingerprint, 0, NativeCr3Decoder.mosaic_recipe());
+        let key = CacheKey::for_mosaic_recipe(fingerprint, 0, recipe);
         cache_key = Some(key);
         let cache_result = cache.load(key);
         frontend.cache_lookup = Some(cache_lookup_started.elapsed());
@@ -508,9 +536,7 @@ fn execute_load(
         sender,
         proxy,
     );
-    let mut decode_request = DecodeRequest::new(&path);
-    decode_request.cancellation = Some(token.clone());
-    let output = match NativeCr3Decoder.decode(&decode_request) {
+    let output = match NativeRawDecoder.decode(&decode_request) {
         Ok(output) => output,
         Err(error) => {
             publish_load_failure(generation, error.to_string(), &token, sender, proxy);
@@ -788,7 +814,7 @@ impl App {
         if file_type.is_dir() {
             let files = gallery::scan_folder(&path);
             if files.is_empty() {
-                self.set_status(format!("no Canon EOS R8 CR3 files in {}", path.display()));
+                self.set_status(format!("no supported CR3 or DNG files in {}", path.display()));
                 return;
             }
             self.gallery = files;
@@ -806,7 +832,7 @@ impl App {
                 .unwrap_or(0);
             self.open_gallery_index(index);
         } else {
-            self.set_status("drop rejected: expected a Canon EOS R8 CR3 file/folder".into());
+            self.set_status("drop rejected: expected a supported CR3/DNG file or folder".into());
         }
     }
 
@@ -865,7 +891,12 @@ impl App {
 fn is_supported_raw(path: &Path) -> bool {
     path.extension()
         .and_then(|extension| extension.to_str())
-        .is_some_and(|extension| extension.eq_ignore_ascii_case("cr3"))
+        .is_some_and(|extension| {
+            extension.eq_ignore_ascii_case("cr3")
+                || extension.eq_ignore_ascii_case("dng")
+                || extension.eq_ignore_ascii_case("tif")
+                || extension.eq_ignore_ascii_case("tiff")
+        })
 }
 
 fn display_name(path: &Path) -> String {

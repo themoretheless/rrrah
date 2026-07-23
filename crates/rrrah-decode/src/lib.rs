@@ -1,11 +1,14 @@
 //! Native RAW decoding and domain adaptation.
 //!
-//! The production path is a clean-room Canon EOS R8 CR3 decoder. It reads the
-//! full sensor mosaic and never substitutes an embedded JPEG.
+//! The production paths are clean-room Canon EOS R8 CR3 and TIFF/DNG decoders.
+//! They read the full sensor mosaic and never substitute an embedded JPEG.
 #![allow(clippy::missing_errors_doc, clippy::cast_precision_loss)]
 
 mod cr3;
+mod dng;
+mod dng_backend;
 mod native_backend;
+mod native_router;
 
 use std::{
     path::{Path, PathBuf},
@@ -16,12 +19,14 @@ use std::{
     time::Duration,
 };
 
+pub use dng_backend::{NATIVE_DNG_BACKEND_ID, NATIVE_DNG_MOSAIC_CONTRACT_1, NativeDngDecoder};
 pub use native_backend::{NATIVE_CR3_BACKEND_ID, NATIVE_EOS_R8_MOSAIC_CONTRACT_1, NativeCr3Decoder};
+pub use native_router::NativeRawDecoder;
 use rrrah_core::{DecodedMosaic, FrameError, MosaicRecipeManifest};
 use thiserror::Error;
 
 pub trait RawDecoder: Send + Sync {
-    fn mosaic_recipe(&self) -> MosaicRecipeManifest;
+    fn mosaic_recipe(&self, request: &DecodeRequest) -> Result<MosaicRecipeManifest, DecodeError>;
     fn decode(&self, request: &DecodeRequest) -> Result<DecodeOutput, DecodeError>;
 }
 
@@ -88,9 +93,21 @@ pub struct DecodeTimings {
     /// Exactly `decoder_select + raw_image`.
     pub raw_decode: Duration,
     pub native: Option<NativeDecodeTimings>,
+    pub dng: Option<DngDecodeTimings>,
     pub adapt: AdaptTimings,
     pub adapt_metadata: Duration,
     pub total: Duration,
+}
+
+#[derive(Debug, Clone, Copy, Default)]
+pub struct DngDecodeTimings {
+    pub tiff_header: Duration,
+    pub ifd_walk: Duration,
+    pub raw_ifd_select: Duration,
+    pub metadata: Duration,
+    pub storage_plan: Duration,
+    pub pixel_unpack: Duration,
+    pub linearization: Duration,
 }
 
 #[derive(Debug, Clone, Copy, Default)]
@@ -121,7 +138,11 @@ pub enum DecodeError {
     InputAllocation { bytes: usize },
     #[error("native EOS R8 CR3 decoder failed: {0}")]
     NativeCr3(String),
-    #[error("native EOS R8 CR3 supports only image index 0, got {index}")]
+    #[error("native DNG decoder failed: {0}")]
+    NativeDng(String),
+    #[error("unsupported RAW format for {path}; expected .cr3, .dng, .tif, or .tiff")]
+    UnsupportedFormat { path: PathBuf },
+    #[error("native RAW backends support only image index 0, got {index}")]
     UnsupportedImageIndex { index: usize },
     #[error("RAW decoder panicked; decode untrusted files in a sandboxed worker")]
     DecoderPanicked,
@@ -134,7 +155,7 @@ pub enum DecodeError {
 }
 
 pub fn decode_file(path: impl AsRef<Path>) -> Result<DecodeOutput, DecodeError> {
-    NativeCr3Decoder.decode(&DecodeRequest::new(path.as_ref()))
+    NativeRawDecoder.decode(&DecodeRequest::new(path.as_ref()))
 }
 
 #[cfg(test)]

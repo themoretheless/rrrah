@@ -27,7 +27,7 @@ impl RawKind {
         {
             Some("cr2") => Self::Cr2,
             Some("cr3") => Self::Cr3,
-            Some("dng") => Self::Dng,
+            Some("dng" | "tif" | "tiff") => Self::Dng,
             _ => Self::Unknown,
         }
     }
@@ -286,6 +286,30 @@ impl PipelineSnapshot {
                         snapshot.set(id, PipelineStageState::Measured(duration));
                         continue;
                     }
+                }
+                if raw_kind == RawKind::Dng
+                    && let Some(dng) = timings.dng
+                {
+                    let exact = match index {
+                        0 => Some(dng.tiff_header),
+                        1 => Some(dng.ifd_walk),
+                        2 => Some(dng.raw_ifd_select),
+                        3 => Some(dng.storage_plan),
+                        4 => Some(dng.pixel_unpack),
+                        6 => Some(dng.linearization),
+                        _ => None,
+                    };
+                    if let Some(duration) = exact {
+                        snapshot.set(id, PipelineStageState::Measured(duration));
+                        continue;
+                    }
+                    let shared = match index {
+                        5 => dng.pixel_unpack,
+                        7..=9 => dng.metadata,
+                        _ => timings.raw_image,
+                    };
+                    snapshot.set(id, PipelineStageState::Shared(shared));
+                    continue;
                 }
                 let enclosing = if raw_kind == RawKind::Cr3 && index < 5 {
                     timings.decoder_select
@@ -614,7 +638,7 @@ impl PipelineSnapshot {
         match id {
             StageId::Idle => copy(
                 "PIPELINE",
-                "DROP A CANON EOS R8 CR3 TO TRACE THE COMPLETE NATIVE LOAD-TO-SUBMIT ROUTE",
+                "DROP A SUPPORTED CR3 OR DNG TO TRACE THE COMPLETE NATIVE LOAD-TO-SUBMIT ROUTE",
             ),
             StageId::Queue => copy(
                 "REQUEST QUEUE",
@@ -640,18 +664,9 @@ impl PipelineSnapshot {
                 "DECODE ADMISSION",
                 "WAIT FOR FOREGROUND DECODE PERMIT AND RECHECK GENERATION CANCELLATION",
             ),
-            StageId::Source => copy(
-                "SOURCE READ",
-                "OPEN THE CR3 AND READ ITS BYTES INTO THE BOUNDED NATIVE DECODER INPUT BUFFER",
-            ),
-            StageId::DecoderSelect => copy(
-                "CR3 PARSE + SELECT",
-                "VALIDATE BMFF, SELECT THE FULL-RESOLUTION CRX SAMPLE AND EXTRACT CMT/CTMD METADATA",
-            ),
-            StageId::RawImageSpan => copy(
-                "NATIVE CRX DECODE",
-                "STREAM FOUR LOSSLESS CRX PLANES IN 32-ROW BATCHES AND ASSEMBLE THE FULL-SENSOR U16 CFA",
-            ),
+            StageId::Source => source_stage_copy(self.raw_kind),
+            StageId::DecoderSelect => decoder_select_stage_copy(self.raw_kind),
+            StageId::RawImageSpan => raw_decode_stage_copy(self.raw_kind),
             StageId::Format1
             | StageId::Format2
             | StageId::Format3
@@ -666,14 +681,8 @@ impl PipelineSnapshot {
                 "ADAPT LAYOUT + CFA",
                 "MAP DIMENSIONS, CPP/BPS, PHOTOMETRIC TYPE AND CFA GRID INTO RRRAH TYPES",
             ),
-            StageId::AdaptLevels => copy(
-                "ADAPT SENSOR LEVELS",
-                "COPY THE EOS R8 BLACK-LEVEL GRID AND WHITE LEVEL INTO VALIDATED FINITE F32 VALUES",
-            ),
-            StageId::AdaptColor => copy(
-                "ADAPT COLOR DATA",
-                "CONVERT EXACT CTMD WHITE-BALANCE RATIOS AND APPLY THE EOS R8 CAMERA MATRIX",
-            ),
+            StageId::AdaptLevels => adapt_levels_stage_copy(self.raw_kind),
+            StageId::AdaptColor => adapt_color_stage_copy(self.raw_kind),
             StageId::AdaptGeometry => copy(
                 "ADAPT RAW GEOMETRY",
                 "CONVERT ACTIVE AREA, CROP RECTANGLE AND EXIF ORIENTATION TO SENSOR COORDINATES",
@@ -755,7 +764,7 @@ impl PipelineSnapshot {
                 "NOTIFY WINDOWING AND REQUEST PRESENT; COMPOSITOR, SCANOUT AND PHOTON TIME UNOBSERVED",
             ),
             StageId::Total => copy(
-                "TOTAL LOAD -> SUBMIT",
+                "TOTAL WALL TIME",
                 "WALL TIME FROM REQUEST ENQUEUE TO FIRST SUCCESSFUL PRESENT REQUEST; GPU FINISH EXCLUDED",
             ),
         }
@@ -852,6 +861,103 @@ const fn conditional_copy(label: &'static str, description: &'static str) -> Sta
     }
 }
 
+const fn source_stage_copy(raw_kind: RawKind) -> StageCopy {
+    match raw_kind {
+        RawKind::Cr3 => copy(
+            "CR3 SOURCE READ",
+            "OPEN THE CR3 AND READ ITS BYTES INTO THE BOUNDED NATIVE DECODER INPUT BUFFER",
+        ),
+        RawKind::Dng => copy(
+            "DNG SOURCE READ",
+            "OPEN THE DNG/TIFF AND READ ITS BYTES INTO THE BOUNDED NATIVE DECODER INPUT BUFFER",
+        ),
+        RawKind::Cr2 => copy(
+            "CR2 SOURCE READ",
+            "OPEN THE CR2 AND READ ITS BYTES INTO THE BOUNDED DECODER INPUT BUFFER",
+        ),
+        RawKind::Unknown => copy(
+            "RAW SOURCE READ",
+            "OPEN THE RAW SOURCE AND READ ITS BYTES INTO A BOUNDED DECODER INPUT BUFFER",
+        ),
+    }
+}
+
+const fn decoder_select_stage_copy(raw_kind: RawKind) -> StageCopy {
+    match raw_kind {
+        RawKind::Cr3 => copy(
+            "CR3 PARSE + SELECT",
+            "VALIDATE BMFF, SELECT THE FULL-RESOLUTION CRX SAMPLE AND EXTRACT CMT/CTMD METADATA",
+        ),
+        RawKind::Dng => copy(
+            "DNG PARSE + SELECT",
+            "VALIDATE TIFF/BIGTIFF, WALK THE BOUNDED IFD GRAPH AND SELECT ONE PRIMARY CFA RAW IFD",
+        ),
+        RawKind::Cr2 => copy(
+            "CR2 PARSE + SELECT",
+            "VALIDATE TIFF/CR2 STRUCTURE AND SELECT THE FULL-RESOLUTION SENSOR IMAGE",
+        ),
+        RawKind::Unknown => copy(
+            "RAW PARSE + SELECT",
+            "VALIDATE THE CONTAINER AND SELECT THE FULL-RESOLUTION SENSOR IMAGE",
+        ),
+    }
+}
+
+const fn raw_decode_stage_copy(raw_kind: RawKind) -> StageCopy {
+    match raw_kind {
+        RawKind::Cr3 => copy(
+            "NATIVE CRX DECODE",
+            "STREAM FOUR LOSSLESS CRX PLANES IN CONFIGURED ROW BATCHES AND ASSEMBLE THE FULL-SENSOR U16 CFA",
+        ),
+        RawKind::Dng => copy(
+            "NATIVE DNG DECODE",
+            "UNPACK OR LOSSLESS-JPEG-DECODE EVERY VALIDATED STRIP/TILE, PLACE SAMPLES AND LINEARIZE U16 CFA",
+        ),
+        RawKind::Cr2 => copy(
+            "NATIVE CR2 DECODE",
+            "DECODE THE SELECTED SENSOR BITSTREAM AND REASSEMBLE ITS FULL-SENSOR U16 CFA",
+        ),
+        RawKind::Unknown => copy(
+            "NATIVE RAW DECODE",
+            "DECODE THE SELECTED SENSOR BITSTREAM INTO A FULL-SENSOR U16 MOSAIC",
+        ),
+    }
+}
+
+const fn adapt_levels_stage_copy(raw_kind: RawKind) -> StageCopy {
+    match raw_kind {
+        RawKind::Dng => copy(
+            "ADAPT SENSOR LEVELS",
+            "MAP DNG BLACKLEVEL REPEAT GRID AND WHITELEVEL INTO VALIDATED FINITE F32 VALUES",
+        ),
+        RawKind::Cr3 => copy(
+            "ADAPT SENSOR LEVELS",
+            "COPY THE EOS R8 BLACK-LEVEL GRID AND WHITE LEVEL INTO VALIDATED FINITE F32 VALUES",
+        ),
+        _ => copy(
+            "ADAPT SENSOR LEVELS",
+            "MAP FORMAT BLACK AND WHITE LEVELS INTO VALIDATED FINITE F32 VALUES",
+        ),
+    }
+}
+
+const fn adapt_color_stage_copy(raw_kind: RawKind) -> StageCopy {
+    match raw_kind {
+        RawKind::Dng => copy(
+            "ADAPT COLOR DATA",
+            "DERIVE RGB GAINS FROM ASSHOTNEUTRAL AND REORDER COLORMATRIX1 PLANES INTO DISPLAY RGB",
+        ),
+        RawKind::Cr3 => copy(
+            "ADAPT COLOR DATA",
+            "CONVERT EXACT CTMD WHITE-BALANCE RATIOS AND APPLY THE EOS R8 CAMERA MATRIX",
+        ),
+        _ => copy(
+            "ADAPT COLOR DATA",
+            "MAP FORMAT WHITE BALANCE AND CAMERA MATRIX INTO THE DISPLAY COLOR CONTRACT",
+        ),
+    }
+}
+
 fn format_stage_copy(raw_kind: RawKind, index: usize) -> StageCopy {
     match (raw_kind, index) {
         (RawKind::Cr2, 0) => copy(
@@ -923,32 +1029,44 @@ fn format_stage_copy(raw_kind: RawKind, index: usize) -> StageCopy {
             "VALIDATE EVERY ROW, THEN INTERLEAVE ARRIVING 32-ROW R/G1/G2/B BATCHES; TIME OVERLAPS DECODE",
         ),
         (RawKind::Dng, 0) => copy(
-            "DNG TIFF + RAW IFD",
-            "SELECT THE FULL-RESOLUTION TIFF RAW IFD AND READ IMAGE SAMPLE DESCRIPTORS",
+            "DNG TIFF HEADER",
+            "VALIDATE II/MM BYTE ORDER AND CLASSIC TIFF OR BIGTIFF HEADER/OFFSET WIDTHS",
         ),
         (RawKind::Dng, 1) => copy(
-            "DNG STORAGE DISPATCH",
-            "RESOLVE STRIP/TILE STORAGE, SAMPLE TYPE, BITS AND COMPRESSION CODEC",
+            "DNG IFD TREE WALK",
+            "WALK TOP-LEVEL AND SUBIFD DIRECTORIES WITH CYCLE, DEPTH, COUNT AND RANGE LIMITS",
         ),
         (RawKind::Dng, 2) => copy(
-            "DNG STRIP/TILE DECODE",
-            "UNPACK OR DECOMPRESS RAW STRIPS/TILES; LOSSLESS JPEG/JPEG XL TILES MAY RUN IN PARALLEL",
+            "DNG RAW IFD SELECT",
+            "SELECT THE HIGHEST-RESOLUTION PRIMARY CFA IFD; REJECT AMBIGUOUS RAW CANDIDATES",
         ),
         (RawKind::Dng, 3) => copy(
-            "DNG PADDING CROP",
-            "REMOVE TILE OR JPEG PADDING AND RESTORE THE DECLARED TIFF IMAGE SIZE",
+            "DNG STORAGE PLAN",
+            "VALIDATE STRIP/TILE GEOMETRY, OFFSETS, BYTE COUNTS, OVERLAPS, BITS AND COMPRESSION",
         ),
-        (RawKind::Dng, 4) => conditional_copy(
+        (RawKind::Dng, 4) => copy(
+            "DNG SEGMENT CODEC",
+            "UNPACK 8–16-BIT INTEGER SAMPLES OR DECODE SOF3 LOSSLESS-HUFFMAN JPEG SEGMENTS",
+        ),
+        (RawKind::Dng, 5) => copy(
+            "DNG STRIP/TILE PLACE",
+            "PLACE VALIDATED SEGMENT SAMPLES INTO THE FULL SENSOR MOSAIC; FUSED WITH CODEC TIMING",
+        ),
+        (RawKind::Dng, 6) => conditional_copy(
             "DNG LINEARIZE",
-            "OPTIONAL LINEARIZATION-TABLE LOOKUP WITH DITHER; BACKEND DOES NOT REPORT THIS BRANCH",
+            "APPLY LINEARIZATIONTABLE EXACTLY WHEN PRESENT; OUT-OF-RANGE INPUT MAPS TO THE LAST ENTRY",
         ),
-        (RawKind::Dng, 5) => conditional_copy(
-            "DNG DEINTERLEAVE",
-            "OPTIONAL 2X2 ROW/COLUMN REORDER; BACKEND DOES NOT REPORT WHETHER IT RAN",
+        (RawKind::Dng, 7) => copy(
+            "DNG CFA + LEVEL TAGS",
+            "READ CFA LAYOUT, BLACK REPEAT GRID, OPTIONAL DELTAS, WHITE LEVEL AND STORED BIT DEPTH",
+        ),
+        (RawKind::Dng, 8) => copy(
+            "DNG COLOR + WB TAGS",
+            "READ COLORMATRIX1 AND ASSHOTNEUTRAL FROM RAW IFD OR IFD0 WITH FINITE-VALUE CHECKS",
         ),
         (RawKind::Dng, _) => copy(
-            "DNG SENSOR TAGS",
-            "READ CFA, WB, LEVELS, MATRIX, CROP AND ORIENTATION; OPCODELISTS ARE NOT APPLIED",
+            "DNG GEOMETRY TAGS",
+            "READ ACTIVEAREA, DEFAULTCROP AND ORIENTATION; OPCODELISTS ARE NOT APPLIED",
         ),
         (RawKind::Unknown, step) => copy(
             match step {
@@ -1026,7 +1144,7 @@ fn format_enclosing_duration(prefix: &str, duration: Duration) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use rrrah_decode::{AdaptTimings, DecodeTimings, NativeDecodeTimings};
+    use rrrah_decode::{AdaptTimings, DecodeTimings, DngDecodeTimings, NativeDecodeTimings};
 
     fn frontend(route: CacheRoute) -> FrontendTimings {
         FrontendTimings {
@@ -1054,6 +1172,7 @@ mod tests {
                 interleave: Duration::from_micros(600),
                 worker_count: 4,
             }),
+            dng: None,
             adapt: AdaptTimings {
                 layout_cfa: Duration::from_micros(10),
                 levels: Duration::from_micros(20),
@@ -1068,7 +1187,19 @@ mod tests {
     }
 
     fn decoded(kind: RawKind, route: CacheRoute) -> PipelineSnapshot {
-        let timings = decode_timings();
+        let mut timings = decode_timings();
+        if kind == RawKind::Dng {
+            timings.native = None;
+            timings.dng = Some(DngDecodeTimings {
+                tiff_header: Duration::from_micros(101),
+                ifd_walk: Duration::from_micros(102),
+                raw_ifd_select: Duration::from_micros(103),
+                metadata: Duration::from_micros(104),
+                storage_plan: Duration::from_micros(105),
+                pixel_unpack: Duration::from_millis(20),
+                linearization: Duration::from_millis(2),
+            });
+        }
         PipelineSnapshot::from_worker(
             7,
             kind,
@@ -1108,6 +1239,7 @@ mod tests {
         assert_eq!(RawKind::from_path(Path::new("a.CR2")), RawKind::Cr2);
         assert_eq!(RawKind::from_path(Path::new("a.cr3")), RawKind::Cr3);
         assert_eq!(RawKind::from_path(Path::new("a.DnG")), RawKind::Dng);
+        assert_eq!(RawKind::from_path(Path::new("a.TIFF")), RawKind::Dng);
         assert_eq!(RawKind::from_path(Path::new("a.raw")), RawKind::Unknown);
     }
 
@@ -1116,19 +1248,36 @@ mod tests {
         for kind in [RawKind::Cr2, RawKind::Cr3, RawKind::Dng] {
             let cards = decoded(kind, CacheRoute::Miss).cards();
             assert_eq!(cards.len(), 41);
-            assert_eq!(cards[6].title, "07 NATIVE CRX DECODE");
+            assert!(cards[6].title.contains(match kind {
+                RawKind::Cr2 => "NATIVE CR2",
+                RawKind::Cr3 => "NATIVE CRX",
+                RawKind::Dng => "NATIVE DNG",
+                RawKind::Unknown => "NATIVE RAW",
+            }));
             assert_eq!(cards[17].title, "18 ADAPT LAYOUT + CFA");
-            assert_eq!(cards[40].title, "41 TOTAL LOAD -> SUBMIT");
-            assert!(cards[7..12].iter().all(|card| matches!(
-                card.state,
-                PipelineStageState::Shared(_) | PipelineStageState::Conditional(_)
-            )));
+            assert_eq!(cards[40].title, "41 TOTAL WALL TIME");
             if kind == RawKind::Cr3 {
+                assert!(cards[7..12].iter().all(|card| matches!(
+                    card.state,
+                    PipelineStageState::Shared(_) | PipelineStageState::Conditional(_)
+                )));
                 assert!(
                     cards[12..17]
                         .iter()
                         .all(|card| matches!(card.state, PipelineStageState::Measured(_)))
                 );
+            } else if kind == RawKind::Dng {
+                for index in [7, 8, 9, 10, 11, 13] {
+                    assert!(matches!(cards[index].state, PipelineStageState::Measured(_)));
+                }
+                for index in [12, 14, 15, 16] {
+                    assert!(matches!(cards[index].state, PipelineStageState::Shared(_)));
+                }
+            } else {
+                assert!(cards[7..17].iter().all(|card| matches!(
+                    card.state,
+                    PipelineStageState::Shared(_) | PipelineStageState::Conditional(_)
+                )));
             }
         }
     }
@@ -1149,7 +1298,11 @@ mod tests {
             cr3[12].state,
             PipelineStageState::Measured(Duration::from_millis(1))
         );
-        assert!(dng[13].description.contains("OPCODELISTS ARE NOT APPLIED"));
+        assert_eq!(
+            dng[7].state,
+            PipelineStageState::Measured(Duration::from_micros(101))
+        );
+        assert!(dng[16].description.contains("OPCODELISTS ARE NOT APPLIED"));
     }
 
     #[test]

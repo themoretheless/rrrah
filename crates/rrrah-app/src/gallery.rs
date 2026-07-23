@@ -11,7 +11,7 @@ use crate::{
 };
 use crossbeam_channel::{Receiver, Sender, bounded};
 use rrrah_cache::{CacheKey, DiskMosaicCache, SourceFingerprint};
-use rrrah_decode::{DecodeRequest, GenerationToken, NativeCr3Decoder, RawDecoder};
+use rrrah_decode::{DecodeRequest, GenerationToken, NativeRawDecoder, RawDecoder};
 use std::{
     path::{Path, PathBuf},
     sync::{
@@ -231,11 +231,12 @@ impl RawPrefetcher {
                                 worker_telemetry.record_prefetch_failure(command.generation);
                                 continue;
                             };
-                            let key = CacheKey::for_mosaic_recipe(
-                                &fingerprint,
-                                0,
-                                NativeCr3Decoder.mosaic_recipe(),
-                            );
+                            let recipe_request = DecodeRequest::new(&path);
+                            let Ok(recipe) = NativeRawDecoder.mosaic_recipe(&recipe_request) else {
+                                worker_telemetry.record_prefetch_failure(command.generation);
+                                continue;
+                            };
+                            let key = CacheKey::for_mosaic_recipe(&fingerprint, 0, recipe);
                             if cache.contains(key) {
                                 // `contains` is only a presence probe. The HUD
                                 // labels this PRESENT rather than HIT because
@@ -269,7 +270,7 @@ impl RawPrefetcher {
                                 GenerationToken::new(Arc::clone(&worker_generation), command.generation);
                             let mut request = DecodeRequest::new(&path);
                             request.cancellation = Some(token);
-                            let Ok(output) = NativeCr3Decoder.decode(&request) else {
+                            let Ok(output) = NativeRawDecoder.decode(&request) else {
                                 worker_telemetry.record_prefetch_failure(command.generation);
                                 continue;
                             };
@@ -509,7 +510,12 @@ impl Prefetcher {
 pub fn is_supported(path: &Path) -> bool {
     path.extension()
         .and_then(|e| e.to_str())
-        .is_some_and(|extension| extension.eq_ignore_ascii_case("cr3"))
+        .is_some_and(|extension| {
+            extension.eq_ignore_ascii_case("cr3")
+                || extension.eq_ignore_ascii_case("dng")
+                || extension.eq_ignore_ascii_case("tif")
+                || extension.eq_ignore_ascii_case("tiff")
+        })
 }
 
 pub fn scan_folder(folder: &Path) -> Vec<PathBuf> {
@@ -578,7 +584,8 @@ mod tests {
     fn extension_filter_is_case_insensitive() {
         assert!(is_supported(Path::new("a.CR3")));
         assert!(!is_supported(Path::new("a.CR2")));
-        assert!(!is_supported(Path::new("a.DNG")));
+        assert!(is_supported(Path::new("a.DNG")));
+        assert!(is_supported(Path::new("a.TIFF")));
         assert!(!is_supported(Path::new("a.jpg")));
     }
     #[test]

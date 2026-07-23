@@ -3,17 +3,25 @@
 Rrrah is a native Rust viewer whose first displayed image is developed from the
 sensor mosaic itself. It never substitutes the embedded JPEG for the main view.
 
-The current fast path is deliberately narrow and measurable:
+The current fast paths are deliberately bounded and measurable:
 
-1. parse Canon EOS R8 CR3/CRX and decode four lossless parity planes in native Rust;
+1. parse Canon EOS R8 CR3/CRX or TIFF/DNG and decode the sensor samples in native Rust;
 2. cache that decoded mosaic;
 3. upload it once as an integer GPU texture;
 4. normalize, demosaic, white-balance, color-convert, and tone-map only the
    visible viewport in WGSL.
 
-The current decoder accepts the confirmed full-resolution, one-tile, 14-bit
-Canon EOS R8 CR3 profile. It has no external RAW-decoder dependency. Other
-cameras and RAW formats are rejected instead of being guessed.
+The CR3 backend accepts the confirmed full-resolution, one-tile, 14-bit Canon
+EOS R8 profile. The DNG backend accepts bounded classic-TIFF and BigTIFF CFA
+DNGs in either byte order, with 8–16-bit uncompressed or lossless-JPEG
+strip/tile storage. It applies `LinearizationTable`, preserves levels, crop,
+orientation, white balance and `ColorMatrix1`, and currently requires a 2×2 RGB
+Bayer CFA for display.
+
+Unsupported DNG features are rejected explicitly: LinearRaw/non-CFA images,
+lossy JPEG, Deflate and JPEG XL compression, opcodes, `BlackLevelDeltaH/V`,
+fractional display crops, and non-Bayer CFA layouts. The default build has no
+external RAW-decoder dependency.
 
 Detailed design, equations, budgets, and benchmark protocol live in
 [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
@@ -28,6 +36,8 @@ mathematical contract in [EDITOR_MATH.md](docs/EDITOR_MATH.md) and the canonical
 benchmark matrix in [BENCHMARK_MATRIX.md](docs/BENCHMARK_MATRIX.md).
 The live HUD/telemetry design is [LIVE_BENCHMARKS.md](docs/LIVE_BENCHMARKS.md),
 and the twenty-role review is [BENCH_AGENT_REVIEW.md](docs/BENCH_AGENT_REVIEW.md).
+The native DNG correctness and paired wall-time comparison is
+[DNG_BENCHMARK_2026-07-23.md](docs/DNG_BENCHMARK_2026-07-23.md).
 The parameter-sweep matrix and runnable synthetic GPU smoke are documented in
 [PARAMETER_SWEEP_ARCHITECTURE.md](docs/PARAMETER_SWEEP_ARCHITECTURE.md) and
 [GPU_SYNTHETIC_SWEEP_GATES.md](docs/GPU_SYNTHETIC_SWEEP_GATES.md).
@@ -67,19 +77,39 @@ contract are recorded in [GALLERY_ARCHITECTURE.md](docs/GALLERY_ARCHITECTURE.md)
 
 ```bash
 cargo run --release -p rrrah -- --no-cache path/to/image.CR3
-cargo run --release -p rrrah -- --no-cache --inspect path/to/image.CR3
+cargo run --release -p rrrah -- --no-cache path/to/image.DNG
+cargo run --release -p rrrah -- --no-cache --inspect path/to/image.DNG
 ```
 
-Controls: drop an EOS R8 CR3 file or folder onto the window; a dropped folder opens
-its first CR3 and `←`/`→` navigate the folder. Mouse wheel zooms, left-drag
+Controls: drop a supported RAW file or folder onto the window; a dropped folder
+opens its first CR3/DNG/TIFF and `←`/`→` navigate the folder. Mouse wheel zooms, left-drag
 pans, `+`/`-` changes exposure, `F` returns to fit, and `R` resets the view.
 The in-image HUD reports decode/cache/adapt/upload/open timings and a live frame
 encode sample.
 
+### CR3 streaming buffer tuning
+
+The “four buffers” often visible in CR3 diagnostics are the four independent
+parity planes (R, G₁, G₂, B), not a user-selectable queue count. The streaming
+assembler defaults to 32 rows per batch and queue depth 1, with two reusable
+batch vectors per plane.
+
+For repeatable experiments only, the bounded alternatives can be selected with:
+
+```bash
+RRRAH_CR3_STREAM_BATCH_ROWS=8|16|32|64|128
+RRRAH_CR3_STREAM_QUEUE_DEPTH=1|2|4
+```
+
+Invalid values fall back to 32 rows / depth 1. The defaults remain the measured
+low-memory choice; deeper queues reserve more scratch memory and did not show a
+stable wall-time improvement on the current EOS R8 fixture.
+
 ## Status
 
-This is an architecture-first prototype. It provides a real native EOS R8 full-RAW decode,
-full-resolution tiled GPU upload for adapters with texture-array capacity,
-timing instrumentation, and warm-open cache; it is not yet a replacement for a
-color-managed production raw developer. Additional camera profiles require
+This is an architecture-first prototype. It provides real native EOS R8 CR3 and
+bounded CFA DNG full-RAW decode, full-resolution tiled GPU upload for adapters
+with texture-array capacity, per-stage timing instrumentation, total wall time,
+and warm-open cache. It is not yet a replacement for a color-managed production
+raw developer. Additional camera profiles and DNG feature families require
 separate framing, metadata and pixel-oracle validation.

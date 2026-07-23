@@ -31,7 +31,12 @@ use std::{
 };
 
 const PLANE_COUNT: usize = 4;
-const STREAM_ROWS_PER_BATCH: usize = 32;
+const DEFAULT_STREAM_ROWS_PER_BATCH: usize = 32;
+const DEFAULT_STREAM_QUEUE_DEPTH: usize = 1;
+const STREAM_ROWS_ENV: &str = "RRRAH_CR3_STREAM_BATCH_ROWS";
+const STREAM_QUEUE_DEPTH_ENV: &str = "RRRAH_CR3_STREAM_QUEUE_DEPTH";
+const STREAM_ROW_OPTIONS: [usize; 5] = [8, 16, 32, 64, 128];
+const STREAM_QUEUE_DEPTH_OPTIONS: [usize; 3] = [1, 2, 4];
 
 /// A generous hard ceiling for the one allocation performed by interleave.
 ///
@@ -553,13 +558,22 @@ enum AssemblyFailure {
     },
 }
 
+fn stream_tuning_value(name: &str, default: usize, allowed: &[usize]) -> usize {
+    std::env::var(name)
+        .ok()
+        .and_then(|value| value.parse().ok())
+        .filter(|value| allowed.contains(value))
+        .unwrap_or(default)
+}
+
 /// Decodes all four parity planes while assembling completed rows directly
 /// into the final mosaic.
 ///
-/// Each plane owns two reusable batches of at most 32 rows. A capacity-one
-/// channel hands one batch to the coordinator while entropy decode fills the
-/// other. Consequently synchronization is amortized and peak decoded-plane
-/// storage stays below 64 rows per plane instead of four complete planes.
+/// By default each plane owns two reusable batches of at most 32 rows. A
+/// capacity-one channel hands one batch to the coordinator while entropy
+/// decode fills the other. The benchmark-only environment overrides below
+/// expand that fixed pool to `queue depth + 1` buffers per plane so queue-depth
+/// experiments do not accidentally benchmark a starved two-buffer pool.
 #[allow(clippy::too_many_lines)]
 pub(crate) fn decode_four_planes_streaming<'a, F, E, C>(
     plane_data: [&'a [u8]; PLANE_COUNT],
@@ -585,6 +599,16 @@ where
 
     let geometry = checked_mosaic_geometry(sensor_width, sensor_height)?;
     let mut mosaic = allocate_mosaic(geometry.pixel_count)?;
+    let rows_per_batch = geometry.plane_height.min(stream_tuning_value(
+        STREAM_ROWS_ENV,
+        DEFAULT_STREAM_ROWS_PER_BATCH,
+        &STREAM_ROW_OPTIONS,
+    ));
+    let queue_depth = stream_tuning_value(
+        STREAM_QUEUE_DEPTH_ENV,
+        DEFAULT_STREAM_QUEUE_DEPTH,
+        &STREAM_QUEUE_DEPTH_OPTIONS,
+    );
     let started = Instant::now();
     let stop = AtomicBool::new(false);
     let first_failed_plane = AtomicUsize::new(PLANE_COUNT);
@@ -594,33 +618,39 @@ where
         let mut row_receivers: Vec<Receiver<StreamedRows>> = Vec::with_capacity(PLANE_COUNT);
         let mut recycle_senders: Vec<Sender<Vec<u16>>> = Vec::with_capacity(PLANE_COUNT);
         let mut spawn_error = None;
-        let rows_per_batch = geometry.plane_height.min(STREAM_ROWS_PER_BATCH);
         let Some(batch_capacity) = geometry.plane_width.checked_mul(rows_per_batch) else {
             return Err(StreamingDecodeError::Interleave(
                 InterleaveError::GeometryOverflow,
             ));
         };
 
-        for (plane_index, &plane_bytes) in plane_data.iter().enumerate() {
-            let (row_sender, row_receiver) = sync_channel(1);
+        'planes: for (plane_index, &plane_bytes) in plane_data.iter().enumerate() {
+            let (row_sender, row_receiver) = sync_channel(queue_depth);
             let (recycle_sender, recycle_receiver) = channel();
             let mut current_batch = Vec::new();
-            let mut spare_batch = Vec::new();
-            if current_batch.try_reserve_exact(batch_capacity).is_err()
-                || spare_batch.try_reserve_exact(batch_capacity).is_err()
-            {
+            if current_batch.try_reserve_exact(batch_capacity).is_err() {
                 stop.store(true, Ordering::Release);
                 spawn_error = Some(ParallelDecodeError::WorkerSpawn {
                     kind: std::io::ErrorKind::OutOfMemory,
                 });
                 break;
             }
-            if recycle_sender.send(spare_batch).is_err() {
-                stop.store(true, Ordering::Release);
-                spawn_error = Some(ParallelDecodeError::WorkerSpawn {
-                    kind: std::io::ErrorKind::BrokenPipe,
-                });
-                break;
+            for _ in 0..queue_depth {
+                let mut spare_batch = Vec::new();
+                if spare_batch.try_reserve_exact(batch_capacity).is_err() {
+                    stop.store(true, Ordering::Release);
+                    spawn_error = Some(ParallelDecodeError::WorkerSpawn {
+                        kind: std::io::ErrorKind::OutOfMemory,
+                    });
+                    break 'planes;
+                }
+                if recycle_sender.send(spare_batch).is_err() {
+                    stop.store(true, Ordering::Release);
+                    spawn_error = Some(ParallelDecodeError::WorkerSpawn {
+                        kind: std::io::ErrorKind::BrokenPipe,
+                    });
+                    break 'planes;
+                }
             }
             row_receivers.push(row_receiver);
             recycle_senders.push(recycle_sender);
@@ -678,7 +708,7 @@ where
                             next_expected_row += 1;
 
                             let final_row = next_expected_row == geometry.plane_height;
-                            if batch_row_count == STREAM_ROWS_PER_BATCH || final_row {
+                            if batch_row_count == rows_per_batch || final_row {
                                 let wait_started = Instant::now();
                                 let outgoing = std::mem::take(&mut current_batch);
                                 if row_sender
@@ -768,14 +798,13 @@ where
         let mut assembly_failure = None;
         let mut interleave_elapsed = Duration::ZERO;
         if spawn_error.is_none() {
-            'batches: for expected_first_row in (0..geometry.plane_height).step_by(STREAM_ROWS_PER_BATCH) {
+            'batches: for expected_first_row in (0..geometry.plane_height).step_by(rows_per_batch) {
                 if cancelled() {
                     assembly_failure = Some(AssemblyFailure::Cancelled);
                     break;
                 }
 
-                let expected_row_count =
-                    (geometry.plane_height - expected_first_row).min(STREAM_ROWS_PER_BATCH);
+                let expected_row_count = (geometry.plane_height - expected_first_row).min(rows_per_batch);
                 let expected_samples = geometry
                     .plane_width
                     .checked_mul(expected_row_count)
