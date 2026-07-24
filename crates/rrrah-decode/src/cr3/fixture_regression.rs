@@ -311,13 +311,20 @@ fn assert_oracle_contract(directory: &Path, contract: FixtureContract) {
             Orientation::Normal,
         )
     );
+    let native = decoded.timings.native.expect("native timing breakdown");
     assert_eq!(
-        decoded
-            .timings
-            .native
-            .expect("native timing breakdown")
-            .worker_count,
-        4
+        usize::from(native.worker_count),
+        crate::native_backend::planned_plane_worker_count(),
+        "{} reported worker count under RRRAH_CR3_PLANE_WORKERS sweep",
+        contract.source_file
+    );
+    eprintln!(
+        "{}: workers={}, plane_wall={:.2?}, interleave={:.2?}, total={:.2?}",
+        contract.source_file,
+        native.worker_count,
+        native.plane_wall,
+        native.interleave,
+        decoded.timings.total,
     );
     assert_eq!(mosaic.len(), PIXEL_COUNT);
     for (index, (actual, expected)) in mosaic

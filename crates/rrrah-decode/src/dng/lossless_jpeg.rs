@@ -397,16 +397,18 @@ struct EntropyReader<'a> {
     bit_buffer: u64,
     bit_count: u8,
     pending_marker: Option<Marker>,
+    word_refill: bool,
 }
 
 impl<'a> EntropyReader<'a> {
-    const fn new(bytes: &'a [u8], position: usize) -> Self {
+    const fn new(bytes: &'a [u8], position: usize, word_refill: bool) -> Self {
         Self {
             bytes,
             position,
             bit_buffer: 0,
             bit_count: 0,
             pending_marker: None,
+            word_refill,
         }
     }
 
@@ -431,6 +433,9 @@ impl<'a> EntropyReader<'a> {
     #[inline]
     fn peek_bits(&mut self, count: u8) -> Result<Option<u32>, LosslessJpegError> {
         while self.bit_count < count {
+            if self.word_refill && self.try_refill_plain_run() {
+                continue;
+            }
             let Some(byte) = self.read_entropy_byte()? else {
                 return Ok(None);
             };
@@ -443,6 +448,38 @@ impl<'a> EntropyReader<'a> {
         Ok(Some(
             u32::try_from(value).map_err(|_| LosslessJpegError::InvalidHuffmanCode)?,
         ))
+    }
+
+    /// Bulk-loads six entropy bytes at once when they cannot start a marker
+    /// or a stuffing sequence (no `0xFF` among them). Returns `false` when the
+    /// next bytes need the per-byte marker-aware path or fewer than eight
+    /// bytes remain; both cases keep their original behavior and error
+    /// reporting.
+    #[inline]
+    fn try_refill_plain_run(&mut self) -> bool {
+        // The caller only refills while `bit_count < count <= 15`; the guard
+        // keeps the 48-bit append below the 64-bit limit even for future
+        // callers with larger counts.
+        if self.pending_marker.is_some() || self.bit_count > 16 {
+            return false;
+        }
+        let Some(window) = self.bytes.get(self.position..).and_then(|tail| tail.get(..8)) else {
+            return false;
+        };
+        let word = u64::from_be_bytes(window.try_into().expect("an eight-byte window"));
+        // SWAR zero-byte detection over the top six bytes after mapping
+        // 0xFF to 0x00; the OR forces the unused bottom two bytes nonzero so
+        // they cannot false-positive. On match we leave the marker prefix to
+        // the per-byte path.
+        let probe = (word ^ 0xffff_ffff_ffff_0000) | 0x0000_0000_0000_0101;
+        let has_marker_prefix = probe.wrapping_sub(0x0101_0101_0101_0101) & !probe & 0x8080_8080_8080_8080;
+        if has_marker_prefix != 0 {
+            return false;
+        }
+        self.bit_buffer = (self.bit_buffer << 48) | (word >> 16);
+        self.bit_count += 48;
+        self.position += 6;
+        true
     }
 
     #[inline]
@@ -524,6 +561,18 @@ pub(crate) fn decode(
     bytes: &[u8],
     cancelled: &dyn Fn() -> bool,
 ) -> Result<LosslessJpegImage, LosslessJpegError> {
+    decode_with_refill(bytes, cancelled, true)
+}
+
+/// `word_refill` exists so benchmarks can A/B the bulk entropy refill against
+/// the byte-at-a-time reference path in the same process; production callers
+/// use [`decode`], which always enables it.
+#[allow(clippy::too_many_lines)]
+pub(crate) fn decode_with_refill(
+    bytes: &[u8],
+    cancelled: &dyn Fn() -> bool,
+    word_refill: bool,
+) -> Result<LosslessJpegImage, LosslessJpegError> {
     let mut reader = MarkerReader::new(bytes, 0);
     if !matches!(reader.next_marker(), Ok(Marker { code: SOI, .. })) {
         return Err(LosslessJpegError::MissingSoi);
@@ -597,6 +646,7 @@ pub(crate) fn decode(
                     restart_interval,
                     samples,
                     cancelled,
+                    word_refill,
                 )?;
                 reader.position = next_position;
                 for component in &scan.components {
@@ -896,6 +946,7 @@ fn decode_scan(
     restart_interval: usize,
     samples: &mut [u16],
     cancelled: &dyn Fn() -> bool,
+    word_refill: bool,
 ) -> Result<(Marker, usize), LosslessJpegError> {
     let width = usize::from(frame.width);
     let height = usize::from(frame.height);
@@ -912,7 +963,7 @@ fn decode_scan(
     let initial_predictor = 1_i32 << (transformed_precision - 1);
     let transformed_maximum = (1_u32 << transformed_precision) - 1;
     let frame_components = frame.components.len();
-    let mut entropy = EntropyReader::new(bytes, entropy_position);
+    let mut entropy = EntropyReader::new(bytes, entropy_position, word_refill);
     let mut expected_restart = 0_u8;
     let mut interval_start_mcu = 0usize;
     let mut interval_start_row = 0usize;
@@ -1459,8 +1510,44 @@ mod tests {
     }
 
     #[test]
+    fn word_refill_matches_bytewise_on_stuffed_restart_stream() {
+        // Samples chosen so the entropy stream contains many 0xFF bytes
+        // (large pseudo-random differences) plus row-aligned restart markers,
+        // exercising both the bulk fast path and the per-byte fallback.
+        let width = 37_u16;
+        let height = 23_u16;
+        let mut state = 0x243f_6a88_85a3_08d3_u64;
+        let samples = (0..usize::from(width) * usize::from(height))
+            .map(|_| {
+                state ^= state >> 12;
+                state ^= state << 25;
+                state ^= state >> 27;
+                u16::try_from(state.wrapping_mul(0x2545_f491_4f6c_dd1d) & 0xfff).unwrap()
+            })
+            .collect::<Vec<_>>();
+        let fixture = build_fixture(
+            width,
+            height,
+            TEST_PRECISION,
+            1,
+            4,
+            0,
+            usize::from(width),
+            &samples,
+        );
+        assert!(
+            fixture.windows(2).any(|pair| pair == [MARKER_PREFIX, 0]),
+            "fixture must contain stuffed 0xFF00 pairs"
+        );
+        let word = decode(&fixture, &|| false).unwrap();
+        let bytewise = decode_with_refill(&fixture, &|| false, false).unwrap();
+        assert_eq!(word, bytewise);
+        assert_eq!(word.samples, samples);
+    }
+
+    #[test]
     fn entropy_reader_unstuffs_ff_and_finds_eoi() {
-        let mut reader = EntropyReader::new(&[0xff, 0x00, 0x80, 0xff, EOI], 0);
+        let mut reader = EntropyReader::new(&[0xff, 0x00, 0x80, 0xff, EOI], 0, true);
         assert_eq!(reader.read_bits(8), Ok(0xff));
         assert_eq!(reader.read_bits(1), Ok(1));
         for _ in 0..7 {
@@ -1479,7 +1566,7 @@ mod tests {
 
     #[test]
     fn rejects_stuffed_zero_after_entropy_marker_fill() {
-        let mut reader = EntropyReader::new(&[MARKER_PREFIX, MARKER_PREFIX, 0], 0);
+        let mut reader = EntropyReader::new(&[MARKER_PREFIX, MARKER_PREFIX, 0], 0, true);
         assert_eq!(
             reader.read_bits(8),
             Err(LosslessJpegError::InvalidEntropyStuffing { offset: 0 })
@@ -1518,7 +1605,7 @@ mod tests {
     fn huffman_fallback_decodes_codes_longer_than_fast_lookup() {
         let table =
             HuffmanTable::build(0, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0], vec![5]).unwrap();
-        let mut reader = EntropyReader::new(&[0, 0x1f, MARKER_PREFIX, EOI], 0);
+        let mut reader = EntropyReader::new(&[0, 0x1f, MARKER_PREFIX, EOI], 0, true);
         assert_eq!(table.decode_symbol(&mut reader), Ok(5));
         assert_eq!(reader.finish_marker().unwrap().code, EOI);
     }

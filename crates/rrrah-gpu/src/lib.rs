@@ -13,7 +13,9 @@ use std::{
 };
 
 use bytemuck::{Pod, Zeroable};
-use rrrah_core::{DecodedMosaic, FrameError, Photometric, camera_to_linear_srgb};
+use rrrah_core::{
+    DecodedMosaic, FrameError, Photometric, camera_to_linear_srgb, luminance_normalize_wb_gains,
+};
 use thiserror::Error;
 use wgpu::util::DeviceExt;
 
@@ -59,6 +61,157 @@ pub struct GpuUploadTimings {
     pub uniform_write: Duration,
     pub bind: Duration,
     pub total: Duration,
+}
+
+/// Default halo of sensor rows/columns duplicated around each tile so bilinear
+/// sampling at tile borders never crosses an array-layer boundary.
+pub const DEFAULT_TILE_HALO: u32 = 1;
+/// Default upper bound for the interior tile size. The experiment-C sweep
+/// (docs/experiments/C.md) measured the Apple M5 optimum at tile 1024 with
+/// halo 1: 81 ms vs 124 ms on a 100 MP frame and 4.1 ms vs 18.2 ms on a 6 MP
+/// frame compared with the legacy 4096 bound.
+pub const DEFAULT_MAX_TILE_SIZE: u32 = 1024;
+/// Minimum interior tile size accepted by the atlas planner.
+pub const MIN_TILE_SIZE: u32 = 32;
+/// The default tiling aligns the stored texture extent to this many samples so
+/// each atlas row is a multiple of `wgpu::COPY_BYTES_PER_ROW_ALIGNMENT`
+/// (128 samples * 2 bytes = 256 bytes) and `row_pack` degenerates to a
+/// copy-free upload (experiment C2: another 5-15% off total).
+const EXTENT_ALIGNMENT_SAMPLES: u32 = 128;
+
+/// Optional overrides for the atlas tiling used by
+/// [`RawRenderer::upload_mosaic_with_tiling`]. `None` keeps the defaults; the
+/// defaults are unchanged from previous releases.
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
+pub struct TilingOverrides {
+    /// Interior tile edge length in sensor samples. The stored texture extent
+    /// is `tile_size + 2 * tile_halo` and must fit `max_texture_dimension_2d`.
+    pub tile_size: Option<u32>,
+    /// Duplicated border width around each tile, in sensor samples.
+    pub tile_halo: Option<u32>,
+}
+
+/// Resolved atlas geometry for one decoded mosaic.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct TilingPlan {
+    pub tile_size: u32,
+    pub tile_halo: u32,
+    pub tile_grid: [u32; 2],
+    pub layer_count: u32,
+    pub texture_extent: u32,
+    pub atlas_bytes: u64,
+}
+
+/// Compute the atlas tiling for a `width`x`height` mosaic, honoring
+/// `overrides` where present. Pure and device-free so the policy is unit
+/// testable without a GPU adapter.
+fn plan_tiling(
+    width: u32,
+    height: u32,
+    max_dimension: u32,
+    max_array_layers: u32,
+    overrides: TilingOverrides,
+) -> Result<TilingPlan, GpuError> {
+    let tile_halo = overrides.tile_halo.unwrap_or(DEFAULT_TILE_HALO);
+    let tile_size = overrides.tile_size.unwrap_or_else(|| {
+        default_tile_size(width, height, max_dimension, max_array_layers, tile_halo)
+    });
+    let texture_extent = tile_size.saturating_add(2 * tile_halo);
+    if tile_size < MIN_TILE_SIZE || texture_extent > max_dimension {
+        if overrides.tile_size.is_some() || overrides.tile_halo.is_some() {
+            return Err(GpuError::InvalidTilingOverride {
+                tile_size,
+                tile_halo,
+                max: max_dimension,
+            });
+        }
+        return Err(GpuError::TileTooLargeForAdapter { max: max_dimension });
+    }
+    let tile_grid = [width.div_ceil(tile_size), height.div_ceil(tile_size)];
+    let layer_count = tile_grid[0]
+        .checked_mul(tile_grid[1])
+        .ok_or(GpuError::TooManyTiles)?;
+    if layer_count > max_array_layers {
+        return Err(GpuError::TooManyTiles);
+    }
+    let atlas_bytes = u64::from(texture_extent)
+        .checked_mul(u64::from(texture_extent))
+        .and_then(|value| value.checked_mul(u64::from(layer_count)))
+        .and_then(|value| value.checked_mul(2))
+        .ok_or(GpuError::AtlasTooLarge {
+            bytes: u64::MAX,
+            max: MAX_EAGER_ATLAS_BYTES,
+        })?;
+    if atlas_bytes > MAX_EAGER_ATLAS_BYTES {
+        return Err(GpuError::AtlasTooLarge {
+            bytes: atlas_bytes,
+            max: MAX_EAGER_ATLAS_BYTES,
+        });
+    }
+    Ok(TilingPlan {
+        tile_size,
+        tile_halo,
+        tile_grid,
+        layer_count,
+        texture_extent,
+        atlas_bytes,
+    })
+}
+
+/// Default interior tile size when no explicit override is given: the C2
+/// optimum (bounded by [`DEFAULT_MAX_TILE_SIZE`]), with the stored texture
+/// extent rounded down to a multiple of [`EXTENT_ALIGNMENT_SAMPLES`], grown
+/// as needed so the tile grid still fits `max_array_layers`.
+fn default_tile_size(
+    width: u32,
+    height: u32,
+    max_dimension: u32,
+    max_array_layers: u32,
+    tile_halo: u32,
+) -> u32 {
+    let max_tile = max_dimension.saturating_sub(2_u32.saturating_mul(tile_halo));
+    let mut tile = DEFAULT_MAX_TILE_SIZE.min(max_tile);
+    tile = align_extent(tile, tile_halo).unwrap_or(tile);
+    while layer_count(width, height, tile) > u64::from(max_array_layers) {
+        let Some(grown) = grow_tile(tile, tile_halo, max_dimension) else {
+            break;
+        };
+        tile = grown;
+    }
+    tile
+}
+
+/// Rounds the stored extent `tile_size + 2 * tile_halo` down to a multiple of
+/// [`EXTENT_ALIGNMENT_SAMPLES`] and returns the matching interior tile size.
+/// Returns `None` when alignment would push the tile below [`MIN_TILE_SIZE`].
+fn align_extent(tile_size: u32, tile_halo: u32) -> Option<u32> {
+    let halo2 = tile_halo.checked_mul(2)?;
+    let extent = tile_size.checked_add(halo2)?;
+    let aligned = extent / EXTENT_ALIGNMENT_SAMPLES * EXTENT_ALIGNMENT_SAMPLES;
+    let aligned_tile = aligned.checked_sub(halo2)?;
+    (aligned >= EXTENT_ALIGNMENT_SAMPLES && aligned_tile >= MIN_TILE_SIZE).then_some(aligned_tile)
+}
+
+/// Doubles the stored extent (keeping it a multiple of
+/// [`EXTENT_ALIGNMENT_SAMPLES`]) to shrink the tile grid, clamped to
+/// `max_dimension`. Returns `None` when the tile cannot grow any further.
+fn grow_tile(tile_size: u32, tile_halo: u32, max_dimension: u32) -> Option<u32> {
+    let halo2 = tile_halo.checked_mul(2)?;
+    let extent = tile_size.checked_add(halo2)?;
+    let doubled = extent.checked_mul(2)?.min(max_dimension);
+    let aligned = doubled / EXTENT_ALIGNMENT_SAMPLES * EXTENT_ALIGNMENT_SAMPLES;
+    let grown = aligned.checked_sub(halo2)?;
+    (grown > tile_size).then_some(grown)
+}
+
+/// Number of array layers the tile grid for `tile_size` would occupy. A zero
+/// tile size (only possible on degenerate adapters) reports the maximum so the
+/// caller grows or rejects instead of dividing by zero.
+fn layer_count(width: u32, height: u32, tile_size: u32) -> u64 {
+    if tile_size == 0 {
+        return u64::MAX;
+    }
+    u64::from(width.div_ceil(tile_size)) * u64::from(height.div_ceil(tile_size))
 }
 
 #[repr(C)]
@@ -895,6 +1048,31 @@ impl Default for GpuParameters {
     }
 }
 
+/// Luminance-normalizes green-relative WB gains at the uniform boundary
+/// (`docs/EDITOR_MATH.md:24-27`, experiment `docs/experiments/d.md` H2).
+///
+/// Decode backends deliver green-relative gains `[gR, gG, gB, gG2]` (DNG:
+/// `AsShotNeutral^-1` normalized to green; CR3: CTMD R/G and B/G ratios).
+/// Applied raw, their Rec.709 weighted luminance differs from one, which
+/// shifts display exposure by a light-source-dependent amount (measured
+/// −0.16…−0.21 stops in experiment D). Dividing every component by that
+/// luminance keeps the channel ratios — and thus the white balance — while
+/// making the operation exposure-neutral. The fourth (second green)
+/// component is scaled by the same factor so both green planes stay equal.
+///
+/// Defensive: backends already validate their WB evidence, so `None` from
+/// the core helper is unexpected; invalid gains are uploaded unchanged with
+/// a warning instead of failing the whole mosaic upload.
+fn display_ready_white_balance(gains: [f32; 4]) -> [f32; 4] {
+    let rgb = [gains[0], gains[1], gains[2]];
+    let Some(normalized) = luminance_normalize_wb_gains(rgb) else {
+        log::warn!("invalid white-balance gains {gains:?}; uploading them without luminance normalization");
+        return gains;
+    };
+    let scale = normalized[1] / gains[1];
+    [normalized[0], normalized[1], normalized[2], gains[3] * scale]
+}
+
 #[derive(Debug)]
 pub struct RawRenderer {
     pipeline: wgpu::RenderPipeline,
@@ -1000,6 +1178,19 @@ impl RawRenderer {
         queue: &wgpu::Queue,
         mosaic: &DecodedMosaic,
     ) -> Result<GpuUploadTimings, GpuError> {
+        self.upload_mosaic_with_tiling(device, queue, mosaic, TilingOverrides::default())
+    }
+
+    /// Upload one decoded mosaic with an explicit tiling override. Overrides
+    /// exist for experimentation (see `examples/gpu_smoke.rs`); the
+    /// production path keeps [`TilingOverrides::default`].
+    pub fn upload_mosaic_with_tiling(
+        &mut self,
+        device: &wgpu::Device,
+        queue: &wgpu::Queue,
+        mosaic: &DecodedMosaic,
+        tiling: TilingOverrides,
+    ) -> Result<GpuUploadTimings, GpuError> {
         let total_started = Instant::now();
         let validate_started = Instant::now();
         let metadata = &mosaic.metadata;
@@ -1027,37 +1218,20 @@ impl RawRenderer {
         let validate = validate_started.elapsed();
 
         let atlas_plan_started = Instant::now();
-        let tile_halo = 1_u32;
-        let tile_size = max_dimension.saturating_sub(2 * tile_halo).min(4096);
-        if tile_size < 32 {
-            return Err(GpuError::TileTooLargeForAdapter { max: max_dimension });
-        }
-        let tile_grid = [
-            metadata.width.div_ceil(tile_size),
-            metadata.height.div_ceil(tile_size),
-        ];
-        let layer_count = tile_grid[0]
-            .checked_mul(tile_grid[1])
-            .ok_or(GpuError::TooManyTiles)?;
-        if layer_count > device.limits().max_texture_array_layers {
-            return Err(GpuError::TooManyTiles);
-        }
-        let texture_width = tile_size + 2 * tile_halo;
-        let texture_height = texture_width;
-        let atlas_bytes = u64::from(texture_width)
-            .checked_mul(u64::from(texture_height))
-            .and_then(|value| value.checked_mul(u64::from(layer_count)))
-            .and_then(|value| value.checked_mul(2))
-            .ok_or(GpuError::AtlasTooLarge {
-                bytes: u64::MAX,
-                max: MAX_EAGER_ATLAS_BYTES,
-            })?;
-        if atlas_bytes > MAX_EAGER_ATLAS_BYTES {
-            return Err(GpuError::AtlasTooLarge {
-                bytes: atlas_bytes,
-                max: MAX_EAGER_ATLAS_BYTES,
-            });
-        }
+        let plan = plan_tiling(
+            metadata.width,
+            metadata.height,
+            max_dimension,
+            device.limits().max_texture_array_layers,
+            tiling,
+        )?;
+        let tile_halo = plan.tile_halo;
+        let tile_size = plan.tile_size;
+        let tile_grid = plan.tile_grid;
+        let layer_count = plan.layer_count;
+        let texture_width = plan.texture_extent;
+        let texture_height = plan.texture_extent;
+        let atlas_bytes = plan.atlas_bytes;
         self.parameters.raw_size = [metadata.width, metadata.height];
         self.parameters.texture_size = [texture_width, texture_height];
         self.parameters.sample_stride = tile_size;
@@ -1068,7 +1242,7 @@ impl RawRenderer {
         self.parameters.cfa = cfa;
         self.parameters.black = black;
         self.parameters.white = white;
-        self.parameters.white_balance = metadata.white_balance;
+        self.parameters.white_balance = display_ready_white_balance(metadata.white_balance);
         self.parameters.camera_to_rgb_0 =
             [camera_to_rgb[0][0], camera_to_rgb[0][1], camera_to_rgb[0][2], 0.0];
         self.parameters.camera_to_rgb_1 =
@@ -1314,6 +1488,8 @@ pub enum GpuError {
     DimensionsTooLarge { width: u32, height: u32, max: u32 },
     #[error("GPU adapter cannot fit a tile in texture limit {max}")]
     TileTooLargeForAdapter { max: u32 },
+    #[error("invalid tiling override: tile_size {tile_size}, halo {tile_halo}, texture limit {max}")]
+    InvalidTilingOverride { tile_size: u32, tile_halo: u32, max: u32 },
     #[error("RAW tile grid exceeds the GPU texture-array layer limit")]
     TooManyTiles,
     #[error("eager GPU atlas requires {bytes} bytes; limit is {max} bytes")]
@@ -1325,10 +1501,82 @@ pub enum GpuError {
 #[cfg(test)]
 mod tests {
     use super::{
-        GpuParameters, HUD_SHADER, floor_to_usize, glyph_rows, hud_card_layout, hud_card_metrics,
-        hud_card_metrics_for_count, hud_card_scale, hud_card_scale_for_count, mosaic_bytes, tile_with_halo,
-        wrap_hud_text,
+        GpuError, GpuParameters, HUD_SHADER, TilingOverrides, display_ready_white_balance, floor_to_usize,
+        glyph_rows, hud_card_layout, hud_card_metrics, hud_card_metrics_for_count, hud_card_scale,
+        hud_card_scale_for_count, mosaic_bytes, plan_tiling, tile_with_halo, wrap_hud_text,
     };
+    use rrrah_core::WB_LUMINANCE_WEIGHTS;
+
+    fn wb_luminance(gains: [f32; 3]) -> f32 {
+        gains[0] * WB_LUMINANCE_WEIGHTS[0]
+            + gains[1] * WB_LUMINANCE_WEIGHTS[1]
+            + gains[2] * WB_LUMINANCE_WEIGHTS[2]
+    }
+
+    /// Contract for the uniform boundary (`docs/EDITOR_MATH.md:24-27`): the
+    /// uploaded gains must have weighted luminance exactly one while keeping
+    /// the green-relative channel ratios of the source gains.
+    fn assert_exposure_neutral_white_balance(raw_gains: [f32; 4]) {
+        let uploaded = display_ready_white_balance(raw_gains);
+        let luminance = wb_luminance([uploaded[0], uploaded[1], uploaded[2]]);
+        assert!((luminance - 1.0).abs() < 1.0e-6, "luminance {luminance} != 1.0");
+        // Green-relative ratios are preserved: the white balance itself is
+        // unchanged, only the overall scale moves.
+        assert!((uploaded[0] / uploaded[1] - raw_gains[0] / raw_gains[1]).abs() < 1.0e-6);
+        assert!((uploaded[2] / uploaded[1] - raw_gains[2] / raw_gains[1]).abs() < 1.0e-6);
+        // The second green plane is scaled by the same factor as the first.
+        assert!((uploaded[3] / uploaded[1] - raw_gains[3] / raw_gains[1]).abs() < 1.0e-6);
+    }
+
+    #[test]
+    fn uploaded_white_balance_is_exposure_neutral_for_tungsten() {
+        // Representative green-relative gains around ~2850 K (experiment D).
+        assert_exposure_neutral_white_balance([1.9, 1.0, 1.4, 1.0]);
+        let uploaded = display_ready_white_balance([1.9, 1.0, 1.4, 1.0]);
+        // Unnormalized luminance is 1.22022 (+0.287 stops); normalization
+        // must pull every channel down by that factor.
+        assert!(uploaded.iter().all(|gain| *gain < 1.9));
+        assert!(uploaded[1] < 1.0);
+    }
+
+    #[test]
+    fn uploaded_white_balance_is_exposure_neutral_for_cr3_fixture() {
+        // Canon EOS R8 CTMD fixture gains 1678/1024 and 1659/1024.
+        let red = 1_678.0 / 1_024.0;
+        let blue = 1_659.0 / 1_024.0;
+        let raw_gains = [red, 1.0, blue, 1.0];
+        // The fixture must actually exercise the normalization (luminance
+        // 1.18055, i.e. +0.240 stops before this fix).
+        assert!(wb_luminance([red, 1.0, blue]) > 1.1);
+        assert_exposure_neutral_white_balance(raw_gains);
+        let uploaded = display_ready_white_balance(raw_gains);
+        assert!(uploaded[0] < red && uploaded[2] < blue);
+    }
+
+    #[test]
+    fn uploaded_white_balance_keeps_neutral_gains_neutral() {
+        let uploaded = display_ready_white_balance([1.0; 4]);
+        for gain in uploaded {
+            assert!((gain - 1.0).abs() < 1.0e-6, "gain {gain} != 1.0");
+        }
+    }
+
+    #[test]
+    fn invalid_white_balance_gains_are_uploaded_unchanged() {
+        // Decode backends validate WB evidence before this point; if invalid
+        // gains still arrive, upload them verbatim rather than failing the
+        // whole mosaic upload (bit-exact comparison avoids float_cmp).
+        let nan_gains = [f32::NAN, 1.0, 1.0, 1.0];
+        assert_eq!(
+            display_ready_white_balance(nan_gains).map(f32::to_bits),
+            nan_gains.map(f32::to_bits)
+        );
+        let zero_red = [0.0, 1.0, 1.4, 1.0];
+        assert_eq!(
+            display_ready_white_balance(zero_red).map(f32::to_bits),
+            zero_red.map(f32::to_bits)
+        );
+    }
 
     #[test]
     fn four_cards_fill_the_nominal_telemetry_dashboard() {
@@ -1698,5 +1946,96 @@ mod tests {
         let tile = tile_with_halo(&[1_u16], 2, 2, 0, 0, 4, 1);
         assert_eq!(tile.len(), 36);
         assert!(tile.iter().all(|sample| *sample == 0));
+    }
+
+    #[test]
+    fn default_tiling_uses_c2_optimum_with_aligned_extent() {
+        // Metal-class adapter: 16384 texture dimension, 2048 array layers.
+        // Experiment C2: tile ~= 1024 with halo 1 is the M5 optimum; the
+        // stored extent snaps down to 1024 (a multiple of 128 samples) so
+        // `row_pack` degenerates to a copy-free upload.
+        let plan = plan_tiling(8256, 6192, 16_384, 2048, TilingOverrides::default()).unwrap();
+        assert_eq!(plan.tile_halo, 1);
+        assert_eq!(plan.tile_size, 1022);
+        assert_eq!(plan.texture_extent, 1024);
+        assert_eq!(plan.texture_extent % 128, 0);
+        assert_eq!(plan.tile_grid, [9, 7]);
+        assert_eq!(plan.layer_count, 63);
+        assert_eq!(plan.atlas_bytes, 1024_u64 * 1024 * 63 * 2);
+    }
+
+    #[test]
+    fn default_tiling_shrinks_for_small_adapters() {
+        // Adapter limited to 4096: the C2 default still fits, so the tile
+        // stays at the aligned 1022 rather than the legacy 4094.
+        let plan = plan_tiling(6000, 4000, 4096, 256, TilingOverrides::default()).unwrap();
+        assert_eq!(plan.tile_size, 1022);
+        assert_eq!(plan.texture_extent, 1024);
+        assert_eq!(plan.tile_grid, [6, 4]);
+    }
+
+    #[test]
+    fn default_tiling_rejects_tiny_adapters() {
+        let error = plan_tiling(64, 64, 33, 256, TilingOverrides::default()).unwrap_err();
+        assert!(matches!(error, GpuError::TileTooLargeForAdapter { max: 33 }));
+    }
+
+    #[test]
+    fn default_tiling_grows_to_fit_array_layer_limit() {
+        // 8192x8192 at tile 1022 would need 9x9 = 81 layers; with a budget of
+        // 8 the default path doubles the extent until the grid fits.
+        let plan = plan_tiling(8192, 8192, 16_384, 8, TilingOverrides::default()).unwrap();
+        assert_eq!(plan.tile_size, 8190);
+        assert_eq!(plan.texture_extent, 8192);
+        assert_eq!(plan.tile_grid, [2, 2]);
+        assert_eq!(plan.layer_count, 4);
+    }
+
+    #[test]
+    fn default_tiling_errors_when_layer_limit_cannot_be_met() {
+        // The tile cannot grow past the texture dimension, so an 8192x8192
+        // mosaic with a 4-layer budget is rejected.
+        let error = plan_tiling(8192, 8192, 4096, 4, TilingOverrides::default()).unwrap_err();
+        assert!(matches!(error, GpuError::TooManyTiles));
+    }
+
+    #[test]
+    fn tiling_override_is_applied_verbatim() {
+        let overrides = TilingOverrides { tile_size: Some(512), tile_halo: Some(2) };
+        let plan = plan_tiling(2048, 1536, 16_384, 2048, overrides).unwrap();
+        assert_eq!(plan.tile_size, 512);
+        assert_eq!(plan.tile_halo, 2);
+        assert_eq!(plan.texture_extent, 516);
+        assert_eq!(plan.tile_grid, [4, 3]);
+        assert_eq!(plan.layer_count, 12);
+        assert_eq!(plan.atlas_bytes, 516_u64 * 516 * 12 * 2);
+    }
+
+    #[test]
+    fn tiling_override_below_minimum_is_rejected() {
+        let overrides = TilingOverrides { tile_size: Some(16), tile_halo: None };
+        let error = plan_tiling(64, 64, 16_384, 2048, overrides).unwrap_err();
+        assert!(matches!(
+            error,
+            GpuError::InvalidTilingOverride { tile_size: 16, tile_halo: 1, max: 16_384 }
+        ));
+    }
+
+    #[test]
+    fn tiling_override_exceeding_texture_limit_is_rejected() {
+        let overrides = TilingOverrides { tile_size: Some(4096), tile_halo: Some(4) };
+        let error = plan_tiling(4096, 4096, 4096, 2048, overrides).unwrap_err();
+        assert!(matches!(
+            error,
+            GpuError::InvalidTilingOverride { tile_size: 4096, tile_halo: 4, max: 4096 }
+        ));
+    }
+
+    #[test]
+    fn tiling_override_respects_array_layer_limit() {
+        let overrides = TilingOverrides { tile_size: Some(32), tile_halo: None };
+        // 128x64 at tile 32 -> 4x2 = 8 layers, limit 4.
+        let error = plan_tiling(128, 64, 16_384, 4, overrides).unwrap_err();
+        assert!(matches!(error, GpuError::TooManyTiles));
     }
 }

@@ -4,8 +4,9 @@ use std::{fs::File, io::Read, sync::Arc, time::Instant};
 
 use rrrah_core::{
     CfaColor, CfaPattern, DECODE_CROP_AS_METADATA, DECODE_FULL_SENSOR_RAW, DECODE_IMAGE_INDEX_IN_KEY,
-    DECODE_INTEGER_U16, DECODE_SENSOR_COORDINATES, DecodedMosaic, LevelGrid, MosaicRecipeManifest,
-    Orientation, Photometric, RawMetadata, Rect, WhiteLevel,
+    DECODE_INTEGER_U16, DECODE_SENSOR_COORDINATES, DecodedMosaic, DngColorMatrix, LevelGrid,
+    MosaicRecipeManifest, Orientation, Photometric, RawMetadata, Rect, WhiteLevel,
+    select_dng_xyz_to_camera,
 };
 
 use crate::{
@@ -318,19 +319,51 @@ fn white_balance(image: &DngImage<'_>, indices: [usize; 3]) -> Result<[f32; 4], 
 }
 
 fn xyz_to_camera(image: &DngImage<'_>, indices: [usize; 3]) -> Result<[[f32; 3]; 4], DecodeError> {
-    let Some(matrix) = image.metadata.color_matrix_1.as_deref() else {
+    let metadata = &image.metadata;
+    let Some(matrix) = select_xyz_to_camera_d65(
+        metadata.color_matrix_1.as_deref(),
+        metadata.calibration_illuminant_1,
+        metadata.color_matrix_2.as_deref(),
+        metadata.calibration_illuminant_2,
+    ) else {
         return Ok([[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0], [0.0; 3]]);
     };
     let mut result = [[0.0_f32; 3]; 4];
     for (destination, source) in indices.into_iter().enumerate() {
-        let offset = source
-            .checked_mul(3)
-            .ok_or_else(|| dng_adapt_error("ColorMatrix1 row offset overflow"))?;
         for column in 0..3 {
-            result[destination][column] = finite_f32(matrix[offset + column])?;
+            result[destination][column] = finite_f32(matrix[source][column])?;
         }
     }
     Ok(result)
+}
+
+/// Picks the D65-referenced `XYZ -> camera` matrix from the DNG calibration
+/// pair. A `ColorMatrix2`/`CalibrationIlluminant2 = D65` pair is used
+/// verbatim; a matrix calibrated for another known illuminant is
+/// Bradford-adapted to D65 in f64; without illuminant information the legacy
+/// verbatim `ColorMatrix1` behavior is kept.
+fn select_xyz_to_camera_d65(
+    color_matrix_1: Option<&[f64]>,
+    calibration_illuminant_1: Option<u16>,
+    color_matrix_2: Option<&[f64]>,
+    calibration_illuminant_2: Option<u16>,
+) -> Option<[[f64; 3]; 3]> {
+    let candidate = |matrix: Option<&[f64]>, illuminant: Option<u16>| {
+        matrix
+            .filter(|flat| flat.len() == 9)
+            .map(|flat| DngColorMatrix {
+                xyz_to_camera: [
+                    [flat[0], flat[1], flat[2]],
+                    [flat[3], flat[4], flat[5]],
+                    [flat[6], flat[7], flat[8]],
+                ],
+                illuminant,
+            })
+    };
+    select_dng_xyz_to_camera(
+        candidate(color_matrix_1, calibration_illuminant_1),
+        candidate(color_matrix_2, calibration_illuminant_2),
+    )
 }
 
 const fn map_cfa_color(color: dng::CfaColor) -> CfaColor {
@@ -441,5 +474,63 @@ mod tests {
         assert_eq!(exact_u32(42.0, "test").unwrap(), 42);
         assert!(exact_u32(0.5, "test").is_err());
         assert!(exact_u32(f64::NAN, "test").is_err());
+    }
+
+    /// Flat `ColorMatrix` layout used by the selection tests below.
+    fn flat(matrix: [[f64; 3]; 3]) -> Vec<f64> {
+        matrix.into_iter().flatten().collect()
+    }
+
+    #[test]
+    // Verbatim bit-exact reuse of the D65 matrix is exactly what is asserted.
+    #[allow(clippy::float_cmp)]
+    fn d65_color_matrix_2_wins_verbatim_over_illuminant_a_matrix_1() {
+        let cm_a = flat([[0.6, -0.1, -0.1], [-0.8, 1.6, 0.2], [-0.2, 0.4, 0.6]]);
+        let cm_d65 = flat([[1.0, -0.2, -0.1], [-0.5, 1.4, 0.1], [-0.1, 0.1, 0.8]]);
+        let selected =
+            select_xyz_to_camera_d65(Some(&cm_a), Some(17), Some(&cm_d65), Some(21)).unwrap();
+        for (selected, verbatim) in selected.into_iter().flatten().zip(cm_d65) {
+            assert_eq!(selected, verbatim);
+        }
+    }
+
+    #[test]
+    fn lone_illuminant_a_matrix_is_bradford_adapted() {
+        let cm_a = flat([[0.6, -0.1, -0.1], [-0.8, 1.6, 0.2], [-0.2, 0.4, 0.6]]);
+        let selected = select_xyz_to_camera_d65(Some(&cm_a), Some(17), None, None).unwrap();
+        // Adapted output must differ from the raw matrix (a real correction)
+        // and must match the shared core selection path exactly.
+        let shifted = selected
+            .into_iter()
+            .flatten()
+            .zip(cm_a.iter().copied())
+            .any(|(adapted, raw)| (adapted - raw).abs() > 1.0e-3);
+        assert!(shifted, "adaptation should visibly change the matrix");
+        let core = select_dng_xyz_to_camera(
+            Some(DngColorMatrix {
+                xyz_to_camera: [[0.6, -0.1, -0.1], [-0.8, 1.6, 0.2], [-0.2, 0.4, 0.6]],
+                illuminant: Some(17),
+            }),
+            None,
+        )
+        .unwrap();
+        assert_eq!(selected, core);
+    }
+
+    #[test]
+    // Verbatim bit-exact reuse of the untagged matrix is exactly what is asserted.
+    #[allow(clippy::float_cmp)]
+    fn missing_or_untagged_matrices_keep_legacy_behavior() {
+        // No matrices at all: identity fallback upstream (`None` here).
+        assert_eq!(select_xyz_to_camera_d65(None, None, None, None), None);
+        // ColorMatrix1 without illuminant tags: verbatim, as before.
+        let cm = flat([[1.0, -0.2, -0.1], [-0.5, 1.4, 0.1], [-0.1, 0.1, 0.8]]);
+        let selected = select_xyz_to_camera_d65(Some(&cm), None, None, None).unwrap();
+        for (selected, verbatim) in selected.into_iter().flatten().zip(&cm) {
+            assert_eq!(selected, *verbatim);
+        }
+        // A malformed row count is ignored rather than misparsed.
+        let short = vec![1.0_f64; 6];
+        assert_eq!(select_xyz_to_camera_d65(Some(&short), Some(17), None, None), None);
     }
 }

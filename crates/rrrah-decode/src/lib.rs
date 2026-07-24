@@ -5,7 +5,8 @@
 #![allow(clippy::missing_errors_doc, clippy::cast_precision_loss)]
 
 mod cr3;
-mod dng;
+#[doc(hidden)] // Exposed only for criterion micro-benchmarks (`bench_support`); not public API.
+pub mod dng;
 mod dng_backend;
 mod native_backend;
 mod native_router;

@@ -4,10 +4,19 @@
 //! from the enclosing TIFF segment geometry. The only required relationship is
 //! that the decoded sample counts agree, so assembly deliberately treats the
 //! JPEG output as one flat TIFF-order sample sequence.
+//!
+//! Segments are independent coded units (own Huffman tables, predictor reset
+//! per segment), so they decode on the bounded worker set from
+//! [`super::parallel`]; assembly into the mosaic is bit-identical for any
+//! worker count.
 
-use super::{DngError, DngImage, Storage, lossless_jpeg};
+use super::{DngError, DngImage, Storage, lossless_jpeg, parallel};
 
-pub(super) fn decode(image: &DngImage<'_>, cancelled: &dyn Fn() -> bool) -> Result<Vec<u16>, DngError> {
+pub(super) fn decode(
+    image: &DngImage<'_>,
+    cancelled: &(dyn Fn() -> bool + Sync),
+    workers: usize,
+) -> Result<Vec<u16>, DngError> {
     let mut pixels = Vec::new();
     pixels
         .try_reserve_exact(image.sample_count)
@@ -28,6 +37,7 @@ pub(super) fn decode(image: &DngImage<'_>, cancelled: &dyn Fn() -> bool) -> Resu
             *rows_per_strip,
             segments,
             cancelled,
+            workers,
         )?,
         Storage::Tiles {
             tile_width,
@@ -42,6 +52,7 @@ pub(super) fn decode(image: &DngImage<'_>, cancelled: &dyn Fn() -> bool) -> Resu
             *tile_height,
             segments,
             cancelled,
+            workers,
         )?,
     }
     Ok(pixels)
@@ -55,14 +66,17 @@ fn decode_strips(
     precision: u8,
     rows_per_strip: u32,
     segments: &[super::Segment<'_>],
-    cancelled: &dyn Fn() -> bool,
+    cancelled: &(dyn Fn() -> bool + Sync),
+    workers: usize,
 ) -> Result<(), DngError> {
     let width = usize::try_from(width).map_err(|_| DngError::ArithmeticOverflow("JPEG strip width"))?;
     let height = usize::try_from(height).map_err(|_| DngError::ArithmeticOverflow("JPEG strip height"))?;
     let rows_per_strip =
         usize::try_from(rows_per_strip).map_err(|_| DngError::ArithmeticOverflow("JPEG rows per strip"))?;
 
-    for (index, segment) in segments.iter().enumerate() {
+    let workers = parallel::effective_workers(workers, segments.len(), output.len());
+    let units = parallel::split_row_bands(output, width, height, rows_per_strip);
+    let process = |index: usize, unit: &mut [u16]| -> Result<(), DngError> {
         let first_row = index
             .checked_mul(rows_per_strip)
             .ok_or(DngError::ArithmeticOverflow("JPEG strip first row"))?;
@@ -73,17 +87,12 @@ fn decode_strips(
         let expected = width
             .checked_mul(rows)
             .ok_or(DngError::ArithmeticOverflow("JPEG strip sample count"))?;
-        let decoded = decode_segment(segment.bytes, cancelled, first_row)?;
+        let decoded = decode_segment(segments[index].bytes, cancelled, first_row)?;
         validate_segment(index, precision, expected, &decoded)?;
-        let target_start = first_row
-            .checked_mul(width)
-            .ok_or(DngError::ArithmeticOverflow("JPEG strip output offset"))?;
-        let target_end = target_start
-            .checked_add(expected)
-            .ok_or(DngError::ArithmeticOverflow("JPEG strip output end"))?;
-        output[target_start..target_end].copy_from_slice(&decoded.samples);
-    }
-    Ok(())
+        unit.copy_from_slice(&decoded.samples);
+        Ok(())
+    };
+    parallel::run_units(units, workers, cancelled, &process)
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -95,7 +104,8 @@ fn decode_tiles(
     tile_width: u32,
     tile_height: u32,
     segments: &[super::Segment<'_>],
-    cancelled: &dyn Fn() -> bool,
+    cancelled: &(dyn Fn() -> bool + Sync),
+    workers: usize,
 ) -> Result<(), DngError> {
     let width = usize::try_from(width).map_err(|_| DngError::ArithmeticOverflow("JPEG tile image width"))?;
     let height =
@@ -105,43 +115,55 @@ fn decode_tiles(
     let tile_height =
         usize::try_from(tile_height).map_err(|_| DngError::ArithmeticOverflow("JPEG tile height"))?;
     let tile_columns = width.div_ceil(tile_width);
+    let tile_rows = height.div_ceil(tile_height);
     let expected = tile_width
         .checked_mul(tile_height)
         .ok_or(DngError::ArithmeticOverflow("JPEG tile sample count"))?;
 
-    for (index, segment) in segments.iter().enumerate() {
-        let tile_y = index / tile_columns;
-        let tile_x = index % tile_columns;
-        let first_y = tile_y
+    // One parallel unit per tile row: bands are contiguous output regions,
+    // tiles inside a band are decoded sequentially in index order.
+    let workers = parallel::effective_workers(workers, tile_rows, output.len());
+    let units = parallel::split_row_bands(output, width, height, tile_height);
+    let process = |band: usize, unit: &mut [u16]| -> Result<(), DngError> {
+        let first_y = band
             .checked_mul(tile_height)
             .ok_or(DngError::ArithmeticOverflow("JPEG tile top"))?;
-        let first_x = tile_x
-            .checked_mul(tile_width)
-            .ok_or(DngError::ArithmeticOverflow("JPEG tile left"))?;
-        if cancelled() {
-            return Err(DngError::Cancelled { row: first_y });
-        }
-        let decoded = decode_segment(segment.bytes, cancelled, first_y)?;
-        validate_segment(index, precision, expected, &decoded)?;
-
-        let copy_width = tile_width.min(width.saturating_sub(first_x));
-        let copy_height = tile_height.min(height.saturating_sub(first_y));
-        for row in 0..copy_height {
-            if cancelled() {
-                return Err(DngError::Cancelled { row: first_y + row });
-            }
-            let source_start = row
+        let first_tile = band
+            .checked_mul(tile_columns)
+            .ok_or(DngError::ArithmeticOverflow("JPEG tile band"))?;
+        let last_tile = first_tile.saturating_add(tile_columns).min(segments.len());
+        for (offset, segment) in segments[first_tile..last_tile].iter().enumerate() {
+            let index = first_tile + offset;
+            let tile_x = index % tile_columns;
+            let first_x = tile_x
                 .checked_mul(tile_width)
-                .ok_or(DngError::ArithmeticOverflow("JPEG tile source row"))?;
-            let target_start = (first_y + row)
-                .checked_mul(width)
-                .and_then(|offset| offset.checked_add(first_x))
-                .ok_or(DngError::ArithmeticOverflow("JPEG tile output row"))?;
-            output[target_start..target_start + copy_width]
-                .copy_from_slice(&decoded.samples[source_start..source_start + copy_width]);
+                .ok_or(DngError::ArithmeticOverflow("JPEG tile left"))?;
+            if cancelled() {
+                return Err(DngError::Cancelled { row: first_y });
+            }
+            let decoded = decode_segment(segment.bytes, cancelled, first_y)?;
+            validate_segment(index, precision, expected, &decoded)?;
+
+            let copy_width = tile_width.min(width.saturating_sub(first_x));
+            let copy_height = tile_height.min(height.saturating_sub(first_y));
+            for row in 0..copy_height {
+                if cancelled() {
+                    return Err(DngError::Cancelled { row: first_y + row });
+                }
+                let source_start = row
+                    .checked_mul(tile_width)
+                    .ok_or(DngError::ArithmeticOverflow("JPEG tile source row"))?;
+                let target_start = row
+                    .checked_mul(width)
+                    .and_then(|offset| offset.checked_add(first_x))
+                    .ok_or(DngError::ArithmeticOverflow("JPEG tile output row"))?;
+                unit[target_start..target_start + copy_width]
+                    .copy_from_slice(&decoded.samples[source_start..source_start + copy_width]);
+            }
         }
-    }
-    Ok(())
+        Ok(())
+    };
+    parallel::run_units(units, workers, cancelled, &process)
 }
 
 fn decode_segment(

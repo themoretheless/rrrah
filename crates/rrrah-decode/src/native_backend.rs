@@ -31,8 +31,51 @@ const NATIVE_DECODE_FLAGS: u32 = DECODE_FULL_SENSOR_RAW
     | DECODE_CROP_AS_METADATA
     | DECODE_IMAGE_INDEX_IN_KEY;
 const MAX_INPUT_BYTES: u64 = 2 * 1024 * 1024 * 1024;
-const REQUESTED_PLANE_WORKERS: usize = 4;
-const MIN_STREAMING_PARALLELISM: usize = REQUESTED_PLANE_WORKERS + 1;
+const DEFAULT_PLANE_WORKERS: usize = 4;
+const PLANE_WORKERS_ENV: &str = "RRRAH_CR3_PLANE_WORKERS";
+const PLANE_WORKER_OPTIONS: [usize; 3] = [1, 2, 4];
+/// CRX stores the four Bayer parities as independent entropy streams, so the
+/// streaming scheduler always runs one worker per plane.
+const CR3_PLANE_COUNT: usize = 4;
+
+/// Resolves the requested CR3 plane-worker count from the environment.
+///
+/// `RRRAH_CR3_PLANE_WORKERS` accepts 1, 2, or 4 and exists for scheduler
+/// sweeps; any missing or invalid value falls back to the default of 4,
+/// matching the previously hardcoded request. Values below the plane count
+/// force the bounded batch scheduler so a `1|2|4` sweep can compare the
+/// batch branch against the streaming branch.
+fn requested_plane_workers() -> usize {
+    parse_plane_workers(std::env::var(PLANE_WORKERS_ENV).ok().as_deref())
+}
+
+fn parse_plane_workers(value: Option<&str>) -> usize {
+    value
+        .and_then(|raw| raw.parse::<usize>().ok())
+        .filter(|workers| PLANE_WORKER_OPTIONS.contains(workers))
+        .unwrap_or(DEFAULT_PLANE_WORKERS)
+}
+
+/// Streaming assembly keeps one worker per plane plus the coordinating
+/// caller, so it is eligible only when the request covers all four planes
+/// and the machine has a spare hardware thread for the coordinator.
+fn should_stream_planes(requested_workers: usize, available_workers: usize) -> bool {
+    requested_workers >= CR3_PLANE_COUNT && available_workers > requested_workers
+}
+
+/// Worker count the decoder reports for the current environment, kept in
+/// sync with both schedulers so regression contracts can assert it under
+/// any `RRRAH_CR3_PLANE_WORKERS` setting.
+#[cfg(test)]
+pub(crate) fn planned_plane_worker_count() -> usize {
+    let requested = requested_plane_workers();
+    let available = std::thread::available_parallelism().map_or(1, usize::from);
+    if should_stream_planes(requested, available) {
+        CR3_PLANE_COUNT
+    } else {
+        requested.clamp(1, available.clamp(1, CR3_PLANE_COUNT))
+    }
+}
 
 /// The small, fully owned subset of a parsed frame needed after entropy decode.
 ///
@@ -205,8 +248,9 @@ fn decode_sensor_pixels(
             .is_some_and(crate::GenerationToken::is_cancelled)
     };
 
+    let requested_workers = requested_plane_workers();
     let available_workers = std::thread::available_parallelism().map_or(1, usize::from);
-    if available_workers >= MIN_STREAMING_PARALLELISM {
+    if should_stream_planes(requested_workers, available_workers) {
         let decode_rows = |_plane_index: usize,
                            bytes: &[u8],
                            should_cancel: &dyn Fn() -> bool,
@@ -242,8 +286,8 @@ fn decode_sensor_pixels(
      -> Result<Vec<u16>, LosslessError> {
         lossless::decode_plane(bytes, plane_width, plane_height, bit_depth, should_cancel)
     };
-    let batch = decode_four_planes(plane_data, REQUESTED_PLANE_WORKERS, &cancelled, &decode)
-        .map_err(map_parallel_error)?;
+    let batch =
+        decode_four_planes(plane_data, requested_workers, &cancelled, &decode).map_err(map_parallel_error)?;
     let worker_count = u8::try_from(batch.worker_count).unwrap_or(4);
     let interleave_started = Instant::now();
     let plane_slices = batch.planes.each_ref().map(Vec::as_slice);
@@ -422,5 +466,31 @@ mod tests {
         fn assert_static<T: 'static>() {}
 
         assert_static::<NativeAdaptationSummary>();
+    }
+
+    #[test]
+    fn plane_worker_knob_accepts_only_supported_values() {
+        assert_eq!(parse_plane_workers(None), DEFAULT_PLANE_WORKERS);
+        assert_eq!(parse_plane_workers(Some("1")), 1);
+        assert_eq!(parse_plane_workers(Some("2")), 2);
+        assert_eq!(parse_plane_workers(Some("4")), 4);
+        for invalid in ["0", "3", "5", "8", "", "four", " 2", "4 "] {
+            assert_eq!(
+                parse_plane_workers(Some(invalid)),
+                DEFAULT_PLANE_WORKERS,
+                "{invalid:?} must fall back to the default"
+            );
+        }
+    }
+
+    #[test]
+    fn streaming_requires_full_plane_coverage_and_a_spare_thread() {
+        assert!(should_stream_planes(4, 5));
+        assert!(should_stream_planes(4, 10));
+        assert!(!should_stream_planes(4, 4));
+        assert!(!should_stream_planes(4, 1));
+        assert!(!should_stream_planes(2, 10));
+        assert!(!should_stream_planes(1, 10));
+        assert!(!should_stream_planes(0, 10));
     }
 }

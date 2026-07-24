@@ -10,6 +10,7 @@
 mod fixture_regression;
 mod lossless_jpeg;
 mod lossless_storage;
+mod parallel;
 mod tiff;
 mod uncompressed;
 
@@ -60,7 +61,10 @@ const TAG_WHITE_LEVEL: u16 = 50_717;
 const TAG_DEFAULT_CROP_ORIGIN: u16 = 50_719;
 const TAG_DEFAULT_CROP_SIZE: u16 = 50_720;
 const TAG_COLOR_MATRIX_1: u16 = 50_721;
+const TAG_COLOR_MATRIX_2: u16 = 50_722;
 const TAG_AS_SHOT_NEUTRAL: u16 = 50_728;
+const TAG_CALIBRATION_ILLUMINANT_1: u16 = 50_778;
+const TAG_CALIBRATION_ILLUMINANT_2: u16 = 50_779;
 const TAG_ACTIVE_AREA: u16 = 50_829;
 
 const PHOTOMETRIC_CFA: u64 = 32_803;
@@ -194,6 +198,16 @@ pub(crate) fn parse(data: &[u8]) -> Result<DngImage<'_>, DngError> {
             .checked_mul(3)
             .ok_or(DngError::ArithmeticOverflow("ColorMatrix1 count"))?,
     )?;
+    let color_matrix_2 = parse_optional_matrix(
+        raw,
+        &root.ifd,
+        TAG_COLOR_MATRIX_2,
+        color_planes
+            .checked_mul(3)
+            .ok_or(DngError::ArithmeticOverflow("ColorMatrix2 count"))?,
+    )?;
+    let calibration_illuminant_1 = optional_u16_scoped(raw, &root.ifd, TAG_CALIBRATION_ILLUMINANT_1)?;
+    let calibration_illuminant_2 = optional_u16_scoped(raw, &root.ifd, TAG_CALIBRATION_ILLUMINANT_2)?;
     let as_shot_neutral = parse_optional_vector(raw, &root.ifd, TAG_AS_SHOT_NEUTRAL, color_planes)?;
     let orientation = parse_orientation(raw, &root.ifd)?;
     let metadata_elapsed = metadata_started.elapsed();
@@ -231,6 +245,9 @@ pub(crate) fn parse(data: &[u8]) -> Result<DngImage<'_>, DngError> {
             crop,
             linearization_table,
             color_matrix_1,
+            color_matrix_2,
+            calibration_illuminant_1,
+            calibration_illuminant_2,
             as_shot_neutral,
         },
         storage,
@@ -253,7 +270,21 @@ pub(crate) struct DngImage<'a> {
 
 impl DngImage<'_> {
     /// Decodes the stored CFA plane and applies `LinearizationTable`, if present.
-    pub(crate) fn decode_u16(&self, cancelled: &dyn Fn() -> bool) -> Result<DngDecodedPixels, DngError> {
+    ///
+    /// Segments decode on a bounded worker set (`RRRAH_DNG_DECODE_WORKERS`,
+    /// default: available parallelism); the result is bit-identical for any
+    /// worker count.
+    pub(crate) fn decode_u16(&self, cancelled: &(dyn Fn() -> bool + Sync)) -> Result<DngDecodedPixels, DngError> {
+        self.decode_u16_with_workers(cancelled, parallel::env_workers())
+    }
+
+    /// Same as [`DngImage::decode_u16`] with an explicit segment-decode
+    /// worker count (1 = fully sequential).
+    pub(crate) fn decode_u16_with_workers(
+        &self,
+        cancelled: &(dyn Fn() -> bool + Sync),
+        workers: usize,
+    ) -> Result<DngDecodedPixels, DngError> {
         let total_started = Instant::now();
         if cancelled() {
             return Err(DngError::Cancelled { row: 0 });
@@ -261,8 +292,8 @@ impl DngImage<'_> {
 
         let pixel_unpack_started = Instant::now();
         let mut pixels = match self.compression {
-            Compression::Uncompressed => uncompressed::decode(self, cancelled),
-            Compression::LosslessJpeg => lossless_storage::decode(self, cancelled),
+            Compression::Uncompressed => uncompressed::decode(self, cancelled, workers),
+            Compression::LosslessJpeg => lossless_storage::decode(self, cancelled, workers),
         }?;
         let pixel_unpack = pixel_unpack_started.elapsed();
 
@@ -360,6 +391,12 @@ pub(crate) struct DngMetadata {
     pub(crate) linearization_table: Option<Vec<u16>>,
     /// Row-major camera-native-by-XYZ matrix from `ColorMatrix1`.
     pub(crate) color_matrix_1: Option<Vec<f64>>,
+    /// Row-major camera-native-by-XYZ matrix from `ColorMatrix2`.
+    pub(crate) color_matrix_2: Option<Vec<f64>>,
+    /// EXIF light source code from `CalibrationIlluminant1`.
+    pub(crate) calibration_illuminant_1: Option<u16>,
+    /// EXIF light source code from `CalibrationIlluminant2`.
+    pub(crate) calibration_illuminant_2: Option<u16>,
     /// Camera-neutral coordinates from `AsShotNeutral`.
     pub(crate) as_shot_neutral: Option<Vec<f64>>,
 }
@@ -1028,6 +1065,20 @@ fn optional_u16(directory: &Directory<'_>, tag: u16) -> Result<Option<u16>, DngE
         .map_err(Into::into)
 }
 
+/// Like [`optional_u16`], but also falls back to the root IFD — the DNG
+/// calibration tags may live in either directory.
+fn optional_u16_scoped(raw: &Directory<'_>, root: &Ifd<'_>, tag: u16) -> Result<Option<u16>, DngError> {
+    let entry = raw.entry(tag)?.or(root.entry(tag)?);
+    entry
+        .map(|entry| {
+            entry.unsigned_scalar().and_then(|value| {
+                u16::try_from(value).map_err(|_| TiffError::ArithmeticOverflow("u16 TIFF value"))
+            })
+        })
+        .transpose()
+        .map_err(Into::into)
+}
+
 fn optional_ascii(directory: &Directory<'_>, tag: u16) -> Result<Option<String>, DngError> {
     Ok(directory
         .entry(tag)?
@@ -1487,6 +1538,522 @@ impl Error for DngError {
     }
 }
 
+#[doc(hidden)]
+pub mod bench_support {
+    //! Measurement hooks for the criterion micro-benchmarks in `benches/`.
+    //! This module is not public API and may change without notice.
+
+    use super::{lossless_jpeg, uncompressed};
+
+    /// Decodes a lossless-JPEG payload and returns the frame width, height,
+    /// sample count, and an order-sensitive checksum of the decoded samples.
+    pub fn decode_lossless_jpeg(bytes: &[u8]) -> Result<(u16, u16, usize, u64), String> {
+        let image = lossless_jpeg::decode(bytes, &|| false).map_err(|error| error.to_string())?;
+        let checksum = sample_checksum(&image.samples);
+        Ok((image.width, image.height, image.samples.len(), checksum))
+    }
+
+    /// Same as [`decode_lossless_jpeg`], but forces the byte-at-a-time
+    /// entropy refill (the pre-optimization reference path) for A/B timing.
+    pub fn decode_lossless_jpeg_bytewise(bytes: &[u8]) -> Result<(u16, u16, usize, u64), String> {
+        let image =
+            lossless_jpeg::decode_with_refill(bytes, &|| false, false).map_err(|error| error.to_string())?;
+        let checksum = sample_checksum(&image.samples);
+        Ok((image.width, image.height, image.samples.len(), checksum))
+    }
+
+    /// Unpacks one MSB-first packed row into `output`.
+    pub fn unpack_msb_row(encoded: &[u8], output: &mut [u16], bits_per_sample: u8) -> Result<(), String> {
+        uncompressed::decode_msb_packed(encoded, output, bits_per_sample).map_err(|error| error.to_string())
+    }
+
+    /// Same as [`unpack_msb_row`], but uses the byte-at-a-time reference loop
+    /// (the pre-optimization path) for A/B timing.
+    pub fn unpack_msb_row_bytewise(
+        encoded: &[u8],
+        output: &mut [u16],
+        bits_per_sample: u8,
+    ) -> Result<(), String> {
+        uncompressed::decode_msb_packed_bytewise(encoded, output, bits_per_sample)
+            .map_err(|error| error.to_string())
+    }
+
+    // ------------------------------------------------------------------
+    // Synthetic segmented-DNG fixtures for the parallel segment-decode
+    // benchmarks and the cross-worker bit-identity tests.
+
+    /// How pixel data is segmented inside a synthetic DNG fixture.
+    #[derive(Debug, Clone, Copy)]
+    pub enum SegmentLayout {
+        /// Strip layout (tags 273/278/279) with this `RowsPerStrip` value.
+        Strips { rows_per_strip: u32 },
+        /// Tiled layout (tags 322/323/324/325); edge tiles are padded with
+        /// zero samples to the full tile size, as the DNG spec requires.
+        Tiles { tile_width: u32, tile_height: u32 },
+    }
+
+    /// Compression used by a synthetic DNG fixture.
+    #[derive(Debug, Clone, Copy)]
+    pub enum SyntheticCompression {
+        /// DNG `Compression = 1`, 16 bits per sample, little-endian rows.
+        Uncompressed16,
+        /// DNG `Compression = 7`, 12-bit lossless JPEG, predictor 1.
+        LosslessJpeg12,
+    }
+
+    const ENCODE_PRECISION: u8 = 12;
+
+    /// Encodes `samples` (row-major, `width * height` values) as a
+    /// single-component 12-bit lossless-JPEG stream, structurally identical
+    /// to one DNG segment produced by a camera.
+    pub fn encode_lossless_jpeg(width: u16, height: u16, predictor: u8, samples: &[u16]) -> Vec<u8> {
+        assert_eq!(
+            samples.len(),
+            usize::from(width) * usize::from(height),
+            "lossless-JPEG fixture sample count",
+        );
+        let mut output = Vec::new();
+        jpeg_marker(&mut output, 0xd8); // SOI
+
+        let mut dht = vec![0_u8];
+        dht.extend_from_slice(&[0, 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        dht.extend(0_u8..=16);
+        jpeg_segment(&mut output, 0xc4, &dht); // DHT
+
+        let mut frame = vec![ENCODE_PRECISION];
+        frame.extend_from_slice(&height.to_be_bytes());
+        frame.extend_from_slice(&width.to_be_bytes());
+        frame.push(1);
+        frame.extend_from_slice(&[1, 0x11, 0]);
+        jpeg_segment(&mut output, 0xc3, &frame); // SOF3
+
+        jpeg_segment(&mut output, 0xda, &[1, 1, 0, predictor, 0, 0]); // SOS
+
+        let width_usize = usize::from(width);
+        let initial = 1_i32 << (ENCODE_PRECISION - 1);
+        let mut bits = BitWriter::new();
+        for mcu in 0..samples.len() {
+            let x = mcu % width_usize;
+            let y = mcu / width_usize;
+            let sample = i32::from(samples[mcu]);
+            let predicted = if mcu == 0 {
+                initial
+            } else if y == 0 {
+                i32::from(samples[mcu - 1])
+            } else if x == 0 {
+                i32::from(samples[mcu - width_usize])
+            } else {
+                let left = i32::from(samples[mcu - 1]);
+                let above = i32::from(samples[mcu - width_usize]);
+                let upper_left = i32::from(samples[mcu - width_usize - 1]);
+                select_predictor(predictor, left, above, upper_left)
+            };
+            let difference = signed_modulo_difference(sample, predicted);
+            let (category, encoded) = category_and_bits(difference);
+            bits.write(u32::from(category), 5);
+            if category < 16 {
+                bits.write(encoded, category);
+            }
+        }
+        bits.pad_ones();
+        output.extend_from_slice(&bits.bytes);
+        jpeg_marker(&mut output, 0xd9); // EOI
+        output
+    }
+
+    /// Builds a minimal but fully valid single-IFD DNG: the root directory is
+    /// also the raw CFA image. Every segment is an independent coded unit, so
+    /// the file exercises the parallel segment decoder.
+    ///
+    /// # Panics
+    ///
+    /// Panics when `samples.len() != width * height` or a dimension exceeds
+    /// the lossless-JPEG `u16` frame geometry limit.
+    pub fn build_segmented_dng(
+        width: u32,
+        height: u32,
+        layout: SegmentLayout,
+        compression: SyntheticCompression,
+        samples: &[u16],
+    ) -> Vec<u8> {
+        let width_usize = usize::try_from(width).expect("fixture width");
+        let height_usize = usize::try_from(height).expect("fixture height");
+        assert_eq!(
+            samples.len(),
+            width_usize * height_usize,
+            "fixture sample count",
+        );
+        let (bits_per_sample, compression_code) = match compression {
+            SyntheticCompression::Uncompressed16 => (16_u16, 1_u16),
+            SyntheticCompression::LosslessJpeg12 => (u16::from(ENCODE_PRECISION), 7),
+        };
+
+        let payloads = encode_segments(width_usize, height_usize, layout, compression, samples);
+        assemble_dng(
+            width,
+            height,
+            bits_per_sample,
+            compression_code,
+            layout,
+            &payloads,
+        )
+    }
+
+    /// Parses a DNG byte buffer and decodes the CFA plane with an explicit
+    /// segment-decode worker count, returning the FNV-1a sample checksum so
+    /// benchmarks can assert bit-identical output across worker counts.
+    pub fn decode_dng_pixels_with_workers(bytes: &[u8], workers: usize) -> Result<u64, String> {
+        let (checksum, _) = decode_dng_pixels_timed(bytes, workers)?;
+        Ok(checksum)
+    }
+
+    /// Same as [`decode_dng_pixels_with_workers`], but also returns the parse
+    /// and pixel-unpack wall times for scaling analysis.
+    pub fn decode_dng_pixels_timed(bytes: &[u8], workers: usize) -> Result<(u64, DngDecodeTiming), String> {
+        let image = super::parse(bytes).map_err(|error| error.to_string())?;
+        let parse = image.parse_timings.total;
+        let decoded = image
+            .decode_u16_with_workers(&|| false, workers)
+            .map_err(|error| error.to_string())?;
+        let timing = DngDecodeTiming {
+            parse,
+            pixel_unpack: decoded.timings.pixel_unpack,
+            linearization: decoded.timings.linearization,
+        };
+        Ok((sample_checksum(&decoded.pixels), timing))
+    }
+
+    /// Wall-time breakdown of one [`decode_dng_pixels_timed`] call.
+    #[derive(Debug, Clone, Copy)]
+    pub struct DngDecodeTiming {
+        /// TIFF/DNG parse (sequential).
+        pub parse: std::time::Duration,
+        /// Segment decode and mosaic assembly (parallel over segments).
+        pub pixel_unpack: std::time::Duration,
+        /// Linearization-table application (sequential; zero without a table).
+        pub linearization: std::time::Duration,
+    }
+
+    fn encode_segments(
+        width: usize,
+        height: usize,
+        layout: SegmentLayout,
+        compression: SyntheticCompression,
+        samples: &[u16],
+    ) -> Vec<Vec<u8>> {
+        let mut payloads = Vec::new();
+        match layout {
+            SegmentLayout::Strips { rows_per_strip } => {
+                let rows_per_strip = usize::try_from(rows_per_strip).expect("rows per strip");
+                let mut first_row = 0;
+                while first_row < height {
+                    let rows = rows_per_strip.min(height - first_row);
+                    let strip = &samples[first_row * width..(first_row + rows) * width];
+                    payloads.push(encode_segment(compression, width, rows, strip));
+                    first_row += rows;
+                }
+            }
+            SegmentLayout::Tiles {
+                tile_width,
+                tile_height,
+            } => {
+                let tile_width = usize::try_from(tile_width).expect("tile width");
+                let tile_height = usize::try_from(tile_height).expect("tile height");
+                let tile_columns = width.div_ceil(tile_width);
+                let tile_rows = height.div_ceil(tile_height);
+                for tile_y in 0..tile_rows {
+                    for tile_x in 0..tile_columns {
+                        let first_x = tile_x * tile_width;
+                        let first_y = tile_y * tile_height;
+                        // Edge tiles are padded with zeros to the full tile
+                        // geometry, as the DNG spec requires.
+                        let mut tile = vec![0_u16; tile_width * tile_height];
+                        for row in 0..tile_height.min(height - first_y) {
+                            let source = (first_y + row) * width + first_x;
+                            let length = tile_width.min(width - first_x);
+                            tile[row * tile_width..row * tile_width + length]
+                                .copy_from_slice(&samples[source..source + length]);
+                        }
+                        payloads.push(encode_segment(compression, tile_width, tile_height, &tile));
+                    }
+                }
+            }
+        }
+        payloads
+    }
+
+    fn encode_segment(
+        compression: SyntheticCompression,
+        width: usize,
+        height: usize,
+        samples: &[u16],
+    ) -> Vec<u8> {
+        match compression {
+            SyntheticCompression::Uncompressed16 => {
+                let mut encoded = Vec::with_capacity(samples.len() * 2);
+                for &sample in samples {
+                    encoded.extend_from_slice(&sample.to_le_bytes());
+                }
+                encoded
+            }
+            SyntheticCompression::LosslessJpeg12 => encode_lossless_jpeg(
+                u16::try_from(width).expect("lossless-JPEG frame width"),
+                u16::try_from(height).expect("lossless-JPEG frame height"),
+                1,
+                samples,
+            ),
+        }
+    }
+
+    /// IFD entry value: either inline bytes or a placeholder resolved to a
+    /// data-area offset during assembly.
+    enum Value {
+        Inline([u8; 4]),
+        Model,
+        Offsets,
+        Counts,
+    }
+
+    /// Assembles the TIFF container around pre-encoded segment payloads.
+    /// Layout: header, one IFD, out-of-line tag values, then segment data.
+    #[allow(clippy::too_many_lines)]
+    fn assemble_dng(
+        width: u32,
+        height: u32,
+        bits_per_sample: u16,
+        compression_code: u16,
+        layout: SegmentLayout,
+        payloads: &[Vec<u8>],
+    ) -> Vec<u8> {
+        const FIELD_BYTE: u16 = 1;
+        const FIELD_ASCII: u16 = 2;
+        const FIELD_SHORT: u16 = 3;
+        const FIELD_LONG: u16 = 4;
+
+        let model: &[u8] = b"Rrrah Synthetic DNG\0";
+        let segment_count = payloads.len();
+
+        let short = |value: u16| Value::Inline(u32::from(value).to_le_bytes());
+        let long = |value: u32| Value::Inline(value.to_le_bytes());
+        let segment_count_u32 = u32::try_from(segment_count).expect("fixture segment count");
+        let model_len = u32::try_from(model.len()).expect("fixture model length");
+        let mut entries: Vec<(u16, u16, u32, Value)> = vec![
+            (256, FIELD_LONG, 1, long(width)),                    // ImageWidth
+            (257, FIELD_LONG, 1, long(height)),                   // ImageLength
+            (258, FIELD_SHORT, 1, short(bits_per_sample)),        // BitsPerSample
+            (259, FIELD_SHORT, 1, short(compression_code)),       // Compression
+            (262, FIELD_SHORT, 1, short(32_803)),                 // PhotometricInterpretation (CFA)
+            (274, FIELD_SHORT, 1, short(1)),                      // Orientation
+            (277, FIELD_SHORT, 1, short(1)),                      // SamplesPerPixel
+        ];
+        match layout {
+            SegmentLayout::Strips { rows_per_strip } => {
+                entries.push((273, FIELD_LONG, segment_count_u32, Value::Offsets));
+                entries.push((278, FIELD_LONG, 1, long(rows_per_strip)));
+                entries.push((279, FIELD_LONG, segment_count_u32, Value::Counts));
+            }
+            SegmentLayout::Tiles {
+                tile_width,
+                tile_height,
+            } => {
+                entries.push((322, FIELD_LONG, 1, long(tile_width)));
+                entries.push((323, FIELD_LONG, 1, long(tile_height)));
+                entries.push((324, FIELD_LONG, segment_count_u32, Value::Offsets));
+                entries.push((325, FIELD_LONG, segment_count_u32, Value::Counts));
+            }
+        }
+        entries.push((33_421, FIELD_SHORT, 2, Value::Inline([2, 0, 2, 0]))); // CFARepeatPatternDim
+        entries.push((33_422, FIELD_BYTE, 4, Value::Inline([0, 1, 1, 2]))); // CFAPattern
+        entries.push((50_706, FIELD_BYTE, 4, Value::Inline([1, 7, 1, 0]))); // DNGVersion
+        entries.push((50_707, FIELD_BYTE, 4, Value::Inline([1, 1, 0, 0]))); // DNGBackwardVersion
+        entries.push((50_708, FIELD_ASCII, model_len, Value::Model)); // UniqueCameraModel
+        entries.sort_by_key(|entry| entry.0);
+
+        // Compute positions: IFD at 8, then out-of-line values, then payloads.
+        let align = |cursor: usize| cursor.div_ceil(2) * 2;
+        let ifd_size = 2 + entries.len() * 12 + 4;
+        let mut cursor = align(8 + ifd_size);
+        let model_offset = cursor;
+        cursor = align(cursor + model.len());
+        let inline_arrays = segment_count == 1;
+        let offsets_offset = if inline_arrays {
+            None
+        } else {
+            let offset = cursor;
+            cursor = align(cursor + segment_count * 4);
+            Some(offset)
+        };
+        let counts_offset = if inline_arrays {
+            None
+        } else {
+            let offset = cursor;
+            cursor = align(cursor + segment_count * 4);
+            Some(offset)
+        };
+        let mut segment_offsets = Vec::with_capacity(segment_count);
+        for payload in payloads {
+            segment_offsets.push(u32::try_from(cursor).expect("fixture segment offset"));
+            cursor = align(cursor + payload.len());
+        }
+
+        let mut bytes = vec![0_u8; cursor];
+        bytes[..8].copy_from_slice(&[b'I', b'I', 42, 0, 8, 0, 0, 0]);
+        bytes[model_offset..model_offset + model.len()].copy_from_slice(model);
+        if let Some(offset) = offsets_offset {
+            for (index, &segment_offset) in segment_offsets.iter().enumerate() {
+                bytes[offset + index * 4..offset + index * 4 + 4]
+                    .copy_from_slice(&segment_offset.to_le_bytes());
+            }
+        }
+        if let Some(offset) = counts_offset {
+            for (index, payload) in payloads.iter().enumerate() {
+                let count = u32::try_from(payload.len()).expect("fixture segment size");
+                bytes[offset + index * 4..offset + index * 4 + 4].copy_from_slice(&count.to_le_bytes());
+            }
+        }
+        for (payload, &offset) in payloads.iter().zip(&segment_offsets) {
+            let start = usize::try_from(offset).expect("fixture segment offset");
+            bytes[start..start + payload.len()].copy_from_slice(payload);
+        }
+
+        // Write the IFD entries.
+        let entry_count = u16::try_from(entries.len()).expect("fixture entry count");
+        bytes[8..10].copy_from_slice(&entry_count.to_le_bytes());
+        for (index, (tag, field_type, count, value)) in entries.iter().enumerate() {
+            let start = 10 + index * 12;
+            bytes[start..start + 2].copy_from_slice(&tag.to_le_bytes());
+            bytes[start + 2..start + 4].copy_from_slice(&field_type.to_le_bytes());
+            bytes[start + 4..start + 8].copy_from_slice(&count.to_le_bytes());
+            let offset_u32 = |offset: usize| u32::try_from(offset).expect("fixture value offset");
+            let value_bytes = match value {
+                Value::Inline(inline) => *inline,
+                Value::Model => offset_u32(model_offset).to_le_bytes(),
+                Value::Offsets => match offsets_offset {
+                    Some(offset) => offset_u32(offset).to_le_bytes(),
+                    None => segment_offsets[0].to_le_bytes(),
+                },
+                Value::Counts => match counts_offset {
+                    Some(offset) => offset_u32(offset).to_le_bytes(),
+                    None => u32::try_from(payloads[0].len())
+                        .expect("fixture segment size")
+                        .to_le_bytes(),
+                },
+            };
+            bytes[start + 8..start + 12].copy_from_slice(&value_bytes);
+        }
+        let next = 10 + entries.len() * 12;
+        bytes[next..next + 4].copy_from_slice(&0_u32.to_le_bytes()); // no next IFD
+        bytes
+    }
+
+    struct BitWriter {
+        bytes: Vec<u8>,
+        current: u8,
+        used: u8,
+    }
+
+    impl BitWriter {
+        const fn new() -> Self {
+            Self {
+                bytes: Vec::new(),
+                current: 0,
+                used: 0,
+            }
+        }
+
+        fn write(&mut self, value: u32, bits: u8) {
+            for shift in (0..bits).rev() {
+                self.current = (self.current << 1) | u8::try_from((value >> shift) & 1).unwrap();
+                self.used += 1;
+                if self.used == 8 {
+                    self.flush_byte();
+                }
+            }
+        }
+
+        fn pad_ones(&mut self) {
+            while self.used != 0 {
+                self.current = (self.current << 1) | 1;
+                self.used += 1;
+                if self.used == 8 {
+                    self.flush_byte();
+                }
+            }
+        }
+
+        fn flush_byte(&mut self) {
+            self.bytes.push(self.current);
+            if self.current == 0xff {
+                self.bytes.push(0);
+            }
+            self.current = 0;
+            self.used = 0;
+        }
+    }
+
+    fn jpeg_marker(output: &mut Vec<u8>, code: u8) {
+        output.extend_from_slice(&[0xff, code]);
+    }
+
+    fn jpeg_segment(output: &mut Vec<u8>, code: u8, payload: &[u8]) {
+        jpeg_marker(output, code);
+        let length = u16::try_from(payload.len() + 2).unwrap();
+        output.extend_from_slice(&length.to_be_bytes());
+        output.extend_from_slice(payload);
+    }
+
+    fn category_and_bits(difference: i32) -> (u8, u32) {
+        if difference == 0 {
+            return (0, 0);
+        }
+        if difference == -32_768 || difference == 32_768 {
+            return (16, 0);
+        }
+        let magnitude = difference.unsigned_abs();
+        let category = u8::try_from(32 - magnitude.leading_zeros()).unwrap();
+        if difference > 0 {
+            (category, magnitude)
+        } else {
+            let mask = (1_u32 << category) - 1;
+            (
+                category,
+                u32::try_from(difference + i32::try_from(mask).unwrap()).unwrap(),
+            )
+        }
+    }
+
+    fn signed_modulo_difference(sample: i32, predictor: i32) -> i32 {
+        let modulo = (sample - predictor) & 0xffff;
+        if modulo > 32_767 { modulo - 65_536 } else { modulo }
+    }
+
+    fn select_predictor(selection: u8, left: i32, above: i32, upper_left: i32) -> i32 {
+        match selection {
+            1 => left,
+            2 => above,
+            3 => upper_left,
+            4 => left + above - upper_left,
+            5 => left + ((above - upper_left) >> 1),
+            6 => above + ((left - upper_left) >> 1),
+            7 => (left + above) >> 1,
+            _ => unreachable!(),
+        }
+    }
+
+    /// FNV-1a over the little-endian sample bytes; used to assert
+    /// bit-identical output across decoder revisions.
+    fn sample_checksum(samples: &[u16]) -> u64 {
+        let mut hash = 0xcbf2_9ce4_8422_2325_u64;
+        for &sample in samples {
+            for byte in sample.to_le_bytes() {
+                hash ^= u64::from(byte);
+                hash = hash.wrapping_mul(0x0000_0100_0000_01b3);
+            }
+        }
+        hash
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -1520,6 +2087,9 @@ mod tests {
         );
         assert_eq!(image.metadata.as_shot_neutral, Some(vec![0.5, 1.0, 0.75]));
         assert_eq!(image.metadata.color_matrix_1.as_ref().unwrap().len(), 9);
+        assert_eq!(image.metadata.color_matrix_2, None);
+        assert_eq!(image.metadata.calibration_illuminant_1, Some(17));
+        assert_eq!(image.metadata.calibration_illuminant_2, Some(21));
         assert_eq!(
             image.decode_u16(&|| false).unwrap().pixels,
             [0, 17, 34, 51, 68, 85]
@@ -1557,6 +2127,136 @@ mod tests {
             image.decode_u16(&|| true),
             Err(DngError::Cancelled { row: 0 })
         ));
+    }
+
+    /// Deterministic photo-like content: smooth gradient plus a mild
+    /// pseudo-random component, so lossless-JPEG differences stay short.
+    fn fixture_samples(width: usize, height: usize) -> Vec<u16> {
+        let mut samples = Vec::with_capacity(width * height);
+        for y in 0..height {
+            for x in 0..width {
+                let base = 1024 + (x * 3 + y * 5) % 2048;
+                let noise = (x * 31 + y * 17 + (x * y) % 23) % 64;
+                samples.push(u16::try_from(base + noise).unwrap());
+            }
+        }
+        samples
+    }
+
+    fn assert_bit_identical_across_workers(bytes: &[u8]) {
+        let reference = parse(bytes)
+            .unwrap()
+            .decode_u16_with_workers(&|| false, 1)
+            .unwrap()
+            .pixels;
+        for workers in [2, 3, 4, 7, 64] {
+            let decoded = parse(bytes)
+                .unwrap()
+                .decode_u16_with_workers(&|| false, workers)
+                .unwrap()
+                .pixels;
+            assert_eq!(decoded, reference, "workers={workers}");
+        }
+    }
+
+    #[test]
+    fn tiled_lossless_jpeg_is_bit_identical_across_workers() {
+        let (width, height) = (800, 600);
+        let bytes = bench_support::build_segmented_dng(
+            width,
+            height,
+            bench_support::SegmentLayout::Tiles {
+                tile_width: 128,
+                tile_height: 128,
+            },
+            bench_support::SyntheticCompression::LosslessJpeg12,
+            &fixture_samples(width as usize, height as usize),
+        );
+        let image = parse(&bytes).unwrap();
+        assert_eq!((image.width, image.height), (width, height));
+        assert_bit_identical_across_workers(&bytes);
+    }
+
+    #[test]
+    fn stripped_lossless_jpeg_is_bit_identical_across_workers() {
+        let (width, height) = (800, 600);
+        let bytes = bench_support::build_segmented_dng(
+            width,
+            height,
+            bench_support::SegmentLayout::Strips { rows_per_strip: 16 },
+            bench_support::SyntheticCompression::LosslessJpeg12,
+            &fixture_samples(width as usize, height as usize),
+        );
+        assert_bit_identical_across_workers(&bytes);
+    }
+
+    #[test]
+    fn tiled_uncompressed_is_bit_identical_across_workers() {
+        let (width, height) = (800, 600);
+        let bytes = bench_support::build_segmented_dng(
+            width,
+            height,
+            bench_support::SegmentLayout::Tiles {
+                tile_width: 128,
+                tile_height: 128,
+            },
+            bench_support::SyntheticCompression::Uncompressed16,
+            &fixture_samples(width as usize, height as usize),
+        );
+        assert_bit_identical_across_workers(&bytes);
+    }
+
+    #[test]
+    fn stripped_uncompressed_is_bit_identical_across_workers() {
+        let (width, height) = (800, 600);
+        let bytes = bench_support::build_segmented_dng(
+            width,
+            height,
+            bench_support::SegmentLayout::Strips { rows_per_strip: 16 },
+            bench_support::SyntheticCompression::Uncompressed16,
+            &fixture_samples(width as usize, height as usize),
+        );
+        assert_bit_identical_across_workers(&bytes);
+    }
+
+    #[test]
+    fn parallel_decode_reports_cancellation() {
+        let (width, height) = (800, 600);
+        let bytes = bench_support::build_segmented_dng(
+            width,
+            height,
+            bench_support::SegmentLayout::Tiles {
+                tile_width: 128,
+                tile_height: 128,
+            },
+            bench_support::SyntheticCompression::LosslessJpeg12,
+            &fixture_samples(width as usize, height as usize),
+        );
+        let image = parse(&bytes).unwrap();
+        assert!(matches!(
+            image.decode_u16_with_workers(&|| true, 4),
+            Err(DngError::Cancelled { .. })
+        ));
+    }
+
+    #[test]
+    fn decode_hook_checksum_matches_across_workers() {
+        let (width, height) = (800, 600);
+        let bytes = bench_support::build_segmented_dng(
+            width,
+            height,
+            bench_support::SegmentLayout::Strips { rows_per_strip: 16 },
+            bench_support::SyntheticCompression::LosslessJpeg12,
+            &fixture_samples(width as usize, height as usize),
+        );
+        let reference = bench_support::decode_dng_pixels_with_workers(&bytes, 1).unwrap();
+        for workers in [2, 4, 7] {
+            assert_eq!(
+                bench_support::decode_dng_pixels_with_workers(&bytes, workers).unwrap(),
+                reference,
+                "workers={workers}",
+            );
+        }
     }
 
     #[allow(clippy::too_many_lines)]
@@ -1600,6 +2300,8 @@ mod tests {
                 3,
                 u32::try_from(NEUTRAL).unwrap().to_le_bytes(),
             ),
+            (TAG_CALIBRATION_ILLUMINANT_1, 3, 1, 17_u32.to_le_bytes()),
+            (TAG_CALIBRATION_ILLUMINANT_2, 3, 1, 21_u32.to_le_bytes()),
         ];
         write_ifd(&mut bytes, ROOT_IFD, &root_entries, 0);
         bytes[MODEL..MODEL + 13].copy_from_slice(b"Clean Camera\0");

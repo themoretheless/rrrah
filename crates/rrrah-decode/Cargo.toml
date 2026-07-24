@@ -10,5 +10,12 @@ blake3.workspace = true
 rrrah-core = { path = "../rrrah-core", version = "0.1.0" }
 thiserror.workspace = true
 
+[dev-dependencies]
+criterion = "0.5"
+
+[[bench]]
+name = "dng_decoders"
+harness = false
+
 [lints]
 workspace = true

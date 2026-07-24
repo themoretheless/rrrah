@@ -32,6 +32,10 @@ const MAX_FULL_UNARY_ZEROES: u32 = 4_096;
 const FULL_ESCAPE_PREFIX: u32 = 41;
 const FULL_ESCAPE_BITS: u8 = 21;
 const FULL_MAX_RICE_PARAMETER: u8 = 15;
+/// Buffered-bit count below which `decode_rice` tops the reservoir up before
+/// decoding a symbol. Byte-aligned appends need eight free bits; the value
+/// balances refill frequency against slow-path (word-straddling) symbols.
+const EARLY_REFILL_THRESHOLD: u8 = 16;
 const MAX_PLANE_SAMPLES: usize = 64 * 1024 * 1024;
 const MAX_PLANE_WIDTH: usize = 64 * 1024;
 const RUN_INDEX_TABLE: [u8; 32] = [
@@ -351,30 +355,61 @@ impl<'a> MsbBitReader<'a> {
         }
     }
 
+    /// Appends as many whole bytes as fit below the buffered bits (or the
+    /// short stream tail).
+    ///
+    /// Full-word refills happen on an empty reservoir; `decode_rice` also
+    /// calls this a few bits earlier (see `EARLY_REFILL_THRESHOLD`) so the
+    /// fused fast path rarely straddles a refill boundary. The append is
+    /// byte-aligned: the next `added` stream bits are shifted directly under
+    /// the buffered bits and every lower bit is kept zero, preserving the
+    /// left-aligned invariant that leading-zero unary scans rely on. Away
+    /// from the stream tail the load is always one fixed eight-byte read;
+    /// the unread slack bits are simply loaded again by the next refill.
+    /// Calls with fewer than eight free bits or at end of stream are no-ops,
+    /// which keeps every legacy call site (all of which refill only on an
+    /// empty reservoir) correct.
     fn refill(&mut self) {
-        debug_assert_eq!(self.reservoir_bits, 0);
         let Some(remaining) = self.bytes.get(self.next_byte..) else {
             return;
         };
+        let free_bits = 64 - self.reservoir_bits;
+        let free_bytes = usize::from(free_bits / 8);
         if remaining.len() >= std::mem::size_of::<u64>() {
+            if free_bytes == 0 {
+                return;
+            }
             let word: [u8; std::mem::size_of::<u64>()] = remaining[..std::mem::size_of::<u64>()]
                 .try_into()
-                .expect("the full-reservoir branch has eight bytes");
-            self.reservoir = u64::from_be_bytes(word);
-            self.reservoir_bits = 64;
-            self.next_byte += std::mem::size_of::<u64>();
+                .expect("the full-load branch has eight bytes");
+            let loaded = u64::from_be_bytes(word);
+            let added = u8::try_from(free_bytes * 8).expect("at most eight bytes append");
+            // `free_bits - added == free_bits % 8 < 8`, so the mask shift is
+            // in range; `reservoir_bits <= 63` here, so the append shift is
+            // too. The mask clears the slack bits this refill does not
+            // consume (`next_byte` advances past `added` bits only).
+            let appended = (loaded >> self.reservoir_bits) & (u64::MAX << (free_bits - added));
+            self.reservoir |= appended;
+            self.reservoir_bits += added;
+            self.next_byte += free_bytes;
             return;
         }
         if remaining.is_empty() {
             return;
         }
 
+        let take = free_bytes.min(remaining.len());
+        if take == 0 {
+            return;
+        }
         let mut word = [0_u8; std::mem::size_of::<u64>()];
-        word[..remaining.len()].copy_from_slice(remaining);
-        self.reservoir = u64::from_be_bytes(word);
-        self.reservoir_bits =
-            u8::try_from(remaining.len() * 8).expect("a short u64 tail has at most 56 bits");
-        self.next_byte += remaining.len();
+        word[..take].copy_from_slice(&remaining[..take]);
+        let loaded = u64::from_be_bytes(word);
+        let added = u8::try_from(take * 8).expect("a short u64 tail has at most 56 bits");
+        let appended = (loaded >> self.reservoir_bits) & (u64::MAX << (free_bits - added));
+        self.reservoir |= appended;
+        self.reservoir_bits += added;
+        self.next_byte += take;
     }
 
     #[inline]
@@ -566,7 +601,7 @@ impl<'a> FullEntropy<'a> {
         }
     }
 
-    #[inline]
+    #[inline(always)]
     fn decode_rice(&mut self, adapt: bool) -> Result<u32, LosslessError> {
         let old_parameter = self.rice_parameter;
 
@@ -575,6 +610,20 @@ impl<'a> FullEntropy<'a> {
         // the symbol decodes with one leading-zero count and one consume
         // instead of two separate reader calls. The escape prefix and any
         // reservoir-underflow case fall back to the general path below.
+        //
+        // Kept `#[inline(always)]` with the cold fallback outlined so the
+        // caller's row loops keep the reader reservoir in registers across
+        // consecutive symbols; profiling showed the outlined call alone cost
+        // a memory round-trip of the reader state per symbol.
+        //
+        // Early refill: topping up while a whole byte still fits below the
+        // buffered bits costs one fixed eight-byte load roughly every 48
+        // consumed bits and keeps the underflow fallback below off the hot
+        // path; refilling only on an empty reservoir sent every symbol that
+        // straddled a word boundary through the two-call slow path.
+        if self.reader.reservoir_bits < EARLY_REFILL_THRESHOLD {
+            self.reader.refill();
+        }
         let prefix = self.reader.reservoir.leading_zeros();
         let symbol_bits = prefix + 1 + u32::from(old_parameter);
         if prefix < FULL_ESCAPE_PREFIX && symbol_bits <= u32::from(self.reader.reservoir_bits) {
@@ -596,6 +645,15 @@ impl<'a> FullEntropy<'a> {
             return Ok(value);
         }
 
+        self.decode_rice_slow(old_parameter, adapt)
+    }
+
+    /// General Rice path: escape prefixes, stream-tail underflow and any
+    /// symbol that does not fit the buffered reservoir. Cold and outlined so
+    /// the hot row loops only carry the fused path above.
+    #[cold]
+    #[inline(never)]
+    fn decode_rice_slow(&mut self, old_parameter: u8, adapt: bool) -> Result<u32, LosslessError> {
         let prefix = self.reader.read_zero_unary(MAX_FULL_UNARY_ZEROES)?;
         let value = if prefix >= FULL_ESCAPE_PREFIX {
             self.reader.read_bits(FULL_ESCAPE_BITS)?
