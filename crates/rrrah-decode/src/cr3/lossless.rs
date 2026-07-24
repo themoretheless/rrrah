@@ -14,7 +14,7 @@
 //! path is fixture-gated against two owner-supplied CR3 files and their
 //! pre-existing black-box pixel oracles.
 
-use std::{error::Error, fmt};
+use std::{error::Error, fmt, mem::MaybeUninit};
 
 /// Size of the compact bootstrap representation used only by the historical
 /// `decode_first_row` probe. The production `decode_plane` consumes the real
@@ -203,11 +203,15 @@ impl fmt::Display for LosslessError {
 impl Error for LosslessError {}
 
 /// Bounded, MSB-first reader used by the confirmed CRX entropy path.
+///
+/// The absolute bit position and the remaining bit count are derived lazily
+/// from the refill cursor (`next_byte`) and the reservoir fill level instead
+/// of being maintained on every consumed bit. They are only needed for error
+/// reporting and for the one-shot `bits_consumed` summary, so per-bit
+/// bookkeeping updates just the reservoir.
 #[derive(Debug, Clone)]
 pub struct MsbBitReader<'a> {
     bytes: &'a [u8],
-    bit_position: usize,
-    bits_remaining: usize,
     next_byte: usize,
     reservoir: u64,
     reservoir_bits: u8,
@@ -217,8 +221,6 @@ impl<'a> MsbBitReader<'a> {
     pub const fn new(bytes: &'a [u8]) -> Self {
         Self {
             bytes,
-            bit_position: 0,
-            bits_remaining: bytes.len().saturating_mul(8),
             next_byte: 0,
             reservoir: 0,
             reservoir_bits: 0,
@@ -226,23 +228,30 @@ impl<'a> MsbBitReader<'a> {
     }
 
     pub const fn bit_position(&self) -> usize {
-        self.bit_position
+        self.next_byte
+            .saturating_mul(8)
+            .saturating_sub(self.reservoir_bits as usize)
     }
 
     pub const fn bits_remaining(&self) -> usize {
-        self.bits_remaining
+        self.bytes
+            .len()
+            .saturating_sub(self.next_byte)
+            .saturating_mul(8)
+            .saturating_add(self.reservoir_bits as usize)
     }
 
+    #[inline]
     pub fn read_bit(&mut self) -> Result<u8, LosslessError> {
         if self.reservoir_bits == 0 {
             self.refill();
-        }
-        if self.reservoir_bits == 0 {
-            return Err(LosslessError::UnexpectedEndOfStream {
-                bit_position: self.bit_position,
-                requested: 1,
-                remaining: 0,
-            });
+            if self.reservoir_bits == 0 {
+                return Err(LosslessError::UnexpectedEndOfStream {
+                    bit_position: self.bit_position(),
+                    requested: 1,
+                    remaining: 0,
+                });
+            }
         }
 
         let bit = (self.reservoir >> 63) as u8;
@@ -256,11 +265,25 @@ impl<'a> MsbBitReader<'a> {
                 context: "bit-read width",
             });
         }
+        if count == 0 {
+            return Ok(0);
+        }
+
+        // Fast path: the request is fully covered by the reservoir. Buffered
+        // bits are a subset of the unread input (`reservoir_bits` is counted
+        // in `bits_remaining`), so no end-of-stream check is needed here.
+        if count <= self.reservoir_bits {
+            // `1 <= count <= 32`, so the shift is `32..=63`.
+            #[allow(clippy::cast_possible_truncation)]
+            let value = (self.reservoir >> (64 - u32::from(count))) as u32;
+            self.consume_buffered(count);
+            return Ok(value);
+        }
 
         let remaining = self.bits_remaining();
         if remaining < usize::from(count) {
             return Err(LosslessError::UnexpectedEndOfStream {
-                bit_position: self.bit_position,
+                bit_position: self.bit_position(),
                 requested: count,
                 remaining,
             });
@@ -287,18 +310,17 @@ impl<'a> MsbBitReader<'a> {
     }
 
     fn read_zero_unary(&mut self, limit: u32) -> Result<u32, LosslessError> {
-        let start = self.bit_position;
         let mut zeroes = 0_u32;
         loop {
             if self.reservoir_bits == 0 {
                 self.refill();
-            }
-            if self.reservoir_bits == 0 {
-                return Err(LosslessError::UnexpectedEndOfStream {
-                    bit_position: self.bit_position,
-                    requested: 1,
-                    remaining: 0,
-                });
+                if self.reservoir_bits == 0 {
+                    return Err(LosslessError::UnexpectedEndOfStream {
+                        bit_position: self.bit_position(),
+                        requested: 1,
+                        remaining: 0,
+                    });
+                }
             }
 
             let available = u32::from(self.reservoir_bits);
@@ -309,11 +331,11 @@ impl<'a> MsbBitReader<'a> {
                 // proves `allowed + 1 <= 64`.
                 #[allow(clippy::cast_possible_truncation)]
                 let consumed = (allowed + 1) as u8;
+                // The original `start` snapshot is the position at function
+                // entry; exactly `zeroes` bits have been consumed since.
+                let bit_position = self.bit_position().saturating_sub(zeroes as usize);
                 self.consume_buffered(consumed);
-                return Err(LosslessError::UnaryRunTooLong {
-                    bit_position: start,
-                    limit,
-                });
+                return Err(LosslessError::UnaryRunTooLong { bit_position, limit });
             }
 
             if leading_zeroes < available {
@@ -355,17 +377,15 @@ impl<'a> MsbBitReader<'a> {
         self.next_byte += remaining.len();
     }
 
+    #[inline]
     fn consume_buffered(&mut self, count: u8) {
         debug_assert!(count <= self.reservoir_bits);
-        debug_assert!(usize::from(count) <= self.bits_remaining);
         if count == 64 {
             self.reservoir = 0;
         } else {
             self.reservoir <<= count;
         }
         self.reservoir_bits -= count;
-        self.bit_position = self.bit_position.saturating_add(usize::from(count));
-        self.bits_remaining -= usize::from(count);
     }
 }
 
@@ -546,8 +566,36 @@ impl<'a> FullEntropy<'a> {
         }
     }
 
+    #[inline]
     fn decode_rice(&mut self, adapt: bool) -> Result<u32, LosslessError> {
         let old_parameter = self.rice_parameter;
+
+        // Fused fast path: the unary quotient, its terminating one and the
+        // `old_parameter` remainder bits are all present in the reservoir, so
+        // the symbol decodes with one leading-zero count and one consume
+        // instead of two separate reader calls. The escape prefix and any
+        // reservoir-underflow case fall back to the general path below.
+        let prefix = self.reader.reservoir.leading_zeros();
+        let symbol_bits = prefix + 1 + u32::from(old_parameter);
+        if prefix < FULL_ESCAPE_PREFIX && symbol_bits <= u32::from(self.reader.reservoir_bits) {
+            // `prefix <= 40` and `old_parameter <= FULL_MAX_RICE_PARAMETER`,
+            // so `symbol_bits <= 56` and every shift below is in range.
+            let value = if old_parameter == 0 {
+                prefix
+            } else {
+                #[allow(clippy::cast_possible_truncation)]
+                let remainder =
+                    ((self.reader.reservoir << (prefix + 1)) >> (64 - u32::from(old_parameter))) as u32;
+                (prefix << old_parameter) + remainder
+            };
+            #[allow(clippy::cast_possible_truncation)]
+            self.reader.consume_buffered(symbol_bits as u8);
+            if adapt {
+                self.update_rice_parameter(value);
+            }
+            return Ok(value);
+        }
+
         let prefix = self.reader.read_zero_unary(MAX_FULL_UNARY_ZEROES)?;
         let value = if prefix >= FULL_ESCAPE_PREFIX {
             self.reader.read_bits(FULL_ESCAPE_BITS)?
@@ -738,6 +786,7 @@ struct RowOutputSpec {
     maximum: u32,
 }
 
+#[allow(unsafe_code)] // justified per-access; keeps the workspace deny intact elsewhere
 fn decode_top_row(
     entropy: &mut FullEntropy<'_>,
     current: &mut [i32],
@@ -745,48 +794,98 @@ fn decode_top_row(
     width: usize,
     output_spec: RowOutputSpec,
 ) -> Result<(), LosslessError> {
+    // Row-buffer invariants relied on by the `get_unchecked` uses below:
+    // `current` has exactly `width + 2` slots (see `decode_plane_rows`), the
+    // loop keeps `1 <= column <= width` with `column - 1 + remaining == width`
+    // and clamps every run to the remaining sample count, so
+    // `column - 1 ..= column + run` never leave the row. `output` is empty
+    // with capacity for `width` samples; samples are written into its spare
+    // capacity and committed with `set_len` only after the whole row was
+    // produced, so an error return leaves the vector empty. The debug
+    // assertions double-check these invariants.
+    debug_assert_eq!(current.len(), width + 2);
+    debug_assert_eq!(output.len(), 0);
+    debug_assert!(output.capacity() >= width);
+    let row_buffer = &mut output.spare_capacity_mut()[..width];
+    let mut emitted = 0usize;
+
     let mut remaining = width;
     let mut column = 1usize;
     while remaining > 1 {
-        let predictor = current[column - 1];
-        current[column] = predictor;
+        // SAFETY: `1 <= column <= width`, so `column - 1` and `column` index
+        // the `width + 2` row slots.
+        let predictor = unsafe {
+            let left = *current.get_unchecked(column - 1);
+            *current.get_unchecked_mut(column) = left;
+            left
+        };
         if predictor == 0 && entropy.reader.read_bit()? == 1 {
             let run = entropy.decode_run(remaining)?;
-            current[column..column + run].fill(predictor);
+            // SAFETY: `run <= remaining` and `column - 1 + remaining == width`
+            // give `column + run <= width + 1`, inside the `width + 2` slots.
+            unsafe {
+                current.get_unchecked_mut(column..column + run).fill(predictor);
+            }
             let sample = checked_sample(
                 predictor + output_spec.midpoint,
                 output_spec.row_start + column - 1,
                 output_spec.maximum,
             )?;
-            output.resize(output.len() + run, sample);
+            emit_run(row_buffer, &mut emitted, run, sample);
             column += run;
             remaining -= run;
             if remaining == 0 {
                 break;
             }
-            current[column] = 0;
+            // SAFETY: `remaining >= 1` keeps `column <= width`.
+            unsafe {
+                *current.get_unchecked_mut(column) = 0;
+            }
         }
         let residual = unmap_signed(entropy.decode_rice(true)?);
-        emit_coefficient(current, output, column, current[column], residual, output_spec)?;
+        // SAFETY: `column <= width`.
+        let predictor = unsafe { *current.get_unchecked(column) };
+        emit_coefficient(
+            current,
+            row_buffer,
+            &mut emitted,
+            column,
+            predictor,
+            residual,
+            output_spec,
+        )?;
         column += 1;
         remaining -= 1;
     }
     if remaining == 1 {
         let residual = unmap_signed(entropy.decode_rice(true)?);
+        // SAFETY: `column == width` here, so `column - 1` is in bounds.
+        let predictor = unsafe { *current.get_unchecked(column - 1) };
         emit_coefficient(
             current,
-            output,
+            row_buffer,
+            &mut emitted,
             column,
-            current[column - 1],
+            predictor,
             residual,
             output_spec,
         )?;
         column += 1;
     }
-    current[column] = current[column - 1] + 1;
+    // SAFETY: `column == width + 1` now, the last of the `width + 2` slots.
+    unsafe {
+        *current.get_unchecked_mut(column) = *current.get_unchecked(column - 1) + 1;
+    }
+    debug_assert_eq!(emitted, width);
+    // SAFETY: `emitted == width` samples were written into `row_buffer`, the
+    // spare capacity of `output`, and `u16` has no drop glue.
+    unsafe {
+        output.set_len(width);
+    }
     Ok(())
 }
 
+#[allow(unsafe_code)] // justified per-access; keeps the workspace deny intact elsewhere
 fn decode_context_row(
     entropy: &mut FullEntropy<'_>,
     previous: &[i32],
@@ -795,42 +894,81 @@ fn decode_context_row(
     width: usize,
     output_spec: RowOutputSpec,
 ) -> Result<(), LosslessError> {
-    current[0] = previous[1];
+    // Same row-buffer invariants as `decode_top_row`.
+    debug_assert_eq!(previous.len(), width + 2);
+    debug_assert_eq!(current.len(), width + 2);
+    debug_assert_eq!(output.len(), 0);
+    debug_assert!(output.capacity() >= width);
+    let row_buffer = &mut output.spare_capacity_mut()[..width];
+    let mut emitted = 0usize;
+
+    // SAFETY: `width >= 1` (enforced by `checked_plane_sample_count`), so
+    // indices 0 and 1 are inside the `width + 2` row slots.
+    unsafe {
+        *current.get_unchecked_mut(0) = *previous.get_unchecked(1);
+    }
     let mut remaining = width;
     let mut column = 1usize;
 
     while remaining > 1 {
-        let left = current[column - 1];
-        let above = previous[column];
-        let upper_left = previous[column - 1];
-        let above_right = previous[column + 1];
+        // SAFETY: `1 <= column <= width`, so `column - 1 ..= column + 1`
+        // index the `width + 2` row slots.
+        let (left, above, upper_left, above_right) = unsafe {
+            (
+                *current.get_unchecked(column - 1),
+                *previous.get_unchecked(column),
+                *previous.get_unchecked(column - 1),
+                *previous.get_unchecked(column + 1),
+            )
+        };
 
         let predictor = if left == above && left == above_right {
             if entropy.reader.read_bit()? == 1 {
                 let run = entropy.decode_run(remaining)?;
-                current[column..column + run].fill(left);
+                // SAFETY: `run <= remaining` and
+                // `column - 1 + remaining == width` give
+                // `column + run <= width + 1`, inside the `width + 2` slots.
+                unsafe {
+                    current.get_unchecked_mut(column..column + run).fill(left);
+                }
                 let sample = checked_sample(
                     left + output_spec.midpoint,
                     output_spec.row_start + column - 1,
                     output_spec.maximum,
                 )?;
-                output.resize(output.len() + run, sample);
+                emit_run(row_buffer, &mut emitted, run, sample);
                 column += run;
                 remaining -= run;
                 if remaining == 0 {
                     break;
                 }
             }
-            previous[column]
+            // SAFETY: `column <= width` after the clamped run.
+            unsafe { *previous.get_unchecked(column) }
         } else {
             median_predictor(left, above, upper_left)
         };
 
         let mapped = entropy.decode_rice(false)?;
         let residual = unmap_signed(mapped);
-        emit_coefficient(current, output, column, predictor, residual, output_spec)?;
+        emit_coefficient(
+            current,
+            row_buffer,
+            &mut emitted,
+            column,
+            predictor,
+            residual,
+            output_spec,
+        )?;
         let adapted = if remaining > 1 {
-            adjusted_context_symbol(mapped, previous[column + 1], previous[column])
+            // SAFETY: `column <= width`, so `column + 1 <= width + 1`.
+            unsafe {
+                adjusted_context_symbol(
+                    mapped,
+                    *previous.get_unchecked(column + 1),
+                    *previous.get_unchecked(column),
+                )
+            }
         } else {
             mapped
         };
@@ -840,12 +978,36 @@ fn decode_context_row(
     }
 
     if remaining == 1 {
-        let predictor = median_predictor(current[column - 1], previous[column], previous[column - 1]);
+        // SAFETY: `column == width`, so `column - 1` and `column` are in bounds.
+        let predictor = unsafe {
+            median_predictor(
+                *current.get_unchecked(column - 1),
+                *previous.get_unchecked(column),
+                *previous.get_unchecked(column - 1),
+            )
+        };
         let residual = unmap_signed(entropy.decode_rice(true)?);
-        emit_coefficient(current, output, column, predictor, residual, output_spec)?;
+        emit_coefficient(
+            current,
+            row_buffer,
+            &mut emitted,
+            column,
+            predictor,
+            residual,
+            output_spec,
+        )?;
         column += 1;
     }
-    current[column] = current[column - 1] + 1;
+    // SAFETY: `column == width + 1`, the last of the `width + 2` slots.
+    unsafe {
+        *current.get_unchecked_mut(column) = *current.get_unchecked(column - 1) + 1;
+    }
+    debug_assert_eq!(emitted, width);
+    // SAFETY: `emitted == width` samples were written into `row_buffer`, the
+    // spare capacity of `output`, and `u16` has no drop glue.
+    unsafe {
+        output.set_len(width);
+    }
     Ok(())
 }
 
@@ -858,22 +1020,53 @@ fn adjusted_context_symbol(mapped: u32, above_right: i32, above: i32) -> u32 {
     (mapped + delta) >> 1
 }
 
+/// Writes `run` copies of an already range-checked run sample into the spare
+/// capacity of the row output.
+#[allow(unsafe_code)] // justified by the run-length invariant, see below
+fn emit_run(row_buffer: &mut [MaybeUninit<u16>], emitted: &mut usize, run: usize, sample: u16) {
+    // SAFETY: `run` was decoded against the remaining sample count of the
+    // row, so `*emitted + run <= width == row_buffer.len()`.
+    unsafe {
+        row_buffer
+            .get_unchecked_mut(*emitted..*emitted + run)
+            .fill(MaybeUninit::new(sample));
+    }
+    *emitted += run;
+}
+
+/// Reconstructs one coefficient, range-checks it with a single unsigned
+/// comparison (negative values wrap above `maximum`) and writes the sample
+/// into the spare capacity of the row output.
+#[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)]
+#[allow(unsafe_code)] // justified by the row-buffer invariants, see below
+#[inline]
 fn emit_coefficient(
     current: &mut [i32],
-    output: &mut Vec<u16>,
+    row_buffer: &mut [MaybeUninit<u16>],
+    emitted: &mut usize,
     column: usize,
     predictor: i32,
     residual: i32,
     output_spec: RowOutputSpec,
 ) -> Result<(), LosslessError> {
     let coefficient = predictor + residual;
-    let sample = checked_sample(
-        coefficient + output_spec.midpoint,
-        output_spec.row_start + column - 1,
-        output_spec.maximum,
-    )?;
-    current[column] = coefficient;
-    output.push(sample);
+    let value = coefficient + output_spec.midpoint;
+    let unsigned = value as u32;
+    if unsigned > output_spec.maximum {
+        return Err(LosslessError::SampleOutOfRange {
+            index: output_spec.row_start + column - 1,
+            value,
+            maximum: output_spec.maximum,
+        });
+    }
+    // SAFETY: the row loops emit at most one sample per remaining sample, so
+    // `*emitted < width == row_buffer.len()`, and `column <= width` keeps the
+    // `width + 2` coefficient row in bounds (see the row decoders).
+    unsafe {
+        row_buffer.get_unchecked_mut(*emitted).write(unsigned as u16);
+        *current.get_unchecked_mut(column) = coefficient;
+    }
+    *emitted += 1;
     Ok(())
 }
 
