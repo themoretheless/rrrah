@@ -153,6 +153,8 @@ def parse_inspect(stdout: str) -> dict[str, Any]:
 
 def timed_run(command: list[str], timeout: float) -> dict[str, Any]:
     started = time.monotonic_ns()
+    stdout = ""
+    stderr = ""
     try:
         completed = subprocess.run(
             command,

@@ -8,7 +8,7 @@
 //! - `RRRAH_GPU_TILE_SIZE=<u32>` — interior tile edge for the normal mode.
 //! - `RRRAH_GPU_TILE_HALO=<u32>` — halo width for the normal mode.
 //! - `RRRAH_GPU_SWEEP=1` — sweep mode: for each RAW size, upload once per
-//!   (tile_size, tile_halo) configuration, `SWEEP_REPS` times, and print one
+//!   (`tile_size`, `tile_halo`) configuration, `SWEEP_REPS` times, and print one
 //!   CSV row per configuration with per-phase p50 timings from
 //!   [`GpuUploadTimings`]. Render timing is skipped in sweep mode.
 //! - `RRRAH_GPU_SWEEP_REPS=<n>` — override the sweep repetition count.
@@ -25,7 +25,7 @@ use std::{sync::Arc, time::Instant};
 use rrrah_core::{
     CfaColor, CfaPattern, DecodedMosaic, LevelGrid, Orientation, Photometric, RawMetadata, WhiteLevel,
 };
-use rrrah_gpu::{GpuUploadTimings, RawRenderer, TilingOverrides, ViewParameters};
+use rrrah_gpu::{GpuUploadTimings, RawRenderer, TilingOverrides, ViewParameters, plan_tiling};
 
 const RAW_SIZES: &[(u32, u32)] = &[(1024, 1024), (2048, 1536), (4096, 3072)];
 const VIEWPORTS: &[(u32, u32)] = &[(1280, 720), (2560, 1440), (3840, 2160)];
@@ -136,11 +136,16 @@ fn run_normal(
             timeout: None,
         })?;
         let upload_wait_ms = upload_wait_started.elapsed().as_secs_f64() * 1e3;
-        // Report the effective geometry (defaults resolved like the library).
-        let tile_halo = tiling.tile_halo.unwrap_or(1);
-        let tile_size = tiling
-            .tile_size
-            .unwrap_or_else(|| limits.max_texture_dimension_2d.saturating_sub(2 * tile_halo).min(4096));
+        // Report the exact geometry selected by the production planner.
+        let plan = plan_tiling(
+            raw_width,
+            raw_height,
+            limits.max_texture_dimension_2d,
+            limits.max_texture_array_layers,
+            tiling,
+        )?;
+        let tile_halo = plan.tile_halo;
+        let tile_size = plan.tile_size;
 
         for &(viewport_width, viewport_height) in VIEWPORTS {
             // Match the render target to the logical viewport. A larger target
@@ -243,8 +248,6 @@ fn run_sweep(
     println!(
         "adapter_backend,adapter_name,raw_width,raw_height,frame_bytes,tile_size,tile_halo,tile_count,atlas_bytes,reps,validate_p50_ms,atlas_plan_p50_ms,texture_allocate_p50_ms,halo_pack_p50_ms,row_pack_p50_ms,write_enqueue_p50_ms,uniform_write_p50_ms,bind_p50_ms,total_p50_ms,total_min_ms,wait_p50_ms"
     );
-    let max_dimension = device.limits().max_texture_dimension_2d;
-
     // Configurations: the library default, then the tile-size sweep at the
     // default halo, then the halo sweep at a fixed tile size.
     let mut configs: Vec<TilingOverrides> = vec![TilingOverrides::default()];
@@ -284,15 +287,15 @@ fn run_sweep(
                 runs.push(timings);
             }
             waits.sort_by(f64::total_cmp);
-            // Report the *effective* geometry (defaults resolved exactly like
-            // the library planner) so rows are unambiguous and groupable.
-            let effective_halo = tiling.tile_halo.unwrap_or(1);
-            let effective_tile = tiling
-                .tile_size
-                .unwrap_or_else(|| max_dimension.saturating_sub(2 * effective_halo).min(4096));
-            let tile_count = raw_width.div_ceil(effective_tile) * raw_height.div_ceil(effective_tile);
-            let extent = u64::from(effective_tile + 2 * effective_halo);
-            let atlas_bytes = extent * extent * u64::from(tile_count) * 2;
+            // Report the exact geometry selected by the production planner so
+            // rows remain valid when its default policy changes.
+            let plan = plan_tiling(
+                raw_width,
+                raw_height,
+                device.limits().max_texture_dimension_2d,
+                device.limits().max_texture_array_layers,
+                tiling,
+            )?;
             println!(
                 "{:?},{:?},{},{},{},{},{},{},{},{},{:.4},{:.4},{:.4},{:.4},{:.4},{:.4},{:.4},{:.4},{:.4},{:.4},{:.3}",
                 info.backend,
@@ -300,10 +303,10 @@ fn run_sweep(
                 raw_width,
                 raw_height,
                 frame_bytes,
-                effective_tile,
-                effective_halo,
-                tile_count,
-                atlas_bytes,
+                plan.tile_size,
+                plan.tile_halo,
+                plan.layer_count,
+                plan.atlas_bytes,
                 reps,
                 phase_p50(&runs, |t| t.validate),
                 phase_p50(&runs, |t| t.atlas_plan),

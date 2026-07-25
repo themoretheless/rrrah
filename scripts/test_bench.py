@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -18,6 +19,12 @@ SPEC = importlib.util.spec_from_file_location("rrrah_bench_report", SCRIPT)
 assert SPEC and SPEC.loader
 REPORT = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(REPORT)
+
+HARNESS_SCRIPT = Path(__file__).with_name("bench-harness.py")
+HARNESS_SPEC = importlib.util.spec_from_file_location("rrrah_bench_harness", HARNESS_SCRIPT)
+assert HARNESS_SPEC and HARNESS_SPEC.loader
+HARNESS = importlib.util.module_from_spec(HARNESS_SPEC)
+HARNESS_SPEC.loader.exec_module(HARNESS)
 
 
 class BenchmarkReportTests(unittest.TestCase):
@@ -76,6 +83,16 @@ class BenchmarkReportTests(unittest.TestCase):
     def test_json_safe_converts_non_finite_for_release_schema(self) -> None:
         safe = REPORT.json_safe({"p95": float("nan"), "nested": [float("inf"), 1.0]})
         self.assertEqual(safe, {"p95": None, "nested": [None, 1.0]})
+
+    def test_harness_timed_run_captures_successful_process_output(self) -> None:
+        sample = HARNESS.timed_run(
+            [sys.executable, "-c", "print('embedded JPEG is not used')"],
+            timeout=5.0,
+        )
+        self.assertEqual(sample["status"], 0)
+        self.assertIsNone(sample["error"])
+        self.assertIn("embedded JPEG is not used", sample["stdout"])
+        self.assertFalse(sample["embedded_jpeg_used"])
 
 
 if __name__ == "__main__":

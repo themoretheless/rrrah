@@ -222,6 +222,128 @@ pub(crate) fn decode_msb_packed(
     output: &mut [u16],
     bits_per_sample: u8,
 ) -> Result<(), DngError> {
+    // The common camera depths have byte-aligned groups, so decode those
+    // groups directly instead of maintaining a dynamic bit reservoir for
+    // every sample. A truncated row deliberately takes the original
+    // word-wise path so its first-missing-byte error and partially decoded
+    // output remain unchanged.
+    if matches!(bits_per_sample, 10 | 12 | 14) {
+        let required_bytes = output
+            .len()
+            .checked_mul(usize::from(bits_per_sample))
+            .and_then(|bits| bits.checked_add(7))
+            .map(|bits| bits / 8);
+        if required_bytes.is_some_and(|required| encoded.len() >= required) {
+            return match bits_per_sample {
+                10 => decode_msb_packed_10(encoded, output),
+                12 => decode_msb_packed_12(encoded, output),
+                14 => decode_msb_packed_14(encoded, output),
+                _ => unreachable!("the fixed-group depths were matched above"),
+            };
+        }
+    }
+    decode_msb_packed_wordwise(encoded, output, bits_per_sample)
+}
+
+/// Decodes four 10-bit samples from every five-byte group. The remaining
+/// zero to three samples start on a byte boundary and use the generic path.
+#[inline]
+fn decode_msb_packed_10(encoded: &[u8], output: &mut [u16]) -> Result<(), DngError> {
+    const SAMPLES_PER_GROUP: usize = 4;
+    const BYTES_PER_GROUP: usize = 5;
+
+    let groups = output.len() / SAMPLES_PER_GROUP;
+    let grouped_samples = groups * SAMPLES_PER_GROUP;
+    let grouped_bytes = groups * BYTES_PER_GROUP;
+    let (grouped_output, tail_output) = output.split_at_mut(grouped_samples);
+    for (bytes, samples) in encoded[..grouped_bytes]
+        .chunks_exact(BYTES_PER_GROUP)
+        .zip(grouped_output.chunks_exact_mut(SAMPLES_PER_GROUP))
+    {
+        let byte_0 = u16::from(bytes[0]);
+        let byte_1 = u16::from(bytes[1]);
+        let byte_2 = u16::from(bytes[2]);
+        let byte_3 = u16::from(bytes[3]);
+        let byte_4 = u16::from(bytes[4]);
+        samples[0] = (byte_0 << 2) | (byte_1 >> 6);
+        samples[1] = ((byte_1 & 0x3f) << 4) | (byte_2 >> 4);
+        samples[2] = ((byte_2 & 0x0f) << 6) | (byte_3 >> 2);
+        samples[3] = ((byte_3 & 0x03) << 8) | byte_4;
+    }
+    if tail_output.is_empty() {
+        Ok(())
+    } else {
+        decode_msb_packed_wordwise(&encoded[grouped_bytes..], tail_output, 10)
+    }
+}
+
+/// Decodes two 12-bit samples from every three-byte group. An odd final
+/// sample starts on a byte boundary and uses the generic path.
+#[inline]
+fn decode_msb_packed_12(encoded: &[u8], output: &mut [u16]) -> Result<(), DngError> {
+    const SAMPLES_PER_GROUP: usize = 2;
+    const BYTES_PER_GROUP: usize = 3;
+
+    let groups = output.len() / SAMPLES_PER_GROUP;
+    let grouped_samples = groups * SAMPLES_PER_GROUP;
+    let grouped_bytes = groups * BYTES_PER_GROUP;
+    let (grouped_output, tail_output) = output.split_at_mut(grouped_samples);
+    for (bytes, samples) in encoded[..grouped_bytes]
+        .chunks_exact(BYTES_PER_GROUP)
+        .zip(grouped_output.chunks_exact_mut(SAMPLES_PER_GROUP))
+    {
+        let byte_0 = u16::from(bytes[0]);
+        let byte_1 = u16::from(bytes[1]);
+        let byte_2 = u16::from(bytes[2]);
+        samples[0] = (byte_0 << 4) | (byte_1 >> 4);
+        samples[1] = ((byte_1 & 0x0f) << 8) | byte_2;
+    }
+    if tail_output.is_empty() {
+        Ok(())
+    } else {
+        decode_msb_packed_wordwise(&encoded[grouped_bytes..], tail_output, 12)
+    }
+}
+
+/// Decodes four 14-bit samples from every seven-byte group. The remaining
+/// zero to three samples start on a byte boundary and use the generic path.
+#[inline]
+fn decode_msb_packed_14(encoded: &[u8], output: &mut [u16]) -> Result<(), DngError> {
+    const SAMPLES_PER_GROUP: usize = 4;
+    const BYTES_PER_GROUP: usize = 7;
+
+    let groups = output.len() / SAMPLES_PER_GROUP;
+    let grouped_samples = groups * SAMPLES_PER_GROUP;
+    let grouped_bytes = groups * BYTES_PER_GROUP;
+    let (grouped_output, tail_output) = output.split_at_mut(grouped_samples);
+    for (bytes, samples) in encoded[..grouped_bytes]
+        .chunks_exact(BYTES_PER_GROUP)
+        .zip(grouped_output.chunks_exact_mut(SAMPLES_PER_GROUP))
+    {
+        let byte_0 = u16::from(bytes[0]);
+        let byte_1 = u16::from(bytes[1]);
+        let byte_2 = u16::from(bytes[2]);
+        let byte_3 = u16::from(bytes[3]);
+        let byte_4 = u16::from(bytes[4]);
+        let byte_5 = u16::from(bytes[5]);
+        let byte_6 = u16::from(bytes[6]);
+        samples[0] = (byte_0 << 6) | (byte_1 >> 2);
+        samples[1] = ((byte_1 & 0x03) << 12) | (byte_2 << 4) | (byte_3 >> 4);
+        samples[2] = ((byte_3 & 0x0f) << 10) | (byte_4 << 2) | (byte_5 >> 6);
+        samples[3] = ((byte_5 & 0x3f) << 8) | byte_6;
+    }
+    if tail_output.is_empty() {
+        Ok(())
+    } else {
+        decode_msb_packed_wordwise(&encoded[grouped_bytes..], tail_output, 14)
+    }
+}
+
+fn decode_msb_packed_wordwise(
+    encoded: &[u8],
+    output: &mut [u16],
+    bits_per_sample: u8,
+) -> Result<(), DngError> {
     let mut reservoir = 0_u64;
     let mut reservoir_bits = 0_u8;
     let mut next_byte = 0_usize;
@@ -258,9 +380,9 @@ pub(crate) fn decode_msb_packed(
     Ok(())
 }
 
-/// Byte-at-a-time reference implementation kept so benchmarks can A/B the
-/// word-wise refill in [`decode_msb_packed`] against the original loop inside
-/// one process. Bit-identical to it by construction.
+/// Byte-at-a-time reference implementation kept so benchmarks and differential
+/// tests can compare [`decode_msb_packed`] against the original loop inside one
+/// process. Bit-identical to it by construction.
 #[doc(hidden)]
 pub(crate) fn decode_msb_packed_bytewise(
     encoded: &[u8],
@@ -307,9 +429,10 @@ mod tests {
     use crate::dng::{Compression, DngMetadata};
 
     #[test]
-    fn word_refill_matches_bytewise_across_widths_and_depths() {
-        // Odd widths make rows end mid-word and vary the reservoir state at
-        // refill boundaries; pseudo-random samples exercise all bit depths.
+    fn optimized_unpack_matches_bytewise_across_widths_depths_and_padding() {
+        // Exhaustive small widths exercise every fixed-group tail length.
+        // Boundary samples and pseudo-random values cover every bit depth;
+        // one-fill padding verifies that unused row bits are ignored.
         let mut state = 0x9e37_79b9_7f4a_7c15_u64;
         let mut next = move || {
             state ^= state >> 12;
@@ -318,29 +441,89 @@ mod tests {
             state.wrapping_mul(0x2545_f491_4f6c_dd1d)
         };
         for bits_per_sample in 9_u8..=15 {
-            for width in [1_usize, 2, 3, 7, 37, 256] {
+            for width in 0_usize..=257 {
                 let mask = (1_u16 << bits_per_sample) - 1;
                 let samples = (0..width)
-                    .map(|_| u16::try_from(next() & u64::from(mask)).unwrap())
+                    .map(|index| match index % 19 {
+                        0 => 0,
+                        1 => mask,
+                        _ => u16::try_from(next() & u64::from(mask)).unwrap(),
+                    })
                     .collect::<Vec<_>>();
-                let row_bytes = packed_row_bytes(width, bits_per_sample).unwrap();
-                let mut encoded = vec![0_u8; row_bytes];
-                let mut bit_position = 0_usize;
-                for &sample in &samples {
-                    for shift in (0..bits_per_sample).rev() {
-                        if (sample >> shift) & 1 == 1 {
-                            encoded[bit_position / 8] |= 1 << (7 - (bit_position % 8));
-                        }
-                        bit_position += 1;
+                for padding_ones in [false, true] {
+                    let mut encoded = encode_msb(&samples, bits_per_sample);
+                    let used_bits = width * usize::from(bits_per_sample);
+                    let padding_bits = (8 - used_bits % 8) % 8;
+                    if padding_ones && padding_bits != 0 {
+                        *encoded.last_mut().expect("a padded row has one byte") |= (1_u8 << padding_bits) - 1;
                     }
+                    let mut optimized = vec![0_u16; width];
+                    let mut bytewise = vec![0_u16; width];
+                    decode_msb_packed(&encoded, &mut optimized, bits_per_sample).unwrap();
+                    decode_msb_packed_bytewise(&encoded, &mut bytewise, bits_per_sample).unwrap();
+                    assert_eq!(
+                        optimized, samples,
+                        "{bits_per_sample}-bit width {width}, padding_ones={padding_ones}"
+                    );
+                    assert_eq!(
+                        bytewise, samples,
+                        "{bits_per_sample}-bit width {width}, padding_ones={padding_ones}"
+                    );
                 }
-                let mut word = vec![0_u16; width];
-                let mut bytewise = vec![0_u16; width];
-                decode_msb_packed(&encoded, &mut word, bits_per_sample).unwrap();
-                decode_msb_packed_bytewise(&encoded, &mut bytewise, bits_per_sample).unwrap();
-                assert_eq!(word, samples, "{bits_per_sample}-bit width {width}");
-                assert_eq!(bytewise, samples, "{bits_per_sample}-bit width {width}");
             }
+        }
+    }
+
+    #[test]
+    fn fixed_group_unpack_preserves_truncation_errors_and_partial_output() {
+        for bits_per_sample in [10_u8, 12, 14] {
+            let mask = (1_u16 << bits_per_sample) - 1;
+            for width in 1_usize..=17 {
+                let samples = (0..width)
+                    .map(|index| u16::try_from(index * 977).unwrap() & mask)
+                    .collect::<Vec<_>>();
+                let encoded = encode_msb(&samples, bits_per_sample);
+                for truncated_length in 0..encoded.len() {
+                    let truncated = &encoded[..truncated_length];
+                    let mut optimized = vec![0xa5a5_u16; width];
+                    let mut bytewise = optimized.clone();
+                    let optimized_error =
+                        decode_msb_packed(truncated, &mut optimized, bits_per_sample).unwrap_err();
+                    let bytewise_error =
+                        decode_msb_packed_bytewise(truncated, &mut bytewise, bits_per_sample).unwrap_err();
+                    assert_eq!(
+                        truncation_fields(&optimized_error),
+                        truncation_fields(&bytewise_error),
+                        "{bits_per_sample}-bit width {width}, truncated to {truncated_length}"
+                    );
+                    assert_eq!(
+                        optimized, bytewise,
+                        "{bits_per_sample}-bit width {width}, truncated to {truncated_length}"
+                    );
+                }
+            }
+        }
+    }
+
+    fn encode_msb(samples: &[u16], bits_per_sample: u8) -> Vec<u8> {
+        let row_bytes = packed_row_bytes(samples.len(), bits_per_sample).unwrap();
+        let mut encoded = vec![0_u8; row_bytes];
+        let mut bit_position = 0_usize;
+        for &sample in samples {
+            for shift in (0..bits_per_sample).rev() {
+                if (sample >> shift) & 1 == 1 {
+                    encoded[bit_position / 8] |= 1 << (7 - (bit_position % 8));
+                }
+                bit_position += 1;
+            }
+        }
+        encoded
+    }
+
+    fn truncation_fields(error: &DngError) -> (usize, usize) {
+        match error {
+            DngError::TruncatedPackedRow { expected, actual } => (*expected, *actual),
+            other => panic!("expected truncated packed row, got {other:?}"),
         }
     }
 

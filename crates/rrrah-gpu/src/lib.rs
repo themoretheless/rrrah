@@ -105,7 +105,7 @@ pub struct TilingPlan {
 /// Compute the atlas tiling for a `width`x`height` mosaic, honoring
 /// `overrides` where present. Pure and device-free so the policy is unit
 /// testable without a GPU adapter.
-fn plan_tiling(
+pub fn plan_tiling(
     width: u32,
     height: u32,
     max_dimension: u32,
@@ -1438,17 +1438,34 @@ fn tile_with_halo(
     if width == 0 || height == 0 || pixels.len() < width.saturating_mul(height) {
         return output;
     }
+
+    // Every output row samples one contiguous source-row interval, with only
+    // the left and right sensor edges requiring replicated values. Copy that
+    // interval in bulk instead of repeating saturating coordinate arithmetic
+    // and a two-dimensional source lookup for every sample. This preserves
+    // the exact clamp-to-edge policy, including oversized edge tiles.
+    let left_fill = halo.saturating_sub(tile_x).min(extent);
+    let source_x = tile_x.saturating_sub(halo).min(width.saturating_sub(1));
+    let copy_len = width
+        .saturating_sub(source_x)
+        .min(extent.saturating_sub(left_fill));
     for local_y in 0..extent {
-        for local_x in 0..extent {
-            let source_x = tile_x
-                .saturating_add(local_x)
-                .saturating_sub(halo)
-                .min(width.saturating_sub(1));
-            let source_y = tile_y
-                .saturating_add(local_y)
-                .saturating_sub(halo)
-                .min(height.saturating_sub(1));
-            output[local_y * extent + local_x] = pixels[source_y * width + source_x];
+        let source_y = tile_y
+            .saturating_add(local_y)
+            .saturating_sub(halo)
+            .min(height.saturating_sub(1));
+        let source_row = &pixels[source_y * width..(source_y + 1) * width];
+        let output_row = &mut output[local_y * extent..(local_y + 1) * extent];
+
+        if left_fill != 0 {
+            output_row[..left_fill].fill(source_row[source_x]);
+        }
+        if copy_len != 0 {
+            output_row[left_fill..left_fill + copy_len]
+                .copy_from_slice(&source_row[source_x..source_x + copy_len]);
+        }
+        if left_fill + copy_len < extent {
+            output_row[left_fill + copy_len..].fill(source_row[width - 1]);
         }
     }
     output
@@ -1526,6 +1543,55 @@ mod tests {
         assert!((uploaded[2] / uploaded[1] - raw_gains[2] / raw_gains[1]).abs() < 1.0e-6);
         // The second green plane is scaled by the same factor as the first.
         assert!((uploaded[3] / uploaded[1] - raw_gains[3] / raw_gains[1]).abs() < 1.0e-6);
+    }
+
+    /// Deliberately scalar oracle for the optimized row-wise tile packer.
+    ///
+    /// Keep the coordinate expression independent from the production
+    /// copy/fill decomposition so randomized comparisons catch boundary and
+    /// saturation mistakes rather than reproducing them.
+    fn scalar_tile_with_halo(
+        pixels: &[u16],
+        width: u32,
+        height: u32,
+        tile_x: u32,
+        tile_y: u32,
+        tile_size: u32,
+        halo: u32,
+    ) -> Vec<u16> {
+        let extent_u32 = tile_size.checked_add(halo.saturating_mul(2)).unwrap_or(0);
+        let extent = usize::try_from(extent_u32).unwrap_or(0);
+        let width = usize::try_from(width).unwrap_or(0);
+        let height = usize::try_from(height).unwrap_or(0);
+        let tile_x = usize::try_from(tile_x.saturating_mul(tile_size)).unwrap_or(0);
+        let tile_y = usize::try_from(tile_y.saturating_mul(tile_size)).unwrap_or(0);
+        let halo = usize::try_from(halo).unwrap_or(0);
+        let mut output = vec![0_u16; extent.saturating_mul(extent)];
+        if width == 0 || height == 0 || pixels.len() < width.saturating_mul(height) {
+            return output;
+        }
+        for local_y in 0..extent {
+            for local_x in 0..extent {
+                let source_x = tile_x
+                    .saturating_add(local_x)
+                    .saturating_sub(halo)
+                    .min(width.saturating_sub(1));
+                let source_y = tile_y
+                    .saturating_add(local_y)
+                    .saturating_sub(halo)
+                    .min(height.saturating_sub(1));
+                output[local_y * extent + local_x] = pixels[source_y * width + source_x];
+            }
+        }
+        output
+    }
+
+    fn next_random(state: &mut u64) -> u32 {
+        // Fixed xorshift64 sequence: deterministic and dependency-free.
+        *state ^= *state << 13;
+        *state ^= *state >> 7;
+        *state ^= *state << 17;
+        *state as u32
     }
 
     #[test]
@@ -1922,6 +1988,39 @@ mod tests {
         // samples. This is the defined border policy for the preview path.
         assert_eq!(tile[0], 11);
         assert_eq!(tile[35], 22);
+    }
+
+    #[test]
+    fn rowwise_tile_halo_matches_scalar_oracle_across_randomized_geometry() {
+        let mut random = 0x6a09_e667_f3bc_c909_u64;
+        for case in 0..512 {
+            let width = next_random(&mut random) % 65;
+            let height = next_random(&mut random) % 65;
+            let tile_size = next_random(&mut random) % 32 + 1;
+            let halo = next_random(&mut random) % 9;
+            let tile_columns = width.div_ceil(tile_size);
+            let tile_rows = height.div_ceil(tile_size);
+            // Include one-past-grid coordinates: the helper's historical
+            // behavior clamps those oversized tiles and must stay panic-free.
+            let tile_x = next_random(&mut random) % (tile_columns + 2);
+            let tile_y = next_random(&mut random) % (tile_rows + 2);
+            let sample_count = usize::try_from(width.saturating_mul(height)).unwrap();
+            let mut pixels = (0..sample_count)
+                .map(|_| next_random(&mut random) as u16)
+                .collect::<Vec<_>>();
+            if case % 17 == 0 && !pixels.is_empty() {
+                // Malformed/truncated input must retain the all-zero fallback.
+                pixels.pop();
+            }
+
+            let expected = scalar_tile_with_halo(&pixels, width, height, tile_x, tile_y, tile_size, halo);
+            let actual = tile_with_halo(&pixels, width, height, tile_x, tile_y, tile_size, halo);
+            assert_eq!(
+                actual, expected,
+                "case {case}: frame={width}x{height}, tile=({tile_x},{tile_y}), \
+                 tile_size={tile_size}, halo={halo}"
+            );
+        }
     }
 
     #[test]

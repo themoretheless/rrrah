@@ -601,6 +601,7 @@ impl<'a> FullEntropy<'a> {
         }
     }
 
+    #[allow(clippy::inline_always)] // measured hot path; see the comment below
     #[inline(always)]
     fn decode_rice(&mut self, adapt: bool) -> Result<u32, LosslessError> {
         let old_parameter = self.rice_parameter;
