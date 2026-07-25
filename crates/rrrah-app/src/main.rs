@@ -937,7 +937,8 @@ impl ApplicationHandler<WakeEvent> for App {
             Window::default_attributes()
                 .with_title("Rrrah — processing pipeline")
                 .with_inner_size(LogicalSize::new(1600.0, 1080.0))
-                .with_min_inner_size(LogicalSize::new(1180.0, 820.0)),
+                .with_min_inner_size(LogicalSize::new(1180.0, 820.0))
+                .with_visible(false),
         ) {
             Ok(telemetry_window) => {
                 let telemetry_window = Arc::new(telemetry_window);
@@ -948,6 +949,8 @@ impl ApplicationHandler<WakeEvent> for App {
                     Ok(mut telemetry) => {
                         telemetry.set_pipeline(&self.pipeline);
                         telemetry.set_cache_snapshot(self.cache_telemetry.snapshot());
+                        telemetry_window.set_minimized(true);
+                        telemetry_window.set_visible(true);
                         self.telemetry_window = Some(telemetry_window);
                         self.telemetry = Some(telemetry);
                     }
@@ -958,6 +961,7 @@ impl ApplicationHandler<WakeEvent> for App {
             }
             Err(error) => log::warn!("timing window creation failed: {error}"),
         }
+        window.focus_window();
         window.request_redraw();
         if let Some(telemetry_window) = &self.telemetry_window {
             telemetry_window.request_redraw();
