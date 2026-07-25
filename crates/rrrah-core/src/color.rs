@@ -95,6 +95,51 @@ pub fn aces_fitted(value: f32) -> f32 {
     (x * (2.51 * x + 0.03) / (x * (2.43 * x + 0.59) + 0.14)).clamp(0.0, 1.0)
 }
 
+/// Hue-preserving ACES tone map for a linear RGB triplet. Mirrors the WGSL
+/// `aces_tone_map` in the GPU viewport shader (`raw_view.wgsl`):
+///
+/// 1. Sub-zero components (out-of-gamut camera colors) are desaturated toward
+///    the achromatic axis (`WB_LUMINANCE_WEIGHTS` luma) until the lowest
+///    channel reaches the gamut boundary; the hue ratio is kept, saturation is
+///    reduced only as far as the negative excursion requires. If the luma axis
+///    itself is non-positive, the color cannot be recovered and is clamped.
+/// 2. The achromatic max-component norm is tone-mapped with [`aces_fitted`],
+///    and the RGB triplet is scaled by `aces(norm) / norm` — one common
+///    positive factor, so hue and channel ratios are preserved by
+///    construction (CIELAB h° is exactly invariant under linear RGB scaling).
+/// 3. Because the norm is the max component and `aces_fitted` never exceeds
+///    1, the output stays inside the display gamut `[0, 1]` with no
+///    post-tone-map clipping.
+///
+/// Achromatic inputs reduce to per-channel [`aces_fitted`]: `r == g == b == x`
+/// maps to `aces_fitted(x)` per channel, so a gray ramp is unchanged.
+pub fn aces_tone_map_rgb(rgb: [f32; 3]) -> [f32; 3] {
+    if rgb.iter().any(|value| !value.is_finite()) {
+        return [0.0; 3];
+    }
+    let mut color = rgb;
+    let minimum = color.iter().copied().fold(f32::INFINITY, f32::min);
+    if minimum < 0.0 {
+        let luma = color[0] * WB_LUMINANCE_WEIGHTS[0]
+            + color[1] * WB_LUMINANCE_WEIGHTS[1]
+            + color[2] * WB_LUMINANCE_WEIGHTS[2];
+        if luma > 0.0 {
+            // Bring the lowest channel exactly to the gamut boundary:
+            // min + t * (luma - min) = 0  →  t = -min / (luma - min).
+            let desaturate = (-minimum / (luma - minimum)).clamp(0.0, 1.0);
+            color = color.map(|channel| channel + desaturate * (luma - channel));
+        } else {
+            color = color.map(|channel| channel.max(0.0));
+        }
+    }
+    let norm = color.iter().copied().fold(0.0_f32, f32::max);
+    if norm <= 0.0 {
+        return [0.0; 3];
+    }
+    let scale = aces_fitted(norm) / norm;
+    color.map(|channel| channel * scale)
+}
+
 pub fn multiply_3x3(left: [[f32; 3]; 3], right: [[f32; 3]; 3]) -> [[f32; 3]; 3] {
     let mut output = [[0.0; 3]; 3];
     for row in 0..3 {
@@ -455,7 +500,7 @@ pub fn display_wb_gains(camera_wb: [f32; 3]) -> Option<[f32; 3]> {
 mod tests {
     use super::{
         CameraProfileError, DNG_ILLUMINANT_D65, DngColorMatrix, GreenPlane, SRGB_TO_XYZ_D65,
-        SRGB_TO_XYZ_D65_F64, WB_LUMINANCE_WEIGHTS, XYZ_WHITE_D65, aces_fitted, apply_3x3, apply_exposure,
+        SRGB_TO_XYZ_D65_F64, WB_LUMINANCE_WEIGHTS, XYZ_WHITE_D65, aces_fitted, aces_tone_map_rgb, apply_3x3, apply_exposure,
         bradford_adaptation, bradford_adaptation_f64, camera_to_linear_srgb, camera_to_linear_srgb_precise,
         diagnose_green_planes, display_wb_gains, dng_illuminant_white, green_relative_wb_gains, invert_3x3,
         invert_3x3_f64, luminance_normalize_wb_gains, multiply_3x3, multiply_3x3_f64,
@@ -521,6 +566,59 @@ mod tests {
         assert!(mapped.iter().all(|value| (0.0..=1.0).contains(value)));
         assert!(aces_fitted(f32::NAN).abs() < f32::EPSILON);
         assert!(aces_fitted(-1.0).abs() < f32::EPSILON);
+    }
+
+    #[test]
+    fn aces_tone_map_rgb_reduces_to_per_channel_aces_on_grays() {
+        for value in [0.0_f32, 0.02, 0.18, 0.5, 1.0, 4.0] {
+            let mapped = aces_tone_map_rgb([value; 3]);
+            let expected = aces_fitted(value);
+            for channel in mapped {
+                // One f32 divide/multiply round-trip away from the scalar
+                // curve: far below the 8-bit output quantization.
+                assert!(
+                    (channel - expected).abs() <= expected.abs() * 1.0e-6 + 1.0e-9,
+                    "gray {value}: {channel} vs scalar {expected}"
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn aces_tone_map_rgb_preserves_channel_ratios_for_in_gamut_colors() {
+        for color in [
+            [1.0_f32, 0.5, 0.0],
+            [0.25, 1.0, 0.5],
+            [0.8, 0.1, 0.9],
+            [2.5, 1.25, 0.75],
+        ] {
+            let mapped = aces_tone_map_rgb(color);
+            let norm = color.iter().copied().fold(0.0_f32, f32::max);
+            let expected_scale = aces_fitted(norm) / norm;
+            for (mapped, original) in mapped.into_iter().zip(color) {
+                let expected = original * expected_scale;
+                assert!(
+                    (mapped - expected).abs() <= expected.abs() * 1.0e-6 + 1.0e-9,
+                    "{color:?}: {mapped} vs uniformly scaled {expected}"
+                );
+            }
+            assert!(mapped.iter().all(|value| (0.0..=1.0).contains(value)));
+        }
+    }
+
+    #[test]
+    fn aces_tone_map_rgb_desaturates_negative_components_to_gamut() {
+        // Out-of-gamut camera color: the blue channel is sub-zero. The mapper
+        // must pull the color to the gamut boundary without zeroing the
+        // channel outright (old clamp behavior) while keeping output bounded.
+        let mapped = aces_tone_map_rgb([0.8, 0.4, -0.2]);
+        let minimum = mapped.iter().copied().fold(f32::INFINITY, f32::min);
+        assert!(minimum >= -1.0e-6, "negative channel survived: {mapped:?}");
+        assert!(mapped.iter().all(|value| *value <= 1.0));
+        assert!(mapped[2].abs() <= 1.0e-6, "desaturation lands exactly on the boundary: {mapped:?}");
+        // Degenerate case: no recoverable achromatic axis falls back to clamp.
+        assert_eq!(aces_tone_map_rgb([-0.5, -0.1, -0.2]), [0.0; 3]);
+        assert_eq!(aces_tone_map_rgb([f32::NAN, 0.0, 0.0]), [0.0; 3]);
     }
 
     #[test]
