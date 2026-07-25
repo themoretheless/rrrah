@@ -307,12 +307,32 @@ pub fn profiled_pattern_mosaic(
 /// WGSL fragment shader plus the sRGB target apply: `aces_fitted` (identical
 /// coefficients in `rrrah-core`) followed by the IEC 61966-2-1 transfer
 /// function, quantized to an 8-bit byte.
+///
+/// Achromatic inputs pass through the hue-preserving [`cpu_reference_rgb`]
+/// unchanged: `r == g == b` reduces to the scalar curve per channel.
 pub fn cpu_reference_byte(normalized_linear: f64) -> u8 {
-    let mapped = f64::from(rrrah_core::aces_fitted(normalized_linear as f32));
-    let encoded = if mapped <= 0.003_130_8 {
-        12.92 * mapped
+    srgb_byte(f64::from(rrrah_core::aces_fitted(normalized_linear as f32)))
+}
+
+/// CPU reference for a linear RGB triplet through the hue-preserving ACES
+/// tone map (`rrrah_core::aces_tone_map_rgb`, mirroring the WGSL shader) and
+/// the sRGB transfer function, quantized per channel to 8-bit bytes.
+pub fn cpu_reference_rgb(linear_rgb: [f64; 3]) -> [u8; 3] {
+    let mapped = rrrah_core::aces_tone_map_rgb([
+        linear_rgb[0] as f32,
+        linear_rgb[1] as f32,
+        linear_rgb[2] as f32,
+    ]);
+    mapped.map(|channel| srgb_byte(f64::from(channel)))
+}
+
+/// IEC 61966-2-1 opto-electronic transfer function and 8-bit quantization,
+/// matching the hardware sRGB conversion on write into the readback target.
+fn srgb_byte(linear: f64) -> u8 {
+    let encoded = if linear <= 0.003_130_8 {
+        12.92 * linear
     } else {
-        1.055 * mapped.powf(1.0 / 2.4) - 0.055
+        1.055 * linear.powf(1.0 / 2.4) - 0.055
     };
     (encoded.clamp(0.0, 1.0) * 255.0).round() as u8
 }
