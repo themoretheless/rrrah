@@ -17,6 +17,12 @@ use rrrah_core::{DecodedMosaic, FrameError, Photometric, camera_to_linear_srgb};
 use thiserror::Error;
 use wgpu::util::DeviceExt;
 
+mod filmstrip;
+pub use filmstrip::{
+    FilmstripRenderer, FilmstripTile, FilmstripTileId, STRIP_HEIGHT, STRIP_PADDING, TILE_STRIDE, TILE_WIDTH,
+    max_scroll, point_in_strip, scroll_to_reveal, strip_band_y, tile_index_at, tile_x,
+};
+
 /// Hard upper bound for the eager atlas path. A 512 MiB cap prevents a
 /// malformed/huge frame from causing an avoidable device-loss while keeping
 /// ordinary 45–60 MP cameras within the fast path. Larger images must use the

@@ -9,7 +9,8 @@
     clippy::needless_pass_by_value,
     clippy::uninlined_format_args,
     clippy::unnested_or_patterns,
-    clippy::while_let_loop
+    clippy::while_let_loop,
+    clippy::too_many_arguments
 )]
 
 use std::{
@@ -27,28 +28,34 @@ use anyhow::{Context, Result, bail};
 use clap::Parser;
 use crossbeam_channel::{Receiver, Sender, TryRecvError, bounded, unbounded};
 use directories::ProjectDirs;
-use rrrah_cache::{CacheKey, DEFAULT_MAX_DISK_CACHE_BYTES, DiskMosaicCache, SourceFingerprint};
+use rrrah_cache::{
+    CacheKey, DEFAULT_MAX_DISK_CACHE_BYTES, DEFAULT_RAM_CACHE_BYTES, DiskMosaicCache, MosaicRamCache,
+    SourceFingerprint,
+};
 use rrrah_core::DecodedMosaic;
 use rrrah_decode::{DecodeRequest, DecodeTimings, GenerationToken, NativeRawDecoder, RawDecoder};
-use rrrah_gpu::{GpuUploadTimings, HudCard, HudRenderer, RawRenderer, ViewParameters};
+use rrrah_gpu::{FilmstripRenderer, GpuUploadTimings, HudCard, HudRenderer, RawRenderer, ViewParameters};
 use winit::{
     application::ApplicationHandler,
     dpi::{LogicalSize, PhysicalPosition, PhysicalSize},
     event::{ElementState, MouseButton, MouseScrollDelta, WindowEvent},
     event_loop::{ActiveEventLoop, ControlFlow, EventLoop, EventLoopProxy, OwnedDisplayHandle},
-    keyboard::{KeyCode, PhysicalKey},
+    keyboard::{KeyCode, ModifiersState, PhysicalKey},
     window::{Window, WindowId},
 };
 
 mod cache_telemetry;
 mod cache_writer;
 mod decode_gate;
+mod filmstrip_ui;
 mod gallery;
 mod pipeline_telemetry;
 
 use cache_telemetry::{CacheTelemetry, CacheTelemetrySnapshot};
 use cache_writer::CacheWriter;
 use decode_gate::{DecodeGate, ForegroundTicket};
+use filmstrip_ui::{FolderStrip, THUMB_CACHE_CAPACITY, ThumbCache};
+use gallery::NavDirection;
 use pipeline_telemetry::{
     CacheRoute, FrameSubmitTimings, FrontendTimings, PipelineSnapshot, PipelineStageState, RawKind,
 };
@@ -65,6 +72,9 @@ struct Cli {
     /// Override the cache directory.
     #[arg(long)]
     cache_dir: Option<PathBuf>,
+    /// In-memory decoded-mosaic cache budget in MiB (0 disables the RAM cache).
+    #[arg(long)]
+    ram_cache_mb: Option<u64>,
     #[arg(value_name = "RAW")]
     path: Option<PathBuf>,
 }
@@ -108,7 +118,10 @@ fn main() -> Result<()> {
         }
         inspect(path, cache_root.as_deref(), cli.no_cache)
     } else {
-        run_viewer(cli.path, cache_root, cli.no_cache)
+        let ram_cache_bytes = cli
+            .ram_cache_mb
+            .map_or(DEFAULT_RAM_CACHE_BYTES, |mb| mb.saturating_mul(1024 * 1024));
+        run_viewer(cli.path, cache_root, cli.no_cache, ram_cache_bytes)
     }
 }
 
@@ -217,7 +230,12 @@ fn print_metadata(
     println!("embedded JPEG is not used by this path");
 }
 
-fn run_viewer(path: Option<PathBuf>, cache_root: Option<PathBuf>, no_cache: bool) -> Result<()> {
+fn run_viewer(
+    path: Option<PathBuf>,
+    cache_root: Option<PathBuf>,
+    no_cache: bool,
+    ram_cache_bytes: u64,
+) -> Result<()> {
     let (sender, receiver) = unbounded();
     let event_loop = EventLoop::<WakeEvent>::with_user_event()
         .build()
@@ -236,6 +254,7 @@ fn run_viewer(path: Option<PathBuf>, cache_root: Option<PathBuf>, no_cache: bool
     let foreground_loader = ForegroundLoader::new(
         cache_root.clone(),
         no_cache,
+        ram_cache_bytes,
         sender,
         proxy,
         Arc::clone(&decode_gate),
@@ -294,6 +313,7 @@ impl ForegroundLoader {
     fn new(
         cache_root: Option<PathBuf>,
         no_cache: bool,
+        ram_cache_bytes: u64,
         sender: Sender<LoadEvent>,
         proxy: EventLoopProxy<WakeEvent>,
         decode_gate: Arc<DecodeGate>,
@@ -308,6 +328,13 @@ impl ForegroundLoader {
             .name("rrrah-raw-decode".into())
             .spawn(move || {
                 let cache = cache_root.filter(|_| !no_cache).map(DiskMosaicCache::new);
+                // The RAM cache shares the disk cache's key derivation, so it
+                // exists exactly when the disk cache does. It is owned solely
+                // by this worker thread: no locking on the load path.
+                let mut ram_cache = cache
+                    .as_ref()
+                    .filter(|_| ram_cache_bytes > 0)
+                    .map(|_| MosaicRamCache::new(ram_cache_bytes));
                 if let Some(cache) = &cache {
                     match cache.usage() {
                         Ok(usage) => worker_telemetry.update_disk_usage(usage),
@@ -327,6 +354,7 @@ impl ForegroundLoader {
                     execute_load(
                         request,
                         cache.as_ref(),
+                        ram_cache.as_mut(),
                         cache_writer.as_ref(),
                         Arc::clone(&worker_generation),
                         &sender,
@@ -384,6 +412,7 @@ impl ForegroundLoader {
 fn execute_load(
     request: LoadRequest,
     cache: Option<&DiskMosaicCache>,
+    mut ram_cache: Option<&mut MosaicRamCache>,
     cache_writer: Option<&CacheWriter>,
     load_generation: Arc<AtomicU64>,
     sender: &Sender<LoadEvent>,
@@ -463,15 +492,54 @@ fn execute_load(
     };
     let mut cache_key = None;
     if let (Some(cache), Some(fingerprint)) = (cache, &fingerprint) {
-        let cache_lookup_started = Instant::now();
         let key = CacheKey::for_mosaic_recipe(fingerprint, 0, recipe);
         cache_key = Some(key);
+        if let Some(ram_cache) = ram_cache.as_mut() {
+            let ram_lookup_started = Instant::now();
+            if let Some(mosaic) = ram_cache.get(&key) {
+                let ram_lookup = ram_lookup_started.elapsed();
+                if token.is_cancelled() {
+                    return;
+                }
+                // The RAM hit becomes the visible frame: pin it before
+                // publishing so no later admission can evict it.
+                ram_cache.mark_visible(&key);
+                frontend.cache_lookup = Some(ram_lookup);
+                telemetry.record_hit(
+                    generation,
+                    ram_lookup,
+                    u64::try_from(mosaic.byte_len()).unwrap_or(u64::MAX),
+                );
+                publish_load_event(
+                    LoadEvent::Ready {
+                        generation,
+                        mosaic,
+                        raw_kind,
+                        cache_route: CacheRoute::Hit,
+                        elapsed: requested_at.elapsed(),
+                        requested_at,
+                        ready_published_at: Instant::now(),
+                        frontend,
+                        decode: None,
+                    },
+                    sender,
+                    proxy,
+                );
+                return;
+            }
+            frontend.cache_lookup = Some(ram_lookup_started.elapsed());
+        }
+        let cache_lookup_started = Instant::now();
         let cache_result = cache.load(key);
         frontend.cache_lookup = Some(cache_lookup_started.elapsed());
         match cache_result {
             Ok(Some(hit)) => {
                 if token.is_cancelled() {
                     return;
+                }
+                if let Some(ram_cache) = ram_cache.as_mut() {
+                    ram_cache.insert(key, hit.mosaic.clone());
+                    ram_cache.mark_visible(&key);
                 }
                 telemetry.record_hit(
                     generation,
@@ -552,6 +620,10 @@ fn execute_load(
     }
     let decode_timings = output.timings;
     let mosaic = output.mosaic;
+    if let (Some(ram_cache), Some(key)) = (ram_cache.as_mut(), cache_key) {
+        ram_cache.insert(key, mosaic.clone());
+        ram_cache.mark_visible(&key);
+    }
     let write_back = cache_key.map(|key| (key, mosaic.clone()));
     let elapsed = requested_at.elapsed();
     // Publish the usable frame before enqueueing persistence. Even an already
@@ -594,13 +666,63 @@ fn publish_load_event(event: LoadEvent, sender: &Sender<LoadEvent>, proxy: &Even
     }
 }
 
+/// Cover-thumbnail decode for the folder filmstrip. The job waits on the
+/// shared decode gate's prefetch admission, so thumbnails never compete with
+/// the foreground frame and take turns with RAW neighbor prefetch.
+fn thumbnail_loader(
+    decode_gate: Arc<DecodeGate>,
+) -> impl Fn(gallery::ThumbnailJob) -> Option<gallery::ThumbnailReady> + Send + Sync + 'static {
+    move |job: gallery::ThumbnailJob| {
+        let permit = decode_gate.acquire_prefetch(|| false)?;
+        let output = NativeRawDecoder.decode(&DecodeRequest::new(&job.source)).ok();
+        drop(permit);
+        let output = output?;
+        let (width, height) = thumbnail_dimensions(
+            output.mosaic.metadata.width,
+            output.mosaic.metadata.height,
+            job.edge,
+        );
+        let pixels = output.mosaic.thumbnail_rgba8(job.edge);
+        let expected = width as usize * height as usize * 4;
+        (pixels.len() == expected).then_some(gallery::ThumbnailReady {
+            index: job.index,
+            width,
+            height,
+            pixels,
+        })
+    }
+}
+
+/// Output dimensions of `DecodedMosaic::thumbnail_rgba8` for the same input.
+fn thumbnail_dimensions(width: u32, height: u32, max_dimension: u32) -> (u32, u32) {
+    let max_dimension = max_dimension.max(1);
+    let long_edge = width.max(height);
+    if long_edge <= max_dimension {
+        return (width, height);
+    }
+    let scaled = |dimension: u32| {
+        u32::try_from(
+            u64::from(dimension)
+                .saturating_mul(u64::from(max_dimension))
+                .div_ceil(u64::from(long_edge)),
+        )
+        .unwrap_or(max_dimension)
+        .max(1)
+    };
+    (scaled(width), scaled(height))
+}
+
 struct App {
     path: PathBuf,
     receiver: Receiver<LoadEvent>,
     foreground_loader: ForegroundLoader,
     gallery: Vec<PathBuf>,
     gallery_index: Option<usize>,
+    last_nav_direction: NavDirection,
     raw_prefetcher: gallery::RawPrefetcher,
+    strip: FolderStrip,
+    strip_thumbs: ThumbCache,
+    thumbnail_prefetcher: gallery::Prefetcher,
     cache_telemetry: Arc<CacheTelemetry>,
     window: Option<Arc<Window>>,
     gpu: Option<GpuState>,
@@ -609,6 +731,9 @@ struct App {
     view: ViewParameters,
     dragging: bool,
     last_cursor: Option<PhysicalPosition<f64>>,
+    modifiers: ModifiersState,
+    telemetry_dragging: bool,
+    telemetry_last_cursor: Option<PhysicalPosition<f64>>,
     status: String,
     pipeline: PipelineSnapshot,
     pending_first_present: Option<PendingFirstPresent>,
@@ -624,6 +749,7 @@ impl App {
         decode_gate: Arc<DecodeGate>,
         cache_telemetry: Arc<CacheTelemetry>,
     ) -> Self {
+        let thumbnail_prefetcher = gallery::Prefetcher::new(32, thumbnail_loader(Arc::clone(&decode_gate)));
         let raw_prefetcher =
             gallery::RawPrefetcher::new(cache_root, no_cache, decode_gate, Arc::clone(&cache_telemetry));
         let generation = foreground_loader.current_generation();
@@ -632,13 +758,17 @@ impl App {
         if has_initial_path {
             raw_prefetcher.begin_foreground();
         }
-        Self {
+        let mut app = Self {
             path,
             receiver,
             foreground_loader,
             gallery: Vec::new(),
             gallery_index: None,
+            last_nav_direction: NavDirection::None,
             raw_prefetcher,
+            strip: FolderStrip::default(),
+            strip_thumbs: ThumbCache::new(THUMB_CACHE_CAPACITY),
+            thumbnail_prefetcher,
             cache_telemetry,
             window: None,
             gpu: None,
@@ -647,6 +777,9 @@ impl App {
             view: ViewParameters::default(),
             dragging: false,
             last_cursor: None,
+            modifiers: ModifiersState::empty(),
+            telemetry_dragging: false,
+            telemetry_last_cursor: None,
             status: "decoding full RAW mosaic…".into(),
             pipeline: if has_initial_path {
                 PipelineSnapshot::waiting(generation, raw_kind)
@@ -654,7 +787,9 @@ impl App {
                 PipelineSnapshot::idle(generation)
             },
             pending_first_present: None,
-        }
+        };
+        app.initialize_folder_context();
+        app
     }
 
     fn drain_load_events(&mut self) {
@@ -764,10 +899,14 @@ impl App {
                         telemetry.set_pipeline(&self.pipeline);
                     }
                     if let Some(index) = self.gallery_index {
-                        self.raw_prefetcher
-                            .finish_foreground_and_submit(&self.gallery, index);
+                        self.raw_prefetcher.finish_foreground_and_submit(
+                            &self.gallery,
+                            index,
+                            self.last_nav_direction,
+                        );
                     } else {
-                        self.raw_prefetcher.finish_foreground_and_submit(&[], 0);
+                        self.raw_prefetcher
+                            .finish_foreground_and_submit(&[], 0, NavDirection::None);
                     }
                 }
                 LoadEvent::Failed { generation, error } => {
@@ -782,7 +921,8 @@ impl App {
                         if let Some(telemetry) = self.telemetry.as_mut() {
                             telemetry.set_pipeline(&self.pipeline);
                         }
-                        self.raw_prefetcher.finish_foreground_and_submit(&[], 0);
+                        self.raw_prefetcher
+                            .finish_foreground_and_submit(&[], 0, NavDirection::None);
                     }
                 }
             }
@@ -799,7 +939,90 @@ impl App {
         }
     }
 
+    /// Establish the folder context for a CLI-opened file: sibling files for
+    /// arrow-key navigation plus the filmstrip tile list.
+    fn initialize_folder_context(&mut self) {
+        if self.path.as_os_str().is_empty() {
+            return;
+        }
+        let Some(folder) = self.path.parent().map(Path::to_path_buf) else {
+            return;
+        };
+        let files = gallery::scan_folder(&folder);
+        if !files.is_empty() {
+            self.gallery_index = files.iter().position(|candidate| candidate == &self.path);
+            self.gallery = files;
+        }
+        self.set_strip_folder(&folder);
+    }
+
+    /// Rebuild the filmstrip for `folder` and queue cover thumbnails that are
+    /// not yet cached.
+    fn set_strip_folder(&mut self, folder: &Path) {
+        let tiles = gallery::sibling_folder_tiles(folder);
+        let viewport_width = self.view.viewport[0];
+        self.strip.set_folder(tiles, folder, viewport_width);
+        self.submit_thumb_jobs();
+    }
+
+    fn submit_thumb_jobs(&self) {
+        let jobs: Vec<_> = self
+            .strip
+            .tiles
+            .iter()
+            .enumerate()
+            .filter(|(_, tile)| !self.strip_thumbs.contains(&tile.folder))
+            .map(|(index, tile)| gallery::ThumbnailJob {
+                index,
+                source: tile.cover.clone(),
+                edge: gallery::THUMB_EDGE,
+            })
+            .collect();
+        self.thumbnail_prefetcher.submit(jobs);
+    }
+
+    /// Open a different folder (filmstrip click or dropped directory): scan
+    /// it, retarget the strip and load its first image.
+    fn open_folder(&mut self, folder: PathBuf) {
+        let files = gallery::scan_folder(&folder);
+        if files.is_empty() {
+            self.set_status(format!("no supported CR3 or DNG files in {}", folder.display()));
+            return;
+        }
+        self.last_nav_direction = NavDirection::None;
+        self.gallery = files;
+        self.set_strip_folder(&folder);
+        self.open_gallery_index(0);
+    }
+
+    /// Drain finished cover thumbnails, upload them to the strip and free
+    /// LRU-evicted textures.
+    fn drain_thumbnails(&mut self) {
+        while let Some(ready) = self.thumbnail_prefetcher.try_recv() {
+            let Some(folder) = self.strip.tiles.get(ready.index).map(|tile| tile.folder.clone()) else {
+                continue;
+            };
+            let Some(gpu) = self.gpu.as_mut() else {
+                break;
+            };
+            let id =
+                gpu.filmstrip
+                    .upload_tile(&gpu.device, &gpu.queue, ready.width, ready.height, &ready.pixels);
+            if let Some(evicted) = self.strip_thumbs.insert(folder, id) {
+                gpu.filmstrip.remove_tile(evicted);
+            }
+            self.strip.dirty = true;
+        }
+        if self.strip.dirty
+            && let Some(window) = &self.window
+        {
+            window.request_redraw();
+        }
+    }
+
     fn open_dropped_path(&mut self, path: PathBuf) {
+        // A fresh drop restarts browsing, so no direction of travel is known.
+        self.last_nav_direction = NavDirection::None;
         let file_type = match fs::symlink_metadata(&path) {
             Ok(metadata) => metadata.file_type(),
             Err(error) => {
@@ -812,13 +1035,7 @@ impl App {
             return;
         }
         if file_type.is_dir() {
-            let files = gallery::scan_folder(&path);
-            if files.is_empty() {
-                self.set_status(format!("no supported CR3 or DNG files in {}", path.display()));
-                return;
-            }
-            self.gallery = files;
-            self.open_gallery_index(0);
+            self.open_folder(path);
         } else if file_type.is_file() && is_supported_raw(&path) {
             self.gallery = path
                 .parent()
@@ -830,6 +1047,9 @@ impl App {
                 .iter()
                 .position(|candidate| candidate == &path)
                 .unwrap_or(0);
+            if let Some(parent) = path.parent().map(Path::to_path_buf) {
+                self.set_strip_folder(&parent);
+            }
             self.open_gallery_index(index);
         } else {
             self.set_status("drop rejected: expected a supported CR3/DNG file or folder".into());
@@ -875,6 +1095,11 @@ impl App {
             _ => None,
         };
         if let Some(next) = next.filter(|next| *next < self.gallery.len()) {
+            self.last_nav_direction = match direction {
+                -1 => NavDirection::Backward,
+                1 => NavDirection::Forward,
+                _ => NavDirection::None,
+            };
             self.open_gallery_index(next);
         }
     }
@@ -970,10 +1195,12 @@ impl ApplicationHandler<WakeEvent> for App {
 
     fn about_to_wait(&mut self, _event_loop: &ActiveEventLoop) {
         self.drain_load_events();
+        self.drain_thumbnails();
     }
 
     fn user_event(&mut self, _event_loop: &ActiveEventLoop, _event: WakeEvent) {
         self.drain_load_events();
+        self.drain_thumbnails();
         if let Some(window) = &self.window {
             window.request_redraw();
         }
@@ -993,6 +1220,59 @@ impl ApplicationHandler<WakeEvent> for App {
                 WindowEvent::Resized(size) => {
                     if let Some(telemetry) = self.telemetry.as_mut() {
                         telemetry.resize(size);
+                    }
+                }
+                WindowEvent::ModifiersChanged(modifiers) => {
+                    self.modifiers = modifiers.state();
+                }
+                WindowEvent::MouseInput { state, button, .. } if button == MouseButton::Left => {
+                    self.telemetry_dragging = state == ElementState::Pressed;
+                    if !self.telemetry_dragging {
+                        self.telemetry_last_cursor = None;
+                    }
+                }
+                WindowEvent::CursorMoved { position, .. } => {
+                    if self.telemetry_dragging {
+                        if let Some(previous) = self.telemetry_last_cursor {
+                            if let Some(telemetry) = self.telemetry.as_mut() {
+                                // Grab-pan: dragging down pulls the content
+                                // down, i.e. scrolls back toward the top.
+                                telemetry.scroll_cards(previous.y as f32 - position.y as f32);
+                            }
+                        }
+                    }
+                    self.telemetry_last_cursor = Some(position);
+                }
+                WindowEvent::MouseWheel { delta, .. } => {
+                    if let Some(telemetry) = self.telemetry.as_mut() {
+                        let amount = match delta {
+                            MouseScrollDelta::LineDelta(_, y) => y,
+                            MouseScrollDelta::PixelDelta(position) => position.y as f32 / 80.0,
+                        };
+                        if self.modifiers.control_key() || self.modifiers.super_key() {
+                            telemetry.zoom_cards(1.12_f32.powf(amount));
+                        } else {
+                            telemetry.scroll_cards(-amount * 48.0);
+                        }
+                    }
+                }
+                WindowEvent::KeyboardInput { event, .. }
+                    if event.state == ElementState::Pressed && !event.repeat =>
+                {
+                    if let Some(telemetry) = self.telemetry.as_mut() {
+                        match event.physical_key {
+                            PhysicalKey::Code(KeyCode::Digit0) | PhysicalKey::Code(KeyCode::KeyF) => {
+                                telemetry.reset_cards_view();
+                            }
+                            PhysicalKey::Code(KeyCode::Equal) | PhysicalKey::Code(KeyCode::NumpadAdd) => {
+                                telemetry.zoom_cards(1.12);
+                            }
+                            PhysicalKey::Code(KeyCode::Minus)
+                            | PhysicalKey::Code(KeyCode::NumpadSubtract) => {
+                                telemetry.zoom_cards(1.0 / 1.12);
+                            }
+                            _ => {}
+                        }
                     }
                 }
                 WindowEvent::RedrawRequested => {
@@ -1023,9 +1303,18 @@ impl ApplicationHandler<WakeEvent> for App {
                     self.view.viewport = [size.width as f32, size.height as f32];
                     gpu.renderer.update_view(&gpu.queue, self.view);
                 }
+                self.strip.dirty = true;
             }
             WindowEvent::RedrawRequested => {
-                let display_submit = self.gpu.as_mut().and_then(GpuState::render);
+                if self.strip.dirty
+                    && let Some(gpu) = self.gpu.as_mut()
+                {
+                    let frame = self.strip.build_frame(&mut self.strip_thumbs);
+                    gpu.filmstrip.update(&gpu.device, &gpu.queue, &frame);
+                    self.strip.dirty = false;
+                }
+                let draw_strip = self.strip.visible && !self.strip.tiles.is_empty();
+                let display_submit = self.gpu.as_mut().and_then(|gpu| gpu.render(draw_strip));
                 if let Some(display_submit) = display_submit {
                     if let Some(pending) = self.pending_first_present.take() {
                         let current_generation = self.foreground_loader.current_generation();
@@ -1056,9 +1345,25 @@ impl ApplicationHandler<WakeEvent> for App {
                 self.last_cursor = Some(position);
             }
             WindowEvent::MouseInput { state, button, .. } if button == MouseButton::Left => {
-                self.dragging = state == ElementState::Pressed;
-                if !self.dragging {
-                    self.last_cursor = None;
+                let strip_click = state == ElementState::Pressed
+                    && self.strip.visible
+                    && self.last_cursor.is_some_and(|position| {
+                        rrrah_gpu::point_in_strip(position.y as f32, self.view.viewport[1])
+                    });
+                if strip_click {
+                    self.dragging = false;
+                    let clicked = self
+                        .last_cursor
+                        .and_then(|position| self.strip.tile_at(position.x as f32));
+                    if let Some(index) = clicked.filter(|index| Some(*index) != self.strip.current) {
+                        let folder = self.strip.tiles[index].folder.clone();
+                        self.open_folder(folder);
+                    }
+                } else {
+                    self.dragging = state == ElementState::Pressed;
+                    if !self.dragging {
+                        self.last_cursor = None;
+                    }
                 }
             }
             WindowEvent::MouseWheel { delta, .. } => {
@@ -1066,8 +1371,19 @@ impl ApplicationHandler<WakeEvent> for App {
                     MouseScrollDelta::LineDelta(_, y) => y,
                     MouseScrollDelta::PixelDelta(position) => position.y as f32 / 80.0,
                 };
-                self.view.zoom = (self.view.zoom * 1.12_f32.powf(amount)).clamp(0.02, 128.0);
-                self.update_view();
+                let over_strip = self.strip.visible
+                    && self.last_cursor.is_some_and(|position| {
+                        rrrah_gpu::point_in_strip(position.y as f32, self.view.viewport[1])
+                    });
+                if over_strip {
+                    self.strip.scroll_by(-amount * 64.0, self.view.viewport[0]);
+                    if let Some(window) = &self.window {
+                        window.request_redraw();
+                    }
+                } else {
+                    self.view.zoom = (self.view.zoom * 1.12_f32.powf(amount)).clamp(0.02, 128.0);
+                    self.update_view();
+                }
             }
             WindowEvent::KeyboardInput { event, .. }
                 if event.state == ElementState::Pressed && !event.repeat =>
@@ -1075,6 +1391,12 @@ impl ApplicationHandler<WakeEvent> for App {
                 match event.physical_key {
                     PhysicalKey::Code(KeyCode::ArrowLeft) => self.navigate_gallery(-1),
                     PhysicalKey::Code(KeyCode::ArrowRight) => self.navigate_gallery(1),
+                    PhysicalKey::Code(KeyCode::KeyG) => {
+                        self.strip.visible = !self.strip.visible;
+                        if let Some(window) = &self.window {
+                            window.request_redraw();
+                        }
+                    }
                     PhysicalKey::Code(KeyCode::KeyF) => {
                         self.view.zoom = 1.0;
                         self.view.pan = [0.0, 0.0];
@@ -1192,6 +1514,24 @@ impl TelemetryState {
         self.window.request_redraw();
     }
 
+    fn scroll_cards(&mut self, delta: f32) {
+        self.hud.scroll_cards_by(delta);
+        self.rebuild_hud();
+        self.window.request_redraw();
+    }
+
+    fn zoom_cards(&mut self, factor: f32) {
+        self.hud.zoom_cards_by(factor);
+        self.rebuild_hud();
+        self.window.request_redraw();
+    }
+
+    fn reset_cards_view(&mut self) {
+        self.hud.reset_cards_view();
+        self.rebuild_hud();
+        self.window.request_redraw();
+    }
+
     fn rebuild_hud(&mut self) {
         let pipeline_cards = self.pipeline.cards();
         let cache_hud = self.cache_snapshot.map(CacheTelemetrySnapshot::format_hud);
@@ -1305,6 +1645,7 @@ struct GpuState {
     config: wgpu::SurfaceConfiguration,
     size: PhysicalSize<u32>,
     renderer: RawRenderer,
+    filmstrip: FilmstripRenderer,
 }
 
 impl GpuState {
@@ -1349,6 +1690,8 @@ impl GpuState {
         };
         surface.configure(&device, &config);
         let renderer = RawRenderer::new(&device, surface_format);
+        let filmstrip =
+            FilmstripRenderer::new(&device, surface_format, [size.width as f32, size.height as f32]);
         Ok(Self {
             _instance: instance,
             window,
@@ -1358,6 +1701,7 @@ impl GpuState {
             config,
             size,
             renderer,
+            filmstrip,
         })
     }
 
@@ -1369,9 +1713,11 @@ impl GpuState {
         self.config.width = size.width;
         self.config.height = size.height;
         self.surface.configure(&self.device, &self.config);
+        self.filmstrip
+            .resize(&self.queue, [size.width as f32, size.height as f32]);
     }
 
-    fn render(&mut self) -> Option<FrameSubmitTimings> {
+    fn render(&mut self, draw_strip: bool) -> Option<FrameSubmitTimings> {
         let total_started = Instant::now();
         let surface_acquire_started = Instant::now();
         let output = match self.surface.get_current_texture() {
@@ -1400,6 +1746,9 @@ impl GpuState {
                 label: Some("Rrrah frame encoder"),
             });
         self.renderer.encode(&mut encoder, &view);
+        if draw_strip {
+            self.filmstrip.encode(&mut encoder, &view);
+        }
         let command_buffer = encoder.finish();
         let frame_encode = frame_encode_started.elapsed();
         let queue_submit_started = Instant::now();
