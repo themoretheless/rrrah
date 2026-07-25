@@ -13,9 +13,7 @@ use std::{
 };
 
 use bytemuck::{Pod, Zeroable};
-use rrrah_core::{
-    DecodedMosaic, FrameError, Photometric, camera_to_linear_srgb, luminance_normalize_wb_gains,
-};
+use rrrah_core::{DecodedMosaic, FrameError, Photometric, camera_to_linear_srgb};
 use thiserror::Error;
 use wgpu::util::DeviceExt;
 
@@ -66,10 +64,10 @@ pub struct GpuUploadTimings {
 /// Default halo of sensor rows/columns duplicated around each tile so bilinear
 /// sampling at tile borders never crosses an array-layer boundary.
 pub const DEFAULT_TILE_HALO: u32 = 1;
-/// Default upper bound for the interior tile size. The experiment-C sweep
-/// (docs/experiments/C.md) measured the Apple M5 optimum at tile 1024 with
-/// halo 1: 81 ms vs 124 ms on a 100 MP frame and 4.1 ms vs 18.2 ms on a 6 MP
-/// frame compared with the legacy 4096 bound.
+/// Default aligned interior tile target. The experiment-C sweep
+/// (`docs/experiments/C.md`) measured the Apple M5 optimum around tile 1024
+/// with halo 1. The planner may instead use one frame-sized tile when it fits
+/// the adapter and materially reduces the total atlas allocation.
 pub const DEFAULT_MAX_TILE_SIZE: u32 = 1024;
 /// Minimum interior tile size accepted by the atlas planner.
 pub const MIN_TILE_SIZE: u32 = 32;
@@ -78,6 +76,10 @@ pub const MIN_TILE_SIZE: u32 = 32;
 /// (128 samples * 2 bytes = 256 bytes) and `row_pack` degenerates to a
 /// copy-free upload (experiment C2: another 5-15% off total).
 const EXTENT_ALIGNMENT_SAMPLES: u32 = 128;
+/// An unaligned single-layer texture avoids many tile uploads, but can require
+/// a row-repack. Select it only when it saves at least one eighth of the atlas,
+/// enough to cover the measured 5–15% alignment advantage.
+const SINGLE_TILE_MAX_ATLAS_FRACTION: (u64, u64) = (7, 8);
 
 /// Optional overrides for the atlas tiling used by
 /// [`RawRenderer::upload_mosaic_with_tiling`]. `None` keeps the defaults; the
@@ -113,9 +115,9 @@ pub fn plan_tiling(
     overrides: TilingOverrides,
 ) -> Result<TilingPlan, GpuError> {
     let tile_halo = overrides.tile_halo.unwrap_or(DEFAULT_TILE_HALO);
-    let tile_size = overrides.tile_size.unwrap_or_else(|| {
-        default_tile_size(width, height, max_dimension, max_array_layers, tile_halo)
-    });
+    let tile_size = overrides
+        .tile_size
+        .unwrap_or_else(|| default_tile_size(width, height, max_dimension, max_array_layers, tile_halo));
     let texture_extent = tile_size.saturating_add(2 * tile_halo);
     if tile_size < MIN_TILE_SIZE || texture_extent > max_dimension {
         if overrides.tile_size.is_some() || overrides.tile_halo.is_some() {
@@ -158,10 +160,9 @@ pub fn plan_tiling(
     })
 }
 
-/// Default interior tile size when no explicit override is given: the C2
-/// optimum (bounded by [`DEFAULT_MAX_TILE_SIZE`]), with the stored texture
-/// extent rounded down to a multiple of [`EXTENT_ALIGNMENT_SAMPLES`], grown
-/// as needed so the tile grid still fits `max_array_layers`.
+/// Default interior tile size when no explicit override is given: start at the
+/// aligned C2 optimum, grow as needed for the adapter's layer limit, then use a
+/// single frame-sized tile when it fits and materially reduces atlas bytes.
 fn default_tile_size(
     width: u32,
     height: u32,
@@ -178,7 +179,36 @@ fn default_tile_size(
         };
         tile = grown;
     }
+    if let Some(single_tile) = materially_smaller_single_tile(width, height, tile, max_tile, tile_halo) {
+        tile = single_tile;
+    }
     tile
+}
+
+/// Returns one frame-sized tile when it fits the adapter and its square atlas
+/// is at most 7/8 the size of the aligned multi-layer plan.
+fn materially_smaller_single_tile(
+    width: u32,
+    height: u32,
+    current_tile: u32,
+    max_tile: u32,
+    tile_halo: u32,
+) -> Option<u32> {
+    let single_tile = width.max(height);
+    if !(MIN_TILE_SIZE..=max_tile).contains(&single_tile) {
+        return None;
+    }
+    let current_texels = atlas_texels(width, height, current_tile, tile_halo)?;
+    let single_texels = atlas_texels(width, height, single_tile, tile_halo)?;
+    let (numerator, denominator) = SINGLE_TILE_MAX_ATLAS_FRACTION;
+    (single_texels.checked_mul(denominator)? <= current_texels.checked_mul(numerator)?).then_some(single_tile)
+}
+
+fn atlas_texels(width: u32, height: u32, tile_size: u32, tile_halo: u32) -> Option<u64> {
+    let extent = tile_size.checked_add(tile_halo.checked_mul(2)?)?;
+    u64::from(extent)
+        .checked_mul(u64::from(extent))?
+        .checked_mul(layer_count(width, height, tile_size))
 }
 
 /// Rounds the stored extent `tile_size + 2 * tile_halo` down to a multiple of
@@ -239,6 +269,11 @@ const HUD_CARD_THREE_COLUMN_LIMIT: usize = 15;
 const HUD_CARD_FOUR_COLUMN_LIMIT: usize = 24;
 const HUD_CARD_COMPACT_MAX_WIDTH: f32 = 420.0;
 const HUD_CARD_COMPACT_MAX_HEIGHT: f32 = 120.0;
+/// Default card-view zoom: slightly reduced so long pipelines fit more of the
+/// flow on screen; the user can zoom with Ctrl+wheel and scroll with the wheel.
+const HUD_CARD_DEFAULT_ZOOM: f32 = 0.75;
+const HUD_CARD_MIN_ZOOM: f32 = 0.3;
+const HUD_CARD_MAX_ZOOM: f32 = 3.0;
 
 /// One structured block in a telemetry HUD.
 ///
@@ -435,6 +470,9 @@ pub struct HudRenderer {
     vertex_capacity: u64,
     vertex_count: u32,
     viewport: [f32; 2],
+    card_zoom: f32,
+    card_scroll: f32,
+    card_max_scroll: f32,
 }
 
 impl HudRenderer {
@@ -533,6 +571,9 @@ impl HudRenderer {
             vertex_capacity,
             vertex_count: 0,
             viewport,
+            card_zoom: HUD_CARD_DEFAULT_ZOOM,
+            card_scroll: 0.0,
+            card_max_scroll: 0.0,
         }
     }
 
@@ -613,6 +654,29 @@ impl HudRenderer {
         self.vertex_count = u32::try_from(vertices.len()).unwrap_or(u32::MAX);
     }
 
+    /// Multiplies the card-view zoom, clamped to a readable range. Callers
+    /// should rebuild the card buffer afterwards via [`Self::update_cards`].
+    pub fn zoom_cards_by(&mut self, factor: f32) {
+        if factor.is_finite() && factor > 0.0 {
+            self.card_zoom = (self.card_zoom * factor).clamp(HUD_CARD_MIN_ZOOM, HUD_CARD_MAX_ZOOM);
+        }
+    }
+
+    /// Scrolls the card view vertically by `delta` pixels (positive moves the
+    /// content up, revealing lower cards). Clamped to the last known content
+    /// height; the bound is refreshed on every [`Self::update_cards`].
+    pub fn scroll_cards_by(&mut self, delta: f32) {
+        if delta.is_finite() {
+            self.card_scroll = (self.card_scroll + delta).clamp(0.0, self.card_max_scroll);
+        }
+    }
+
+    /// Restores the default reduced zoom and returns to the top of the flow.
+    pub fn reset_cards_view(&mut self) {
+        self.card_zoom = HUD_CARD_DEFAULT_ZOOM;
+        self.card_scroll = 0.0;
+    }
+
     /// Replaces the HUD contents with structured telemetry cards.
     ///
     /// Cards are laid out in input order and descriptions are word-wrapped to
@@ -625,12 +689,68 @@ impl HudRenderer {
             return;
         }
 
-        let bounds = hud_card_layout(self.viewport, cards.len());
-        let scale = hud_card_scale_for_count(self.viewport, cards.len());
+        // Lay the flow out in a virtual viewport enlarged by 1/zoom so cards
+        // shrink as the user zooms out, then apply the scroll offset. Quads
+        // that land outside the surface are clipped by the rasterizer, but
+        // fully off-screen cards are skipped to keep the vertex buffer small.
+        let zoom = self.card_zoom;
+        let virtual_viewport = [self.viewport[0] / zoom, self.viewport[1] / zoom];
+        let mut bounds = hud_card_layout(virtual_viewport, cards.len());
+        let base_scale = hud_card_scale_for_count(virtual_viewport, cards.len());
+        let content_bottom =
+            bounds.iter().map(|b| b.y + b.height).fold(0.0_f32, f32::max) + HUD_CARD_MARGIN * base_scale;
+        self.card_max_scroll = (content_bottom * zoom - self.viewport[1]).max(0.0);
+        self.card_scroll = self.card_scroll.clamp(0.0, self.card_max_scroll);
+        let scroll = self.card_scroll;
+        let scale = base_scale * zoom;
+        for b in &mut bounds {
+            b.x *= zoom;
+            b.y = b.y * zoom - scroll;
+            b.width *= zoom;
+            b.height *= zoom;
+        }
+
+        let viewport_height = self.viewport[1];
         let mut vertices = Vec::new();
         for (card, bounds) in cards.iter().zip(bounds) {
+            if bounds.y + bounds.height < 0.0 || bounds.y > viewport_height {
+                continue;
+            }
             push_hud_card(&mut vertices, card, bounds, scale, cards.len());
         }
+
+        // Scroll position indicator along the right edge, shown only when the
+        // flow overflows the viewport. The thumb size mirrors the visible
+        // fraction and its position mirrors scroll progress.
+        if self.card_max_scroll > 0.0 {
+            let viewport_width = self.viewport[0];
+            let content_height = content_bottom * zoom;
+            let track_x = viewport_width - 7.0;
+            let track_height = (viewport_height - 16.0).max(0.0);
+            if track_height > 0.0 {
+                push_quad(
+                    &mut vertices,
+                    track_x,
+                    8.0,
+                    3.0,
+                    track_height,
+                    [0.32, 0.38, 0.46, 0.45],
+                );
+                let thumb_height =
+                    (track_height * viewport_height / content_height).clamp(20.0, track_height);
+                let thumb_travel = track_height - thumb_height;
+                let thumb_y = 8.0 + thumb_travel * (scroll / self.card_max_scroll);
+                push_quad(
+                    &mut vertices,
+                    track_x,
+                    thumb_y,
+                    3.0,
+                    thumb_height,
+                    [0.62, 0.72, 0.84, 0.9],
+                );
+            }
+        }
+
         if vertices.is_empty() {
             self.vertex_count = 0;
             return;
@@ -1048,29 +1168,18 @@ impl Default for GpuParameters {
     }
 }
 
-/// Luminance-normalizes green-relative WB gains at the uniform boundary
-/// (`docs/EDITOR_MATH.md:24-27`, experiment `docs/experiments/d.md` H2).
+/// Preserve the decoder's camera-space correction gains at the display
+/// boundary.
 ///
-/// Decode backends deliver green-relative gains `[gR, gG, gB, gG2]` (DNG:
-/// `AsShotNeutral^-1` normalized to green; CR3: CTMD R/G and B/G ratios).
-/// Applied raw, their Rec.709 weighted luminance differs from one, which
-/// shifts display exposure by a light-source-dependent amount (measured
-/// −0.16…−0.21 stops in experiment D). Dividing every component by that
-/// luminance keeps the channel ratios — and thus the white balance — while
-/// making the operation exposure-neutral. The fourth (second green)
-/// component is scaled by the same factor so both green planes stay equal.
-///
-/// Defensive: backends already validate their WB evidence, so `None` from
-/// the core helper is unexpected; invalid gains are uploaded unchanged with
-/// a warning instead of failing the whole mosaic upload.
-fn display_ready_white_balance(gains: [f32; 4]) -> [f32; 4] {
-    let rgb = [gains[0], gains[1], gains[2]];
-    let Some(normalized) = luminance_normalize_wb_gains(rgb) else {
-        log::warn!("invalid white-balance gains {gains:?}; uploading them without luminance normalization");
-        return gains;
-    };
-    let scale = normalized[1] / gains[1];
-    [normalized[0], normalized[1], normalized[2], gains[3] * scale]
+/// Decode backends already resolve metadata to multiplicative gains such that
+/// a sensor response to the as-shot neutral becomes achromatic. Their common
+/// green-normalized scale is part of that backend contract. Rec.709 luminance
+/// weights describe linear display RGB, not camera RGB, so applying them here
+/// would introduce an illuminant-dependent exposure shift before the camera
+/// matrix. Exposure remains a separate scene-linear control.
+#[inline]
+const fn display_white_balance(gains: [f32; 4]) -> [f32; 4] {
+    gains
 }
 
 #[derive(Debug)]
@@ -1242,7 +1351,7 @@ impl RawRenderer {
         self.parameters.cfa = cfa;
         self.parameters.black = black;
         self.parameters.white = white;
-        self.parameters.white_balance = display_ready_white_balance(metadata.white_balance);
+        self.parameters.white_balance = display_white_balance(metadata.white_balance);
         self.parameters.camera_to_rgb_0 =
             [camera_to_rgb[0][0], camera_to_rgb[0][1], camera_to_rgb[0][2], 0.0];
         self.parameters.camera_to_rgb_1 =
@@ -1506,7 +1615,11 @@ pub enum GpuError {
     #[error("GPU adapter cannot fit a tile in texture limit {max}")]
     TileTooLargeForAdapter { max: u32 },
     #[error("invalid tiling override: tile_size {tile_size}, halo {tile_halo}, texture limit {max}")]
-    InvalidTilingOverride { tile_size: u32, tile_halo: u32, max: u32 },
+    InvalidTilingOverride {
+        tile_size: u32,
+        tile_halo: u32,
+        max: u32,
+    },
     #[error("RAW tile grid exceeds the GPU texture-array layer limit")]
     TooManyTiles,
     #[error("eager GPU atlas requires {bytes} bytes; limit is {max} bytes")]
@@ -1517,33 +1630,13 @@ pub enum GpuError {
 
 #[cfg(test)]
 mod tests {
+    use rrrah_core::{apply_3x3, camera_to_linear_srgb};
+
     use super::{
-        GpuError, GpuParameters, HUD_SHADER, TilingOverrides, display_ready_white_balance, floor_to_usize,
+        GpuError, GpuParameters, HUD_SHADER, TilingOverrides, display_white_balance, floor_to_usize,
         glyph_rows, hud_card_layout, hud_card_metrics, hud_card_metrics_for_count, hud_card_scale,
         hud_card_scale_for_count, mosaic_bytes, plan_tiling, tile_with_halo, wrap_hud_text,
     };
-    use rrrah_core::WB_LUMINANCE_WEIGHTS;
-
-    fn wb_luminance(gains: [f32; 3]) -> f32 {
-        gains[0] * WB_LUMINANCE_WEIGHTS[0]
-            + gains[1] * WB_LUMINANCE_WEIGHTS[1]
-            + gains[2] * WB_LUMINANCE_WEIGHTS[2]
-    }
-
-    /// Contract for the uniform boundary (`docs/EDITOR_MATH.md:24-27`): the
-    /// uploaded gains must have weighted luminance exactly one while keeping
-    /// the green-relative channel ratios of the source gains.
-    fn assert_exposure_neutral_white_balance(raw_gains: [f32; 4]) {
-        let uploaded = display_ready_white_balance(raw_gains);
-        let luminance = wb_luminance([uploaded[0], uploaded[1], uploaded[2]]);
-        assert!((luminance - 1.0).abs() < 1.0e-6, "luminance {luminance} != 1.0");
-        // Green-relative ratios are preserved: the white balance itself is
-        // unchanged, only the overall scale moves.
-        assert!((uploaded[0] / uploaded[1] - raw_gains[0] / raw_gains[1]).abs() < 1.0e-6);
-        assert!((uploaded[2] / uploaded[1] - raw_gains[2] / raw_gains[1]).abs() < 1.0e-6);
-        // The second green plane is scaled by the same factor as the first.
-        assert!((uploaded[3] / uploaded[1] - raw_gains[3] / raw_gains[1]).abs() < 1.0e-6);
-    }
 
     /// Deliberately scalar oracle for the optimized row-wise tile packer.
     ///
@@ -1595,53 +1688,48 @@ mod tests {
     }
 
     #[test]
-    fn uploaded_white_balance_is_exposure_neutral_for_tungsten() {
-        // Representative green-relative gains around ~2850 K (experiment D).
-        assert_exposure_neutral_white_balance([1.9, 1.0, 1.4, 1.0]);
-        let uploaded = display_ready_white_balance([1.9, 1.0, 1.4, 1.0]);
-        // Unnormalized luminance is 1.22022 (+0.287 stops); normalization
-        // must pull every channel down by that factor.
-        assert!(uploaded.iter().all(|gain| *gain < 1.9));
-        assert!(uploaded[1] < 1.0);
+    fn display_keeps_decoder_white_balance_gains_bit_exact() {
+        let gains = [1_678.0 / 1_024.0, 1.0, 1_659.0 / 1_024.0, 1.0];
+        assert_eq!(
+            display_white_balance(gains).map(f32::to_bits),
+            gains.map(f32::to_bits)
+        );
     }
 
     #[test]
-    fn uploaded_white_balance_is_exposure_neutral_for_cr3_fixture() {
-        // Canon EOS R8 CTMD fixture gains 1678/1024 and 1659/1024.
-        let red = 1_678.0 / 1_024.0;
-        let blue = 1_659.0 / 1_024.0;
-        let raw_gains = [red, 1.0, blue, 1.0];
-        // The fixture must actually exercise the normalization (luminance
-        // 1.18055, i.e. +0.240 stops before this fix).
-        assert!(wb_luminance([red, 1.0, blue]) > 1.1);
-        assert_exposure_neutral_white_balance(raw_gains);
-        let uploaded = display_ready_white_balance(raw_gains);
-        assert!(uploaded[0] < red && uploaded[2] < blue);
-    }
+    fn direct_white_balance_preserves_backend_neutral_contract() {
+        let decoder_cases: [[f32; 4]; 2] = [
+            [1_678.0 / 1_024.0, 1.0, 1_659.0 / 1_024.0, 1.0],
+            [2.0, 1.0, 1.25, 1.0],
+        ];
+        let camera_to_rgb = camera_to_linear_srgb([
+            [0.9539, -0.2795, -0.1224],
+            [-0.4175, 1.1998, 0.2458],
+            [-0.0465, 0.1755, 0.6048],
+            [0.0; 3],
+        ])
+        .expect("test camera matrix must be invertible");
 
-    #[test]
-    fn uploaded_white_balance_keeps_neutral_gains_neutral() {
-        let uploaded = display_ready_white_balance([1.0; 4]);
-        for gain in uploaded {
-            assert!((gain - 1.0).abs() < 1.0e-6, "gain {gain} != 1.0");
+        for decoder_gains in decoder_cases {
+            let as_shot_neutral = [
+                decoder_gains[0].recip(),
+                decoder_gains[1].recip(),
+                decoder_gains[2].recip(),
+            ];
+            let uploaded_gains = display_white_balance(decoder_gains);
+            let corrected = [
+                uploaded_gains[0] * as_shot_neutral[0],
+                uploaded_gains[1] * as_shot_neutral[1],
+                uploaded_gains[2] * as_shot_neutral[2],
+            ];
+            for channel in corrected {
+                assert!((channel - 1.0).abs() < f32::EPSILON);
+            }
+            let display_neutral = apply_3x3(camera_to_rgb, corrected);
+            for channel in display_neutral {
+                assert!((channel - 1.0).abs() < 2.0e-5);
+            }
         }
-    }
-
-    #[test]
-    fn invalid_white_balance_gains_are_uploaded_unchanged() {
-        // Decode backends validate WB evidence before this point; if invalid
-        // gains still arrive, upload them verbatim rather than failing the
-        // whole mosaic upload (bit-exact comparison avoids float_cmp).
-        let nan_gains = [f32::NAN, 1.0, 1.0, 1.0];
-        assert_eq!(
-            display_ready_white_balance(nan_gains).map(f32::to_bits),
-            nan_gains.map(f32::to_bits)
-        );
-        let zero_red = [0.0, 1.0, 1.4, 1.0];
-        assert_eq!(
-            display_ready_white_balance(zero_red).map(f32::to_bits),
-            zero_red.map(f32::to_bits)
-        );
     }
 
     #[test]
@@ -2064,6 +2152,34 @@ mod tests {
     }
 
     #[test]
+    fn default_tiling_uses_one_small_frame_tile_when_atlas_is_materially_smaller() {
+        let plan = plan_tiling(2048, 1536, 16_384, 2048, TilingOverrides::default()).unwrap();
+        assert_eq!(plan.tile_size, 2048);
+        assert_eq!(plan.texture_extent, 2050);
+        assert_eq!(plan.tile_grid, [1, 1]);
+        assert_eq!(plan.atlas_bytes, 2050_u64 * 2050 * 2);
+    }
+
+    #[test]
+    fn default_tiling_avoids_the_4096_frame_regression() {
+        // The aligned 1022 plan needs 20 layers (40 MiB), while one exact
+        // frame-sized tile needs about 32 MiB and measured 15–24% faster.
+        let plan = plan_tiling(4096, 3072, 16_384, 2048, TilingOverrides::default()).unwrap();
+        assert_eq!(plan.tile_size, 4096);
+        assert_eq!(plan.texture_extent, 4098);
+        assert_eq!(plan.tile_grid, [1, 1]);
+        assert_eq!(plan.atlas_bytes, 4098_u64 * 4098 * 2);
+    }
+
+    #[test]
+    fn default_tiling_keeps_aligned_tiles_when_one_layer_is_not_smaller() {
+        let plan = plan_tiling(6240, 4160, 16_384, 2048, TilingOverrides::default()).unwrap();
+        assert_eq!(plan.tile_size, 1022);
+        assert_eq!(plan.texture_extent, 1024);
+        assert_eq!(plan.tile_grid, [7, 5]);
+    }
+
+    #[test]
     fn default_tiling_shrinks_for_small_adapters() {
         // Adapter limited to 4096: the C2 default still fits, so the tile
         // stays at the aligned 1022 rather than the legacy 4094.
@@ -2080,14 +2196,14 @@ mod tests {
     }
 
     #[test]
-    fn default_tiling_grows_to_fit_array_layer_limit() {
-        // 8192x8192 at tile 1022 would need 9x9 = 81 layers; with a budget of
-        // 8 the default path doubles the extent until the grid fits.
+    fn default_tiling_uses_one_frame_tile_when_layer_growth_would_waste_atlas_space() {
+        // 8192x8192 at tile 1022 needs 81 layers. One exact tile fits this
+        // adapter and is much smaller than the aligned 2x2 fallback.
         let plan = plan_tiling(8192, 8192, 16_384, 8, TilingOverrides::default()).unwrap();
-        assert_eq!(plan.tile_size, 8190);
-        assert_eq!(plan.texture_extent, 8192);
-        assert_eq!(plan.tile_grid, [2, 2]);
-        assert_eq!(plan.layer_count, 4);
+        assert_eq!(plan.tile_size, 8192);
+        assert_eq!(plan.texture_extent, 8194);
+        assert_eq!(plan.tile_grid, [1, 1]);
+        assert_eq!(plan.layer_count, 1);
     }
 
     #[test]
@@ -2100,7 +2216,10 @@ mod tests {
 
     #[test]
     fn tiling_override_is_applied_verbatim() {
-        let overrides = TilingOverrides { tile_size: Some(512), tile_halo: Some(2) };
+        let overrides = TilingOverrides {
+            tile_size: Some(512),
+            tile_halo: Some(2),
+        };
         let plan = plan_tiling(2048, 1536, 16_384, 2048, overrides).unwrap();
         assert_eq!(plan.tile_size, 512);
         assert_eq!(plan.tile_halo, 2);
@@ -2112,27 +2231,44 @@ mod tests {
 
     #[test]
     fn tiling_override_below_minimum_is_rejected() {
-        let overrides = TilingOverrides { tile_size: Some(16), tile_halo: None };
+        let overrides = TilingOverrides {
+            tile_size: Some(16),
+            tile_halo: None,
+        };
         let error = plan_tiling(64, 64, 16_384, 2048, overrides).unwrap_err();
         assert!(matches!(
             error,
-            GpuError::InvalidTilingOverride { tile_size: 16, tile_halo: 1, max: 16_384 }
+            GpuError::InvalidTilingOverride {
+                tile_size: 16,
+                tile_halo: 1,
+                max: 16_384
+            }
         ));
     }
 
     #[test]
     fn tiling_override_exceeding_texture_limit_is_rejected() {
-        let overrides = TilingOverrides { tile_size: Some(4096), tile_halo: Some(4) };
+        let overrides = TilingOverrides {
+            tile_size: Some(4096),
+            tile_halo: Some(4),
+        };
         let error = plan_tiling(4096, 4096, 4096, 2048, overrides).unwrap_err();
         assert!(matches!(
             error,
-            GpuError::InvalidTilingOverride { tile_size: 4096, tile_halo: 4, max: 4096 }
+            GpuError::InvalidTilingOverride {
+                tile_size: 4096,
+                tile_halo: 4,
+                max: 4096
+            }
         ));
     }
 
     #[test]
     fn tiling_override_respects_array_layer_limit() {
-        let overrides = TilingOverrides { tile_size: Some(32), tile_halo: None };
+        let overrides = TilingOverrides {
+            tile_size: Some(32),
+            tile_halo: None,
+        };
         // 128x64 at tile 32 -> 4x2 = 8 layers, limit 4.
         let error = plan_tiling(128, 64, 16_384, 4, overrides).unwrap_err();
         assert!(matches!(error, GpuError::TooManyTiles));

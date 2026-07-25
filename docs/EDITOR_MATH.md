@@ -21,10 +21,16 @@ metadata and `white <= black`.
 
 Exposure is scene-linear: `E = 2^stops`, `rgb' = E * rgb`.
 
-WB uses a diagonal matrix. With green-normalized camera gains:
+WB uses a diagonal matrix in camera space. Format backends provide resolved
+multiplicative correction gains `g` such that
+`diag(g) * AsShotNeutral = [k, k, k]`, conventionally with green gain equal to
+one. The renderer uploads those gains unchanged. Their common scale defines the
+camera-neutral exposure convention; exposure adjustment remains a separate
+scene-linear operation.
 
-`g_c = (WB_c / WB_G)^-1`, then normalize by weighted luminance
-`0.2126*gR + 0.7152*gG + 0.0722*gB` to avoid changing exposure.
+Do not apply Rec.709 luminance weights to camera-space gains. Those weights are
+defined only after the camera-to-linear-sRGB transform and would introduce an
+illuminant-dependent exposure shift here.
 
 Color matrix:
 

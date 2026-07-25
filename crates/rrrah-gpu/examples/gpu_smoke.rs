@@ -12,6 +12,9 @@
 //!   CSV row per configuration with per-phase p50 timings from
 //!   [`GpuUploadTimings`]. Render timing is skipped in sweep mode.
 //! - `RRRAH_GPU_SWEEP_REPS=<n>` — override the sweep repetition count.
+//! - `RRRAH_GPU_UPLOAD_AB=1` — counterbalanced current-default vs legacy-4096
+//!   upload A/B, with raw samples plus p50/p95 summaries.
+//! - `RRRAH_GPU_UPLOAD_AB_REPS=<n>` — override A/B repetitions per variant.
 
 #![allow(
     clippy::cast_possible_truncation,
@@ -47,6 +50,9 @@ const ENV_TILE_SIZE: &str = "RRRAH_GPU_TILE_SIZE";
 const ENV_TILE_HALO: &str = "RRRAH_GPU_TILE_HALO";
 const ENV_SWEEP: &str = "RRRAH_GPU_SWEEP";
 const ENV_SWEEP_REPS: &str = "RRRAH_GPU_SWEEP_REPS";
+const ENV_UPLOAD_AB: &str = "RRRAH_GPU_UPLOAD_AB";
+const ENV_UPLOAD_AB_REPS: &str = "RRRAH_GPU_UPLOAD_AB_REPS";
+const UPLOAD_AB_REPS: usize = 16;
 
 fn main() {
     if let Err(error) = pollster::block_on(run()) {
@@ -93,7 +99,10 @@ async fn run() -> Result<(), Box<dyn std::error::Error>> {
         limits.max_buffer_size
     );
 
-    if env_flag(ENV_SWEEP) {
+    if env_flag(ENV_UPLOAD_AB) {
+        let reps = env_u32(ENV_UPLOAD_AB_REPS).map_or(UPLOAD_AB_REPS, |value| value.max(1) as usize);
+        run_upload_ab(&device, &queue, &info, reps)
+    } else if env_flag(ENV_SWEEP) {
         let reps = env_u32(ENV_SWEEP_REPS).map_or(SWEEP_REPS, |value| value.max(1) as usize);
         run_sweep(&device, &queue, &info, reps)
     } else {
@@ -102,7 +111,10 @@ async fn run() -> Result<(), Box<dyn std::error::Error>> {
             tile_halo: env_u32(ENV_TILE_HALO),
         };
         if tiling.tile_size.is_some() || tiling.tile_halo.is_some() {
-            eprintln!("gpu_smoke: tiling override tile_size={:?} tile_halo={:?}", tiling.tile_size, tiling.tile_halo);
+            eprintln!(
+                "gpu_smoke: tiling override tile_size={:?} tile_halo={:?}",
+                tiling.tile_size, tiling.tile_halo
+            );
         }
         run_normal(&device, &queue, &info, &limits, tiling)
     }
@@ -237,6 +249,127 @@ fn run_normal(
     Ok(())
 }
 
+/// Counterbalanced upload comparison between the current planner default and
+/// the legacy 4096/halo-1 geometry. Alternating AB/BA order limits warm-up and
+/// thermal drift bias; every sample is followed by an empty submission wait so
+/// deferred queue work cannot leak into the next variant.
+fn run_upload_ab(
+    device: &wgpu::Device,
+    queue: &wgpu::Queue,
+    info: &wgpu::AdapterInfo,
+    reps: usize,
+) -> Result<(), Box<dyn std::error::Error>> {
+    const VARIANTS: [(&str, TilingOverrides); 2] = [
+        (
+            "current_default",
+            TilingOverrides {
+                tile_size: None,
+                tile_halo: None,
+            },
+        ),
+        (
+            "legacy_4096",
+            TilingOverrides {
+                tile_size: Some(4096),
+                tile_halo: Some(1),
+            },
+        ),
+    ];
+    eprintln!("gpu_smoke: counterbalanced upload A/B, {reps} reps per variant");
+    println!(
+        "kind,adapter_backend,adapter_name,raw_width,raw_height,variant,round,sequence,tile_size,tile_halo,tile_count,atlas_bytes,upload_total_ms,upload_total_p95_ms,enqueue_wall_ms,completed_wall_ms"
+    );
+    let limits = device.limits();
+
+    for &(raw_width, raw_height) in SWEEP_RAW_SIZES {
+        let mosaic = synthetic_mosaic(raw_width, raw_height)?;
+        // Two warm-up rounds, AB then BA: each variant gets two uploads and
+        // occupies each sequence position once before measurement.
+        for warmup_round in 0..2 {
+            let order = if warmup_round % 2 == 0 { [0, 1] } else { [1, 0] };
+            for index in order {
+                let tiling = VARIANTS[index].1;
+                let mut renderer = RawRenderer::new(device, wgpu::TextureFormat::Rgba8UnormSrgb);
+                renderer.upload_mosaic_with_tiling(device, queue, &mosaic, tiling)?;
+                let submission = queue.submit([]);
+                device.poll(wgpu::PollType::Wait {
+                    submission_index: Some(submission),
+                    timeout: None,
+                })?;
+            }
+        }
+
+        let mut timings = [Vec::with_capacity(reps), Vec::with_capacity(reps)];
+        let mut enqueue_walls = [Vec::with_capacity(reps), Vec::with_capacity(reps)];
+        let mut completed_walls = [Vec::with_capacity(reps), Vec::with_capacity(reps)];
+        for round in 0..reps {
+            let order = if round % 2 == 0 { [0, 1] } else { [1, 0] };
+            for (sequence, index) in order.into_iter().enumerate() {
+                let (variant, tiling) = VARIANTS[index];
+                let plan = plan_tiling(
+                    raw_width,
+                    raw_height,
+                    limits.max_texture_dimension_2d,
+                    limits.max_texture_array_layers,
+                    tiling,
+                )?;
+                let mut renderer = RawRenderer::new(device, wgpu::TextureFormat::Rgba8UnormSrgb);
+                let started = Instant::now();
+                let upload = renderer.upload_mosaic_with_tiling(device, queue, &mosaic, tiling)?;
+                let enqueue_wall = started.elapsed().as_secs_f64() * 1e3;
+                let submission = queue.submit([]);
+                device.poll(wgpu::PollType::Wait {
+                    submission_index: Some(submission),
+                    timeout: None,
+                })?;
+                let completed_wall = started.elapsed().as_secs_f64() * 1e3;
+                println!(
+                    "sample,{:?},{:?},{raw_width},{raw_height},{variant},{},{},{},{},{},{},{:.4},,{enqueue_wall:.4},{completed_wall:.4}",
+                    info.backend,
+                    info.name,
+                    round + 1,
+                    sequence + 1,
+                    plan.tile_size,
+                    plan.tile_halo,
+                    plan.layer_count,
+                    plan.atlas_bytes,
+                    ms(upload.total),
+                );
+                timings[index].push(upload);
+                enqueue_walls[index].push(enqueue_wall);
+                completed_walls[index].push(completed_wall);
+            }
+        }
+
+        for (index, &(variant, tiling)) in VARIANTS.iter().enumerate() {
+            let plan = plan_tiling(
+                raw_width,
+                raw_height,
+                limits.max_texture_dimension_2d,
+                limits.max_texture_array_layers,
+                tiling,
+            )?;
+            let total_p50 = phase_percentile(&timings[index], |sample| sample.total, 0.50);
+            let total_p95 = phase_percentile(&timings[index], |sample| sample.total, 0.95);
+            enqueue_walls[index].sort_by(f64::total_cmp);
+            completed_walls[index].sort_by(f64::total_cmp);
+            println!(
+                "summary,{:?},{:?},{raw_width},{raw_height},{variant},{reps},0,{},{},{},{},{total_p50:.4},{:.4},{:.4},{:.4}",
+                info.backend,
+                info.name,
+                plan.tile_size,
+                plan.tile_halo,
+                plan.layer_count,
+                plan.atlas_bytes,
+                total_p95,
+                percentile(&enqueue_walls[index], 0.50),
+                percentile(&completed_walls[index], 0.50),
+            );
+        }
+    }
+    Ok(())
+}
+
 /// One upload-only sweep row: per-phase p50 over `reps` full uploads.
 fn run_sweep(
     device: &wgpu::Device,
@@ -326,9 +459,17 @@ fn run_sweep(
 }
 
 fn phase_p50(runs: &[GpuUploadTimings], phase: impl Fn(&GpuUploadTimings) -> std::time::Duration) -> f64 {
+    phase_percentile(runs, phase, 0.50)
+}
+
+fn phase_percentile(
+    runs: &[GpuUploadTimings],
+    phase: impl Fn(&GpuUploadTimings) -> std::time::Duration,
+    fraction: f64,
+) -> f64 {
     let mut samples: Vec<f64> = runs.iter().map(|run| ms(phase(run))).collect();
     samples.sort_by(f64::total_cmp);
-    percentile(&samples, 0.50)
+    percentile(&samples, fraction)
 }
 
 fn ms(duration: std::time::Duration) -> f64 {

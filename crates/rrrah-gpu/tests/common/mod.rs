@@ -46,7 +46,9 @@ impl RgbaFrame {
     /// RGBA byte quad at (`x`, `y`), origin top-left.
     pub fn pixel(&self, x: u32, y: u32) -> [u8; 4] {
         let offset = (y as usize * self.width as usize + x as usize) * 4;
-        self.pixels[offset..offset + 4].try_into().expect("in-bounds pixel")
+        self.pixels[offset..offset + 4]
+            .try_into()
+            .expect("in-bounds pixel")
     }
 
     /// Center pixel; the geometric focus of every fill-view render.
@@ -156,8 +158,8 @@ impl GpuReadback {
         });
         let target_view = target.create_view(&wgpu::TextureViewDescriptor::default());
 
-        let row_pitch = (size[0] * 4).div_ceil(wgpu::COPY_BYTES_PER_ROW_ALIGNMENT)
-            * wgpu::COPY_BYTES_PER_ROW_ALIGNMENT;
+        let row_pitch =
+            (size[0] * 4).div_ceil(wgpu::COPY_BYTES_PER_ROW_ALIGNMENT) * wgpu::COPY_BYTES_PER_ROW_ALIGNMENT;
         let buffer = self.device.create_buffer(&wgpu::BufferDescriptor {
             label: Some("rrrah readback buffer"),
             size: u64::from(row_pitch) * u64::from(size[1]),
@@ -245,6 +247,27 @@ pub fn pattern_mosaic(
     white_level: f32,
     sample: impl Fn(u32, u32) -> u16,
 ) -> DecodedMosaic {
+    profiled_pattern_mosaic(
+        width,
+        height,
+        white_level,
+        [1.0; 4],
+        [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0], [0.0; 3]],
+        sample,
+    )
+}
+
+/// Builds a Bayer mosaic with explicit camera-space WB gains and profile.
+/// This is the integration-test boundary for color-policy cases that cannot
+/// be represented by the identity metadata in [`pattern_mosaic`].
+pub fn profiled_pattern_mosaic(
+    width: u32,
+    height: u32,
+    white_level: f32,
+    white_balance: [f32; 4],
+    xyz_to_camera: [[f32; 3]; 4],
+    sample: impl Fn(u32, u32) -> u16,
+) -> DecodedMosaic {
     let sample = &sample;
     let pixels = Arc::new(
         (0..height)
@@ -271,8 +294,8 @@ pub fn pattern_mosaic(
             values: vec![0.0],
         },
         white_level: WhiteLevel(vec![white_level]),
-        white_balance: [1.0; 4],
-        xyz_to_camera: [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0], [0.0; 3]],
+        white_balance,
+        xyz_to_camera,
         active_area: None,
         crop_area: None,
         orientation: Orientation::Normal,

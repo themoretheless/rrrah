@@ -290,10 +290,7 @@ pub fn invert_3x3_f64(matrix: [[f64; 3]; 3]) -> Option<[[f64; 3]; 3]> {
 ///
 /// Reference-precision counterpart of [`bradford_adaptation`] for building
 /// camera profiles; downcast to f32 only at uniform upload.
-pub fn bradford_adaptation_f64(
-    source_white: [f64; 3],
-    destination_white: [f64; 3],
-) -> Option<[[f64; 3]; 3]> {
+pub fn bradford_adaptation_f64(source_white: [f64; 3], destination_white: [f64; 3]) -> Option<[[f64; 3]; 3]> {
     if source_white
         .iter()
         .chain(destination_white.iter())
@@ -458,11 +455,11 @@ pub fn display_wb_gains(camera_wb: [f32; 3]) -> Option<[f32; 3]> {
 mod tests {
     use super::{
         CameraProfileError, DNG_ILLUMINANT_D65, DngColorMatrix, GreenPlane, SRGB_TO_XYZ_D65,
-        SRGB_TO_XYZ_D65_F64, WB_LUMINANCE_WEIGHTS, XYZ_WHITE_D65, aces_fitted, apply_3x3,
-        apply_exposure, bradford_adaptation, bradford_adaptation_f64, camera_to_linear_srgb,
-        camera_to_linear_srgb_precise, diagnose_green_planes, display_wb_gains, dng_illuminant_white,
-        green_relative_wb_gains, invert_3x3, invert_3x3_f64, luminance_normalize_wb_gains, multiply_3x3,
-        multiply_3x3_f64, select_dng_xyz_to_camera, xy_chromaticity_to_xyz,
+        SRGB_TO_XYZ_D65_F64, WB_LUMINANCE_WEIGHTS, XYZ_WHITE_D65, aces_fitted, apply_3x3, apply_exposure,
+        bradford_adaptation, bradford_adaptation_f64, camera_to_linear_srgb, camera_to_linear_srgb_precise,
+        diagnose_green_planes, display_wb_gains, dng_illuminant_white, green_relative_wb_gains, invert_3x3,
+        invert_3x3_f64, luminance_normalize_wb_gains, multiply_3x3, multiply_3x3_f64,
+        select_dng_xyz_to_camera, xy_chromaticity_to_xyz,
     };
 
     fn assert_matrix_close(actual: [[f32; 3]; 3], expected: [[f32; 3]; 3]) {
@@ -578,21 +575,34 @@ mod tests {
     fn precise_transform_matches_f32_wrapper_on_healthy_profile() {
         let profile = realistic_profile([0.0; 3]);
         let precise = camera_to_linear_srgb_precise(profile).expect("healthy profile");
-        let wrapped = camera_to_linear_srgb(profile.map(|row| row.map(|v| v as f32))).expect("healthy profile");
+        let wrapped =
+            camera_to_linear_srgb(profile.map(|row| row.map(|v| v as f32))).expect("healthy profile");
         for (precise, wrapped) in precise.into_iter().flatten().zip(wrapped.into_iter().flatten()) {
-            assert!((precise - f64::from(wrapped)).abs() < 1.0e-5, "{precise} != {wrapped}");
+            assert!(
+                (precise - f64::from(wrapped)).abs() < 1.0e-5,
+                "{precise} != {wrapped}"
+            );
         }
     }
 
     #[test]
     fn green_plane_diagnosis_classifies_absent_consistent_divergent() {
         let g1 = [-0.4923, 1.3619, 0.1304];
-        assert_eq!(diagnose_green_planes(&realistic_profile([0.0; 3])), GreenPlane::Absent);
-        assert_eq!(diagnose_green_planes(&realistic_profile(g1)), GreenPlane::Consistent);
+        assert_eq!(
+            diagnose_green_planes(&realistic_profile([0.0; 3])),
+            GreenPlane::Absent
+        );
+        assert_eq!(
+            diagnose_green_planes(&realistic_profile(g1)),
+            GreenPlane::Consistent
+        );
 
         let mut noisy = g1;
         noisy[0] += 1.0e-4; // well below 1e-3 * scale
-        assert_eq!(diagnose_green_planes(&realistic_profile(noisy)), GreenPlane::Consistent);
+        assert_eq!(
+            diagnose_green_planes(&realistic_profile(noisy)),
+            GreenPlane::Consistent
+        );
 
         let mut different = g1;
         different[1] *= 0.9; // a genuinely different green filter response
@@ -649,10 +659,7 @@ mod tests {
         let d65 = [0.95047, 1.0, 1.08883];
         let d50 = [0.96422, 1.0, 0.82521];
         let adaptation = bradford_adaptation_f64(d65, d50).expect("valid white points");
-        let adapted = apply_3x3(
-            adaptation.map(|row| row.map(|v| v as f32)),
-            d65.map(|v| v as f32),
-        );
+        let adapted = apply_3x3(adaptation.map(|row| row.map(|v| v as f32)), d65.map(|v| v as f32));
         // f64-built adaptation maps the source white exactly onto the target.
         let adapted_f64 = {
             let m = adaptation;
@@ -762,13 +769,22 @@ mod tests {
         ];
         // ColorMatrix2 calibrated for D65 wins verbatim over ColorMatrix1/A.
         let selected = select_dng_xyz_to_camera(
-            Some(DngColorMatrix { xyz_to_camera: cm_a, illuminant: Some(17) }),
-            Some(DngColorMatrix { xyz_to_camera: cm_d65, illuminant: Some(DNG_ILLUMINANT_D65) }),
+            Some(DngColorMatrix {
+                xyz_to_camera: cm_a,
+                illuminant: Some(17),
+            }),
+            Some(DngColorMatrix {
+                xyz_to_camera: cm_d65,
+                illuminant: Some(DNG_ILLUMINANT_D65),
+            }),
         );
         assert_eq!(selected, Some(cm_d65));
         // ColorMatrix1 calibrated for D65 is verbatim too.
         let selected = select_dng_xyz_to_camera(
-            Some(DngColorMatrix { xyz_to_camera: cm_a, illuminant: Some(DNG_ILLUMINANT_D65) }),
+            Some(DngColorMatrix {
+                xyz_to_camera: cm_a,
+                illuminant: Some(DNG_ILLUMINANT_D65),
+            }),
             None,
         );
         assert_eq!(selected, Some(cm_a));
@@ -778,7 +794,10 @@ mod tests {
     fn illuminant_a_color_matrix_is_bradford_adapted_to_d65_reference() {
         let cm_a = illuminant_a_matrix();
         let selected = select_dng_xyz_to_camera(
-            Some(DngColorMatrix { xyz_to_camera: cm_a, illuminant: Some(17) }),
+            Some(DngColorMatrix {
+                xyz_to_camera: cm_a,
+                illuminant: Some(17),
+            }),
             None,
         )
         .expect("illuminant A matrix must be adaptable");
@@ -799,7 +818,10 @@ mod tests {
             .zip(cm_a.into_iter().flatten())
             .map(|(adapted, raw)| (adapted - raw).abs())
             .fold(0.0_f64, f64::max);
-        assert!(max_shift > 1.0e-2, "adaptation shift {max_shift:e} is implausibly small");
+        assert!(
+            max_shift > 1.0e-2,
+            "adaptation shift {max_shift:e} is implausibly small"
+        );
     }
 
     #[test]
@@ -810,7 +832,10 @@ mod tests {
         // the un-adapted matrix.
         let camera = apply_3x3_ref(cm_a, a_white);
         let selected = select_dng_xyz_to_camera(
-            Some(DngColorMatrix { xyz_to_camera: cm_a, illuminant: Some(17) }),
+            Some(DngColorMatrix {
+                xyz_to_camera: cm_a,
+                illuminant: Some(17),
+            }),
             None,
         )
         .expect("adaptable");
@@ -827,7 +852,10 @@ mod tests {
             .zip(XYZ_WHITE_D65)
             .map(|(actual, expected)| (actual - expected).abs())
             .fold(0.0_f64, f64::max);
-        assert!(delta > 0.1, "un-adapted white should sit far from D65, delta {delta:e}");
+        assert!(
+            delta > 0.1,
+            "un-adapted white should sit far from D65, delta {delta:e}"
+        );
     }
 
     #[test]
@@ -847,26 +875,37 @@ mod tests {
         let cm_a = illuminant_a_matrix();
         // No illuminant tags at all: ColorMatrix1 verbatim (legacy behavior).
         let selected = select_dng_xyz_to_camera(
-            Some(DngColorMatrix { xyz_to_camera: cm_a, illuminant: None }),
+            Some(DngColorMatrix {
+                xyz_to_camera: cm_a,
+                illuminant: None,
+            }),
             None,
         );
         assert_eq!(selected, Some(cm_a));
         // Unmapped codes (e.g. 255 "other") also keep the verbatim matrix.
-        let cm_other = [
-            [1.1, -0.2, -0.1],
-            [-0.5, 1.4, 0.1],
-            [-0.1, 0.1, 0.8],
-        ];
+        let cm_other = [[1.1, -0.2, -0.1], [-0.5, 1.4, 0.1], [-0.1, 0.1, 0.8]];
         let selected = select_dng_xyz_to_camera(
-            Some(DngColorMatrix { xyz_to_camera: cm_a, illuminant: Some(255) }),
-            Some(DngColorMatrix { xyz_to_camera: cm_other, illuminant: None }),
+            Some(DngColorMatrix {
+                xyz_to_camera: cm_a,
+                illuminant: Some(255),
+            }),
+            Some(DngColorMatrix {
+                xyz_to_camera: cm_other,
+                illuminant: None,
+            }),
         );
         assert_eq!(selected, Some(cm_a));
         // A known non-D65 illuminant on ColorMatrix2 is preferred over an
         // unmapped ColorMatrix1 and gets adapted.
         let selected = select_dng_xyz_to_camera(
-            Some(DngColorMatrix { xyz_to_camera: cm_a, illuminant: None }),
-            Some(DngColorMatrix { xyz_to_camera: cm_other, illuminant: Some(17) }),
+            Some(DngColorMatrix {
+                xyz_to_camera: cm_a,
+                illuminant: None,
+            }),
+            Some(DngColorMatrix {
+                xyz_to_camera: cm_other,
+                illuminant: Some(17),
+            }),
         )
         .expect("adaptable");
         let expected = multiply_3x3_f64(

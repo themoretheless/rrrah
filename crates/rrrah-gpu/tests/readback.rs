@@ -14,7 +14,7 @@
 
 mod common;
 
-use common::{GpuReadback, cpu_reference_byte, pattern_mosaic, uniform_mosaic};
+use common::{GpuReadback, cpu_reference_byte, pattern_mosaic, profiled_pattern_mosaic, uniform_mosaic};
 
 const FRAME: [u32; 2] = [256, 256];
 const WHITE: f32 = 65_535.0;
@@ -26,6 +26,13 @@ const REFERENCE_TOLERANCE: u8 = 2;
 /// Tolerance for channel-to-channel neutrality of a gray frame. All channels
 /// run identical f32 math on identical inputs, so this is nearly exact.
 const NEUTRAL_TOLERANCE: u8 = 1;
+const EOS_R8_GAINS: [f32; 4] = [1_678.0 / 1_024.0, 1.0, 1_659.0 / 1_024.0, 1.0];
+const EOS_R8_XYZ_TO_CAMERA: [[f32; 3]; 4] = [
+    [0.9539, -0.2795, -0.1224],
+    [-0.4175, 1.1998, 0.2458],
+    [-0.0465, 0.1755, 0.6048],
+    [0.0; 3],
+];
 
 fn gpu() -> Option<GpuReadback> {
     let gpu = GpuReadback::new();
@@ -46,7 +53,10 @@ fn readback_is_bit_identical_across_rerenders() {
     });
     let first = gpu.render(&mosaic, FRAME);
     let second = gpu.render(&mosaic, FRAME);
-    assert_eq!(first, second, "two renders of the same input must be bit-identical");
+    assert_eq!(
+        first, second,
+        "two renders of the same input must be bit-identical"
+    );
 }
 
 #[test]
@@ -90,8 +100,15 @@ fn tone_curve_is_monotonic_across_input_levels() {
         previous = current;
     }
     // The endpoints must actually move: 0 -> black, white -> ACES shoulder.
-    assert_eq!(previous[0], gpu.render(&uniform_mosaic(256, 256, WHITE as u16, WHITE), FRAME).center()[0]);
-    assert!(previous[0] > 200, "white input must land on the ACES shoulder, got {previous:?}");
+    assert_eq!(
+        previous[0],
+        gpu.render(&uniform_mosaic(256, 256, WHITE as u16, WHITE), FRAME)
+            .center()[0]
+    );
+    assert!(
+        previous[0] > 200,
+        "white input must land on the ACES shoulder, got {previous:?}"
+    );
 }
 
 #[test]
@@ -99,11 +116,17 @@ fn black_and_white_endpoints_match_aces_contract() {
     let Some(gpu) = gpu() else { return };
     // Black maps to black: aces_fitted(0) = 0 -> sRGB 0.
     let black = gpu.render(&uniform_mosaic(256, 256, 0, WHITE), FRAME).center();
-    assert_eq!(&black[..3], &[0, 0, 0], "black input must render black, got {black:?}");
+    assert_eq!(
+        &black[..3],
+        &[0, 0, 0],
+        "black input must render black, got {black:?}"
+    );
     // White does NOT clip to 255: ACES(1.0) = 0.8038 (highlight roll-off),
     // sRGB(0.8038) ~= 0.908 -> ~232. This is the documented behavior of the
     // fitted curve at the top of the reference range.
-    let white = gpu.render(&uniform_mosaic(256, 256, WHITE as u16, WHITE), FRAME).center();
+    let white = gpu
+        .render(&uniform_mosaic(256, 256, WHITE as u16, WHITE), FRAME)
+        .center();
     let expected = cpu_reference_byte(1.0);
     assert_eq!(expected, 232, "reference sanity: sRGB(ACES(1)) should be ~232");
     for (channel, (&actual, expected)) in white.iter().zip([expected; 3]).enumerate() {
@@ -131,6 +154,75 @@ fn known_gray_points_match_cpu_reference_curve() {
             );
         }
     }
+}
+
+#[test]
+fn decoder_white_balance_scale_is_preserved_through_real_camera_profile() {
+    const SIZE: u32 = 256;
+    const NEUTRAL: f32 = 0.18;
+    let Some(gpu) = gpu() else { return };
+
+    let direct_samples = [
+        NEUTRAL / EOS_R8_GAINS[0],
+        NEUTRAL / EOS_R8_GAINS[1],
+        NEUTRAL / EOS_R8_GAINS[3],
+        NEUTRAL / EOS_R8_GAINS[2],
+    ]
+    .map(|value| (value * WHITE).round() as u16);
+    let unit_sample = (NEUTRAL * WHITE).round() as u16;
+    let phase_sample = |samples: [u16; 4], x: u32, y: u32| {
+        let phase = ((y & 1) * 2 + (x & 1)) as usize;
+        samples[phase]
+    };
+    let unit = profiled_pattern_mosaic(SIZE, SIZE, WHITE, [1.0; 4], EOS_R8_XYZ_TO_CAMERA, |_x, _y| {
+        unit_sample
+    });
+    let direct = profiled_pattern_mosaic(SIZE, SIZE, WHITE, EOS_R8_GAINS, EOS_R8_XYZ_TO_CAMERA, |x, y| {
+        phase_sample(direct_samples, x, y)
+    });
+    let normalized_rgb =
+        rrrah_core::luminance_normalize_wb_gains([EOS_R8_GAINS[0], EOS_R8_GAINS[1], EOS_R8_GAINS[2]])
+            .expect("EOS R8 gains are valid");
+    let rejected_scale = normalized_rgb[1] / EOS_R8_GAINS[1];
+    let rejected_gains = EOS_R8_GAINS.map(|gain| gain * rejected_scale);
+    let rejected =
+        profiled_pattern_mosaic(SIZE, SIZE, WHITE, rejected_gains, EOS_R8_XYZ_TO_CAMERA, |x, y| {
+            phase_sample(direct_samples, x, y)
+        });
+
+    let unit_pixel = gpu.render(&unit, FRAME).center();
+    let direct_pixel = gpu.render(&direct, FRAME).center();
+    let rejected_pixel = gpu.render(&rejected, FRAME).center();
+    for channel in 0..3 {
+        assert!(
+            direct_pixel[channel].abs_diff(unit_pixel[channel]) <= REFERENCE_TOLERANCE,
+            "direct WB channel {channel}: {} vs unit reference {}",
+            direct_pixel[channel],
+            unit_pixel[channel]
+        );
+    }
+    let expected = cpu_reference_byte(f64::from(NEUTRAL));
+    for (channel, &actual) in direct_pixel[..3].iter().enumerate() {
+        assert!(
+            actual.abs_diff(expected) <= REFERENCE_TOLERANCE,
+            "direct WB channel {channel}: {actual} vs CPU reference {expected}"
+        );
+    }
+    let direct_mean = direct_pixel[..3]
+        .iter()
+        .map(|&value| u16::from(value))
+        .sum::<u16>()
+        / 3;
+    let rejected_mean = rejected_pixel[..3]
+        .iter()
+        .map(|&value| u16::from(value))
+        .sum::<u16>()
+        / 3;
+    assert!(
+        direct_mean >= rejected_mean + 8,
+        "readback must distinguish direct WB ({direct_pixel:?}) from rejected Rec.709 normalization \
+         ({rejected_pixel:?})"
+    );
 }
 
 #[test]
