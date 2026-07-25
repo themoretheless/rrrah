@@ -1,6 +1,6 @@
 //! Default clean-room Canon EOS R8 CR3 backend.
 
-use std::{fs::File, io::Read, sync::Arc, time::Instant};
+use std::{sync::Arc, time::Instant};
 
 use rrrah_core::{
     CfaPattern, DECODE_CROP_AS_METADATA, DECODE_FULL_SENSOR_RAW, DECODE_IMAGE_INDEX_IN_KEY,
@@ -10,6 +10,7 @@ use rrrah_core::{
 
 use crate::{
     AdaptTimings, DecodeError, DecodeOutput, DecodeRequest, DecodeTimings, NativeDecodeTimings, RawDecoder,
+    bounded_io::read_bounded,
     cr3::{
         assemble::{
             ParallelDecodeError, StreamingDecodeError, decode_four_planes, decode_four_planes_streaming,
@@ -30,7 +31,6 @@ const NATIVE_DECODE_FLAGS: u32 = DECODE_FULL_SENSOR_RAW
     | DECODE_SENSOR_COORDINATES
     | DECODE_CROP_AS_METADATA
     | DECODE_IMAGE_INDEX_IN_KEY;
-const MAX_INPUT_BYTES: u64 = 2 * 1024 * 1024 * 1024;
 const DEFAULT_PLANE_WORKERS: usize = 4;
 const PLANE_WORKERS_ENV: &str = "RRRAH_CR3_PLANE_WORKERS";
 const PLANE_WORKER_OPTIONS: [usize; 3] = [1, 2, 4];
@@ -122,10 +122,7 @@ pub const NATIVE_EOS_R8_MOSAIC_CONTRACT_1: MosaicRecipeManifest = MosaicRecipeMa
     1,
     1,
     NATIVE_DECODE_FLAGS,
-    [
-        0xab, 0x83, 0x34, 0x86, 0x28, 0xb8, 0xa9, 0x5b, 0x42, 0x58, 0x3e, 0x96, 0xbe, 0xd2, 0x2a, 0xa5, 0xba,
-        0x94, 0x4c, 0xda, 0xb5, 0x4f, 0xb7, 0x45, 0xbe, 0xb0, 0xa6, 0xa0, 0x98, 0xea, 0x37, 0x70,
-    ],
+    crate::WORKSPACE_LOCK_DIGEST,
 );
 
 #[derive(Debug, Clone, Copy, Default)]
@@ -184,51 +181,6 @@ impl RawDecoder for NativeCr3Decoder {
             },
         })
     }
-}
-
-fn read_bounded(request: &DecodeRequest) -> Result<Vec<u8>, DecodeError> {
-    let mut file = File::open(&request.path).map_err(|source| DecodeError::Io {
-        path: request.path.clone(),
-        source,
-    })?;
-    let declared = file
-        .metadata()
-        .map_err(|source| DecodeError::Io {
-            path: request.path.clone(),
-            source,
-        })?
-        .len();
-    if declared > MAX_INPUT_BYTES {
-        return Err(DecodeError::InputTooLarge {
-            path: request.path.clone(),
-            actual: declared,
-            limit: MAX_INPUT_BYTES,
-        });
-    }
-    let capacity = usize::try_from(declared).map_err(|_| DecodeError::InputTooLarge {
-        path: request.path.clone(),
-        actual: declared,
-        limit: MAX_INPUT_BYTES,
-    })?;
-    let mut data = Vec::new();
-    data.try_reserve_exact(capacity)
-        .map_err(|_| DecodeError::InputAllocation { bytes: capacity })?;
-    file.by_ref()
-        .take(MAX_INPUT_BYTES.saturating_add(1))
-        .read_to_end(&mut data)
-        .map_err(|source| DecodeError::Io {
-            path: request.path.clone(),
-            source,
-        })?;
-    let actual = u64::try_from(data.len()).unwrap_or(u64::MAX);
-    if actual > MAX_INPUT_BYTES {
-        return Err(DecodeError::InputTooLarge {
-            path: request.path.clone(),
-            actual,
-            limit: MAX_INPUT_BYTES,
-        });
-    }
-    Ok(data)
 }
 
 fn decode_sensor_pixels(

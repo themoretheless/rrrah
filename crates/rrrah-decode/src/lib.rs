@@ -4,12 +4,23 @@
 //! They read the full sensor mosaic and never substitute an embedded JPEG.
 #![allow(clippy::missing_errors_doc, clippy::cast_precision_loss)]
 
+mod bounded_io;
+mod camtiff;
 mod cr3;
 #[doc(hidden)] // Exposed only for criterion micro-benchmarks (`bench_support`); not public API.
 pub mod dng;
 mod dng_backend;
 mod native_backend;
 mod native_router;
+mod sniff;
+
+/// SHA-256 digest of the resolved workspace lockfile, shared by every native
+/// backend's semantic recipe. Must stay in sync with
+/// `scripts/native-cr3-semantic-lock.sha256`.
+pub(crate) const WORKSPACE_LOCK_DIGEST: [u8; 32] = [
+    0xab, 0x83, 0x34, 0x86, 0x28, 0xb8, 0xa9, 0x5b, 0x42, 0x58, 0x3e, 0x96, 0xbe, 0xd2, 0x2a, 0xa5, 0xba,
+    0x94, 0x4c, 0xda, 0xb5, 0x4f, 0xb7, 0x45, 0xbe, 0xb0, 0xa6, 0xa0, 0x98, 0xea, 0x37, 0x70,
+];
 
 use std::{
     path::{Path, PathBuf},
@@ -141,7 +152,11 @@ pub enum DecodeError {
     NativeCr3(String),
     #[error("native DNG decoder failed: {0}")]
     NativeDng(String),
-    #[error("unsupported RAW format for {path}; expected .cr3, .dng, .tif, or .tiff")]
+    #[error("native {format} decoder failed: {message}")]
+    NativeCamera { format: &'static str, message: String },
+    #[error(
+        "unsupported RAW format for {path}; expected .cr3, .cr2, .nef, .arw, .orf, .pef, .rw2, .raf, .dng, .tif, or .tiff"
+    )]
     UnsupportedFormat { path: PathBuf },
     #[error("native RAW backends support only image index 0, got {index}")]
     UnsupportedImageIndex { index: usize },

@@ -1,9 +1,19 @@
-//! Bounded TIFF/BigTIFF directory parsing used by the native DNG reader.
+//! Bounded TIFF/BigTIFF directory parsing used by the native DNG reader and
+//! the shared camera-format backends in [`crate::camtiff`].
 
 use std::{error::Error, fmt};
 
 const CLASSIC_MAGIC: u16 = 42;
 const BIG_TIFF_MAGIC: u16 = 43;
+/// Olympus ORF stores `RO`/`OR` (`IIRO`/`MMOR` headers) or `RS`/`SR`
+/// (`IIRS`/`MMSR` headers) instead of the classic magic; both values are
+/// byte-order symmetric and the rest of the file is classic TIFF.
+const ORF_CLASSIC_MAGIC_RO: u16 = 0x4F52;
+const ORF_CLASSIC_MAGIC_RS: u16 = 0x5352;
+/// Panasonic RW2 stores `U\0` (the `IIU\0` header) instead of the classic
+/// magic; little-endian only in practice, byte order still comes from the
+/// `II`/`MM` prefix.
+const RW2_CLASSIC_MAGIC: u16 = 0x55;
 const BIG_TIFF_OFFSET_SIZE: u16 = 8;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -132,7 +142,7 @@ impl<'a> Tiff<'a> {
         };
         let magic = read_slice(data, 2, 2, "TIFF magic").map(|bytes| byte_order.u16(bytes))?;
         let (variant, first_ifd_offset) = match magic {
-            CLASSIC_MAGIC => {
+            CLASSIC_MAGIC | ORF_CLASSIC_MAGIC_RO | ORF_CLASSIC_MAGIC_RS | RW2_CLASSIC_MAGIC => {
                 let bytes = read_slice(data, 4, 4, "classic TIFF first IFD")?;
                 (Variant::Classic, u64::from(byte_order.u32(bytes)))
             }
@@ -602,7 +612,10 @@ impl fmt::Display for TiffError {
                 "truncated {context} at offset {offset}: need {needed} bytes, have {available}"
             ),
             Self::InvalidMagic { actual } => {
-                write!(formatter, "invalid TIFF magic {actual}, expected 42 or 43")
+                write!(
+                    formatter,
+                    "invalid TIFF magic {actual}, expected 42, 43, or a camera variant (0x4F52, 0x5352, 0x55)"
+                )
             }
             Self::InvalidBigTiffHeader {
                 offset_size,
@@ -733,6 +746,56 @@ mod tests {
                 .unwrap(),
             [52]
         );
+    }
+
+    #[test]
+    fn accepts_orf_camera_magics_as_classic_tiff() {
+        // ORF headers: `IIRO`, `IIRS` (little-endian) and `MMOR`, `MMSR`
+        // (big-endian); the magic values are byte-order symmetric.
+        for (header, expected_order) in [
+            (&b"IIRO\x08\0\0\0"[..], ByteOrder::Little),
+            (&b"IIRS\x08\0\0\0"[..], ByteOrder::Little),
+            (&b"MMOR\0\0\0\x08"[..], ByteOrder::Big),
+            (&b"MMSR\0\0\0\x08"[..], ByteOrder::Big),
+        ] {
+            let mut bytes = vec![0_u8; 16];
+            bytes[..8].copy_from_slice(header);
+            let tiff = Tiff::parse(&bytes, Limits::default())
+                .unwrap_or_else(|error| panic!("ORF header {header:?}: {error}"));
+            assert_eq!(tiff.variant(), Variant::Classic, "{header:?}");
+            assert_eq!(tiff.byte_order(), expected_order, "{header:?}");
+            assert_eq!(tiff.first_ifd_offset(), 8, "{header:?}");
+        }
+    }
+
+    #[test]
+    fn accepts_rw2_magic_as_classic_tiff() {
+        // Panasonic RW2 header: `IIU\0` followed by the classic 32-bit first
+        // IFD offset.
+        let mut bytes = vec![0_u8; 16];
+        bytes[..8].copy_from_slice(b"IIU\0\x0c\0\0\0");
+        let tiff = Tiff::parse(&bytes, Limits::default()).unwrap();
+        assert_eq!(tiff.variant(), Variant::Classic);
+        assert_eq!(tiff.byte_order(), ByteOrder::Little);
+        assert_eq!(tiff.first_ifd_offset(), 12);
+    }
+
+    #[test]
+    fn still_rejects_unrelated_magics() {
+        let mut bytes = vec![0_u8; 16];
+        bytes[..8].copy_from_slice(&[b'I', b'I', 99, 0, 8, 0, 0, 0]);
+        assert!(matches!(
+            Tiff::parse(&bytes, Limits::default()),
+            Err(TiffError::InvalidMagic { actual: 99 })
+        ));
+        // The byte-swapped ORF magic (`OR` little-endian, which would be the
+        // `RO` value under the wrong byte order) is not a camera header: the
+        // prefix `IIOR` has magic 0x524F and must still be rejected.
+        bytes[..8].copy_from_slice(b"IIOR\x08\0\0\0");
+        assert!(matches!(
+            Tiff::parse(&bytes, Limits::default()),
+            Err(TiffError::InvalidMagic { actual: 0x524F })
+        ));
     }
 
     #[test]

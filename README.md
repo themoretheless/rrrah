@@ -5,7 +5,8 @@ sensor mosaic itself. It never substitutes the embedded JPEG for the main view.
 
 The current fast paths are deliberately bounded and measurable:
 
-1. parse Canon EOS R8 CR3/CRX or TIFF/DNG and decode the sensor samples in native Rust;
+1. parse Canon EOS R8 CR3/CRX, TIFF/DNG, or a TIFF-family camera RAW (CR2,
+   NEF, ARW, ORF, PEF, RW2, RAF) and decode the sensor samples in native Rust;
 2. cache that decoded mosaic;
 3. upload it once as an integer GPU texture;
 4. normalize, demosaic, white-balance, color-convert, and tone-map only the
@@ -22,6 +23,46 @@ Unsupported DNG features are rejected explicitly: LinearRaw/non-CFA images,
 lossy JPEG, Deflate and JPEG XL compression, opcodes, `BlackLevelDeltaH/V`,
 fractional display crops, and non-Bayer CFA layouts. The default build has no
 external RAW-decoder dependency.
+
+Seven camera formats share a bounded clean-room TIFF reader with the DNG
+backend and decode real sensor data through the same mosaic pipeline. Each
+one accepts only the storage variants it can verify and rejects the rest with
+typed errors — the embedded JPEG is never substituted:
+
+- **Canon CR2** — single-strip lossless JPEG with CR2 vertical-slice scatter.
+  Other compressions, subsampled sRAW/mRAW, tile/multi-strip storage, and the
+  EOS-1D two-column width quirk are rejected.
+- **Nikon NEF** — uncompressed 12/14-bit MSB-packed strips and Nikon lossless
+  (compression 34713: makernote Huffman tree + linearization curve, decoded
+  by a native bitstream decoder modelled on rawspeed's `NikonDecompressor`).
+  The Z-series high-efficiency/lossy variants, multi-strip 34713, and exotic
+  curve variants are rejected.
+- **Sony ARW** — uncompressed 16-bit and LSB-packed 12/14-bit rows, ARW 2.x
+  cRAW block-delta, and lossless JPEG (Alpha 1+). The ARW 1.0 Huffman/curve
+  encoding is rejected.
+- **Olympus ORF** — `IIRO`/`IIRS`/`MMOR`/`MMSR` containers with Olympus
+  12-bit packing, uncompressed 16-bit, or single-strip lossless JPEG. The
+  C-series Huffman and OM System bitstreams are rejected as unverifiable.
+- **Pentax PEF** — uncompressed MSB-packed 12/14/16-bit, TIFF/EP lossless
+  JPEG (K-x and newer), and Pentax lossless (compression 65535: makernote
+  Huffman table 0x0220, custom predictor). Multi-strip 65535, odd widths, and
+  files missing the makernote table are rejected.
+- **Panasonic RW2** — `IIU\0` container with 16-bit uncompressed rows, the
+  Panasonic packed 12/14-bit bitstream (dcraw `panasonic_load_raw`
+  semantics), or single-strip lossless JPEG. Legacy Panasonic compression
+  codes are rejected.
+- **Fujifilm RAF** — `FUJIFILMCCD-RAW` container with Bayer 12/14-bit
+  LSB-packed, 16-bit, or lossless-JPEG storage. X-Trans, rotated Super-CCD,
+  and Fuji's proprietary compressed format are rejected.
+
+Like the DNG backend, all seven require a 2×2 RGB Bayer CFA for display.
+Makernote coverage is deliberately limited (documented per format in
+`crates/rrrah-decode/src/camtiff/`): white balance and color matrices fall
+back to documented neutral values where the format carries no DNG-style tags.
+Camera compatibility is validated by synthetic unit tests and opt-in
+real-file regression tests (`RRRAH_<FORMAT>_FIXTURE`, see
+[`docs/DECODE_FORMAT_AUDIT.md`](docs/DECODE_FORMAT_AUDIT.md) §4), not yet by
+a licensed camera corpus.
 
 Detailed design, equations, budgets, and benchmark protocol live in
 [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
@@ -107,8 +148,8 @@ stable wall-time improvement on the current EOS R8 fixture.
 
 ## Status
 
-This is an architecture-first prototype. It provides real native EOS R8 CR3 and
-bounded CFA DNG full-RAW decode, full-resolution tiled GPU upload for adapters
+This is an architecture-first prototype. It provides real native EOS R8 CR3,
+bounded CFA DNG, and CR2/NEF/ARW/ORF/PEF/RW2/RAF full-RAW decode, full-resolution tiled GPU upload for adapters
 with texture-array capacity, per-stage timing instrumentation, total wall time,
 and warm-open cache. It is not yet a replacement for a color-managed production
 raw developer. Additional camera profiles and DNG feature families require
