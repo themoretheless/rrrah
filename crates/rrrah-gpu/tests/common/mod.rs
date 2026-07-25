@@ -46,7 +46,9 @@ impl RgbaFrame {
     /// RGBA byte quad at (`x`, `y`), origin top-left.
     pub fn pixel(&self, x: u32, y: u32) -> [u8; 4] {
         let offset = (y as usize * self.width as usize + x as usize) * 4;
-        self.pixels[offset..offset + 4].try_into().expect("in-bounds pixel")
+        self.pixels[offset..offset + 4]
+            .try_into()
+            .expect("in-bounds pixel")
     }
 
     /// Center pixel; the geometric focus of every fill-view render.
@@ -156,8 +158,8 @@ impl GpuReadback {
         });
         let target_view = target.create_view(&wgpu::TextureViewDescriptor::default());
 
-        let row_pitch = (size[0] * 4).div_ceil(wgpu::COPY_BYTES_PER_ROW_ALIGNMENT)
-            * wgpu::COPY_BYTES_PER_ROW_ALIGNMENT;
+        let row_pitch =
+            (size[0] * 4).div_ceil(wgpu::COPY_BYTES_PER_ROW_ALIGNMENT) * wgpu::COPY_BYTES_PER_ROW_ALIGNMENT;
         let buffer = self.device.create_buffer(&wgpu::BufferDescriptor {
             label: Some("rrrah readback buffer"),
             size: u64::from(row_pitch) * u64::from(size[1]),
@@ -245,6 +247,27 @@ pub fn pattern_mosaic(
     white_level: f32,
     sample: impl Fn(u32, u32) -> u16,
 ) -> DecodedMosaic {
+    profiled_pattern_mosaic(
+        width,
+        height,
+        white_level,
+        [1.0; 4],
+        [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0], [0.0; 3]],
+        sample,
+    )
+}
+
+/// Builds a Bayer mosaic with explicit camera-space WB gains and profile.
+/// This is the integration-test boundary for color-policy cases that cannot
+/// be represented by the identity metadata in [`pattern_mosaic`].
+pub fn profiled_pattern_mosaic(
+    width: u32,
+    height: u32,
+    white_level: f32,
+    white_balance: [f32; 4],
+    xyz_to_camera: [[f32; 3]; 4],
+    sample: impl Fn(u32, u32) -> u16,
+) -> DecodedMosaic {
     let sample = &sample;
     let pixels = Arc::new(
         (0..height)
@@ -271,8 +294,8 @@ pub fn pattern_mosaic(
             values: vec![0.0],
         },
         white_level: WhiteLevel(vec![white_level]),
-        white_balance: [1.0; 4],
-        xyz_to_camera: [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0], [0.0; 3]],
+        white_balance,
+        xyz_to_camera,
         active_area: None,
         crop_area: None,
         orientation: Orientation::Normal,
@@ -284,12 +307,32 @@ pub fn pattern_mosaic(
 /// WGSL fragment shader plus the sRGB target apply: `aces_fitted` (identical
 /// coefficients in `rrrah-core`) followed by the IEC 61966-2-1 transfer
 /// function, quantized to an 8-bit byte.
+///
+/// Achromatic inputs pass through the hue-preserving [`cpu_reference_rgb`]
+/// unchanged: `r == g == b` reduces to the scalar curve per channel.
 pub fn cpu_reference_byte(normalized_linear: f64) -> u8 {
-    let mapped = f64::from(rrrah_core::aces_fitted(normalized_linear as f32));
-    let encoded = if mapped <= 0.003_130_8 {
-        12.92 * mapped
+    srgb_byte(f64::from(rrrah_core::aces_fitted(normalized_linear as f32)))
+}
+
+/// CPU reference for a linear RGB triplet through the hue-preserving ACES
+/// tone map (`rrrah_core::aces_tone_map_rgb`, mirroring the WGSL shader) and
+/// the sRGB transfer function, quantized per channel to 8-bit bytes.
+pub fn cpu_reference_rgb(linear_rgb: [f64; 3]) -> [u8; 3] {
+    let mapped = rrrah_core::aces_tone_map_rgb([
+        linear_rgb[0] as f32,
+        linear_rgb[1] as f32,
+        linear_rgb[2] as f32,
+    ]);
+    mapped.map(|channel| srgb_byte(f64::from(channel)))
+}
+
+/// IEC 61966-2-1 opto-electronic transfer function and 8-bit quantization,
+/// matching the hardware sRGB conversion on write into the readback target.
+fn srgb_byte(linear: f64) -> u8 {
+    let encoded = if linear <= 0.003_130_8 {
+        12.92 * linear
     } else {
-        1.055 * mapped.powf(1.0 / 2.4) - 0.055
+        1.055 * linear.powf(1.0 / 2.4) - 0.055
     };
     (encoded.clamp(0.0, 1.0) * 255.0).round() as u8
 }

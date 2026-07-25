@@ -5,8 +5,8 @@
 //! in f64 for both paths so the f32 path is measured against true arithmetic.
 
 use rrrah_core::{
-    BRADFORD, SRGB_TO_XYZ_D65_F64, camera_to_linear_srgb, camera_to_linear_srgb_precise,
-    display_wb_gains, invert_3x3, invert_3x3_f64, multiply_3x3_f64,
+    BRADFORD, SRGB_TO_XYZ_D65_F64, camera_to_linear_srgb, camera_to_linear_srgb_precise, display_wb_gains,
+    invert_3x3, invert_3x3_f64, multiply_3x3_f64,
 };
 
 const IDENTITY: [[f64; 3]; 3] = [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]];
@@ -137,7 +137,8 @@ fn f32_vs_f64_inversion_precision_corpus() {
             let inverse_f64 = inverse_f32.map(|row| row.map(f64::from));
             round_trip_error_f64(matrix_f64, inverse_f64)
         });
-        let f64_result = invert_3x3_f64(case.matrix).map(|inverse| round_trip_error_f64(case.matrix, inverse));
+        let f64_result =
+            invert_3x3_f64(case.matrix).map(|inverse| round_trip_error_f64(case.matrix, inverse));
 
         let f32_text = f32_result.map_or_else(|| "rejected".to_string(), |e| format!("{e:.3e}"));
         let f64_text = f64_result.map_or_else(|| "rejected".to_string(), |e| format!("{e:.3e}"));
@@ -180,13 +181,18 @@ fn f32_vs_f64_inversion_precision_corpus() {
             }
         }
     }
-    println!("f32 round-trip > 1e-5 on {f32_failures} cases; f64 > 1e-10 on {f64_failures} near-singular cases");
+    println!(
+        "f32 round-trip > 1e-5 on {f32_failures} cases; f64 > 1e-10 on {f64_failures} near-singular cases"
+    );
 }
 
 #[test]
 fn wb_without_luminance_normalization_shifts_exposure() {
     println!();
-    println!("{:<24} {:>14} {:>14}", "camera WB (as shot)", "luma shift", "stops");
+    println!(
+        "{:<24} {:>14} {:>14}",
+        "camera WB (as shot)", "luma shift", "stops"
+    );
     let samples = [
         ("tungsten [1.9, 1.0, 1.4]", [1.9, 1.0, 1.4]),
         ("shade [2.3, 1.0, 1.2]", [2.3, 1.0, 1.2]),
@@ -213,12 +219,7 @@ fn wb_without_luminance_normalization_shifts_exposure() {
 #[allow(clippy::cast_possible_truncation)]
 fn precise_and_f32_camera_transforms_agree_on_realistic_profiles() {
     for (name, xyz_to_camera) in realistic_camera_matrices() {
-        let profile = [
-            xyz_to_camera[0],
-            xyz_to_camera[1],
-            xyz_to_camera[2],
-            [0.0; 3],
-        ];
+        let profile = [xyz_to_camera[0], xyz_to_camera[1], xyz_to_camera[2], [0.0; 3]];
         let precise = camera_to_linear_srgb_precise(profile).expect(name);
         let legacy = camera_to_linear_srgb(profile.map(|row| row.map(|v| v as f32))).expect(name);
         let mut max_diff = 0.0_f64;

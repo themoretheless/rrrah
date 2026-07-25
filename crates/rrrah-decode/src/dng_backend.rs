@@ -1,16 +1,16 @@
 //! Production adapter for the clean-room TIFF/DNG decoder.
 
-use std::{fs::File, io::Read, sync::Arc, time::Instant};
+use std::{sync::Arc, time::Instant};
 
 use rrrah_core::{
     CfaColor, CfaPattern, DECODE_CROP_AS_METADATA, DECODE_FULL_SENSOR_RAW, DECODE_IMAGE_INDEX_IN_KEY,
     DECODE_INTEGER_U16, DECODE_SENSOR_COORDINATES, DecodedMosaic, DngColorMatrix, LevelGrid,
-    MosaicRecipeManifest, Orientation, Photometric, RawMetadata, Rect, WhiteLevel,
-    select_dng_xyz_to_camera,
+    MosaicRecipeManifest, Orientation, Photometric, RawMetadata, Rect, WhiteLevel, select_dng_xyz_to_camera,
 };
 
 use crate::{
     AdaptTimings, DecodeError, DecodeOutput, DecodeRequest, DecodeTimings, DngDecodeTimings, RawDecoder,
+    bounded_io::read_bounded,
     dng::{self, DngError, DngImage},
 };
 
@@ -21,7 +21,6 @@ const NATIVE_DECODE_FLAGS: u32 = DECODE_FULL_SENSOR_RAW
     | DECODE_SENSOR_COORDINATES
     | DECODE_CROP_AS_METADATA
     | DECODE_IMAGE_INDEX_IN_KEY;
-const MAX_INPUT_BYTES: u64 = 2 * 1024 * 1024 * 1024;
 
 /// Semantic contract for the first native DNG decoder.
 ///
@@ -34,10 +33,7 @@ pub const NATIVE_DNG_MOSAIC_CONTRACT_1: MosaicRecipeManifest = MosaicRecipeManif
     1,
     1,
     NATIVE_DECODE_FLAGS,
-    [
-        0xab, 0x83, 0x34, 0x86, 0x28, 0xb8, 0xa9, 0x5b, 0x42, 0x58, 0x3e, 0x96, 0xbe, 0xd2, 0x2a, 0xa5, 0xba,
-        0x94, 0x4c, 0xda, 0xb5, 0x4f, 0xb7, 0x45, 0xbe, 0xb0, 0xa6, 0xa0, 0x98, 0xea, 0x37, 0x70,
-    ],
+    crate::WORKSPACE_LOCK_DIGEST,
 );
 
 #[derive(Debug, Clone, Copy, Default)]
@@ -111,51 +107,6 @@ impl RawDecoder for NativeDngDecoder {
             },
         })
     }
-}
-
-fn read_bounded(request: &DecodeRequest) -> Result<Vec<u8>, DecodeError> {
-    let mut file = File::open(&request.path).map_err(|source| DecodeError::Io {
-        path: request.path.clone(),
-        source,
-    })?;
-    let declared = file
-        .metadata()
-        .map_err(|source| DecodeError::Io {
-            path: request.path.clone(),
-            source,
-        })?
-        .len();
-    if declared > MAX_INPUT_BYTES {
-        return Err(DecodeError::InputTooLarge {
-            path: request.path.clone(),
-            actual: declared,
-            limit: MAX_INPUT_BYTES,
-        });
-    }
-    let capacity = usize::try_from(declared).map_err(|_| DecodeError::InputTooLarge {
-        path: request.path.clone(),
-        actual: declared,
-        limit: MAX_INPUT_BYTES,
-    })?;
-    let mut data = Vec::new();
-    data.try_reserve_exact(capacity)
-        .map_err(|_| DecodeError::InputAllocation { bytes: capacity })?;
-    file.by_ref()
-        .take(MAX_INPUT_BYTES.saturating_add(1))
-        .read_to_end(&mut data)
-        .map_err(|source| DecodeError::Io {
-            path: request.path.clone(),
-            source,
-        })?;
-    let actual = u64::try_from(data.len()).unwrap_or(u64::MAX);
-    if actual > MAX_INPUT_BYTES {
-        return Err(DecodeError::InputTooLarge {
-            path: request.path.clone(),
-            actual,
-            limit: MAX_INPUT_BYTES,
-        });
-    }
-    Ok(data)
 }
 
 fn map_dng_error(error: &DngError) -> DecodeError {
@@ -349,16 +300,14 @@ fn select_xyz_to_camera_d65(
     calibration_illuminant_2: Option<u16>,
 ) -> Option<[[f64; 3]; 3]> {
     let candidate = |matrix: Option<&[f64]>, illuminant: Option<u16>| {
-        matrix
-            .filter(|flat| flat.len() == 9)
-            .map(|flat| DngColorMatrix {
-                xyz_to_camera: [
-                    [flat[0], flat[1], flat[2]],
-                    [flat[3], flat[4], flat[5]],
-                    [flat[6], flat[7], flat[8]],
-                ],
-                illuminant,
-            })
+        matrix.filter(|flat| flat.len() == 9).map(|flat| DngColorMatrix {
+            xyz_to_camera: [
+                [flat[0], flat[1], flat[2]],
+                [flat[3], flat[4], flat[5]],
+                [flat[6], flat[7], flat[8]],
+            ],
+            illuminant,
+        })
     };
     select_dng_xyz_to_camera(
         candidate(color_matrix_1, calibration_illuminant_1),
@@ -487,8 +436,7 @@ mod tests {
     fn d65_color_matrix_2_wins_verbatim_over_illuminant_a_matrix_1() {
         let cm_a = flat([[0.6, -0.1, -0.1], [-0.8, 1.6, 0.2], [-0.2, 0.4, 0.6]]);
         let cm_d65 = flat([[1.0, -0.2, -0.1], [-0.5, 1.4, 0.1], [-0.1, 0.1, 0.8]]);
-        let selected =
-            select_xyz_to_camera_d65(Some(&cm_a), Some(17), Some(&cm_d65), Some(21)).unwrap();
+        let selected = select_xyz_to_camera_d65(Some(&cm_a), Some(17), Some(&cm_d65), Some(21)).unwrap();
         for (selected, verbatim) in selected.into_iter().flatten().zip(cm_d65) {
             assert_eq!(selected, verbatim);
         }

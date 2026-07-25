@@ -62,6 +62,13 @@ process с лимитами RSS, CPU/wall time и длины IPC.
 | `BlackIsZero` photometric | metadata is preserved | GPU fast path rejects non-CFA explicitly | grayscale/raw-channel path or visible degraded mode |
 | X-Trans / 6x6 / four-color CFA | metadata is preserved | `bayer_quad()` rejects fast path | quality demosaic backend and camera corpus |
 | unknown photometric / malformed IFD | rawler error or panic caught | typed error, no JPEG fallback | independent bounded probe and fuzz campaign |
+| Canon CR2 | rawler full-frame decode | native clean-room decode: single-strip lossless JPEG with CR2 slice scatter; typed rejection of other compressions, sRAW/mRAW, tile/multi-strip storage, EOS-1D width quirk | `cr2-canon-24mp`/`cr2-canon-52mp` corpus + exact pixel oracle (`RRRAH_CR2_FIXTURE` smoke gate in place) |
+| Nikon NEF | rawler full-frame decode | native decode of uncompressed 12/14-bit MSB-packed strips and Nikon lossless (34713: makernote Huffman tree + linearization curve, native bitstream decoder per rawspeed `NikonDecompressor`); Z-series high-efficiency/lossy variants, multi-strip 34713 and exotic curve variants rejected explicitly | `nef-uncompressed` + `nef-lossless` corpus (`RRRAH_NEF_FIXTURE`) |
+| Sony ARW | rawler full-frame decode | native decode: uncompressed 16-bit / LSB-packed 12/14-bit, ARW 2.x cRAW block delta, lossless JPEG; ARW 1.0 Huffman/curve rejected | `arw-uncompressed` + `arw-craw` + `arw-ljpeg` corpus (`RRRAH_ARW_FIXTURE`) |
+| Olympus ORF | rawler full-frame decode | native decode: 0x4F52/0x5352 magic accepted as classic TIFF; 12-bit packed / 16-bit / single-strip LJPEG; C-series Huffman and OM System bitstreams rejected as unverifiable | `orf-12bit` corpus + 12-bit packing oracle (`RRRAH_ORF_FIXTURE`) |
+| Pentax PEF | rawler full-frame decode | native decode: uncompressed MSB-packed 12/14/16-bit, TIFF/EP lossless JPEG, and Pentax lossless (65535: makernote Huffman table 0x0220, custom predictor); multi-strip 65535, odd widths and missing-makernote files rejected | `pef-uncompressed` + `pef-ljpeg` + `pef-65535` corpus (`RRRAH_PEF_FIXTURE`) |
+| Panasonic RW2 | rawler full-frame decode | native decode: 0x55 magic accepted as classic TIFF; 16-bit uncompressed, Panasonic packed 12/14-bit (dcraw `panasonic_load_raw` semantics), single-strip LJPEG; legacy 34316/34826/34828/34830 codes rejected | `rw2-packed` + `rw2-ljpeg` corpus + packed-stream oracle (`RRRAH_RW2_FIXTURE`) |
+| Fujifilm RAF | rawler full-frame decode | native decode: FUJIFILMCCD-RAW container, Bayer 12/14-bit LSB-packed / 16-bit / LJPEG; X-Trans, rotated Super-CCD and Fuji proprietary compression rejected | `raf-bayer` corpus + X-Trans negative case (`RRRAH_RAF_FIXTURE`) |
 
 Important: preserving a non-Bayer CFA is not the same as supporting it. The
 adapter test checks that `RRGG` is not rewritten as Bayer; the GPU tests must then
@@ -79,6 +86,15 @@ camera files:
   `FrameError::UnsupportedCfa`;
 - `BlackIsZero` remains explicit metadata and is not replaced by an embedded
   preview or a fake CFA.
+
+`crates/rrrah-decode/src/camtiff/` adds deterministic camera-format tests
+built from synthetic in-memory containers (no licensed camera files): per
+format they validate header/signature handling, raw-IFD selection, metadata
+mapping, the pixel unpackers against hand-computed or dcraw-style reference
+vectors, and every typed rejection listed in §2. The shared TIFF reader has
+unit coverage for the ORF (0x4F52/0x5352) and RW2 (0x55) magics alongside the
+classic (42) and BigTIFF (43) magics. These tests prove parser and decoder
+arithmetic, never camera compatibility.
 
 The test module has no fixture bytes and therefore cannot create a false claim of
 camera compatibility. It currently passes with the workspace's normal
@@ -106,6 +122,19 @@ are supplied by the fixture manifest.
 | `dng-black-grid` | 2x2 and non-uniform repeat black-level grids | positive | full grid retained; no top-left-only oracle |
 | `dng-xtrans` | 6x6 CFA, orientation not normal | capability | metadata exact; Bayer fast path rejects |
 | `dng-malformed-ifd` | cycles, huge count, duplicate/overflowed offsets | negative | no allocation proportional to attacker count |
+| `cr2-real-bayer` | Canon CR2, single-strip lossless JPEG, 2x2 Bayer | positive | `decode_file` succeeds; geometry/CFA/pixel-count invariants (`RRRAH_CR2_FIXTURE`) |
+| `nef-real-uncompressed` | Nikon NEF, uncompressed 12/14-bit MSB-packed strips | positive | same invariant suite (`RRRAH_NEF_FIXTURE`) |
+| `nef-lossless` | Nikon NEF, compression 34713 (single strip, documented 12/14-bit curve) | positive | same invariant suite; linearization curve applied exactly (`RRRAH_NEF_FIXTURE`) |
+| `nef-zseries-rejected` | Nikon NEF, Z-series high-efficiency/lossy compression | negative | typed rejection, no misdecoded pixels |
+| `arw-real-uncompressed` | Sony ARW, compression 1 (16-bit or LSB-packed) | positive | same invariant suite (`RRRAH_ARW_FIXTURE`) |
+| `arw-craw` | Sony ARW 2.x cRAW block-delta (compression 32767) | positive | same invariant suite; cRAW oracle digest |
+| `arw-huffman-rejected` | Sony ARW 1.0 Huffman/curve | negative | typed rejection, no misdecoded pixels |
+| `orf-real-12bit` | Olympus ORF (`IIRO`/`IIRS`), 12-bit packed | positive | same invariant suite (`RRRAH_ORF_FIXTURE`) |
+| `pef-real` | Pentax PEF, uncompressed packed or TIFF/EP LJPEG | positive | same invariant suite (`RRRAH_PEF_FIXTURE`) |
+| `pef-65535` | Pentax PEF, compression 65535 (single strip, even width, makernote table 0x0220) | positive | same invariant suite (`RRRAH_PEF_FIXTURE`) |
+| `rw2-real-packed` | Panasonic RW2 (`IIU\0`), packed 12/14-bit or 16-bit | positive | same invariant suite (`RRRAH_RW2_FIXTURE`) |
+| `raf-real-bayer` | Fujifilm RAF, Bayer 12/14-bit LSB-packed or 16-bit | positive | same invariant suite (`RRRAH_RAF_FIXTURE`) |
+| `raf-xtrans-rejected` | Fujifilm RAF, X-Trans 6x6 | negative | typed rejection; not mislabeled as Bayer |
 
 The current shell fixture helper verifies `SHA256SUMS`; before release it should
 also verify a sidecar manifest with format, expected metadata, licence, decoder
@@ -120,6 +149,24 @@ The adapter tests are opt-in for real files:
 RRRAH_CR2_FIXTURE=/licensed/path/sample.CR2 \
   cargo test -p rrrah-decode configured_cr2_fixture_decodes_sensor_samples --locked
 
+RRRAH_NEF_FIXTURE=/licensed/path/sample.NEF \
+  cargo test -p rrrah-decode configured_nef_fixture_decodes_sensor_samples --locked
+
+RRRAH_ARW_FIXTURE=/licensed/path/sample.ARW \
+  cargo test -p rrrah-decode configured_arw_fixture_decodes_sensor_samples --locked
+
+RRRAH_ORF_FIXTURE=/licensed/path/sample.ORF \
+  cargo test -p rrrah-decode configured_orf_fixture_decodes_sensor_samples --locked
+
+RRRAH_PEF_FIXTURE=/licensed/path/sample.PEF \
+  cargo test -p rrrah-decode configured_pef_fixture_decodes_sensor_samples --locked
+
+RRRAH_RW2_FIXTURE=/licensed/path/sample.RW2 \
+  cargo test -p rrrah-decode configured_rw2_fixture_decodes_sensor_samples --locked
+
+RRRAH_RAF_FIXTURE=/licensed/path/sample.RAF \
+  cargo test -p rrrah-decode configured_raf_fixture_decodes_sensor_samples --locked
+
 RRRAH_DNG_FIXTURE=/licensed/path/sample.DNG \
   cargo test -p rrrah-decode configured_dng_fixture_decodes_sensor_samples --locked
 
@@ -128,8 +175,10 @@ RRRAH_DNG_FLOAT_FIXTURE=/licensed/path/linear-float.DNG \
 ```
 
 If an environment variable is absent the test reports a skip; it never invents
-fixture bytes. CI with a licensed corpus should set all three variables and
-fail if any is missing.
+fixture bytes. The camera-format tests decode through the production router
+and assert routing, geometry, CFA, levels and pixel-count invariants only —
+an exact pixel oracle additionally requires the staged manifest above. CI
+with a licensed corpus should set all variables and fail if any is missing.
 
 ## 5. Differential oracle
 

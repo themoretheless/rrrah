@@ -10,6 +10,7 @@ mod disk;
 mod key;
 mod mosaic_object_v1;
 mod mosaic_payload_v1;
+mod ram;
 mod weighted_lru;
 
 #[cfg(feature = "bench-internals")]
@@ -37,6 +38,7 @@ pub use mosaic_payload_v1::{
     decode_mosaic_payload_v1_with_limits, encode_mosaic_payload_v1, mosaic_payload_schema_v1,
     prepare_mosaic_payload_v1,
 };
+pub use ram::{DEFAULT_RAM_CACHE_BYTES, MosaicRamCache};
 pub use weighted_lru::WeightedLru;
 
 // Cross-layer wire caps are part of one composition contract. Keep these as

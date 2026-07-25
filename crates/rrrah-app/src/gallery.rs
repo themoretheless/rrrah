@@ -30,6 +30,27 @@ pub const PREFETCH_AHEAD: usize = 5;
 const RAW_PREFETCH_FOREGROUND: u8 = 1 << 0;
 const RAW_PREFETCH_STORE_ADMITTED: u8 = 1 << 1;
 
+/// Direction of the most recent gallery navigation. The prefetch window is
+/// biased toward the direction of travel: backward navigation swaps the
+/// behind/ahead extents so revisited frames are warmed first.
+#[derive(Debug, Default, Clone, Copy, PartialEq, Eq)]
+pub enum NavDirection {
+    #[default]
+    None,
+    Forward,
+    Backward,
+}
+
+impl NavDirection {
+    /// `(behind, ahead)` prefetch extents for this direction of travel.
+    fn window(self) -> (usize, usize) {
+        match self {
+            Self::None | Self::Forward => (PREFETCH_BEHIND, PREFETCH_AHEAD),
+            Self::Backward => (PREFETCH_AHEAD, PREFETCH_BEHIND),
+        }
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct GalleryItem {
     pub path: PathBuf,
@@ -348,7 +369,12 @@ impl RawPrefetcher {
     /// Resume background work after the selected frame is ready. Foreground
     /// write-back owns the current frame; this worker warms two previous, then
     /// five following paths without racing to decode the current frame twice.
-    pub fn finish_foreground_and_submit(&self, gallery: &[PathBuf], selected: usize) {
+    pub fn finish_foreground_and_submit(
+        &self,
+        gallery: &[PathBuf],
+        selected: usize,
+        direction: NavDirection,
+    ) {
         self.decode_gate.defer_prefetch();
         if !self.enabled {
             self.telemetry().disable_prefetch();
@@ -361,7 +387,7 @@ impl RawPrefetcher {
             return;
         }
         let generation = self.generation.fetch_add(1, Ordering::AcqRel).wrapping_add(1);
-        let paths = raw_prefetch_paths(gallery, selected);
+        let paths = raw_prefetch_paths(gallery, selected, direction);
         self.telemetry().begin_prefetch(generation, paths.len());
         while self.pending.try_recv().is_ok() {}
         if self
@@ -381,17 +407,18 @@ impl RawPrefetcher {
     }
 }
 
-fn raw_prefetch_paths(gallery: &[PathBuf], selected: usize) -> Vec<PathBuf> {
+fn raw_prefetch_paths(gallery: &[PathBuf], selected: usize, direction: NavDirection) -> Vec<PathBuf> {
     if selected >= gallery.len() {
         return Vec::new();
     }
-    let mut paths = Vec::with_capacity(PREFETCH_BEHIND + PREFETCH_AHEAD);
-    for delta in 1..=PREFETCH_BEHIND {
+    let (behind, ahead) = direction.window();
+    let mut paths = Vec::with_capacity(behind + ahead);
+    for delta in 1..=behind {
         if let Some(index) = selected.checked_sub(delta) {
             paths.push(gallery[index].clone());
         }
     }
-    for delta in 1..=PREFETCH_AHEAD {
+    for delta in 1..=ahead {
         if let Some(path) = selected.checked_add(delta).and_then(|index| gallery.get(index)) {
             paths.push(path.clone());
         }
@@ -539,9 +566,127 @@ pub fn scan_folder(folder: &Path) -> Vec<PathBuf> {
     paths
 }
 
+/// One folder tile in the filmstrip: the directory plus its cover image (the
+/// first supported file in deterministic name order).
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct FolderTile {
+    pub folder: PathBuf,
+    pub cover: PathBuf,
+}
+
+/// Enumerate sibling directories of `folder` (including `folder` itself) that
+/// contain at least one supported image. Deliberately cheap: one readdir of
+/// the parent plus one readdir per subdirectory, no recursion, no symlink
+/// following.
+pub fn sibling_folder_tiles(folder: &Path) -> Vec<FolderTile> {
+    let Some(parent) = folder.parent() else {
+        return Vec::new();
+    };
+    let Ok(entries) = std::fs::read_dir(parent) else {
+        return Vec::new();
+    };
+    let mut tiles = entries
+        .filter_map(Result::ok)
+        .filter_map(|entry| {
+            let path = entry.path();
+            let metadata = std::fs::symlink_metadata(&path).ok()?;
+            if !metadata.file_type().is_dir() {
+                return None;
+            }
+            let cover = first_supported_image(&path)?;
+            Some(FolderTile { folder: path, cover })
+        })
+        .collect::<Vec<_>>();
+    tiles.sort_by_cached_key(|tile| {
+        tile.folder
+            .file_name()
+            .map(|n| n.to_string_lossy().to_ascii_lowercase())
+            .unwrap_or_default()
+    });
+    tiles
+}
+
+fn first_supported_image(folder: &Path) -> Option<PathBuf> {
+    let mut candidates = std::fs::read_dir(folder)
+        .ok()?
+        .filter_map(Result::ok)
+        .filter_map(|entry| {
+            let path = entry.path();
+            let metadata = std::fs::symlink_metadata(&path).ok()?;
+            (metadata.file_type().is_file() && is_supported(&path)).then_some(path)
+        })
+        .collect::<Vec<_>>();
+    candidates.sort_by_cached_key(|p| {
+        p.file_name()
+            .map(|n| n.to_string_lossy().to_ascii_lowercase())
+            .unwrap_or_default()
+    });
+    candidates.into_iter().next()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    fn write_file(path: &std::path::Path) {
+        std::fs::write(path, b"synthetic").expect("write test file");
+    }
+
+    #[test]
+    fn sibling_folder_tiles_lists_only_dirs_with_supported_images() {
+        let root = tempfile::tempdir().expect("tempdir");
+        let parent = root.path();
+        for name in ["b-session", "a-session", "c-session"] {
+            let dir = parent.join(name);
+            std::fs::create_dir(&dir).expect("mkdir");
+        }
+        write_file(&parent.join("b-session").join("IMG_0002.CR3"));
+        write_file(&parent.join("b-session").join("IMG_0001.DNG"));
+        write_file(&parent.join("a-session").join("photo.dng"));
+        // c-session has only unsupported files and must be skipped.
+        write_file(&parent.join("c-session").join("notes.txt"));
+        write_file(&parent.join("loose-file.dng"));
+
+        let tiles = sibling_folder_tiles(&parent.join("b-session"));
+        let names: Vec<_> = tiles
+            .iter()
+            .map(|tile| tile.folder.file_name().unwrap().to_string_lossy().into_owned())
+            .collect();
+        assert_eq!(names, ["a-session", "b-session"], "sorted, supported-only");
+        // Cover is the first supported image in deterministic name order.
+        assert_eq!(
+            tiles[1].cover.file_name().unwrap().to_string_lossy(),
+            "IMG_0001.DNG"
+        );
+    }
+
+    #[test]
+    fn sibling_folder_tiles_ignores_symlinked_dirs() {
+        let root = tempfile::tempdir().expect("tempdir");
+        let parent = root.path();
+        let real = parent.join("real");
+        std::fs::create_dir(&real).expect("mkdir");
+        write_file(&real.join("a.cr3"));
+        #[cfg(unix)]
+        {
+            std::os::unix::fs::symlink(&real, parent.join("linked")).expect("symlink");
+            let tiles = sibling_folder_tiles(&real);
+            assert_eq!(tiles.len(), 1);
+            assert_eq!(tiles[0].folder, real);
+        }
+        #[cfg(not(unix))]
+        {
+            assert_eq!(sibling_folder_tiles(&real).len(), 1);
+        }
+    }
+
+    #[test]
+    fn sibling_folder_tiles_handles_missing_parent_and_filesystem_root() {
+        assert!(sibling_folder_tiles(Path::new("/definitely/missing/path")).is_empty());
+        let root = std::path::Path::new("/");
+        // parent of "/" is None.
+        let _ = sibling_folder_tiles(root);
+    }
 
     fn thumbnail_job(index: usize) -> ThumbnailJob {
         ThumbnailJob {
@@ -652,8 +797,40 @@ mod tests {
             .map(|i| PathBuf::from(format!("{i}.cr3")))
             .collect::<Vec<_>>();
         assert_eq!(
-            raw_prefetch_paths(&paths, 10),
+            raw_prefetch_paths(&paths, 10, NavDirection::None),
             [9, 8, 11, 12, 13, 14, 15].map(|i| PathBuf::from(format!("{i}.cr3")))
+        );
+        assert_eq!(
+            raw_prefetch_paths(&paths, 10, NavDirection::Forward),
+            raw_prefetch_paths(&paths, 10, NavDirection::None),
+            "forward travel keeps the default forward-biased window"
+        );
+    }
+
+    #[test]
+    fn raw_prefetch_paths_swap_window_when_travelling_backward() {
+        let paths = (0..20)
+            .map(|i| PathBuf::from(format!("{i}.cr3")))
+            .collect::<Vec<_>>();
+        assert_eq!(
+            raw_prefetch_paths(&paths, 10, NavDirection::Backward),
+            [9, 8, 7, 6, 5, 11, 12].map(|i| PathBuf::from(format!("{i}.cr3")))
+        );
+    }
+
+    #[test]
+    fn raw_prefetch_backward_window_is_bounded_at_gallery_edges() {
+        let paths = (0..7)
+            .map(|i| PathBuf::from(format!("{i}.dng")))
+            .collect::<Vec<_>>();
+
+        assert_eq!(
+            raw_prefetch_paths(&paths, 0, NavDirection::Backward),
+            [1, 2].map(|i| PathBuf::from(format!("{i}.dng")))
+        );
+        assert_eq!(
+            raw_prefetch_paths(&paths, 6, NavDirection::Backward),
+            [5, 4, 3, 2, 1].map(|i| PathBuf::from(format!("{i}.dng")))
         );
     }
 
@@ -664,15 +841,15 @@ mod tests {
             .collect::<Vec<_>>();
 
         assert_eq!(
-            raw_prefetch_paths(&paths, 0),
+            raw_prefetch_paths(&paths, 0, NavDirection::None),
             [1, 2, 3, 4, 5].map(|i| PathBuf::from(format!("{i}.dng")))
         );
         assert_eq!(
-            raw_prefetch_paths(&paths, 6),
+            raw_prefetch_paths(&paths, 6, NavDirection::None),
             [5, 4].map(|i| PathBuf::from(format!("{i}.dng")))
         );
-        assert!(raw_prefetch_paths(&paths, paths.len()).is_empty());
-        assert!(raw_prefetch_paths(&[], 0).is_empty());
+        assert!(raw_prefetch_paths(&paths, paths.len(), NavDirection::None).is_empty());
+        assert!(raw_prefetch_paths(&[], 0, NavDirection::None).is_empty());
     }
 
     #[test]
@@ -771,15 +948,15 @@ mod tests {
             .map(|index| PathBuf::from(format!("{index}.cr3")))
             .collect::<Vec<_>>();
 
-        prefetcher.finish_foreground_and_submit(&paths, 3);
+        prefetcher.finish_foreground_and_submit(&paths, 3, NavDirection::None);
         let first_generation = prefetcher.generation.load(Ordering::Acquire);
-        prefetcher.finish_foreground_and_submit(&paths, 10);
+        prefetcher.finish_foreground_and_submit(&paths, 10, NavDirection::None);
 
         assert_eq!(prefetcher.pending.len(), 1);
         let command = prefetcher.pending.try_recv().unwrap();
         assert!(command.generation > first_generation);
         assert_eq!(command.generation, prefetcher.generation.load(Ordering::Acquire));
-        assert_eq!(command.paths, raw_prefetch_paths(&paths, 10));
+        assert_eq!(command.paths, raw_prefetch_paths(&paths, 10, NavDirection::None));
         assert!(prefetcher.pending.try_recv().is_err());
     }
 
@@ -790,7 +967,7 @@ mod tests {
             .map(|index| PathBuf::from(format!("{index}.dng")))
             .collect::<Vec<_>>();
 
-        prefetcher.finish_foreground_and_submit(&paths, 4);
+        prefetcher.finish_foreground_and_submit(&paths, 4, NavDirection::None);
         let stale_generation = prefetcher.generation.load(Ordering::Acquire);
         assert_eq!(prefetcher.pending.len(), 1);
 
@@ -802,14 +979,14 @@ mod tests {
         assert!(prefetcher.pending.is_empty());
         assert_ne!(prefetcher.generation.load(Ordering::Acquire), stale_generation);
 
-        prefetcher.finish_foreground_and_submit(&paths, 5);
+        prefetcher.finish_foreground_and_submit(&paths, 5, NavDirection::None);
         assert_eq!(
             prefetcher.state.load(Ordering::Acquire) & RAW_PREFETCH_FOREGROUND,
             0
         );
         let resumed = prefetcher.pending.try_recv().unwrap();
         assert_eq!(resumed.generation, prefetcher.generation.load(Ordering::Acquire));
-        assert_eq!(resumed.paths, raw_prefetch_paths(&paths, 5));
+        assert_eq!(resumed.paths, raw_prefetch_paths(&paths, 5, NavDirection::None));
     }
 
     #[test]
@@ -843,13 +1020,16 @@ mod tests {
                 assert!(prefetcher.pending.is_empty());
             }
             let selected = (step * 37) % paths.len();
-            prefetcher.finish_foreground_and_submit(&paths, selected);
+            prefetcher.finish_foreground_and_submit(&paths, selected, NavDirection::None);
             assert!(prefetcher.pending.len() <= 1, "step {step}");
         }
 
         let latest = prefetcher.pending.try_recv().unwrap();
         let selected = ((10_000 - 1) * 37) % paths.len();
-        assert_eq!(latest.paths, raw_prefetch_paths(&paths, selected));
+        assert_eq!(
+            latest.paths,
+            raw_prefetch_paths(&paths, selected, NavDirection::None)
+        );
         assert_eq!(latest.generation, prefetcher.generation.load(Ordering::Acquire));
     }
 }

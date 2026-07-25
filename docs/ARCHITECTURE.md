@@ -88,7 +88,10 @@ B=\frac{NW+NE+SW+SE}{4}.
 
 ### 3. Цвет
 
-Форматный backend предоставляет `white_balance` и `xyz_to_camera`. Для D65:
+Форматный backend предоставляет `white_balance` как готовые мультипликативные
+camera-space correction gains и `xyz_to_camera`. Renderer загружает WB без
+дополнительной display-luma нормализации: нейтраль и её общий масштаб уже
+зафиксированы backend-конвенцией. Для D65:
 
 \[
 M_{rgb\to cam}=normalize(M_{xyz\to cam}M_{sRGB\to XYZ}),\quad

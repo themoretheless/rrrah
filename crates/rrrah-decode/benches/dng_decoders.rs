@@ -362,5 +362,10 @@ fn bench_dng_tiled_parallel(criterion: &mut Criterion) {
     group.finish();
 }
 
-criterion_group!(benches, bench_lossless_jpeg, bench_unpack_msb, bench_dng_tiled_parallel);
+criterion_group!(
+    benches,
+    bench_lossless_jpeg,
+    bench_unpack_msb,
+    bench_dng_tiled_parallel
+);
 criterion_main!(benches);

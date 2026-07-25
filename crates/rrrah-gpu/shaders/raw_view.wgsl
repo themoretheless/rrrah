@@ -131,11 +131,44 @@ fn developed_rgb_at(raw_position: vec2<f32>, raw_pixel_footprint: f32) -> vec3<f
     return linear_rgb * exp2(parameters.exposure_stops);
 }
 
-fn aces_fitted(value: vec3<f32>) -> vec3<f32> {
-    let positive = max(value, vec3<f32>(0.0));
-    let numerator = positive * (2.51 * positive + vec3<f32>(0.03));
-    let denominator = positive * (2.43 * positive + vec3<f32>(0.59)) + vec3<f32>(0.14);
-    return clamp(numerator / denominator, vec3<f32>(0.0), vec3<f32>(1.0));
+fn aces_scalar(value: f32) -> f32 {
+    let positive = max(value, 0.0);
+    let numerator = positive * (2.51 * positive + 0.03);
+    let denominator = positive * (2.43 * positive + 0.59) + 0.14;
+    return clamp(numerator / denominator, 0.0, 1.0);
+}
+
+// Hue-preserving ACES tone/gamut mapping (color question #4). Mirrors
+// `rrrah_core::aces_tone_map_rgb`; see `docs/experiments/SUMMARY.md`.
+//
+// 1. Sub-zero components (out-of-gamut camera colors) are desaturated toward
+//    the Rec.709 luma axis until the lowest channel reaches the gamut
+//    boundary, instead of being clamped to zero (which rotated hue).
+// 2. The achromatic max-component norm runs through the ACES fitted curve
+//    and the triplet scales by aces(norm)/norm — one common positive factor,
+//    so hue and channel ratios are preserved by construction (CIELAB h° is
+//    invariant under linear-RGB scaling). Achromatic inputs reduce to the
+//    previous per-channel curve exactly.
+// 3. The norm is the max component and aces_scalar <= 1, so the output never
+//    leaves the display gamut: no post-tone-map clipping is needed.
+fn aces_tone_map(rgb: vec3<f32>) -> vec3<f32> {
+    var color = rgb;
+    let minimum = min(color.r, min(color.g, color.b));
+    if minimum < 0.0 {
+        let luma = dot(color, vec3<f32>(0.2126, 0.7152, 0.0722));
+        if luma > 0.0 {
+            // min + t * (luma - min) = 0  ->  t = -min / (luma - min).
+            let desaturate = clamp(-minimum / (luma - minimum), 0.0, 1.0);
+            color = mix(color, vec3<f32>(luma), desaturate);
+        } else {
+            color = max(color, vec3<f32>(0.0));
+        }
+    }
+    let norm = max(color.r, max(color.g, color.b));
+    if norm <= 0.0 {
+        return vec3<f32>(0.0);
+    }
+    return color * (aces_scalar(norm) / norm);
 }
 
 @fragment
@@ -156,5 +189,5 @@ fn fs_main(@builtin(position) fragment: vec4<f32>) -> @location(0) vec4<f32> {
     let crop_extent = max(vec2<f32>(parameters.crop_size) - vec2<f32>(1.0), vec2<f32>(0.0));
     let raw_position = vec2<f32>(parameters.crop_origin) + raw_uv * crop_extent;
     let linear_rgb = developed_rgb_at(raw_position, 1.0 / scale);
-    return vec4<f32>(aces_fitted(linear_rgb), 1.0);
+    return vec4<f32>(aces_tone_map(linear_rgb), 1.0);
 }

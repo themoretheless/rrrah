@@ -22,6 +22,7 @@ const MAX_COMPONENTS: usize = 4;
 const MAX_HUFFMAN_TABLES: usize = 4;
 const MAX_OUTPUT_SAMPLES: usize = 128 * 1024 * 1024;
 const CANCELLATION_MCU_GRANULARITY: usize = 1_024;
+const LINEARIZATION_CHUNK_SAMPLES: usize = 4_096;
 const HUFFMAN_LOOKAHEAD_BITS: usize = 10;
 const HUFFMAN_LOOKAHEAD_SIZE: usize = 1 << HUFFMAN_LOOKAHEAD_BITS;
 
@@ -107,6 +108,24 @@ pub(crate) enum LosslessJpegError {
     InvalidDifferenceCategory { table_id: u8, category: u8 },
     #[error("lossless JPEG scan references undefined DC Huffman table {table_id}")]
     MissingHuffmanTable { table_id: u8 },
+    #[error("lossless JPEG external Huffman table {table_id} is supplied more than once")]
+    DuplicateExternalHuffmanTable { table_id: u8 },
+    #[error(
+        "lossless JPEG external Huffman table {table_id} declares {declared} symbols but provides {provided}"
+    )]
+    ExternalHuffmanSymbolCount {
+        table_id: u8,
+        declared: usize,
+        provided: usize,
+    },
+    #[error(
+        "lossless JPEG linearization curve has {curve_len} entries, but sample {sample_index} has value {value}"
+    )]
+    LinearizationCurveOutOfRange {
+        sample_index: usize,
+        value: u16,
+        curve_len: usize,
+    },
     #[error("lossless JPEG SOS component count {components} is outside the SOF3 frame")]
     InvalidScanComponentCount { components: usize },
     #[error("lossless JPEG SOS references unknown component identifier {component_id}")]
@@ -555,23 +574,71 @@ impl<'a> EntropyReader<'a> {
     }
 }
 
+/// A DC Huffman table supplied by the caller instead of an in-stream DHT
+/// segment.
+///
+/// Camera formats such as Nikon NEF compression 34713 and Pentax PEF
+/// compression 65535 store a proprietary Huffman table in the makernote and
+/// emit SOF3 streams without DHT segments. `counts` holds the 16 code-length
+/// counts and `symbols` the symbol list, in the exact layout of a DHT
+/// segment payload (T.81 B.2.4.2) minus the leading class/id byte — the same
+/// layout makernotes use. The symbol list must contain exactly
+/// `counts.iter().sum()` entries.
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[allow(dead_code)] // Retained as tested infrastructure: both NEF 34713 and PEF 65535 turned
+// out to be raw bitstreams (not marker JPEG), so no production caller exists yet; kept for
+// future camera formats that do emit SOF3 streams with makernote Huffman tables.
+pub(crate) struct ExternalHuffmanTable<'a> {
+    pub(crate) table_id: u8,
+    pub(crate) counts: [u8; 16],
+    pub(crate) symbols: &'a [u8],
+}
+
 /// Decodes a complete lossless Huffman JPEG payload.
-#[allow(clippy::too_many_lines)]
 pub(crate) fn decode(
     bytes: &[u8],
     cancelled: &dyn Fn() -> bool,
 ) -> Result<LosslessJpegImage, LosslessJpegError> {
-    decode_with_refill(bytes, cancelled, true)
+    decode_impl(bytes, cancelled, true, &[], false)
 }
 
 /// `word_refill` exists so benchmarks can A/B the bulk entropy refill against
 /// the byte-at-a-time reference path in the same process; production callers
 /// use [`decode`], which always enables it.
-#[allow(clippy::too_many_lines)]
 pub(crate) fn decode_with_refill(
     bytes: &[u8],
     cancelled: &dyn Fn() -> bool,
     word_refill: bool,
+) -> Result<LosslessJpegImage, LosslessJpegError> {
+    decode_impl(bytes, cancelled, word_refill, &[], false)
+}
+
+/// Decodes a complete lossless Huffman JPEG payload, seeding the DC Huffman
+/// tables from `external_tables` instead of requiring in-stream DHT segments.
+///
+/// Seeding happens before marker parsing, so an in-stream DHT segment still
+/// redefines a seeded slot (standard T.81 redefinition). With
+/// `prefer_external` set, in-stream DHT segments are fully validated but
+/// cannot overwrite a seeded slot, letting the caller force the makernote
+/// table. All other behavior matches [`decode`].
+#[allow(dead_code)] // No production caller yet (NEF/PEF are raw bitstreams, not marker JPEG);
+// retained with its tests as infrastructure for future marker-stream camera formats.
+pub(crate) fn decode_with_external_tables(
+    bytes: &[u8],
+    cancelled: &dyn Fn() -> bool,
+    external_tables: &[ExternalHuffmanTable<'_>],
+    prefer_external: bool,
+) -> Result<LosslessJpegImage, LosslessJpegError> {
+    decode_impl(bytes, cancelled, true, external_tables, prefer_external)
+}
+
+#[allow(clippy::too_many_lines)]
+fn decode_impl(
+    bytes: &[u8],
+    cancelled: &dyn Fn() -> bool,
+    word_refill: bool,
+    external_tables: &[ExternalHuffmanTable<'_>],
+    prefer_external: bool,
 ) -> Result<LosslessJpegImage, LosslessJpegError> {
     let mut reader = MarkerReader::new(bytes, 0);
     if !matches!(reader.next_marker(), Ok(Marker { code: SOI, .. })) {
@@ -580,6 +647,41 @@ pub(crate) fn decode_with_refill(
 
     let mut frame: Option<Frame> = None;
     let mut huffman_tables: [Option<HuffmanTable>; MAX_HUFFMAN_TABLES] = std::array::from_fn(|_| None);
+    // Seed caller-supplied tables before marker parsing so scans without
+    // in-stream DHT segments can reference them. The symbol-count check must
+    // run before `HuffmanTable::build`, which assumes the two agree.
+    let mut external_slots = [false; MAX_HUFFMAN_TABLES];
+    for table in external_tables {
+        let slot = usize::from(table.table_id);
+        if slot >= MAX_HUFFMAN_TABLES {
+            return Err(LosslessJpegError::UnsupportedHuffmanTable {
+                table_id: table.table_id,
+            });
+        }
+        if external_slots[slot] {
+            return Err(LosslessJpegError::DuplicateExternalHuffmanTable {
+                table_id: table.table_id,
+            });
+        }
+        let declared = table
+            .counts
+            .iter()
+            .map(|count| usize::from(*count))
+            .sum::<usize>();
+        if declared != table.symbols.len() {
+            return Err(LosslessJpegError::ExternalHuffmanSymbolCount {
+                table_id: table.table_id,
+                declared,
+                provided: table.symbols.len(),
+            });
+        }
+        huffman_tables[slot] = Some(HuffmanTable::build(
+            table.table_id,
+            table.counts,
+            table.symbols.to_vec(),
+        )?);
+        external_slots[slot] = true;
+    }
     let mut restart_interval = 0usize;
     let mut transformed_samples: Option<Vec<u16>> = None;
     let mut decoded_components = [false; MAX_COMPONENTS];
@@ -618,7 +720,20 @@ pub(crate) fn decode_with_refill(
             }
             DHT => {
                 let payload = reader.segment(marker)?;
-                parse_huffman_tables(payload, &mut huffman_tables)?;
+                if prefer_external {
+                    // Validate the segment fully, but never let it overwrite a
+                    // caller-seeded slot; unseeded slots still update.
+                    let mut parsed: [Option<HuffmanTable>; MAX_HUFFMAN_TABLES] =
+                        std::array::from_fn(|_| None);
+                    parse_huffman_tables(payload, &mut parsed)?;
+                    for (slot, parsed_table) in parsed.iter_mut().enumerate() {
+                        if !external_slots[slot] && parsed_table.is_some() {
+                            huffman_tables[slot] = parsed_table.take();
+                        }
+                    }
+                } else {
+                    parse_huffman_tables(payload, &mut huffman_tables)?;
+                }
             }
             DRI => {
                 let payload = reader.segment(marker)?;
@@ -1061,6 +1176,43 @@ fn select_predictor(selection: u8, left: i32, above: i32, upper_left: i32) -> i3
         7 => (left + above) >> 1,
         _ => unreachable!("SOS predictor was validated"),
     }
+}
+
+/// Applies a camera linearization curve to decoded samples in place.
+///
+/// Nikon NEF compression 34713 stores a `u16` lookup table in the makernote
+/// (tags 0x8C/0x96) that maps each entropy-decoded sample to its linearized
+/// value. Every sample must be a valid index into `curve`; an out-of-range
+/// sample is a hard error rather than a clamp so makernote/geometry
+/// mismatches surface instead of silently corrupting pixels. `cancelled` is
+/// polled once per [`LINEARIZATION_CHUNK_SAMPLES`] samples; a cancellation
+/// reports the number of samples processed so far in the `row` field of
+/// [`LosslessJpegError::Cancelled`]. Samples processed before the
+/// cancellation remain linearized, so callers must discard the buffer on
+/// error.
+pub(crate) fn apply_linearization_curve(
+    samples: &mut [u16],
+    curve: &[u16],
+    cancelled: &dyn Fn() -> bool,
+) -> Result<(), LosslessJpegError> {
+    for (chunk_index, chunk) in samples.chunks_mut(LINEARIZATION_CHUNK_SAMPLES).enumerate() {
+        let processed = chunk_index * LINEARIZATION_CHUNK_SAMPLES;
+        if cancelled() {
+            return Err(LosslessJpegError::Cancelled { row: processed });
+        }
+        for (offset, sample) in chunk.iter_mut().enumerate() {
+            let index = usize::from(*sample);
+            let Some(&mapped) = curve.get(index) else {
+                return Err(LosslessJpegError::LinearizationCurveOutOfRange {
+                    sample_index: processed + offset,
+                    value: *sample,
+                    curve_len: curve.len(),
+                });
+            };
+            *sample = mapped;
+        }
+    }
+    Ok(())
 }
 
 fn unexpected_end(
@@ -1717,5 +1869,157 @@ mod tests {
             decode(&fixture, &cancelled),
             Err(LosslessJpegError::Cancelled { .. })
         ));
+    }
+
+    /// The counts/symbols pair matching the DHT segment every fixture
+    /// builder emits: 17 canonical five-bit codes mapping to categories
+    /// 0..=16.
+    const FIXTURE_COUNTS: [u8; 16] = [0, 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    const FIXTURE_SYMBOLS: [u8; 17] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+
+    fn fixture_external_table() -> ExternalHuffmanTable<'static> {
+        ExternalHuffmanTable {
+            table_id: 0,
+            counts: FIXTURE_COUNTS,
+            symbols: &FIXTURE_SYMBOLS,
+        }
+    }
+
+    /// Removes the first DHT segment, simulating camera streams (Nikon NEF
+    /// compression 34713, Pentax PEF compression 65535) that carry their
+    /// Huffman table in the makernote instead of in-band.
+    fn strip_dht_segment(fixture: &mut Vec<u8>) {
+        assert_eq!(&fixture[..2], &[MARKER_PREFIX, SOI]);
+        assert_eq!(&fixture[2..4], &[MARKER_PREFIX, DHT]);
+        let length = usize::from(u16::from_be_bytes([fixture[4], fixture[5]]));
+        fixture.drain(2..2 + 2 + length);
+    }
+
+    #[test]
+    fn decodes_stream_without_dht_using_external_table() {
+        let samples = patterned_samples(6, 5, 2);
+        let mut fixture = build_fixture(6, 5, TEST_PRECISION, 2, 4, 0, 0, &samples);
+        strip_dht_segment(&mut fixture);
+        assert_eq!(
+            decode(&fixture, &|| false),
+            Err(LosslessJpegError::MissingHuffmanTable { table_id: 0 })
+        );
+        let decoded =
+            decode_with_external_tables(&fixture, &|| false, &[fixture_external_table()], false).unwrap();
+        assert_eq!(decoded.width, 6);
+        assert_eq!(decoded.height, 5);
+        assert_eq!(decoded.precision, TEST_PRECISION);
+        assert_eq!(decoded.component_ids, [1, 2]);
+        assert_eq!(decoded.samples, samples);
+    }
+
+    #[test]
+    fn external_table_symbol_count_must_match_counts() {
+        let samples = patterned_samples(2, 2, 1);
+        let mut fixture = build_fixture(2, 2, TEST_PRECISION, 1, 1, 0, 0, &samples);
+        strip_dht_segment(&mut fixture);
+        let short = ExternalHuffmanTable {
+            table_id: 0,
+            counts: FIXTURE_COUNTS,
+            symbols: &FIXTURE_SYMBOLS[..2],
+        };
+        assert_eq!(
+            decode_with_external_tables(&fixture, &|| false, &[short], false),
+            Err(LosslessJpegError::ExternalHuffmanSymbolCount {
+                table_id: 0,
+                declared: 17,
+                provided: 2,
+            })
+        );
+        let duplicate = [fixture_external_table(), fixture_external_table()];
+        assert_eq!(
+            decode_with_external_tables(&fixture, &|| false, &duplicate, false),
+            Err(LosslessJpegError::DuplicateExternalHuffmanTable { table_id: 0 })
+        );
+        let out_of_range_id = ExternalHuffmanTable {
+            table_id: 4,
+            ..fixture_external_table()
+        };
+        assert_eq!(
+            decode_with_external_tables(&fixture, &|| false, &[out_of_range_id], false),
+            Err(LosslessJpegError::UnsupportedHuffmanTable { table_id: 4 })
+        );
+    }
+
+    #[test]
+    fn in_stream_dht_overrides_external_table_unless_forced() {
+        let samples = patterned_samples(4, 3, 1);
+        let fixture = build_fixture(4, 3, TEST_PRECISION, 1, 1, 0, 0, &samples);
+        // A valid but wrong external table: the same code lengths with the
+        // category symbols reversed.
+        let mut reversed_symbols = FIXTURE_SYMBOLS;
+        reversed_symbols.reverse();
+        let wrong = ExternalHuffmanTable {
+            table_id: 0,
+            counts: FIXTURE_COUNTS,
+            symbols: &reversed_symbols,
+        };
+        // Default: the in-stream DHT redefines the seeded slot and wins.
+        let decoded =
+            decode_with_external_tables(&fixture, &|| false, std::slice::from_ref(&wrong), false).unwrap();
+        assert_eq!(decoded.samples, samples);
+        // Forced: the makernote-style external table wins, so decoding can no
+        // longer reproduce the fixture's samples.
+        let forced = decode_with_external_tables(&fixture, &|| false, &[wrong], true);
+        assert!(forced.is_err() || forced.unwrap().samples != samples);
+    }
+
+    #[test]
+    fn applies_linearization_curve_with_checked_bounds() {
+        let curve = [0_u16, 100, 200, 300];
+        let mut samples = vec![0, 1, 2, 3, 2, 0];
+        apply_linearization_curve(&mut samples, &curve, &|| false).unwrap();
+        assert_eq!(samples, [0, 100, 200, 300, 200, 0]);
+
+        let mut out_of_range = vec![0_u16, 4, 1];
+        assert_eq!(
+            apply_linearization_curve(&mut out_of_range, &curve, &|| false),
+            Err(LosslessJpegError::LinearizationCurveOutOfRange {
+                sample_index: 1,
+                value: 4,
+                curve_len: 4,
+            })
+        );
+
+        let mut empty_curve_samples = vec![0_u16];
+        assert_eq!(
+            apply_linearization_curve(&mut empty_curve_samples, &[], &|| false),
+            Err(LosslessJpegError::LinearizationCurveOutOfRange {
+                sample_index: 0,
+                value: 0,
+                curve_len: 0,
+            })
+        );
+    }
+
+    #[test]
+    fn linearization_curve_honours_cancellation() {
+        use std::cell::Cell;
+
+        let mut samples = vec![0_u16; LINEARIZATION_CHUNK_SAMPLES * 2 + 1];
+        let curve = [7_u16];
+        let polls = Cell::new(0usize);
+        let cancelled = || {
+            let next = polls.get() + 1;
+            polls.set(next);
+            next >= 2
+        };
+        assert_eq!(
+            apply_linearization_curve(&mut samples, &curve, &cancelled),
+            Err(LosslessJpegError::Cancelled {
+                row: LINEARIZATION_CHUNK_SAMPLES,
+            })
+        );
+        // The first chunk was linearized before cancellation reported.
+        assert!(
+            samples[..LINEARIZATION_CHUNK_SAMPLES]
+                .iter()
+                .all(|&sample| sample == 7)
+        );
     }
 }

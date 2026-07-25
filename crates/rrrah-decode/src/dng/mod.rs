@@ -8,11 +8,11 @@
 
 #[cfg(test)]
 mod fixture_regression;
-mod lossless_jpeg;
+pub(crate) mod lossless_jpeg;
 mod lossless_storage;
 mod parallel;
-mod tiff;
-mod uncompressed;
+pub(crate) mod tiff;
+pub(crate) mod uncompressed;
 
 use std::{
     collections::{HashSet, VecDeque},
@@ -274,7 +274,10 @@ impl DngImage<'_> {
     /// Segments decode on a bounded worker set (`RRRAH_DNG_DECODE_WORKERS`,
     /// default: available parallelism); the result is bit-identical for any
     /// worker count.
-    pub(crate) fn decode_u16(&self, cancelled: &(dyn Fn() -> bool + Sync)) -> Result<DngDecodedPixels, DngError> {
+    pub(crate) fn decode_u16(
+        &self,
+        cancelled: &(dyn Fn() -> bool + Sync),
+    ) -> Result<DngDecodedPixels, DngError> {
         self.decode_u16_with_workers(cancelled, parallel::env_workers())
     }
 
@@ -1678,11 +1681,7 @@ pub mod bench_support {
     ) -> Vec<u8> {
         let width_usize = usize::try_from(width).expect("fixture width");
         let height_usize = usize::try_from(height).expect("fixture height");
-        assert_eq!(
-            samples.len(),
-            width_usize * height_usize,
-            "fixture sample count",
-        );
+        assert_eq!(samples.len(), width_usize * height_usize, "fixture sample count");
         let (bits_per_sample, compression_code) = match compression {
             SyntheticCompression::Uncompressed16 => (16_u16, 1_u16),
             SyntheticCompression::LosslessJpeg12 => (u16::from(ENCODE_PRECISION), 7),
@@ -1838,13 +1837,13 @@ pub mod bench_support {
         let segment_count_u32 = u32::try_from(segment_count).expect("fixture segment count");
         let model_len = u32::try_from(model.len()).expect("fixture model length");
         let mut entries: Vec<(u16, u16, u32, Value)> = vec![
-            (256, FIELD_LONG, 1, long(width)),                    // ImageWidth
-            (257, FIELD_LONG, 1, long(height)),                   // ImageLength
-            (258, FIELD_SHORT, 1, short(bits_per_sample)),        // BitsPerSample
-            (259, FIELD_SHORT, 1, short(compression_code)),       // Compression
-            (262, FIELD_SHORT, 1, short(32_803)),                 // PhotometricInterpretation (CFA)
-            (274, FIELD_SHORT, 1, short(1)),                      // Orientation
-            (277, FIELD_SHORT, 1, short(1)),                      // SamplesPerPixel
+            (256, FIELD_LONG, 1, long(width)),              // ImageWidth
+            (257, FIELD_LONG, 1, long(height)),             // ImageLength
+            (258, FIELD_SHORT, 1, short(bits_per_sample)),  // BitsPerSample
+            (259, FIELD_SHORT, 1, short(compression_code)), // Compression
+            (262, FIELD_SHORT, 1, short(32_803)),           // PhotometricInterpretation (CFA)
+            (274, FIELD_SHORT, 1, short(1)),                // Orientation
+            (277, FIELD_SHORT, 1, short(1)),                // SamplesPerPixel
         ];
         match layout {
             SegmentLayout::Strips { rows_per_strip } => {

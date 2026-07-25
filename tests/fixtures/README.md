@@ -18,7 +18,13 @@ Required reference IDs are documented in
 - Canon CR2 24 MP and 52 MP;
 - CR2 with restart markers and a truncated negative corpus;
 - uncompressed/tiled/lossless-JPEG/BigTIFF DNG;
-- DNG black-level grid, OpcodeList and floating-point negative cases.
+- DNG black-level grid, OpcodeList and floating-point negative cases;
+- one real camera file per TIFF-family format for the env-gated regression
+  tests: CR2 (`RRRAH_CR2_FIXTURE`), NEF (`RRRAH_NEF_FIXTURE`), ARW
+  (`RRRAH_ARW_FIXTURE`), ORF (`RRRAH_ORF_FIXTURE`), PEF
+  (`RRRAH_PEF_FIXTURE`), RW2 (`RRRAH_RW2_FIXTURE`) and RAF
+  (`RRRAH_RAF_FIXTURE`), plus the negative variants listed in the audit
+  (Nikon lossless 34713, ARW 1.0 Huffman, PEF 65535, Fuji X-Trans).
 
 For local runs:
 

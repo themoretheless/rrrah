@@ -147,6 +147,12 @@ impl CacheKey {
     pub fn to_hex(self) -> String {
         self.0.iter().map(|byte| format!("{byte:02x}")).collect()
     }
+
+    /// Deterministic key material for unit tests that only need distinct keys.
+    #[cfg(test)]
+    pub(crate) fn from_bytes_for_test(byte: u8) -> Self {
+        Self([byte; 32])
+    }
 }
 
 impl fmt::Debug for CacheKey {

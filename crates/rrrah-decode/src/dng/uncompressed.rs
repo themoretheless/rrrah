@@ -174,8 +174,7 @@ fn decode_tiles(
                     byte_order,
                 )?;
                 let target_start = row * width + first_x;
-                unit[target_start..target_start + copy_width]
-                    .copy_from_slice(&decoded_row[..copy_width]);
+                unit[target_start..target_start + copy_width].copy_from_slice(&decoded_row[..copy_width]);
             }
         }
         Ok(())

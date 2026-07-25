@@ -1,5 +1,10 @@
 # Эксперимент F — luminance-нормализация баланса белого в GPU-пайплайне отображения
 
+> **Superseded.** Этот вариант сохранён как историческое сравнение, но больше
+> не является production policy. Нормализация в camera space давала скрытый
+> exposure shift; актуальное решение и GPU readback —
+> [`DIRECT_WB_GPU_READBACK.md`](DIRECT_WB_GPU_READBACK.md).
+
 Исполнитель: Исполнитель_F. Зона: `crates/rrrah-gpu/src/lib.rs` (секция uniform-сборки),
 `crates/rrrah-gpu/shaders/raw_view.wgsl` (не потребовался — см. ниже).
 Машина: Apple M5 (arm64), macOS 27.0. Дата прогона: 2026-07-24.

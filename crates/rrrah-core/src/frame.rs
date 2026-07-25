@@ -236,6 +236,10 @@ pub struct RawMetadata {
     pub cfa: Option<CfaPattern>,
     pub black_level: LevelGrid,
     pub white_level: WhiteLevel,
+    /// Resolved multiplicative camera-space correction gains in
+    /// `[red, green, blue, second_green]` order. Decode backends choose the
+    /// common scale (currently green-normalized); renderers must preserve it
+    /// unchanged and keep exposure as a separate scene-linear operation.
     pub white_balance: [f32; 4],
     pub xyz_to_camera: [[f32; 3]; 4],
     pub active_area: Option<Rect>,
