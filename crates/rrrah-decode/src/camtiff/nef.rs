@@ -68,7 +68,11 @@
 //!   (`[c0r0, c0r1, c1r0, c1r1]`): the 2nd and 3rd `u16` are swapped
 //!   relative to dcraw's sequential read; both modern decoders agree, and
 //!   the swapped reading is the one consistent with the vertical-parity
-//!   accumulator layout.
+//!   accumulator layout. In every real NEF inspected (raw.pixls.us CC0
+//!   corpus, D100..D850 and Z5..Z9, lossless and lossy) all four seeds
+//!   are equal, so the order is unobservable on real files; the
+//!   `seed_order_matches_the_canonical_rawspeed_layout` test pins it
+//!   against hand-written literals anyway.
 //!
 //! # Typed rejections (never the embedded JPEG, never silent degradation;
 //! project policy: `docs/DECODE_FORMAT_AUDIT.md`)
@@ -2260,6 +2264,57 @@ mod tests {
         // the predictor samples exactly. Distinct vpred seeds catch any
         // seed-order mix-up in the vertical accumulators.
         assert_eq!(decoded, samples);
+    }
+
+    #[test]
+    fn seed_order_matches_the_canonical_rawspeed_layout() {
+        // Hand-pinned regression for the predictor-seed order. Unlike the
+        // round-trip tests, neither the expected frame nor the entropy
+        // stream comes from the shared encoder helpers, so the decoder and
+        // the expectations cannot share a consistent-but-wrong convention.
+        //
+        // The blob carries four literal seeds in the canonical
+        // rawspeed/rawler order [c0r0, c0r1, c1r0, c1r1] (2nd and 3rd u16
+        // swapped relative to dcraw). The stream is hand-emitted as zero
+        // differences only (symbol 0, no extra bits), so the decoded frame
+        // is fully determined by the seed assignment: even rows start from
+        // [c0r0, c1r0] and odd rows from [c0r1, c1r1]. Any seed-order
+        // mix-up moves a seed to a different row/column parity and fails
+        // this test.
+        let container_le = true;
+        let (width, height) = (6_usize, 4_usize);
+        let (s0, s1, s2, s3) = (1_000_u16, 2_000_u16, 3_000_u16, 4_000_u16);
+
+        // Hand-emitted stream: one zero difference per pixel, using the
+        // canonical Huffman codes of the 12-bit lossless table (index 2).
+        let (counts, symbols) = NIKON_TREE[2];
+        let codes = huff_codes(counts, symbols);
+        let mut sink = BitSink::new();
+        for _ in 0..width * height {
+            emit_plain(&mut sink, &codes, 0);
+        }
+        let stream = sink.finish();
+
+        // Literal expected frame, computed by hand from the canonical
+        // layout: pixel(row, col) = seed[col parity][row parity].
+        let mut expected = Vec::new();
+        for row in 0..height {
+            for col in 0..width {
+                expected.push(match (row & 1, col & 1) {
+                    (0, 0) => s0,
+                    (1, 0) => s1,
+                    (0, 1) => s2,
+                    (1, 1) => s3,
+                    _ => unreachable!(),
+                });
+            }
+        }
+
+        let blob = curve_blob_lossless(container_le, [s0, s1, s2, s3]);
+        let makernote = build_makernote(container_le, MakernoteVariant::SignatureV1, &[(0x8c, blob)]);
+        let bytes = assemble_compressed_nef(container_le, 6, 4, 12, Some(&makernote), &[&stream]);
+        let decoded = decode_compressed(&bytes).unwrap();
+        assert_eq!(decoded, expected);
     }
 
     #[test]
