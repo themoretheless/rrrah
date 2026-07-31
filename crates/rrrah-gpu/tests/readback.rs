@@ -14,7 +14,10 @@
 
 mod common;
 
-use common::{GpuReadback, cpu_reference_byte, cpu_reference_rgb, pattern_mosaic, profiled_pattern_mosaic, uniform_mosaic};
+use common::{
+    GpuReadback, cpu_reference_byte, cpu_reference_rgb, pattern_mosaic, profiled_pattern_mosaic,
+    uniform_mosaic,
+};
 
 const FRAME: [u32; 2] = [256, 256];
 const WHITE: f32 = 65_535.0;
@@ -280,26 +283,30 @@ fn byte_to_linear(byte: u8) -> f64 {
 
 /// CIELAB hue angle (degrees, D65) of a linear sRGB triplet.
 fn cielab_hue_degrees(linear_rgb: [f64; 3]) -> f64 {
-    let [r, g, b] = linear_rgb;
+    let [red, green, blue] = linear_rgb;
     let matrix = rrrah_core::SRGB_TO_XYZ_D65_F64;
     let xyz = [
-        matrix[0][0] * r + matrix[0][1] * g + matrix[0][2] * b,
-        matrix[1][0] * r + matrix[1][1] * g + matrix[1][2] * b,
-        matrix[2][0] * r + matrix[2][1] * g + matrix[2][2] * b,
+        matrix[0][0] * red + matrix[0][1] * green + matrix[0][2] * blue,
+        matrix[1][0] * red + matrix[1][1] * green + matrix[1][2] * blue,
+        matrix[2][0] * red + matrix[2][1] * green + matrix[2][2] * blue,
     ];
     let white = rrrah_core::XYZ_WHITE_D65;
-    let f = |t: f64| {
+    let lab_transform = |value: f64| {
         let delta = 6.0 / 29.0;
-        if t > delta * delta * delta {
-            t.cbrt()
+        if value > delta * delta * delta {
+            value.cbrt()
         } else {
-            t / (3.0 * delta * delta) + 4.0 / 29.0
+            value / (3.0 * delta * delta) + 4.0 / 29.0
         }
     };
-    let (fx, fy, fz) = (f(xyz[0] / white[0]), f(xyz[1] / white[1]), f(xyz[2] / white[2]));
-    let a = 500.0 * (fx - fy);
+    let (fx, fy, fz) = (
+        lab_transform(xyz[0] / white[0]),
+        lab_transform(xyz[1] / white[1]),
+        lab_transform(xyz[2] / white[2]),
+    );
+    let a_star = 500.0 * (fx - fy);
     let b_star = 200.0 * (fy - fz);
-    b_star.atan2(a).to_degrees().rem_euclid(360.0)
+    b_star.atan2(a_star).to_degrees().rem_euclid(360.0)
 }
 
 /// Smallest absolute difference between two hue angles, in degrees.
@@ -329,12 +336,7 @@ fn saturated_mosaic(color: [f32; 3], level: f32) -> rrrah_core::DecodedMosaic {
 }
 
 /// Renders `color * level * 2^exposure_stops` and returns the center pixel.
-fn render_saturated(
-    gpu: &GpuReadback,
-    color: [f32; 3],
-    level: f32,
-    exposure_stops: f32,
-) -> [u8; 4] {
+fn render_saturated(gpu: &GpuReadback, color: [f32; 3], level: f32, exposure_stops: f32) -> [u8; 4] {
     let mosaic = saturated_mosaic(color, level);
     if exposure_stops == 0.0 {
         return gpu.render(&mosaic, FRAME).center();
@@ -378,7 +380,7 @@ fn saturated_colors_preserve_hue_through_tone_map() {
     for (name, color) in colors {
         let input_hue = cielab_hue_degrees(color.map(f64::from));
         for (level, stops) in levels {
-            let effective = f64::from(level) * 2.0_f64.powi(i32::from(stops as i32));
+            let effective = f64::from(level) * 2.0_f64.powi(stops as i32);
             let pixel = render_saturated(&gpu, color, level, stops);
             let output_linear = [
                 byte_to_linear(pixel[0]),
@@ -388,7 +390,9 @@ fn saturated_colors_preserve_hue_through_tone_map() {
             let output_hue = cielab_hue_degrees(output_linear);
             let delta = hue_delta_degrees(input_hue, output_hue);
             let expected = cpu_reference_rgb(color.map(|c| f64::from(c) * effective));
-            rows.push((name, color, effective, input_hue, output_hue, delta, pixel, expected));
+            rows.push((
+                name, color, effective, input_hue, output_hue, delta, pixel, expected,
+            ));
         }
     }
     eprintln!("\nhue preservation (CIELAB h°, input -> output, Δh):");
@@ -442,9 +446,21 @@ fn out_of_gamut_camera_colors_desaturate_matching_cpu_reference() {
             samples[3] * EOS_R8_GAINS[2],
         ];
         let linear_rgb = [
-            f64::from(camera_to_rgb[0][0] * camera_rgb[0] + camera_to_rgb[0][1] * camera_rgb[1] + camera_to_rgb[0][2] * camera_rgb[2]),
-            f64::from(camera_to_rgb[1][0] * camera_rgb[0] + camera_to_rgb[1][1] * camera_rgb[1] + camera_to_rgb[1][2] * camera_rgb[2]),
-            f64::from(camera_to_rgb[2][0] * camera_rgb[0] + camera_to_rgb[2][1] * camera_rgb[1] + camera_to_rgb[2][2] * camera_rgb[2]),
+            f64::from(
+                camera_to_rgb[0][0] * camera_rgb[0]
+                    + camera_to_rgb[0][1] * camera_rgb[1]
+                    + camera_to_rgb[0][2] * camera_rgb[2],
+            ),
+            f64::from(
+                camera_to_rgb[1][0] * camera_rgb[0]
+                    + camera_to_rgb[1][1] * camera_rgb[1]
+                    + camera_to_rgb[1][2] * camera_rgb[2],
+            ),
+            f64::from(
+                camera_to_rgb[2][0] * camera_rgb[0]
+                    + camera_to_rgb[2][1] * camera_rgb[1]
+                    + camera_to_rgb[2][2] * camera_rgb[2],
+            ),
         ];
         assert!(
             linear_rgb.iter().any(|value| *value < 0.0),
@@ -452,7 +468,9 @@ fn out_of_gamut_camera_colors_desaturate_matching_cpu_reference() {
         );
         let pixel = gpu.render(&mosaic, FRAME).center();
         let expected = cpu_reference_rgb(linear_rgb);
-        eprintln!("out-of-gamut {name}: linear {linear_rgb:?} -> readback {pixel:?} vs reference {expected:?}");
+        eprintln!(
+            "out-of-gamut {name}: linear {linear_rgb:?} -> readback {pixel:?} vs reference {expected:?}"
+        );
         for (channel, (&actual, expected)) in pixel.iter().zip(expected).enumerate() {
             assert!(
                 actual.abs_diff(expected) <= REFERENCE_TOLERANCE,

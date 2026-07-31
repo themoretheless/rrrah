@@ -318,11 +318,8 @@ pub fn cpu_reference_byte(normalized_linear: f64) -> u8 {
 /// tone map (`rrrah_core::aces_tone_map_rgb`, mirroring the WGSL shader) and
 /// the sRGB transfer function, quantized per channel to 8-bit bytes.
 pub fn cpu_reference_rgb(linear_rgb: [f64; 3]) -> [u8; 3] {
-    let mapped = rrrah_core::aces_tone_map_rgb([
-        linear_rgb[0] as f32,
-        linear_rgb[1] as f32,
-        linear_rgb[2] as f32,
-    ]);
+    let mapped =
+        rrrah_core::aces_tone_map_rgb([linear_rgb[0] as f32, linear_rgb[1] as f32, linear_rgb[2] as f32]);
     mapped.map(|channel| srgb_byte(f64::from(channel)))
 }
 

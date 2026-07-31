@@ -500,11 +500,11 @@ pub fn display_wb_gains(camera_wb: [f32; 3]) -> Option<[f32; 3]> {
 mod tests {
     use super::{
         CameraProfileError, DNG_ILLUMINANT_D65, DngColorMatrix, GreenPlane, SRGB_TO_XYZ_D65,
-        SRGB_TO_XYZ_D65_F64, WB_LUMINANCE_WEIGHTS, XYZ_WHITE_D65, aces_fitted, aces_tone_map_rgb, apply_3x3, apply_exposure,
-        bradford_adaptation, bradford_adaptation_f64, camera_to_linear_srgb, camera_to_linear_srgb_precise,
-        diagnose_green_planes, display_wb_gains, dng_illuminant_white, green_relative_wb_gains, invert_3x3,
-        invert_3x3_f64, luminance_normalize_wb_gains, multiply_3x3, multiply_3x3_f64,
-        select_dng_xyz_to_camera, xy_chromaticity_to_xyz,
+        SRGB_TO_XYZ_D65_F64, WB_LUMINANCE_WEIGHTS, XYZ_WHITE_D65, aces_fitted, aces_tone_map_rgb, apply_3x3,
+        apply_exposure, bradford_adaptation, bradford_adaptation_f64, camera_to_linear_srgb,
+        camera_to_linear_srgb_precise, diagnose_green_planes, display_wb_gains, dng_illuminant_white,
+        green_relative_wb_gains, invert_3x3, invert_3x3_f64, luminance_normalize_wb_gains, multiply_3x3,
+        multiply_3x3_f64, select_dng_xyz_to_camera, xy_chromaticity_to_xyz,
     };
 
     fn assert_matrix_close(actual: [[f32; 3]; 3], expected: [[f32; 3]; 3]) {
@@ -615,10 +615,13 @@ mod tests {
         let minimum = mapped.iter().copied().fold(f32::INFINITY, f32::min);
         assert!(minimum >= -1.0e-6, "negative channel survived: {mapped:?}");
         assert!(mapped.iter().all(|value| *value <= 1.0));
-        assert!(mapped[2].abs() <= 1.0e-6, "desaturation lands exactly on the boundary: {mapped:?}");
+        assert!(
+            mapped[2].abs() <= 1.0e-6,
+            "desaturation lands exactly on the boundary: {mapped:?}"
+        );
         // Degenerate case: no recoverable achromatic axis falls back to clamp.
-        assert_eq!(aces_tone_map_rgb([-0.5, -0.1, -0.2]), [0.0; 3]);
-        assert_eq!(aces_tone_map_rgb([f32::NAN, 0.0, 0.0]), [0.0; 3]);
+        assert_eq!(aces_tone_map_rgb([-0.5, -0.1, -0.2]).map(f32::to_bits), [0; 3]);
+        assert_eq!(aces_tone_map_rgb([f32::NAN, 0.0, 0.0]).map(f32::to_bits), [0; 3]);
     }
 
     #[test]

@@ -33,7 +33,13 @@ serde_json = "1.0"
 tempfile = "3.23"
 thiserror = "2.0"
 wgpu = "=30.0.0"
-winit = "0.30.8"
+winit = { version = "0.30.8", default-features = false, features = [
+    "rwh_06",
+    "wayland",
+    "wayland-csd-adwaita-notitle",
+    "wayland-dlopen",
+    "x11",
+] }
 
 [workspace.lints.rust]
 unsafe_code = "deny"
