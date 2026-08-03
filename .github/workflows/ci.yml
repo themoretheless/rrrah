@@ -17,9 +17,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: themoretheless/.github/.github/actions/setup-rust@bb3377f2f424201379ab4e47e147f164f4014b38 # v1
         with: { components: rustfmt, clippy }
-      - uses: Swatinem/rust-cache@v2
       - run: cargo fmt --all -- --check
       - run: cargo metadata --locked --format-version 1 >/dev/null
       - run: cargo check --workspace --all-targets --all-features --locked
@@ -33,8 +32,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@1.89.0
-      - uses: Swatinem/rust-cache@v2
+      - uses: themoretheless/.github/.github/actions/setup-rust@bb3377f2f424201379ab4e47e147f164f4014b38 # v1
+        with:
+          rust-toolchain: 1.89.0
       - run: cargo check --workspace --all-targets --all-features --locked
       - run: cargo test --workspace --all-targets --all-features --locked
 
@@ -45,8 +45,7 @@ jobs:
     # schema checks remain visible when the advisory gate is red.
     steps:
       - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
-      - uses: Swatinem/rust-cache@v2
+      - uses: themoretheless/.github/.github/actions/setup-rust@bb3377f2f424201379ab4e47e147f164f4014b38 # v1
       - uses: taiki-e/install-action@v2
         with:
           tool: cargo-audit
