@@ -1,8 +1,8 @@
 //! Explicit complete-presentation equality, distinct from encoded-byte identity.
 use crate::{
     animated::{AnimationBudget, AnimationError, AnimationKind, decode_animation},
-    decode::{FileError, decode_selected_frame},
     decode::DecodeSourceSnapshot as ContentSnapshot,
+    decode::{FileError, decode_selected_frame},
     exact::SnapshotError,
     pages::{PageKind, decode_pages},
 };

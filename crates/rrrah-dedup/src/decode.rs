@@ -14,16 +14,20 @@ pub(crate) struct DecodeSourceSnapshot {
     dependencies: Vec<crate::exact::ContentSnapshot>,
 }
 impl DecodeSourceSnapshot {
-    pub(crate) fn read(path: &std::path::Path, max_bytes: u64, cancel: impl Fn() -> bool)
-        -> Result<Self, crate::exact::SnapshotError>
-    {
+    pub(crate) fn read(
+        path: &std::path::Path,
+        max_bytes: u64,
+        cancel: impl Fn() -> bool,
+    ) -> Result<Self, crate::exact::SnapshotError> {
         let source = crate::exact::ContentSnapshot::read(path, max_bytes, &cancel)?;
-        let length = usize::try_from(source.byte_count().min(64))
-            .map_err(|_| crate::exact::SnapshotError::Policy)?;
+        let length =
+            usize::try_from(source.byte_count().min(64)).map_err(|_| crate::exact::SnapshotError::Policy)?;
         let header = source.read_prefix(length, &cancel)?;
         let paths = rrrah_decode::raster_external_dependencies(&DecodeRequest::new(path), &header);
         let mut dependencies = Vec::new();
-        dependencies.try_reserve_exact(paths.len()).map_err(|_| crate::exact::SnapshotError::Policy)?;
+        dependencies
+            .try_reserve_exact(paths.len())
+            .map_err(|_| crate::exact::SnapshotError::Policy)?;
         for path in paths {
             dependencies.push(crate::exact::ContentSnapshot::read(&path, max_bytes, &cancel)?);
         }
@@ -31,13 +35,17 @@ impl DecodeSourceSnapshot {
     }
     pub(crate) fn verify(&self, cancel: impl Fn() -> bool) -> Result<(), crate::exact::SnapshotError> {
         self.source.verify(&cancel)?;
-        for dependency in &self.dependencies { dependency.verify(&cancel)?; }
+        for dependency in &self.dependencies {
+            dependency.verify(&cancel)?;
+        }
         Ok(())
     }
 }
 impl std::ops::Deref for DecodeSourceSnapshot {
     type Target = crate::exact::ContentSnapshot;
-    fn deref(&self) -> &Self::Target { &self.source }
+    fn deref(&self) -> &Self::Target {
+        &self.source
+    }
 }
 
 #[derive(Debug, thiserror::Error)]
@@ -230,8 +238,8 @@ pub fn fingerprint_file(
                 .is_some_and(rrrah_decode::GenerationToken::is_cancelled)
     };
     let source = DecodeSourceSnapshot::read(&request.path, policy.max_file_bytes, cancelled)?;
-    let header_length = usize::try_from(source.byte_count().min(64))
-        .map_err(|_| crate::cache::CacheError::Invalid)?;
+    let header_length =
+        usize::try_from(source.byte_count().min(64)).map_err(|_| crate::cache::CacheError::Invalid)?;
     let header = source.read_prefix(header_length, cancelled)?;
     let dependencies = &source.dependencies;
     let native_identity = if header.get(4..8) == Some(b"ftyp") {
@@ -245,7 +253,8 @@ pub fn fingerprint_file(
             if current != expected {
                 return Err(FileError::from(rrrah_decode::RasterDecodeError::InvalidHeif(
                     "decoder inventory changed during fingerprint processing".into(),
-                )).into());
+                ))
+                .into());
             }
         }
         Ok(())
@@ -261,7 +270,10 @@ pub fn fingerprint_file(
     }
     // Native dispatch and selected-frame admission can depend on the extension.
     // Keep content-addressed reuse across paths with the same dispatch hint.
-    let extension = request.path.extension().map_or(&[][..], std::ffi::OsStr::as_encoded_bytes);
+    let extension = request
+        .path
+        .extension()
+        .map_or(&[][..], std::ffi::OsStr::as_encoded_bytes);
     recipe.update(b"native-extension-hint-v1");
     recipe.update(&(extension.len() as u64).to_le_bytes());
     for byte in extension {
@@ -271,7 +283,11 @@ pub fn fingerprint_file(
         recipe.update(b"hevc-runtime-inventory-v1");
         recipe.update(&identity);
     }
-    if request.path.extension().is_some_and(|e| e.eq_ignore_ascii_case("svg")) {
+    if request
+        .path
+        .extension()
+        .is_some_and(|e| e.eq_ignore_ascii_case("svg"))
+    {
         let fonts = rrrah_decode::svg_font_resource_identity().map_err(FileError::from)?;
         recipe.update(b"svg-font-resources-v1");
         recipe.update(&fonts);

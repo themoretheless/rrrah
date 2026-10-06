@@ -4,23 +4,33 @@ mod common;
 fn raster_replacement_accounts_for_old_texture_and_queued_upload() {
     let instance = common::headless_instance();
     let adapter = pollster::block_on(common::request_adapter(
-        &instance, &wgpu::RequestAdapterOptions::default(),
-    )).expect("actual GPU required");
+        &instance,
+        &wgpu::RequestAdapterOptions::default(),
+    ))
+    .expect("actual GPU required");
     eprintln!("replacement adapter: {:?}", adapter.get_info());
-    let (device, queue) = pollster::block_on(adapter.request_device(
-        &wgpu::DeviceDescriptor::default(),
-    )).unwrap();
+    let (device, queue) =
+        pollster::block_on(adapter.request_device(&wgpu::DeviceDescriptor::default())).unwrap();
     let budget = rrrah_core::MemoryBudget::new(32);
-    let mut renderer = rrrah_gpu::RasterRenderer::new_with_budget(
-        &device, common::READBACK_FORMAT, budget.clone(),
-    );
-    let frame = |red| rrrah_core::DecodedRaster::new(1, 1,
-        rrrah_core::RasterPixels::Rgba32Float(std::sync::Arc::new(vec![red, 0.0, 0.0, 1.0]).into()),
-        rrrah_core::RasterColorSpace::LinearSrgb,
-    ).unwrap();
+    let mut renderer =
+        rrrah_gpu::RasterRenderer::new_with_budget(&device, common::READBACK_FORMAT, budget.clone());
+    let frame = |red| {
+        rrrah_core::DecodedRaster::new(
+            1,
+            1,
+            rrrah_core::RasterPixels::Rgba32Float(std::sync::Arc::new(vec![red, 0.0, 0.0, 1.0]).into()),
+            rrrah_core::RasterColorSpace::LinearSrgb,
+        )
+        .unwrap()
+    };
     let complete = || {
         let submission = queue.submit([]);
-        device.poll(wgpu::PollType::Wait { submission_index: Some(submission), timeout: None }).unwrap();
+        device
+            .poll(wgpu::PollType::Wait {
+                submission_index: Some(submission),
+                timeout: None,
+            })
+            .unwrap();
     };
     renderer.upload(&device, &queue, &frame(1.0)).unwrap();
     complete();

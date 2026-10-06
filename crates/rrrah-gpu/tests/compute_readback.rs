@@ -5,12 +5,13 @@ use wgpu::util::DeviceExt;
 fn exposure_readback_cancellation_releases_mapping_and_allows_retry() {
     let instance = common::headless_instance();
     let adapter = pollster::block_on(common::request_adapter(
-        &instance, &wgpu::RequestAdapterOptions::default(),
-    )).expect("actual GPU required");
+        &instance,
+        &wgpu::RequestAdapterOptions::default(),
+    ))
+    .expect("actual GPU required");
     eprintln!("cancelled readback adapter: {:?}", adapter.get_info());
-    let (device, queue) = pollster::block_on(adapter.request_device(
-        &wgpu::DeviceDescriptor::default(),
-    )).unwrap();
+    let (device, queue) =
+        pollster::block_on(adapter.request_device(&wgpu::DeviceDescriptor::default())).unwrap();
     let compute = rrrah_gpu::LinearExposureCompute::new(&device);
     let input = vec![[4.0, -2.0, 0.125, 0.375]; 8200];
     let bytes = input.len() as u64 * 16;
@@ -19,18 +20,29 @@ fn exposure_readback_cancellation_releases_mapping_and_allows_retry() {
     for flat in [false, true] {
         let mut admitted_polls = 0;
         let mut cancel = || {
-            if gpu.used() > 0 { admitted_polls += 1; }
+            if gpu.used() > 0 {
+                admitted_polls += 1;
+            }
             // Admission, before submit, first copy chunk, then second chunk.
             admitted_polls == 4
         };
         let cancelled = if flat {
-            matches!(compute.execute_interleaved_with_cancel(
-                &queue, bytemuck::cast_slice(&input), 1.0, &gpu, &cpu, &mut cancel,
-            ), Err(rrrah_gpu::ExposureError::Cancelled))
+            matches!(
+                compute.execute_interleaved_with_cancel(
+                    &queue,
+                    bytemuck::cast_slice(&input),
+                    1.0,
+                    &gpu,
+                    &cpu,
+                    &mut cancel,
+                ),
+                Err(rrrah_gpu::ExposureError::Cancelled)
+            )
         } else {
-            matches!(compute.execute_managed_with_cancel(
-                &queue, &input, 1.0, &gpu, &cpu, &mut cancel,
-            ), Err(rrrah_gpu::ExposureError::Cancelled))
+            matches!(
+                compute.execute_managed_with_cancel(&queue, &input, 1.0, &gpu, &cpu, &mut cancel,),
+                Err(rrrah_gpu::ExposureError::Cancelled)
+            )
         };
         assert!(cancelled);
         assert_eq!(admitted_polls, 4);
@@ -48,36 +60,47 @@ fn exposure_readback_cancellation_releases_mapping_and_allows_retry() {
 fn interleaved_exposure_preserves_bits_and_managed_raster_ownership() {
     let instance = common::headless_instance();
     let adapter = pollster::block_on(common::request_adapter(
-        &instance, &wgpu::RequestAdapterOptions::default(),
-    )).expect("actual GPU required");
+        &instance,
+        &wgpu::RequestAdapterOptions::default(),
+    ))
+    .expect("actual GPU required");
     eprintln!("interleaved compute adapter: {:?}", adapter.get_info());
     let (device, queue) = pollster::block_on(adapter.request_device(&wgpu::DeviceDescriptor {
-        required_limits: wgpu::Limits { max_storage_buffer_binding_size: 1024, ..Default::default() },
+        required_limits: wgpu::Limits {
+            max_storage_buffer_binding_size: 1024,
+            ..Default::default()
+        },
         ..Default::default()
-    })).unwrap();
+    }))
+    .unwrap();
     let compute = rrrah_gpu::LinearExposureCompute::new(&device);
-    let input: Vec<f32> = (0..129).flat_map(|i| [i as f32 / 8.0, -2.0, 0.125, i as f32 / 256.0]).collect();
+    let input: Vec<f32> = (0..129)
+        .flat_map(|i| [i as f32 / 8.0, -2.0, 0.125, i as f32 / 256.0])
+        .collect();
     let bytes = input.len() as u64 * 4;
     let gpu_bytes = bytes * 3 + 3 * 16;
     let cpu = rrrah_core::MemoryBudget::new(bytes);
     let gpu = rrrah_core::MemoryBudget::new(gpu_bytes);
-    assert!(matches!(compute.execute_interleaved_with_cancel(
-        &queue, &input[..input.len()-1], 1.0, &gpu, &cpu, || false,
-    ), Err(rrrah_gpu::ExposureError::Invalid(_))));
+    assert!(matches!(
+        compute
+            .execute_interleaved_with_cancel(&queue, &input[..input.len() - 1], 1.0, &gpu, &cpu, || false,),
+        Err(rrrah_gpu::ExposureError::Invalid(_))
+    ));
     assert_eq!(cpu.peak(), 0);
     assert_eq!(gpu.peak(), 0);
     for (gpu_limit, cpu_limit) in [(gpu_bytes - 1, bytes), (gpu_bytes, bytes - 1)] {
         let short_gpu = rrrah_core::MemoryBudget::new(gpu_limit);
         let short_cpu = rrrah_core::MemoryBudget::new(cpu_limit);
-        assert!(matches!(compute.execute_interleaved_with_cancel(
-            &queue, &input, 1.0, &short_gpu, &short_cpu, || false,
-        ), Err(rrrah_gpu::ExposureError::Memory(_))));
+        assert!(matches!(
+            compute.execute_interleaved_with_cancel(&queue, &input, 1.0, &short_gpu, &short_cpu, || false,),
+            Err(rrrah_gpu::ExposureError::Memory(_))
+        ));
         assert_eq!(short_gpu.used(), 0);
         assert_eq!(short_cpu.used(), 0);
     }
-    let output = compute.execute_interleaved_with_cancel(
-        &queue, &input, 1.0, &gpu, &cpu, || false,
-    ).unwrap();
+    let output = compute
+        .execute_interleaved_with_cancel(&queue, &input, 1.0, &gpu, &cpu, || false)
+        .unwrap();
     for (index, (&actual, &source)) in output.iter().zip(&input).enumerate() {
         let expected = if index % 4 == 3 { source } else { source * 2.0 };
         assert_eq!(actual.to_bits(), expected.to_bits());
@@ -87,10 +110,15 @@ fn interleaved_exposure_preserves_bits_and_managed_raster_ownership() {
     let alias = output.clone();
     let pointer = output.as_ptr();
     let raster = rrrah_core::DecodedRaster::new(
-        129, 1, rrrah_core::RasterPixels::Rgba32Float(output),
+        129,
+        1,
+        rrrah_core::RasterPixels::Rgba32Float(output),
         rrrah_core::RasterColorSpace::LinearSrgb,
-    ).unwrap();
-    let rrrah_core::RasterPixels::Rgba32Float(values) = raster.pixels() else {panic!()};
+    )
+    .unwrap();
+    let rrrah_core::RasterPixels::Rgba32Float(values) = raster.pixels() else {
+        panic!()
+    };
     assert_eq!(values.as_ptr(), pointer);
     drop(raster);
     assert_eq!(cpu.used(), bytes);
@@ -152,26 +180,35 @@ fn linear_exposure_compute_preserves_hdr_alpha_and_dispatch_tail() {
     }
     let cancel_cpu = rrrah_core::MemoryBudget::new(16);
     let cancel_gpu = rrrah_core::MemoryBudget::new(64);
-    assert!(matches!(compute.execute_managed_with_cancel(
-        &queue, &[[1.0; 4]], 0.0, &cancel_gpu, &cancel_cpu, || true,
-    ), Err(rrrah_gpu::ExposureError::Cancelled)));
+    assert!(matches!(
+        compute.execute_managed_with_cancel(&queue, &[[1.0; 4]], 0.0, &cancel_gpu, &cancel_cpu, || true,),
+        Err(rrrah_gpu::ExposureError::Cancelled)
+    ));
     assert_eq!(cancel_cpu.peak(), 0);
     assert_eq!(cancel_gpu.peak(), 0);
-    assert!(matches!(compute.execute_managed_with_cancel(
-        &queue, &[[1.0; 4]], 0.0, &cancel_gpu, &cancel_cpu,
-        || cancel_gpu.used() > 0,
-    ), Err(rrrah_gpu::ExposureError::Cancelled)));
+    assert!(matches!(
+        compute.execute_managed_with_cancel(
+            &queue,
+            &[[1.0; 4]],
+            0.0,
+            &cancel_gpu,
+            &cancel_cpu,
+            || cancel_gpu.used() > 0,
+        ),
+        Err(rrrah_gpu::ExposureError::Cancelled)
+    ));
     assert_eq!(cancel_cpu.used(), 0);
     assert_eq!(cancel_gpu.used(), 0);
     // Cancellation observed only after the submitted readback must also release
     // output and in-flight reservations, and the next request must remain usable.
     let mut checks = 0;
-    assert!(matches!(compute.execute_managed_with_cancel(
-        &queue, &[[1.0; 4]], 0.0, &cancel_gpu, &cancel_cpu, || {
+    assert!(matches!(
+        compute.execute_managed_with_cancel(&queue, &[[1.0; 4]], 0.0, &cancel_gpu, &cancel_cpu, || {
             checks += 1;
             checks == 6
-        },
-    ), Err(rrrah_gpu::ExposureError::Cancelled)));
+        },),
+        Err(rrrah_gpu::ExposureError::Cancelled)
+    ));
     assert_eq!(checks, 6);
     assert_eq!(cancel_cpu.used(), 0);
     assert_eq!(cancel_gpu.used(), 0);
@@ -179,12 +216,20 @@ fn linear_exposure_compute_preserves_hdr_alpha_and_dispatch_tail() {
     let validation_cpu = rrrah_core::MemoryBudget::new(8193 * 16);
     let validation_gpu = rrrah_core::MemoryBudget::new(8193 * 48 + 4096);
     let mut validation_checks = 0;
-    assert!(matches!(compute.execute_managed_with_cancel(
-        &queue, &validation_pixels, 0.0, &validation_gpu, &validation_cpu, || {
-            validation_checks += 1;
-            validation_checks == 3
-        },
-    ), Err(rrrah_gpu::ExposureError::Cancelled)));
+    assert!(matches!(
+        compute.execute_managed_with_cancel(
+            &queue,
+            &validation_pixels,
+            0.0,
+            &validation_gpu,
+            &validation_cpu,
+            || {
+                validation_checks += 1;
+                validation_checks == 3
+            },
+        ),
+        Err(rrrah_gpu::ExposureError::Cancelled)
+    ));
     assert_eq!(validation_cpu.peak(), 0);
     assert_eq!(validation_gpu.peak(), 0);
     let maximum = compute
@@ -345,18 +390,23 @@ fn full_sensor_managed_exposure_budgets_and_checks_every_pixel() {
     }
     let compute = rrrah_gpu::LinearExposureCompute::new(&device);
     let flat_started = std::time::Instant::now();
-    let flat = compute.execute_interleaved_with_cancel(
-        &queue, bytemuck::cast_slice(&pixels), -1.0, &gpu, &cpu, || false,
-    ).unwrap();
+    let flat = compute
+        .execute_interleaved_with_cancel(&queue, bytemuck::cast_slice(&pixels), -1.0, &gpu, &cpu, || false)
+        .unwrap();
     let flat_elapsed_ms = flat_started.elapsed().as_secs_f64() * 1000.0;
     for (index, pixel) in flat.chunks_exact(4).enumerate() {
-        assert_eq!(pixel, [2.0 + (index % 1024) as f32 / 256.0, -0.25, 0.125, 0.75],
-            "interleaved full sensor pixel {index}");
+        assert_eq!(
+            pixel,
+            [2.0 + (index % 1024) as f32 / 256.0, -0.25, 0.125, 0.75],
+            "interleaved full sensor pixel {index}"
+        );
     }
     assert_eq!(gpu.used(), 0);
     drop(flat);
     assert_eq!(cpu.used(), bytes);
-    eprintln!("interleaved full-resolution exposure: pixels={count}, end_to_end_ms={flat_elapsed_ms:.3}, all pixels exact");
+    eprintln!(
+        "interleaved full-resolution exposure: pixels={count}, end_to_end_ms={flat_elapsed_ms:.3}, all pixels exact"
+    );
     let started = std::time::Instant::now();
     let result = compute
         .execute_managed(&queue, &pixels, -1.0, &gpu, &cpu)

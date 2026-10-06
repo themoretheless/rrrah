@@ -427,7 +427,9 @@ impl<K: Clone + Eq + Hash + Send + 'static, V: SwapPayload> ImageSwapCache<K, V>
         // Serialize admission so simultaneous restores cannot each spend the
         // same remaining allowance from retired budget generations.
         let _admission = loop {
-            if cancelled() { return Ok(None); }
+            if cancelled() {
+                return Ok(None);
+            }
             match self.restore_admission.try_lock() {
                 Ok(guard) => break guard,
                 Err(std::sync::TryLockError::Poisoned(error)) => break error.into_inner(),
@@ -445,17 +447,20 @@ impl<K: Clone + Eq + Hash + Send + 'static, V: SwapPayload> ImageSwapCache<K, V>
             return Ok(None);
         };
         let mut memory_pressure = None;
-        let budgets = std::iter::once(&self.restore_budget)
-            .chain(self.retired_restore_budgets.iter());
+        let budgets = std::iter::once(&self.restore_budget).chain(self.retired_restore_budgets.iter());
         // An ancestor's usage already includes all descendant reservations.
         // Sum only outermost budgets; identical handles count once as well.
-        let live = budgets.clone().enumerate().filter(|(position, budget)| {
-            !budgets.clone().enumerate().any(|(other_position, other)| {
-                other_position != *position
-                    && budget.is_descendant_of(other)
-                    && (!other.is_descendant_of(budget) || other_position < *position)
+        let live = budgets
+            .clone()
+            .enumerate()
+            .filter(|(position, budget)| {
+                !budgets.clone().enumerate().any(|(other_position, other)| {
+                    other_position != *position
+                        && budget.is_descendant_of(other)
+                        && (!other.is_descendant_of(budget) || other_position < *position)
+                })
             })
-        }).fold(0u64, |total, (_, budget)| total.saturating_add(budget.used()));
+            .fold(0u64, |total, (_, budget)| total.saturating_add(budget.used()));
         let allowance = self.restore_limit.saturating_sub(live);
         let restore = self.restore_budget.child(allowance);
         let result = self.store.read_stream(&handle, &mut cancelled, |mut reader| {
@@ -467,13 +472,16 @@ impl<K: Clone + Eq + Hash + Send + 'static, V: SwapPayload> ImageSwapCache<K, V>
                     // old-generation owners. A truly smaller parent cap still
                     // reports an impossible allocation and avoids futile eviction.
                     memory_pressure = Some(match error {
-                        rrrah_memory::BufferError::Capacity {requested,used,limit}
-                            if live!=0 && limit==allowance =>
-                            rrrah_memory::BufferError::Capacity {
-                                requested,used:live.saturating_add(used),
-                                limit:self.restore_budget.allocation_limit(),
-                            },
-                        other=>other,
+                        rrrah_memory::BufferError::Capacity {
+                            requested,
+                            used,
+                            limit,
+                        } if live != 0 && limit == allowance => rrrah_memory::BufferError::Capacity {
+                            requested,
+                            used: live.saturating_add(used),
+                            limit: self.restore_budget.allocation_limit(),
+                        },
+                        other => other,
                     });
                     Err(std::io::Error::other("restore allocation admission rejected"))
                 }
@@ -691,102 +699,195 @@ mod write_cancellation_tests {
     }
     #[test]
     fn cancelled_restore_waiter_returns_before_active_admission_releases() {
-        let directory=tempfile::tempdir().unwrap();
-        let root=MemoryBudget::new(4);
-        let swap=ImageSwapCache::<u8,Payload>::new_with_budgets(directory.path(),ImageSwapConfig {
-            limits:CacheLimits::bytes(32),queue_bytes:1,queue_count:1,restore_bytes:1,
-        },MemoryBudget::new(1),root.clone()).unwrap();
-        swap.enqueue(1,Payload {buffer:root.try_buffer(1,7u8).unwrap().freeze(),pause:None});
+        let directory = tempfile::tempdir().unwrap();
+        let root = MemoryBudget::new(4);
+        let swap = ImageSwapCache::<u8, Payload>::new_with_budgets(
+            directory.path(),
+            ImageSwapConfig {
+                limits: CacheLimits::bytes(32),
+                queue_bytes: 1,
+                queue_count: 1,
+                restore_bytes: 1,
+            },
+            MemoryBudget::new(1),
+            root.clone(),
+        )
+        .unwrap();
+        swap.enqueue(
+            1,
+            Payload {
+                buffer: root.try_buffer(1, 7u8).unwrap().freeze(),
+                pause: None,
+            },
+        );
         swap.wait_idle().unwrap();
-        for cancel_after in [1,3] {
-            let admission=swap.restore_admission.lock().unwrap();
+        for cancel_after in [1, 3] {
+            let admission = swap.restore_admission.lock().unwrap();
             std::thread::scope(|scope| {
-                let (sent,received)=mpsc::channel();
-                let cache=&swap;
-                let worker=scope.spawn(move || {
-                    let mut calls=0;
-                    let result=cache.try_get(&1,|| {calls+=1;calls>=cancel_after});
-                    sent.send(matches!(result,Ok(None))).unwrap();
+                let (sent, received) = mpsc::channel();
+                let cache = &swap;
+                let worker = scope.spawn(move || {
+                    let mut calls = 0;
+                    let result = cache.try_get(&1, || {
+                        calls += 1;
+                        calls >= cancel_after
+                    });
+                    sent.send(matches!(result, Ok(None))).unwrap();
                 });
-                let before_release=received.recv_timeout(std::time::Duration::from_secs(2));
+                let before_release = received.recv_timeout(std::time::Duration::from_secs(2));
                 drop(admission);
                 worker.join().unwrap();
-                assert_eq!(before_release.unwrap(),true);
+                assert_eq!(before_release.unwrap(), true);
             });
-            assert_eq!(root.used(),0);
-            assert_eq!(swap.stats().reads,0);
+            assert_eq!(root.used(), 0);
+            assert_eq!(swap.stats().reads, 0);
         }
-        let retry=swap.try_get(&1,||false).unwrap().unwrap();
-        assert_eq!(&*retry.buffer,&[7]);drop(retry);assert_eq!(root.used(),0);
+        let retry = swap.try_get(&1, || false).unwrap().unwrap();
+        assert_eq!(&*retry.buffer, &[7]);
+        drop(retry);
+        assert_eq!(root.used(), 0);
     }
     #[test]
     fn concurrent_restores_cannot_double_spend_retired_generation_allowance() {
-        let directory=tempfile::tempdir().unwrap();
-        let old=MemoryBudget::new(32);let current=MemoryBudget::new(32);
-        let mut swap=ImageSwapCache::<u8,Payload>::new_with_budgets(directory.path(),ImageSwapConfig {
-            limits:CacheLimits::bytes(32),queue_bytes:2,queue_count:1,restore_bytes:3,
-        },MemoryBudget::new(2),old.clone()).unwrap();
-        swap.enqueue(1,Payload {buffer:old.try_buffer(1,7u8).unwrap().freeze(),pause:None});
+        let directory = tempfile::tempdir().unwrap();
+        let old = MemoryBudget::new(32);
+        let current = MemoryBudget::new(32);
+        let mut swap = ImageSwapCache::<u8, Payload>::new_with_budgets(
+            directory.path(),
+            ImageSwapConfig {
+                limits: CacheLimits::bytes(32),
+                queue_bytes: 2,
+                queue_count: 1,
+                restore_bytes: 3,
+            },
+            MemoryBudget::new(2),
+            old.clone(),
+        )
+        .unwrap();
+        swap.enqueue(
+            1,
+            Payload {
+                buffer: old.try_buffer(1, 7u8).unwrap().freeze(),
+                pause: None,
+            },
+        );
         swap.wait_idle().unwrap();
-        swap.enqueue(2,Payload {buffer:old.try_buffer(2,8u8).unwrap().freeze(),pause:None});
+        swap.enqueue(
+            2,
+            Payload {
+                buffer: old.try_buffer(2, 8u8).unwrap().freeze(),
+                pause: None,
+            },
+        );
         swap.wait_idle().unwrap();
-        let previous=swap.try_get(&1,||false).unwrap().unwrap();
+        let previous = swap.try_get(&1, || false).unwrap().unwrap();
         swap.set_restore_budget(current.clone());
-        let start=std::sync::Barrier::new(8);
-        let swap=&swap;
-        let results=std::thread::scope(|scope| {
-            let handles:Vec<_>=(0..8).map(|_| {
-                let start=&start;
-                scope.spawn(move || {start.wait();swap.try_get(&2,||false)})
-            }).collect();
-            handles.into_iter().map(|handle|handle.join().unwrap()).collect::<Vec<_>>()
+        let start = std::sync::Barrier::new(8);
+        let swap = &swap;
+        let results = std::thread::scope(|scope| {
+            let handles: Vec<_> = (0..8)
+                .map(|_| {
+                    let start = &start;
+                    scope.spawn(move || {
+                        start.wait();
+                        swap.try_get(&2, || false)
+                    })
+                })
+                .collect();
+            handles
+                .into_iter()
+                .map(|handle| handle.join().unwrap())
+                .collect::<Vec<_>>()
         });
-        assert_eq!(results.iter().filter(|result|matches!(result,Ok(Some(_)))).count(),1);
-        assert_eq!(results.iter().filter(|result|matches!(result,Err(rrrah_memory::BufferError::Capacity {..}))).count(),7);
-        assert_eq!(old.used(),1);assert_eq!(current.used(),2);
-        drop(results);drop(previous);
-        assert_eq!(old.used(),0);assert_eq!(current.used(),0);
-        let retry=swap.try_get(&2,||false).unwrap().unwrap();
-        assert_eq!(&*retry.buffer,&[8;2]);
-        drop(retry);assert_eq!(current.used(),0);
+        assert_eq!(
+            results
+                .iter()
+                .filter(|result| matches!(result, Ok(Some(_))))
+                .count(),
+            1
+        );
+        assert_eq!(
+            results
+                .iter()
+                .filter(|result| matches!(result, Err(rrrah_memory::BufferError::Capacity { .. })))
+                .count(),
+            7
+        );
+        assert_eq!(old.used(), 1);
+        assert_eq!(current.used(), 2);
+        drop(results);
+        drop(previous);
+        assert_eq!(old.used(), 0);
+        assert_eq!(current.used(), 0);
+        let retry = swap.try_get(&2, || false).unwrap().unwrap();
+        assert_eq!(&*retry.buffer, &[8; 2]);
+        drop(retry);
+        assert_eq!(current.used(), 0);
     }
     #[test]
     fn restore_rebinding_preserves_aggregate_cap_until_last_old_owner_releases() {
-        let directory=tempfile::tempdir().unwrap();
-        let original=MemoryBudget::new(32);
-        let replacement=MemoryBudget::new(32);
-        let mut swap=ImageSwapCache::<u8,Payload>::new_with_budgets(directory.path(),ImageSwapConfig {
-            limits:CacheLimits::bytes(32),queue_bytes:4,queue_count:1,restore_bytes:4,
-        },MemoryBudget::new(4),original.clone()).unwrap();
-        swap.enqueue(1,Payload {buffer:original.try_buffer(4,7u8).unwrap().freeze(),pause:None});
+        let directory = tempfile::tempdir().unwrap();
+        let original = MemoryBudget::new(32);
+        let replacement = MemoryBudget::new(32);
+        let mut swap = ImageSwapCache::<u8, Payload>::new_with_budgets(
+            directory.path(),
+            ImageSwapConfig {
+                limits: CacheLimits::bytes(32),
+                queue_bytes: 4,
+                queue_count: 1,
+                restore_bytes: 4,
+            },
+            MemoryBudget::new(4),
+            original.clone(),
+        )
+        .unwrap();
+        swap.enqueue(
+            1,
+            Payload {
+                buffer: original.try_buffer(4, 7u8).unwrap().freeze(),
+                pause: None,
+            },
+        );
         swap.wait_idle().unwrap();
-        let first=swap.try_get(&1,||false).unwrap().unwrap();
-        let alias=first.buffer.clone();
+        let first = swap.try_get(&1, || false).unwrap().unwrap();
+        let alias = first.buffer.clone();
         swap.set_restore_budget(original.clone());
-        assert!(swap.try_get(&1,||false).is_err());
+        assert!(swap.try_get(&1, || false).is_err());
         swap.set_restore_budget(replacement.clone());
         drop(first);
-        assert_eq!(original.used(),4);assert_eq!(replacement.used(),0);
-        assert!(swap.try_get(&1,||false).is_err());
-        drop(alias);assert_eq!(original.used(),0);
-        let retry=swap.try_get(&1,||false).unwrap().unwrap();
-        assert_eq!(&*retry.buffer,&[7;4]);assert_eq!(replacement.used(),4);
-        drop(retry);assert_eq!(replacement.used(),0);
+        assert_eq!(original.used(), 4);
+        assert_eq!(replacement.used(), 0);
+        assert!(swap.try_get(&1, || false).is_err());
+        drop(alias);
+        assert_eq!(original.used(), 0);
+        let retry = swap.try_get(&1, || false).unwrap().unwrap();
+        assert_eq!(&*retry.buffer, &[7; 4]);
+        assert_eq!(replacement.used(), 4);
+        drop(retry);
+        assert_eq!(replacement.used(), 0);
     }
     #[test]
     fn restore_rebinding_to_existing_budget_counts_nested_owners_once() {
         let directory = tempfile::tempdir().unwrap();
         let source = MemoryBudget::new(8);
         let mut swap = ImageSwapCache::<u8, Payload>::new(
-            directory.path(), ImageSwapConfig {
-                limits: CacheLimits::bytes(8), queue_bytes: 8,
-                queue_count: 2, restore_bytes: 4,
+            directory.path(),
+            ImageSwapConfig {
+                limits: CacheLimits::bytes(8),
+                queue_bytes: 8,
+                queue_count: 2,
+                restore_bytes: 4,
             },
-        ).unwrap();
+        )
+        .unwrap();
         for (key, bytes) in [(1, 1), (2, 2)] {
-            swap.enqueue(key, Payload {
-                buffer: source.try_buffer(bytes, key).unwrap().freeze(), pause: None,
-            });
+            swap.enqueue(
+                key,
+                Payload {
+                    buffer: source.try_buffer(bytes, key).unwrap().freeze(),
+                    pause: None,
+                },
+            );
         }
         swap.wait_idle().unwrap();
         let first = swap.try_get(&1, || false).unwrap().unwrap();

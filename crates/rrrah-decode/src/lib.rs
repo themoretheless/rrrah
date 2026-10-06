@@ -5,33 +5,33 @@
 #![allow(clippy::missing_errors_doc, clippy::cast_precision_loss)]
 
 mod bay;
-pub use bay::{BaySensorLayout, BaySensorError, unpack_bay_sensor};
+pub use bay::{BaySensorError, BaySensorLayout, unpack_bay_sensor};
 
-mod xcf;
 mod ciff;
-mod crw_entropy;
 mod crw;
+mod crw_entropy;
+mod xcf;
 pub use crw::{NativeCrwDecoder, decode_crw_10d, decode_crw_10d_with_tables};
-pub use xcf::{XcfHeader, XcfHeaderError, XcfProperties, XcfProperty, parse_xcf_header, xcf_properties};
-pub use xcf::{XcfObjectTables, XcfOffsets, parse_xcf_object_tables};
-pub use xcf::{XcfLayer, parse_xcf_layer};
-pub use xcf::{XcfChannel, parse_xcf_channel};
-pub use xcf::XcfLayerAttributes;
 pub use xcf::XcfCompositionAttributes;
+pub use xcf::XcfLayerAttributes;
+pub use xcf::XcfLayerGroup;
+pub use xcf::composite_xcf_normal_premultiplied_rgba32f;
 pub use xcf::composite_xcf_normal_rgba8;
+pub use xcf::composite_xcf_normal_rgba32f;
+pub use xcf::decode_xcf_samples;
+pub use xcf::decode_xcf_tile;
 pub use xcf::expand_xcf_legacy_u8_pixels;
 pub use xcf::prepare_xcf_legacy_rgba8;
-pub use xcf::XcfLayerGroup;
-pub use xcf::decode_xcf_samples;
-pub use xcf::composite_xcf_normal_rgba32f;
-pub use xcf::composite_xcf_normal_premultiplied_rgba32f;
-pub use xcf::{XcfLayerNode, parse_xcf_layer_tree};
 pub use xcf::xcf_icc_profile;
 pub use xcf::xcf_palette;
+pub use xcf::{XcfChannel, parse_xcf_channel};
 pub use xcf::{XcfDecodedLayer, decode_xcf_layer};
 pub use xcf::{XcfFlattenedImage, flatten_xcf_legacy_normal};
-pub use xcf::decode_xcf_tile;
+pub use xcf::{XcfHeader, XcfHeaderError, XcfProperties, XcfProperty, parse_xcf_header, xcf_properties};
+pub use xcf::{XcfLayer, parse_xcf_layer};
+pub use xcf::{XcfLayerNode, parse_xcf_layer_tree};
 pub use xcf::{XcfLevel, parse_xcf_hierarchy};
+pub use xcf::{XcfObjectTables, XcfOffsets, parse_xcf_object_tables};
 pub use xcf::{XcfPixelError, decode_xcf_level};
 
 mod off_swap;
@@ -57,9 +57,17 @@ pub use stl::{StlDecodeError, StlFacet, StlMesh, decode_stl};
 
 mod eip;
 mod x3f;
-pub use x3f::{decode_x3f_legacy, x3f_neutral_response, rotate_x3f_linear, decode_x3f_legacy_auto, x3f_linear_raster, x3f_linear_output, crop_x3f_channels, smooth_x3f_chroma, x3f_chroma_guide, transform_x3f_pixels, x3f_color_transform_auto, X3fColorTransform, smooth_x3f_hues_wide, smooth_x3f_hues, x3f_noise_curves_auto, X3fNoiseCurve, linearize_x3f_highlights_from_camf, linearize_x3f_highlights, sharpen_x3f_red, repair_x3f_bad_pixels_from_camf, repair_x3f_bad_pixels, smooth_x3f_black_rows, x3f_block_enabled, x3f_illuminant_matrix, x3f_wb_correction, visit_x3f_camf, X3fCamfEntry, X3fCamfMatrix, X3fCamf, X3fEntry, X3fError, X3fImageInfo, X3fInventory, X3fLegacyChannels, X3fLegacyHuffman, X3fProperties, inspect_x3f};
 pub use eip::{
     EipEntry, EipError, EipManifest, EipRaw, EipSensor, decode_eip_sensor, inspect_eip, read_eip_raw,
+};
+pub use x3f::{
+    X3fCamf, X3fCamfEntry, X3fCamfMatrix, X3fColorTransform, X3fEntry, X3fError, X3fImageInfo, X3fInventory,
+    X3fLegacyChannels, X3fLegacyHuffman, X3fNoiseCurve, X3fProperties, crop_x3f_channels, decode_x3f_legacy,
+    decode_x3f_legacy_auto, inspect_x3f, linearize_x3f_highlights, linearize_x3f_highlights_from_camf,
+    repair_x3f_bad_pixels, repair_x3f_bad_pixels_from_camf, rotate_x3f_linear, sharpen_x3f_red,
+    smooth_x3f_black_rows, smooth_x3f_chroma, smooth_x3f_hues, smooth_x3f_hues_wide, transform_x3f_pixels,
+    visit_x3f_camf, x3f_block_enabled, x3f_chroma_guide, x3f_color_transform_auto, x3f_illuminant_matrix,
+    x3f_linear_output, x3f_linear_raster, x3f_neutral_response, x3f_noise_curves_auto, x3f_wb_correction,
 };
 
 mod animation;
@@ -75,12 +83,12 @@ pub use webp_animation::{WebpImage, decode_webp_animation};
 mod gif_animation;
 pub use gif_animation::{GifImage, decode_gif};
 mod basis;
-mod pdf;
 mod emf;
 mod mng;
+mod pdf;
+mod pict;
 mod sti;
 mod wmf;
-mod pict;
 pub use mng::{MngImage, decode_mng};
 mod apng;
 mod astc;
@@ -235,30 +243,46 @@ pub struct GenerationToken {
 
 impl GenerationToken {
     pub fn new(generation: Arc<AtomicU64>, expected: u64) -> Self {
-        Self { generation, expected, additional: Arc::from([]) }
+        Self {
+            generation,
+            expected,
+            additional: Arc::from([]),
+        }
     }
 
     /// Cancellation from either owner terminates the shared operation. Flattened
     /// conditions avoid recursive token traversal and deduplicate identical owners.
     pub fn combine(&self, other: &Self) -> Self {
         let mut additional = self.additional.to_vec();
-        for condition in std::iter::once((&other.generation, other.expected))
-            .chain(other.additional.iter().map(|(owner, expected)| (owner, *expected))) {
+        for condition in std::iter::once((&other.generation, other.expected)).chain(
+            other
+                .additional
+                .iter()
+                .map(|(owner, expected)| (owner, *expected)),
+        ) {
             if Arc::ptr_eq(&self.generation, condition.0) && self.expected == condition.1 {
                 continue;
             }
-            if !additional.iter().any(|(owner, expected)|
-                Arc::ptr_eq(owner, condition.0) && *expected == condition.1) {
+            if !additional
+                .iter()
+                .any(|(owner, expected)| Arc::ptr_eq(owner, condition.0) && *expected == condition.1)
+            {
                 additional.push((Arc::clone(condition.0), condition.1));
             }
         }
-        Self { generation: Arc::clone(&self.generation), expected: self.expected,
-            additional: additional.into() }
+        Self {
+            generation: Arc::clone(&self.generation),
+            expected: self.expected,
+            additional: additional.into(),
+        }
     }
 
     pub fn is_cancelled(&self) -> bool {
         self.generation.load(Ordering::Acquire) != self.expected
-            || self.additional.iter().any(|(owner, expected)| owner.load(Ordering::Acquire) != *expected)
+            || self
+                .additional
+                .iter()
+                .any(|(owner, expected)| owner.load(Ordering::Acquire) != *expected)
     }
 }
 
@@ -372,7 +396,10 @@ mod tests {
     fn combined_generation_tokens_cancel_from_either_owner_and_deduplicate() {
         for changed in 0..3 {
             let owners: Vec<_> = (0..3).map(|_| Arc::new(AtomicU64::new(1))).collect();
-            let tokens: Vec<_> = owners.iter().map(|owner| GenerationToken::new(owner.clone(), 1)).collect();
+            let tokens: Vec<_> = owners
+                .iter()
+                .map(|owner| GenerationToken::new(owner.clone(), 1))
+                .collect();
             let mut combined = tokens[0].combine(&tokens[1]).combine(&tokens[2]);
             for _ in 0..100 {
                 combined = combined.combine(&combined);
@@ -418,7 +445,9 @@ pub use raster_color::{
     RasterColorError, prepare_raster_for_display, prepare_raster_for_display_with_budget,
     prepare_raster_for_display_with_budget_and_cancel,
 };
-pub use rla::{RlaAlphaMode, RlaFloatByteOrder, decode_rla_float_with_interpretation, decode_rla_with_interpretation};
+pub use rla::{
+    RlaAlphaMode, RlaFloatByteOrder, decode_rla_float_with_interpretation, decode_rla_with_interpretation,
+};
 pub use scientific::{ScalarWindow, decode_raster_with_window};
 pub use wal::{decode_wal_with_palette, wal_palette_path};
 

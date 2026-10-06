@@ -128,8 +128,10 @@ impl MemoryBudget {
     }
     /// Maximum allocation permitted by local and ancestor caps, ignoring use.
     pub fn allocation_limit(&self) -> u64 {
-        self.0.parent.as_ref().map_or(self.limit(),
-            |parent| self.limit().min(parent.allocation_limit()))
+        self.0
+            .parent
+            .as_ref()
+            .map_or(self.limit(), |parent| self.limit().min(parent.allocation_limit()))
     }
     pub fn used(&self) -> u64 {
         self.0.used.load(Ordering::Acquire)
@@ -236,7 +238,10 @@ impl Reservation {
         values.try_reserve_exact(length).map_err(BufferError::Allocate)?;
         self.ensure_bytes(buffer_bytes::<T>(values.capacity())?)?;
         values.resize_with(length, || value);
-        Ok(MutableBuffer { values, reservation: self })
+        Ok(MutableBuffer {
+            values,
+            reservation: self,
+        })
     }
 
     pub fn bytes(&self) -> u64 {
@@ -666,7 +671,10 @@ mod staged_buffer_tests {
         assert_eq!(leaf.used(), 0);
 
         let reserved = leaf.try_reserve(4).unwrap();
-        assert!(matches!(reserved.try_buffer(usize::MAX, 0u16), Err(BufferError::Overflow)));
+        assert!(matches!(
+            reserved.try_buffer(usize::MAX, 0u16),
+            Err(BufferError::Overflow)
+        ));
         assert_eq!(root.used(), 16);
         assert_eq!(child.used(), 0);
         assert_eq!(leaf.used(), 0);
@@ -694,7 +702,10 @@ mod staged_buffer_tests {
         assert_eq!(child.used(), 0);
 
         let reservation = child.try_reserve(16).unwrap();
-        assert!(matches!(reservation.try_buffer(5, 0u32), Err(BufferError::Capacity { .. })));
+        assert!(matches!(
+            reservation.try_buffer(5, 0u32),
+            Err(BufferError::Capacity { .. })
+        ));
         assert_eq!(root.used(), 0);
         assert_eq!(child.used(), 0);
         let reservation = child.try_reserve(16).unwrap();

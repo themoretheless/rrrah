@@ -551,16 +551,25 @@ mod soft_mask_isolation_tests {
         let budget = MemoryBudget::new(1024 * 1024);
         let mut request = DecodeRequest::new("mask.pdf");
         request.memory_budget = Some(budget.clone());
-        let image = decode(include_bytes!("../../../tests/fixtures/pdf/soft-mask-luminosity.pdf"), &request).unwrap();
+        let image = decode(
+            include_bytes!("../../../tests/fixtures/pdf/soft-mask-luminosity.pdf"),
+            &request,
+        )
+        .unwrap();
         assert_eq!((image.width(), image.height()), (12, 8));
-        let RasterPixels::Rgba8(pixels) = image.pixels() else { panic!() };
+        let RasterPixels::Rgba8(pixels) = image.pixels() else {
+            panic!()
+        };
         for row in pixels.chunks_exact(48) {
             for (x, pixel) in row.chunks_exact(4).enumerate() {
-                assert_eq!(pixel, match x {
-                    0..=3 => &[0, 0, 0, 0],
-                    4..=7 => &[0, 0, 255, 128],
-                    _ => &[0, 0, 255, 255],
-                });
+                assert_eq!(
+                    pixel,
+                    match x {
+                        0..=3 => &[0, 0, 0, 0],
+                        4..=7 => &[0, 0, 255, 128],
+                        _ => &[0, 0, 255, 255],
+                    }
+                );
             }
         }
         drop(image);

@@ -463,19 +463,26 @@ mod managed_policy_tests {
     fn combined_limit_update_is_atomic_across_visible_pin_lease_and_ttl() {
         let budget = MemoryBudget::new(128);
         let mut cache = RasterRamCache::new(CacheLimits {
-            max_bytes: 128, max_entries: Some(2), ttl: None,
+            max_bytes: 128,
+            max_entries: Some(2),
+            ttl: None,
         });
         assert!(cache.insert(1u8, managed(&budget)));
         let lease = cache.get_lease(&1).unwrap();
         assert!(cache.insert_visible(2, managed(&budget)));
         let tightened = CacheLimits {
-            max_bytes: 64, max_entries: Some(1), ttl: Some(Duration::ZERO),
+            max_bytes: 64,
+            max_entries: Some(1),
+            ttl: Some(Duration::ZERO),
         };
         assert!(!cache.set_limits_and_spill(tightened));
         // Failed admission must not apply even the TTL part of the new policy.
         assert!(cache.get(&1).is_some());
         assert!(cache.get(&2).is_some());
-        assert_eq!((cache.len(), cache.resident_bytes(), budget.used()), (2, 128, 128));
+        assert_eq!(
+            (cache.len(), cache.resident_bytes(), budget.used()),
+            (2, 128, 128)
+        );
         drop(lease);
         assert!(cache.set_limits_and_spill(tightened));
         assert_eq!((cache.len(), cache.resident_bytes(), budget.used()), (1, 64, 64));

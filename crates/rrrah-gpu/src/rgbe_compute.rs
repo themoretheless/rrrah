@@ -49,8 +49,15 @@ impl RgbeCompute {
         gpu_budget: &rrrah_core::MemoryBudget,
         cpu_budget: &rrrah_core::MemoryBudget,
     ) -> Result<rrrah_core::PixelBuffer<[f32; 4]>, RgbeComputeError> {
-        self.execute_managed_with_cancel(queue, source_values, dimensions, quad,
-            gpu_budget, cpu_budget, || false)
+        self.execute_managed_with_cancel(
+            queue,
+            source_values,
+            dimensions,
+            quad,
+            gpu_budget,
+            cpu_budget,
+            || false,
+        )
     }
     /// Cooperative cancellation before submission and after completed readback.
     /// Submitted GPU work and driver waits are not interrupted.
@@ -64,19 +71,29 @@ impl RgbeCompute {
         cpu_budget: &rrrah_core::MemoryBudget,
         mut cancelled: impl FnMut() -> bool,
     ) -> Result<rrrah_core::PixelBuffer<[f32; 4]>, RgbeComputeError> {
-        if cancelled() { return Err(RgbeComputeError::Cancelled); }
+        if cancelled() {
+            return Err(RgbeComputeError::Cancelled);
+        }
         let plan = crate::RgbePlan::new(dimensions, quad, &self.device.limits())?;
         if source_values.len() as u64 != plan.source_bytes / 4 {
             return Err(RgbeComputeError::Invalid("sample count differs from geometry"));
         }
         for (index, value) in source_values.iter().enumerate() {
-            if index % 4096 == 0 && cancelled() { return Err(RgbeComputeError::Cancelled); }
-            if !value.is_finite() { return Err(RgbeComputeError::Invalid("samples must be finite")); }
+            if index % 4096 == 0 && cancelled() {
+                return Err(RgbeComputeError::Cancelled);
+            }
+            if !value.is_finite() {
+                return Err(RgbeComputeError::Invalid("samples must be finite"));
+            }
         }
-        if cancelled() { return Err(RgbeComputeError::Cancelled); }
+        if cancelled() {
+            return Err(RgbeComputeError::Cancelled);
+        }
         let cpu_reservation = cpu_budget.try_reserve(plan.output_bytes)?;
         let reservation = std::sync::Arc::new(gpu_budget.try_reserve(plan.gpu_buffer_bytes)?);
-        if cancelled() { return Err(RgbeComputeError::Cancelled); }
+        if cancelled() {
+            return Err(RgbeComputeError::Cancelled);
+        }
         let mut result = cpu_reservation.try_buffer(source_values.len(), [0f32; 4])?;
         let source = self.device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
             label: Some("managed RGBE input"),
@@ -97,7 +114,9 @@ impl RgbeCompute {
         });
         let mut encoder = self.device.create_command_encoder(&Default::default());
         for dispatch in plan.dispatches {
-            if cancelled() { return Err(RgbeComputeError::Cancelled); }
+            if cancelled() {
+                return Err(RgbeComputeError::Cancelled);
+            }
             let params = [
                 dimensions[0],
                 dimensions[1],
@@ -141,7 +160,9 @@ impl RgbeCompute {
             pass.dispatch_workgroups(dispatch.workgroups[0], dispatch.workgroups[1], 1);
         }
         encoder.copy_buffer_to_buffer(&output, 0, &readback, 0, plan.output_bytes);
-        if cancelled() { return Err(RgbeComputeError::Cancelled); }
+        if cancelled() {
+            return Err(RgbeComputeError::Cancelled);
+        }
         let submission = queue.submit([encoder.finish()]);
         let in_flight = reservation.clone();
         queue.on_submitted_work_done(move || drop(in_flight));
@@ -165,7 +186,9 @@ impl RgbeCompute {
         result.copy_from_slice(bytemuck::cast_slice(&mapped));
         drop(mapped);
         readback.unmap();
-        if cancelled() { return Err(RgbeComputeError::Cancelled); }
+        if cancelled() {
+            return Err(RgbeComputeError::Cancelled);
+        }
         Ok(result.freeze().into())
     }
 }

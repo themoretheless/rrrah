@@ -28,7 +28,10 @@ pub fn decode_crw_10d_with_tables(
     decode_with_timings(request, table_zero).map(|output| output.mosaic)
 }
 
-fn decode_with_timings(request: &DecodeRequest, table_zero: &[u8]) -> Result<crate::DecodeOutput, DecodeError> {
+fn decode_with_timings(
+    request: &DecodeRequest,
+    table_zero: &[u8],
+) -> Result<crate::DecodeOutput, DecodeError> {
     let total = std::time::Instant::now();
     let error = |message: &str| DecodeError::NativeCamera {
         format: "CRW",
@@ -67,10 +70,17 @@ fn decode_with_timings(request: &DecodeRequest, table_zero: &[u8]) -> Result<cra
         request.check_cancelled().is_err()
     })?;
     let raw_image = raw_started.elapsed();
-    Ok(crate::DecodeOutput { mosaic, timings: crate::DecodeTimings {
-        source_open, decoder_select, raw_image, raw_decode: decoder_select + raw_image,
-        total: total.elapsed(), ..Default::default()
-    } })
+    Ok(crate::DecodeOutput {
+        mosaic,
+        timings: crate::DecodeTimings {
+            source_open,
+            decoder_select,
+            raw_image,
+            raw_decode: decoder_select + raw_image,
+            total: total.elapsed(),
+            ..Default::default()
+        },
+    })
 }
 
 #[cfg(test)]
@@ -113,15 +123,25 @@ mod tests {
 #[derive(Debug, Clone, Copy, Default)]
 pub struct NativeCrwDecoder;
 impl crate::RawDecoder for NativeCrwDecoder {
-    fn mosaic_recipe(&self, request: &DecodeRequest) -> Result<rrrah_core::MosaicRecipeManifest, DecodeError> {
+    fn mosaic_recipe(
+        &self,
+        request: &DecodeRequest,
+    ) -> Result<rrrah_core::MosaicRecipeManifest, DecodeError> {
         request.check_cancelled()?;
         if request.image_index != 0 {
-            return Err(DecodeError::UnsupportedImageIndex { index: request.image_index });
+            return Err(DecodeError::UnsupportedImageIndex {
+                index: request.image_index,
+            });
         }
         Ok(rrrah_core::MosaicRecipeManifest::new(
-            23, 1, 1, 1,
-            rrrah_core::DECODE_FULL_SENSOR_RAW | rrrah_core::DECODE_INTEGER_U16
-                | rrrah_core::DECODE_SENSOR_COORDINATES | rrrah_core::DECODE_CROP_AS_METADATA
+            23,
+            1,
+            1,
+            1,
+            rrrah_core::DECODE_FULL_SENSOR_RAW
+                | rrrah_core::DECODE_INTEGER_U16
+                | rrrah_core::DECODE_SENSOR_COORDINATES
+                | rrrah_core::DECODE_CROP_AS_METADATA
                 | rrrah_core::DECODE_IMAGE_INDEX_IN_KEY,
             crate::WORKSPACE_LOCK_DIGEST,
         ))
@@ -141,13 +161,24 @@ mod router_tests {
     use crate::RawDecoder;
     #[test]
     fn ciff_signature_routes_even_with_unknown_extension() {
-        let path = std::env::temp_dir().join(format!("rrrah-ciff-route-{}-{}.bin",
-            std::process::id(), std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_nanos()));
+        let path = std::env::temp_dir().join(format!(
+            "rrrah-ciff-route-{}-{}.bin",
+            std::process::id(),
+            std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .unwrap()
+                .as_nanos()
+        ));
         std::fs::write(&path, b"II\x1a\0\0\0HEAPCCDR").unwrap();
         let request = DecodeRequest::new(&path);
-        assert_eq!(crate::image_source_kind(&request).unwrap(), crate::ImageSourceKind::Sensor);
-        assert_eq!(crate::NativeRawDecoder.mosaic_recipe(&request).unwrap(),
-                   NativeCrwDecoder.mosaic_recipe(&request).unwrap());
+        assert_eq!(
+            crate::image_source_kind(&request).unwrap(),
+            crate::ImageSourceKind::Sensor
+        );
+        assert_eq!(
+            crate::NativeRawDecoder.mosaic_recipe(&request).unwrap(),
+            NativeCrwDecoder.mosaic_recipe(&request).unwrap()
+        );
         assert!(crate::is_supported_raw_path(std::path::Path::new("camera.CRW")));
         std::fs::remove_file(path).unwrap();
     }
@@ -158,7 +189,10 @@ mod router_tests {
         let request = DecodeRequest::new(&path);
         let direct = decode_crw_10d(&request).unwrap();
         let routed = crate::NativeRawDecoder.decode(&request).unwrap();
-        assert_eq!(routed.timings.raw_decode, routed.timings.decoder_select + routed.timings.raw_image);
+        assert_eq!(
+            routed.timings.raw_decode,
+            routed.timings.decoder_select + routed.timings.raw_image
+        );
         assert!(routed.timings.total >= routed.timings.source_open + routed.timings.raw_decode);
         assert_eq!(direct.metadata, routed.mosaic.metadata);
         assert_eq!(&*direct.pixels, &*routed.mosaic.pixels);
@@ -173,7 +207,10 @@ mod router_tests {
         let mut request = DecodeRequest::new(&path);
         request.memory_budget = Some(budget.clone());
         let competing = budget.try_buffer(1, 0u8).unwrap().freeze();
-        assert!(matches!(crate::NativeRawDecoder.decode(&request), Err(DecodeError::Memory(_))));
+        assert!(matches!(
+            crate::NativeRawDecoder.decode(&request),
+            Err(DecodeError::Memory(_))
+        ));
         assert_eq!(budget.used(), 1);
         drop(competing);
         let decoded = crate::NativeRawDecoder.decode(&request).unwrap();
@@ -185,8 +222,10 @@ mod router_tests {
         drop(retained);
         assert_eq!(budget.used(), 0);
         request.memory_budget = Some(rrrah_core::MemoryBudget::new(source_bytes - 1));
-        assert!(matches!(crate::NativeRawDecoder.decode(&request), Err(DecodeError::Memory(_))));
+        assert!(matches!(
+            crate::NativeRawDecoder.decode(&request),
+            Err(DecodeError::Memory(_))
+        ));
         assert_eq!(request.memory_budget.as_ref().unwrap().peak(), 0);
     }
-
 }

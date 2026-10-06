@@ -708,28 +708,49 @@ fn indexed_wal_palette_mutation_discards_stale_source_decisions() {
         std::fs::create_dir(root.join("pics")).unwrap();
         let path = root.join("textures/source.wal");
         let palette = root.join("pics/colormap.pcx");
-        std::fs::write(&path, include_bytes!("../../../tests/fixtures/raster/palette-grid.wal")).unwrap();
-        std::fs::write(&palette, include_bytes!("../../../tests/fixtures/raster/wal-colormap.pcx")).unwrap();
-        if id == 1 { first_palette = palette; }
+        std::fs::write(
+            &path,
+            include_bytes!("../../../tests/fixtures/raster/palette-grid.wal"),
+        )
+        .unwrap();
+        std::fs::write(
+            &palette,
+            include_bytes!("../../../tests/fixtures/raster/wal-colormap.pcx"),
+        )
+        .unwrap();
+        if id == 1 {
+            first_palette = palette;
+        }
         files.push((id, DecodeRequest::new(path)));
     }
     let budget = MemoryBudget::new(8 * 1024 * 1024);
     let active = std::cell::Cell::new(false);
     let changed = std::cell::Cell::new(false);
     let report = rrrah_dedup::pixel_index::scan_indexed_pixels(files, policy(), &budget, || {
-        if budget.used() > 0 { active.set(true); }
-        else if active.get() && !changed.replace(true) {
+        if budget.used() > 0 {
+            active.set(true);
+        } else if active.get() && !changed.replace(true) {
             let mut bytes = std::fs::read(&first_palette).unwrap();
             let start = bytes.len() - 768;
-            for channel in &mut bytes[start..] { *channel = 255 - *channel; }
+            for channel in &mut bytes[start..] {
+                *channel = 255 - *channel;
+            }
             std::fs::write(&first_palette, bytes).unwrap();
         }
         false
-    }).unwrap();
-    assert!(changed.get(), "mutation must occur after retained pixel observation");
+    })
+    .unwrap();
+    assert!(
+        changed.get(),
+        "mutation must occur after retained pixel observation"
+    );
     assert_eq!(report.pixels.equal, [(2, 3)]);
     assert!(report.pixels.different.is_empty());
-    assert!(report.source_issues.iter().any(|(id, error)| *id == 1
-        && matches!(error, rrrah_dedup::exact::SnapshotError::Changed)));
+    assert!(
+        report
+            .source_issues
+            .iter()
+            .any(|(id, error)| *id == 1 && matches!(error, rrrah_dedup::exact::SnapshotError::Changed))
+    );
     assert_eq!(budget.used(), 0);
 }

@@ -313,9 +313,16 @@ impl DecodedRaster {
             }
             for &value in &rgba[..3] {
                 let linear = if bt709 {
-                    if value < 0.081 { value / 4.5 }
-                    else { ((value + 0.099) / 1.099).powf(1.0 / 0.45) }
-                } else if encoded { srgb_linear(value) } else { value };
+                    if value < 0.081 {
+                        value / 4.5
+                    } else {
+                        ((value + 0.099) / 1.099).powf(1.0 / 0.45)
+                    }
+                } else if encoded {
+                    srgb_linear(value)
+                } else {
+                    value
+                };
                 if !linear.is_finite() {
                     return Err(RasterError::NonFiniteSample);
                 }
@@ -509,21 +516,32 @@ mod tests {
         for (value, rgba) in samples.chunks_exact_mut(4).enumerate() {
             rgba.fill(u16::try_from(value).unwrap());
         }
-        let source = super::DecodedRaster::new(65536, 1,
-            super::RasterPixels::Rgba16(samples.freeze().into()), super::RasterColorSpace::Bt709).unwrap();
+        let source = super::DecodedRaster::new(
+            65536,
+            1,
+            super::RasterPixels::Rgba16(samples.freeze().into()),
+            super::RasterColorSpace::Bt709,
+        )
+        .unwrap();
         let linear = source.to_linear_srgb_with_budget(Some(&budget)).unwrap();
-        let super::RasterPixels::Rgba32Float(output) = linear.pixels() else { panic!("float output"); };
+        let super::RasterPixels::Rgba32Float(output) = linear.pixels() else {
+            panic!("float output");
+        };
         for (value, rgba) in output.chunks_exact(4).enumerate() {
             let encoded = f64::from(u16::try_from(value).unwrap()) / 65535.0;
-            let expected = if encoded < 0.081 { encoded / 4.5 }
-                else { ((encoded + 0.099) / 1.099).powf(1.0 / 0.45) };
+            let expected = if encoded < 0.081 {
+                encoded / 4.5
+            } else {
+                ((encoded + 0.099) / 1.099).powf(1.0 / 0.45)
+            };
             for &channel in &rgba[..3] {
                 assert!((f64::from(channel) - expected).abs() < 3e-7, "sample {value}");
             }
             assert!((f64::from(rgba[3]) - encoded).abs() < 3e-8);
         }
         assert_eq!(linear.color_space(), &super::RasterColorSpace::LinearSrgb);
-        drop(linear); drop(source);
+        drop(linear);
+        drop(source);
         assert_eq!(budget.used(), 0);
     }
     #[test]

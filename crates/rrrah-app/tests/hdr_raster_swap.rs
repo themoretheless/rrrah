@@ -64,7 +64,10 @@ fn profiled_png_and_archives_keep_color_through_swap_and_metal() {
             (16, 16, std::fs::read(fixtures.join(golden_name)).unwrap())
         };
         let golden = DecodedRaster::new(
-            width, height, RasterPixels::Rgba8(Arc::new(rgba).into()), RasterColorSpace::Srgb,
+            width,
+            height,
+            RasterPixels::Rgba8(Arc::new(rgba).into()),
+            RasterColorSpace::Srgb,
         )
         .unwrap()
         .to_linear_srgb()
@@ -142,12 +145,21 @@ fn masked_legacy_xcf_preserves_explicit_color_assumption_through_swap_and_metal(
             [127, 128, 0, 255, 0, 0, 255, 255],
         ),
         ("normal-mask-hidden-v1.xcf", [255, 0, 0, 255, 0, 0, 255, 255]),
-        ("normal-mask-zero-opacity-v1.xcf", [255, 0, 0, 255, 0, 0, 255, 255]),
-        ("normal-mask-half-opacity-v1.xcf", [255, 0, 0, 255, 0, 64, 191, 255]),
+        (
+            "normal-mask-zero-opacity-v1.xcf",
+            [255, 0, 0, 255, 0, 0, 255, 255],
+        ),
+        (
+            "normal-mask-half-opacity-v1.xcf",
+            [255, 0, 0, 255, 0, 64, 191, 255],
+        ),
         ("normal-gray-v1.xcf", [17, 17, 17, 255, 239, 239, 239, 255]),
         ("normal-indexed-v1.xcf", [17, 43, 91, 255, 239, 181, 7, 255]),
         ("normal-indexed-alpha-v1.xcf", [17, 43, 91, 255, 239, 181, 7, 255]),
-        ("normal-indexed-alpha-boundary-v1.xcf", [0, 0, 0, 0, 239, 181, 7, 255]),
+        (
+            "normal-indexed-alpha-boundary-v1.xcf",
+            [0, 0, 0, 0, 239, 181, 7, 255],
+        ),
         ("normal-gray-alpha-v1.xcf", [17, 17, 17, 128, 239, 239, 239, 255]),
     ] {
         let budget = rrrah_core::MemoryBudget::new(4096);
@@ -436,7 +448,8 @@ fn hdr_raster_swap_preserves_samples_and_linear_metal_output() {
     let mapped = readback.slice(..).get_mapped_range().unwrap();
     // Exact IEEE binary16 encodings: 8, 4, -1, opaque alpha.
     for (index, pixel) in mapped.chunks_exact(8).enumerate() {
-        let channels: Vec<u16> = pixel.chunks_exact(2)
+        let channels: Vec<u16> = pixel
+            .chunks_exact(2)
             .map(|bytes| u16::from_le_bytes([bytes[0], bytes[1]]))
             .collect();
         assert_eq!(channels, [0x4800, 0x4400, 0xbc00, 0x3c00], "HDR pixel {index}");
@@ -450,89 +463,131 @@ fn hdr_raster_swap_preserves_samples_and_linear_metal_output() {
 
 #[test]
 fn pict_public_route_lease_swap_pressure_and_metal_preserve_rgba() {
-    let path=std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/pict/red-rectangle-v2.pict");
-    qualify_pict_transport(path,4096,None);
+    let path = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("../../tests/fixtures/pict/red-rectangle-v2.pict");
+    qualify_pict_transport(path, 4096, None);
 }
 
 #[test]
 #[ignore = "requires actual GPU and external PICT/TwelveMonkeys corpus"]
 fn pict_external_directbits_oracle_swap_pressure_and_metal() {
-    let root=std::env::var_os("RRRAH_PICT_CORPUS").expect("RRRAH_PICT_CORPUS required");
-    for name in ["mire16.pict","mire32.pict","16bit.pict","32bit.pict"] {
-        let root=std::path::Path::new(&root);
-        let oracle=std::fs::read(root.join(format!("{name}.rgba"))).unwrap();
-        qualify_pict_transport(root.join(name),4*1024*1024,Some(&oracle));
+    let root = std::env::var_os("RRRAH_PICT_CORPUS").expect("RRRAH_PICT_CORPUS required");
+    for name in ["mire16.pict", "mire32.pict", "16bit.pict", "32bit.pict"] {
+        let root = std::path::Path::new(&root);
+        let oracle = std::fs::read(root.join(format!("{name}.rgba"))).unwrap();
+        qualify_pict_transport(root.join(name), 4 * 1024 * 1024, Some(&oracle));
     }
 }
 
 #[test]
 fn pict_unpacked_xrgb_macos_pixels_survive_swap_pressure_and_metal() {
     // Recorded macOS sips RGBA; qualifier pins the fixture hash and manifest.
-    let oracle=[255,0,0,255,17,95,203,255];
-    for name in ["unpacked-xrgb.pict","drop-pad-rgb.pict"] {
-        let path=std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-            .join("../../tests/fixtures/pict").join(name);
-        qualify_pict_transport(path,4096,Some(&oracle));
+    let oracle = [255, 0, 0, 255, 17, 95, 203, 255];
+    for name in ["unpacked-xrgb.pict", "drop-pad-rgb.pict"] {
+        let path = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+            .join("../../tests/fixtures/pict")
+            .join(name);
+        qualify_pict_transport(path, 4096, Some(&oracle));
     }
 }
 
-fn qualify_pict_transport(path:std::path::PathBuf, limit:u64, oracle:Option<&[u8]>) {
-    let gpu=common::qualification_gpu().expect("actual GPU required");
-    eprintln!("PICT adapter: {}",gpu.adapter_name());
-    let budget=rrrah_core::MemoryBudget::new(limit);
-    let mut request=rrrah_decode::DecodeRequest::new(path);
-    request.memory_budget=Some(budget.clone());request.assume_untagged_srgb=true;
-    let rrrah_decode::DecodedImage::Raster(decoded)=rrrah_decode::decode_image(&request).unwrap() else {panic!()};
-    if let Some(oracle)=oracle {
-        let RasterPixels::Rgba8(p)=decoded.pixels() else {panic!()};
-        assert_eq!(&**p,oracle);
+fn qualify_pict_transport(path: std::path::PathBuf, limit: u64, oracle: Option<&[u8]>) {
+    let gpu = common::qualification_gpu().expect("actual GPU required");
+    eprintln!("PICT adapter: {}", gpu.adapter_name());
+    let budget = rrrah_core::MemoryBudget::new(limit);
+    let mut request = rrrah_decode::DecodeRequest::new(path);
+    request.memory_budget = Some(budget.clone());
+    request.assume_untagged_srgb = true;
+    let rrrah_decode::DecodedImage::Raster(decoded) = rrrah_decode::decode_image(&request).unwrap() else {
+        panic!()
+    };
+    if let Some(oracle) = oracle {
+        let RasterPixels::Rgba8(p) = decoded.pixels() else {
+            panic!()
+        };
+        assert_eq!(&**p, oracle);
     }
-    let weight=decoded.capacity_bytes();
-    let expected=decoded.clone();
-    let mut ram=rrrah_cache::LeaseCache::new(rrrah_cache::CacheLimits {max_bytes:weight,max_entries:Some(1),ttl:None});
-    ram.insert(1u8,decoded,weight).unwrap();
-    let lease=ram.get(&1).unwrap();
+    let weight = decoded.capacity_bytes();
+    let expected = decoded.clone();
+    let mut ram = rrrah_cache::LeaseCache::new(rrrah_cache::CacheLimits {
+        max_bytes: weight,
+        max_entries: Some(1),
+        ttl: None,
+    });
+    ram.insert(1u8, decoded, weight).unwrap();
+    let lease = ram.get(&1).unwrap();
     assert!(ram.set_limits(rrrah_cache::CacheLimits::bytes(0)).is_none());
-    let prepared=rrrah_decode::prepare_raster_for_display_with_budget(&lease,Some(&budget)).unwrap();
-    let parameters=view();
-    let before=gpu.render_raster(&prepared,parameters,[64,64]).pixels;
+    let prepared = rrrah_decode::prepare_raster_for_display_with_budget(&lease, Some(&budget)).unwrap();
+    let parameters = view();
+    let before = gpu.render_raster(&prepared, parameters, [64, 64]).pixels;
     if oracle.is_some() {
-        assert!(before.chunks_exact(4).any(|pixel|pixel!=&before[..4]),
-            "external PICT GPU frame must contain image detail");
+        assert!(
+            before.chunks_exact(4).any(|pixel| pixel != &before[..4]),
+            "external PICT GPU frame must contain image detail"
+        );
     }
-    drop(prepared);drop(lease);
-    let (_,victim)=ram.take_lru().unwrap();
-    let directory=tempfile::tempdir().unwrap();
-    let swap:rrrah_cache::RasterSwapCache<u8>=rrrah_cache::ImageSwapCache::new_with_budgets(
-        directory.path(),rrrah_cache::ImageSwapConfig {
-            limits:rrrah_cache::CacheLimits {max_bytes:limit,max_entries:Some(1),ttl:None},
-            queue_bytes:weight,queue_count:1,restore_bytes:weight,
-        },rrrah_core::MemoryBudget::new(weight),budget.clone()).unwrap();
-    swap.enqueue(1,victim);swap.wait_idle().unwrap();
+    drop(prepared);
+    drop(lease);
+    let (_, victim) = ram.take_lru().unwrap();
+    let directory = tempfile::tempdir().unwrap();
+    let swap: rrrah_cache::RasterSwapCache<u8> = rrrah_cache::ImageSwapCache::new_with_budgets(
+        directory.path(),
+        rrrah_cache::ImageSwapConfig {
+            limits: rrrah_cache::CacheLimits {
+                max_bytes: limit,
+                max_entries: Some(1),
+                ttl: None,
+            },
+            queue_bytes: weight,
+            queue_count: 1,
+            restore_bytes: weight,
+        },
+        rrrah_core::MemoryBudget::new(weight),
+        budget.clone(),
+    )
+    .unwrap();
+    swap.enqueue(1, victim);
+    swap.wait_idle().unwrap();
     // The independent comparison retains source allocation until explicitly dropped.
-    let expected_pixels=match expected.pixels() {RasterPixels::Rgba8(p)=>p.to_vec(),_=>panic!()};
-    drop(expected);assert_eq!(budget.used(),0);
-    let pressure=budget.try_buffer(limit as usize,0u8).unwrap().freeze();
-    assert!(swap.try_get(&1,||false).is_err());drop(pressure);
-    let restored=swap.try_get(&1,||false).unwrap().unwrap();
+    let expected_pixels = match expected.pixels() {
+        RasterPixels::Rgba8(p) => p.to_vec(),
+        _ => panic!(),
+    };
+    drop(expected);
+    assert_eq!(budget.used(), 0);
+    let pressure = budget.try_buffer(limit as usize, 0u8).unwrap().freeze();
+    assert!(swap.try_get(&1, || false).is_err());
+    drop(pressure);
+    let restored = swap.try_get(&1, || false).unwrap().unwrap();
     // The local restore cap must bind even while the shared parent has room.
-    assert!(budget.available_bytes()>=weight);
+    assert!(budget.available_bytes() >= weight);
     assert!(matches!(swap.try_get(&1,||false),
         Err(rrrah_core::BufferError::Capacity {limit,..}) if limit<=weight));
-    let retained=restored.clone();
-    assert_eq!(restored.color_space(),&RasterColorSpace::AssumedSrgb);
-    let RasterPixels::Rgba8(p)=restored.pixels() else {panic!()};
-    assert_eq!(&**p,&expected_pixels);
-    if let Some(oracle)=oracle {assert_eq!(&**p,oracle);}
-    let ready=rrrah_decode::prepare_raster_for_display_with_budget(&restored,Some(&budget)).unwrap();
-    assert_eq!(gpu.render_raster(&ready,parameters,[64,64]).pixels,before);
-    drop(ready);drop(restored);assert_eq!(budget.used(),weight);
+    let retained = restored.clone();
+    assert_eq!(restored.color_space(), &RasterColorSpace::AssumedSrgb);
+    let RasterPixels::Rgba8(p) = restored.pixels() else {
+        panic!()
+    };
+    assert_eq!(&**p, &expected_pixels);
+    if let Some(oracle) = oracle {
+        assert_eq!(&**p, oracle);
+    }
+    let ready = rrrah_decode::prepare_raster_for_display_with_budget(&restored, Some(&budget)).unwrap();
+    assert_eq!(gpu.render_raster(&ready, parameters, [64, 64]).pixels, before);
+    drop(ready);
+    drop(restored);
+    assert_eq!(budget.used(), weight);
     assert!(matches!(swap.try_get(&1,||false),
         Err(rrrah_core::BufferError::Capacity {limit,..}) if limit<=weight));
-    drop(retained);assert_eq!(budget.used(),0);
-    let retry=swap.try_get(&1,||false).unwrap().unwrap();
-    let RasterPixels::Rgba8(p)=retry.pixels() else {panic!()};
-    assert_eq!(&**p,&expected_pixels);
-    drop(retry);assert_eq!(budget.used(),0);
-    assert_eq!(swap.stats().writes,1);assert_eq!(swap.stats().reads,2);
+    drop(retained);
+    assert_eq!(budget.used(), 0);
+    let retry = swap.try_get(&1, || false).unwrap().unwrap();
+    let RasterPixels::Rgba8(p) = retry.pixels() else {
+        panic!()
+    };
+    assert_eq!(&**p, &expected_pixels);
+    drop(retry);
+    assert_eq!(budget.used(), 0);
+    assert_eq!(swap.stats().writes, 1);
+    assert_eq!(swap.stats().reads, 2);
 }

@@ -108,7 +108,10 @@ pub fn is_supported_model_path(path: &std::path::Path) -> bool {
 pub fn decode_model(request: &DecodeRequest) -> Result<DecodedModel, ModelDecodeError> {
     request.check_cancelled()?;
     if request.image_index != 0 {
-        return Err(crate::DecodeError::UnsupportedImageIndex { index: request.image_index }.into());
+        return Err(crate::DecodeError::UnsupportedImageIndex {
+            index: request.image_index,
+        }
+        .into());
     }
     let model = decode_model_inner(request)?;
     request.check_cancelled()?;
@@ -325,7 +328,8 @@ mod managed_tests {
     fn nonzero_model_index_is_refused_before_source_io() {
         for extension in ["stl", "obj", "ply", "off"] {
             for index in [1, usize::MAX] {
-                let mut request = crate::DecodeRequest::new(format!("/rrrah-absent-indexed-model.{extension}"));
+                let mut request =
+                    crate::DecodeRequest::new(format!("/rrrah-absent-indexed-model.{extension}"));
                 request.image_index = index;
                 assert!(matches!(super::decode_model(&request),
                     Err(super::ModelDecodeError::Source(crate::DecodeError::UnsupportedImageIndex { index: actual }))
@@ -338,12 +342,15 @@ mod managed_tests {
         for extension in ["stl", "obj", "ply", "off", "unknown"] {
             let mut request = crate::DecodeRequest::new(format!("/rrrah-absent-cancelled-model.{extension}"));
             request.cancellation = Some(crate::GenerationToken::new(
-                std::sync::Arc::new(std::sync::atomic::AtomicU64::new(2)), 1,
+                std::sync::Arc::new(std::sync::atomic::AtomicU64::new(2)),
+                1,
             ));
             let budget = rrrah_core::MemoryBudget::new(0);
             request.memory_budget = Some(budget.clone());
-            assert!(matches!(super::decode_model(&request),
-                Err(super::ModelDecodeError::Source(crate::DecodeError::Cancelled))));
+            assert!(matches!(
+                super::decode_model(&request),
+                Err(super::ModelDecodeError::Source(crate::DecodeError::Cancelled))
+            ));
             assert_eq!(budget.peak(), 0);
         }
     }

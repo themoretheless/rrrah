@@ -670,7 +670,7 @@ mod tests {
             .set_restore_budget(rrrah_memory::MemoryBudget::new(8));
         // Aggregate pressure permits evicting the unpinned old-generation frame.
         assert!(cache.get(&key(3)).is_none()); // visible frame remains protected
-        let visible=cache.visible.take().unwrap();
+        let visible = cache.visible.take().unwrap();
         cache.inner.unpin(&visible);
         assert!(cache.get(&key(3)).is_some());
         assert!(cache.inner.get(&key(1)).is_none());

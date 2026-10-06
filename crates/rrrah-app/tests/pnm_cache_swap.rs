@@ -69,11 +69,16 @@ fn qualify(mut observe: impl FnMut(&DecodedRaster) -> Vec<u8>) {
         swap.wait_idle().unwrap();
         assert_eq!(budget.used(), 0);
         let mut allocation_seen = false;
-        let cancelled = swap.try_get(&1, || {
-            allocation_seen |= budget.used() > 0;
-            allocation_seen
-        }).unwrap();
-        assert!(allocation_seen, "cancel after output admission, not before reading");
+        let cancelled = swap
+            .try_get(&1, || {
+                allocation_seen |= budget.used() > 0;
+                allocation_seen
+            })
+            .unwrap();
+        assert!(
+            allocation_seen,
+            "cancel after output admission, not before reading"
+        );
         assert!(cancelled.is_none());
         assert_eq!(budget.used(), 0);
         assert_eq!(swap.stats().errors, 0);

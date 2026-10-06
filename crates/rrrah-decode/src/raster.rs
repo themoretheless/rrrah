@@ -285,7 +285,9 @@ fn decode_raster_bytes_inner(
     if crate::ktx::has_magic(&bytes) {
         return crate::ktx::decode(&bytes, request);
     }
-    if crate::pdf::has_magic(&bytes) { return crate::pdf::decode(&bytes, request); }
+    if crate::pdf::has_magic(&bytes) {
+        return crate::pdf::decode(&bytes, request);
+    }
     if crate::basis::has_magic(&bytes) {
         return crate::basis::decode(&bytes, request);
     }
@@ -309,14 +311,24 @@ fn decode_raster_bytes_inner(
     }
     if bytes.starts_with(b"FOVb") {
         request.check_cancelled()?;
-        if request.image_index!=0 {return Err(DecodeError::UnsupportedImageIndex {index:request.image_index}.into());}
-        let fallback=rrrah_core::MemoryBudget::new(MAX_RASTER_BYTES);
-        let budget=request.memory_budget.as_ref().unwrap_or(&fallback);
-        let result=crate::decode_x3f_legacy(&bytes,budget,||request.check_cancelled().is_err());
+        if request.image_index != 0 {
+            return Err(DecodeError::UnsupportedImageIndex {
+                index: request.image_index,
+            }
+            .into());
+        }
+        let fallback = rrrah_core::MemoryBudget::new(MAX_RASTER_BYTES);
+        let budget = request.memory_budget.as_ref().unwrap_or(&fallback);
+        let result = crate::decode_x3f_legacy(&bytes, budget, || request.check_cancelled().is_err());
         request.check_cancelled()?;
         return result.map_err(Into::into);
     }
-    if crate::pict::has_magic(&bytes) || request.path.extension().is_some_and(|e| e.eq_ignore_ascii_case("pict") || e.eq_ignore_ascii_case("pct")) {
+    if crate::pict::has_magic(&bytes)
+        || request
+            .path
+            .extension()
+            .is_some_and(|e| e.eq_ignore_ascii_case("pict") || e.eq_ignore_ascii_case("pct"))
+    {
         return crate::pict::decode(&bytes, request);
     }
     if crate::wmf::has_magic(&bytes) {
@@ -518,7 +530,12 @@ fn decode_raster_bytes_inner(
         (Box::new(reader.into_decoder()?), None)
     };
     let associated_tiff = format == ImageFormat::Tiff && tiff_alpha::associated(bytes, request)?;
-    if associated_tiff && !matches!(decoder.color_type(), ColorType::La8 | ColorType::La16 | ColorType::Rgba8 | ColorType::Rgba16 | ColorType::Rgba32F) {
+    if associated_tiff
+        && !matches!(
+            decoder.color_type(),
+            ColorType::La8 | ColorType::La16 | ColorType::Rgba8 | ColorType::Rgba16 | ColorType::Rgba32F
+        )
+    {
         return Err(RasterDecodeError::InvalidTiffAlpha("missing alpha channel"));
     }
     let (width, height) = decoder.dimensions();
@@ -590,9 +607,14 @@ fn decode_raster_bytes_inner(
                         // Standard PBM/PGM/PPM use full-range BT.709, not sRGB.
                         // Nonstandard sRGB variants require the explicit override;
                         // PAM tuple/color interpretation remains separate.
-                        ImageFormat::Pnm if matches!(bytes.get(..2),
-                            Some(b"P1" | b"P2" | b"P3" | b"P4" | b"P5" | b"P6")) =>
-                            RasterColorSpace::Bt709,
+                        ImageFormat::Pnm
+                            if matches!(
+                                bytes.get(..2),
+                                Some(b"P1" | b"P2" | b"P3" | b"P4" | b"P5" | b"P6")
+                            ) =>
+                        {
+                            RasterColorSpace::Bt709
+                        }
                         // EXR/HDR primaries, TIFF/PNG/TGA gamma and QOI's transfer flag
                         // require metadata handling before a display transform is chosen.
                         _ => RasterColorSpace::Unspecified,
@@ -606,12 +628,16 @@ fn decode_raster_bytes_inner(
     let pixels = match sample_bytes {
         2 => {
             let mut pixels = image.into_rgba16().into_raw();
-            if associated_tiff { tiff_alpha::u16_pixels(&mut pixels, request)?; }
+            if associated_tiff {
+                tiff_alpha::u16_pixels(&mut pixels, request)?;
+            }
             RasterPixels::Rgba16(adopt_raster_output(pixels, output_reservation)?)
-        },
+        }
         4 => {
             let mut pixels = image.into_rgba32f().into_raw();
-            if associated_tiff { tiff_alpha::f32_pixels(&mut pixels, request)?; }
+            if associated_tiff {
+                tiff_alpha::f32_pixels(&mut pixels, request)?;
+            }
             if format == ImageFormat::OpenExr {
                 // OpenEXR's conventional RGB channels are alpha-associated.
                 // Our raster API and common renderer use straight alpha.
@@ -647,9 +673,11 @@ fn decode_raster_bytes_inner(
         }
         _ => {
             let mut pixels = image.into_rgba8().into_raw();
-            if associated_tiff { tiff_alpha::u8_pixels(&mut pixels, request)?; }
+            if associated_tiff {
+                tiff_alpha::u8_pixels(&mut pixels, request)?;
+            }
             RasterPixels::Rgba8(adopt_raster_output(pixels, output_reservation)?)
-        },
+        }
     };
     Ok(DecodedRaster::new(width, height, pixels, color_space)?.with_hotspot(hotspot)?)
 }
@@ -1041,10 +1069,26 @@ mod output_budget_tests {
         let cases: Vec<(&str, Vec<u8>, [[f64; 3]; 2])> = vec![
             ("p1.pbm", b"P1\n2 1\n0 1\n".to_vec(), [[1.; 3], [0.; 3]]),
             ("p4.pbm", b"P4\n2 1\n\x40".to_vec(), [[1.; 3], [0.; 3]]),
-            ("p2.pgm", b"P2\n2 1\n255\n128 255\n".to_vec(), [[128./255.; 3], [1.; 3]]),
-            ("p5.pgm", b"P5\n2 1\n65535\n\x80\0\xff\xff".to_vec(), [[32768./65535.; 3], [1.; 3]]),
-            ("p3.ppm", b"P3\n2 1\n255\n255 0 0 128 128 128\n".to_vec(), [[1., 0., 0.], [128./255.; 3]]),
-            ("p6.ppm", b"P6\n2 1\n65535\n\xff\xff\0\0\0\0\x80\0\x80\0\x80\0".to_vec(), [[1., 0., 0.], [32768./65535.; 3]]),
+            (
+                "p2.pgm",
+                b"P2\n2 1\n255\n128 255\n".to_vec(),
+                [[128. / 255.; 3], [1.; 3]],
+            ),
+            (
+                "p5.pgm",
+                b"P5\n2 1\n65535\n\x80\0\xff\xff".to_vec(),
+                [[32768. / 65535.; 3], [1.; 3]],
+            ),
+            (
+                "p3.ppm",
+                b"P3\n2 1\n255\n255 0 0 128 128 128\n".to_vec(),
+                [[1., 0., 0.], [128. / 255.; 3]],
+            ),
+            (
+                "p6.ppm",
+                b"P6\n2 1\n65535\n\xff\xff\0\0\0\0\x80\0\x80\0\x80\0".to_vec(),
+                [[1., 0., 0.], [32768. / 65535.; 3]],
+            ),
         ];
         for (name, bytes, expected) in cases {
             let path = std::env::temp_dir().join(format!("rrrah-pnm-bt709-{}-{name}", std::process::id()));
@@ -1056,16 +1100,23 @@ mod output_budget_tests {
             std::fs::remove_file(path).unwrap();
             assert_eq!(source.color_space(), &rrrah_core::RasterColorSpace::Bt709);
             let linear = crate::prepare_raster_for_display_with_budget(&source, Some(&budget)).unwrap();
-            let rrrah_core::RasterPixels::Rgba32Float(pixels) = linear.pixels() else { panic!("float output"); };
+            let rrrah_core::RasterPixels::Rgba32Float(pixels) = linear.pixels() else {
+                panic!("float output");
+            };
             for (actual, rgb) in pixels.chunks_exact(4).zip(expected) {
                 for (actual, value) in actual[..3].iter().zip(rgb) {
-                    let reference = if value < 0.081 { value / 4.5 }
-                        else { ((value + 0.099) / 1.099).powf(1./0.45) };
-                    assert!((f64::from(*actual)-reference).abs()<3e-7, "{name}");
+                    let reference = if value < 0.081 {
+                        value / 4.5
+                    } else {
+                        ((value + 0.099) / 1.099).powf(1. / 0.45)
+                    };
+                    assert!((f64::from(*actual) - reference).abs() < 3e-7, "{name}");
                 }
                 assert_eq!(actual[3], 1.);
             }
-            drop(linear); drop(source); assert_eq!(budget.used(), 0);
+            drop(linear);
+            drop(source);
+            assert_eq!(budget.used(), 0);
         }
     }
 }

@@ -124,11 +124,17 @@ fn assert_camera_fixture(path: &Path, format: CameraFormat) {
     ));
     assert_eq!(managed_request.memory_budget.as_ref().unwrap().used(), 0);
     // Deterministic generation changes at native pixel checkpoints avoid timers.
-    use std::sync::{Arc, atomic::{AtomicU64, AtomicUsize, Ordering}};
+    use std::sync::{
+        Arc,
+        atomic::{AtomicU64, AtomicUsize, Ordering},
+    };
     let generation = Arc::new(AtomicU64::new(1));
     managed_request.memory_budget = Some(budget.clone());
     managed_request.cancellation = Some(crate::GenerationToken::new(Arc::clone(&generation), 0));
-    assert!(matches!(NativeRawDecoder.decode(&managed_request), Err(crate::DecodeError::Cancelled)));
+    assert!(matches!(
+        NativeRawDecoder.decode(&managed_request),
+        Err(crate::DecodeError::Cancelled)
+    ));
     assert_eq!(budget.used(), 0);
     managed_request.cancellation = None;
     let bytes = std::fs::read(path).unwrap();
@@ -136,13 +142,18 @@ fn assert_camera_fixture(path: &Path, format: CameraFormat) {
     let container = quirks.parse_container(&bytes).unwrap();
     let raw = quirks.select_raw_ifd(&container).unwrap();
     let calls = AtomicUsize::new(0);
-    let baseline = quirks.decode_pixels(&container, raw, &|| {
-        calls.fetch_add(1, Ordering::Relaxed);
-        false
-    }).unwrap();
+    let baseline = quirks
+        .decode_pixels(&container, raw, &|| {
+            calls.fetch_add(1, Ordering::Relaxed);
+            false
+        })
+        .unwrap();
     assert_eq!(baseline.as_slice(), &output.mosaic.pixels[..]);
     let checkpoints = calls.load(Ordering::Relaxed);
-    assert!(checkpoints > 1, "real camera must reach multiple cancellation checkpoints");
+    assert!(
+        checkpoints > 1,
+        "real camera must reach multiple cancellation checkpoints"
+    );
     let targets = [1, checkpoints.div_ceil(2), checkpoints];
     for target in targets {
         calls.store(0, Ordering::Relaxed);
@@ -154,8 +165,10 @@ fn assert_camera_fixture(path: &Path, format: CameraFormat) {
             }
             token.is_cancelled()
         });
-        assert!(matches!(cancelled, Err(crate::DecodeError::Cancelled)),
-            "{format:?} generation checkpoint {target}: {cancelled:?}");
+        assert!(
+            matches!(cancelled, Err(crate::DecodeError::Cancelled)),
+            "{format:?} generation checkpoint {target}: {cancelled:?}"
+        );
     }
     let retry = NativeRawDecoder.decode(&managed_request).unwrap();
     assert_eq!(retry.mosaic.pixels, output.mosaic.pixels);

@@ -306,9 +306,8 @@ impl RawPrefetcher {
                         .with_max_entries(limits.max_entries)
                         .with_ttl(limits.ttl);
                     while let Ok(command) = commands.recv() {
-                        let token = GenerationToken::new(
-                            Arc::clone(&worker_generation), command.generation,
-                        ).combine(&worker_lifetime);
+                        let token = GenerationToken::new(Arc::clone(&worker_generation), command.generation)
+                            .combine(&worker_lifetime);
                         let mut protected = Vec::new();
                         // Do not let the lower-priority tail of this plan evict
                         // the neighbours we just warmed in a count-limited cache.
@@ -336,7 +335,8 @@ impl RawPrefetcher {
                             let mut recipe_request = DecodeRequest::new(&path);
                             recipe_request.cancellation = Some(token.clone());
                             if path.extension().is_some_and(|extension| {
-                                extension.eq_ignore_ascii_case("tif") || extension.eq_ignore_ascii_case("tiff")
+                                extension.eq_ignore_ascii_case("tif")
+                                    || extension.eq_ignore_ascii_case("tiff")
                             }) {
                                 match rrrah_decode::image_source_kind(&recipe_request) {
                                     Ok(rrrah_decode::ImageSourceKind::Raster) => {
@@ -669,7 +669,10 @@ impl Prefetcher {
         // pending decode jobs. Draining here also frees the bounded pixel
         // buffers before the newest generation starts publishing.
         while self.rx.try_recv().is_ok() {}
-        for job in jobs.into_iter().take(self.tx.capacity().expect("bounded prefetch queue")) {
+        for job in jobs
+            .into_iter()
+            .take(self.tx.capacity().expect("bounded prefetch queue"))
+        {
             if self.tx.try_send((generation, job)).is_err() {
                 break;
             }
@@ -915,7 +918,9 @@ mod tests {
         let generation = Arc::clone(&worker.generation);
         let pending = worker.pending.clone();
         worker.finish_foreground_and_submit(
-            &[PathBuf::from("0.png"), PathBuf::from("1.cr3")], 0, NavDirection::Forward,
+            &[PathBuf::from("0.png"), PathBuf::from("1.cr3")],
+            0,
+            NavDirection::Forward,
         );
         let current = generation.load(Ordering::Acquire);
         let gate_token = GenerationToken::new(Arc::clone(&generation), current);
@@ -926,24 +931,33 @@ mod tests {
         assert!(token.is_cancelled());
         assert!(!gate_token.is_cancelled());
         assert_eq!(generation.load(Ordering::Acquire), current);
-        assert!(matches!(pending.try_recv(), Err(crossbeam_channel::TryRecvError::Disconnected)));
+        assert!(matches!(
+            pending.try_recv(),
+            Err(crossbeam_channel::TryRecvError::Disconnected)
+        ));
         assert!(RawStoreAdmission::try_acquire(&state).is_none());
     }
 
     #[test]
     fn mixed_gallery_submits_raw_neighbours_from_raster_or_model_selection() {
         let paths: Vec<_> = ["0.cr3", "1.png", "2.nef", "3.obj", "4.arw", "5.jpg"]
-            .into_iter().map(PathBuf::from).collect();
+            .into_iter()
+            .map(PathBuf::from)
+            .collect();
         let mut worker = raw_prefetcher_without_worker();
         worker.window = PrefetchWindow { behind: 1, ahead: 2 };
         worker.begin_foreground();
         worker.finish_foreground_and_submit(&paths, 1, NavDirection::Forward);
-        assert_eq!(worker.pending.try_recv().unwrap().paths,
-            [paths[2].clone(), paths[0].clone()]);
+        assert_eq!(
+            worker.pending.try_recv().unwrap().paths,
+            [paths[2].clone(), paths[0].clone()]
+        );
         worker.begin_foreground();
         worker.finish_foreground_and_submit(&paths, 3, NavDirection::Backward);
-        assert_eq!(worker.pending.try_recv().unwrap().paths,
-            [paths[2].clone(), paths[4].clone()]);
+        assert_eq!(
+            worker.pending.try_recv().unwrap().paths,
+            [paths[2].clone(), paths[4].clone()]
+        );
     }
     #[test]
     fn raw_worker_skips_ordinary_tiff_without_decoding_failure() {
@@ -1383,29 +1397,39 @@ mod tests {
                     for ahead in [0, 2, 5, usize::MAX] {
                         for direction in [NavDirection::None, NavDirection::Forward, NavDirection::Backward] {
                             let actual = neighbour_prefetch_paths(
-                                &paths, selected, direction, PrefetchWindow { behind, ahead },
+                                &paths,
+                                selected,
+                                direction,
+                                PrefetchWindow { behind, ahead },
                             );
                             let mut expected = Vec::new();
                             if selected < len {
                                 let (left, right) = if direction == NavDirection::Backward {
                                     (ahead, behind)
-                                } else { (behind, ahead) };
+                                } else {
+                                    (behind, ahead)
+                                };
                                 for index in 0..len {
                                     if (index < selected && selected - index <= left)
-                                        || (index > selected && index - selected <= right) {
+                                        || (index > selected && index - selected <= right)
+                                    {
                                         expected.push(index);
                                     }
                                 }
                                 expected.sort_by_key(|&index| {
                                     let priority_side = if direction == NavDirection::Forward {
                                         index > selected
-                                    } else { index < selected };
+                                    } else {
+                                        index < selected
+                                    };
                                     (!priority_side, index.abs_diff(selected))
                                 });
                             }
                             let expected: Vec<_> = expected.into_iter().map(|i| paths[i].clone()).collect();
-                            assert_eq!(actual, expected,
-                                "len={len} selected={selected} behind={behind} ahead={ahead} direction={direction:?}");
+                            assert_eq!(
+                                actual, expected,
+                                "len={len} selected={selected} behind={behind} ahead={ahead} direction={direction:?}"
+                            );
                         }
                     }
                 }

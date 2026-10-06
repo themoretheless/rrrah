@@ -394,7 +394,9 @@ mod tests {
             max_entries: Some(1),
             ttl: Some(std::time::Duration::from_secs(1)),
         });
-        cache.insert(1, budget.try_buffer(4, 31u8).unwrap().freeze(), 4).unwrap();
+        cache
+            .insert(1, budget.try_buffer(4, 31u8).unwrap().freeze(), 4)
+            .unwrap();
         let lease = cache.get(&1).unwrap();
         let other = lease.clone();
         assert!(cache.pin(&1));
@@ -405,8 +407,13 @@ mod tests {
         std::thread::spawn(move || {
             assert_eq!(&**other, &[31; 4]);
             drop(other);
-        }).join().unwrap();
-        assert!(cache.drain_expired().is_empty(), "explicit owner pin survives last lease");
+        })
+        .join()
+        .unwrap();
+        assert!(
+            cache.drain_expired().is_empty(),
+            "explicit owner pin survives last lease"
+        );
         assert_eq!(budget.used(), 4);
         cache.unpin(&1);
         let expired = cache.drain_expired();
@@ -414,8 +421,9 @@ mod tests {
         assert_eq!(budget.used(), 4, "spill victim still owns allocation");
         drop(expired);
         assert_eq!(budget.used(), 0);
-        cache.insert(2, budget.try_buffer(4, 32u8).unwrap().freeze(), 4).unwrap();
+        cache
+            .insert(2, budget.try_buffer(4, 32u8).unwrap().freeze(), 4)
+            .unwrap();
         assert_eq!(&**cache.get(&2).unwrap(), &[32; 4]);
     }
-
 }

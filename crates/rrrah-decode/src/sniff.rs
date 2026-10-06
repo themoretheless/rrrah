@@ -41,8 +41,7 @@ pub(crate) enum SniffedFormat {
 /// Classifies a header slice. Pure and total: any input, including an empty
 /// one, maps to exactly one [`SniffedFormat`].
 pub(crate) fn sniff(header: &[u8]) -> SniffedFormat {
-    if (header.starts_with(b"II") || header.starts_with(b"MM"))
-        && header.get(6..14) == Some(b"HEAPCCDR") {
+    if (header.starts_with(b"II") || header.starts_with(b"MM")) && header.get(6..14) == Some(b"HEAPCCDR") {
         return SniffedFormat::Crw;
     }
     if header.starts_with(b"\0MRM") {

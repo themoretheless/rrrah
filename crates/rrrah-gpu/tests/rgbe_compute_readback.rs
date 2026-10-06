@@ -171,17 +171,32 @@ fn managed_rgbe_admission_completion_and_output_owner() {
         let cancelled_cpu = rrrah_core::MemoryBudget::new(4096);
         let cancelled_gpu = rrrah_core::MemoryBudget::new(8192);
         let mut checks = 0;
-        let final_check = rrrah_gpu::RgbePlan::new([16, 13], [3, 0, 2, 1], &device.limits()).unwrap().dispatches.len() + 6;
-        assert!(matches!(compute.execute_managed_with_cancel(
-            &queue, &source, [16, 13], [3, 0, 2, 1], &cancelled_gpu, &cancelled_cpu,
-            || { checks += 1; match phase {
-                0 => true,
-                1 => cancelled_gpu.used() > 0,
-                2 => checks == final_check,
-                3 => checks == final_check - 1,
-                _ => checks == 5,
-            } },
-        ), Err(rrrah_gpu::RgbeComputeError::Cancelled)));
+        let final_check = rrrah_gpu::RgbePlan::new([16, 13], [3, 0, 2, 1], &device.limits())
+            .unwrap()
+            .dispatches
+            .len()
+            + 6;
+        assert!(matches!(
+            compute.execute_managed_with_cancel(
+                &queue,
+                &source,
+                [16, 13],
+                [3, 0, 2, 1],
+                &cancelled_gpu,
+                &cancelled_cpu,
+                || {
+                    checks += 1;
+                    match phase {
+                        0 => true,
+                        1 => cancelled_gpu.used() > 0,
+                        2 => checks == final_check,
+                        3 => checks == final_check - 1,
+                        _ => checks == 5,
+                    }
+                },
+            ),
+            Err(rrrah_gpu::RgbeComputeError::Cancelled)
+        ));
         assert_eq!(cancelled_cpu.used(), 0);
         assert_eq!(cancelled_gpu.used(), 0);
     }
@@ -269,20 +284,22 @@ fn full_f828_managed_rgbe_matches_cpu_reference() {
 fn cancelled_large_rgbe_validation_does_not_admit_output_resources() {
     let instance = common::headless_instance();
     let adapter = pollster::block_on(common::request_adapter(
-        &instance, &wgpu::RequestAdapterOptions::default(),
-    )).unwrap();
-    let (device, queue) = pollster::block_on(
-        adapter.request_device(&wgpu::DeviceDescriptor::default()),
-    ).unwrap();
+        &instance,
+        &wgpu::RequestAdapterOptions::default(),
+    ))
+    .unwrap();
+    let (device, queue) =
+        pollster::block_on(adapter.request_device(&wgpu::DeviceDescriptor::default())).unwrap();
     let compute = rrrah_gpu::RgbeCompute::new(&device);
     let source = vec![2.5; 128 * 65];
     let cpu = rrrah_core::MemoryBudget::new(0);
     let gpu = rrrah_core::MemoryBudget::new(0);
     let mut checkpoints = 0;
-    let result = compute.execute_managed_with_cancel(
-        &queue, &source, [128, 65], [3, 0, 2, 1], &gpu, &cpu,
-        || { checkpoints += 1; checkpoints == 3 },
-    );
+    let result =
+        compute.execute_managed_with_cancel(&queue, &source, [128, 65], [3, 0, 2, 1], &gpu, &cpu, || {
+            checkpoints += 1;
+            checkpoints == 3
+        });
     assert!(matches!(result, Err(rrrah_gpu::RgbeComputeError::Cancelled)));
     assert_eq!(checkpoints, 3);
     assert_eq!(cpu.peak(), 0);

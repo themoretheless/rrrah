@@ -2,8 +2,8 @@
 //! Candidate thresholds are caller policy, never exact content identity.
 use crate::{
     animated::AnimationBudget,
-    decode::{CachedError, decode_selected_frame_bounded},
     decode::DecodeSourceSnapshot as ContentSnapshot,
+    decode::{CachedError, decode_selected_frame_bounded},
     exact::SnapshotError,
     geometry::{
         Correspondence, GeometryError, GeometryEvidence, GeometryPolicy, verify_similarity_candidates,
@@ -495,10 +495,19 @@ fn compare_local_files_selected(
     budget: &MemoryBudget,
     cancel: impl Fn() -> bool,
 ) -> Result<LocalFileEvidence, LocalFileError> {
-    compare_local_file_views(left,right,policy,signals,spatial,budget,cancel,|av,bv,matches,cancelled| {
-        let models = verify_similarity_candidates(&matches, policy.geometry, cancelled)?;
-        confirm_local_models(av,bv,matches,models,policy,signals,cancelled)
-    })
+    compare_local_file_views(
+        left,
+        right,
+        policy,
+        signals,
+        spatial,
+        budget,
+        cancel,
+        |av, bv, matches, cancelled| {
+            let models = verify_similarity_candidates(&matches, policy.geometry, cancelled)?;
+            confirm_local_models(av, bv, matches, models, policy, signals, cancelled)
+        },
+    )
 }
 
 #[derive(Debug)]
@@ -522,37 +531,97 @@ pub struct ProjectiveFileEvidence {
 /// Invalid policy (including fewer than four inliers), source changes,
 /// decode/geometry/work refusal or cancellation, with no partial candidate.
 pub fn compare_local_files_projective(
-    left: &DecodeRequest, right: &DecodeRequest, policy: LocalFilePolicy,
-    budget: &MemoryBudget, cancel: impl Fn() -> bool,
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    policy: LocalFilePolicy,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
 ) -> Result<ProjectiveFileEvidence, LocalFileError> {
-    if policy.geometry.min_inliers < 4 { return Err(LocalFileError::InvalidPolicy); }
-    compare_local_file_views(left,right,policy,(None,None,None,false),None,budget,cancel,|av,bv,correspondences,cancelled| {
-        let geometry = crate::geometry::verify_projective(&correspondences,policy.geometry,cancelled)?;
-        let pixels = geometry.as_ref().map(|model| crate::warp::verify_projective_bidirectional(av,bv,model.transform,policy.pixels,cancelled)).transpose()?;
-        let candidate = pixels.as_ref().is_some_and(|evidence| accepted(evidence,policy));
-        Ok(ProjectiveFileEvidence { registered_transform:None,filtered:None,correspondences,geometry,pixels,candidate })
-    })
+    if policy.geometry.min_inliers < 4 {
+        return Err(LocalFileError::InvalidPolicy);
+    }
+    compare_local_file_views(
+        left,
+        right,
+        policy,
+        (None, None, None, false),
+        None,
+        budget,
+        cancel,
+        |av, bv, correspondences, cancelled| {
+            let geometry = crate::geometry::verify_projective(&correspondences, policy.geometry, cancelled)?;
+            let pixels = geometry
+                .as_ref()
+                .map(|model| {
+                    crate::warp::verify_projective_bidirectional(
+                        av,
+                        bv,
+                        model.transform,
+                        policy.pixels,
+                        cancelled,
+                    )
+                })
+                .transpose()?;
+            let candidate = pixels.as_ref().is_some_and(|evidence| accepted(evidence, policy));
+            Ok(ProjectiveFileEvidence {
+                registered_transform: None,
+                filtered: None,
+                correspondences,
+                geometry,
+                pixels,
+                candidate,
+            })
+        },
+    )
 }
 
 #[allow(clippy::too_many_arguments)] // Shared lifecycle preserves all comparison-mode source/resource checks.
 fn compare_local_file_views<T>(
-    left: &DecodeRequest, right: &DecodeRequest, policy: LocalFilePolicy,
-    signals: ComparisonSignals, spatial: Option<SpatialFeaturePolicy>,
-    budget: &MemoryBudget, cancel: impl Fn() -> bool,
-    verify: impl FnOnce(&crate::linear::LinearRgbaView<'_>, &crate::linear::LinearRgbaView<'_>, Vec<Correspondence>, &dyn Fn() -> bool) -> Result<T,LocalFileError>,
-) -> Result<T,LocalFileError> {
-    compare_local_file_views_with_extractor(left,right,policy,signals,budget,cancel,
-        |view,cancel|extract_search_features(view,policy.extract,spatial,budget,cancel),verify)
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    policy: LocalFilePolicy,
+    signals: ComparisonSignals,
+    spatial: Option<SpatialFeaturePolicy>,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+    verify: impl FnOnce(
+        &crate::linear::LinearRgbaView<'_>,
+        &crate::linear::LinearRgbaView<'_>,
+        Vec<Correspondence>,
+        &dyn Fn() -> bool,
+    ) -> Result<T, LocalFileError>,
+) -> Result<T, LocalFileError> {
+    compare_local_file_views_with_extractor(
+        left,
+        right,
+        policy,
+        signals,
+        budget,
+        cancel,
+        |view, cancel| extract_search_features(view, policy.extract, spatial, budget, cancel),
+        verify,
+    )
 }
 
 #[allow(clippy::too_many_arguments)] // All feature recipes share the same atomic file lifecycle.
 fn compare_local_file_views_with_extractor<T>(
-    left: &DecodeRequest, right: &DecodeRequest, policy: LocalFilePolicy,
-    signals: ComparisonSignals, budget: &MemoryBudget, cancel: impl Fn() -> bool,
-    extract: impl Fn(&crate::linear::LinearRgbaView<'_>, &dyn Fn() -> bool)
-        -> Result<rrrah_core::SharedBuffer<crate::local::Feature>,LocalError>,
-    verify: impl FnOnce(&crate::linear::LinearRgbaView<'_>, &crate::linear::LinearRgbaView<'_>, Vec<Correspondence>, &dyn Fn() -> bool) -> Result<T,LocalFileError>,
-) -> Result<T,LocalFileError> {
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    policy: LocalFilePolicy,
+    signals: ComparisonSignals,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+    extract: impl Fn(
+        &crate::linear::LinearRgbaView<'_>,
+        &dyn Fn() -> bool,
+    ) -> Result<rrrah_core::SharedBuffer<crate::local::Feature>, LocalError>,
+    verify: impl FnOnce(
+        &crate::linear::LinearRgbaView<'_>,
+        &crate::linear::LinearRgbaView<'_>,
+        Vec<Correspondence>,
+        &dyn Fn() -> bool,
+    ) -> Result<T, LocalFileError>,
+) -> Result<T, LocalFileError> {
     validate_selected_policy(policy, signals)?;
     let latch = Cell::new(false);
     let cancelled = || {
@@ -582,7 +651,7 @@ fn compare_local_file_views_with_extractor<T>(
         let af = extract(&av, &cancelled)?;
         let bf = extract(&bv, &cancelled)?;
         let matches = match_features(&af, &bf, policy.matching, cancelled)?;
-        let evidence = verify(&av,&bv,matches,&cancelled)?;
+        let evidence = verify(&av, &bv, matches, &cancelled)?;
         first.verify(cancelled)?;
         second.verify(cancelled)?;
         Ok(evidence)
@@ -607,7 +676,13 @@ pub struct LocalFileReport<E = LocalFileEvidence> {
     pub source_issues: Vec<(u64, SnapshotError)>,
 }
 impl<E> Default for LocalFileReport<E> {
-    fn default()->Self {Self {pairs:Vec::new(),issues:Vec::new(),source_issues:Vec::new()}}
+    fn default() -> Self {
+        Self {
+            pairs: Vec::new(),
+            issues: Vec::new(),
+            source_issues: Vec::new(),
+        }
+    }
 }
 fn verify_selected_filter(
     source: &crate::linear::LinearRgbaView<'_>,
@@ -1915,53 +1990,128 @@ mod reflected_model_confirmation_tests {
 /// # Errors
 /// Invalid policy, resource refusal, source changes, geometry failure or cancellation.
 pub fn compare_local_files_projective_filtered(
-    left: &DecodeRequest, right: &DecodeRequest, policy: LocalFilePolicy,
-    filter: crate::warp::ColorFilterPolicy, budget: &MemoryBudget,
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    policy: LocalFilePolicy,
+    filter: crate::warp::ColorFilterPolicy,
+    budget: &MemoryBudget,
     cancel: impl Fn() -> bool,
 ) -> Result<ProjectiveFileEvidence, LocalFileError> {
-    compare_projective_registered_selected(left,right,policy,filter,None,None,None,None,budget,cancel)
+    compare_projective_registered_selected(
+        left, right, policy, filter, None, None, None, None, budget, cancel,
+    )
 }
 /// Compare planar candidates after explicitly bounded pixel registration.
 ///
 /// # Errors
 /// Source/resource failures, invalid policy or cancellation yield no candidate.
 pub fn compare_local_files_projective_registered(
-    left:&DecodeRequest,right:&DecodeRequest,policy:LocalFilePolicy,
-    filter:crate::warp::ColorFilterPolicy,registration:crate::warp::ProjectiveRegistrationPolicy,
-    budget:&MemoryBudget,cancel:impl Fn()->bool,
-)->Result<ProjectiveFileEvidence,LocalFileError>{
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    policy: LocalFilePolicy,
+    filter: crate::warp::ColorFilterPolicy,
+    registration: crate::warp::ProjectiveRegistrationPolicy,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<ProjectiveFileEvidence, LocalFileError> {
     crate::warp::validate_registration_policy(registration)?;
-    compare_projective_registered_selected(left,right,policy,filter,Some(registration),None,None,None,budget,cancel)
+    compare_projective_registered_selected(
+        left,
+        right,
+        policy,
+        filter,
+        Some(registration),
+        None,
+        None,
+        None,
+        budget,
+        cancel,
+    )
 }
 #[allow(clippy::too_many_arguments)] // Explicit comparison and registration budgets share file lifecycle.
 fn compare_projective_registered_selected(
-    left:&DecodeRequest,right:&DecodeRequest,policy:LocalFilePolicy,
-    filter:crate::warp::ColorFilterPolicy,registration:Option<crate::warp::ProjectiveRegistrationPolicy>,
-    spatial:Option<SpatialFeaturePolicy>,sampling:Option<crate::geometry::ProjectiveSamplingPolicy>,
-    anchored:Option<crate::warp::ProjectiveRegistrationTrustPolicy>,budget:&MemoryBudget,cancel:impl Fn()->bool,
-)->Result<ProjectiveFileEvidence,LocalFileError>{
-    if let Some(trust)=anchored {crate::warp::validate_registration_trust_policy(trust)?;}
-    if let Some(sample)=sampling {
-        if sample.seed==0 || sample.trials==0 {return Err(LocalFileError::InvalidPolicy);}
-        if sample.trials>policy.geometry.max_hypotheses {return Err(crate::geometry::GeometryError::Budget.into());}
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    policy: LocalFilePolicy,
+    filter: crate::warp::ColorFilterPolicy,
+    registration: Option<crate::warp::ProjectiveRegistrationPolicy>,
+    spatial: Option<SpatialFeaturePolicy>,
+    sampling: Option<crate::geometry::ProjectiveSamplingPolicy>,
+    anchored: Option<crate::warp::ProjectiveRegistrationTrustPolicy>,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<ProjectiveFileEvidence, LocalFileError> {
+    if let Some(trust) = anchored {
+        crate::warp::validate_registration_trust_policy(trust)?;
     }
-    if let Some(grid)=spatial {validate_spatial(grid,policy.extract.max_features)?;}
+    if let Some(sample) = sampling {
+        if sample.seed == 0 || sample.trials == 0 {
+            return Err(LocalFileError::InvalidPolicy);
+        }
+        if sample.trials > policy.geometry.max_hypotheses {
+            return Err(crate::geometry::GeometryError::Budget.into());
+        }
+    }
+    if let Some(grid) = spatial {
+        validate_spatial(grid, policy.extract.max_features)?;
+    }
     crate::warp::validate_filter_policy(filter.filter)?;
-    if policy.geometry.min_inliers < 4 { return Err(LocalFileError::InvalidPolicy); }
-    compare_local_file_views(left,right,policy,(None,None,None,false),spatial,budget,cancel,|a,b,correspondences,cancel| {
-        let geometry=match sampling {
-            Some(sample)=>crate::geometry::verify_projective_sampled(&correspondences,policy.geometry,sample,cancel)?,
-            None=>crate::geometry::verify_projective(&correspondences,policy.geometry,cancel)?,
-        };
-        let registered_transform=geometry.as_ref().zip(registration).map(|(g,r)|match anchored {
-            Some(trust)=>crate::warp::refine_projective_pixels_anchored(a,b,g.transform,trust,cancel),
-            None=>crate::warp::refine_projective_pixels(a,b,g.transform,r,cancel),
-        }).transpose()?;
-        let filtered=geometry.as_ref().map(|g| crate::warp::verify_projective_filtered(a,b,registered_transform.unwrap_or(g.transform),policy.pixels,filter,cancel)).transpose()?;
-        let pixels=filtered.as_ref().map(|e| e.strict.clone());
-        let candidate=filtered.as_ref().is_some_and(|e| accepted(&e.filtered,policy));
-        Ok(ProjectiveFileEvidence {registered_transform,filtered,correspondences,geometry,pixels,candidate})
-    })
+    if policy.geometry.min_inliers < 4 {
+        return Err(LocalFileError::InvalidPolicy);
+    }
+    compare_local_file_views(
+        left,
+        right,
+        policy,
+        (None, None, None, false),
+        spatial,
+        budget,
+        cancel,
+        |a, b, correspondences, cancel| {
+            let geometry = match sampling {
+                Some(sample) => crate::geometry::verify_projective_sampled(
+                    &correspondences,
+                    policy.geometry,
+                    sample,
+                    cancel,
+                )?,
+                None => crate::geometry::verify_projective(&correspondences, policy.geometry, cancel)?,
+            };
+            let registered_transform = geometry
+                .as_ref()
+                .zip(registration)
+                .map(|(g, r)| match anchored {
+                    Some(trust) => {
+                        crate::warp::refine_projective_pixels_anchored(a, b, g.transform, trust, cancel)
+                    }
+                    None => crate::warp::refine_projective_pixels(a, b, g.transform, r, cancel),
+                })
+                .transpose()?;
+            let filtered = geometry
+                .as_ref()
+                .map(|g| {
+                    crate::warp::verify_projective_filtered(
+                        a,
+                        b,
+                        registered_transform.unwrap_or(g.transform),
+                        policy.pixels,
+                        filter,
+                        cancel,
+                    )
+                })
+                .transpose()?;
+            let pixels = filtered.as_ref().map(|e| e.strict.clone());
+            let candidate = filtered.as_ref().is_some_and(|e| accepted(&e.filtered, policy));
+            Ok(ProjectiveFileEvidence {
+                registered_transform,
+                filtered,
+                correspondences,
+                geometry,
+                pixels,
+                candidate,
+            })
+        },
+    )
 }
 
 /// Planar registration with explicit spatial quotas for feature selection.
@@ -1971,23 +2121,38 @@ fn compare_projective_registered_selected(
 /// Invalid spatial/search policy, source/work refusal or cancellation.
 #[allow(clippy::too_many_arguments)] // Explicit grid, comparison and registration policies share one lifecycle.
 pub fn compare_local_files_projective_registered_spatial(
-    left:&DecodeRequest,right:&DecodeRequest,policy:LocalFilePolicy,
-    filter:crate::warp::ColorFilterPolicy,registration:crate::warp::ProjectiveRegistrationPolicy,
-    spatial:SpatialFeaturePolicy,budget:&MemoryBudget,cancel:impl Fn()->bool,
-)->Result<ProjectiveFileEvidence,LocalFileError>{
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    policy: LocalFilePolicy,
+    filter: crate::warp::ColorFilterPolicy,
+    registration: crate::warp::ProjectiveRegistrationPolicy,
+    spatial: SpatialFeaturePolicy,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<ProjectiveFileEvidence, LocalFileError> {
     crate::warp::validate_registration_policy(registration)?;
-    compare_projective_registered_selected(left,right,policy,filter,Some(registration),Some(spatial),None,None,budget,cancel)
+    compare_projective_registered_selected(
+        left,
+        right,
+        policy,
+        filter,
+        Some(registration),
+        Some(spatial),
+        None,
+        None,
+        budget,
+        cancel,
+    )
 }
 
-
 /// Explicit sampled planar search configuration; sampling is approximate.
-#[derive(Debug,Clone,Copy)]
+#[derive(Debug, Clone, Copy)]
 pub struct ProjectiveSampledFilePolicy {
-    pub local:LocalFilePolicy,
-    pub filter:crate::warp::ColorFilterPolicy,
-    pub registration:crate::warp::ProjectiveRegistrationPolicy,
-    pub spatial:Option<SpatialFeaturePolicy>,
-    pub sampling:crate::geometry::ProjectiveSamplingPolicy,
+    pub local: LocalFilePolicy,
+    pub filter: crate::warp::ColorFilterPolicy,
+    pub registration: crate::warp::ProjectiveRegistrationPolicy,
+    pub spatial: Option<SpatialFeaturePolicy>,
+    pub sampling: crate::geometry::ProjectiveSamplingPolicy,
 }
 
 /// Sampled planar geometry with the same source/decode/registration/pixel lifecycle.
@@ -1996,22 +2161,35 @@ pub struct ProjectiveSampledFilePolicy {
 /// # Errors
 /// Invalid policy, changed source, work/resource refusal or cancellation.
 pub fn compare_local_files_projective_sampled(
-    left:&DecodeRequest,right:&DecodeRequest,policy:ProjectiveSampledFilePolicy,
-    budget:&MemoryBudget,cancel:impl Fn()->bool,
-)->Result<ProjectiveFileEvidence,LocalFileError>{
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    policy: ProjectiveSampledFilePolicy,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<ProjectiveFileEvidence, LocalFileError> {
     crate::warp::validate_registration_policy(policy.registration)?;
-    compare_projective_registered_selected(left,right,policy.local,policy.filter,Some(policy.registration),policy.spatial,Some(policy.sampling),None,budget,cancel)
+    compare_projective_registered_selected(
+        left,
+        right,
+        policy.local,
+        policy.filter,
+        Some(policy.registration),
+        policy.spatial,
+        Some(policy.sampling),
+        None,
+        budget,
+        cancel,
+    )
 }
 
-
 /// Explicit geometry trust region and nuisance-color objective for planar files.
-#[derive(Debug,Clone,Copy)]
+#[derive(Debug, Clone, Copy)]
 pub struct ProjectiveAnchoredFilePolicy {
-    pub local:LocalFilePolicy,
-    pub filter:crate::warp::ColorFilterPolicy,
-    pub registration:crate::warp::ProjectiveRegistrationTrustPolicy,
-    pub spatial:Option<SpatialFeaturePolicy>,
-    pub sampling:Option<crate::geometry::ProjectiveSamplingPolicy>,
+    pub local: LocalFilePolicy,
+    pub filter: crate::warp::ColorFilterPolicy,
+    pub registration: crate::warp::ProjectiveRegistrationTrustPolicy,
+    pub spatial: Option<SpatialFeaturePolicy>,
+    pub sampling: Option<crate::geometry::ProjectiveSamplingPolicy>,
 }
 /// Anchored planar registration with unchanged full bidirectional pixel admission.
 /// Color fitting affects geometry search only; it never grants visual acceptance.
@@ -2019,10 +2197,24 @@ pub struct ProjectiveAnchoredFilePolicy {
 /// # Errors
 /// Invalid policy, source/work/resource refusal or cancellation.
 pub fn compare_local_files_projective_anchored(
-    left:&DecodeRequest,right:&DecodeRequest,policy:ProjectiveAnchoredFilePolicy,
-    budget:&MemoryBudget,cancel:impl Fn()->bool,
-)->Result<ProjectiveFileEvidence,LocalFileError>{
-    compare_projective_registered_selected(left,right,policy.local,policy.filter,Some(policy.registration.registration),policy.spatial,policy.sampling,Some(policy.registration),budget,cancel)
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    policy: ProjectiveAnchoredFilePolicy,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<ProjectiveFileEvidence, LocalFileError> {
+    compare_projective_registered_selected(
+        left,
+        right,
+        policy.local,
+        policy.filter,
+        Some(policy.registration.registration),
+        policy.spatial,
+        policy.sampling,
+        Some(policy.registration),
+        budget,
+        cancel,
+    )
 }
 
 /// Explicit perspective and bounded color comparison, using the anchored
@@ -2053,42 +2245,91 @@ pub struct ProjectivePhotometricFileEvidence {
 /// Invalid policy, source/decode/work refusal or cancellation. A photometric
 /// fitting refusal is returned as rejected evidence without retrying pixel work.
 pub fn compare_local_files_projective_photometric(
-    left: &DecodeRequest, right: &DecodeRequest, policy: ProjectivePhotometricFilePolicy,
-    budget: &MemoryBudget, cancel: impl Fn() -> bool,
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    policy: ProjectivePhotometricFilePolicy,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
 ) -> Result<ProjectivePhotometricFileEvidence, LocalFileError> {
     let p = policy.search;
     crate::warp::validate_registration_trust_policy(p.registration)?;
     crate::warp::validate_photometric_policy(policy.photometric)?;
     crate::warp::validate_filter_policy(p.filter.filter)?;
-    if p.local.geometry.min_inliers < 4 { return Err(LocalFileError::InvalidPolicy); }
-    if let Some(grid) = p.spatial { validate_spatial(grid,p.local.extract.max_features)?; }
-    if let Some(sampling) = p.sampling {
-        if sampling.seed == 0 || sampling.trials == 0 { return Err(LocalFileError::InvalidPolicy); }
-        if sampling.trials > p.local.geometry.max_hypotheses { return Err(GeometryError::Budget.into()); }
+    if p.local.geometry.min_inliers < 4 {
+        return Err(LocalFileError::InvalidPolicy);
     }
-    compare_local_file_views(left,right,p.local,(None,None,None,false),p.spatial,budget,cancel,|a,b,correspondences,cancel| {
-        let geometry = match p.sampling {
-            Some(sampling) => crate::geometry::verify_projective_sampled(&correspondences,p.local.geometry,sampling,cancel)?,
-            None => crate::geometry::verify_projective(&correspondences,p.local.geometry,cancel)?,
-        };
-        let registered_transform = geometry.as_ref().map(|g|
-            crate::warp::refine_projective_pixels_anchored(a,b,g.transform,p.registration,cancel)).transpose()?;
-        let mut pixels = None;
-        let mut fit_failure = None;
-        let mut unfitted = None;
-        if let Some(transform) = registered_transform {
-            match crate::warp::verify_projective_photometric_filtered(a,b,transform,policy.photometric,p.filter,policy.fit_mode,cancel) {
-                Ok(evidence) => { unfitted = Some(evidence.unfitted.clone()); pixels = Some(evidence); }
-                Err(WarpError::Fit(reason)) => {
-                    fit_failure = Some(reason);
-
-                }
-                Err(error) => return Err(error.into()),
-            }
+    if let Some(grid) = p.spatial {
+        validate_spatial(grid, p.local.extract.max_features)?;
+    }
+    if let Some(sampling) = p.sampling {
+        if sampling.seed == 0 || sampling.trials == 0 {
+            return Err(LocalFileError::InvalidPolicy);
         }
-        let candidate = pixels.as_ref().is_some_and(|e| accepted_photometric(&e.fitted,p.local));
-        Ok(ProjectivePhotometricFileEvidence { correspondences,geometry,registered_transform,pixels,fit_failure,unfitted,candidate })
-    })
+        if sampling.trials > p.local.geometry.max_hypotheses {
+            return Err(GeometryError::Budget.into());
+        }
+    }
+    compare_local_file_views(
+        left,
+        right,
+        p.local,
+        (None, None, None, false),
+        p.spatial,
+        budget,
+        cancel,
+        |a, b, correspondences, cancel| {
+            let geometry = match p.sampling {
+                Some(sampling) => crate::geometry::verify_projective_sampled(
+                    &correspondences,
+                    p.local.geometry,
+                    sampling,
+                    cancel,
+                )?,
+                None => crate::geometry::verify_projective(&correspondences, p.local.geometry, cancel)?,
+            };
+            let registered_transform = geometry
+                .as_ref()
+                .map(|g| {
+                    crate::warp::refine_projective_pixels_anchored(a, b, g.transform, p.registration, cancel)
+                })
+                .transpose()?;
+            let mut pixels = None;
+            let mut fit_failure = None;
+            let mut unfitted = None;
+            if let Some(transform) = registered_transform {
+                match crate::warp::verify_projective_photometric_filtered(
+                    a,
+                    b,
+                    transform,
+                    policy.photometric,
+                    p.filter,
+                    policy.fit_mode,
+                    cancel,
+                ) {
+                    Ok(evidence) => {
+                        unfitted = Some(evidence.unfitted.clone());
+                        pixels = Some(evidence);
+                    }
+                    Err(WarpError::Fit(reason)) => {
+                        fit_failure = Some(reason);
+                    }
+                    Err(error) => return Err(error.into()),
+                }
+            }
+            let candidate = pixels
+                .as_ref()
+                .is_some_and(|e| accepted_photometric(&e.fitted, p.local));
+            Ok(ProjectivePhotometricFileEvidence {
+                correspondences,
+                geometry,
+                registered_transform,
+                pixels,
+                fit_failure,
+                unfitted,
+                candidate,
+            })
+        },
+    )
 }
 
 /// Explicit bounded scale-pyramid search with independently selected color fitting.
@@ -2112,50 +2353,94 @@ pub struct ProjectivePyramidPhotometricFilePolicy {
 /// Policy, source, decode, memory/work and cancellation refusals return no result.
 /// A bounded fitting refusal is explicit rejected evidence.
 pub fn compare_local_files_projective_pyramid_photometric(
-    left: &DecodeRequest, right: &DecodeRequest,
+    left: &DecodeRequest,
+    right: &DecodeRequest,
     policy: ProjectivePyramidPhotometricFilePolicy,
-    budget: &MemoryBudget, cancel: impl Fn() -> bool,
-) -> Result<ProjectivePhotometricFileEvidence,LocalFileError> {
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<ProjectivePhotometricFileEvidence, LocalFileError> {
     validate_projective_pyramid_file_policy(&policy)?;
-    let p=policy.local;
-    let pyramid=crate::pyramid::PyramidPolicy{local:p.extract,max_levels:policy.max_levels,
-        max_total_pixels:policy.max_total_pixels,max_total_features:policy.max_total_features};
-    compare_local_file_views_with_extractor(left,right,p,(None,None,None,false),budget,cancel,
-        |view,cancel|crate::pyramid::extract_oriented_pyramid_managed(view,pyramid,budget,cancel),
-        |a,b,correspondences,cancel|verify_projective_pyramid_views(a,b,correspondences,policy,cancel))
+    let p = policy.local;
+    let pyramid = crate::pyramid::PyramidPolicy {
+        local: p.extract,
+        max_levels: policy.max_levels,
+        max_total_pixels: policy.max_total_pixels,
+        max_total_features: policy.max_total_features,
+    };
+    compare_local_file_views_with_extractor(
+        left,
+        right,
+        p,
+        (None, None, None, false),
+        budget,
+        cancel,
+        |view, cancel| crate::pyramid::extract_oriented_pyramid_managed(view, pyramid, budget, cancel),
+        |a, b, correspondences, cancel| {
+            verify_projective_pyramid_views(a, b, correspondences, policy, cancel)
+        },
+    )
 }
 fn verify_projective_pyramid_views(
-    a:&crate::linear::LinearRgbaView<'_>,b:&crate::linear::LinearRgbaView<'_>,
-    correspondences:Vec<Correspondence>,policy:ProjectivePyramidPhotometricFilePolicy,
-    cancel:&dyn Fn()->bool,
-)->Result<ProjectivePhotometricFileEvidence,LocalFileError>{
-            let p=policy.local;
-            let geometry=crate::geometry::verify_projective_sampled(&correspondences,p.geometry,policy.sampling,cancel)?;
-            let mut pixels=None;let mut unfitted=None;let mut fit_failure=None;
-            if let Some(g)=&geometry {
-                match crate::warp::verify_projective_photometric_filtered(a,b,g.transform,
-                    policy.photometric,policy.filter,policy.fit_mode,cancel) {
-                    Ok(e)=>{unfitted=Some(e.unfitted.clone());pixels=Some(e);}
-                    Err(WarpError::Fit(reason))=>{fit_failure=Some(reason);}
-                    Err(error)=>return Err(error.into()),
-                }
+    a: &crate::linear::LinearRgbaView<'_>,
+    b: &crate::linear::LinearRgbaView<'_>,
+    correspondences: Vec<Correspondence>,
+    policy: ProjectivePyramidPhotometricFilePolicy,
+    cancel: &dyn Fn() -> bool,
+) -> Result<ProjectivePhotometricFileEvidence, LocalFileError> {
+    let p = policy.local;
+    let geometry =
+        crate::geometry::verify_projective_sampled(&correspondences, p.geometry, policy.sampling, cancel)?;
+    let mut pixels = None;
+    let mut unfitted = None;
+    let mut fit_failure = None;
+    if let Some(g) = &geometry {
+        match crate::warp::verify_projective_photometric_filtered(
+            a,
+            b,
+            g.transform,
+            policy.photometric,
+            policy.filter,
+            policy.fit_mode,
+            cancel,
+        ) {
+            Ok(e) => {
+                unfitted = Some(e.unfitted.clone());
+                pixels = Some(e);
             }
-            let candidate=pixels.as_ref().is_some_and(|e|accepted_photometric(&e.fitted,p));
-            Ok(ProjectivePhotometricFileEvidence{correspondences,geometry,registered_transform:None,
-                pixels,fit_failure,unfitted,candidate})
+            Err(WarpError::Fit(reason)) => {
+                fit_failure = Some(reason);
+            }
+            Err(error) => return Err(error.into()),
+        }
+    }
+    let candidate = pixels
+        .as_ref()
+        .is_some_and(|e| accepted_photometric(&e.fitted, p));
+    Ok(ProjectivePhotometricFileEvidence {
+        correspondences,
+        geometry,
+        registered_transform: None,
+        pixels,
+        fit_failure,
+        unfitted,
+        candidate,
+    })
 }
 
 pub(crate) fn validate_projective_pyramid_file_policy(
-    policy:&ProjectivePyramidPhotometricFilePolicy,
-)->Result<(),LocalFileError>{
+    policy: &ProjectivePyramidPhotometricFilePolicy,
+) -> Result<(), LocalFileError> {
     validate(policy.local)?;
     crate::warp::validate_photometric_policy(policy.photometric)?;
     crate::warp::validate_filter_policy(policy.filter.filter)?;
-    if policy.max_levels==0 || policy.local.geometry.min_inliers<4
-        || policy.sampling.seed==0 || policy.sampling.trials==0 {
+    if policy.max_levels == 0
+        || policy.local.geometry.min_inliers < 4
+        || policy.sampling.seed == 0
+        || policy.sampling.trials == 0
+    {
         return Err(LocalFileError::InvalidPolicy);
     }
-    if policy.sampling.trials>policy.local.geometry.max_hypotheses {
+    if policy.sampling.trials > policy.local.geometry.max_hypotheses {
         return Err(GeometryError::Budget.into());
     }
     Ok(())
@@ -2178,7 +2463,7 @@ pub struct ProjectivePortfolioFileEvidence {
     /// Either complete bidirectional verification passed the caller's policy.
     /// This remains selected-frame visual evidence, never exact identity.
     /// Independent final admission of anchored and unanchored lanes.
-    pub accepted_lanes: [bool;2],
+    pub accepted_lanes: [bool; 2],
     pub candidate: bool,
 }
 /// Compare local files through two independently verified registration lanes.
@@ -2189,41 +2474,98 @@ pub struct ProjectivePortfolioFileEvidence {
 /// Invalid policy, source/decode/model/work refusal, or cancellation discards the
 /// result. A partial successful lane cannot mask an error in the other lane.
 pub fn compare_local_files_projective_portfolio(
-    left: &DecodeRequest, right: &DecodeRequest, policy: ProjectivePortfolioFilePolicy,
-    budget: &MemoryBudget, cancel: impl Fn()->bool,
-) -> Result<ProjectivePortfolioFileEvidence,LocalFileError> {
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    policy: ProjectivePortfolioFilePolicy,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<ProjectivePortfolioFileEvidence, LocalFileError> {
     validate_projective_portfolio_file_policy(&policy)?;
-    compare_local_file_views(left,right,policy.local,(None,None,None,false),policy.spatial,budget,cancel,
-        |a,b,correspondences,cancel|verify_projective_portfolio_views(a,b,correspondences,policy,cancel))
+    compare_local_file_views(
+        left,
+        right,
+        policy.local,
+        (None, None, None, false),
+        policy.spatial,
+        budget,
+        cancel,
+        |a, b, correspondences, cancel| {
+            verify_projective_portfolio_views(a, b, correspondences, policy, cancel)
+        },
+    )
 }
 fn verify_projective_portfolio_views(
-    a:&crate::linear::LinearRgbaView<'_>,b:&crate::linear::LinearRgbaView<'_>,
-    correspondences:Vec<Correspondence>,policy:ProjectivePortfolioFilePolicy,cancel:&dyn Fn()->bool,
-)->Result<ProjectivePortfolioFileEvidence,LocalFileError>{
-        let geometry=match policy.sampling {
-            Some(sample)=>crate::geometry::verify_projective_sampled(&correspondences,policy.local.geometry,sample,cancel)?,
-            None=>crate::geometry::verify_projective(&correspondences,policy.local.geometry,cancel)?,
-        };
-        let pixels=geometry.as_ref().map(|g| {
-            let models=crate::warp::refine_projective_pixels_candidates(a,b,g.transform,policy.registration,cancel)?;
-            crate::warp::verify_projective_candidates_filtered(a,b,models,policy.local.pixels,policy.filter,cancel)
-        }).transpose()?;
-        let accepted_lanes=pixels.as_ref().map_or([false;2],|e|
-            [accepted(&e.anchored.filtered,policy.local),accepted(&e.unanchored.filtered,policy.local)]);
-        let candidate=accepted_lanes.into_iter().any(|accepted|accepted);
-        Ok(ProjectivePortfolioFileEvidence{correspondences,geometry,pixels,accepted_lanes,candidate})
+    a: &crate::linear::LinearRgbaView<'_>,
+    b: &crate::linear::LinearRgbaView<'_>,
+    correspondences: Vec<Correspondence>,
+    policy: ProjectivePortfolioFilePolicy,
+    cancel: &dyn Fn() -> bool,
+) -> Result<ProjectivePortfolioFileEvidence, LocalFileError> {
+    let geometry = match policy.sampling {
+        Some(sample) => crate::geometry::verify_projective_sampled(
+            &correspondences,
+            policy.local.geometry,
+            sample,
+            cancel,
+        )?,
+        None => crate::geometry::verify_projective(&correspondences, policy.local.geometry, cancel)?,
+    };
+    let pixels = geometry
+        .as_ref()
+        .map(|g| {
+            let models = crate::warp::refine_projective_pixels_candidates(
+                a,
+                b,
+                g.transform,
+                policy.registration,
+                cancel,
+            )?;
+            crate::warp::verify_projective_candidates_filtered(
+                a,
+                b,
+                models,
+                policy.local.pixels,
+                policy.filter,
+                cancel,
+            )
+        })
+        .transpose()?;
+    let accepted_lanes = pixels.as_ref().map_or([false; 2], |e| {
+        [
+            accepted(&e.anchored.filtered, policy.local),
+            accepted(&e.unanchored.filtered, policy.local),
+        ]
+    });
+    let candidate = accepted_lanes.into_iter().any(|accepted| accepted);
+    Ok(ProjectivePortfolioFileEvidence {
+        correspondences,
+        geometry,
+        pixels,
+        accepted_lanes,
+        candidate,
+    })
 }
 
-pub(crate) fn validate_projective_portfolio_file_policy(policy: &ProjectivePortfolioFilePolicy) -> Result<(),LocalFileError> {
+pub(crate) fn validate_projective_portfolio_file_policy(
+    policy: &ProjectivePortfolioFilePolicy,
+) -> Result<(), LocalFileError> {
     crate::warp::validate_registration_portfolio_policy(policy.registration)?;
     crate::warp::validate_filter_policy(policy.filter.filter)?;
-    if policy.local.geometry.min_inliers<4 {return Err(LocalFileError::InvalidPolicy);}
-    if let Some(grid)=policy.spatial {validate_spatial(grid,policy.local.extract.max_features)?;}
-    if let Some(sample)=policy.sampling {
-        if sample.seed==0 || sample.trials==0 {return Err(LocalFileError::InvalidPolicy);}
-        if sample.trials>policy.local.geometry.max_hypotheses {return Err(GeometryError::Budget.into());}
+    if policy.local.geometry.min_inliers < 4 {
+        return Err(LocalFileError::InvalidPolicy);
     }
-    validate_selected_policy(policy.local,(None,None,None,false))?;
+    if let Some(grid) = policy.spatial {
+        validate_spatial(grid, policy.local.extract.max_features)?;
+    }
+    if let Some(sample) = policy.sampling {
+        if sample.seed == 0 || sample.trials == 0 {
+            return Err(LocalFileError::InvalidPolicy);
+        }
+        if sample.trials > policy.local.geometry.max_hypotheses {
+            return Err(GeometryError::Budget.into());
+        }
+    }
+    validate_selected_policy(policy.local, (None, None, None, false))?;
     Ok(())
 }
 
@@ -2257,44 +2599,83 @@ pub struct ProjectiveComplementaryFileEvidence {
 /// Invalid/incompatible policies, cumulative or phase work/memory limits,
 /// decode/source changes or cancellation discard the entire result.
 pub fn compare_local_files_projective_complementary(
-    left:&DecodeRequest,right:&DecodeRequest,policy:ProjectiveComplementaryFilePolicy,
-    budget:&MemoryBudget,cancel:impl Fn()->bool,
-)->Result<ProjectiveComplementaryFileEvidence,LocalFileError>{
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    policy: ProjectiveComplementaryFilePolicy,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<ProjectiveComplementaryFileEvidence, LocalFileError> {
     validate_projective_complementary_file_policy(&policy)?;
-    let p=policy.pyramid;
-    let pyramid=crate::pyramid::PyramidPolicy{local:p.local.extract,max_levels:p.max_levels,
-        max_total_pixels:p.max_total_pixels,max_total_features:p.max_total_features};
-    compare_local_file_views_with_extractor(left,right,p.local,(None,None,None,false),budget,cancel,
-        |view,cancel|crate::pyramid::extract_oriented_pyramid_managed(view,pyramid,budget,cancel),
-        |a,b,correspondences,cancel|{
-            let pyramid=verify_projective_pyramid_views(a,b,correspondences,p,cancel)?;
-            let r=policy.registration;
-            let af=extract_search_features(a,r.local.extract,r.spatial,budget,cancel)?;
-            let bf=extract_search_features(b,r.local.extract,r.spatial,budget,cancel)?;
-            let matches=match_features(&af,&bf,r.local.matching,cancel)?;
-            let registration=verify_projective_portfolio_views(a,b,matches,r,cancel)?;
-            let accepted_searches=[registration.candidate,pyramid.candidate];
-            let candidate=accepted_searches.into_iter().any(|accepted|accepted);
-            Ok(ProjectiveComplementaryFileEvidence{registration,pyramid,accepted_searches,candidate})
-        })
+    let p = policy.pyramid;
+    let pyramid = crate::pyramid::PyramidPolicy {
+        local: p.local.extract,
+        max_levels: p.max_levels,
+        max_total_pixels: p.max_total_pixels,
+        max_total_features: p.max_total_features,
+    };
+    compare_local_file_views_with_extractor(
+        left,
+        right,
+        p.local,
+        (None, None, None, false),
+        budget,
+        cancel,
+        |view, cancel| crate::pyramid::extract_oriented_pyramid_managed(view, pyramid, budget, cancel),
+        |a, b, correspondences, cancel| {
+            let pyramid = verify_projective_pyramid_views(a, b, correspondences, p, cancel)?;
+            let r = policy.registration;
+            let af = extract_search_features(a, r.local.extract, r.spatial, budget, cancel)?;
+            let bf = extract_search_features(b, r.local.extract, r.spatial, budget, cancel)?;
+            let matches = match_features(&af, &bf, r.local.matching, cancel)?;
+            let registration = verify_projective_portfolio_views(a, b, matches, r, cancel)?;
+            let accepted_searches = [registration.candidate, pyramid.candidate];
+            let candidate = accepted_searches.into_iter().any(|accepted| accepted);
+            Ok(ProjectiveComplementaryFileEvidence {
+                registration,
+                pyramid,
+                accepted_searches,
+                candidate,
+            })
+        },
+    )
 }
 pub(crate) fn validate_projective_complementary_file_policy(
-    policy:&ProjectiveComplementaryFilePolicy,
-)->Result<(),LocalFileError>{
+    policy: &ProjectiveComplementaryFilePolicy,
+) -> Result<(), LocalFileError> {
     validate_projective_portfolio_file_policy(&policy.registration)?;
     validate_projective_pyramid_file_policy(&policy.pyramid)?;
-    let a=policy.registration.local.decode;let b=policy.pyramid.local.decode;
-    if a.max_frames!=b.max_frames || a.max_pixels!=b.max_pixels || a.max_file_bytes!=b.max_file_bytes {
+    let a = policy.registration.local.decode;
+    let b = policy.pyramid.local.decode;
+    if a.max_frames != b.max_frames || a.max_pixels != b.max_pixels || a.max_file_bytes != b.max_file_bytes {
         return Err(LocalFileError::InvalidPolicy);
     }
-    let r=policy.registration;let p=policy.pyramid;
-    let comparisons=r.local.matching.max_comparisons.checked_add(p.local.matching.max_comparisons).ok_or(LocalError::Budget)?;
-    let hypotheses=r.sampling.map_or(r.local.geometry.max_hypotheses,|s|s.trials)
-        .checked_add(p.sampling.trials).ok_or(GeometryError::Budget)?;
-    let sample_pairs=r.registration.max_sample_pairs.checked_add(r.filter.filter.max_sample_pairs)
-        .and_then(|n|n.checked_add(p.filter.filter.max_sample_pairs)).ok_or(WarpError::Budget)?;
-    if comparisons>policy.max_total_comparisons {return Err(LocalError::Budget.into());}
-    if hypotheses>policy.max_total_hypotheses {return Err(GeometryError::Budget.into());}
-    if sample_pairs>policy.max_total_sample_pairs {return Err(WarpError::Budget.into());}
+    let r = policy.registration;
+    let p = policy.pyramid;
+    let comparisons = r
+        .local
+        .matching
+        .max_comparisons
+        .checked_add(p.local.matching.max_comparisons)
+        .ok_or(LocalError::Budget)?;
+    let hypotheses = r
+        .sampling
+        .map_or(r.local.geometry.max_hypotheses, |s| s.trials)
+        .checked_add(p.sampling.trials)
+        .ok_or(GeometryError::Budget)?;
+    let sample_pairs = r
+        .registration
+        .max_sample_pairs
+        .checked_add(r.filter.filter.max_sample_pairs)
+        .and_then(|n| n.checked_add(p.filter.filter.max_sample_pairs))
+        .ok_or(WarpError::Budget)?;
+    if comparisons > policy.max_total_comparisons {
+        return Err(LocalError::Budget.into());
+    }
+    if hypotheses > policy.max_total_hypotheses {
+        return Err(GeometryError::Budget.into());
+    }
+    if sample_pairs > policy.max_total_sample_pairs {
+        return Err(WarpError::Budget.into());
+    }
     Ok(())
 }

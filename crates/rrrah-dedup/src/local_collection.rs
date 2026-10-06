@@ -1,7 +1,7 @@
 //! Descriptor-indexed selected-frame candidates, followed by fresh geometry/pixels.
 use crate::{
-    decode::{CachedError, FingerprintPolicy, decode_snapshot_frame},
     decode::DecodeSourceSnapshot as ContentSnapshot,
+    decode::{CachedError, FingerprintPolicy, decode_snapshot_frame},
     local::{Feature, LocalError},
     local_index::{FileFeatureBudgets, descriptor_file_pairs_shared},
     local_scan::{
@@ -84,29 +84,48 @@ fn scan_local_collection_selected(
     budget: &MemoryBudget,
     cancel: impl Fn() -> bool,
 ) -> Result<LocalCollectionReport, ScanError> {
-    scan_collection_with_verifiers(files,policy,spatial,budget,cancel,
-        |left,right,cancel|preverify(left,right,policy.search,cancel),
-        |left,right,cancel|compare_selected_pair(left,right,policy.search,spatial,budget,cancel))
+    scan_collection_with_verifiers(
+        files,
+        policy,
+        spatial,
+        budget,
+        cancel,
+        |left, right, cancel| preverify(left, right, policy.search, cancel),
+        |left, right, cancel| compare_selected_pair(left, right, policy.search, spatial, budget, cancel),
+    )
 }
-#[allow(clippy::too_many_arguments,clippy::too_many_lines)] // One admission/index/source lifecycle for both evidence types.
+#[allow(clippy::too_many_arguments, clippy::too_many_lines)] // One admission/index/source lifecycle for both evidence types.
 fn scan_collection_with_verifiers<E>(
-    files:impl IntoIterator<Item=(u64,DecodeRequest)>,policy:&LocalCollectionPolicy,
-    spatial:Option<SpatialFeaturePolicy>,budget:&MemoryBudget,cancel:impl Fn()->bool,
-    precheck:impl Fn(&[Feature],&[Feature],&dyn Fn()->bool)->Result<Option<E>,LocalFileError>,
-    compare:impl Fn(&DecodeRequest,&DecodeRequest,&dyn Fn()->bool)->Result<E,LocalFileError>,
-)->Result<LocalCollectionReport<E>,ScanError>{
-    scan_collection_with_extractor(files,policy,cancel,
-        |request,source,cancel|extract_file(request,source,policy.search,spatial,budget,cancel),
-        precheck,compare)
+    files: impl IntoIterator<Item = (u64, DecodeRequest)>,
+    policy: &LocalCollectionPolicy,
+    spatial: Option<SpatialFeaturePolicy>,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+    precheck: impl Fn(&[Feature], &[Feature], &dyn Fn() -> bool) -> Result<Option<E>, LocalFileError>,
+    compare: impl Fn(&DecodeRequest, &DecodeRequest, &dyn Fn() -> bool) -> Result<E, LocalFileError>,
+) -> Result<LocalCollectionReport<E>, ScanError> {
+    scan_collection_with_extractor(
+        files,
+        policy,
+        cancel,
+        |request, source, cancel| extract_file(request, source, policy.search, spatial, budget, cancel),
+        precheck,
+        compare,
+    )
 }
-#[allow(clippy::too_many_arguments,clippy::too_many_lines)]
+#[allow(clippy::too_many_arguments, clippy::too_many_lines)]
 fn scan_collection_with_extractor<E>(
-    files:impl IntoIterator<Item=(u64,DecodeRequest)>,policy:&LocalCollectionPolicy,
-    cancel:impl Fn()->bool,
-    extract:impl Fn(&DecodeRequest,&ContentSnapshot,&dyn Fn()->bool)->Result<rrrah_core::SharedBuffer<Feature>,LocalFileError>,
-    precheck:impl Fn(&[Feature],&[Feature],&dyn Fn()->bool)->Result<Option<E>,LocalFileError>,
-    compare:impl Fn(&DecodeRequest,&DecodeRequest,&dyn Fn()->bool)->Result<E,LocalFileError>,
-)->Result<LocalCollectionReport<E>,ScanError>{
+    files: impl IntoIterator<Item = (u64, DecodeRequest)>,
+    policy: &LocalCollectionPolicy,
+    cancel: impl Fn() -> bool,
+    extract: impl Fn(
+        &DecodeRequest,
+        &ContentSnapshot,
+        &dyn Fn() -> bool,
+    ) -> Result<rrrah_core::SharedBuffer<Feature>, LocalFileError>,
+    precheck: impl Fn(&[Feature], &[Feature], &dyn Fn() -> bool) -> Result<Option<E>, LocalFileError>,
+    compare: impl Fn(&DecodeRequest, &DecodeRequest, &dyn Fn() -> bool) -> Result<E, LocalFileError>,
+) -> Result<LocalCollectionReport<E>, ScanError> {
     validate_search(policy.search)?;
     let requests = admit(files, policy.budgets.max_files, &cancel)?;
     let mut generations = Vec::new();
@@ -173,14 +192,13 @@ fn scan_collection_with_extractor<E>(
     let proposed_pairs = retrieved.pairs.len();
     let mut pixel_verification_pairs = 0;
     for (left, right) in retrieved.pairs {
-        let result =
-            precheck(&features[&left], &features[&right], &cancelled).and_then(|evidence| {
-                if let Some(evidence) = evidence {
-                    return Ok(evidence);
-                }
-                pixel_verification_pairs += 1;
-                compare(&requests[&left],&requests[&right],&cancelled)
-            });
+        let result = precheck(&features[&left], &features[&right], &cancelled).and_then(|evidence| {
+            if let Some(evidence) = evidence {
+                return Ok(evidence);
+            }
+            pixel_verification_pairs += 1;
+            compare(&requests[&left], &requests[&right], &cancelled)
+        });
         if cancelled() || matches!(result, Err(LocalFileError::Cancelled)) {
             return Err(ScanError::Cancelled);
         }
@@ -297,14 +315,21 @@ fn extract_file(
     budget: &MemoryBudget,
     cancel: impl Fn() -> bool,
 ) -> Result<rrrah_core::SharedBuffer<Feature>, LocalFileError> {
-    extract_file_with(request,source,policy,budget,cancel,
-        |view,cancel|extract_search_features(view,policy.local.extract,spatial,budget,cancel))
+    extract_file_with(request, source, policy, budget, cancel, |view, cancel| {
+        extract_search_features(view, policy.local.extract, spatial, budget, cancel)
+    })
 }
 fn extract_file_with(
-    request:&DecodeRequest,source:&ContentSnapshot,policy:LocalSearchPolicy,
-    budget:&MemoryBudget,cancel:impl Fn()->bool,
-    extract:impl Fn(&crate::linear::LinearRgbaView<'_>,&dyn Fn()->bool)->Result<rrrah_core::SharedBuffer<Feature>,LocalError>,
-)->Result<rrrah_core::SharedBuffer<Feature>,LocalFileError>{
+    request: &DecodeRequest,
+    source: &ContentSnapshot,
+    policy: LocalSearchPolicy,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+    extract: impl Fn(
+        &crate::linear::LinearRgbaView<'_>,
+        &dyn Fn() -> bool,
+    ) -> Result<rrrah_core::SharedBuffer<Feature>, LocalError>,
+) -> Result<rrrah_core::SharedBuffer<Feature>, LocalFileError> {
     let limits = policy.local.decode;
     let frame = decode_snapshot_frame(
         request,
@@ -471,14 +496,23 @@ fn scan_roots_selected(
     cancel: impl Fn() -> bool,
 ) -> Result<DirectoryLocalCollectionReport, ScanError> {
     validate_search(policy.search)?;
-    scan_roots_with_collection(roots,traversal,policy.budgets.max_files,request_for,cancel,
-        |requests,cancel|scan_local_collection_selected(requests,policy,spatial,budget,cancel))
+    scan_roots_with_collection(
+        roots,
+        traversal,
+        policy.budgets.max_files,
+        request_for,
+        cancel,
+        |requests, cancel| scan_local_collection_selected(requests, policy, spatial, budget, cancel),
+    )
 }
 fn scan_roots_with_collection<E>(
-    roots:&[std::path::PathBuf],traversal:&crate::exact::Options,max_files:usize,
-    request_for:impl Fn(&std::path::Path)->DecodeRequest,cancel:impl Fn()->bool,
-    scan:impl FnOnce(Vec<(u64,DecodeRequest)>,&dyn Fn()->bool)->Result<LocalCollectionReport<E>,ScanError>,
-)->Result<DirectoryLocalCollectionReport<E>,ScanError>{
+    roots: &[std::path::PathBuf],
+    traversal: &crate::exact::Options,
+    max_files: usize,
+    request_for: impl Fn(&std::path::Path) -> DecodeRequest,
+    cancel: impl Fn() -> bool,
+    scan: impl FnOnce(Vec<(u64, DecodeRequest)>, &dyn Fn() -> bool) -> Result<LocalCollectionReport<E>, ScanError>,
+) -> Result<DirectoryLocalCollectionReport<E>, ScanError> {
     let discovery = crate::exact::discover(roots, traversal, &cancel);
     if discovery.cancelled || cancel() {
         return Err(ScanError::Cancelled);
@@ -504,7 +538,7 @@ fn scan_roots_with_collection<E>(
         }
         requests.push((*id, request));
     }
-    let indexed = scan(requests,&cancel)?;
+    let indexed = scan(requests, &cancel)?;
     if cancel() {
         return Err(ScanError::Cancelled);
     }
@@ -953,13 +987,28 @@ fn reflected_color_policy(
 /// # Errors
 /// Invalid policy, duplicate IDs, resource refusal or cancellation yields no report.
 pub fn scan_projective_local_collection(
-    files:impl IntoIterator<Item=(u64,DecodeRequest)>,
-    local:crate::local_scan::LocalFilePolicy,
-    filter:crate::warp::ColorFilterPolicy,
-    registration:crate::warp::ProjectiveRegistrationPolicy,
-    limits:FileFeatureBudgets,budget:&MemoryBudget,cancel:impl Fn()->bool,
-)->Result<LocalCollectionReport<crate::local_scan::ProjectiveFileEvidence>,ScanError>{
-    scan_projective_collection_selected(files,ProjectiveCollectionPolicy{local,filter,registration,budgets:limits},None,None,None,budget,cancel)
+    files: impl IntoIterator<Item = (u64, DecodeRequest)>,
+    local: crate::local_scan::LocalFilePolicy,
+    filter: crate::warp::ColorFilterPolicy,
+    registration: crate::warp::ProjectiveRegistrationPolicy,
+    limits: FileFeatureBudgets,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<LocalCollectionReport<crate::local_scan::ProjectiveFileEvidence>, ScanError> {
+    scan_projective_collection_selected(
+        files,
+        ProjectiveCollectionPolicy {
+            local,
+            filter,
+            registration,
+            budgets: limits,
+        },
+        None,
+        None,
+        None,
+        budget,
+        cancel,
+    )
 }
 
 /// Planar retrieval and fresh confirmation using the same spatial feature quotas.
@@ -967,56 +1016,145 @@ pub fn scan_projective_local_collection(
 /// # Errors
 /// Invalid policy, resource refusal or cancellation yields no report.
 pub fn scan_projective_local_collection_spatial(
-    files:impl IntoIterator<Item=(u64,DecodeRequest)>,
-    policy:ProjectiveCollectionPolicy,spatial:SpatialFeaturePolicy,
-    budget:&MemoryBudget,cancel:impl Fn()->bool,
-)->Result<LocalCollectionReport<crate::local_scan::ProjectiveFileEvidence>,ScanError>{
-    scan_projective_collection_selected(files,policy,Some(spatial),None,None,budget,cancel)
+    files: impl IntoIterator<Item = (u64, DecodeRequest)>,
+    policy: ProjectiveCollectionPolicy,
+    spatial: SpatialFeaturePolicy,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<LocalCollectionReport<crate::local_scan::ProjectiveFileEvidence>, ScanError> {
+    scan_projective_collection_selected(files, policy, Some(spatial), None, None, budget, cancel)
 }
 
 fn scan_projective_collection_selected(
-    files:impl IntoIterator<Item=(u64,DecodeRequest)>,
-    config:ProjectiveCollectionPolicy,spatial:Option<SpatialFeaturePolicy>,
-    sampling:Option<crate::geometry::ProjectiveSamplingPolicy>,anchored:Option<crate::warp::ProjectiveRegistrationTrustPolicy>,budget:&MemoryBudget,cancel:impl Fn()->bool,
-)->Result<LocalCollectionReport<crate::local_scan::ProjectiveFileEvidence>,ScanError>{
-    let ProjectiveCollectionPolicy{local,filter,registration,budgets:limits}=config;
-    if let Some(trust)=anchored {crate::warp::validate_registration_trust_policy(trust).map_err(|_|ScanError::InvalidPolicy)?;}
-    if let Some(sample)=sampling {
-        if sample.seed==0 || sample.trials==0 {return Err(ScanError::InvalidPolicy);}
-        if sample.trials>local.geometry.max_hypotheses {return Err(ScanError::Budget);}
+    files: impl IntoIterator<Item = (u64, DecodeRequest)>,
+    config: ProjectiveCollectionPolicy,
+    spatial: Option<SpatialFeaturePolicy>,
+    sampling: Option<crate::geometry::ProjectiveSamplingPolicy>,
+    anchored: Option<crate::warp::ProjectiveRegistrationTrustPolicy>,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<LocalCollectionReport<crate::local_scan::ProjectiveFileEvidence>, ScanError> {
+    let ProjectiveCollectionPolicy {
+        local,
+        filter,
+        registration,
+        budgets: limits,
+    } = config;
+    if let Some(trust) = anchored {
+        crate::warp::validate_registration_trust_policy(trust).map_err(|_| ScanError::InvalidPolicy)?;
     }
-    crate::warp::validate_registration_policy(registration).map_err(|_|ScanError::InvalidPolicy)?;
-    crate::warp::validate_filter_policy(filter.filter).map_err(|_|ScanError::InvalidPolicy)?;
-    if local.geometry.min_inliers<4 {return Err(ScanError::InvalidPolicy);}
-    if let Some(grid)=spatial {validate_spatial(grid,local.extract.max_features).map_err(|_|ScanError::InvalidPolicy)?;}
-    let policy=LocalCollectionPolicy{search:local.into(),budgets:limits};
-    scan_collection_with_verifiers(files,&policy,spatial,budget,cancel,
-        |left,right,cancel| {
-            let correspondences=crate::local::match_features(left,right,local.matching,cancel)?;
-            let geometry=match sampling {
-                Some(sample)=>crate::geometry::verify_projective_sampled(&correspondences,local.geometry,sample,cancel)?,
-                None=>crate::geometry::verify_projective(&correspondences,local.geometry,cancel)?,
+    if let Some(sample) = sampling {
+        if sample.seed == 0 || sample.trials == 0 {
+            return Err(ScanError::InvalidPolicy);
+        }
+        if sample.trials > local.geometry.max_hypotheses {
+            return Err(ScanError::Budget);
+        }
+    }
+    crate::warp::validate_registration_policy(registration).map_err(|_| ScanError::InvalidPolicy)?;
+    crate::warp::validate_filter_policy(filter.filter).map_err(|_| ScanError::InvalidPolicy)?;
+    if local.geometry.min_inliers < 4 {
+        return Err(ScanError::InvalidPolicy);
+    }
+    if let Some(grid) = spatial {
+        validate_spatial(grid, local.extract.max_features).map_err(|_| ScanError::InvalidPolicy)?;
+    }
+    let policy = LocalCollectionPolicy {
+        search: local.into(),
+        budgets: limits,
+    };
+    scan_collection_with_verifiers(
+        files,
+        &policy,
+        spatial,
+        budget,
+        cancel,
+        |left, right, cancel| {
+            let correspondences = crate::local::match_features(left, right, local.matching, cancel)?;
+            let geometry = match sampling {
+                Some(sample) => crate::geometry::verify_projective_sampled(
+                    &correspondences,
+                    local.geometry,
+                    sample,
+                    cancel,
+                )?,
+                None => crate::geometry::verify_projective(&correspondences, local.geometry, cancel)?,
             };
-            if geometry.is_some(){return Ok(None);}
-            Ok(Some(crate::local_scan::ProjectiveFileEvidence{correspondences,geometry,pixels:None,filtered:None,registered_transform:None,candidate:false}))
+            if geometry.is_some() {
+                return Ok(None);
+            }
+            Ok(Some(crate::local_scan::ProjectiveFileEvidence {
+                correspondences,
+                geometry,
+                pixels: None,
+                filtered: None,
+                registered_transform: None,
+                candidate: false,
+            }))
         },
-        |left,right,cancel|if let Some(trust)=anchored {
-            crate::local_scan::compare_local_files_projective_anchored(left,right,crate::local_scan::ProjectiveAnchoredFilePolicy{local,filter,registration:trust,spatial,sampling},budget,cancel)
-        } else if let Some(sample)=sampling {
-            crate::local_scan::compare_local_files_projective_sampled(left,right,crate::local_scan::ProjectiveSampledFilePolicy{local,filter,registration,spatial,sampling:sample},budget,cancel)
-        } else {match spatial {
-            Some(grid)=>crate::local_scan::compare_local_files_projective_registered_spatial(left,right,local,filter,registration,grid,budget,cancel),
-            None=>crate::local_scan::compare_local_files_projective_registered(left,right,local,filter,registration,budget,cancel),
-        }})
+        |left, right, cancel| {
+            if let Some(trust) = anchored {
+                crate::local_scan::compare_local_files_projective_anchored(
+                    left,
+                    right,
+                    crate::local_scan::ProjectiveAnchoredFilePolicy {
+                        local,
+                        filter,
+                        registration: trust,
+                        spatial,
+                        sampling,
+                    },
+                    budget,
+                    cancel,
+                )
+            } else if let Some(sample) = sampling {
+                crate::local_scan::compare_local_files_projective_sampled(
+                    left,
+                    right,
+                    crate::local_scan::ProjectiveSampledFilePolicy {
+                        local,
+                        filter,
+                        registration,
+                        spatial,
+                        sampling: sample,
+                    },
+                    budget,
+                    cancel,
+                )
+            } else {
+                match spatial {
+                    Some(grid) => crate::local_scan::compare_local_files_projective_registered_spatial(
+                        left,
+                        right,
+                        local,
+                        filter,
+                        registration,
+                        grid,
+                        budget,
+                        cancel,
+                    ),
+                    None => crate::local_scan::compare_local_files_projective_registered(
+                        left,
+                        right,
+                        local,
+                        filter,
+                        registration,
+                        budget,
+                        cancel,
+                    ),
+                }
+            }
+        },
+    )
 }
 
 /// Explicit planar collection configuration shared by recursive discovery.
-#[derive(Debug,Clone,Copy)]
+#[derive(Debug, Clone, Copy)]
 pub struct ProjectiveCollectionPolicy {
-    pub local:crate::local_scan::LocalFilePolicy,
-    pub filter:crate::warp::ColorFilterPolicy,
-    pub registration:crate::warp::ProjectiveRegistrationPolicy,
-    pub budgets:FileFeatureBudgets,
+    pub local: crate::local_scan::LocalFilePolicy,
+    pub filter: crate::warp::ColorFilterPolicy,
+    pub registration: crate::warp::ProjectiveRegistrationPolicy,
+    pub budgets: FileFeatureBudgets,
 }
 /// Recursive planar search with caller-selected frame/color/generation settings.
 /// Physical aliases and traversal issues use the ordinary directory lifecycle.
@@ -1024,11 +1162,24 @@ pub struct ProjectiveCollectionPolicy {
 /// # Errors
 /// Invalid policy/request path, source/resource failure or latched cancellation.
 pub fn scan_projective_local_collection_roots_with_requests(
-    roots:&[std::path::PathBuf],traversal:&crate::exact::Options,
-    policy:ProjectiveCollectionPolicy,budget:&MemoryBudget,
-    request_for:impl Fn(&std::path::Path)->DecodeRequest,cancel:impl Fn()->bool,
-)->Result<DirectoryLocalCollectionReport<crate::local_scan::ProjectiveFileEvidence>,ScanError>{
-    scan_projective_roots_selected(roots,traversal,policy,None,None,None,budget,request_for,cancel)
+    roots: &[std::path::PathBuf],
+    traversal: &crate::exact::Options,
+    policy: ProjectiveCollectionPolicy,
+    budget: &MemoryBudget,
+    request_for: impl Fn(&std::path::Path) -> DecodeRequest,
+    cancel: impl Fn() -> bool,
+) -> Result<DirectoryLocalCollectionReport<crate::local_scan::ProjectiveFileEvidence>, ScanError> {
+    scan_projective_roots_selected(
+        roots,
+        traversal,
+        policy,
+        None,
+        None,
+        None,
+        budget,
+        request_for,
+        cancel,
+    )
 }
 
 /// Recursive spatial planar search retaining caller-selected decode requests.
@@ -1036,11 +1187,25 @@ pub fn scan_projective_local_collection_roots_with_requests(
 /// # Errors
 /// Invalid policy/request path, resource refusal or cancellation yields no report.
 pub fn scan_projective_local_collection_roots_spatial_with_requests(
-    roots:&[std::path::PathBuf],traversal:&crate::exact::Options,
-    policy:ProjectiveCollectionPolicy,spatial:SpatialFeaturePolicy,budget:&MemoryBudget,
-    request_for:impl Fn(&std::path::Path)->DecodeRequest,cancel:impl Fn()->bool,
-)->Result<DirectoryLocalCollectionReport<crate::local_scan::ProjectiveFileEvidence>,ScanError>{
-    scan_projective_roots_selected(roots,traversal,policy,Some(spatial),None,None,budget,request_for,cancel)
+    roots: &[std::path::PathBuf],
+    traversal: &crate::exact::Options,
+    policy: ProjectiveCollectionPolicy,
+    spatial: SpatialFeaturePolicy,
+    budget: &MemoryBudget,
+    request_for: impl Fn(&std::path::Path) -> DecodeRequest,
+    cancel: impl Fn() -> bool,
+) -> Result<DirectoryLocalCollectionReport<crate::local_scan::ProjectiveFileEvidence>, ScanError> {
+    scan_projective_roots_selected(
+        roots,
+        traversal,
+        policy,
+        Some(spatial),
+        None,
+        None,
+        budget,
+        request_for,
+        cancel,
+    )
 }
 
 /// Recursive spatial planar search with native default decode requests.
@@ -1048,32 +1213,66 @@ pub fn scan_projective_local_collection_roots_spatial_with_requests(
 /// # Errors
 /// Invalid policy, resource refusal or cancellation yields no report.
 pub fn scan_projective_local_collection_roots_spatial(
-    roots:&[std::path::PathBuf],traversal:&crate::exact::Options,
-    policy:ProjectiveCollectionPolicy,spatial:SpatialFeaturePolicy,budget:&MemoryBudget,
-    cancel:impl Fn()->bool,
-)->Result<DirectoryLocalCollectionReport<crate::local_scan::ProjectiveFileEvidence>,ScanError>{
-    scan_projective_local_collection_roots_spatial_with_requests(roots,traversal,policy,spatial,budget,|path|DecodeRequest::new(path),cancel)
+    roots: &[std::path::PathBuf],
+    traversal: &crate::exact::Options,
+    policy: ProjectiveCollectionPolicy,
+    spatial: SpatialFeaturePolicy,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<DirectoryLocalCollectionReport<crate::local_scan::ProjectiveFileEvidence>, ScanError> {
+    scan_projective_local_collection_roots_spatial_with_requests(
+        roots,
+        traversal,
+        policy,
+        spatial,
+        budget,
+        |path| DecodeRequest::new(path),
+        cancel,
+    )
 }
 
 #[allow(clippy::too_many_arguments)] // Shared discovery accepts explicit optional selection modes.
 fn scan_projective_roots_selected(
-    roots:&[std::path::PathBuf],traversal:&crate::exact::Options,
-    policy:ProjectiveCollectionPolicy,spatial:Option<SpatialFeaturePolicy>,
-    sampling:Option<crate::geometry::ProjectiveSamplingPolicy>,anchored:Option<crate::warp::ProjectiveRegistrationTrustPolicy>,budget:&MemoryBudget,
-    request_for:impl Fn(&std::path::Path)->DecodeRequest,cancel:impl Fn()->bool,
-)->Result<DirectoryLocalCollectionReport<crate::local_scan::ProjectiveFileEvidence>,ScanError>{
-    if let Some(trust)=anchored {crate::warp::validate_registration_trust_policy(trust).map_err(|_|ScanError::InvalidPolicy)?;}
-    if let Some(sample)=sampling {
-        if sample.seed==0 || sample.trials==0 {return Err(ScanError::InvalidPolicy);}
-        if sample.trials>policy.local.geometry.max_hypotheses {return Err(ScanError::Budget);}
+    roots: &[std::path::PathBuf],
+    traversal: &crate::exact::Options,
+    policy: ProjectiveCollectionPolicy,
+    spatial: Option<SpatialFeaturePolicy>,
+    sampling: Option<crate::geometry::ProjectiveSamplingPolicy>,
+    anchored: Option<crate::warp::ProjectiveRegistrationTrustPolicy>,
+    budget: &MemoryBudget,
+    request_for: impl Fn(&std::path::Path) -> DecodeRequest,
+    cancel: impl Fn() -> bool,
+) -> Result<DirectoryLocalCollectionReport<crate::local_scan::ProjectiveFileEvidence>, ScanError> {
+    if let Some(trust) = anchored {
+        crate::warp::validate_registration_trust_policy(trust).map_err(|_| ScanError::InvalidPolicy)?;
+    }
+    if let Some(sample) = sampling {
+        if sample.seed == 0 || sample.trials == 0 {
+            return Err(ScanError::InvalidPolicy);
+        }
+        if sample.trials > policy.local.geometry.max_hypotheses {
+            return Err(ScanError::Budget);
+        }
     }
     validate_search(policy.local.into())?;
-    crate::warp::validate_registration_policy(policy.registration).map_err(|_|ScanError::InvalidPolicy)?;
-    crate::warp::validate_filter_policy(policy.filter.filter).map_err(|_|ScanError::InvalidPolicy)?;
-    if policy.local.geometry.min_inliers<4{return Err(ScanError::InvalidPolicy);}
-    if let Some(grid)=spatial {validate_spatial(grid,policy.local.extract.max_features).map_err(|_|ScanError::InvalidPolicy)?;}
-    scan_roots_with_collection(roots,traversal,policy.budgets.max_files,request_for,cancel,
-        |requests,cancel|scan_projective_collection_selected(requests,policy,spatial,sampling,anchored,budget,cancel))
+    crate::warp::validate_registration_policy(policy.registration).map_err(|_| ScanError::InvalidPolicy)?;
+    crate::warp::validate_filter_policy(policy.filter.filter).map_err(|_| ScanError::InvalidPolicy)?;
+    if policy.local.geometry.min_inliers < 4 {
+        return Err(ScanError::InvalidPolicy);
+    }
+    if let Some(grid) = spatial {
+        validate_spatial(grid, policy.local.extract.max_features).map_err(|_| ScanError::InvalidPolicy)?;
+    }
+    scan_roots_with_collection(
+        roots,
+        traversal,
+        policy.budgets.max_files,
+        request_for,
+        cancel,
+        |requests, cancel| {
+            scan_projective_collection_selected(requests, policy, spatial, sampling, anchored, budget, cancel)
+        },
+    )
 }
 
 /// Recursive planar search with native default decode requests.
@@ -1081,31 +1280,54 @@ fn scan_projective_roots_selected(
 /// # Errors
 /// Invalid policy, source/resource failures or cancellation with no report.
 pub fn scan_projective_local_collection_roots(
-    roots:&[std::path::PathBuf],traversal:&crate::exact::Options,
-    policy:ProjectiveCollectionPolicy,budget:&MemoryBudget,cancel:impl Fn()->bool,
-)->Result<DirectoryLocalCollectionReport<crate::local_scan::ProjectiveFileEvidence>,ScanError>{
-    scan_projective_local_collection_roots_with_requests(roots,traversal,policy,budget,|path|DecodeRequest::new(path),cancel)
+    roots: &[std::path::PathBuf],
+    traversal: &crate::exact::Options,
+    policy: ProjectiveCollectionPolicy,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<DirectoryLocalCollectionReport<crate::local_scan::ProjectiveFileEvidence>, ScanError> {
+    scan_projective_local_collection_roots_with_requests(
+        roots,
+        traversal,
+        policy,
+        budget,
+        |path| DecodeRequest::new(path),
+        cancel,
+    )
 }
-
 
 /// Indexed sampled planar search using identical feature/model policies in both stages.
 ///
 /// # Errors
 /// Invalid policies, duplicate IDs, resource/work refusal or cancellation.
 pub fn scan_projective_local_collection_sampled(
-    files:impl IntoIterator<Item=(u64,DecodeRequest)>,
-    policy:crate::local_scan::ProjectiveSampledFilePolicy,limits:FileFeatureBudgets,
-    budget:&MemoryBudget,cancel:impl Fn()->bool,
-)->Result<LocalCollectionReport<crate::local_scan::ProjectiveFileEvidence>,ScanError>{
-    scan_projective_collection_selected(files,ProjectiveCollectionPolicy{local:policy.local,filter:policy.filter,registration:policy.registration,budgets:limits},policy.spatial,Some(policy.sampling),None,budget,cancel)
+    files: impl IntoIterator<Item = (u64, DecodeRequest)>,
+    policy: crate::local_scan::ProjectiveSampledFilePolicy,
+    limits: FileFeatureBudgets,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<LocalCollectionReport<crate::local_scan::ProjectiveFileEvidence>, ScanError> {
+    scan_projective_collection_selected(
+        files,
+        ProjectiveCollectionPolicy {
+            local: policy.local,
+            filter: policy.filter,
+            registration: policy.registration,
+            budgets: limits,
+        },
+        policy.spatial,
+        Some(policy.sampling),
+        None,
+        budget,
+        cancel,
+    )
 }
 
-
 /// Sampled planar collection configuration shared by recursive discovery.
-#[derive(Debug,Clone,Copy)]
+#[derive(Debug, Clone, Copy)]
 pub struct ProjectiveSampledCollectionPolicy {
-    pub search:crate::local_scan::ProjectiveSampledFilePolicy,
-    pub budgets:FileFeatureBudgets,
+    pub search: crate::local_scan::ProjectiveSampledFilePolicy,
+    pub budgets: FileFeatureBudgets,
 }
 
 /// Recursive sampled planar search retaining per-path decode requests.
@@ -1113,12 +1335,30 @@ pub struct ProjectiveSampledCollectionPolicy {
 /// # Errors
 /// Invalid policy/request path, resource refusal or cancellation yields no report.
 pub fn scan_projective_local_collection_roots_sampled_with_requests(
-    roots:&[std::path::PathBuf],traversal:&crate::exact::Options,
-    policy:ProjectiveSampledCollectionPolicy,budget:&MemoryBudget,
-    request_for:impl Fn(&std::path::Path)->DecodeRequest,cancel:impl Fn()->bool,
-)->Result<DirectoryLocalCollectionReport<crate::local_scan::ProjectiveFileEvidence>,ScanError>{
-    let search=policy.search;
-    scan_projective_roots_selected(roots,traversal,ProjectiveCollectionPolicy{local:search.local,filter:search.filter,registration:search.registration,budgets:policy.budgets},search.spatial,Some(search.sampling),None,budget,request_for,cancel)
+    roots: &[std::path::PathBuf],
+    traversal: &crate::exact::Options,
+    policy: ProjectiveSampledCollectionPolicy,
+    budget: &MemoryBudget,
+    request_for: impl Fn(&std::path::Path) -> DecodeRequest,
+    cancel: impl Fn() -> bool,
+) -> Result<DirectoryLocalCollectionReport<crate::local_scan::ProjectiveFileEvidence>, ScanError> {
+    let search = policy.search;
+    scan_projective_roots_selected(
+        roots,
+        traversal,
+        ProjectiveCollectionPolicy {
+            local: search.local,
+            filter: search.filter,
+            registration: search.registration,
+            budgets: policy.budgets,
+        },
+        search.spatial,
+        Some(search.sampling),
+        None,
+        budget,
+        request_for,
+        cancel,
+    )
 }
 
 /// Recursive sampled planar search with native default decode requests.
@@ -1126,18 +1366,27 @@ pub fn scan_projective_local_collection_roots_sampled_with_requests(
 /// # Errors
 /// Invalid policy, resource refusal or cancellation yields no report.
 pub fn scan_projective_local_collection_roots_sampled(
-    roots:&[std::path::PathBuf],traversal:&crate::exact::Options,
-    policy:ProjectiveSampledCollectionPolicy,budget:&MemoryBudget,cancel:impl Fn()->bool,
-)->Result<DirectoryLocalCollectionReport<crate::local_scan::ProjectiveFileEvidence>,ScanError>{
-    scan_projective_local_collection_roots_sampled_with_requests(roots,traversal,policy,budget,|path|DecodeRequest::new(path),cancel)
+    roots: &[std::path::PathBuf],
+    traversal: &crate::exact::Options,
+    policy: ProjectiveSampledCollectionPolicy,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<DirectoryLocalCollectionReport<crate::local_scan::ProjectiveFileEvidence>, ScanError> {
+    scan_projective_local_collection_roots_sampled_with_requests(
+        roots,
+        traversal,
+        policy,
+        budget,
+        |path| DecodeRequest::new(path),
+        cancel,
+    )
 }
 
-
 /// Explicit anchored planar configuration for collection and recursive search.
-#[derive(Debug,Clone,Copy)]
+#[derive(Debug, Clone, Copy)]
 pub struct ProjectiveAnchoredCollectionPolicy {
-    pub search:crate::local_scan::ProjectiveAnchoredFilePolicy,
-    pub budgets:FileFeatureBudgets,
+    pub search: crate::local_scan::ProjectiveAnchoredFilePolicy,
+    pub budgets: FileFeatureBudgets,
 }
 
 /// Indexed anchored planar search using the direct file confirmation lifecycle.
@@ -1145,11 +1394,26 @@ pub struct ProjectiveAnchoredCollectionPolicy {
 /// # Errors
 /// Invalid policies, source/work/resource refusal or cancellation.
 pub fn scan_projective_local_collection_anchored(
-    files:impl IntoIterator<Item=(u64,DecodeRequest)>,policy:ProjectiveAnchoredCollectionPolicy,
-    budget:&MemoryBudget,cancel:impl Fn()->bool,
-)->Result<LocalCollectionReport<crate::local_scan::ProjectiveFileEvidence>,ScanError>{
-    let p=policy.search;
-    scan_projective_collection_selected(files,ProjectiveCollectionPolicy{local:p.local,filter:p.filter,registration:p.registration.registration,budgets:policy.budgets},p.spatial,p.sampling,Some(p.registration),budget,cancel)
+    files: impl IntoIterator<Item = (u64, DecodeRequest)>,
+    policy: ProjectiveAnchoredCollectionPolicy,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<LocalCollectionReport<crate::local_scan::ProjectiveFileEvidence>, ScanError> {
+    let p = policy.search;
+    scan_projective_collection_selected(
+        files,
+        ProjectiveCollectionPolicy {
+            local: p.local,
+            filter: p.filter,
+            registration: p.registration.registration,
+            budgets: policy.budgets,
+        },
+        p.spatial,
+        p.sampling,
+        Some(p.registration),
+        budget,
+        cancel,
+    )
 }
 
 /// Recursive anchored search preserving per-path native decode requests.
@@ -1157,22 +1421,50 @@ pub fn scan_projective_local_collection_anchored(
 /// # Errors
 /// Invalid policy/request paths, source/work/resource refusal or cancellation.
 pub fn scan_projective_local_collection_roots_anchored_with_requests(
-    roots:&[std::path::PathBuf],traversal:&crate::exact::Options,
-    policy:ProjectiveAnchoredCollectionPolicy,budget:&MemoryBudget,
-    request_for:impl Fn(&std::path::Path)->DecodeRequest,cancel:impl Fn()->bool,
-)->Result<DirectoryLocalCollectionReport<crate::local_scan::ProjectiveFileEvidence>,ScanError>{
-    let p=policy.search;
-    scan_projective_roots_selected(roots,traversal,ProjectiveCollectionPolicy{local:p.local,filter:p.filter,registration:p.registration.registration,budgets:policy.budgets},p.spatial,p.sampling,Some(p.registration),budget,request_for,cancel)
+    roots: &[std::path::PathBuf],
+    traversal: &crate::exact::Options,
+    policy: ProjectiveAnchoredCollectionPolicy,
+    budget: &MemoryBudget,
+    request_for: impl Fn(&std::path::Path) -> DecodeRequest,
+    cancel: impl Fn() -> bool,
+) -> Result<DirectoryLocalCollectionReport<crate::local_scan::ProjectiveFileEvidence>, ScanError> {
+    let p = policy.search;
+    scan_projective_roots_selected(
+        roots,
+        traversal,
+        ProjectiveCollectionPolicy {
+            local: p.local,
+            filter: p.filter,
+            registration: p.registration.registration,
+            budgets: policy.budgets,
+        },
+        p.spatial,
+        p.sampling,
+        Some(p.registration),
+        budget,
+        request_for,
+        cancel,
+    )
 }
 /// Recursive anchored search with native default requests.
 ///
 /// # Errors
 /// Invalid policy, source/work/resource refusal or cancellation.
 pub fn scan_projective_local_collection_roots_anchored(
-    roots:&[std::path::PathBuf],traversal:&crate::exact::Options,
-    policy:ProjectiveAnchoredCollectionPolicy,budget:&MemoryBudget,cancel:impl Fn()->bool,
-)->Result<DirectoryLocalCollectionReport<crate::local_scan::ProjectiveFileEvidence>,ScanError>{
-    scan_projective_local_collection_roots_anchored_with_requests(roots,traversal,policy,budget,|path|DecodeRequest::new(path),cancel)
+    roots: &[std::path::PathBuf],
+    traversal: &crate::exact::Options,
+    policy: ProjectiveAnchoredCollectionPolicy,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<DirectoryLocalCollectionReport<crate::local_scan::ProjectiveFileEvidence>, ScanError> {
+    scan_projective_local_collection_roots_anchored_with_requests(
+        roots,
+        traversal,
+        policy,
+        budget,
+        |path| DecodeRequest::new(path),
+        cancel,
+    )
 }
 
 #[derive(Debug, Clone, Copy)]
@@ -1187,42 +1479,84 @@ pub struct ProjectivePhotometricCollectionPolicy {
 /// Invalid policy, collection limits, changed sources or cancellation. Individual
 /// decode/model refusals remain attributed to their file or pair.
 pub fn scan_projective_local_collection_photometric(
-    files: impl IntoIterator<Item=(u64,DecodeRequest)>,
+    files: impl IntoIterator<Item = (u64, DecodeRequest)>,
     config: ProjectivePhotometricCollectionPolicy,
-    budget: &MemoryBudget, cancel: impl Fn()->bool,
-) -> Result<LocalCollectionReport<crate::local_scan::ProjectivePhotometricFileEvidence>,ScanError> {
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<LocalCollectionReport<crate::local_scan::ProjectivePhotometricFileEvidence>, ScanError> {
     validate_projective_photometric_collection(&config)?;
-    let p=config.search.search;
-    let policy=LocalCollectionPolicy{search:p.local.into(),budgets:config.budgets};
-    scan_collection_with_verifiers(files,&policy,p.spatial,budget,cancel,
-        |left,right,cancel| {
-            let correspondences=crate::local::match_features(left,right,p.local.matching,cancel)?;
-            let geometry=match p.sampling {
-                Some(sample)=>crate::geometry::verify_projective_sampled(&correspondences,p.local.geometry,sample,cancel)?,
-                None=>crate::geometry::verify_projective(&correspondences,p.local.geometry,cancel)?,
+    let p = config.search.search;
+    let policy = LocalCollectionPolicy {
+        search: p.local.into(),
+        budgets: config.budgets,
+    };
+    scan_collection_with_verifiers(
+        files,
+        &policy,
+        p.spatial,
+        budget,
+        cancel,
+        |left, right, cancel| {
+            let correspondences = crate::local::match_features(left, right, p.local.matching, cancel)?;
+            let geometry = match p.sampling {
+                Some(sample) => crate::geometry::verify_projective_sampled(
+                    &correspondences,
+                    p.local.geometry,
+                    sample,
+                    cancel,
+                )?,
+                None => crate::geometry::verify_projective(&correspondences, p.local.geometry, cancel)?,
             };
-            if geometry.is_some(){return Ok(None);}
-            Ok(Some(crate::local_scan::ProjectivePhotometricFileEvidence{correspondences,geometry,
-                registered_transform:None,pixels:None,fit_failure:None,unfitted:None,candidate:false}))
+            if geometry.is_some() {
+                return Ok(None);
+            }
+            Ok(Some(crate::local_scan::ProjectivePhotometricFileEvidence {
+                correspondences,
+                geometry,
+                registered_transform: None,
+                pixels: None,
+                fit_failure: None,
+                unfitted: None,
+                candidate: false,
+            }))
         },
-        |left,right,cancel|crate::local_scan::compare_local_files_projective_photometric(left,right,config.search,budget,cancel))
+        |left, right, cancel| {
+            crate::local_scan::compare_local_files_projective_photometric(
+                left,
+                right,
+                config.search,
+                budget,
+                cancel,
+            )
+        },
+    )
 }
 
-fn validate_projective_photometric_collection(config: &ProjectivePhotometricCollectionPolicy) -> Result<(),ScanError> {
-    let p=config.search.search;
-    crate::warp::validate_photometric_policy(config.search.photometric).map_err(|_|ScanError::InvalidPolicy)?;
-    crate::warp::validate_registration_trust_policy(p.registration).map_err(|_|ScanError::InvalidPolicy)?;
-    crate::warp::validate_filter_policy(p.filter.filter).map_err(|_|ScanError::InvalidPolicy)?;
-    if p.local.geometry.min_inliers<4 {return Err(ScanError::InvalidPolicy);}
-    if let Some(sample)=p.sampling {
-        if sample.seed==0 || sample.trials==0 {return Err(ScanError::InvalidPolicy);}
-        if sample.trials>p.local.geometry.max_hypotheses {return Err(ScanError::Budget);}
+fn validate_projective_photometric_collection(
+    config: &ProjectivePhotometricCollectionPolicy,
+) -> Result<(), ScanError> {
+    let p = config.search.search;
+    crate::warp::validate_photometric_policy(config.search.photometric)
+        .map_err(|_| ScanError::InvalidPolicy)?;
+    crate::warp::validate_registration_trust_policy(p.registration).map_err(|_| ScanError::InvalidPolicy)?;
+    crate::warp::validate_filter_policy(p.filter.filter).map_err(|_| ScanError::InvalidPolicy)?;
+    if p.local.geometry.min_inliers < 4 {
+        return Err(ScanError::InvalidPolicy);
     }
-    if let Some(grid)=p.spatial {validate_spatial(grid,p.local.extract.max_features).map_err(|_|ScanError::InvalidPolicy)?;}
+    if let Some(sample) = p.sampling {
+        if sample.seed == 0 || sample.trials == 0 {
+            return Err(ScanError::InvalidPolicy);
+        }
+        if sample.trials > p.local.geometry.max_hypotheses {
+            return Err(ScanError::Budget);
+        }
+    }
+    if let Some(grid) = p.spatial {
+        validate_spatial(grid, p.local.extract.max_features).map_err(|_| ScanError::InvalidPolicy)?;
+    }
     validate_search(p.local.into())?;
     Ok(())
 }
-
 
 /// Recursive perspective/color search with caller-preserved frame requests.
 ///
@@ -1230,25 +1564,42 @@ fn validate_projective_photometric_collection(config: &ProjectivePhotometricColl
 /// Invalid policies or substituted request paths, traversal/collection limits,
 /// source changes or cancellation; individual decode refusals remain attributed.
 pub fn scan_projective_local_collection_roots_photometric_with_requests(
-    roots: &[std::path::PathBuf], traversal: &crate::exact::Options,
-    policy: ProjectivePhotometricCollectionPolicy, budget: &MemoryBudget,
-    request_for: impl Fn(&std::path::Path)->DecodeRequest, cancel: impl Fn()->bool,
-) -> Result<DirectoryLocalCollectionReport<crate::local_scan::ProjectivePhotometricFileEvidence>,ScanError> {
+    roots: &[std::path::PathBuf],
+    traversal: &crate::exact::Options,
+    policy: ProjectivePhotometricCollectionPolicy,
+    budget: &MemoryBudget,
+    request_for: impl Fn(&std::path::Path) -> DecodeRequest,
+    cancel: impl Fn() -> bool,
+) -> Result<DirectoryLocalCollectionReport<crate::local_scan::ProjectivePhotometricFileEvidence>, ScanError> {
     validate_projective_photometric_collection(&policy)?;
-    scan_roots_with_collection(roots,traversal,policy.budgets.max_files,request_for,cancel,
-        |requests,cancel|scan_projective_local_collection_photometric(requests,policy,budget,cancel))
+    scan_roots_with_collection(
+        roots,
+        traversal,
+        policy.budgets.max_files,
+        request_for,
+        cancel,
+        |requests, cancel| scan_projective_local_collection_photometric(requests, policy, budget, cancel),
+    )
 }
 /// Recursive perspective/color search with native default selected frames.
 ///
 /// # Errors
 /// Invalid policy, traversal/collection refusal or cancellation.
 pub fn scan_projective_local_collection_roots_photometric(
-    roots: &[std::path::PathBuf], traversal: &crate::exact::Options,
-    policy: ProjectivePhotometricCollectionPolicy, budget: &MemoryBudget,
-    cancel: impl Fn()->bool,
-) -> Result<DirectoryLocalCollectionReport<crate::local_scan::ProjectivePhotometricFileEvidence>,ScanError> {
-    scan_projective_local_collection_roots_photometric_with_requests(roots,traversal,policy,budget,
-        |path|DecodeRequest::new(path),cancel)
+    roots: &[std::path::PathBuf],
+    traversal: &crate::exact::Options,
+    policy: ProjectivePhotometricCollectionPolicy,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<DirectoryLocalCollectionReport<crate::local_scan::ProjectivePhotometricFileEvidence>, ScanError> {
+    scan_projective_local_collection_roots_photometric_with_requests(
+        roots,
+        traversal,
+        policy,
+        budget,
+        |path| DecodeRequest::new(path),
+        cancel,
+    )
 }
 
 #[derive(Debug, Clone, Copy)]
@@ -1263,27 +1614,53 @@ pub struct ProjectivePortfolioCollectionPolicy {
 /// Invalid policy, collection/source/work refusal or cancellation; individual
 /// file and pair errors remain attributed through the shared collection lifecycle.
 pub fn scan_projective_local_collection_portfolio(
-    files: impl IntoIterator<Item=(u64,DecodeRequest)>,
-    config: ProjectivePortfolioCollectionPolicy, budget: &MemoryBudget,
-    cancel: impl Fn()->bool,
-) -> Result<LocalCollectionReport<crate::local_scan::ProjectivePortfolioFileEvidence>,ScanError> {
-    let p=config.search;
-    crate::local_scan::validate_projective_portfolio_file_policy(&p).map_err(|error|match error {
-        LocalFileError::Pixels(crate::warp::WarpError::Budget) | LocalFileError::Geometry(crate::geometry::GeometryError::Budget)=>ScanError::Budget,
-        _=>ScanError::InvalidPolicy,
+    files: impl IntoIterator<Item = (u64, DecodeRequest)>,
+    config: ProjectivePortfolioCollectionPolicy,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<LocalCollectionReport<crate::local_scan::ProjectivePortfolioFileEvidence>, ScanError> {
+    let p = config.search;
+    crate::local_scan::validate_projective_portfolio_file_policy(&p).map_err(|error| match error {
+        LocalFileError::Pixels(crate::warp::WarpError::Budget)
+        | LocalFileError::Geometry(crate::geometry::GeometryError::Budget) => ScanError::Budget,
+        _ => ScanError::InvalidPolicy,
     })?;
-    let policy=LocalCollectionPolicy{search:p.local.into(),budgets:config.budgets};
-    scan_collection_with_verifiers(files,&policy,p.spatial,budget,cancel,
-        |left,right,cancel| {
-            let correspondences=crate::local::match_features(left,right,p.local.matching,cancel)?;
-            let geometry=match p.sampling {
-                Some(sample)=>crate::geometry::verify_projective_sampled(&correspondences,p.local.geometry,sample,cancel)?,
-                None=>crate::geometry::verify_projective(&correspondences,p.local.geometry,cancel)?,
+    let policy = LocalCollectionPolicy {
+        search: p.local.into(),
+        budgets: config.budgets,
+    };
+    scan_collection_with_verifiers(
+        files,
+        &policy,
+        p.spatial,
+        budget,
+        cancel,
+        |left, right, cancel| {
+            let correspondences = crate::local::match_features(left, right, p.local.matching, cancel)?;
+            let geometry = match p.sampling {
+                Some(sample) => crate::geometry::verify_projective_sampled(
+                    &correspondences,
+                    p.local.geometry,
+                    sample,
+                    cancel,
+                )?,
+                None => crate::geometry::verify_projective(&correspondences, p.local.geometry, cancel)?,
             };
-            if geometry.is_some(){return Ok(None);}
-            Ok(Some(crate::local_scan::ProjectivePortfolioFileEvidence{correspondences,geometry,pixels:None,accepted_lanes:[false;2],candidate:false}))
+            if geometry.is_some() {
+                return Ok(None);
+            }
+            Ok(Some(crate::local_scan::ProjectivePortfolioFileEvidence {
+                correspondences,
+                geometry,
+                pixels: None,
+                accepted_lanes: [false; 2],
+                candidate: false,
+            }))
         },
-        |left,right,cancel|crate::local_scan::compare_local_files_projective_portfolio(left,right,p,budget,cancel))
+        |left, right, cancel| {
+            crate::local_scan::compare_local_files_projective_portfolio(left, right, p, budget, cancel)
+        },
+    )
 }
 
 /// Recursive two-lane registration search preserving per-path decode requests.
@@ -1293,28 +1670,48 @@ pub fn scan_projective_local_collection_portfolio(
 /// Invalid policy/request paths, cumulative work or collection limits, source
 /// changes, or cancellation; individual decode refusals remain attributed.
 pub fn scan_projective_local_collection_roots_portfolio_with_requests(
-    roots: &[std::path::PathBuf], traversal: &crate::exact::Options,
-    policy: ProjectivePortfolioCollectionPolicy, budget: &MemoryBudget,
-    request_for: impl Fn(&std::path::Path)->DecodeRequest, cancel: impl Fn()->bool,
-) -> Result<DirectoryLocalCollectionReport<crate::local_scan::ProjectivePortfolioFileEvidence>,ScanError> {
-    crate::local_scan::validate_projective_portfolio_file_policy(&policy.search).map_err(|error|match error {
-        LocalFileError::Pixels(crate::warp::WarpError::Budget) | LocalFileError::Geometry(crate::geometry::GeometryError::Budget)=>ScanError::Budget,
-        _=>ScanError::InvalidPolicy,
-    })?;
-    scan_roots_with_collection(roots,traversal,policy.budgets.max_files,request_for,cancel,
-        |requests,cancel|scan_projective_local_collection_portfolio(requests,policy,budget,cancel))
+    roots: &[std::path::PathBuf],
+    traversal: &crate::exact::Options,
+    policy: ProjectivePortfolioCollectionPolicy,
+    budget: &MemoryBudget,
+    request_for: impl Fn(&std::path::Path) -> DecodeRequest,
+    cancel: impl Fn() -> bool,
+) -> Result<DirectoryLocalCollectionReport<crate::local_scan::ProjectivePortfolioFileEvidence>, ScanError> {
+    crate::local_scan::validate_projective_portfolio_file_policy(&policy.search).map_err(
+        |error| match error {
+            LocalFileError::Pixels(crate::warp::WarpError::Budget)
+            | LocalFileError::Geometry(crate::geometry::GeometryError::Budget) => ScanError::Budget,
+            _ => ScanError::InvalidPolicy,
+        },
+    )?;
+    scan_roots_with_collection(
+        roots,
+        traversal,
+        policy.budgets.max_files,
+        request_for,
+        cancel,
+        |requests, cancel| scan_projective_local_collection_portfolio(requests, policy, budget, cancel),
+    )
 }
 /// Recursive two-lane registration search with native default frame requests.
 ///
 /// # Errors
 /// Invalid policy, traversal/collection refusal, source changes or cancellation.
 pub fn scan_projective_local_collection_roots_portfolio(
-    roots: &[std::path::PathBuf], traversal: &crate::exact::Options,
-    policy: ProjectivePortfolioCollectionPolicy, budget: &MemoryBudget,
-    cancel: impl Fn()->bool,
-) -> Result<DirectoryLocalCollectionReport<crate::local_scan::ProjectivePortfolioFileEvidence>,ScanError> {
-    scan_projective_local_collection_roots_portfolio_with_requests(roots,traversal,policy,budget,
-        |path|DecodeRequest::new(path),cancel)
+    roots: &[std::path::PathBuf],
+    traversal: &crate::exact::Options,
+    policy: ProjectivePortfolioCollectionPolicy,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<DirectoryLocalCollectionReport<crate::local_scan::ProjectivePortfolioFileEvidence>, ScanError> {
+    scan_projective_local_collection_roots_portfolio_with_requests(
+        roots,
+        traversal,
+        policy,
+        budget,
+        |path| DecodeRequest::new(path),
+        cancel,
+    )
 }
 
 /// Indexed search using the same managed pyramid as fresh file confirmation.
@@ -1323,10 +1720,12 @@ pub struct ProjectivePyramidCollectionPolicy {
     pub search: crate::local_scan::ProjectivePyramidPhotometricFilePolicy,
     pub budgets: FileFeatureBudgets,
 }
-fn validate_projective_pyramid_collection(config:&ProjectivePyramidCollectionPolicy)->Result<(),ScanError>{
-    crate::local_scan::validate_projective_pyramid_file_policy(&config.search).map_err(|e|match e {
-        LocalFileError::InvalidPolicy=>ScanError::InvalidPolicy,
-        _=>ScanError::Budget,
+fn validate_projective_pyramid_collection(
+    config: &ProjectivePyramidCollectionPolicy,
+) -> Result<(), ScanError> {
+    crate::local_scan::validate_projective_pyramid_file_policy(&config.search).map_err(|e| match e {
+        LocalFileError::InvalidPolicy => ScanError::InvalidPolicy,
+        _ => ScanError::Budget,
     })?;
     validate_search(config.search.local.into())
 }
@@ -1337,47 +1736,236 @@ fn validate_projective_pyramid_collection(config:&ProjectivePyramidCollectionPol
 /// Invalid policy, collection/work/memory limits or cancellation. Individual
 /// decode/geometry/pixel refusals remain attributed to their source or pair.
 pub fn scan_projective_local_collection_pyramid(
-    files:impl IntoIterator<Item=(u64,DecodeRequest)>,
-    config:ProjectivePyramidCollectionPolicy,budget:&MemoryBudget,cancel:impl Fn()->bool,
-)->Result<LocalCollectionReport<crate::local_scan::ProjectivePhotometricFileEvidence>,ScanError>{
+    files: impl IntoIterator<Item = (u64, DecodeRequest)>,
+    config: ProjectivePyramidCollectionPolicy,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<LocalCollectionReport<crate::local_scan::ProjectivePhotometricFileEvidence>, ScanError> {
     validate_projective_pyramid_collection(&config)?;
-    let p=config.search;
-    let policy=LocalCollectionPolicy{search:p.local.into(),budgets:config.budgets};
-    let pyramid=crate::pyramid::PyramidPolicy{local:p.local.extract,max_levels:p.max_levels,
-        max_total_pixels:p.max_total_pixels,max_total_features:p.max_total_features};
-    scan_collection_with_extractor(files,&policy,cancel,
-        |request,source,cancel|extract_file_with(request,source,policy.search,budget,cancel,
-            |view,cancel|crate::pyramid::extract_oriented_pyramid_managed(view,pyramid,budget,cancel)),
-        |left,right,cancel|{
-            let correspondences=crate::local::match_features(left,right,p.local.matching,cancel)?;
-            let geometry=crate::geometry::verify_projective_sampled(&correspondences,p.local.geometry,p.sampling,cancel)?;
-            if geometry.is_some(){return Ok(None);}
-            Ok(Some(crate::local_scan::ProjectivePhotometricFileEvidence{correspondences,geometry,
-                registered_transform:None,pixels:None,fit_failure:None,unfitted:None,candidate:false}))
+    let p = config.search;
+    let policy = LocalCollectionPolicy {
+        search: p.local.into(),
+        budgets: config.budgets,
+    };
+    let pyramid = crate::pyramid::PyramidPolicy {
+        local: p.local.extract,
+        max_levels: p.max_levels,
+        max_total_pixels: p.max_total_pixels,
+        max_total_features: p.max_total_features,
+    };
+    scan_collection_with_extractor(
+        files,
+        &policy,
+        cancel,
+        |request, source, cancel| {
+            extract_file_with(request, source, policy.search, budget, cancel, |view, cancel| {
+                crate::pyramid::extract_oriented_pyramid_managed(view, pyramid, budget, cancel)
+            })
         },
-        |left,right,cancel|crate::local_scan::compare_local_files_projective_pyramid_photometric(left,right,p,budget,cancel))
+        |left, right, cancel| {
+            let correspondences = crate::local::match_features(left, right, p.local.matching, cancel)?;
+            let geometry = crate::geometry::verify_projective_sampled(
+                &correspondences,
+                p.local.geometry,
+                p.sampling,
+                cancel,
+            )?;
+            if geometry.is_some() {
+                return Ok(None);
+            }
+            Ok(Some(crate::local_scan::ProjectivePhotometricFileEvidence {
+                correspondences,
+                geometry,
+                registered_transform: None,
+                pixels: None,
+                fit_failure: None,
+                unfitted: None,
+                candidate: false,
+            }))
+        },
+        |left, right, cancel| {
+            crate::local_scan::compare_local_files_projective_pyramid_photometric(
+                left, right, p, budget, cancel,
+            )
+        },
+    )
 }
 /// Recursively search managed pyramid features with caller-selected frames.
 ///
 /// # Errors
 /// Policy/traversal/collection limits, substituted paths or cancellation.
 pub fn scan_projective_local_collection_roots_pyramid_with_requests(
-    roots:&[std::path::PathBuf],traversal:&crate::exact::Options,
-    policy:ProjectivePyramidCollectionPolicy,budget:&MemoryBudget,
-    request_for:impl Fn(&std::path::Path)->DecodeRequest,cancel:impl Fn()->bool,
-)->Result<DirectoryLocalCollectionReport<crate::local_scan::ProjectivePhotometricFileEvidence>,ScanError>{
+    roots: &[std::path::PathBuf],
+    traversal: &crate::exact::Options,
+    policy: ProjectivePyramidCollectionPolicy,
+    budget: &MemoryBudget,
+    request_for: impl Fn(&std::path::Path) -> DecodeRequest,
+    cancel: impl Fn() -> bool,
+) -> Result<DirectoryLocalCollectionReport<crate::local_scan::ProjectivePhotometricFileEvidence>, ScanError> {
     validate_projective_pyramid_collection(&policy)?;
-    scan_roots_with_collection(roots,traversal,policy.budgets.max_files,request_for,cancel,
-        |requests,cancel|scan_projective_local_collection_pyramid(requests,policy,budget,cancel))
+    scan_roots_with_collection(
+        roots,
+        traversal,
+        policy.budgets.max_files,
+        request_for,
+        cancel,
+        |requests, cancel| scan_projective_local_collection_pyramid(requests, policy, budget, cancel),
+    )
 }
 /// Recursively search native default selected frames with managed pyramids.
 ///
 /// # Errors
 /// Invalid policy, traversal/collection refusal or cancellation.
 pub fn scan_projective_local_collection_roots_pyramid(
-    roots:&[std::path::PathBuf],traversal:&crate::exact::Options,
-    policy:ProjectivePyramidCollectionPolicy,budget:&MemoryBudget,cancel:impl Fn()->bool,
-)->Result<DirectoryLocalCollectionReport<crate::local_scan::ProjectivePhotometricFileEvidence>,ScanError>{
-    scan_projective_local_collection_roots_pyramid_with_requests(roots,traversal,policy,budget,
-        |path|DecodeRequest::new(path),cancel)
+    roots: &[std::path::PathBuf],
+    traversal: &crate::exact::Options,
+    policy: ProjectivePyramidCollectionPolicy,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<DirectoryLocalCollectionReport<crate::local_scan::ProjectivePhotometricFileEvidence>, ScanError> {
+    scan_projective_local_collection_roots_pyramid_with_requests(
+        roots,
+        traversal,
+        policy,
+        budget,
+        |path| DecodeRequest::new(path),
+        cancel,
+    )
+}
+
+/// Descriptor proposals from both families, followed by shared-view confirmation.
+#[derive(Debug, Clone, Copy)]
+pub struct ProjectiveComplementaryCollectionPolicy {
+    pub search: crate::local_scan::ProjectiveComplementaryFilePolicy,
+    pub budgets: FileFeatureBudgets,
+}
+fn validate_projective_complementary_collection(
+    config: &ProjectiveComplementaryCollectionPolicy,
+) -> Result<(), ScanError> {
+    crate::local_scan::validate_projective_complementary_file_policy(&config.search).map_err(
+        |e| match e {
+            LocalFileError::InvalidPolicy => ScanError::InvalidPolicy,
+            _ => ScanError::Budget,
+        },
+    )?;
+    validate_search(config.search.pyramid.local.into())
+}
+/// Index the union of compatible descriptors from both searches. Merged features
+/// are proposals only: ambiguous duplicate descriptors are never used to reject
+/// a pair geometrically. Each retrieved pair receives both original searches,
+/// preserving their individual matching and verification policies.
+///
+/// # Errors
+/// Invalid policy, file/index/work/memory limits or cancellation. Source and
+/// phase refusals retain the existing per-file/per-pair attribution and guards.
+pub fn scan_projective_local_collection_complementary(
+    files: impl IntoIterator<Item = (u64, DecodeRequest)>,
+    config: ProjectiveComplementaryCollectionPolicy,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<LocalCollectionReport<crate::local_scan::ProjectiveComplementaryFileEvidence>, ScanError> {
+    validate_projective_complementary_collection(&config)?;
+    let c = config.search;
+    let p = c.pyramid;
+    let r = c.registration;
+    let mut proposal = p.local;
+    proposal.matching.max_distance = proposal.matching.max_distance.max(r.local.matching.max_distance);
+    proposal.geometry.min_inliers = proposal.geometry.min_inliers.min(r.local.geometry.min_inliers);
+    let policy = LocalCollectionPolicy {
+        search: proposal.into(),
+        budgets: config.budgets,
+    };
+    let pyramid = crate::pyramid::PyramidPolicy {
+        local: p.local.extract,
+        max_levels: p.max_levels,
+        max_total_pixels: p.max_total_pixels,
+        max_total_features: p.max_total_features,
+    };
+    let capacity = p
+        .max_total_features
+        .checked_add(r.local.extract.max_features)
+        .ok_or(ScanError::Budget)?;
+    let bytes = capacity
+        .checked_mul(std::mem::size_of::<Feature>())
+        .and_then(|n| u64::try_from(n).ok())
+        .ok_or(ScanError::Budget)?;
+    scan_collection_with_extractor(
+        files,
+        &policy,
+        cancel,
+        |request, source, cancel| {
+            extract_file_with(request, source, policy.search, budget, cancel, |view, cancel| {
+                let retained = budget.try_reserve(bytes).map_err(|_| LocalError::Budget)?;
+                let ordinary = extract_search_features(view, r.local.extract, r.spatial, budget, cancel)?;
+                let multiscale =
+                    crate::pyramid::extract_oriented_pyramid_managed(view, pyramid, budget, cancel)?;
+                let count = ordinary
+                    .len()
+                    .checked_add(multiscale.len())
+                    .ok_or(LocalError::Budget)?;
+                if count > capacity {
+                    return Err(LocalError::Budget);
+                }
+                let mut combined = Vec::new();
+                combined
+                    .try_reserve_exact(count)
+                    .map_err(|_| LocalError::Budget)?;
+                for feature in ordinary.iter().chain(multiscale.iter()) {
+                    if cancel() {
+                        return Err(LocalError::Cancelled);
+                    }
+                    combined.push(*feature);
+                }
+                retained.try_adopt(combined).map_err(|_| LocalError::Budget)
+            })
+        },
+        |_, _, _| Ok(None),
+        |left, right, cancel| {
+            crate::local_scan::compare_local_files_projective_complementary(left, right, c, budget, cancel)
+        },
+    )
+}
+/// Recursive complementary search with caller-selected frame requests.
+///
+/// # Errors
+/// Invalid policy, traversal/index/source/work limits, path substitution or cancellation.
+pub fn scan_projective_local_collection_roots_complementary_with_requests(
+    roots: &[std::path::PathBuf],
+    traversal: &crate::exact::Options,
+    policy: ProjectiveComplementaryCollectionPolicy,
+    budget: &MemoryBudget,
+    request_for: impl Fn(&std::path::Path) -> DecodeRequest,
+    cancel: impl Fn() -> bool,
+) -> Result<DirectoryLocalCollectionReport<crate::local_scan::ProjectiveComplementaryFileEvidence>, ScanError>
+{
+    validate_projective_complementary_collection(&policy)?;
+    scan_roots_with_collection(
+        roots,
+        traversal,
+        policy.budgets.max_files,
+        request_for,
+        cancel,
+        |requests, cancel| scan_projective_local_collection_complementary(requests, policy, budget, cancel),
+    )
+}
+/// Recursive complementary search with native default selected frames.
+///
+/// # Errors
+/// Invalid policy, traversal/index/source/work refusal or cancellation.
+pub fn scan_projective_local_collection_roots_complementary(
+    roots: &[std::path::PathBuf],
+    traversal: &crate::exact::Options,
+    policy: ProjectiveComplementaryCollectionPolicy,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<DirectoryLocalCollectionReport<crate::local_scan::ProjectiveComplementaryFileEvidence>, ScanError>
+{
+    scan_projective_local_collection_roots_complementary_with_requests(
+        roots,
+        traversal,
+        policy,
+        budget,
+        |path| DecodeRequest::new(path),
+        cancel,
+    )
 }

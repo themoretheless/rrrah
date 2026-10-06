@@ -32,8 +32,9 @@ pub fn is_supported_image_path(path: &Path) -> bool {
                 "fit", "fts", "mrc", "mrcs", "map", "nrrd", "wad", "rla", "pic", "cin", "cineon", "dpx",
                 "wal", "mac", "macp", "pntg", "mpnt", "pam", "ff", "exr", "hdr", "pfm", "pcx", "sgi", "rgb",
                 "rgba", "bw", "ras", "sun", "sunras", "dds", "avif", "xbm", "xpm", "cur", "svg", "ora",
-                "pdf", "ai", "basis", "ktx2", "ktx", "pkm", "iff", "ilbm", "lbm", "pix", "astc", "heic", "heif", "hif",
-                "x3f", "pict", "pct", "kra", "xcf", "psd", "psb", "dcx", "mng", "sti", "wmf", "emf", "jxl", "jp2", "j2k", "j2c", "jpc",
+                "pdf", "ai", "basis", "ktx2", "ktx", "pkm", "iff", "ilbm", "lbm", "pix", "astc", "heic",
+                "heif", "hif", "x3f", "pict", "pct", "kra", "xcf", "psd", "psb", "dcx", "mng", "sti", "wmf",
+                "emf", "jxl", "jp2", "j2k", "j2c", "jpc",
             ]
             .iter()
             .any(|ext| s.eq_ignore_ascii_case(ext))
@@ -45,8 +46,9 @@ pub fn is_supported_image_path(path: &Path) -> bool {
 pub fn is_supported_raw_path(path: &Path) -> bool {
     path.extension().and_then(|s| s.to_str()).is_some_and(|s| {
         [
-            "crw", "cr3", "cr2", "dng", "nef", "nrw", "arw", "sr2", "mrw", "erf", "kdc", "srw", "3fr", "fff", "dcr",
-            "mos", "iiq", "srf", "dcs", "orf", "pef", "ptx", "rw2", "rwl", "raw", "raf", "tif", "tiff",
+            "crw", "cr3", "cr2", "dng", "nef", "nrw", "arw", "sr2", "mrw", "erf", "kdc", "srw", "3fr", "fff",
+            "dcr", "mos", "iiq", "srf", "dcs", "orf", "pef", "ptx", "rw2", "rwl", "raw", "raf", "tif",
+            "tiff",
         ]
         .iter()
         .any(|ext| s.eq_ignore_ascii_case(ext))
@@ -176,18 +178,27 @@ mod tests {
         for extension in ["png", "tiff", "cr3", "pdf", "nrrd", "unknown"] {
             let mut request = crate::DecodeRequest::new(format!("/rrrah-absent-cancelled-image.{extension}"));
             request.cancellation = Some(crate::GenerationToken::new(
-                std::sync::Arc::new(std::sync::atomic::AtomicU64::new(2)), 1,
+                std::sync::Arc::new(std::sync::atomic::AtomicU64::new(2)),
+                1,
             ));
             let budget = rrrah_core::MemoryBudget::new(0);
             request.memory_budget = Some(budget.clone());
-            assert!(matches!(super::image_source_kind(&request),
-                Err(crate::RasterDecodeError::Source(crate::DecodeError::Cancelled))));
-            assert!(matches!(super::decode_image(&request),
-                Err(crate::RasterDecodeError::Source(crate::DecodeError::Cancelled))));
-            assert!(matches!(crate::decode_raster(&request),
-                Err(crate::RasterDecodeError::Source(crate::DecodeError::Cancelled))));
-            assert!(matches!(crate::decode_raster_with_window(&request, crate::ScalarWindow::new(0.0, 1.0).unwrap()),
-                Err(crate::RasterDecodeError::Source(crate::DecodeError::Cancelled))));
+            assert!(matches!(
+                super::image_source_kind(&request),
+                Err(crate::RasterDecodeError::Source(crate::DecodeError::Cancelled))
+            ));
+            assert!(matches!(
+                super::decode_image(&request),
+                Err(crate::RasterDecodeError::Source(crate::DecodeError::Cancelled))
+            ));
+            assert!(matches!(
+                crate::decode_raster(&request),
+                Err(crate::RasterDecodeError::Source(crate::DecodeError::Cancelled))
+            ));
+            assert!(matches!(
+                crate::decode_raster_with_window(&request, crate::ScalarWindow::new(0.0, 1.0).unwrap()),
+                Err(crate::RasterDecodeError::Source(crate::DecodeError::Cancelled))
+            ));
             assert_eq!(budget.peak(), 0);
         }
     }

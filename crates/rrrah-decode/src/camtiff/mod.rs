@@ -576,10 +576,12 @@ fn assert_pixel_cancellation_checkpoints(
 ) {
     use std::sync::atomic::{AtomicUsize, Ordering};
     let calls = AtomicUsize::new(0);
-    let expected = quirks.decode_pixels(container, raw, &|| {
-        calls.fetch_add(1, Ordering::Relaxed);
-        false
-    }).expect("cancellation fixture must decode successfully");
+    let expected = quirks
+        .decode_pixels(container, raw, &|| {
+            calls.fetch_add(1, Ordering::Relaxed);
+            false
+        })
+        .expect("cancellation fixture must decode successfully");
     let checkpoints = calls.load(Ordering::Relaxed);
     assert!(checkpoints > 0, "decoder must observe cancellation");
     for target in 1..=checkpoints {
@@ -587,8 +589,11 @@ fn assert_pixel_cancellation_checkpoints(
         let result = quirks.decode_pixels(container, raw, &|| {
             calls.fetch_add(1, Ordering::Relaxed) + 1 == target
         });
-        assert!(matches!(result, Err(DecodeError::Cancelled)),
-            "{} checkpoint {target}: {result:?}", quirks.format_name());
+        assert!(
+            matches!(result, Err(DecodeError::Cancelled)),
+            "{} checkpoint {target}: {result:?}",
+            quirks.format_name()
+        );
         assert_eq!(quirks.decode_pixels(container, raw, &|| false).unwrap(), expected);
     }
     println!("{} cancellation checkpoints: {checkpoints}", quirks.format_name());

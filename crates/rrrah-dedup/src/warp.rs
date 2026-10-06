@@ -83,7 +83,7 @@ fn verify_pixels_mapped(
     {
         return Err(WarpError::Invalid);
     }
-    verify_mapped_coordinates(source, target, policy, cancel, |[x,y]| {
+    verify_mapped_coordinates(source, target, policy, cancel, |[x, y]| {
         Some(transform.apply([if reflected { -x } else { x }, y]))
     })
 }
@@ -95,32 +95,52 @@ fn verify_pixels_mapped(
 /// # Errors
 /// Invalid model/policy, bounded pixel work exhaustion or cancellation.
 pub fn verify_projective_pixels(
-    source: &LinearRgbaView<'_>, target: &LinearRgbaView<'_>,
-    transform: crate::geometry::ProjectiveTransform, policy: WarpPolicy,
+    source: &LinearRgbaView<'_>,
+    target: &LinearRgbaView<'_>,
+    transform: crate::geometry::ProjectiveTransform,
+    policy: WarpPolicy,
     cancel: impl Fn() -> bool,
 ) -> Result<WarpEvidence, WarpError> {
     let m = transform.matrix;
-    if m.iter().flatten().any(|v| !v.is_finite()) { return Err(WarpError::Invalid); }
-    let scale = m.iter().flatten().fold(0.0_f64, |a,b| a.max(b.abs()));
-    if scale == 0.0 { return Err(WarpError::Invalid); }
-    let h = m.map(|row| row.map(|v| v/scale));
-    let det = h[0][0]*(h[1][1]*h[2][2]-h[1][2]*h[2][1])
-        -h[0][1]*(h[1][0]*h[2][2]-h[1][2]*h[2][0])
-        +h[0][2]*(h[1][0]*h[2][1]-h[1][1]*h[2][0]);
-    if !det.is_finite() || det == 0.0 { return Err(WarpError::Invalid); }
-    let (w,h) = source.dimensions();
-    let denominators = [[0.0,0.0],[f64::from(w-1),0.0],[0.0,f64::from(h-1)],[f64::from(w-1),f64::from(h-1)]]
-        .map(|[x,y]| m[2][0]*x+m[2][1]*y+m[2][2]);
-    if denominators.iter().any(|d| !d.is_finite() || *d == 0.0 || d.is_sign_positive()!=denominators[0].is_sign_positive()) {
+    if m.iter().flatten().any(|v| !v.is_finite()) {
         return Err(WarpError::Invalid);
     }
-    let (tw,th) = target.dimensions();
-    verify_mapped_coordinates(source,target,policy,cancel,|p| {
+    let scale = m.iter().flatten().fold(0.0_f64, |a, b| a.max(b.abs()));
+    if scale == 0.0 {
+        return Err(WarpError::Invalid);
+    }
+    let h = m.map(|row| row.map(|v| v / scale));
+    let det = h[0][0] * (h[1][1] * h[2][2] - h[1][2] * h[2][1])
+        - h[0][1] * (h[1][0] * h[2][2] - h[1][2] * h[2][0])
+        + h[0][2] * (h[1][0] * h[2][1] - h[1][1] * h[2][0]);
+    if !det.is_finite() || det == 0.0 {
+        return Err(WarpError::Invalid);
+    }
+    let (w, h) = source.dimensions();
+    let denominators = [
+        [0.0, 0.0],
+        [f64::from(w - 1), 0.0],
+        [0.0, f64::from(h - 1)],
+        [f64::from(w - 1), f64::from(h - 1)],
+    ]
+    .map(|[x, y]| m[2][0] * x + m[2][1] * y + m[2][2]);
+    if denominators
+        .iter()
+        .any(|d| !d.is_finite() || *d == 0.0 || d.is_sign_positive() != denominators[0].is_sign_positive())
+    {
+        return Err(WarpError::Invalid);
+    }
+    let (tw, th) = target.dimensions();
+    verify_mapped_coordinates(source, target, policy, cancel, |p| {
         let mut q = transform.apply(p)?;
-        for (coordinate,last) in q.iter_mut().zip([f64::from(tw-1),f64::from(th-1)]) {
-            let epsilon = 16.0*f64::EPSILON*last.max(1.0);
-            if *coordinate < 0.0 && *coordinate >= -epsilon { *coordinate = 0.0; }
-            if *coordinate > last && *coordinate <= last+epsilon { *coordinate = last; }
+        for (coordinate, last) in q.iter_mut().zip([f64::from(tw - 1), f64::from(th - 1)]) {
+            let epsilon = 16.0 * f64::EPSILON * last.max(1.0);
+            if *coordinate < 0.0 && *coordinate >= -epsilon {
+                *coordinate = 0.0;
+            }
+            if *coordinate > last && *coordinate <= last + epsilon {
+                *coordinate = last;
+            }
         }
         Some(q)
     })
@@ -132,26 +152,42 @@ pub fn verify_projective_pixels(
 /// # Errors
 /// Invalid/singular/horizon-crossing geometry, shared work refusal or cancellation.
 pub fn verify_projective_bidirectional(
-    source: &LinearRgbaView<'_>, target: &LinearRgbaView<'_>,
-    transform: crate::geometry::ProjectiveTransform, policy: WarpPolicy,
+    source: &LinearRgbaView<'_>,
+    target: &LinearRgbaView<'_>,
+    transform: crate::geometry::ProjectiveTransform,
+    policy: WarpPolicy,
     cancel: impl Fn() -> bool,
 ) -> Result<BidirectionalEvidence, WarpError> {
-    let (sw,sh) = source.dimensions(); let (tw,th) = target.dimensions();
-    let work = (u64::from(sw)*u64::from(sh)).checked_add(u64::from(tw)*u64::from(th)).ok_or(WarpError::Budget)?;
-    if work > policy.max_source_pixels { return Err(WarpError::Budget); }
+    let (sw, sh) = source.dimensions();
+    let (tw, th) = target.dimensions();
+    let work = (u64::from(sw) * u64::from(sh))
+        .checked_add(u64::from(tw) * u64::from(th))
+        .ok_or(WarpError::Budget)?;
+    if work > policy.max_source_pixels {
+        return Err(WarpError::Budget);
+    }
     let inverse = transform.inverse().map_err(|_| WarpError::Invalid)?;
-    let forward = verify_projective_pixels(source,target,transform,policy,&cancel)?;
-    let reverse = verify_projective_pixels(target,source,inverse,policy,&cancel)?;
-    if cancel() { return Err(WarpError::Cancelled); }
+    let forward = verify_projective_pixels(source, target, transform, policy, &cancel)?;
+    let reverse = verify_projective_pixels(target, source, inverse, policy, &cancel)?;
+    if cancel() {
+        return Err(WarpError::Cancelled);
+    }
     Ok(BidirectionalEvidence { forward, reverse })
 }
 
 fn verify_mapped_coordinates(
-    source: &LinearRgbaView<'_>, target: &LinearRgbaView<'_>, policy: WarpPolicy,
-    cancel: impl Fn() -> bool, mapping: impl Fn([f64;2]) -> Option<[f64;2]>,
+    source: &LinearRgbaView<'_>,
+    target: &LinearRgbaView<'_>,
+    policy: WarpPolicy,
+    cancel: impl Fn() -> bool,
+    mapping: impl Fn([f64; 2]) -> Option<[f64; 2]>,
 ) -> Result<WarpEvidence, WarpError> {
-    if !policy.tolerance.is_finite() || policy.tolerance < 0.0 { return Err(WarpError::Invalid); }
-    if cancel() { return Err(WarpError::Cancelled); }
+    if !policy.tolerance.is_finite() || policy.tolerance < 0.0 {
+        return Err(WarpError::Invalid);
+    }
+    if cancel() {
+        return Err(WarpError::Cancelled);
+    }
     let (width, height) = source.dimensions();
     let source_pixels = u64::from(width) * u64::from(height);
     if source_pixels > policy.max_source_pixels {
@@ -170,7 +206,9 @@ fn verify_mapped_coordinates(
                 return Err(WarpError::Cancelled);
             }
             let position = mapping([f64::from(x), f64::from(y)]).ok_or(WarpError::Invalid)?;
-            if position.iter().any(|v| !v.is_finite()) { return Err(WarpError::Invalid); }
+            if position.iter().any(|v| !v.is_finite()) {
+                return Err(WarpError::Invalid);
+            }
             let Some(actual) = interpolate(target, position) else {
                 continue;
             };
@@ -504,8 +542,11 @@ struct GridPolicy {
     projection: Option<FitSampleRange>,
 }
 fn verify_photometric_grid(
-    source: &LinearRgbaView<'_>, target: &LinearRgbaView<'_>,
-    transform: Transform, grid: GridPolicy, cancel: impl Fn() -> bool,
+    source: &LinearRgbaView<'_>,
+    target: &LinearRgbaView<'_>,
+    transform: Transform,
+    grid: GridPolicy,
+    cancel: impl Fn() -> bool,
 ) -> Result<PhotometricEvidence, WarpError> {
     if [
         transform.a,
@@ -519,16 +560,20 @@ fn verify_photometric_grid(
     {
         return Err(WarpError::Invalid);
     }
-    verify_photometric_grid_mapped(source, target,
-        &|[x,y]| Some(transform.apply([if grid.reflected { -x } else { x },y])),
-        grid, cancel)
+    verify_photometric_grid_mapped(
+        source,
+        target,
+        &|[x, y]| Some(transform.apply([if grid.reflected { -x } else { x }, y])),
+        grid,
+        cancel,
+    )
 }
 
 #[allow(clippy::cast_precision_loss, clippy::too_many_lines)] // Two bounded passes share one fitted model.
 fn verify_photometric_grid_mapped(
     source: &LinearRgbaView<'_>,
     target: &LinearRgbaView<'_>,
-    mapping: &impl Fn([f64;2]) -> Option<[f64;2]>,
+    mapping: &impl Fn([f64; 2]) -> Option<[f64; 2]>,
     grid: GridPolicy,
     cancel: impl Fn() -> bool,
 ) -> Result<PhotometricEvidence, WarpError> {
@@ -551,15 +596,8 @@ fn verify_photometric_grid_mapped(
             if cancel() {
                 return Err(WarpError::Cancelled);
             }
-            let Some((expected, actual)) = sample_pair_mapped(
-                source,
-                target,
-                mapping,
-                [x, y],
-                radius,
-                space,
-                &cancel,
-            )?
+            let Some((expected, actual)) =
+                sample_pair_mapped(source, target, mapping, [x, y], radius, space, &cancel)?
             else {
                 continue;
             };
@@ -627,15 +665,8 @@ fn verify_photometric_grid_mapped(
             if cancel() {
                 return Err(WarpError::Cancelled);
             }
-            let Some((mut expected, mut actual)) = sample_pair_mapped(
-                source,
-                target,
-                mapping,
-                [x, y],
-                radius,
-                space,
-                &cancel,
-            )?
+            let Some((mut expected, mut actual)) =
+                sample_pair_mapped(source, target, mapping, [x, y], radius, space, &cancel)?
             else {
                 continue;
             };
@@ -902,22 +933,36 @@ pub struct ProjectiveFilteredEvidence {
 /// # Errors
 /// Invalid model/filter, shared pixel/sample-work refusal or cancellation.
 pub fn verify_projective_filtered(
-    source: &LinearRgbaView<'_>, target: &LinearRgbaView<'_>,
-    transform: crate::geometry::ProjectiveTransform, pixels: WarpPolicy,
-    filter: ColorFilterPolicy, cancel: impl Fn() -> bool,
-) -> Result<ProjectiveFilteredEvidence,WarpError> {
+    source: &LinearRgbaView<'_>,
+    target: &LinearRgbaView<'_>,
+    transform: crate::geometry::ProjectiveTransform,
+    pixels: WarpPolicy,
+    filter: ColorFilterPolicy,
+    cancel: impl Fn() -> bool,
+) -> Result<ProjectiveFilteredEvidence, WarpError> {
     validate_filter_policy(filter.filter)?;
-    let (sw,sh)=source.dimensions(); let (tw,th)=target.dimensions();
-    let count=(u64::from(sw)*u64::from(sh)).checked_add(u64::from(tw)*u64::from(th)).ok_or(WarpError::Budget)?;
-    let side=u64::from(filter.filter.radius)*2+1;
-    let work=count.checked_mul(side*side).ok_or(WarpError::Budget)?;
-    if work>filter.filter.max_sample_pairs { return Err(WarpError::Budget); }
-    let strict=verify_projective_bidirectional(source,target,transform,pixels,&cancel)?;
-    let inverse=transform.inverse().map_err(|_|WarpError::Invalid)?;
-    let forward=projective_filtered_grid(source,target,transform,pixels,filter,&cancel)?;
-    let reverse=projective_filtered_grid(target,source,inverse,pixels,filter,&cancel)?;
-    if cancel() { return Err(WarpError::Cancelled); }
-    Ok(ProjectiveFilteredEvidence {filter,strict,filtered:BidirectionalEvidence {forward,reverse}})
+    let (sw, sh) = source.dimensions();
+    let (tw, th) = target.dimensions();
+    let count = (u64::from(sw) * u64::from(sh))
+        .checked_add(u64::from(tw) * u64::from(th))
+        .ok_or(WarpError::Budget)?;
+    let side = u64::from(filter.filter.radius) * 2 + 1;
+    let work = count.checked_mul(side * side).ok_or(WarpError::Budget)?;
+    if work > filter.filter.max_sample_pairs {
+        return Err(WarpError::Budget);
+    }
+    let strict = verify_projective_bidirectional(source, target, transform, pixels, &cancel)?;
+    let inverse = transform.inverse().map_err(|_| WarpError::Invalid)?;
+    let forward = projective_filtered_grid(source, target, transform, pixels, filter, &cancel)?;
+    let reverse = projective_filtered_grid(target, source, inverse, pixels, filter, &cancel)?;
+    if cancel() {
+        return Err(WarpError::Cancelled);
+    }
+    Ok(ProjectiveFilteredEvidence {
+        filter,
+        strict,
+        filtered: BidirectionalEvidence { forward, reverse },
+    })
 }
 /// Perspective evidence keeps unfitted strict/window residuals beside a bounded
 /// per-channel affine color fit. Fitted evidence is a visual candidate score,
@@ -938,59 +983,113 @@ pub struct ProjectivePhotometricEvidence {
 /// Invalid geometry/policy, insufficient or low-variance fit samples, an
 /// out-of-policy fit, shared work exhaustion, or cancellation discards the result.
 pub fn verify_projective_photometric_filtered(
-    source: &LinearRgbaView<'_>, target: &LinearRgbaView<'_>,
+    source: &LinearRgbaView<'_>,
+    target: &LinearRgbaView<'_>,
     transform: crate::geometry::ProjectiveTransform,
-    photometric: PhotometricPolicy, filter: ColorFilterPolicy,
-    fit_mode: PhotometricFitMode, cancel: impl Fn() -> bool,
+    photometric: PhotometricPolicy,
+    filter: ColorFilterPolicy,
+    fit_mode: PhotometricFitMode,
+    cancel: impl Fn() -> bool,
 ) -> Result<ProjectivePhotometricEvidence, WarpError> {
     validate_photometric_policy(photometric)?;
     validate_filter_policy(filter.filter)?;
-    let (sw,sh) = source.dimensions(); let (tw,th) = target.dimensions();
-    let count = (u64::from(sw)*u64::from(sh)).checked_add(u64::from(tw)*u64::from(th))
+    let (sw, sh) = source.dimensions();
+    let (tw, th) = target.dimensions();
+    let count = (u64::from(sw) * u64::from(sh))
+        .checked_add(u64::from(tw) * u64::from(th))
         .ok_or(WarpError::Budget)?;
-    let side = u64::from(filter.filter.radius)*2+1;
-    let work = count.checked_mul(side*side).and_then(|n| n.checked_mul(3))
+    let side = u64::from(filter.filter.radius) * 2 + 1;
+    let work = count
+        .checked_mul(side * side)
+        .and_then(|n| n.checked_mul(3))
         .ok_or(WarpError::Budget)?;
     if count > photometric.residual.max_source_pixels || work > filter.filter.max_sample_pairs {
         return Err(WarpError::Budget);
     }
     // This first pass enforces singularity and horizon guards on both rectangles.
-    let unfitted = verify_projective_filtered(source,target,transform,photometric.residual,filter,&cancel)?;
+    let unfitted =
+        verify_projective_filtered(source, target, transform, photometric.residual, filter, &cancel)?;
     let inverse = transform.inverse().map_err(|_| WarpError::Invalid)?;
     let grid = GridPolicy {
-        reflected: false, photometric, radius: filter.filter.radius,
-        space: filter.color_space, fit: fit_mode, fit_range: None, projection: None,
+        reflected: false,
+        photometric,
+        radius: filter.filter.radius,
+        space: filter.color_space,
+        fit: fit_mode,
+        fit_range: None,
+        projection: None,
     };
-    let forward = verify_photometric_grid_mapped(source,target,&|p| transform.apply(p),grid,&cancel)?;
-    let reverse = verify_photometric_grid_mapped(target,source,&|p| inverse.apply(p),grid,&cancel)?;
-    if cancel() { return Err(WarpError::Cancelled); }
-    Ok(ProjectivePhotometricEvidence { unfitted, fit_mode,
-        fitted: BidirectionalPhotometricEvidence { forward, reverse } })
+    let forward = verify_photometric_grid_mapped(source, target, &|p| transform.apply(p), grid, &cancel)?;
+    let reverse = verify_photometric_grid_mapped(target, source, &|p| inverse.apply(p), grid, &cancel)?;
+    if cancel() {
+        return Err(WarpError::Cancelled);
+    }
+    Ok(ProjectivePhotometricEvidence {
+        unfitted,
+        fit_mode,
+        fitted: BidirectionalPhotometricEvidence { forward, reverse },
+    })
 }
 
 fn projective_filtered_grid(
-    source:&LinearRgbaView<'_>,target:&LinearRgbaView<'_>,
-    transform:crate::geometry::ProjectiveTransform,pixels:WarpPolicy,
-    filter:ColorFilterPolicy,cancel:&impl Fn()->bool,
-)->Result<WarpEvidence,WarpError>{
-    let (width,height)=source.dimensions();
-    let mut evidence=WarpEvidence{source_pixels:u64::from(width)*u64::from(height),compared_pixels:0,matched_pixels:0,maximum_channel_error:0.0,squared_error:0.0};
-    for y in 0..height {for x in 0..width {
-        if cancel(){return Err(WarpError::Cancelled);}
-        let Some((expected,actual))=sample_pair_mapped(source,target,&|p|transform.apply(p),[x,y],filter.filter.radius,filter.color_space,cancel)? else {continue;};
-        let mut maximum=0.0_f64;
-        for (a,b) in expected.into_iter().zip(actual){let error=(a-b).abs();maximum=maximum.max(error);evidence.squared_error+=error*error;}
-        evidence.compared_pixels+=1;evidence.matched_pixels+=u64::from(maximum<=pixels.tolerance);evidence.maximum_channel_error=evidence.maximum_channel_error.max(maximum);
-    }}
-    if cancel(){return Err(WarpError::Cancelled);}
+    source: &LinearRgbaView<'_>,
+    target: &LinearRgbaView<'_>,
+    transform: crate::geometry::ProjectiveTransform,
+    pixels: WarpPolicy,
+    filter: ColorFilterPolicy,
+    cancel: &impl Fn() -> bool,
+) -> Result<WarpEvidence, WarpError> {
+    let (width, height) = source.dimensions();
+    let mut evidence = WarpEvidence {
+        source_pixels: u64::from(width) * u64::from(height),
+        compared_pixels: 0,
+        matched_pixels: 0,
+        maximum_channel_error: 0.0,
+        squared_error: 0.0,
+    };
+    for y in 0..height {
+        for x in 0..width {
+            if cancel() {
+                return Err(WarpError::Cancelled);
+            }
+            let Some((expected, actual)) = sample_pair_mapped(
+                source,
+                target,
+                &|p| transform.apply(p),
+                [x, y],
+                filter.filter.radius,
+                filter.color_space,
+                cancel,
+            )?
+            else {
+                continue;
+            };
+            let mut maximum = 0.0_f64;
+            for (a, b) in expected.into_iter().zip(actual) {
+                let error = (a - b).abs();
+                maximum = maximum.max(error);
+                evidence.squared_error += error * error;
+            }
+            evidence.compared_pixels += 1;
+            evidence.matched_pixels += u64::from(maximum <= pixels.tolerance);
+            evidence.maximum_channel_error = evidence.maximum_channel_error.max(maximum);
+        }
+    }
+    if cancel() {
+        return Err(WarpError::Cancelled);
+    }
     Ok(evidence)
 }
 
 fn sample_pair_mapped(
-    source: &LinearRgbaView<'_>, target: &LinearRgbaView<'_>,
-    mapping: &impl Fn([f64;2]) -> Option<[f64;2]>, point: [u32;2],
-    radius: u32, space: FilterColorSpace, cancel: &impl Fn() -> bool,
-) -> Result<Option<SamplePair>,WarpError> {
+    source: &LinearRgbaView<'_>,
+    target: &LinearRgbaView<'_>,
+    mapping: &impl Fn([f64; 2]) -> Option<[f64; 2]>,
+    point: [u32; 2],
+    radius: u32,
+    space: FilterColorSpace,
+    cancel: &impl Fn() -> bool,
+) -> Result<Option<SamplePair>, WarpError> {
     let (width, height) = source.dimensions();
     let [x, y] = point;
     if x < radius
@@ -1010,7 +1109,7 @@ fn sample_pair_mapped(
             }
             let sx = x - radius + dx;
             let sy = y - radius + dy;
-            let p = mapping([f64::from(sx),f64::from(sy)]).ok_or(WarpError::Invalid)?;
+            let p = mapping([f64::from(sx), f64::from(sy)]).ok_or(WarpError::Invalid)?;
             if p.iter().any(|v| !v.is_finite()) {
                 return Err(WarpError::Invalid);
             }
@@ -1399,8 +1498,10 @@ pub struct ProjectiveRegistrationPolicy {
     pub rounds: u32,
     pub max_sample_pairs: u64,
 }
-pub(crate) fn validate_registration_policy(policy: ProjectiveRegistrationPolicy) -> Result<(),WarpError> {
-    if policy.radius > 8 || policy.stride == 0 || policy.rounds == 0 || policy.rounds > 256 {return Err(WarpError::Invalid);}
+pub(crate) fn validate_registration_policy(policy: ProjectiveRegistrationPolicy) -> Result<(), WarpError> {
+    if policy.radius > 8 || policy.stride == 0 || policy.rounds == 0 || policy.rounds > 256 {
+        return Err(WarpError::Invalid);
+    }
     Ok(())
 }
 /// Refine an initial planar model against a fixed target-grid sample domain.
@@ -1410,11 +1511,13 @@ pub(crate) fn validate_registration_policy(policy: ProjectiveRegistrationPolicy)
 /// # Errors
 /// Invalid model/policy, insufficient overlap, cancellation or exhausted work.
 pub fn refine_projective_pixels(
-    source: &LinearRgbaView<'_>, target: &LinearRgbaView<'_>,
+    source: &LinearRgbaView<'_>,
+    target: &LinearRgbaView<'_>,
     initial: crate::geometry::ProjectiveTransform,
-    policy: ProjectiveRegistrationPolicy, cancel: impl Fn() -> bool,
+    policy: ProjectiveRegistrationPolicy,
+    cancel: impl Fn() -> bool,
 ) -> Result<crate::geometry::ProjectiveTransform, WarpError> {
-    refine_projective_pixels_selected(source,target,initial,policy,None,None,cancel)
+    refine_projective_pixels_selected(source, target, initial, policy, None, None, cancel)
 }
 
 /// Refine geometry with bounded encoded-sRGB gains/offsets as nuisance parameters.
@@ -1424,122 +1527,252 @@ pub fn refine_projective_pixels(
 /// # Errors
 /// Invalid policies/model, insufficient informative samples, work or cancellation.
 pub fn refine_projective_pixels_photometric(
-    source:&LinearRgbaView<'_>,target:&LinearRgbaView<'_>,
-    initial:crate::geometry::ProjectiveTransform,policy:ProjectiveRegistrationPolicy,
-    photometric:PhotometricPolicy,cancel:impl Fn()->bool,
-)->Result<crate::geometry::ProjectiveTransform,WarpError>{
+    source: &LinearRgbaView<'_>,
+    target: &LinearRgbaView<'_>,
+    initial: crate::geometry::ProjectiveTransform,
+    policy: ProjectiveRegistrationPolicy,
+    photometric: PhotometricPolicy,
+    cancel: impl Fn() -> bool,
+) -> Result<crate::geometry::ProjectiveTransform, WarpError> {
     validate_photometric_policy(photometric)?;
-    refine_projective_pixels_selected(source,target,initial,policy,Some(photometric),None,cancel)
+    refine_projective_pixels_selected(source, target, initial, policy, Some(photometric), None, cancel)
 }
 
 #[allow(clippy::cast_precision_loss)] // Admitted fixed-grid sample count.
 fn refine_projective_pixels_selected(
-    source:&LinearRgbaView<'_>,target:&LinearRgbaView<'_>,
-    initial:crate::geometry::ProjectiveTransform,policy:ProjectiveRegistrationPolicy,
-    photometric:Option<PhotometricPolicy>,maximum_corner_shift:Option<f64>,cancel:impl Fn()->bool,
-)->Result<crate::geometry::ProjectiveTransform,WarpError>{
+    source: &LinearRgbaView<'_>,
+    target: &LinearRgbaView<'_>,
+    initial: crate::geometry::ProjectiveTransform,
+    policy: ProjectiveRegistrationPolicy,
+    photometric: Option<PhotometricPolicy>,
+    maximum_corner_shift: Option<f64>,
+    cancel: impl Fn() -> bool,
+) -> Result<crate::geometry::ProjectiveTransform, WarpError> {
     validate_registration_policy(policy)?;
-    let inverse=initial.inverse().map_err(|_|WarpError::Invalid)?;
-    let mut matrix=inverse.matrix;
-    let scale=matrix[2][2];
-    if scale==0.0 || !scale.is_finite() {return Err(WarpError::Invalid);}
-    for row in &mut matrix {for value in row {*value/=scale;}}
-    let (sw,sh)=source.dimensions();let (tw,th)=target.dimensions();
-    let corners=[[0.,0.],[f64::from(tw-1),0.],[0.,f64::from(th-1)],[f64::from(tw-1),f64::from(th-1)]];
-    let mut controls=corners.map(|source|crate::geometry::Correspondence{source,target:[0.,0.]});
-    for control in &mut controls {control.target=inverse.apply(control.source).ok_or(WarpError::Invalid)?;}
-    let original_controls=controls;
-    let mut step=1.0;
-    let work=std::cell::Cell::new(0_u64);
-    let score=|trial: [[f64;3];3]| -> Result<f64,WarpError> {
-        let model=crate::geometry::ProjectiveTransform{matrix:trial};
-        let mut sum=0.;let mut count=0_u64;
-        let mut n=0_u64;let mut mean_a=[0.;3];let mut mean_b=[0.;3];
-        let mut variance_a=[0.;3];let mut variance_b=[0.;3];let mut covariance=[0.;3];let mut alpha_error=0.;
-        for y in (0..th).step_by(policy.stride as usize) {for x in (0..tw).step_by(policy.stride as usize) {
-            if cancel(){return Err(WarpError::Cancelled);}
-            let next=work.get().checked_add(1).ok_or(WarpError::Budget)?;
-            if next>policy.max_sample_pairs {return Err(WarpError::Budget);}work.set(next);
-            let point=[f64::from(x),f64::from(y)];
-            let Some(original)=inverse.apply(point) else {return Err(WarpError::Invalid);};
-            if original[0]<8. || original[1]<8. || original[0]>f64::from(sw)-9. || original[1]>f64::from(sh)-9. {continue;}
-            let (expected,actual)=if policy.radius==0 {
-                let Some(mapped)=model.apply(point) else {return Ok(f64::INFINITY);};
-                let Some(actual)=interpolate_in_space(source,mapped,FilterColorSpace::EncodedSrgb) else {return Ok(f64::INFINITY);};
-                (premultiplied_in_space(target,x,y,FilterColorSpace::EncodedSrgb).ok_or(WarpError::Invalid)?,actual)
-            } else {
-                let side=u64::from(policy.radius)*2+1;
-                let next=work.get().checked_add(2*side*side).ok_or(WarpError::Budget)?;
-                if next>policy.max_sample_pairs {return Err(WarpError::Budget);}work.set(next);
-                // Admission depends only on the initial model. Dropped trial
-                // windows fail the trial instead of shrinking its objective.
-                if sample_pair_mapped(target,source,&|p|inverse.apply(p),[x,y],policy.radius,FilterColorSpace::EncodedSrgb,&cancel)?.is_none(){continue;}
-                let Some(pair)=sample_pair_mapped(target,source,&|p|model.apply(p),[x,y],policy.radius,FilterColorSpace::EncodedSrgb,&cancel)? else {return Ok(f64::INFINITY);};
-                pair
-            };
-            for (a,b) in actual.into_iter().zip(expected){sum+=(a-b)*(a-b);}
-            if photometric.is_some(){
-                alpha_error+=(actual[3]-expected[3]).powi(2);
-                // Restrict nuisance fitting to opaque samples. Other RGB samples
-                // retain absolute error and cannot disappear from the objective.
-                if actual[3]>=0.999 && expected[3]>=0.999 {
-                    n+=1;
-                    for c in 0..3 {
-                        let da=actual[c]-mean_a[c];let db=expected[c]-mean_b[c];
-                        mean_a[c]+=da/n as f64;mean_b[c]+=db/n as f64;
-                        variance_a[c]+=da*(actual[c]-mean_a[c]);variance_b[c]+=db*(expected[c]-mean_b[c]);covariance[c]+=da*(expected[c]-mean_b[c]);
+    let inverse = initial.inverse().map_err(|_| WarpError::Invalid)?;
+    let mut matrix = inverse.matrix;
+    let scale = matrix[2][2];
+    if scale == 0.0 || !scale.is_finite() {
+        return Err(WarpError::Invalid);
+    }
+    for row in &mut matrix {
+        for value in row {
+            *value /= scale;
+        }
+    }
+    let (sw, sh) = source.dimensions();
+    let (tw, th) = target.dimensions();
+    let corners = [
+        [0., 0.],
+        [f64::from(tw - 1), 0.],
+        [0., f64::from(th - 1)],
+        [f64::from(tw - 1), f64::from(th - 1)],
+    ];
+    let mut controls = corners.map(|source| crate::geometry::Correspondence {
+        source,
+        target: [0., 0.],
+    });
+    for control in &mut controls {
+        control.target = inverse.apply(control.source).ok_or(WarpError::Invalid)?;
+    }
+    let original_controls = controls;
+    let mut step = 1.0;
+    let work = std::cell::Cell::new(0_u64);
+    let score = |trial: [[f64; 3]; 3]| -> Result<f64, WarpError> {
+        let model = crate::geometry::ProjectiveTransform { matrix: trial };
+        let mut sum = 0.;
+        let mut count = 0_u64;
+        let mut n = 0_u64;
+        let mut mean_a = [0.; 3];
+        let mut mean_b = [0.; 3];
+        let mut variance_a = [0.; 3];
+        let mut variance_b = [0.; 3];
+        let mut covariance = [0.; 3];
+        let mut alpha_error = 0.;
+        for y in (0..th).step_by(policy.stride as usize) {
+            for x in (0..tw).step_by(policy.stride as usize) {
+                if cancel() {
+                    return Err(WarpError::Cancelled);
+                }
+                let next = work.get().checked_add(1).ok_or(WarpError::Budget)?;
+                if next > policy.max_sample_pairs {
+                    return Err(WarpError::Budget);
+                }
+                work.set(next);
+                let point = [f64::from(x), f64::from(y)];
+                let Some(original) = inverse.apply(point) else {
+                    return Err(WarpError::Invalid);
+                };
+                if original[0] < 8.
+                    || original[1] < 8.
+                    || original[0] > f64::from(sw) - 9.
+                    || original[1] > f64::from(sh) - 9.
+                {
+                    continue;
+                }
+                let (expected, actual) = if policy.radius == 0 {
+                    let Some(mapped) = model.apply(point) else {
+                        return Ok(f64::INFINITY);
+                    };
+                    let Some(actual) = interpolate_in_space(source, mapped, FilterColorSpace::EncodedSrgb)
+                    else {
+                        return Ok(f64::INFINITY);
+                    };
+                    (
+                        premultiplied_in_space(target, x, y, FilterColorSpace::EncodedSrgb)
+                            .ok_or(WarpError::Invalid)?,
+                        actual,
+                    )
+                } else {
+                    let side = u64::from(policy.radius) * 2 + 1;
+                    let next = work.get().checked_add(2 * side * side).ok_or(WarpError::Budget)?;
+                    if next > policy.max_sample_pairs {
+                        return Err(WarpError::Budget);
                     }
-                }else{for c in 0..3 {alpha_error+=(actual[c]-expected[c]).powi(2);}}
-            }
-            count+=1;
-        }}
-        if count<16{return Err(WarpError::Invalid);}
-        if let Some(fit)=photometric {
-            if n<fit.minimum_samples {return Ok(f64::INFINITY);}
-            sum=alpha_error;
-            for c in 0..3 {
-                if variance_a[c]/(n as f64)<fit.minimum_variance {return Ok(f64::INFINITY);}
-                let stats=ChannelStats{source:mean_a[c],target:mean_b[c],variance:variance_a[c],covariance:covariance[c],samples:n as f64};
-                let Some(model)=fit_channel(stats,fit,PhotometricFitMode::ConstrainedLeastSquares) else {return Ok(f64::INFINITY);};
-                let residual=variance_b[c]+model.gain*model.gain*variance_a[c]-2.*model.gain*covariance[c]+n as f64*(mean_b[c]-model.gain*mean_a[c]-model.offset).powi(2);
-                sum+=residual.max(0.);
+                    work.set(next);
+                    // Admission depends only on the initial model. Dropped trial
+                    // windows fail the trial instead of shrinking its objective.
+                    if sample_pair_mapped(
+                        target,
+                        source,
+                        &|p| inverse.apply(p),
+                        [x, y],
+                        policy.radius,
+                        FilterColorSpace::EncodedSrgb,
+                        &cancel,
+                    )?
+                    .is_none()
+                    {
+                        continue;
+                    }
+                    let Some(pair) = sample_pair_mapped(
+                        target,
+                        source,
+                        &|p| model.apply(p),
+                        [x, y],
+                        policy.radius,
+                        FilterColorSpace::EncodedSrgb,
+                        &cancel,
+                    )?
+                    else {
+                        return Ok(f64::INFINITY);
+                    };
+                    pair
+                };
+                for (a, b) in actual.into_iter().zip(expected) {
+                    sum += (a - b) * (a - b);
+                }
+                if photometric.is_some() {
+                    alpha_error += (actual[3] - expected[3]).powi(2);
+                    // Restrict nuisance fitting to opaque samples. Other RGB samples
+                    // retain absolute error and cannot disappear from the objective.
+                    if actual[3] >= 0.999 && expected[3] >= 0.999 {
+                        n += 1;
+                        for c in 0..3 {
+                            let da = actual[c] - mean_a[c];
+                            let db = expected[c] - mean_b[c];
+                            mean_a[c] += da / n as f64;
+                            mean_b[c] += db / n as f64;
+                            variance_a[c] += da * (actual[c] - mean_a[c]);
+                            variance_b[c] += db * (expected[c] - mean_b[c]);
+                            covariance[c] += da * (expected[c] - mean_b[c]);
+                        }
+                    } else {
+                        for c in 0..3 {
+                            alpha_error += (actual[c] - expected[c]).powi(2);
+                        }
+                    }
+                }
+                count += 1;
             }
         }
-        if !sum.is_finite(){return Ok(f64::INFINITY);}Ok(sum)
-    };
-    let mut best=score(matrix)?;
-    if !best.is_finite(){return Err(WarpError::Invalid);}
-    for _ in 0..policy.rounds {
-        let mut improved=false;
-        for corner in 0..4 {for axis in 0..2 {
-            for sign in [-1.,1.] {
-                let mut trial_controls=controls;trial_controls[corner].target[axis]+=sign*step;
-                if maximum_corner_shift.is_some_and(|limit|(trial_controls[corner].target[0]-original_controls[corner].target[0]).hypot(trial_controls[corner].target[1]-original_controls[corner].target[1])>limit){continue;}
-                let trial=match crate::geometry::fit_projective_four(&trial_controls,&cancel) {
-                    Ok(model)=>model.matrix,
-                    Err(crate::geometry::GeometryError::Cancelled)=>return Err(WarpError::Cancelled),
-                    Err(crate::geometry::GeometryError::Invalid)=>continue,
-                    Err(crate::geometry::GeometryError::Budget)=>return Err(WarpError::Budget),
-                };
-                let error=score(trial)?;
-                if error<best {matrix=trial;controls=trial_controls;best=error;improved=true;}
+        if count < 16 {
+            return Err(WarpError::Invalid);
+        }
+        if let Some(fit) = photometric {
+            if n < fit.minimum_samples {
+                return Ok(f64::INFINITY);
             }
-        }}
-        if !improved {step*=0.5;}
+            sum = alpha_error;
+            for c in 0..3 {
+                if variance_a[c] / (n as f64) < fit.minimum_variance {
+                    return Ok(f64::INFINITY);
+                }
+                let stats = ChannelStats {
+                    source: mean_a[c],
+                    target: mean_b[c],
+                    variance: variance_a[c],
+                    covariance: covariance[c],
+                    samples: n as f64,
+                };
+                let Some(model) = fit_channel(stats, fit, PhotometricFitMode::ConstrainedLeastSquares) else {
+                    return Ok(f64::INFINITY);
+                };
+                let residual = variance_b[c] + model.gain * model.gain * variance_a[c]
+                    - 2. * model.gain * covariance[c]
+                    + n as f64 * (mean_b[c] - model.gain * mean_a[c] - model.offset).powi(2);
+                sum += residual.max(0.);
+            }
+        }
+        if !sum.is_finite() {
+            return Ok(f64::INFINITY);
+        }
+        Ok(sum)
+    };
+    let mut best = score(matrix)?;
+    if !best.is_finite() {
+        return Err(WarpError::Invalid);
     }
-    if cancel(){return Err(WarpError::Cancelled);}
-    crate::geometry::ProjectiveTransform{matrix}.inverse().map_err(|_|WarpError::Invalid)
+    for _ in 0..policy.rounds {
+        let mut improved = false;
+        for corner in 0..4 {
+            for axis in 0..2 {
+                for sign in [-1., 1.] {
+                    let mut trial_controls = controls;
+                    trial_controls[corner].target[axis] += sign * step;
+                    if maximum_corner_shift.is_some_and(|limit| {
+                        (trial_controls[corner].target[0] - original_controls[corner].target[0])
+                            .hypot(trial_controls[corner].target[1] - original_controls[corner].target[1])
+                            > limit
+                    }) {
+                        continue;
+                    }
+                    let trial = match crate::geometry::fit_projective_four(&trial_controls, &cancel) {
+                        Ok(model) => model.matrix,
+                        Err(crate::geometry::GeometryError::Cancelled) => return Err(WarpError::Cancelled),
+                        Err(crate::geometry::GeometryError::Invalid) => continue,
+                        Err(crate::geometry::GeometryError::Budget) => return Err(WarpError::Budget),
+                    };
+                    let error = score(trial)?;
+                    if error < best {
+                        matrix = trial;
+                        controls = trial_controls;
+                        best = error;
+                        improved = true;
+                    }
+                }
+            }
+        }
+        if !improved {
+            step *= 0.5;
+        }
+    }
+    if cancel() {
+        return Err(WarpError::Cancelled);
+    }
+    crate::geometry::ProjectiveTransform { matrix }
+        .inverse()
+        .map_err(|_| WarpError::Invalid)
 }
 
-
 /// Caller-declared trust region around the initial inverse corner coordinates.
-#[derive(Debug,Clone,Copy)]
+#[derive(Debug, Clone, Copy)]
 pub struct ProjectiveRegistrationTrustPolicy {
-    pub registration:ProjectiveRegistrationPolicy,
-    pub photometric:PhotometricPolicy,
+    pub registration: ProjectiveRegistrationPolicy,
+    pub photometric: PhotometricPolicy,
     /// Maximum Euclidean displacement of each target corner mapped into source
     /// coordinates. This is not a continuous image-wide displacement certificate.
-    pub maximum_corner_shift:f64,
+    pub maximum_corner_shift: f64,
 }
 
 /// Bounded photometric registration anchored to the caller's initial geometry.
@@ -1549,16 +1782,30 @@ pub struct ProjectiveRegistrationTrustPolicy {
 /// # Errors
 /// Invalid policies/model, insufficient samples, work refusal or cancellation.
 pub fn refine_projective_pixels_anchored(
-    source:&LinearRgbaView<'_>,target:&LinearRgbaView<'_>,
-    initial:crate::geometry::ProjectiveTransform,policy:ProjectiveRegistrationTrustPolicy,
-    cancel:impl Fn()->bool,
-)->Result<crate::geometry::ProjectiveTransform,WarpError>{
+    source: &LinearRgbaView<'_>,
+    target: &LinearRgbaView<'_>,
+    initial: crate::geometry::ProjectiveTransform,
+    policy: ProjectiveRegistrationTrustPolicy,
+    cancel: impl Fn() -> bool,
+) -> Result<crate::geometry::ProjectiveTransform, WarpError> {
     validate_registration_trust_policy(policy)?;
-    refine_projective_pixels_selected(source,target,initial,policy.registration,Some(policy.photometric),Some(policy.maximum_corner_shift),cancel)
+    refine_projective_pixels_selected(
+        source,
+        target,
+        initial,
+        policy.registration,
+        Some(policy.photometric),
+        Some(policy.maximum_corner_shift),
+        cancel,
+    )
 }
 
-pub(crate) fn validate_registration_trust_policy(policy:ProjectiveRegistrationTrustPolicy)->Result<(),WarpError>{
-    if !policy.maximum_corner_shift.is_finite() || policy.maximum_corner_shift<0. {return Err(WarpError::Invalid);}
+pub(crate) fn validate_registration_trust_policy(
+    policy: ProjectiveRegistrationTrustPolicy,
+) -> Result<(), WarpError> {
+    if !policy.maximum_corner_shift.is_finite() || policy.maximum_corner_shift < 0. {
+        return Err(WarpError::Invalid);
+    }
     validate_photometric_policy(policy.photometric)?;
     validate_registration_policy(policy.registration)
 }
@@ -1585,17 +1832,25 @@ pub struct ProjectiveRegistrationCandidates {
 /// Invalid policies/model, cumulative or lane work exhaustion, cancellation or
 /// insufficient informative registration samples.
 pub fn refine_projective_pixels_candidates(
-    source: &LinearRgbaView<'_>, target: &LinearRgbaView<'_>,
+    source: &LinearRgbaView<'_>,
+    target: &LinearRgbaView<'_>,
     initial: crate::geometry::ProjectiveTransform,
-    policy: ProjectiveRegistrationPortfolioPolicy, cancel: impl Fn()->bool,
-) -> Result<ProjectiveRegistrationCandidates,WarpError> {
+    policy: ProjectiveRegistrationPortfolioPolicy,
+    cancel: impl Fn() -> bool,
+) -> Result<ProjectiveRegistrationCandidates, WarpError> {
     validate_registration_portfolio_policy(policy)?;
-    let latched=std::cell::Cell::new(false);
-    let cancelled=||{let value=latched.get() || cancel();latched.set(value);value};
-    let anchored=refine_projective_pixels_anchored(source,target,initial,policy.anchored,cancelled)?;
-    let unanchored=refine_projective_pixels(source,target,initial,policy.unanchored,cancelled)?;
-    if cancelled(){return Err(WarpError::Cancelled);}
-    Ok(ProjectiveRegistrationCandidates{anchored,unanchored})
+    let latched = std::cell::Cell::new(false);
+    let cancelled = || {
+        let value = latched.get() || cancel();
+        latched.set(value);
+        value
+    };
+    let anchored = refine_projective_pixels_anchored(source, target, initial, policy.anchored, cancelled)?;
+    let unanchored = refine_projective_pixels(source, target, initial, policy.unanchored, cancelled)?;
+    if cancelled() {
+        return Err(WarpError::Cancelled);
+    }
+    Ok(ProjectiveRegistrationCandidates { anchored, unanchored })
 }
 
 /// Separate complete-grid residuals for both registration hypotheses.
@@ -1614,31 +1869,60 @@ pub struct ProjectiveCandidatePixelEvidence {
 /// Invalid model/policy, cumulative work refusal, or cancellation discards all
 /// evidence, including a successfully verified first hypothesis.
 pub fn verify_projective_candidates_filtered(
-    source: &LinearRgbaView<'_>, target: &LinearRgbaView<'_>,
-    models: ProjectiveRegistrationCandidates, pixels: WarpPolicy,
-    filter: ColorFilterPolicy, cancel: impl Fn()->bool,
-) -> Result<ProjectiveCandidatePixelEvidence,WarpError> {
+    source: &LinearRgbaView<'_>,
+    target: &LinearRgbaView<'_>,
+    models: ProjectiveRegistrationCandidates,
+    pixels: WarpPolicy,
+    filter: ColorFilterPolicy,
+    cancel: impl Fn() -> bool,
+) -> Result<ProjectiveCandidatePixelEvidence, WarpError> {
     validate_filter_policy(filter.filter)?;
-    if !pixels.tolerance.is_finite() || pixels.tolerance<0.0 {return Err(WarpError::Invalid);}
-    let (sw,sh)=source.dimensions();let (tw,th)=target.dimensions();
-    let visits=(u64::from(sw)*u64::from(sh)).checked_add(u64::from(tw)*u64::from(th))
-        .and_then(|v|v.checked_mul(2)).ok_or(WarpError::Budget)?;
-    let side=u64::from(filter.filter.radius)*2+1;
-    let work=visits.checked_mul(side*side).ok_or(WarpError::Budget)?;
-    if visits>pixels.max_source_pixels || work>filter.filter.max_sample_pairs {return Err(WarpError::Budget);}
-    let latched=std::cell::Cell::new(false);
-    let cancelled=||{let value=latched.get() || cancel();latched.set(value);value};
-    let anchored=verify_projective_filtered(source,target,models.anchored,pixels,filter,cancelled)?;
-    let unanchored=verify_projective_filtered(source,target,models.unanchored,pixels,filter,cancelled)?;
-    if cancelled(){return Err(WarpError::Cancelled);}
-    Ok(ProjectiveCandidatePixelEvidence{models,anchored,unanchored})
+    if !pixels.tolerance.is_finite() || pixels.tolerance < 0.0 {
+        return Err(WarpError::Invalid);
+    }
+    let (sw, sh) = source.dimensions();
+    let (tw, th) = target.dimensions();
+    let visits = (u64::from(sw) * u64::from(sh))
+        .checked_add(u64::from(tw) * u64::from(th))
+        .and_then(|v| v.checked_mul(2))
+        .ok_or(WarpError::Budget)?;
+    let side = u64::from(filter.filter.radius) * 2 + 1;
+    let work = visits.checked_mul(side * side).ok_or(WarpError::Budget)?;
+    if visits > pixels.max_source_pixels || work > filter.filter.max_sample_pairs {
+        return Err(WarpError::Budget);
+    }
+    let latched = std::cell::Cell::new(false);
+    let cancelled = || {
+        let value = latched.get() || cancel();
+        latched.set(value);
+        value
+    };
+    let anchored = verify_projective_filtered(source, target, models.anchored, pixels, filter, cancelled)?;
+    let unanchored =
+        verify_projective_filtered(source, target, models.unanchored, pixels, filter, cancelled)?;
+    if cancelled() {
+        return Err(WarpError::Cancelled);
+    }
+    Ok(ProjectiveCandidatePixelEvidence {
+        models,
+        anchored,
+        unanchored,
+    })
 }
 
-pub(crate) fn validate_registration_portfolio_policy(policy: ProjectiveRegistrationPortfolioPolicy) -> Result<(),WarpError> {
+pub(crate) fn validate_registration_portfolio_policy(
+    policy: ProjectiveRegistrationPortfolioPolicy,
+) -> Result<(), WarpError> {
     validate_registration_trust_policy(policy.anchored)?;
     validate_registration_policy(policy.unanchored)?;
-    let admitted=policy.anchored.registration.max_sample_pairs
-        .checked_add(policy.unanchored.max_sample_pairs).ok_or(WarpError::Budget)?;
-    if admitted>policy.max_sample_pairs {return Err(WarpError::Budget);}
+    let admitted = policy
+        .anchored
+        .registration
+        .max_sample_pairs
+        .checked_add(policy.unanchored.max_sample_pairs)
+        .ok_or(WarpError::Budget)?;
+    if admitted > policy.max_sample_pairs {
+        return Err(WarpError::Budget);
+    }
     Ok(())
 }

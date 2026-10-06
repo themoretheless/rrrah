@@ -1311,20 +1311,31 @@ mod tests {
         let raw = quirks.select_raw_ifd(&container).unwrap();
         use std::sync::atomic::{AtomicUsize, Ordering};
         let calls = AtomicUsize::new(0);
-        let expected = quirks.decode_pixels(&container, raw, &|| {
-            calls.fetch_add(1, Ordering::Relaxed);
-            false
-        }).unwrap();
+        let expected = quirks
+            .decode_pixels(&container, raw, &|| {
+                calls.fetch_add(1, Ordering::Relaxed);
+                false
+            })
+            .unwrap();
         let checkpoints = calls.load(Ordering::Relaxed);
-        assert!(checkpoints > 1, "fixture must exercise cancellation after decode starts");
+        assert!(
+            checkpoints > 1,
+            "fixture must exercise cancellation after decode starts"
+        );
         for target in 1..=checkpoints {
             calls.store(0, Ordering::Relaxed);
             let result = quirks.decode_pixels(&container, raw, &|| {
                 calls.fetch_add(1, Ordering::Relaxed);
                 calls.load(Ordering::Relaxed) == target
             });
-            assert!(matches!(result, Err(DecodeError::Cancelled)), "checkpoint {target}: {result:?}");
-            assert_eq!(quirks.decode_pixels(&container, raw, &|| false).unwrap(), expected);
+            assert!(
+                matches!(result, Err(DecodeError::Cancelled)),
+                "checkpoint {target}: {result:?}"
+            );
+            assert_eq!(
+                quirks.decode_pixels(&container, raw, &|| false).unwrap(),
+                expected
+            );
         }
     }
 

@@ -9,9 +9,15 @@ fn imported_crw_swap_preserves_sensor_metadata_and_metal_frame() {
     let mut request = rrrah_decode::DecodeRequest::new(source);
     request.memory_budget = Some(budget.clone());
     use rrrah_decode::RawDecoder;
-    assert_eq!(rrrah_decode::image_source_kind(&request).unwrap(), rrrah_decode::ImageSourceKind::Sensor);
+    assert_eq!(
+        rrrah_decode::image_source_kind(&request).unwrap(),
+        rrrah_decode::ImageSourceKind::Sensor
+    );
     let recipe = rrrah_decode::NativeRawDecoder.mosaic_recipe(&request).unwrap();
-    assert_eq!(recipe, rrrah_decode::NativeCrwDecoder.mosaic_recipe(&request).unwrap());
+    assert_eq!(
+        recipe,
+        rrrah_decode::NativeCrwDecoder.mosaic_recipe(&request).unwrap()
+    );
     let mosaic = rrrah_decode::NativeRawDecoder.decode(&request).unwrap().mosaic;
     let expected_pixels = mosaic.pixels.to_vec(); // Independent test-owned comparison, outside managed root.
     let metadata = mosaic.metadata.clone();

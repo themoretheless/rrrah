@@ -1,7 +1,7 @@
 //! Exact selected-frame candidates indexed by canonical normalized pixels.
 use crate::{
-    decode::{CachedError, decode_snapshot_frame},
     decode::DecodeSourceSnapshot as ContentSnapshot,
+    decode::{CachedError, decode_snapshot_frame},
     exact::SnapshotError,
     raster::{AdapterError, NormalizedRaster},
     scan::{FileIssue, PixelConfirmation, PixelSearchPolicy, ScanError, VisualPolicy, confirm_pixels},

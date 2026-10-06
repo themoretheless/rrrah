@@ -322,8 +322,7 @@ fn raster_queue_admission_accounts_alignment_and_completion_ownership() {
 fn qualified_sd10_linear_raster_full_frame_display_readback() {
     let path = std::env::var_os("RRRAH_X3F_LINEAR_SRGB_ORACLE").expect("qualified linear sRGB fixture");
     let bytes = std::fs::read(path).unwrap();
-    let dimensions = std::env::var("RRRAH_X3F_EXPECTED_DIMENSIONS")
-        .unwrap_or_else(|_| "2267x1513".into());
+    let dimensions = std::env::var("RRRAH_X3F_EXPECTED_DIMENSIONS").unwrap_or_else(|_| "2267x1513".into());
     let (width, height) = dimensions.split_once('x').unwrap();
     let (width, height) = (width.parse::<u32>().unwrap(), height.parse::<u32>().unwrap());
     assert!(width > 32 && height > 32);

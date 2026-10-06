@@ -203,7 +203,7 @@ pub fn confirm_pixels(
     budget: &MemoryBudget,
     cancel: impl Fn() -> bool,
 ) -> Result<PixelConfirmation, ScanError> {
-    use crate::decode::{decode_snapshot_frame, DecodeSourceSnapshot as ContentSnapshot};
+    use crate::decode::{DecodeSourceSnapshot as ContentSnapshot, decode_snapshot_frame};
     let mut requests = std::collections::HashMap::new();
     for (id, request) in files {
         if cancel() {
@@ -363,7 +363,11 @@ pub fn confirm_pixel_groups(
         }
         seen.try_reserve(1).map_err(|_| ScanError::Budget)?;
         seen.insert(*id);
-        match crate::decode::DecodeSourceSnapshot::read(&request.path, policy.fingerprint.max_file_bytes, cancel) {
+        match crate::decode::DecodeSourceSnapshot::read(
+            &request.path,
+            policy.fingerprint.max_file_bytes,
+            cancel,
+        ) {
             Ok(snapshot) => {
                 crate::local::reserve_slot(&mut snapshots, policy.max_files)
                     .map_err(|_| ScanError::Budget)?;

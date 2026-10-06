@@ -155,7 +155,9 @@ impl RawDecoder for NativeRawDecoder {
     fn mosaic_recipe(&self, request: &DecodeRequest) -> Result<MosaicRecipeManifest, DecodeError> {
         request.check_cancelled()?;
         if request.image_index != 0 {
-            return Err(DecodeError::UnsupportedImageIndex { index: request.image_index });
+            return Err(DecodeError::UnsupportedImageIndex {
+                index: request.image_index,
+            });
         }
         dispatch!(NativeFormat::resolve(&request.path)?, mosaic_recipe, request)
     }
@@ -163,7 +165,9 @@ impl RawDecoder for NativeRawDecoder {
     fn decode(&self, request: &DecodeRequest) -> Result<DecodeOutput, DecodeError> {
         request.check_cancelled()?;
         if request.image_index != 0 {
-            return Err(DecodeError::UnsupportedImageIndex { index: request.image_index });
+            return Err(DecodeError::UnsupportedImageIndex {
+                index: request.image_index,
+            });
         }
         dispatch!(NativeFormat::resolve(&request.path)?, decode, request)
     }
@@ -190,12 +194,19 @@ mod tests {
         for extension in ["cr3", "tiff", "nef", "unknown"] {
             let mut request = DecodeRequest::new(format!("/rrrah-absent-cancelled-source.{extension}"));
             request.cancellation = Some(crate::GenerationToken::new(
-                std::sync::Arc::new(std::sync::atomic::AtomicU64::new(2)), 1,
+                std::sync::Arc::new(std::sync::atomic::AtomicU64::new(2)),
+                1,
             ));
             let budget = rrrah_core::MemoryBudget::new(0);
             request.memory_budget = Some(budget.clone());
-            assert!(matches!(NativeRawDecoder.mosaic_recipe(&request), Err(DecodeError::Cancelled)));
-            assert!(matches!(NativeRawDecoder.decode(&request), Err(DecodeError::Cancelled)));
+            assert!(matches!(
+                NativeRawDecoder.mosaic_recipe(&request),
+                Err(DecodeError::Cancelled)
+            ));
+            assert!(matches!(
+                NativeRawDecoder.decode(&request),
+                Err(DecodeError::Cancelled)
+            ));
             assert_eq!(budget.peak(), 0);
         }
     }

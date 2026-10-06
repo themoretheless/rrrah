@@ -3405,10 +3405,14 @@ mod selected_layer_tests {
     #[test]
     fn legacy_grayscale_flatten_preserves_levels_alpha_and_last_owner() {
         for (bytes, expected) in [
-            (include_bytes!("../../../tests/fixtures/xcf/normal-gray-v1.xcf").as_slice(),
-             [17, 17, 17, 255, 239, 239, 239, 255]),
-            (include_bytes!("../../../tests/fixtures/xcf/normal-gray-alpha-v1.xcf").as_slice(),
-             [17, 17, 17, 128, 239, 239, 239, 255]),
+            (
+                include_bytes!("../../../tests/fixtures/xcf/normal-gray-v1.xcf").as_slice(),
+                [17, 17, 17, 255, 239, 239, 239, 255],
+            ),
+            (
+                include_bytes!("../../../tests/fixtures/xcf/normal-gray-alpha-v1.xcf").as_slice(),
+                [17, 17, 17, 128, 239, 239, 239, 255],
+            ),
         ] {
             let budget = rrrah_core::MemoryBudget::new(1024);
             let image = flatten_xcf_legacy_normal(bytes, &budget, || false).unwrap();
@@ -3420,5 +3424,4 @@ mod selected_layer_tests {
             assert_eq!(budget.used(), 0);
         }
     }
-
 }

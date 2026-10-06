@@ -132,7 +132,9 @@ pub fn fit_projective_four(
         }
         let pivot_row = rows[column];
         for (index, row) in rows.iter_mut().enumerate() {
-            if index == column { continue; }
+            if index == column {
+                continue;
+            }
             let factor = row[column];
             for (value, pivot_value) in row.iter_mut().zip(pivot_row).skip(column) {
                 *value -= factor * pivot_value;
@@ -529,38 +531,63 @@ pub fn verify_projective(
             }
         }
     }
-    refine_projective_evidence(points,policy,tolerance2,best,hypotheses,&cancel)
+    refine_projective_evidence(points, policy, tolerance2, best, hypotheses, &cancel)
 }
 
 fn refine_projective_evidence(
-    points:&[Correspondence],policy:GeometryPolicy,tolerance2:f64,
-    mut best:Option<ProjectiveEvidence>,hypotheses:u64,cancel:&impl Fn()->bool,
-)->Result<Option<ProjectiveEvidence>,GeometryError>{
+    points: &[Correspondence],
+    policy: GeometryPolicy,
+    tolerance2: f64,
+    mut best: Option<ProjectiveEvidence>,
+    hypotheses: u64,
+    cancel: &impl Fn() -> bool,
+) -> Result<Option<ProjectiveEvidence>, GeometryError> {
     if cancel() {
         return Err(GeometryError::Cancelled);
     }
     if let Some(previous) = &best {
-        match fit_projective_support(points,&previous.inliers,&cancel) {
+        match fit_projective_support(points, &previous.inliers, &cancel) {
             Ok(transform) => {
                 let mut inliers = Vec::new();
-                inliers.try_reserve_exact(points.len()).map_err(|_| GeometryError::Budget)?;
+                inliers
+                    .try_reserve_exact(points.len())
+                    .map_err(|_| GeometryError::Budget)?;
                 let mut squared_error = 0.0;
-                for (index,point) in points.iter().enumerate() {
-                    if cancel() { return Err(GeometryError::Cancelled); }
-                    let Some(p) = transform.apply(point.source) else { continue; };
-                    let residual = (p[0]-point.target[0]).powi(2)+(p[1]-point.target[1]).powi(2);
-                    if residual.is_finite() && residual<=tolerance2 { inliers.push(index); squared_error+=residual; }
+                for (index, point) in points.iter().enumerate() {
+                    if cancel() {
+                        return Err(GeometryError::Cancelled);
+                    }
+                    let Some(p) = transform.apply(point.source) else {
+                        continue;
+                    };
+                    let residual = (p[0] - point.target[0]).powi(2) + (p[1] - point.target[1]).powi(2);
+                    if residual.is_finite() && residual <= tolerance2 {
+                        inliers.push(index);
+                        squared_error += residual;
+                    }
                 }
-                if squared_error.is_finite() && inliers.len()>=policy.min_inliers && spread(points,&inliers,&cancel)?
-                    && (inliers.len()>previous.inliers.len() || (inliers.len()==previous.inliers.len() && squared_error<previous.squared_error)) {
-                    best = Some(ProjectiveEvidence {transform,inliers,squared_error,hypotheses});
+                if squared_error.is_finite()
+                    && inliers.len() >= policy.min_inliers
+                    && spread(points, &inliers, &cancel)?
+                    && (inliers.len() > previous.inliers.len()
+                        || (inliers.len() == previous.inliers.len()
+                            && squared_error < previous.squared_error))
+                {
+                    best = Some(ProjectiveEvidence {
+                        transform,
+                        inliers,
+                        squared_error,
+                        hypotheses,
+                    });
                 }
             }
-            Err(GeometryError::Invalid) => {},
+            Err(GeometryError::Invalid) => {}
             Err(error) => return Err(error),
         }
     }
-    if cancel() { return Err(GeometryError::Cancelled); }
+    if cancel() {
+        return Err(GeometryError::Cancelled);
+    }
     if let Some(evidence) = &mut best {
         evidence.hypotheses = hypotheses;
     }
@@ -570,55 +597,99 @@ fn refine_projective_evidence(
 // Streaming Givens QR retains only an 8x9 triangular system. Coordinate
 // normalization limits conditioning without forming squared normal equations.
 #[allow(clippy::cast_precision_loss)] // Support count was admitted by max_points.
-fn fit_projective_support(points: &[Correspondence], support: &[usize], cancel: &impl Fn() -> bool)
-    -> Result<ProjectiveTransform, GeometryError> {
+fn fit_projective_support(
+    points: &[Correspondence],
+    support: &[usize],
+    cancel: &impl Fn() -> bool,
+) -> Result<ProjectiveTransform, GeometryError> {
     let support_count = support.len() as f64;
-    let mut center = [[0.0;2];2];
+    let mut center = [[0.0; 2]; 2];
     for &index in support {
-        if cancel() { return Err(GeometryError::Cancelled); }
-        for (side,p) in [points[index].source,points[index].target].iter().enumerate() {
-            for axis in 0..2 { center[side][axis] += p[axis]/support_count; }
+        if cancel() {
+            return Err(GeometryError::Cancelled);
+        }
+        for (side, p) in [points[index].source, points[index].target].iter().enumerate() {
+            for axis in 0..2 {
+                center[side][axis] += p[axis] / support_count;
+            }
         }
     }
-    let mut scale = [0.0_f64;2];
+    let mut scale = [0.0_f64; 2];
     for &index in support {
-        if cancel() { return Err(GeometryError::Cancelled); }
-        for (side,p) in [points[index].source,points[index].target].iter().enumerate() {
-            for axis in 0..2 { scale[side] = scale[side].max((p[axis]-center[side][axis]).abs()); }
+        if cancel() {
+            return Err(GeometryError::Cancelled);
+        }
+        for (side, p) in [points[index].source, points[index].target].iter().enumerate() {
+            for axis in 0..2 {
+                scale[side] = scale[side].max((p[axis] - center[side][axis]).abs());
+            }
         }
     }
-    if scale.iter().any(|v| !v.is_finite() || *v<=0.0) { return Err(GeometryError::Invalid); }
-    let mut qr = [[0.0_f64;9];8];
+    if scale.iter().any(|v| !v.is_finite() || *v <= 0.0) {
+        return Err(GeometryError::Invalid);
+    }
+    let mut qr = [[0.0_f64; 9]; 8];
     for &index in support {
         let point = points[index];
-        let [x,y] = std::array::from_fn(|axis| (point.source[axis]-center[0][axis])/scale[0]);
-        let [u,v] = std::array::from_fn(|axis| (point.target[axis]-center[1][axis])/scale[1]);
-        for mut row in [[x,y,1.0,0.0,0.0,0.0,-u*x,-u*y,u],[0.0,0.0,0.0,x,y,1.0,-v*x,-v*y,v]] {
+        let [x, y] = std::array::from_fn(|axis| (point.source[axis] - center[0][axis]) / scale[0]);
+        let [u, v] = std::array::from_fn(|axis| (point.target[axis] - center[1][axis]) / scale[1]);
+        for mut row in [
+            [x, y, 1.0, 0.0, 0.0, 0.0, -u * x, -u * y, u],
+            [0.0, 0.0, 0.0, x, y, 1.0, -v * x, -v * y, v],
+        ] {
             for column in 0..8 {
-                if cancel() { return Err(GeometryError::Cancelled); }
+                if cancel() {
+                    return Err(GeometryError::Cancelled);
+                }
                 let radius = qr[column][column].hypot(row[column]);
-                if radius == 0.0 { continue; }
-                let cosine = qr[column][column]/radius; let sine = row[column]/radius;
-                for (top,bottom) in qr[column].iter_mut().zip(&mut row).skip(column) {
+                if radius == 0.0 {
+                    continue;
+                }
+                let cosine = qr[column][column] / radius;
+                let sine = row[column] / radius;
+                for (top, bottom) in qr[column].iter_mut().zip(&mut row).skip(column) {
                     let previous = *top;
-                    *top = cosine*previous+sine* *bottom;
-                    *bottom = -sine*previous+cosine* *bottom;
+                    *top = cosine * previous + sine * *bottom;
+                    *bottom = -sine * previous + cosine * *bottom;
                 }
             }
         }
     }
-    let mut solution = [0.0;8];
+    let mut solution = [0.0; 8];
     for row in (0..8).rev() {
-        if cancel() { return Err(GeometryError::Cancelled); }
-        if qr[row][row].abs() < 1e-12 { return Err(GeometryError::Invalid); }
-        solution[row] = (qr[row][8]-(row+1..8).map(|col|qr[row][col]*solution[col]).sum::<f64>())/qr[row][row];
+        if cancel() {
+            return Err(GeometryError::Cancelled);
+        }
+        if qr[row][row].abs() < 1e-12 {
+            return Err(GeometryError::Invalid);
+        }
+        solution[row] =
+            (qr[row][8] - (row + 1..8).map(|col| qr[row][col] * solution[col]).sum::<f64>()) / qr[row][row];
     }
-    let normalized_matrix = [[solution[0],solution[1],solution[2]],[solution[3],solution[4],solution[5]],[solution[6],solution[7],1.0]];
-    let multiply = |a:[[f64;3];3],b:[[f64;3];3]| -> [[f64;3];3] {
-        std::array::from_fn(|i|std::array::from_fn(|j|(0..3).map(|k|a[i][k]*b[k][j]).sum()))
+    let normalized_matrix = [
+        [solution[0], solution[1], solution[2]],
+        [solution[3], solution[4], solution[5]],
+        [solution[6], solution[7], 1.0],
+    ];
+    let multiply = |a: [[f64; 3]; 3], b: [[f64; 3]; 3]| -> [[f64; 3]; 3] {
+        std::array::from_fn(|i| std::array::from_fn(|j| (0..3).map(|k| a[i][k] * b[k][j]).sum()))
     };
-    let matrix = multiply([[scale[1],0.0,center[1][0]],[0.0,scale[1],center[1][1]],[0.0,0.0,1.0]],multiply(normalized_matrix,[[1.0/scale[0],0.0,-center[0][0]/scale[0]],[0.0,1.0/scale[0],-center[0][1]/scale[0]],[0.0,0.0,1.0]]));
-    let transform = ProjectiveTransform {matrix};
+    let matrix = multiply(
+        [
+            [scale[1], 0.0, center[1][0]],
+            [0.0, scale[1], center[1][1]],
+            [0.0, 0.0, 1.0],
+        ],
+        multiply(
+            normalized_matrix,
+            [
+                [1.0 / scale[0], 0.0, -center[0][0] / scale[0]],
+                [0.0, 1.0 / scale[0], -center[0][1] / scale[0]],
+                [0.0, 0.0, 1.0],
+            ],
+        ),
+    );
+    let transform = ProjectiveTransform { matrix };
     transform.inverse()?;
     Ok(transform)
 }
@@ -811,14 +882,13 @@ fn verify_reflected_similarity_selected(
     Ok(evidence.map(|model| model.map(|similarity| ReflectedGeometryEvidence { similarity })))
 }
 
-
 /// Explicit deterministic sampling effort, independent of final pixel admission.
 /// Sampling is approximate and does not certify confidence or exhaustive recovery.
-#[derive(Debug,Clone,Copy)]
+#[derive(Debug, Clone, Copy)]
 pub struct ProjectiveSamplingPolicy {
-    pub trials:u64,
+    pub trials: u64,
     /// Nonzero reproducible xorshift state. No statistical confidence is implied.
-    pub seed:u64,
+    pub seed: u64,
 }
 
 /// Fit projective models from bounded four-point samples, scoring every input.
@@ -829,42 +899,84 @@ pub struct ProjectiveSamplingPolicy {
 /// Invalid/duplicate inputs, invalid sampling, resource refusal or cancellation.
 #[allow(clippy::cast_possible_truncation)] // Draw is reduced below admitted usize length.
 pub fn verify_projective_sampled(
-    points:&[Correspondence],policy:GeometryPolicy,sampling:ProjectiveSamplingPolicy,
-    cancel:impl Fn()->bool,
-)->Result<Option<ProjectiveEvidence>,GeometryError>{
-    let tolerance2=validate(points,policy,&cancel)?;
-    if policy.min_inliers<4 || sampling.trials==0 || sampling.seed==0 {return Err(GeometryError::Invalid);}
-    if sampling.trials>policy.max_hypotheses {return Err(GeometryError::Budget);}
-    if points.len()<4 {return Ok(None);}
-    let mut state=sampling.seed;let mut best:Option<ProjectiveEvidence>=None;
+    points: &[Correspondence],
+    policy: GeometryPolicy,
+    sampling: ProjectiveSamplingPolicy,
+    cancel: impl Fn() -> bool,
+) -> Result<Option<ProjectiveEvidence>, GeometryError> {
+    let tolerance2 = validate(points, policy, &cancel)?;
+    if policy.min_inliers < 4 || sampling.trials == 0 || sampling.seed == 0 {
+        return Err(GeometryError::Invalid);
+    }
+    if sampling.trials > policy.max_hypotheses {
+        return Err(GeometryError::Budget);
+    }
+    if points.len() < 4 {
+        return Ok(None);
+    }
+    let mut state = sampling.seed;
+    let mut best: Option<ProjectiveEvidence> = None;
     for trial in 0..sampling.trials {
-        if cancel(){return Err(GeometryError::Cancelled);}
-        let mut selected=[0usize;4];
+        if cancel() {
+            return Err(GeometryError::Cancelled);
+        }
+        let mut selected = [0usize; 4];
         for i in 0..4 {
-            state^=state<<13;state^=state>>7;state^=state<<17;
-            let remaining=u64::try_from(points.len()-i).map_err(|_|GeometryError::Budget)?;
-            let mut draw=(state%remaining) as usize;
+            state ^= state << 13;
+            state ^= state >> 7;
+            state ^= state << 17;
+            let remaining = u64::try_from(points.len() - i).map_err(|_| GeometryError::Budget)?;
+            let mut draw = (state % remaining) as usize;
             // Map the reduced draw into the complement of sorted prior choices.
             selected[..i].sort_unstable();
-            for previous in &selected[..i] {if draw>=*previous {draw+=1;}}
-            selected[i]=draw;
+            for previous in &selected[..i] {
+                if draw >= *previous {
+                    draw += 1;
+                }
+            }
+            selected[i] = draw;
         }
-        let transform=match fit_projective_four(&selected.map(|i|points[i]),&cancel){
-            Ok(h)=>h,Err(GeometryError::Invalid)=>continue,Err(e)=>return Err(e),
+        let transform = match fit_projective_four(&selected.map(|i| points[i]), &cancel) {
+            Ok(h) => h,
+            Err(GeometryError::Invalid) => continue,
+            Err(e) => return Err(e),
         };
-        let mut inliers=Vec::new();inliers.try_reserve_exact(points.len()).map_err(|_|GeometryError::Budget)?;
-        let mut squared_error=0.0;
-        for (index,point) in points.iter().enumerate(){
-            if cancel(){return Err(GeometryError::Cancelled);}
-            let Some(predicted)=transform.apply(point.source) else {continue;};
-            let residual=(predicted[0]-point.target[0]).powi(2)+(predicted[1]-point.target[1]).powi(2);
-            if residual.is_finite() && residual<=tolerance2 {inliers.push(index);squared_error+=residual;}
+        let mut inliers = Vec::new();
+        inliers
+            .try_reserve_exact(points.len())
+            .map_err(|_| GeometryError::Budget)?;
+        let mut squared_error = 0.0;
+        for (index, point) in points.iter().enumerate() {
+            if cancel() {
+                return Err(GeometryError::Cancelled);
+            }
+            let Some(predicted) = transform.apply(point.source) else {
+                continue;
+            };
+            let residual =
+                (predicted[0] - point.target[0]).powi(2) + (predicted[1] - point.target[1]).powi(2);
+            if residual.is_finite() && residual <= tolerance2 {
+                inliers.push(index);
+                squared_error += residual;
+            }
         }
-        if !squared_error.is_finite(){return Err(GeometryError::Invalid);}
-        if inliers.len()<policy.min_inliers || !spread(points,&inliers,&cancel)? {continue;}
-        if best.as_ref().is_none_or(|old|inliers.len()>old.inliers.len() || (inliers.len()==old.inliers.len() && squared_error<old.squared_error)) {
-            best=Some(ProjectiveEvidence{transform,inliers,squared_error,hypotheses:trial+1});
+        if !squared_error.is_finite() {
+            return Err(GeometryError::Invalid);
+        }
+        if inliers.len() < policy.min_inliers || !spread(points, &inliers, &cancel)? {
+            continue;
+        }
+        if best.as_ref().is_none_or(|old| {
+            inliers.len() > old.inliers.len()
+                || (inliers.len() == old.inliers.len() && squared_error < old.squared_error)
+        }) {
+            best = Some(ProjectiveEvidence {
+                transform,
+                inliers,
+                squared_error,
+                hypotheses: trial + 1,
+            });
         }
     }
-    refine_projective_evidence(points,policy,tolerance2,best,sampling.trials,&cancel)
+    refine_projective_evidence(points, policy, tolerance2, best, sampling.trials, &cancel)
 }

@@ -100,7 +100,14 @@ impl X3fLegacyChannels {
         budget: &rrrah_core::MemoryBudget,
         mut cancelled: impl FnMut() -> bool,
     ) -> Result<rrrah_core::PixelBuffer<i32>, X3fError> {
-        self.process_with_white_balance(calibration, b"Auto", target_from_xyz, area, budget, &mut cancelled)
+        self.process_with_white_balance(
+            calibration,
+            b"Auto",
+            target_from_xyz,
+            area,
+            budget,
+            &mut cancelled,
+        )
     }
     /// Process legacy camera channels using an explicitly selected calibrated WB mode.
     pub fn process_with_white_balance(
@@ -132,7 +139,8 @@ impl X3fLegacyChannels {
         repair_x3f_bad_pixels_from_camf(&mut work, self.width, self.height, calibration, &mut cancelled)?;
         sharpen_x3f_red(&mut work, self.width, self.height, budget, &mut cancelled)?;
         linearize_x3f_highlights_for_mode(&mut work, calibration, mode, &mut cancelled)?;
-        let curves = x3f_noise_curves_for_mode(calibration, mode, transform.luminance, budget, &mut cancelled)?;
+        let curves =
+            x3f_noise_curves_for_mode(calibration, mode, transform.luminance, budget, &mut cancelled)?;
         smooth_x3f_hues(
             &mut work,
             self.width,
@@ -579,17 +587,23 @@ pub fn decode_x3f_legacy(
     for entry in inventory.entries() {
         if let Some(properties) = entry.properties(&mut cancelled)? {
             for (key, value) in properties.entries() {
-                if cancelled() { return Err(X3fError::Cancelled); }
-                if key != b"W\0B\0_\0D\0E\0S\0C\0" { continue; }
+                if cancelled() {
+                    return Err(X3fError::Cancelled);
+                }
+                if key != b"W\0B\0_\0D\0E\0S\0C\0" {
+                    continue;
+                }
                 if length.is_some() || value.is_empty() || value.len() > 128 {
                     return Err(X3fError::Invalid);
                 }
                 for (index, pair) in value.chunks_exact(2).enumerate() {
                     let unit = u16::from_le_bytes(pair.try_into().unwrap());
-                    if unit == 0 || unit > 127 { return Err(X3fError::Invalid); }
+                    if unit == 0 || unit > 127 {
+                        return Err(X3fError::Invalid);
+                    }
                     mode[index] = unit as u8;
                 }
-                length = Some(value.len()/2);
+                length = Some(value.len() / 2);
             }
         }
     }
@@ -661,7 +675,8 @@ fn decode_x3f_legacy_with_mode(
         [-0.5263, 1.4816, 0.017],
         [-0.0112, 0.0183, 0.9113],
     ];
-    let frame = channels.process_with_white_balance(&calibration, mode, target, area, budget, &mut cancelled)?;
+    let frame =
+        channels.process_with_white_balance(&calibration, mode, target, area, budget, &mut cancelled)?;
     drop(channels);
     drop(calibration);
     let output = x3f_linear_output(&frame, target, budget, &mut cancelled)?;
@@ -1213,7 +1228,9 @@ fn x3f_noise_curves_for_mode(
     if cancelled() {
         return Err(X3fError::Cancelled);
     }
-    if !luminance.is_finite() || luminance <= 0.0 { return Err(X3fError::Invalid); }
+    if !luminance.is_finite() || luminance <= 0.0 {
+        return Err(X3fError::Invalid);
+    }
     let mut response = x3f_neutral_response(calibration, mode, &mut cancelled)?;
     let maximum = response.iter().copied().fold(0f32, f32::max);
     for v in &mut response {
@@ -1432,19 +1449,16 @@ fn linearize_x3f_highlights_for_mode(
 ) -> Result<(), X3fError> {
     let neutral = x3f_neutral_response(calibration, mode, &mut cancelled)?;
     let saturation = unique_camf_matrix(calibration, b"SaturationLevel", &mut cancelled)?;
-    if saturation.elements != 3 || saturation.element_type != 0 { return Err(X3fError::Invalid); }
+    if saturation.elements != 3 || saturation.element_type != 0 {
+        return Err(X3fError::Invalid);
+    }
     let mut levels = [0u32; 3];
     for (i, level) in levels.iter_mut().enumerate() {
         *level = u32::from(u16::from_le_bytes(
             saturation.data[i * 2..i * 2 + 2].try_into().unwrap(),
         ));
     }
-    linearize_x3f_highlights(
-        pixels,
-        levels,
-        neutral,
-        &mut cancelled,
-    )
+    linearize_x3f_highlights(pixels, levels, neutral, &mut cancelled)
 }
 
 /// Legacy highlight linearity adjustment using explicit saturation and neutral response.
@@ -1855,7 +1869,9 @@ impl X3fLegacyHuffman<'_> {
         // Offset addition commutes with the row's wrapping predictor. Preserve
         // signed samples until this final scan; clamp only after adding offset.
         for chunk in pixels.chunks_mut(768) {
-            if cancelled() { return Err(X3fError::Cancelled); }
+            if cancelled() {
+                return Err(X3fError::Cancelled);
+            }
             for value in chunk {
                 *value = (*value as i16).wrapping_add(offset).max(0) as u16;
             }
@@ -2309,36 +2325,56 @@ pub fn x3f_neutral_response(
     mode: &[u8],
     mut cancelled: impl FnMut() -> bool,
 ) -> Result<[f32; 3], X3fError> {
-    if cancelled() { return Err(X3fError::Cancelled); }
+    if cancelled() {
+        return Err(X3fError::Cancelled);
+    }
     if mode.is_empty() || mode.len() > 64 || mode.contains(&0) {
         return Err(X3fError::Invalid);
     }
     let mut name = [0u8; 74];
     name[..mode.len()].copy_from_slice(mode);
-    name[mode.len()..mode.len()+10].copy_from_slice(b"RGBNeutral");
-    let name = &name[..mode.len()+10];
+    name[mode.len()..mode.len() + 10].copy_from_slice(b"RGBNeutral");
+    let name = &name[..mode.len() + 10];
     let response = if x3f_block_enabled(bytes, name, &mut cancelled)? {
         let m = unique_camf_matrix(bytes, name, &mut cancelled)?;
-        if m.elements != 3 { return Err(X3fError::Invalid); }
+        if m.elements != 3 {
+            return Err(X3fError::Invalid);
+        }
         [m.float32(0)?, m.float32(1)?, m.float32(2)?]
     } else {
         let xyz = x3f_illuminant_matrix(bytes, mode, &mut cancelled)?;
         let correction = x3f_wb_correction(bytes, mode, &mut cancelled)?;
         let mut combined = [[0f32; 3]; 3];
-        for i in 0..3 { for j in 0..3 { for c in 0..3 {
-            combined[i][j] += correction[i*3+c] * xyz[c*3+j];
-        } } }
+        for i in 0..3 {
+            for j in 0..3 {
+                for c in 0..3 {
+                    combined[i][j] += correction[i * 3 + c] * xyz[c * 3 + j];
+                }
+            }
+        }
         let mut cofactors = [[0f32; 3]; 3];
-        for i in 0..3 { for c in 0..3 {
-            cofactors[c][i] = combined[(i+1)%3][(c+1)%3] * combined[(i+2)%3][(c+2)%3]
-                - combined[(i+1)%3][(c+2)%3] * combined[(i+2)%3][(c+1)%3];
-        } }
-        let determinant = (0..3).map(|c| f64::from(combined[0][c]) * f64::from(cofactors[c][0])).sum::<f64>();
-        if !determinant.is_finite() || determinant == 0.0 { return Err(X3fError::Invalid); }
-        cofactors.map(|row| (f64::from(row[0])*0.3127 + f64::from(row[1])*0.329 + f64::from(row[2])*0.3583) as f32)
+        for i in 0..3 {
+            for c in 0..3 {
+                cofactors[c][i] = combined[(i + 1) % 3][(c + 1) % 3] * combined[(i + 2) % 3][(c + 2) % 3]
+                    - combined[(i + 1) % 3][(c + 2) % 3] * combined[(i + 2) % 3][(c + 1) % 3];
+            }
+        }
+        let determinant = (0..3)
+            .map(|c| f64::from(combined[0][c]) * f64::from(cofactors[c][0]))
+            .sum::<f64>();
+        if !determinant.is_finite() || determinant == 0.0 {
+            return Err(X3fError::Invalid);
+        }
+        cofactors.map(|row| {
+            (f64::from(row[0]) * 0.3127 + f64::from(row[1]) * 0.329 + f64::from(row[2]) * 0.3583) as f32
+        })
     };
-    if response.iter().any(|v| !v.is_finite() || *v <= 0.0) { return Err(X3fError::Invalid); }
-    if cancelled() { return Err(X3fError::Cancelled); }
+    if response.iter().any(|v| !v.is_finite() || *v <= 0.0) {
+        return Err(X3fError::Invalid);
+    }
+    if cancelled() {
+        return Err(X3fError::Cancelled);
+    }
     Ok(response)
 }
 
@@ -2828,74 +2864,141 @@ mod tests {
         let source = std::fs::read(std::env::var_os("RRRAH_X3F_SD14_SOURCE").unwrap()).unwrap();
         let oracle = std::fs::read(std::env::var_os("RRRAH_X3F_SD14_ORACLE").unwrap()).unwrap();
         let inventory = inspect_x3f(&source, || false).unwrap();
-        let sensor = inventory.entries().find(|entry| {
-            entry.image_info().unwrap().is_some_and(|info| info.image_type == 3)
-        }).unwrap();
+        let sensor = inventory
+            .entries()
+            .find(|entry| {
+                entry
+                    .image_info()
+                    .unwrap()
+                    .is_some_and(|info| info.image_type == 3)
+            })
+            .unwrap();
         if std::env::var_os("RRRAH_X3F_SD14_SENSOR_TIMING").is_some() {
             let layout = sensor.legacy_huffman(|| false).unwrap();
             let budget = rrrah_core::MemoryBudget::new(64 * 1024 * 1024);
             let mut times = [Vec::new(), Vec::new()];
             for iteration in 0..11 {
-                for algorithm in if iteration % 2 == 0 { [0,1] } else { [1,0] } {
+                for algorithm in if iteration % 2 == 0 { [0, 1] } else { [1, 0] } {
                     let start = std::time::Instant::now();
                     let result = if algorithm == 0 {
                         decode_two_pass_reference(&layout, &budget, || false)
-                    } else { layout.decode_channels(&budget, || false) }.unwrap();
-                    let elapsed = start.elapsed().as_secs_f64()*1000.0;
-                    assert_eq!(oracle.len(), result.pixels.len()*2);
-                    for (value, expected) in result.pixels.iter().zip(oracle.chunks_exact(2)) {
-                        assert_eq!(*value,u16::from_le_bytes(expected.try_into().unwrap()));
+                    } else {
+                        layout.decode_channels(&budget, || false)
                     }
-                    drop(result); assert_eq!(budget.used(),0);
-                    if iteration >= 2 { times[algorithm].push(elapsed); }
+                    .unwrap();
+                    let elapsed = start.elapsed().as_secs_f64() * 1000.0;
+                    assert_eq!(oracle.len(), result.pixels.len() * 2);
+                    for (value, expected) in result.pixels.iter().zip(oracle.chunks_exact(2)) {
+                        assert_eq!(*value, u16::from_le_bytes(expected.try_into().unwrap()));
+                    }
+                    drop(result);
+                    assert_eq!(budget.used(), 0);
+                    if iteration >= 2 {
+                        times[algorithm].push(elapsed);
+                    }
                 }
             }
             for (name, mut samples) in ["two-pass", "one-pass"].into_iter().zip(times) {
                 samples.sort_by(f64::total_cmp);
-                eprintln!("SD14 sensor {name} p50={:.3} p95={:.3} ms n={} samples={samples:?}", samples[4], samples[8], samples.len());
+                eprintln!(
+                    "SD14 sensor {name} p50={:.3} p95={:.3} ms n={} samples={samples:?}",
+                    samples[4],
+                    samples[8],
+                    samples.len()
+                );
             }
         }
         let budget = rrrah_core::MemoryBudget::new(256 * 1024 * 1024);
-        let channels = sensor.legacy_huffman(|| false).unwrap().decode_channels(&budget, || false).unwrap();
+        let channels = sensor
+            .legacy_huffman(|| false)
+            .unwrap()
+            .decode_channels(&budget, || false)
+            .unwrap();
         assert_eq!((channels.width, channels.height), (2688, 1792));
         assert_eq!(oracle.len(), channels.pixels.len() * 2);
         for (index, (actual, expected)) in channels.pixels.iter().zip(oracle.chunks_exact(2)).enumerate() {
-            assert_eq!(*actual, u16::from_le_bytes(expected.try_into().unwrap()), "SD14 sensor sample {index}");
+            assert_eq!(
+                *actual,
+                u16::from_le_bytes(expected.try_into().unwrap()),
+                "SD14 sensor sample {index}"
+            );
         }
-        eprintln!("SD14 all {} sensor channels exact; offset={}", channels.pixels.len(), channels.legacy_offset);
+        eprintln!(
+            "SD14 all {} sensor channels exact; offset={}",
+            channels.pixels.len(),
+            channels.legacy_offset
+        );
         drop(channels);
         assert_eq!(budget.used(), 0);
         let entry = inventory.entries().find(|entry| &entry.kind == b"CAMF").unwrap();
         let camf = entry.camf().unwrap().unwrap();
         let calibration = camf.decode_type2(&budget, || false).unwrap();
-        eprintln!("SD14 CAMF bytes={} AutoRGBNeutral enabled={:?}", calibration.len(), x3f_block_enabled(&calibration, b"AutoRGBNeutral", &mut || false));
+        eprintln!(
+            "SD14 CAMF bytes={} AutoRGBNeutral enabled={:?}",
+            calibration.len(),
+            x3f_block_enabled(&calibration, b"AutoRGBNeutral", &mut || false)
+        );
         if let Some(folder) = std::env::var_os("RRRAH_X3F_SD14_NEUTRAL_ORACLES") {
-            for mode in ["Auto", "Custom", "Sunlight", "Shade", "Overcast", "Incandescent", "Fluorescent", "Flash"] {
-                let oracle = std::fs::read(std::path::PathBuf::from(&folder).join(format!("{mode}.bin"))).unwrap();
+            for mode in [
+                "Auto",
+                "Custom",
+                "Sunlight",
+                "Shade",
+                "Overcast",
+                "Incandescent",
+                "Fluorescent",
+                "Flash",
+            ] {
+                let oracle =
+                    std::fs::read(std::path::PathBuf::from(&folder).join(format!("{mode}.bin"))).unwrap();
                 assert_eq!(oracle.len(), 12);
                 let response = x3f_neutral_response(&calibration, mode.as_bytes(), || false).unwrap();
                 for (actual, expected) in response.iter().zip(oracle.chunks_exact(4)) {
-                    assert_eq!(actual.to_bits(), f32::from_le_bytes(expected.try_into().unwrap()).to_bits(), "SD14 neutral {mode}");
+                    assert_eq!(
+                        actual.to_bits(),
+                        f32::from_le_bytes(expected.try_into().unwrap()).to_bits(),
+                        "SD14 neutral {mode}"
+                    );
                 }
                 eprintln!("SD14 calibrated neutral {mode} exact: {response:?}");
             }
             assert!(x3f_neutral_response(&calibration, b"Unknown", || false).is_err());
-            assert!(matches!(x3f_neutral_response(&calibration, b"Auto", || true), Err(X3fError::Cancelled)));
+            assert!(matches!(
+                x3f_neutral_response(&calibration, b"Auto", || true),
+                Err(X3fError::Cancelled)
+            ));
         }
         if let Some(path) = std::env::var_os("RRRAH_X3F_SD14_LINEAR_ORACLE") {
             let processing_budget = rrrah_core::MemoryBudget::new(256 * 1024 * 1024);
-            let channels = sensor.legacy_huffman(|| false).unwrap().decode_channels(&processing_budget, || false).unwrap();
-            let target = [[1.4032, -0.2231, -0.1016], [-0.5263, 1.4816, 0.017], [-0.0112, 0.0183, 0.9113]];
+            let channels = sensor
+                .legacy_huffman(|| false)
+                .unwrap()
+                .decode_channels(&processing_budget, || false)
+                .unwrap();
+            let target = [
+                [1.4032, -0.2231, -0.1016],
+                [-0.5263, 1.4816, 0.017],
+                [-0.0112, 0.0183, 0.9113],
+            ];
             let area = [24, 16, 2663, 1773];
             let mode = std::env::var("RRRAH_X3F_SD14_WB").unwrap_or_else(|_| "Auto".into());
-            let processed = channels.process_with_white_balance(&calibration, mode.as_bytes(), target, area, &processing_budget, || false).unwrap();
+            let processed = channels
+                .process_with_white_balance(
+                    &calibration,
+                    mode.as_bytes(),
+                    target,
+                    area,
+                    &processing_budget,
+                    || false,
+                )
+                .unwrap();
             drop(channels);
             let linear = x3f_linear_output(&processed, target, &processing_budget, || false).unwrap();
             drop(processed);
             let expected = std::fs::read(path).unwrap();
             let header = b"P6\n2639 1757\n65535\n";
             assert!(expected.starts_with(header));
-            assert_eq!(expected.len()-header.len(), linear.len()*2);
+            assert_eq!(expected.len() - header.len(), linear.len() * 2);
             let mut differences = 0usize;
             let mut max_difference = 0u16;
             for (actual, expected) in linear.iter().zip(expected[header.len()..].chunks_exact(2)) {
@@ -2903,16 +3006,23 @@ mod tests {
                 differences += usize::from(*actual != expected);
                 max_difference = max_difference.max(actual.abs_diff(expected));
             }
-            eprintln!("SD14 {mode} full linear channels mismatches={differences} max difference={max_difference}");
+            eprintln!(
+                "SD14 {mode} full linear channels mismatches={differences} max difference={max_difference}"
+            );
             assert_eq!(differences, 0);
             if mode == "Sunlight" {
-                let mut request = crate::DecodeRequest::new(std::path::PathBuf::from(std::env::var_os("RRRAH_X3F_SD14_SOURCE").unwrap()));
+                let mut request = crate::DecodeRequest::new(std::path::PathBuf::from(
+                    std::env::var_os("RRRAH_X3F_SD14_SOURCE").unwrap(),
+                ));
                 request.memory_budget = Some(processing_budget.clone());
                 let raster = crate::decode_raster(&request).unwrap();
-                assert_eq!((raster.width(), raster.height()), (2639,1757));
-                let rrrah_core::RasterPixels::Rgba16(values) = raster.pixels() else { panic!("precision") };
+                assert_eq!((raster.width(), raster.height()), (2639, 1757));
+                let rrrah_core::RasterPixels::Rgba16(values) = raster.pixels() else {
+                    panic!("precision")
+                };
                 for (actual, expected) in values.chunks_exact(4).zip(linear.chunks_exact(3)) {
-                    assert_eq!(&actual[..3], expected); assert_eq!(actual[3],65535);
+                    assert_eq!(&actual[..3], expected);
+                    assert_eq!(actual[3], 65535);
                 }
                 drop(raster);
                 eprintln!("SD14 public raster selected Sunlight matches complete independent output");
@@ -2924,31 +3034,50 @@ mod tests {
         assert_eq!(budget.used(), 0);
         let property_entry = inventory.entries().find(|entry| &entry.kind == b"PROP").unwrap();
         let properties = property_entry.properties(|| false).unwrap().unwrap();
-        let (key, value) = properties.entries().find(|(key, _)| *key == b"W\0B\0_\0D\0E\0S\0C\0").unwrap();
+        let (key, value) = properties
+            .entries()
+            .find(|(key, _)| *key == b"W\0B\0_\0D\0E\0S\0C\0")
+            .unwrap();
         let key_offset = key.as_ptr() as usize - source.as_ptr() as usize;
         let value_offset = value.as_ptr() as usize - source.as_ptr() as usize;
-        for (offset, changed) in [(key_offset, b'X'), (value_offset+1, 0x80)] {
-            let mut invalid = source.clone(); invalid[offset] = changed;
+        for (offset, changed) in [(key_offset, b'X'), (value_offset + 1, 0x80)] {
+            let mut invalid = source.clone();
+            invalid[offset] = changed;
             let tiny = rrrah_core::MemoryBudget::new(1);
-            assert!(matches!(decode_x3f_legacy(&invalid, &tiny, || false), Err(X3fError::Invalid)));
+            assert!(matches!(
+                decode_x3f_legacy(&invalid, &tiny, || false),
+                Err(X3fError::Invalid)
+            ));
             assert_eq!(tiny.peak(), 0);
         }
         let mut duplicate = source.clone();
         let count = word(property_entry.bytes, 8) as usize;
-        let strings_offset = property_entry.offset as usize + 24 + count*8;
-        let wb_index = ((key_offset-strings_offset)/2) as u32;
-        let table_offset = property_entry.offset as usize+24;
-        duplicate[table_offset..table_offset+4].copy_from_slice(&wb_index.to_le_bytes());
+        let strings_offset = property_entry.offset as usize + 24 + count * 8;
+        let wb_index = ((key_offset - strings_offset) / 2) as u32;
+        let table_offset = property_entry.offset as usize + 24;
+        duplicate[table_offset..table_offset + 4].copy_from_slice(&wb_index.to_le_bytes());
         let tiny = rrrah_core::MemoryBudget::new(1);
-        assert!(matches!(decode_x3f_legacy(&duplicate, &tiny, || false), Err(X3fError::Invalid)));
+        assert!(matches!(
+            decode_x3f_legacy(&duplicate, &tiny, || false),
+            Err(X3fError::Invalid)
+        ));
         assert_eq!(tiny.peak(), 0);
-        let mut unknown = source.clone(); unknown[value_offset] = b'X';
-        assert!(matches!(decode_x3f_legacy(&unknown, &budget, || false), Err(X3fError::Invalid)));
+        let mut unknown = source.clone();
+        unknown[value_offset] = b'X';
+        assert!(matches!(
+            decode_x3f_legacy(&unknown, &budget, || false),
+            Err(X3fError::Invalid)
+        ));
         assert_eq!(budget.used(), 0);
-        assert!(matches!(decode_x3f_legacy(&source, &budget, || true), Err(X3fError::Cancelled)));
-        eprintln!("SD14 missing duplicate non-ASCII unknown WB and cancellation refuse without fallback or retained memory");
+        assert!(matches!(
+            decode_x3f_legacy(&source, &budget, || true),
+            Err(X3fError::Cancelled)
+        ));
+        eprintln!(
+            "SD14 missing duplicate non-ASCII unknown WB and cancellation refuse without fallback or retained memory"
+        );
         let raster = decode_x3f_legacy_auto(&source, &budget, || false).unwrap();
-        assert_eq!((raster.width(), raster.height()), (2639,1757));
+        assert_eq!((raster.width(), raster.height()), (2639, 1757));
         drop(raster);
         assert_eq!(budget.used(), 0);
         eprintln!("SD14 explicit Auto container opening succeeds; all leases released");
@@ -3869,8 +3998,14 @@ mod tests {
             std::fs::read(std::env::var_os("RRRAH_X3F_CAMF_ORACLE").expect("RRRAH_X3F_CAMF_ORACLE")).unwrap();
         assert_eq!(&*calibration, &oracle[..]);
         let embedded = unique_camf_matrix(&calibration, b"AutoRGBNeutral", || false).unwrap();
-        assert_eq!(x3f_neutral_response(&calibration, b"Auto", || false).unwrap(),
-                   [embedded.float32(0).unwrap(), embedded.float32(1).unwrap(), embedded.float32(2).unwrap()]);
+        assert_eq!(
+            x3f_neutral_response(&calibration, b"Auto", || false).unwrap(),
+            [
+                embedded.float32(0).unwrap(),
+                embedded.float32(1).unwrap(),
+                embedded.float32(2).unwrap()
+            ]
+        );
         eprintln!("SD10 explicit neutral resolver preserves embedded Auto response exactly");
         let identity = [[1.0f32, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]];
         let transform = x3f_color_transform_auto(&calibration, identity, || false).unwrap();
@@ -4748,7 +4883,9 @@ mod tests {
             }
         }
         for index in 0..missing.len().saturating_sub(23) {
-            if &missing[index..index + 23] == b"WhiteBalanceIlluminants" { missing[index] = b'X'; }
+            if &missing[index..index + 23] == b"WhiteBalanceIlluminants" {
+                missing[index] = b'X';
+            }
         }
         assert!(
             channels
@@ -4895,7 +5032,9 @@ mod tests {
                 (180, "RRRAH_X3F_ROTATED180_ORACLE", (2267, 1513)),
                 (270, "RRRAH_X3F_ROTATED270_ORACLE", (1513, 2267)),
             ] {
-                let Some(path) = std::env::var_os(variable) else { continue };
+                let Some(path) = std::env::var_os(variable) else {
+                    continue;
+                };
                 let mut rotated_source = bytes.clone();
                 rotated_source[36..40].copy_from_slice(&degrees.to_le_bytes());
                 let rotated = decode_x3f_legacy_auto(&rotated_source, &budget, || false).unwrap();
@@ -5041,16 +5180,23 @@ mod tests {
         wrapping[16..20].copy_from_slice(&2u32.to_le_bytes());
         wrapping[28..30].copy_from_slice(&(-32760i16).to_le_bytes());
         wrapping[30..32].copy_from_slice(&5i16.to_le_bytes());
-        wrapping[6172..6174].copy_from_slice(&[0x5c,0x5c]);
+        wrapping[6172..6174].copy_from_slice(&[0x5c, 0x5c]);
         let budget = rrrah_core::MemoryBudget::new(4096);
         let layout = entry(&wrapping).legacy_huffman(|| false).unwrap();
         let result = layout.decode_channels(&budget, || false).unwrap();
-        assert_eq!(result.legacy_offset,32760);
-        assert_eq!(&*result.pixels,&[0,32765,0,5,0,5,0,32765,0,5,0,5]);
-        drop(result); assert_eq!(budget.used(),0);
+        assert_eq!(result.legacy_offset, 32760);
+        assert_eq!(&*result.pixels, &[0, 32765, 0, 5, 0, 5, 0, 32765, 0, 5, 0, 5]);
+        drop(result);
+        assert_eq!(budget.used(), 0);
         wrapping[28..30].copy_from_slice(&i16::MIN.to_le_bytes());
-        assert!(entry(&wrapping).legacy_huffman(|| false).unwrap().decode_channels(&budget,||false).is_err());
-        assert_eq!(budget.used(),0);
+        assert!(
+            entry(&wrapping)
+                .legacy_huffman(|| false)
+                .unwrap()
+                .decode_channels(&budget, || false)
+                .is_err()
+        );
+        assert_eq!(budget.used(), 0);
         bytes[28..30].copy_from_slice(&(-1i16).to_le_bytes());
         let layout = entry(&bytes).legacy_huffman(|| false).unwrap();
         let budget = rrrah_core::MemoryBudget::new(4096);
