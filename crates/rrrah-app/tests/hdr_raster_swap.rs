@@ -315,6 +315,16 @@ fn corrupt_raster_swap_entries_release_memory_and_allow_replacement() {
 
 #[test]
 fn hdr_raster_swap_preserves_samples_and_linear_metal_output() {
+    qualify_linear_hdr_swap(false);
+}
+
+#[test]
+fn float_rla_swap_preserves_hdr_samples_and_linear_metal_output() {
+    qualify_linear_hdr_swap(true);
+}
+
+fn qualify_linear_hdr_swap(float_rla: bool) {
+    let weight = if float_rla { 32 } else { 16 };
     let instance = common::headless_instance();
     let adapter = match pollster::block_on(common::request_adapter(
         &instance,
@@ -330,13 +340,27 @@ fn hdr_raster_swap_preserves_samples_and_linear_metal_output() {
     eprintln!("HDR raster adapter: {:?}", adapter.get_info());
     let (device, queue) =
         pollster::block_on(adapter.request_device(&wgpu::DeviceDescriptor::default())).unwrap();
-    let gpu_budget = rrrah_core::MemoryBudget::new(16);
+    let gpu_budget = rrrah_core::MemoryBudget::new(weight);
     let mut renderer = rrrah_gpu::RasterRenderer::new_linear_hdr_with_budget(&device, gpu_budget.clone());
-    let budget = rrrah_core::MemoryBudget::new(16);
-    let source = frame(1, vec![4.0, 2.0, -0.5, 1.0])
-        .try_manage_pixels(&budget)
-        .unwrap();
-    assert_eq!(budget.used(), 16);
+    let budget = rrrah_core::MemoryBudget::new(if float_rla { 4096 } else { weight });
+    let source = if float_rla {
+        let path = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+            .join("../../tests/fixtures/raster/rla-float32-le-hdr-oiio.rla");
+        let mut request = rrrah_decode::DecodeRequest::new(path);
+        request.memory_budget = Some(budget.clone());
+        rrrah_decode::decode_rla_float_with_interpretation(
+            &request,
+            rrrah_decode::RlaFloatByteOrder::Little,
+            rrrah_decode::RlaAlphaMode::Straight,
+            RasterColorSpace::LinearSrgb,
+        )
+        .unwrap()
+    } else {
+        frame(1, vec![4.0, 2.0, -0.5, 1.0])
+            .try_manage_pixels(&budget)
+            .unwrap()
+    };
+    assert_eq!(budget.used(), weight);
     let directory = tempfile::tempdir().unwrap();
     let swap: rrrah_cache::RasterSwapCache<u8> = rrrah_cache::ImageSwapCache::new_with_budgets(
         directory.path(),
@@ -346,15 +370,15 @@ fn hdr_raster_swap_preserves_samples_and_linear_metal_output() {
                 max_entries: Some(1),
                 ttl: None,
             },
-            queue_bytes: 16,
+            queue_bytes: weight,
             queue_count: 1,
-            restore_bytes: 16,
+            restore_bytes: weight,
         },
-        rrrah_core::MemoryBudget::new(16),
+        rrrah_core::MemoryBudget::new(weight),
         budget.clone(),
     )
     .unwrap();
-    let mut ram = rrrah_cache::RasterRamCache::new(rrrah_cache::CacheLimits::bytes(16));
+    let mut ram = rrrah_cache::RasterRamCache::new(rrrah_cache::CacheLimits::bytes(weight));
     ram.enable_swap(swap);
     assert!(ram.insert_visible(1, source));
     let lease = ram.get_lease(&1).unwrap();
@@ -367,7 +391,7 @@ fn hdr_raster_swap_preserves_samples_and_linear_metal_output() {
     let swap = ram.swap().unwrap();
     swap.wait_idle().unwrap();
     assert_eq!(budget.used(), 0);
-    let pressure = budget.try_reserve(16).unwrap();
+    let pressure = budget.try_reserve(budget.limit()).unwrap();
     assert!(swap.try_get(&1, || false).is_err());
     assert_eq!(swap.stats().errors, 0);
     drop(pressure);
@@ -376,9 +400,17 @@ fn hdr_raster_swap_preserves_samples_and_linear_metal_output() {
     let RasterPixels::Rgba32Float(samples) = source.pixels() else {
         panic!("HDR sample type changed")
     };
-    assert_eq!(samples.as_slice(), &[4.0, 2.0, -0.5, 1.0]);
+    let expected = if float_rla {
+        vec![4.0, 2.0, -0.5, 1.0, 4.0, 2.0, -0.5, 1.0]
+    } else {
+        vec![4.0, 2.0, -0.5, 1.0]
+    };
+    assert_eq!(
+        samples.iter().map(|v| v.to_bits()).collect::<Vec<_>>(),
+        expected.iter().map(|v: &f32| v.to_bits()).collect::<Vec<_>>()
+    );
     assert!(samples.is_managed());
-    assert_eq!(budget.used(), 16);
+    assert_eq!(budget.used(), weight);
     assert_eq!(swap.stats().writes, 1);
     assert_eq!(swap.stats().reads, 1);
     assert_eq!(swap.stats().errors, 0);
@@ -388,6 +420,11 @@ fn hdr_raster_swap_preserves_samples_and_linear_metal_output() {
     drop(source);
     assert_eq!(budget.used(), 0);
     let mut parameters = view();
+    // Fit leaves a 32-pixel viewport margin; the 2:1 producer fixture needs
+    // zoom four to cover the entire square target, including its top row.
+    if float_rla {
+        parameters.zoom = 4.0;
+    }
     parameters.exposure_stops = 1.0;
     renderer.update_view(&queue, parameters);
     let target = device.create_texture(&wgpu::TextureDescriptor {
@@ -456,7 +493,7 @@ fn hdr_raster_swap_preserves_samples_and_linear_metal_output() {
     }
     drop(mapped);
     readback.unmap();
-    assert_eq!(gpu_budget.used(), 16);
+    assert_eq!(gpu_budget.used(), weight);
     drop(renderer);
     assert_eq!(gpu_budget.used(), 0);
 }
@@ -491,9 +528,50 @@ fn pict_unpacked_xrgb_macos_pixels_survive_swap_pressure_and_metal() {
     }
 }
 
+#[test]
+fn avif_clean_aperture_ram_swap_and_metal_preserve_pixels() {
+    let root = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster");
+    let mut names = vec!["avif-clean-aperture-integer.avif".to_owned()];
+    names.extend((2..=8).map(|i| format!("avif-clean-aperture-orientation-{i}.avif")));
+    for name in names {
+        let path = root.join(&name);
+        let decoded = rrrah_decode::decode_raster(&rrrah_decode::DecodeRequest::new(&path)).unwrap();
+        let dimensions = if name.contains("integer") {
+            (8, 6)
+        } else if ["-5.avif", "-6.avif", "-7.avif", "-8.avif"]
+            .iter()
+            .any(|suffix| name.ends_with(suffix))
+        {
+            (2, 4)
+        } else {
+            (4, 2)
+        };
+        assert_eq!((decoded.width(), decoded.height()), dimensions);
+        assert_eq!(decoded.color_space(), &RasterColorSpace::Srgb);
+        let RasterPixels::Rgba8(pixels) = decoded.pixels() else {
+            panic!()
+        };
+        let oracle = std::fs::read(root.join(format!("{name}.rgba"))).unwrap();
+        assert_eq!(pixels.len(), oracle.len());
+        assert!(pixels.iter().zip(&oracle).all(|(a, b)| a.abs_diff(*b) <= 3));
+        let actual = pixels.to_vec();
+        drop(decoded);
+        qualify_u8_raster_transport(path, 4096, Some(&actual), RasterColorSpace::Srgb);
+    }
+}
+
 fn qualify_pict_transport(path: std::path::PathBuf, limit: u64, oracle: Option<&[u8]>) {
+    qualify_u8_raster_transport(path, limit, oracle, RasterColorSpace::AssumedSrgb);
+}
+
+fn qualify_u8_raster_transport(
+    path: std::path::PathBuf,
+    limit: u64,
+    oracle: Option<&[u8]>,
+    color: RasterColorSpace,
+) {
     let gpu = common::qualification_gpu().expect("actual GPU required");
-    eprintln!("PICT adapter: {}", gpu.adapter_name());
+    eprintln!("Raster transport adapter: {}", gpu.adapter_name());
     let budget = rrrah_core::MemoryBudget::new(limit);
     let mut request = rrrah_decode::DecodeRequest::new(path);
     request.memory_budget = Some(budget.clone());
@@ -507,6 +585,7 @@ fn qualify_pict_transport(path: std::path::PathBuf, limit: u64, oracle: Option<&
         };
         assert_eq!(&**p, oracle);
     }
+    let dimensions = (decoded.width(), decoded.height());
     let weight = decoded.capacity_bytes();
     let expected = decoded.clone();
     let mut ram = rrrah_cache::LeaseCache::new(rrrah_cache::CacheLimits {
@@ -523,7 +602,7 @@ fn qualify_pict_transport(path: std::path::PathBuf, limit: u64, oracle: Option<&
     if oracle.is_some() {
         assert!(
             before.chunks_exact(4).any(|pixel| pixel != &before[..4]),
-            "external PICT GPU frame must contain image detail"
+            "oracle-qualified raster GPU frame must contain image detail"
         );
     }
     drop(prepared);
@@ -564,7 +643,8 @@ fn qualify_pict_transport(path: std::path::PathBuf, limit: u64, oracle: Option<&
     assert!(matches!(swap.try_get(&1,||false),
         Err(rrrah_core::BufferError::Capacity {limit,..}) if limit<=weight));
     let retained = restored.clone();
-    assert_eq!(restored.color_space(), &RasterColorSpace::AssumedSrgb);
+    assert_eq!((restored.width(), restored.height()), dimensions);
+    assert_eq!(restored.color_space(), &color);
     let RasterPixels::Rgba8(p) = restored.pixels() else {
         panic!()
     };

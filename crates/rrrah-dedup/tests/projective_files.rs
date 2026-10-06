@@ -4384,6 +4384,22 @@ fn complementary_collection_keeps_separate_matching_and_nested_source_lifecycle(
         scan_projective_local_collection_roots_complementary(&roots, &traversal, config, &budget, || false)
             .unwrap();
     assert_eq!(recursive.files.len(), 3);
+    let first = recursive
+        .files
+        .iter()
+        .find(|(_, path)| path.ends_with("a/deep/a.png"))
+        .unwrap()
+        .0;
+    let second = recursive
+        .files
+        .iter()
+        .find(|(_, path)| path.ends_with("b/deep/b.png"))
+        .unwrap()
+        .0;
+    assert_eq!(
+        accepted(&recursive.indexed),
+        BTreeSet::from([(first.min(second), first.max(second))])
+    );
     assert_eq!(
         recursive
             .indexed

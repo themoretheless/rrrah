@@ -1,0 +1,27 @@
+   Compiling rrrah-memory v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-memory)
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+   Compiling rrrah-core v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-core)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `test` profile [optimized + debuginfo] target(s) in 3m 30s
+     Running tests/projective_files.rs (/Users/themoretheless/.codex/tmp/rrrah-dedup-atomic-20261006/target/debug/deps/projective_files-af2b447668e34079)
+
+running 1 test
+test complementary_collection_and_roots_match_direct_without_merged_geometry ... FAILED
+
+failures:
+
+---- complementary_collection_and_roots_match_direct_without_merged_geometry stdout ----
+
+thread 'complementary_collection_and_roots_match_direct_without_merged_geometry' (609698) panicked at crates/rrrah-dedup/tests/projective_files.rs:4444:227:
+assertion `left == right` failed
+  left: {(0, 1)}
+ right: {(1, 2)}
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    complementary_collection_and_roots_match_direct_without_merged_geometry
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 28 filtered out; finished in 13.89s
+
+error: test failed, to rerun pass `-p rrrah-dedup --test projective_files`

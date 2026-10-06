@@ -420,6 +420,12 @@ fn decode_raster_bytes_inner(
         return crate::xpm::decode(&bytes, request);
     }
     let avif_properties = crate::avif_color::properties(&bytes)?;
+    // The container codec rejects essential clap despite our own handling.
+    // Clear only already parsed primary clap associations in the borrowed copy;
+    // the source and all unknown essential properties remain untouched.
+    for &offset in &avif_properties.handled_aperture_associations {
+        bytes[offset] &= 0x7f;
+    }
     let png_color = crate::png_color::declaration(&bytes)?;
     let exr_color = crate::exr_color::declaration(&bytes)?;
     // QOI defines RGB as sRGB (0) or linear sRGB (1), while alpha is always
@@ -539,6 +545,11 @@ fn decode_raster_bytes_inner(
         return Err(RasterDecodeError::InvalidTiffAlpha("missing alpha channel"));
     }
     let (width, height) = decoder.dimensions();
+    let clean_crop = avif_properties
+        .clean_aperture
+        .as_ref()
+        .map(|data| crate::avif_color::crop_rect(data, width, height))
+        .transpose()?;
     let sample_bytes = match decoder.color_type() {
         ColorType::L16 | ColorType::La16 | ColorType::Rgb16 | ColorType::Rgba16 => 2,
         ColorType::Rgb32F | ColorType::Rgba32F => 4,
@@ -553,7 +564,8 @@ fn decode_raster_bytes_inner(
     }
     // Admit final RGBA capacity before the codec allocates its decoded image.
     // Codec scratch and overlapping conversion/orientation buffers are separate.
-    let output_bytes = u64::from(width) * u64::from(height) * 4 * sample_bytes;
+    let (output_width, output_height) = clean_crop.map_or((width, height), |rect| (rect[2], rect[3]));
+    let output_bytes = u64::from(output_width) * u64::from(output_height) * 4 * sample_bytes;
     let output_reservation = request
         .memory_budget
         .as_ref()
@@ -567,6 +579,9 @@ fn decode_raster_bytes_inner(
     let orientation = decoder.orientation()?;
     request.check_cancelled()?;
     let mut image = DynamicImage::from_decoder(decoder)?;
+    if let Some([x, y, width, height]) = clean_crop {
+        image = image.crop_imm(x, y, width, height);
+    }
     image.apply_orientation(orientation);
     // HEIF transforms apply rotation (counterclockwise), then mirroring.
     image = match avif_properties.rotation {

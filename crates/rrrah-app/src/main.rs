@@ -82,26 +82,55 @@ enum RlaAlphaChoice {
     Premultiplied,
 }
 
+#[derive(Debug, Clone, Copy, clap::ValueEnum)]
+enum RlaFloatOrderChoice {
+    Little,
+    Big,
+}
+
+#[derive(Debug, Clone, Copy, clap::ValueEnum)]
+enum RlaColorChoice {
+    Srgb,
+    LinearSrgb,
+}
+
 #[derive(Debug, Clone, Copy)]
 struct RasterInterpretation {
     color: UntaggedColor,
     alpha: Option<rrrah_decode::RlaAlphaMode>,
+    float_order: Option<rrrah_decode::RlaFloatByteOrder>,
+    rla_color: Option<rrrah_decode::RlaColorSpace>,
 }
 impl From<UntaggedColor> for RasterInterpretation {
     fn from(color: UntaggedColor) -> Self {
-        Self { color, alpha: None }
+        Self {
+            color,
+            alpha: None,
+            float_order: None,
+            rla_color: None,
+        }
     }
 }
 impl RasterInterpretation {
     fn apply(self, request: &mut DecodeRequest) {
         self.color.apply(request);
         request.rla_alpha_mode = self.alpha;
+        request.rla_float_byte_order = self.float_order;
+        request.rla_color_space = self.rla_color;
     }
 }
 impl Cli {
     fn raster_interpretation(&self) -> RasterInterpretation {
         RasterInterpretation {
             color: self.untagged_color,
+            rla_color: self.rla_color.map(|color| match color {
+                RlaColorChoice::Srgb => rrrah_decode::RlaColorSpace::Srgb,
+                RlaColorChoice::LinearSrgb => rrrah_decode::RlaColorSpace::LinearSrgb,
+            }),
+            float_order: self.rla_float_byte_order.map(|order| match order {
+                RlaFloatOrderChoice::Little => rrrah_decode::RlaFloatByteOrder::Little,
+                RlaFloatOrderChoice::Big => rrrah_decode::RlaFloatByteOrder::Big,
+            }),
             alpha: self.rla_alpha.map(|value| match value {
                 RlaAlphaChoice::Straight => rrrah_decode::RlaAlphaMode::Straight,
                 RlaAlphaChoice::Premultiplied => rrrah_decode::RlaAlphaMode::Premultiplied,
@@ -116,6 +145,12 @@ struct Cli {
     /// Explicit alpha association for RLA files; omitted leaves ambiguous alpha refused.
     #[arg(long, value_enum, conflicts_with = "inspect")]
     rla_alpha: Option<RlaAlphaChoice>,
+    /// Producer byte order of raw float32 RLA channel records; no automatic guessing.
+    #[arg(long, value_enum, conflicts_with = "inspect")]
+    rla_float_byte_order: Option<RlaFloatOrderChoice>,
+    /// Producer-declared RLA color space; overrides the generic untagged-color setting for RLA.
+    #[arg(long, value_enum, conflicts_with = "inspect")]
+    rla_color: Option<RlaColorChoice>,
     /// Explicit interpretation of raster images without a color profile (viewer only).
     #[arg(long, value_enum, default_value = "strict", conflicts_with = "inspect")]
     untagged_color: UntaggedColor,
@@ -1680,6 +1715,8 @@ type RasterDisplayKey = (
     bool,
     bool,
     Option<rrrah_decode::RlaAlphaMode>,
+    Option<rrrah_decode::RlaFloatByteOrder>,
+    Option<rrrah_decode::RlaColorSpace>,
 );
 type RasterDisplayCache = rrrah_cache::RasterRamCache<RasterDisplayKey>;
 fn raster_cache_with_swap(
@@ -1763,6 +1800,8 @@ fn load_cached_raster_mode(
             request.assume_untagged_srgb,
             request.assume_untagged_linear_srgb,
             request.rla_alpha_mode,
+            request.rla_float_byte_order,
+            request.rla_color_space,
         )
     });
     if let Some(key) = &key {
@@ -4369,6 +4408,171 @@ mod foreground_loader_tests {
         assert_eq!(short.used(), 0);
     }
     #[test]
+    fn rla_linear_color_cli_preserves_hdr_and_separates_cached_transfer() {
+        let path = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+            .join("../../tests/fixtures/raster/rla-float32-le-hdr-oiio.rla");
+        let cli = Cli::try_parse_from([
+            "rrrah",
+            "--rla-color",
+            "linear-srgb",
+            "--rla-float-byte-order",
+            "little",
+            "--rla-alpha",
+            "straight",
+        ])
+        .unwrap();
+        let policy = cli.raster_interpretation();
+        let budget = rrrah_cache::MemoryBudget::new(4096);
+        let mut request = DecodeRequest::new(&path);
+        request.memory_budget = Some(budget.clone());
+        policy.apply(&mut request);
+        assert_eq!(
+            request.rla_color_space,
+            Some(rrrah_decode::RlaColorSpace::LinearSrgb)
+        );
+        let mut cache = RasterDisplayCache::new(rrrah_cache::CacheLimits::bytes(4096));
+        let (linear, _) = load_cached_raster_for_display(&request, None, &mut cache).unwrap();
+        let rrrah_core::RasterPixels::Rgba32Float(pixels) = linear.pixels() else {
+            panic!()
+        };
+        assert_eq!(pixels.as_ref(), &[4.0, 2.0, -0.5, 1.0, 4.0, 2.0, -0.5, 1.0]);
+        request.rla_color_space = Some(rrrah_decode::RlaColorSpace::Srgb);
+        let (encoded, _) = load_cached_raster_for_display(&request, None, &mut cache).unwrap();
+        let rrrah_core::RasterPixels::Rgba32Float(other) = encoded.pixels() else {
+            panic!()
+        };
+        assert_ne!(pixels[0].to_bits(), other[0].to_bits());
+        assert_eq!(cache.len(), 2);
+        request.rla_color_space = Some(rrrah_decode::RlaColorSpace::LinearSrgb);
+        let (hit, _) = load_cached_raster_with(&request, None, &mut cache, || {
+            panic!("linear color must hit its own existing entry")
+        })
+        .unwrap();
+        let rrrah_core::RasterPixels::Rgba32Float(hit_pixels) = hit.pixels() else {
+            panic!()
+        };
+        assert!(pixels.ptr_eq(hit_pixels));
+        drop(hit);
+        let loader = thumbnail_loader_with_cancel(Arc::new(DecodeGate::new()), Some(budget.clone()), policy);
+        let thumbnail = loader(
+            gallery::ThumbnailJob {
+                index: 0,
+                source: path,
+                edge: 32,
+            },
+            GenerationToken::new(Arc::new(AtomicU64::new(1)), 1),
+        )
+        .unwrap();
+        assert_eq!((thumbnail.width, thumbnail.height), (2, 1));
+        drop((thumbnail, linear, encoded, cache));
+        assert_eq!(budget.used(), 0);
+        Cli::try_parse_from(["rrrah"])
+            .unwrap()
+            .raster_interpretation()
+            .apply(&mut request);
+        assert_eq!(request.rla_color_space, None);
+        assert!(Cli::try_parse_from(["rrrah", "--rla-color", "auto"]).is_err());
+    }
+    #[test]
+    fn rla_float_cli_reaches_decode_and_thumbnail_and_clears_defaults() {
+        let path = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+            .join("../../tests/fixtures/raster/rla-float32-le-hdr-oiio.rla");
+        let cli = Cli::try_parse_from([
+            "rrrah",
+            "--rla-float-byte-order",
+            "little",
+            "--rla-alpha",
+            "straight",
+            "--untagged-color",
+            "srgb",
+        ])
+        .unwrap();
+        let policy = cli.raster_interpretation();
+        let budget = rrrah_cache::MemoryBudget::new(4096);
+        let mut request = DecodeRequest::new(&path);
+        request.memory_budget = Some(budget.clone());
+        policy.apply(&mut request);
+        assert_eq!(
+            request.rla_float_byte_order,
+            Some(rrrah_decode::RlaFloatByteOrder::Little)
+        );
+        let (prepared, _) = load_raster_for_display_typed(&request, None).unwrap();
+        assert_eq!((prepared.width(), prepared.height()), (2, 1));
+        drop(prepared);
+        let loader = thumbnail_loader_with_cancel(Arc::new(DecodeGate::new()), Some(budget.clone()), policy);
+        let owner = Arc::new(AtomicU64::new(1));
+        let thumbnail = loader(
+            gallery::ThumbnailJob {
+                index: 0,
+                source: path,
+                edge: 32,
+            },
+            GenerationToken::new(owner, 1),
+        )
+        .unwrap();
+        assert_eq!((thumbnail.width, thumbnail.height), (2, 1));
+        drop(thumbnail);
+        assert_eq!(budget.used(), 0);
+        Cli::try_parse_from(["rrrah"])
+            .unwrap()
+            .raster_interpretation()
+            .apply(&mut request);
+        assert_eq!(request.rla_float_byte_order, None);
+        assert!(load_raster_for_display_typed(&request, None).is_err());
+        assert_eq!(budget.used(), 0);
+        let big = Cli::try_parse_from(["rrrah", "--rla-float-byte-order", "big"]).unwrap();
+        big.raster_interpretation().apply(&mut request);
+        assert_eq!(
+            request.rla_float_byte_order,
+            Some(rrrah_decode::RlaFloatByteOrder::Big)
+        );
+        assert!(Cli::try_parse_from(["rrrah", "--rla-float-byte-order", "native"]).is_err());
+    }
+    #[test]
+    fn rla_float_byte_order_isolated_in_actual_display_cache() {
+        let path = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+            .join("../../tests/fixtures/raster/rla-float32-le-hdr-oiio.rla");
+        let budget = rrrah_cache::MemoryBudget::new(1024 * 1024);
+        let mut request = DecodeRequest::new(path);
+        request.memory_budget = Some(budget.clone());
+        request.assume_untagged_srgb = true;
+        request.rla_alpha_mode = Some(rrrah_decode::RlaAlphaMode::Straight);
+        let mut cache = RasterDisplayCache::new(rrrah_cache::CacheLimits::bytes(4096));
+        request.rla_float_byte_order = Some(rrrah_decode::RlaFloatByteOrder::Little);
+        let (little, _) = load_cached_raster_for_display(&request, None, &mut cache).unwrap();
+        request.rla_float_byte_order = Some(rrrah_decode::RlaFloatByteOrder::Big);
+        let (big, _) = load_cached_raster_for_display(&request, None, &mut cache).unwrap();
+        let rrrah_core::RasterPixels::Rgba32Float(little_pixels) = little.pixels() else {
+            panic!()
+        };
+        let rrrah_core::RasterPixels::Rgba32Float(big_pixels) = big.pixels() else {
+            panic!()
+        };
+        assert_ne!(little_pixels[0].to_bits(), big_pixels[0].to_bits());
+        assert_eq!(cache.len(), 2);
+        request.rla_float_byte_order = None;
+        assert!(load_cached_raster_for_display(&request, None, &mut cache).is_err());
+        for (order, expected) in [
+            (rrrah_decode::RlaFloatByteOrder::Little, &little),
+            (rrrah_decode::RlaFloatByteOrder::Big, &big),
+        ] {
+            request.rla_float_byte_order = Some(order);
+            let (hit, _) = load_cached_raster_with(&request, None, &mut cache, || {
+                panic!("byte-order-specific result must hit its existing cache entry")
+            })
+            .unwrap();
+            let rrrah_core::RasterPixels::Rgba32Float(a) = hit.pixels() else {
+                panic!()
+            };
+            let rrrah_core::RasterPixels::Rgba32Float(b) = expected.pixels() else {
+                panic!()
+            };
+            assert!(a.ptr_eq(b));
+        }
+        drop((little, big, cache));
+        assert_eq!(budget.used(), 0);
+    }
+    #[test]
     fn rla_cache_alpha_policy_cannot_bypass_strict_refusal() {
         let path = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
             .join("../../tests/fixtures/raster/rla-8-c3-a8-mixed1.rla");
@@ -6412,6 +6616,8 @@ mod raster_budget_pressure_tests {
             false,
             false,
             None,
+            None,
+            None,
         );
         let neighbour = (
             PathBuf::from("neighbour"),
@@ -6423,6 +6629,8 @@ mod raster_budget_pressure_tests {
             false,
             false,
             false,
+            None,
+            None,
             None,
         );
         let mut cache = RasterDisplayCache::new(rrrah_cache::CacheLimits::bytes(1024));
@@ -6492,6 +6700,8 @@ mod raster_source_pressure_tests {
             false,
             false,
             None,
+            None,
+            None,
         );
         let neighbour = (
             PathBuf::from("neighbour"),
@@ -6503,6 +6713,8 @@ mod raster_source_pressure_tests {
             false,
             false,
             false,
+            None,
+            None,
             None,
         );
         let mut cache = RasterDisplayCache::new(rrrah_cache::CacheLimits::bytes(budget.limit()));

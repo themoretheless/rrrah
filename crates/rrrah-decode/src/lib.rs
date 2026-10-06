@@ -184,6 +184,10 @@ pub struct DecodeRequest {
     /// Explicit producer-declared alpha association for RLA. None refuses
     /// alpha-bearing RLA; color interpretation remains a separate policy.
     pub rla_alpha_mode: Option<RlaAlphaMode>,
+    /// Explicit byte order of producer-native float RLA records. None refuses float input.
+    pub rla_float_byte_order: Option<RlaFloatByteOrder>,
+    /// Explicit producer color interpretation for RLA, independent of alpha/storage.
+    pub rla_color_space: Option<RlaColorSpace>,
     /// Explicit conventional interpretation for untagged TIFF, PNM, TGA and RLA.
     /// Defaults to false. Embedded ICC and declared color metadata take priority;
     /// unspecified linear/HDR primaries are never overridden by this setting.
@@ -203,6 +207,8 @@ impl DecodeRequest {
             path: path.into(),
             image_index: 0,
             rla_alpha_mode: None,
+            rla_float_byte_order: None,
+            rla_color_space: None,
             assume_untagged_srgb: false,
             assume_untagged_linear_srgb: false,
             cancellation: None,
@@ -423,6 +429,8 @@ mod tests {
         let generation = Arc::new(AtomicU64::new(12));
         let request = DecodeRequest {
             rla_alpha_mode: None,
+            rla_float_byte_order: None,
+            rla_color_space: None,
             path: "does-not-exist.CR3".into(),
             image_index: 0,
             assume_untagged_srgb: false,
@@ -446,7 +454,8 @@ pub use raster_color::{
     prepare_raster_for_display_with_budget_and_cancel,
 };
 pub use rla::{
-    RlaAlphaMode, RlaFloatByteOrder, decode_rla_float_with_interpretation, decode_rla_with_interpretation,
+    RlaAlphaMode, RlaColorSpace, RlaFloatByteOrder, decode_rla_float_with_interpretation,
+    decode_rla_with_interpretation,
 };
 pub use scientific::{ScalarWindow, decode_raster_with_window};
 pub use wal::{decode_wal_with_palette, wal_palette_path};

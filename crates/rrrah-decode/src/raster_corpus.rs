@@ -54,7 +54,7 @@ fn independent_raster_corpus_matches_dimensions_alpha_and_pixels() {
         assert_eq!(budget.used(), 0, "{}", fields[0]);
         count += 1;
     }
-    assert_eq!(count, 150, "corpus coverage changed; inspect the manifest");
+    assert_eq!(count, 158, "corpus coverage changed; inspect the manifest");
 }
 
 #[test]
@@ -623,4 +623,63 @@ fn dcx_selection_under_camera_suffix_preserves_page_metadata() {
     );
     let prepared = crate::prepare_raster_for_display(&frame).unwrap();
     assert_eq!((prepared.image_index(), prepared.image_count()), (1, 2));
+}
+
+#[test]
+fn avif_clean_aperture_file_refusals_release_managed_input_and_output() {
+    use crate::{DecodeRequest, decode_raster, raster::RasterDecodeError};
+    use rrrah_core::MemoryBudget;
+    let original = include_bytes!("../../../tests/fixtures/raster/avif-clean-aperture-integer.avif");
+    let nonce = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .unwrap()
+        .as_nanos();
+    let path = std::env::temp_dir().join(format!(
+        "rrrah-avif-clap-refusals-{}-{nonce}.avif",
+        std::process::id()
+    ));
+    let at = original.windows(4).position(|bytes| bytes == b"clap").unwrap() + 4;
+    let budget = MemoryBudget::new(4096);
+    let mut request = DecodeRequest::new(&path);
+    request.memory_budget = Some(budget.clone());
+    // Zero denominator, fractional width, outside origin, excessive width and
+    // a half-pixel origin: every error must remain typed and release input credit.
+    for (offset, value) in [(4, 0u32), (0, 7), (16, 20), (0, 100), (20, 2)] {
+        let mut invalid = original.to_vec();
+        if offset == 0 && value == 7 {
+            invalid[at + 4..at + 8].copy_from_slice(&2u32.to_be_bytes());
+        }
+        invalid[at + offset..at + offset + 4].copy_from_slice(&value.to_be_bytes());
+        std::fs::write(&path, invalid).unwrap();
+        assert!(matches!(
+            decode_raster(&request),
+            Err(RasterDecodeError::InvalidAvif(_))
+        ));
+        assert_eq!(budget.used(), 0);
+    }
+    let mut unknown = original.to_vec();
+    unknown[at - 4..at].copy_from_slice(b"zzzz");
+    std::fs::write(&path, unknown).unwrap();
+    // A handled clap must not cause unrelated required properties to be ignored.
+    assert!(decode_raster(&request).is_err());
+    assert_eq!(budget.used(), 0);
+    std::fs::write(&path, original).unwrap();
+    let short = MemoryBudget::new(original.len() as u64 + 8 * 6 * 4 - 1);
+    request.memory_budget = Some(short.clone());
+    assert!(matches!(
+        decode_raster(&request),
+        Err(RasterDecodeError::Source(crate::DecodeError::Memory(_)))
+    ));
+    assert_eq!(short.used(), 0);
+    request.memory_budget = Some(budget.clone());
+    let decoded = decode_raster(&request).unwrap();
+    assert_eq!((decoded.width(), decoded.height()), (8, 6));
+    assert_eq!(budget.used(), decoded.capacity_bytes());
+    let alias = decoded.clone();
+    let weight = budget.used();
+    drop(decoded);
+    assert_eq!(budget.used(), weight);
+    drop(alias);
+    assert_eq!(budget.used(), 0);
+    std::fs::remove_file(&path).unwrap();
 }

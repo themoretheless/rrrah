@@ -1,0 +1,34 @@
+{
+  "status": "macos_consolidated_and_linux_preconsolidation_gates_passed",
+  "macos_failed_session": 15707,
+  "macos_failed_exit_code": 101,
+  "failure": "Test compared authored IDs1/2 with traversal IDs0/1; corrected assertion resolves IDs from physical fixture paths.",
+  "macos_session": 50486,
+  "macos_exit_code": 0,
+  "macos_passed_tests": 1,
+  "scope": "Linux file and both collection gates passed, including direct/index/root edges and lifecycle. Redundant collection test consolidated into existing stronger mutation/request-lifecycle test, adding physical-path edge assertion; consolidated test passed on macOS. Independent production collection cohort and full current-tree regression pending.",
+  "files": {
+    "Cargo.lock": "d0999b2b9095148aed051790d4b6deb2820e45b22a479fffe832227dcbf891cb",
+    "crates/rrrah-dedup/src/local_scan.rs": "93a9884124a459eb77448e2e7bb324c3d3030df563ec4b02e634d346c027cff3",
+    "crates/rrrah-dedup/src/local_collection.rs": "a60bb724354dcc6bd80faae5711aa6b51cb3612a771d36284f659e7b49c47e17",
+    "crates/rrrah-dedup/tests/projective_files.rs": "816fe82eae0e4f307b5b070b2fe6006b8194fed646a946017b8e1b61bc1228ec",
+    "scripts/run-dedup-linux-native.sh": "bc135a7da18bd720167a2f66bb6d8edb48090066f68dfcfcdf3dc975fe0345b2"
+  },
+  "linux_attempt": {
+    "exit_code": 1,
+    "failure": "Docker daemon unreachable; no native tests executed.",
+    "log": "docs/research/dedup-complementary-collection-linux.log"
+  },
+  "linux_vm_recovery": {
+    "session": 57141,
+    "exit_code": 0,
+    "scope": "Existing default Colima profile restored after verified stopped state."
+  },
+  "linux_retry_session": 98985,
+  "positive_resume_session": 89780,
+  "linux_retry_exit_code": 0,
+  "linux_retry_passed_tests": 3,
+  "macos_consolidated_session": 7053,
+  "macos_consolidated_exit_code": 0,
+  "macos_consolidated_passed_tests": 1
+}

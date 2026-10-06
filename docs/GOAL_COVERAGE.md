@@ -5029,3 +5029,167 @@ research/rla-float-oiio-readback-2026-10-07.log.
 The default route refuses float input without a byte-order contract. Common
 request/CLI/cache-key wiring and float-RLA-specific RAM/swap/Metal/HDR display
 qualification remain unfinished. This does not complete the broader goal.
+
+Float RLA common request/cache identity (2026-10-07): DecodeRequest now exposes
+optional rla_float_byte_order, default None. The common raster decoder forwards
+it alongside explicit alpha and color policy. RasterDisplayKey includes the
+order, preventing prepared display entries from being shared across Little,
+Big or an unspecified request. An actual file/display-cache test creates two
+separate entries for the external float fixture with explicit sRGB assumption
+and straight alpha, checks distinct output bits, requires allocation-identical
+cache hits on repeat, and verifies that None refuses despite both entries.
+Dropping results and cache returns managed memory to zero. Five focused app
+RLA tests passed, zero ignored. Evidence:
+research/rla-float-request-app-2026-10-07.log. This test declares encoded sRGB;
+it does not infer linear color from float storage. CLI byte-order/color controls,
+float-specific swap/GPU qualification and physical HDR presentation remain
+pending.
+
+Float RLA native RAM/swap/linear Metal readback (2026-10-07): shared existing
+HDR transport harness now runs both the synthetic one-pixel source and the
+independent two-pixel float-RLA producer fixture. The float fixture is decoded
+with explicit Little/Straight/LinearSrgb policy, retained under a visible lease,
+then spilled after unpin. Full CPU budget pressure refuses restore without a
+swap corruption error; releasing pressure enables restore. All eight restored
+f32 bits match [4,2,-0.5,1] repeated twice, and RAM memory returns to zero after
+upload/drop. The source GPU texture retains 32 managed bytes until renderer
+drop; this accounting excludes the test target/readback and driver overhead.
+At +1 exposure, every one of 4096 Rgba16Float target pixels equals [8,4,-1,1]
+exactly in binary16. The initial new test used insufficient zoom for the 2:1
+fixture and encountered the expected viewport background; adjusting test
+framing to zoom four made the full target contain image pixels. No renderer
+behavior was changed. Two tests passed, zero ignored, actual Apple M4 Max Metal.
+Evidence: research/float-rla-hdr-swap-metal-2026-10-07.log. Physical HDR display,
+CLI color/byte-order selection, mixed float/integer groups and NVIDIA remain
+pending; offscreen linear readback does not establish physical presentation.
+
+Float RLA application byte-order configuration (2026-10-07): added optional
+--rla-float-byte-order little|big. RasterInterpretation forwards it to requests
+on the foreground, neighbour and thumbnail paths; applying the default policy
+clears a previously selected order rather than retaining stale interpretation.
+A new actual CLI/decode/thumbnail test verifies Little with explicit straight
+alpha and encoded sRGB assumption, default refusal, Big selection, invalid
+native choice refusal, dimensions and released managed memory. Six focused
+app RLA tests passed, zero ignored; research/rla-float-cli-2026-10-07.log.
+Encoded sRGB in this routing test is an explicit test interpretation, not an
+inferred property of float storage. Producer-declared linear color still uses
+the library API; a suitable CLI color option and live presentation remain
+pending. This does not establish physical HDR output or all formats.
+
+Explicit RLA color request/CLI/cache identity (2026-10-07): added optional
+RlaColorSpace::{Srgb,LinearSrgb} to DecodeRequest and --rla-color srgb|linear-srgb.
+The RLA-specific choice takes precedence over the generic untagged policy,
+without inferring linearity from storage; default None retains strict behavior.
+Shared RasterInterpretation carries the choice to foreground, neighbours and
+thumbnails and clears it when default settings are applied. RasterDisplayKey
+includes color alongside alpha and float byte order. Actual common file loading
+with the linear CLI policy preserves all eight HDR f32 values exactly. Choosing
+encoded sRGB creates a distinct prepared cache entry; switching back must reuse
+the same linear pixel allocation. Actual thumbnail loading succeeds under the
+linear policy; final owner drops release managed memory. Seven focused app
+RLA tests passed, zero ignored; research/rla-linear-cli-2026-10-07.log.
+README now documents the producer-declared Little/Straight/LinearSrgb command.
+Physical HDR presentation, producer-wide color/window qualification, mixed
+channel storage, NVIDIA and completion of all 100 formats remain unproven.
+
+Final RLA request/CLI regression sweep (2026-10-07): the full application
+unit suite passed on the final alpha/float-order/color fields and cache identity:
+153 passed, zero failed, 18 external/hardware-dependent tests ignored.
+The decode/cache/memory library sweep passed 780/117/38 respectively, total
+935 passed, zero failed, 47 external decoder tests ignored. Existing two unused
+import warnings in cache container tests remain; this is not a clean Clippy
+claim. Evidence: research/rla-app-full-regression-2026-10-07.log and
+research/rla-library-full-regression-2026-10-07.log. These library/unit suites
+do not replace independent producer qualification, live display, CUDA hardware
+execution or all-format acceptance. Full goal remains incomplete.
+
+AVIF primary clean-aperture implementation (2026-10-07): primary-associated
+clap records now retain their exact 32-byte rationals; duplicate/malformed
+records refuse. Crop conversion uses signed offset numerators and unsigned
+nonzero denominators with i128 arithmetic. Integral positive extents and
+pixel-aligned origins are required without rounding; negative/outside bounds
+refuse. Native selected-image decode applies the admitted crop before image
+orientation/rotation/mirror and admits final RGBA bytes using cropped dimensions.
+Codec scratch remains separate from final-pixel accounting, as before.
+Tests verify integral/reduced fractions, odd-sized images with half offsets,
+negative offsets, bounds/denominator/fractional refusals, primary association
+and duplicate properties. Full decoder suite: 782 passed, zero failed, 47
+external tests ignored; research/avif-clean-aperture-regression-2026-10-07.log.
+Rational convention checked against the primary libavif implementation:
+https://github.com/AOMediaCodec/libavif/blob/main/src/avif.c
+No avifenc executable is available locally. Independently produced cropped
+AVIF pixel oracles, combined transform qualification, RAM/swap/GPU and live
+presentation of this crop path remain pending. Fractional resampling and HDR
+AVIF are still unsupported/unqualified; this is not full AVIF qualification.
+
+AVIF essential clean-aperture coded-pixel qualification (2026-10-07): added
+CC0 avif-clean-aperture-integer.avif on the pinned libavif RGB producer, with
+authored essential primary clap/ipma metadata for crop (3,5)-(11,11). Generator
+scripts/generate-avif-crop-fixture.py rewrites only the known fixture layout,
+updates iloc offsets and verifies unchanged independently decoded source pixels.
+Pillow 12.3.0/libavif decodes stored pixels without applying clap; Pillow's crop
+provides the separate 8x6 RGBA oracle. This is not a crop exported by an
+independent producer, nor an independent container crop interpreter.
+The real file exposed mp4parse rejecting essential clap before coded decode.
+After our primary-property parsing, only handled clap association essential
+bits are cleared in the private decode buffer. Source bytes, offsets, unknown
+required properties and our explicit crop interpretation remain intact. The
+native crop now passes dimensions, alpha/pixel tolerance <=3, file SHA256,
+managed output ownership and final reservation release in the shared corpus.
+Corpus now has 151 admitted cases; its fixed coverage count was updated from
+150 after all pixel checks passed. Full decoder regression: 782 passed, zero
+failed, 47 external tests ignored. Evidence: research/avif-crop-pixel-regression-2026-10-07.log
+and research/avif-crop-generation-2026-10-07.log.
+Independent producer clap/transform interpretation, broader rational/resampling
+cases, cropped-image RAM/swap/GPU and physical presentation remain pending.
+
+Cropped AVIF RAM/swap/Metal transport (2026-10-07): added actual cropped
+container test in hdr_raster_swap. Native 8x6 sRGB pixels are compared with the
+independent stored-pixel/Pillow-crop oracle, tolerance <=3. Shared managed U8
+transport harness verifies leased eviction refusal, physical streamed swap,
+root memory-pressure restore refusal followed by successful retry, local restore
+cap binding while the parent has space, exact retained pixels/dimensions/color,
+nonuniform Metal frame and whole-frame equality before/after restore. Aliases
+retain reservation until final drop, then root memory is zero; second restore
+also succeeds after release. Actual adapter: Metal Apple M4 Max.
+The shared harness preserves existing PICT expected color and adds explicit
+restored dimensions. Focused cropped AVIF passes; full HDR/raster-swap suite
+passes eight tests with one external PICT ignored. Evidence:
+research/avif-crop-swap-metal-2026-10-07.log and
+research/avif-crop-swap-suite-2026-10-07.log. Independent producer transform
+interpretation, combined crop/orientation, fractional resampling and physical
+presentation remain pending. This does not establish full AVIF qualification.
+
+Combined AVIF crop/orientation transport (2026-10-07): expanded the fixture
+writer with seven crops on the committed libavif orientation-2..8 sources.
+Authored essential clap is associated after ispe and before rotation/mirror;
+initial insertion before ispe was correctly refused by the container codec and
+was fixed in the fixture writer, without relaxing parser strictness. Source
+coded pixels stay unchanged. Independent Pillow stored pixels are cropped
+before ImageOps.exif_transpose; expected final dimensions are 4x2 or 2x4.
+The full shared pixel corpus now has 158 cases and passes dimensions, SHA256,
+alpha/pixel tolerance <=3, managed ownership and final memory release.
+The actual RAM/swap/Metal integration covers all eight cropped sources, including
+visible lease protection, parent pressure retry, local restore cap, exact native
+pixels/dimensions/color, source-dependent nonuniform whole frame preservation,
+alias credit retention and repeat restoration. One integration test with eight
+cases passes, zero ignored, actual Apple M4 Max Metal. Evidence:
+research/avif-crop-orientation-pixels-2026-10-07.log and
+research/avif-crop-orientation-metal-2026-10-07.log; fixture generation observation:
+research/avif-crop-orientation-generation-2026-10-07.log.
+Crop metadata is authored; independent exported crop producer, fractional
+resampling, HDR/sequence and physical display qualification remain pending.
+
+Actual AVIF clean-aperture refusal/memory test (2026-10-07): mutated the
+committed cropped container through its public file decoder. Zero denominator,
+fractional width, out-of-bounds offset/extent and half-pixel origin return typed
+InvalidAvif and release all managed input/output credit. Replacing the essential
+clap property with unknown zzzz refuses, proving handled-clap normalization does
+not silently admit another mandatory property. One-byte-short input-plus-final
+output budget returns typed memory refusal with zero retained credit. Retrying
+the valid source succeeds at 8x6; only final raster capacity remains charged,
+and an alias retains credit until the final owner drops. This accounting covers
+managed input/final pixels, not codec scratch. One focused test passed, zero
+ignored; research/avif-crop-refusals-2026-10-07.log. Broader invalid-property
+combinations, independent producer crops and all-format qualification remain
+pending.

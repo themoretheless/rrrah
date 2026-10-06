@@ -13,12 +13,14 @@ p.add_argument('manifest', type=pathlib.Path)
 p.add_argument('probe', type=pathlib.Path)
 p.add_argument('report', type=pathlib.Path)
 p.add_argument('--pyramid-file', action='store_true', help='Use the managed public pyramid file API with fixed three-level policy.')
+p.add_argument('--pyramid-blur', action='store_true', help='Use explicit radius3 linear filtering with32m window-work admission; acceptance thresholds unchanged.')
 p.add_argument('--pyramid-collection', action='store_true', help='Use the managed indexed pyramid collection API with the same file policy.')
 p.add_argument('--complementary-file', action='store_true', help='Use both native searches on shared decoded views with cumulative work admission.')
 p.add_argument('--negative-query', help='Compare this strong query against every different original-origin group.')
+p.add_argument('--resume', action='store_true', help='Validate and continue an interrupted checkpoint without discarding executed pairs.')
 a = p.parse_args()
-assert sum([a.pyramid_file,a.pyramid_collection,a.complementary_file])<=1, 'Select one public API mode.'
-use_pyramid=a.pyramid_file or a.pyramid_collection
+assert sum([a.pyramid_file,a.pyramid_collection,a.complementary_file,a.pyramid_blur])<=1, 'Select one public API mode.'
+use_pyramid=a.pyramid_file or a.pyramid_collection or a.pyramid_blur
 use_native=use_pyramid or a.complementary_file
 m = json.loads(a.manifest.read_text())
 assert len(m['positive_pairs']) == m['required_positive_pairs'] == 229
@@ -35,6 +37,9 @@ if use_pyramid:
                       'No oracle geometry. This is copy-origin recovery measurement, not '
                       'full-library qualification or an independent negative precision gate.')
 state['mode'] = 'pyramid_collection' if a.pyramid_collection else 'pyramid_file' if a.pyramid_file else 'portfolio'
+if a.pyramid_blur:
+    state['mode']='pyramid_blur_radius3'
+    state['scope']+=' Explicit radius3 linear windows,32m work cap; same geometry, gain/offset bounds, coverage and residual thresholds. Experimental diagnostic, not a promoted default.'
 if a.complementary_file:
     state['mode']='complementary_file'
     state['scope']='All229 strong-subset publisher-origin pairs through shared-view complementary native file searches with fixed individual acceptance and cumulative work admission. No oracle geometry, no semantic/burst precision or full-copy certificate.'
@@ -50,6 +55,28 @@ if a.negative_query:
     assert len(pairs)==156
     state['required_pairs']=156
     state['scope']=f'One strong query against all156 different publisher-origin groups through fixed public mode {state["mode"]}. Not a general semantic/burst or all-query precision certificate.'
+if a.resume:
+    checkpoint_bytes=a.report.read_bytes()
+    previous=json.loads(checkpoint_bytes)
+    for key in ['manifest_sha256','probe_sha256','required_pairs','mode']:
+        assert previous[key]==state[key], f'Checkpoint {key} does not match requested run.'
+    completed=previous['results']
+    assert len(completed)<=len(pairs) and previous['completed_pairs']==len(completed)
+    for row,pair in zip(completed,pairs):
+        assert row['query_id']==pair['query_id'] and row['label']==pair['label']
+        assert row['status'] in ['ok','error','timeout','process_error']
+        if row['status']=='ok':
+            assert row['returncode']==0 and row['evidence']['status']=='ok'
+            assert isinstance(row['evidence']['candidate'],bool)
+        for side in ['left','right']:
+            value=pair[side]
+            assert hashlib.sha256(pathlib.Path(value['normalized_path']).read_bytes()).hexdigest()==value['normalized_sha256']
+    assert previous['status_counts']==dict(collections.Counter(row['status'] for row in completed))
+    assert previous['candidates']==sum(row.get('evidence',{}).get('candidate',False) for row in completed)
+    state=previous
+    state.pop('status',None)
+    state.setdefault('resume_events',[]).append({'completed_pairs':len(completed),'checkpoint_sha256':hashlib.sha256(checkpoint_bytes).hexdigest(),'reason':'Explicit resume after prior process disappearance; pinned probe, manifest, ordered results and prior inputs validated.'})
+    pairs=pairs[len(completed):]
 for pair in pairs:
     row = {'query_id': pair['query_id'], 'label': pair['label']}
     started = time.monotonic()
@@ -62,7 +89,7 @@ for pair in pairs:
                    pair['left']['normalized_path'], pair['right']['normalized_path'],
                    '1', '0', '0', '0', '1', '0', '0', '0', '1']
         if use_pyramid:
-            command = [str(a.probe.resolve()), '--pyramid-collection-pair' if a.pyramid_collection else '--pyramid-file-pair',
+            command = [str(a.probe.resolve()), '--pyramid-collection-pair' if a.pyramid_collection else '--pyramid-blur-pair' if a.pyramid_blur else '--pyramid-file-pair',
                        pair['left']['normalized_path'], pair['right']['normalized_path']]
         if a.complementary_file:
             command=[str(a.probe.resolve()),'--complementary-file-pair',

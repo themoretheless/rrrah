@@ -594,3 +594,19 @@ Choose `--rla-alpha premultiplied` only for associated-alpha source pixels.
 These independent settings apply to foreground loading, neighbour prefetch
 and thumbnails. Omitting the alpha setting rejects ambiguous alpha-bearing
 RLA, and omitting the color setting keeps untagged color unspecified.
+
+Float RLA producers may store channel records with different byte orders.
+Select the declared producer order with `--rla-float-byte-order little` or
+`--rla-float-byte-order big`, together with the producer's explicit alpha/color
+interpretation. This setting reaches foreground loading, neighbour prefetch
+and thumbnails. The default refuses ambiguous float records. Byte order does
+not declare a transfer function: `--untagged-color srgb` is appropriate only
+for producer-declared encoded sRGB. Producer-declared linear float RLA can be opened with:
+
+```sh
+rrrah --rla-float-byte-order little --rla-alpha straight --rla-color linear-srgb image.rla
+```
+
+`--rla-color srgb` declares encoded sRGB instead. The RLA-specific color choice
+overrides the generic untagged-color policy for RLA and is part of cache identity;
+choose it from the producing pipeline, since float storage does not identify color.

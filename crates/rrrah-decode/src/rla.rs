@@ -38,6 +38,12 @@ pub enum RlaAlphaMode {
     Straight,
     Premultiplied,
 }
+/// Explicit producer color interpretation; float storage alone does not declare linear light.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum RlaColorSpace {
+    Srgb,
+    LinearSrgb,
+}
 /// Float RLA records have producer-dependent byte order; never infer it from values.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum RlaFloatByteOrder {
@@ -88,12 +94,23 @@ pub fn decode_rla_with_interpretation(
     )
 }
 pub(crate) fn decode(b: &[u8], request: &DecodeRequest) -> Result<DecodedRaster, RasterDecodeError> {
-    let color = if request.assume_untagged_srgb {
+    let color = if let Some(color) = request.rla_color_space {
+        match color {
+            RlaColorSpace::Srgb => RasterColorSpace::Srgb,
+            RlaColorSpace::LinearSrgb => RasterColorSpace::LinearSrgb,
+        }
+    } else if request.assume_untagged_srgb {
         RasterColorSpace::AssumedSrgb
     } else {
         RasterColorSpace::Unspecified
     };
-    decode_with_mode(b, request, request.rla_alpha_mode, color)
+    decode_with_settings(
+        b,
+        request,
+        request.rla_alpha_mode,
+        color,
+        request.rla_float_byte_order,
+    )
 }
 fn decode_with_mode(
     b: &[u8],

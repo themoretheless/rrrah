@@ -1,0 +1,43 @@
+{
+  "scope": "Fake probe protocol integration only, not native image recognition. All real input files read-only and hash checked.",
+  "private_fixture_root": "/Users/themoretheless/.codex/tmp/rrrah-dedup-resume-protocol-n11osa2z",
+  "checks": [
+    {
+      "case": "valid_prefix_preserved_and_only_remaining226_executed",
+      "passed": true
+    },
+    {
+      "case": "probe_mismatch",
+      "passed": true,
+      "exit_code": 1
+    },
+    {
+      "case": "manifest_mismatch",
+      "passed": true,
+      "exit_code": 1
+    },
+    {
+      "case": "mode_mismatch",
+      "passed": true,
+      "exit_code": 1
+    },
+    {
+      "case": "ordered_pair_mismatch",
+      "passed": true,
+      "exit_code": 1
+    },
+    {
+      "case": "count_mismatch",
+      "passed": true,
+      "exit_code": 1
+    },
+    {
+      "case": "complete_checkpoint_revalidated_without_new_child_calls",
+      "passed": true
+    },
+    {
+      "case": "all226_child_argument_lists_equal_exact_remaining_ordered_manifest_pairs",
+      "passed": true
+    }
+  ]
+}

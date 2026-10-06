@@ -14,7 +14,7 @@ Reference format inventory: https://imagemagick.org/formats/ (used only as a for
 | 2 | PNG | Raster decode, ICC bytes, sRGB/cICP precedence, straight alpha and 16-bit samples | Pillow CC0 baseline pixel/alpha oracle passes; full variants/color/viewer pending |
 | 3 | GIF | Selected composited RGBA8 frames, delay and repeat metadata; decode stops at selection | Twelve independent Pillow presentations for KEEP/BACKGROUND/PREVIOUS; malformed bounds checked; live playback/full variants pending |
 | 4 | WebP | Still decoder plus selected linear-light animation composition, delays/plays, ICC source color | Sixteen libwebp raw-frame/linear presentation contracts, lossy ALPH and lossless; full variants/live playback pending |
-| 5 | AVIF | dav1d/image first image, ICC retained | RGB/alpha libavif oracles; ICC and NCLX sRGB display checked; HDR/crop/sequence pending |
+| 5 | AVIF | dav1d/image first image, ICC retained; exact pixel-aligned primary clean-aperture crop before transforms | RGB/alpha libavif oracles; ICC and NCLX sRGB display checked; crop rational/association tests and authored essential-clap container with independent stored-pixel crop oracle pass; independent producer transform qualification pending; HDR/fractional crop/sequence pending |
 | 6 | HEIF / HEIC | libheif HEVC primary image; ICC, NCLX sRGB/linear, straight alpha, item transforms and native precision | Four authored lossless pixel oracles and adjacent 12-bit values; other codecs/HDR/sequence/viewer/full qualification pending |
 | 7 | JPEG-XL | jxl-oxide first frame, ICC and native sample precision | libjxl container/codestream alpha oracles; animation/HDR/CMYK/full qualification pending |
 | 8 | TIFF | Raster first-image decoder; qualification pending | Pillow CC0 baseline pixel/alpha oracle passes; full variants/color/viewer pending |
@@ -725,12 +725,11 @@ remain unqualified.
 Float32 RLA gray/RGB (optional float32 matte) is available through
 `decode_rla_float_with_interpretation(request, RlaFloatByteOrder, RlaAlphaMode,
 RasterColorSpace)`. Byte order is explicitly Little/Big; the general route
-continues refusing float records rather than guessing producer byte order.
+requires `DecodeRequest::rla_float_byte_order` for float records rather than guessing producer byte order.
 Raw float channel lengths must equal active width times four; finite RGB values
 including negative and HDR values survive unchanged. Alpha must be finite in
 [0,1]; premultiplied interpretation refuses zero-alpha emission and numeric
 overflow. Working/output pixels share one managed float allocation. A two-pixel
 OpenImageIO-authored little-endian fixture and its independent readback agree
 exactly with native HDR samples; an authored byte-swapped variant verifies Big.
-Common request/CLI/cache-key routing for float byte order and GPU/swap testing
-of this float-RLA path remain pending.
+Common request routing and display-cache byte-order isolation are implemented. Explicit native float-RLA RAM/swap and linear Metal readback are tested against the producer HDR fixture; CLI byte-order selection is available; CLI color selection (`--rla-color srgb|linear-srgb`) is available; physical HDR presentation remains pending.

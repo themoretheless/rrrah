@@ -53,6 +53,8 @@ pub(crate) struct Properties {
     pub color: Option<RasterColorSpace>,
     pub rotation: u8,
     pub mirror: Option<u8>,
+    pub clean_aperture: Option<[u8; 32]>,
+    pub handled_aperture_associations: Vec<usize>,
 }
 
 #[cfg(test)]
@@ -133,13 +135,14 @@ pub(crate) fn properties(bytes: &[u8]) -> Result<Properties, RasterDecodeError> 
             let id = number(&mut b, if full[0] == 0 { 2 } else { 4 })?;
             let count = number(&mut b, 1)?;
             for _ in 0..count {
+                let association_offset = b.as_ptr() as usize - bytes.as_ptr() as usize;
                 let index = number(&mut b, if full[3] & 1 == 0 { 1 } else { 2 })?
                     & if full[3] & 1 == 0 { 127 } else { 32767 };
                 if index > properties.len() as u32 {
                     return Err(invalid("property index outside container"));
                 }
                 if id == primary && index != 0 {
-                    selected.push(index as usize - 1);
+                    selected.push((index as usize - 1, association_offset));
                 }
             }
         }
@@ -147,11 +150,13 @@ pub(crate) fn properties(bytes: &[u8]) -> Result<Properties, RasterDecodeError> 
             return Err(invalid("trailing association bytes"));
         }
     }
+    let mut handled_aperture_associations = Vec::new();
+    let mut clean_aperture = None;
     let mut rotation = None;
     let mut mirror = None;
     let mut color = None;
     let mut icc = None;
-    for index in selected {
+    for (index, association_offset) in selected {
         let (kind, data) = properties[index];
         match &kind {
             b"irot" => {
@@ -164,7 +169,15 @@ pub(crate) fn properties(bytes: &[u8]) -> Result<Properties, RasterDecodeError> 
                     return Err(invalid("invalid or duplicate mirror"));
                 }
             }
-            b"clap" => return Err(invalid("clean-aperture crop is not yet supported")),
+            b"clap" => {
+                let aperture: [u8; 32] = data
+                    .try_into()
+                    .map_err(|_| invalid("invalid clean-aperture length"))?;
+                handled_aperture_associations.push(association_offset);
+                if clean_aperture.replace(aperture).is_some() {
+                    return Err(invalid("duplicate clean aperture"));
+                }
+            }
             _ => {}
         }
         if &kind != b"colr" {
@@ -200,12 +213,114 @@ pub(crate) fn properties(bytes: &[u8]) -> Result<Properties, RasterDecodeError> 
         color: icc.or(color),
         rotation: rotation.unwrap_or(0),
         mirror,
+        clean_aperture,
+        handled_aperture_associations,
     })
+}
+
+/// Exact pixel-aligned clean aperture; rational metadata is never rounded.
+pub(crate) fn crop_rect(data: &[u8; 32], width: u32, height: u32) -> Result<[u32; 4], RasterDecodeError> {
+    let unsigned = |at| u32::from_be_bytes(data[at..at + 4].try_into().unwrap());
+    let axis = |full: u32, at: usize, offset: usize| -> Result<(u32, u32), RasterDecodeError> {
+        let (n, d) = (unsigned(at), unsigned(at + 4));
+        let od = unsigned(offset + 4);
+        if d == 0 || od == 0 || n == 0 || n % d != 0 {
+            return Err(invalid("nonintegral or invalid clean-aperture extent"));
+        }
+        let extent = n / d;
+        if extent > full {
+            return Err(invalid("clean aperture exceeds image"));
+        }
+        let on = i32::from_be_bytes(data[offset..offset + 4].try_into().unwrap());
+        let numerator = i128::from(full - extent) * i128::from(od) + 2 * i128::from(on);
+        let denominator = 2 * i128::from(od);
+        if numerator < 0 || numerator % denominator != 0 {
+            return Err(invalid("nonintegral or negative clean-aperture origin"));
+        }
+        let origin = numerator / denominator;
+        if origin + i128::from(extent) > i128::from(full) {
+            return Err(invalid("clean aperture outside image"));
+        }
+        Ok((origin as u32, extent))
+    };
+    let (x, w) = axis(width, 0, 16)?;
+    let (y, h) = axis(height, 8, 24)?;
+    Ok([x, y, w, h])
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn clean_aperture_follows_primary_association_and_rejects_duplicates() {
+        fn bx(tag: &[u8; 4], payload: &[u8]) -> Vec<u8> {
+            let mut out = ((payload.len() + 8) as u32).to_be_bytes().to_vec();
+            out.extend(tag);
+            out.extend(payload);
+            out
+        }
+        let aperture: Vec<u8> = [4u32, 1, 2, 1, 0, 1, 0, 1]
+            .into_iter()
+            .flat_map(u32::to_be_bytes)
+            .collect();
+        let build = |item: u16, count: u8| {
+            let mut association = vec![0, 0, 0, 0, 0, 0, 0, 1];
+            association.extend(item.to_be_bytes());
+            association.push(count);
+            association.extend(std::iter::repeat_n(1u8, count as usize));
+            let mut iprp = bx(b"ipco", &bx(b"clap", &aperture));
+            iprp.extend(bx(b"ipma", &association));
+            let mut meta = vec![0; 4];
+            meta.extend(bx(b"pitm", &[0, 0, 0, 0, 0, 1]));
+            meta.extend(bx(b"iprp", &iprp));
+            let mut image = bx(b"ftyp", b"avif\0\0\0\0avif");
+            image.extend(bx(b"meta", &meta));
+            image
+        };
+        assert_eq!(
+            properties(&build(1, 1))
+                .unwrap()
+                .clean_aperture
+                .unwrap()
+                .as_slice(),
+            aperture
+        );
+        assert!(properties(&build(2, 1)).unwrap().clean_aperture.is_none());
+        assert!(properties(&build(1, 2)).is_err());
+    }
+    #[test]
+    fn exact_clean_aperture_signed_offsets_and_bounds() {
+        let header = |values: [i64; 8]| {
+            let mut bytes = [0u8; 32];
+            for (slot, value) in bytes.chunks_exact_mut(4).zip(values) {
+                slot.copy_from_slice(&(value as u32).to_be_bytes());
+            }
+            bytes
+        };
+        assert_eq!(
+            crop_rect(&header([4, 1, 2, 1, -1, 1, 0, 1]), 8, 6).unwrap(),
+            [1, 2, 4, 2]
+        );
+        assert_eq!(
+            crop_rect(&header([4, 1, 2, 1, -1, 2, 1, 2]), 7, 5).unwrap(),
+            [1, 2, 4, 2]
+        );
+        assert_eq!(
+            crop_rect(&header([8, 2, 4, 2, 0, 1, 0, 1]), 8, 6).unwrap(),
+            [2, 2, 4, 2]
+        );
+        for values in [
+            [4, 0, 2, 1, 0, 1, 0, 1],
+            [3, 2, 2, 1, 0, 1, 0, 1],
+            [4, 1, 2, 1, 0, 0, 0, 1],
+            [4, 1, 2, 1, -3, 1, 0, 1],
+            [9, 1, 2, 1, 0, 1, 0, 1],
+            [4, 1, 2, 1, 3, 1, 0, 1],
+        ] {
+            assert!(crop_rect(&header(values), 8, 6).is_err());
+        }
+        assert!(crop_rect(&header([4, 1, 2, 1, 0, 1, 0, 1]), 7, 5).is_err());
+    }
     #[test]
     fn primary_color_association_and_icc_precedence() {
         assert_eq!(

@@ -53,11 +53,14 @@ fn main() {
         complementary_file_pair(&arguments[2..]);
         return;
     }
-    if arguments
-        .get(1)
-        .is_some_and(|a| a == "--pyramid-file-pair" || a == "--pyramid-collection-pair")
-    {
-        pyramid_file_pair(&arguments[2..], arguments[1] == "--pyramid-collection-pair");
+    if arguments.get(1).is_some_and(|a| {
+        a == "--pyramid-file-pair" || a == "--pyramid-collection-pair" || a == "--pyramid-blur-pair"
+    }) {
+        pyramid_file_pair(
+            &arguments[2..],
+            arguments[1] == "--pyramid-collection-pair",
+            arguments[1] == "--pyramid-blur-pair",
+        );
         return;
     }
     if arguments.get(1).is_some_and(|a| {
@@ -613,7 +616,7 @@ fn projective_correspondences(args: &[String]) {
     );
 }
 
-fn pyramid_file_pair(args: &[String], collection: bool) {
+fn pyramid_file_pair(args: &[String], collection: bool, blur: bool) {
     use rrrah_dedup::{
         geometry::ProjectiveSamplingPolicy,
         local_scan::{
@@ -642,8 +645,8 @@ fn pyramid_file_pair(args: &[String], collection: bool) {
         photometric,
         filter: ColorFilterPolicy {
             filter: FilterPolicy {
-                radius: 1,
-                max_sample_pairs: 12_000_000,
+                radius: if blur { 3 } else { 1 },
+                max_sample_pairs: if blur { 32_000_000 } else { 12_000_000 },
             },
             color_space: FilterColorSpace::LinearSrgb,
         },

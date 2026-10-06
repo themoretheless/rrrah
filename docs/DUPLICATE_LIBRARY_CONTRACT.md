@@ -104,10 +104,33 @@ rejection, all cumulative refusals before I/O, incompatible decode policy,
 overflow, phase work refusal after a successful pyramid search, memory refusal,
 cancellation, source mutation and retry. Independent print/scan query `200001`
 retains the same pyramid geometry/pixels with registration rejected. The new
-API's all-229 independent run, one-query negative gate and Linux/regression
-qualification are pending; combined collection/root integration remains absent.
+API's earlier 27-test macOS regression and native Linux file gate have complete
+passing test logs; their process handles subsequently disappeared, so process
+exit codes are not claimed. The recovered print/scan query rejects all156
+different publisher-origin groups. The all229 positive run stopped after78
+completed pairs with no process left and resumed after validating pinned
+probe/manifest, ordered prefix outcomes and all prefix input hashes. It now
+completes all229 pairs successfully:26 copies recovered,203 omitted. All
+reported per-family geometry, pixel counts, inlier/correspondence counts and
+decisions exactly match the standalone measurements; all386 inputs revalidate.
+Complementary indexed/root APIs now use merged descriptors only for proposals,
+followed by original independent matching/verification. Their authored macOS
+gate passes direct/index equality, unrelated rejection, nested overlapping
+roots, reversed order, cancellation/retry and phase-budget attribution. Three
+native Linux gates pass. Redundant collection checks were consolidated into
+the stronger source-mutation/request-lifecycle test with an explicit physical
+path edge assertion; that consolidated gate passes on macOS. Independent
+production collection qualification remains pending.
 Evidence: `research/dedup-complementary-files-macos.log` and
-`research/dedup-copydays-complementary-first-pair.json`.
+`research/dedup-copydays-complementary-first-pair.json`,
+`research/dedup-copydays-complementary-negative-state.json`,
+`research/dedup-complementary-collection-state.json`,
+`research/dedup-copydays-complementary-state.json`.
+Checkpoint continuation has a separate fake-probe protocol test: completed
+prefixes are preserved, only remaining pairs execute, completed runs revalidate
+without new child calls, and probe/manifest/mode/order/count mismatches refuse
+before child execution. This is protocol evidence, not image recognition.
+Evidence: `research/dedup-copydays-resume-protocol-adversaries.json`.
 
 Nested recursive visual discovery now has a six-source, 19-file authored gate:
 three copies of each source in separate nested branches plus one corrupt file.
