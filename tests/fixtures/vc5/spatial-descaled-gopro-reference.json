@@ -1,0 +1,20 @@
+{
+  "oracle": "Unchanged GoPro InvertSpatialQuantDescale16s and original horizontal/dequantization helpers",
+  "commit": "446c736a38fb14f51343605c0780d347dc602f89",
+  "prescale": 2,
+  "cases": 32,
+  "samples": 2280,
+  "odd_and_even_output_extents": true,
+  "factors": [
+    1,
+    12,
+    24,
+    96
+  ],
+  "golden_sha256": "db93ece33be96d8f31bdf8bb8be218493fdd49cc62bc77e1597b43fc8bb49d66",
+  "reference_sha256": {
+    "inverse.c": "b861586368f12fd8b2dd09fe6104278cb5072153757e16e861b2e3476795e45b",
+    "spatial-descale-original.inc": "2de72956f5f08c5dd06c672c3a7a58ba6a99558744870fb450ffb593868deafa",
+    "horizontal-descale-original.inc": "a10947be4e767041f88036559d9fce6dde408a62f5917865012582633a43566b"
+  }
+}

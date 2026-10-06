@@ -197,53 +197,107 @@ fn selected_pdf_pages_ram_swap_and_metal_match_opaque_reference() {
 }
 
 #[test]
-fn cairo_pdf_rectangle_matches_poppler_through_ram_swap_and_metal() {
+fn independently_referenced_pdfs_and_profiled_jpegs_match_through_ram_swap_and_metal() {
     let gpu = common::qualification_gpu().expect("actual GPU required");
-    eprintln!("Cairo PDF adapter: {}", gpu.adapter_name());
+    eprintln!("Independent raster adapter: {}", gpu.adapter_name());
     let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/pdf");
-    for (name, width, height) in [
-        ("cairo-rect", 48, 36),
-        ("rotate90", 20, 10),
-        ("geometry-unit", 20, 40),
-    ] {
+    let mut cases: Vec<_> = [
+        ("cairo-rect", "cairo-rect.rgba", 48, 36, 0u8),
+        ("rotate90", "rotate90.rgba", 20, 10, 0),
+        ("geometry-unit", "geometry-unit.rgba", 20, 40, 0),
+        (
+            "gradient-center-strips-cmyk",
+            "cmyk-float-littlecms.rgba",
+            12,
+            8,
+            0,
+        ),
+        ("cmyk-image8", "cmyk-image8-littlecms.rgba", 4721, 1, 1),
+        ("cmyk-app14-profiled", "cmyk-jpeg-app14-littlecms.rgba", 64, 8, 0),
+        ("ycck-app14-profiled", "ycck-jpeg-app14-littlecms.rgba", 64, 8, 0),
+    ].into_iter().map(|(name, golden, width, height, tolerance)|
+        (name.to_owned(), golden.to_owned(), width, height, tolerance)).collect();
+    for kind in ["cmyk", "ycck"] {
+        for orientation in 1..=8 {
+            let name = format!("{kind}-profiled-orientation-{orientation}");
+            let (width, height) = if orientation >= 5 { (13, 17) } else { (17, 13) };
+            cases.push((name.clone(), format!("../raster/{name}.rgba"), width, height, 2));
+        }
+    }
+    for (name, golden_name, width, height, source_tolerance) in cases {
         let directory = tempfile::tempdir().unwrap();
         let budget = rrrah_core::MemoryBudget::new(256 * 1024);
-        let mut request = rrrah_decode::DecodeRequest::new(root.join(format!("{name}.pdf")));
+        let path = if name.contains("profiled") {
+            root.parent().unwrap().join("raster").join(format!("{name}.jpg"))
+        } else {
+            root.join(format!("{name}.pdf"))
+        };
+        let mut request = rrrah_decode::DecodeRequest::new(path);
         request.memory_budget = Some(budget.clone());
         let native = rrrah_decode::decode_raster(&request).unwrap();
         assert_eq!((native.width(), native.height()), (width, height));
-        let reference = std::fs::read(root.join(format!("{name}.rgba"))).unwrap();
+        let reference = std::fs::read(root.join(golden_name)).unwrap();
         let rrrah_core::RasterPixels::Rgba8(values) = native.pixels() else {
             panic!()
         };
-        assert_eq!(&**values, reference.as_slice());
+        assert_eq!(values.len(), reference.len());
+        assert!(
+            values
+                .iter()
+                .zip(&reference)
+                .all(|(a, b)| a.abs_diff(*b) <= source_tolerance)
+        );
         let prepared = rrrah_decode::prepare_raster_for_display_with_budget(&native, Some(&budget)).unwrap();
         let golden = rrrah_core::DecodedRaster::new(
             width,
             height,
-            rrrah_core::RasterPixels::Rgba32Float(
-                std::sync::Arc::new(reference.iter().map(|&v| f32::from(v) / 255.).collect::<Vec<_>>())
-                    .into(),
-            ),
-            rrrah_core::RasterColorSpace::LinearSrgb,
+            rrrah_core::RasterPixels::Rgba8(std::sync::Arc::new(reference).into()),
+            rrrah_core::RasterColorSpace::Srgb,
         )
+        .unwrap()
+        .to_linear_srgb()
         .unwrap();
+        let target = [width.max(96), 64];
         let parameters = rrrah_gpu::ViewParameters {
-            viewport: [96., 64.],
+            viewport: [target[0] as f32, target[1] as f32],
             zoom: 1.,
+            pan: if name == "cmyk-image8" {
+                [0.0, 0.5]
+            } else {
+                [0.0, 0.0]
+            },
             ..Default::default()
         };
-        let expected = gpu.render_raster(&golden, parameters, [96, 64]).pixels;
-        assert_eq!(
-            gpu.render_raster(&prepared, parameters, [96, 64]).pixels,
-            expected
-        );
+        let oracle_frame = gpu.render_raster(&golden, parameters, target).pixels;
+        let expected = gpu.render_raster(&prepared, parameters, target).pixels;
+        // Compare displayed output to the independently converted reference.
+        let max_error = expected
+            .iter()
+            .zip(&oracle_frame)
+            .map(|(a, b)| a.abs_diff(*b))
+            .max()
+            .unwrap();
+        eprintln!("{name}: independent GPU max channel error {max_error}");
+        assert!(max_error <= source_tolerance);
+        if name == "cmyk-image8" {
+            let colors: std::collections::HashSet<_> =
+                expected.chunks_exact(4).map(|p| [p[0], p[1], p[2]]).collect();
+            assert!(
+                colors.len() > 128,
+                "CMYK corpus must actually appear in GPU output"
+            );
+        }
+        if name.contains("profiled") {
+            let colors: std::collections::HashSet<_> =
+                expected.chunks_exact(4).map(|p| [p[0], p[1], p[2]]).collect();
+            assert!(colors.len() >= 8, "JPEG stripes must appear in GPU output");
+        }
         let mut ram =
             rrrah_cache::RasterRamCache::new(rrrah_cache::CacheLimits::bytes(prepared.capacity_bytes()));
         assert!(ram.insert(1u8, prepared.clone()));
         let lease = ram.get_lease(&1).unwrap();
         assert!(ram.set_limits(rrrah_cache::CacheLimits::bytes(0)).is_none());
-        assert_eq!(gpu.render_raster(&lease, parameters, [96, 64]).pixels, expected);
+        assert_eq!(gpu.render_raster(&lease, parameters, target).pixels, expected);
         drop(lease);
         drop(ram);
         for source in [native, prepared] {
@@ -251,7 +305,7 @@ fn cairo_pdf_rectangle_matches_poppler_through_ram_swap_and_metal() {
             let swap: rrrah_cache::RasterSwapCache<u8> = rrrah_cache::ImageSwapCache::new_with_budgets(
                 directory.path(),
                 rrrah_cache::ImageSwapConfig {
-                    limits: rrrah_cache::CacheLimits::bytes(65536),
+                    limits: rrrah_cache::CacheLimits::bytes(256 * 1024),
                     queue_bytes: weight,
                     queue_count: 1,
                     restore_bytes: weight,
@@ -290,7 +344,7 @@ fn cairo_pdf_rectangle_matches_poppler_through_ram_swap_and_metal() {
             }
             let display =
                 rrrah_decode::prepare_raster_for_display_with_budget(&restored, Some(&budget)).unwrap();
-            assert_eq!(gpu.render_raster(&display, parameters, [96, 64]).pixels, expected);
+            assert_eq!(gpu.render_raster(&display, parameters, target).pixels, expected);
             drop((source, restored, display));
         }
         assert_eq!(budget.used(), 0);

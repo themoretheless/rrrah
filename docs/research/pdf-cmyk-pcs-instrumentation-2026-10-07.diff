@@ -1,0 +1,12 @@
+--- /Users/themoretheless/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/moxcms-0.8.1/src/conversions/lut4.rs	2006-07-24 05:21:28
++++ /tmp/rrrah-cmyk-staged-probe/moxcms/src/conversions/lut4.rs	2026-10-07 02:50:12
+@@ -168,6 +168,9 @@
+             dest[1] = pcs_y;
+             dest[2] = pcs_z;
+         }
++        if let Ok(path) = std::env::var("RRRAH_DIAGNOSTIC_PCS_DUMP") {
++            std::fs::write(path, dst.iter().flat_map(|v| v.to_le_bytes()).collect::<Vec<_>>()).unwrap();
++        }
+         Ok(dst)
+     }
+ }

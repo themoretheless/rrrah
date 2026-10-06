@@ -6125,6 +6125,59 @@ mod foreground_loader_tests {
         assert_eq!(root.used(), 0);
     }
     #[test]
+    fn profiled_jpeg_neighbour_windows_preserve_visible_and_respect_count_size_ttl() {
+        let fixtures = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+            .join("../../tests/fixtures/raster");
+        let paths: Vec<_> = (1..=5).map(|i| fixtures.join(format!(
+            "{}-profiled-orientation-{i}.jpg", if i % 2 == 0 { "ycck" } else { "cmyk" }))).collect();
+        let weight = 17 * 13 * 16;
+        for limits in [
+            rrrah_cache::CacheLimits::bytes(weight * 2),
+            rrrah_cache::CacheLimits { max_bytes: weight * 10, max_entries: Some(2), ttl: None },
+        ] {
+            let budget = rrrah_cache::MemoryBudget::new(1024 * 1024);
+            let request_for = |path| {
+                let mut request = DecodeRequest::new(path);
+                request.memory_budget = Some(budget.clone());
+                request
+            };
+            let mut cache = RasterDisplayCache::new(limits);
+            let gate = Arc::new(DecodeGate::new());
+            let visible = request_for(paths[2].clone());
+            let (frame, _) = load_cached_raster_for_display(&visible, None, &mut cache).unwrap();
+            assert_eq!(frame.capacity_bytes(), weight);
+            for direction in [gallery::NavDirection::Forward, gallery::NavDirection::Backward] {
+                let planned = gallery::neighbour_prefetch_paths(&paths, 2, direction,
+                    gallery::PrefetchWindow { behind: 1, ahead: 2 });
+                assert_eq!(planned.len(), 3);
+                assert_eq!(planned[0], paths[if direction == gallery::NavDirection::Forward { 3 } else { 1 }]);
+                for path in planned {
+                    drop(preload_raster(&request_for(path), None, &mut cache, &gate).unwrap());
+                    assert_eq!(cache.len(), 2);
+                    assert_eq!(cache.resident_bytes(), weight * 2);
+                    let (hit, _) = load_cached_raster_with(&visible, None, &mut cache,
+                        || panic!("JPEG prefetch displaced visible image")).unwrap();
+                    let (rrrah_core::RasterPixels::Rgba32Float(a), rrrah_core::RasterPixels::Rgba32Float(b)) =
+                        (frame.pixels(), hit.pixels()) else { panic!() };
+                    assert!(a.ptr_eq(b));
+                }
+            }
+            assert!(cache.set_limits_and_spill(rrrah_cache::CacheLimits {
+                max_bytes: weight * 2, max_entries: Some(2), ttl: Some(Duration::ZERO),
+            }));
+            drop(preload_raster(&request_for(paths[4].clone()), None, &mut cache, &gate).unwrap());
+            cache.spill_expired();
+            assert_eq!(cache.len(), 1);
+            assert_eq!(cache.resident_bytes(), weight);
+            drop(load_cached_raster_with(&visible, None, &mut cache,
+                || panic!("TTL expired pinned JPEG")).unwrap());
+            drop(frame);
+            drop(cache);
+            assert_eq!(budget.used(), 0);
+        }
+    }
+
+    #[test]
     fn raster_prefetch_headroom_preserves_ram_hits_and_recovers_after_pressure() {
         let path = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
             .join("../../tests/fixtures/raster/gif-animation-disposal-3.gif");
@@ -6458,6 +6511,71 @@ mod foreground_loader_tests {
             drop(cache);
             assert_eq!(budget.used(), 0);
         }
+    }
+    #[test]
+    fn queued_navigation_cancels_profiled_jpeg_preload_and_decodes_latest_raster() {
+        let fixtures = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures");
+        let (tx, worker_rx) = bounded(1);
+        let gate = Arc::new(DecodeGate::new());
+        let loader = ForegroundLoader {
+            decode_first: false,
+            automatic_policy: false,
+            flight: Arc::new(std::sync::Mutex::new(None)),
+            tx,
+            pending: worker_rx.clone(),
+            generation: Arc::new(AtomicU64::new(0)),
+            decode_gate: gate.clone(),
+            telemetry: Arc::new(CacheTelemetry::new(true, 4096)),
+            development: None,
+        };
+        let first = loader
+            .submit(fixtures.join("raster/cmyk-profiled-orientation-1.jpg"))
+            .unwrap();
+        let active = worker_rx.try_recv().unwrap();
+        let token = GenerationToken::new(loader.generation.clone(), first);
+        let held = active.foreground.acquire_decode(|| token.is_cancelled()).unwrap();
+        let budget = rrrah_cache::MemoryBudget::new(1024 * 1024);
+        let root = budget.clone();
+        let worker_gate = gate.clone();
+        let stale_token = token.clone();
+        let worker = thread::spawn(move || {
+            let mut request = DecodeRequest::new(active.path);
+            request.memory_budget = Some(root.clone());
+            request.cancellation = Some(stale_token);
+            request.assume_untagged_srgb = true;
+            let mut cache = RasterDisplayCache::new(rrrah_cache::CacheLimits::bytes(root.limit()));
+            let result = preload_raster(&request, None, &mut cache, &worker_gate);
+            assert!(result.is_err());
+            assert_eq!(cache.len(), 0);
+        });
+        loader
+            .submit(fixtures.join("raster/cmyk-profiled-orientation-1.jpg"))
+            .unwrap();
+        loader
+            .submit(fixtures.join("raster/ycck-profiled-orientation-2.jpg"))
+            .unwrap();
+        let latest = loader
+            .submit(fixtures.join("raster/ycck-profiled-orientation-6.jpg"))
+            .unwrap();
+        assert!(token.is_cancelled());
+        drop(held);
+        worker.join().unwrap();
+        assert_eq!(budget.used(), 0);
+        let selected = worker_rx.try_recv().unwrap();
+        assert_eq!(selected.generation, latest);
+        assert!(worker_rx.try_recv().is_err());
+        // Real source decoding and display preparation remain possible after cancellation.
+        drop(selected.foreground);
+        let mut request = DecodeRequest::new(selected.path);
+        request.memory_budget = Some(budget.clone());
+        request.cancellation = Some(GenerationToken::new(loader.generation.clone(), latest));
+        let mut cache = RasterDisplayCache::new(rrrah_cache::CacheLimits::bytes(budget.limit()));
+        let (ready, _) = preload_raster(&request, None, &mut cache, &gate).unwrap();
+        assert_eq!((ready.width(), ready.height()), (13, 17));
+        assert_eq!(ready.color_space(), &rrrah_core::RasterColorSpace::LinearSrgb);
+        drop(ready);
+        drop(cache);
+        assert_eq!(budget.used(), 0);
     }
     #[test]
     fn queued_navigation_cancels_pict_preload_and_decodes_latest_raster() {

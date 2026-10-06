@@ -20,6 +20,8 @@ pub(crate) const MAX_RASTER_BYTES: u64 = 512 * 1024 * 1024;
 
 #[derive(Debug, Error)]
 pub enum RasterDecodeError {
+    #[error("invalid or unsupported JPEG color: {0}")]
+    InvalidJpegColor(&'static str),
     #[error("invalid or unsupported TIFF alpha: {0}")]
     InvalidTiffAlpha(&'static str),
     #[error(transparent)]
@@ -611,7 +613,16 @@ fn decode_raster_bytes_inner(
     };
     let orientation = decoder.orientation()?;
     request.check_cancelled()?;
-    let mut image = DynamicImage::from_decoder(decoder)?;
+    let cmyk = if format == ImageFormat::Jpeg {
+        crate::jpeg_cmyk::decode_profiled(&bytes, profile.as_deref(), width, height, request)?
+    } else {
+        None
+    };
+    let cmyk_converted = cmyk.is_some();
+    let mut image = match cmyk {
+        Some(image) => image,
+        None => DynamicImage::from_decoder(decoder)?,
+    };
     if let Some([x, y, width, height]) = clean_crop {
         image = image.crop_imm(x, y, width, height);
     }
@@ -629,7 +640,9 @@ fn decode_raster_bytes_inner(
         _ => image,
     };
     request.check_cancelled()?;
-    let color_space = if png_color.override_icc {
+    let color_space = if cmyk_converted {
+        RasterColorSpace::Srgb
+    } else if png_color.override_icc {
         png_color.color.unwrap_or(RasterColorSpace::Unspecified)
     } else {
         profile.map_or_else(

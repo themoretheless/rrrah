@@ -1,0 +1,168 @@
+{
+  "source": {
+    "repository": "https://github.com/gopro/gpr",
+    "commit": "446c736a38fb14f51343605c0780d347dc602f89",
+    "path": "data/samples/HERO9/GOPR0002.GPR",
+    "url": "https://raw.githubusercontent.com/gopro/gpr/446c736a38fb14f51343605c0780d347dc602f89/data/samples/HERO9/GOPR0002.GPR",
+    "bytes": 6763778,
+    "sha256": "9249208a3482d6d71d39575210fe19ab3dd737e5e446a4d0718d4bd9d3c4358b"
+  },
+  "structure": {
+    "byte_order": "II",
+    "ifds": [
+      {
+        "offset": 8,
+        "tags": {
+          "256": [
+            5568
+          ],
+          "257": [
+            4176
+          ],
+          "258": [
+            16
+          ],
+          "259": [
+            9
+          ],
+          "262": [
+            32803
+          ],
+          "271": "GoPro",
+          "272": "HERO9 Black",
+          "33421": [
+            2,
+            2
+          ],
+          "33422": "00010102",
+          "50706": "01030000",
+          "50710": "000102",
+          "50714": [
+            [
+              0,
+              256
+            ],
+            [
+              0,
+              256
+            ],
+            [
+              0,
+              256
+            ],
+            [
+              0,
+              256
+            ]
+          ],
+          "50717": [
+            16383
+          ],
+          "50721": [
+            [
+              18331,
+              10000
+            ],
+            [
+              -8166,
+              10000
+            ],
+            [
+              -2478,
+              10000
+            ],
+            [
+              1391,
+              10000
+            ],
+            [
+              8961,
+              10000
+            ],
+            [
+              -367,
+              10000
+            ],
+            [
+              822,
+              10000
+            ],
+            [
+              662,
+              10000
+            ],
+            [
+              2597,
+              10000
+            ]
+          ],
+          "50722": [
+            [
+              10344,
+              10000
+            ],
+            [
+              -4210,
+              10000
+            ],
+            [
+              -620,
+              10000
+            ],
+            [
+              -2315,
+              10000
+            ],
+            [
+              10625,
+              10000
+            ],
+            [
+              1948,
+              10000
+            ],
+            [
+              93,
+              10000
+            ],
+            [
+              1058,
+              10000
+            ],
+            [
+              5541,
+              10000
+            ]
+          ],
+          "50728": [
+            [
+              463768,
+              1000000
+            ],
+            [
+              1000000,
+              1000000
+            ],
+            [
+              565121,
+              1000000
+            ]
+          ],
+          "51009": "0000000400000009010400000000000100000834000000000000000000001060"
+        }
+      }
+    ]
+  },
+  "vc5_tile": {
+    "offset": 14622,
+    "bytes": 6749156,
+    "sha256": "093c2055d8435f7776e415a318226330a22283faa025bfc28967bc562730533b",
+    "first_64_bytes_hex": "56432d35000c0004001415c00015105000540004006a0002006b0002006c00010066000c006d2800bffc0009060a2b3401010105010101201300000000000000"
+  },
+  "native_public_decode": {
+    "command": "RRRAH_RAW_MEMORY_MB=256 cargo run -p rrrah-decode --example raw_fixture_dump --locked --offline --target-dir /tmp/rrrah-required-corpus-target -- SOURCE OUTPUT",
+    "result": "NativeDng(\"DNG Compression 9 is unsupported\")",
+    "qualified": false
+  },
+  "next_required_work": "Native VC-5 entropy/subband inverse wavelet and Bayer reconstruction; full independent sensor oracle before enabling viewer routing"
+}

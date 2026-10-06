@@ -1,0 +1,30 @@
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `dev` profile [optimized + debuginfo] target(s) in 1.58s
+     Running `/tmp/rrrah-required-corpus-target/debug/examples/pdf_cmyk_load_bench tests/fixtures/pdf/cmyk-image8.pdf`
+{
+  "checksum": 12085760,
+  "dimensions": [
+    4721,
+    1
+  ],
+  "first_decode_ms": 3.241958,
+  "iterations_per_repeat": 32,
+  "managed_final_bytes": 0,
+  "managed_peak_bytes": 94420,
+  "repeats": 5,
+  "scope": "Public decoder and display preparation, cached filesystem, no GPU rendering; first decode includes first-use ICC initialization, not disk-cold I/O",
+  "warm_decode_ms": [
+    0.24872403125000006,
+    0.24273831250000003,
+    0.24900912499999994,
+    0.24944403125,
+    0.24412493750000003
+  ],
+  "warm_prepare_ms": [
+    0.018149749999999996,
+    0.017779874999999997,
+    0.017226468749999998,
+    0.017179656249999998,
+    0.01714709375
+  ]
+}

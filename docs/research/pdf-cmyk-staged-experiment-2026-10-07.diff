@@ -1,0 +1,16 @@
+--- /Users/themoretheless/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/moxcms-0.8.1/src/conversions/lut_transforms.rs	2006-07-24 05:21:28
++++ /tmp/rrrah-cmyk-staged-probe/moxcms/src/conversions/lut_transforms.rs	2026-10-07 02:47:08
+@@ -375,12 +375,7 @@
+         const GRID_SIZE: usize = 17;
+ 
+         #[cfg(feature = "any_to_any")]
+-        let is_katana_required_for_source = source
+-            .get_device_to_pcs(options.rendering_intent)
+-            .ok_or(CmsError::UnsupportedLutRenderingIntent(
+-                source.rendering_intent,
+-            ))
+-            .map(|x| x.is_katana_required())?;
++        let is_katana_required_for_source = true;
+ 
+         #[cfg(feature = "any_to_any")]
+         let is_katana_required_for_destination =

@@ -1,0 +1,32 @@
+   Compiling hayro-interpret v0.7.0 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret)
+   Compiling hayro v0.7.1
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `dev` profile [optimized + debuginfo] target(s) in 2.19s
+     Running `/tmp/rrrah-required-corpus-target/debug/examples/pdf_cmyk_load_bench tests/fixtures/pdf/cmyk-image8.pdf`
+{
+  "checksum": 12085760,
+  "dimensions": [
+    4721,
+    1
+  ],
+  "first_decode_ms": 3.208792,
+  "iterations_per_repeat": 32,
+  "managed_final_bytes": 0,
+  "managed_peak_bytes": 94420,
+  "repeats": 5,
+  "scope": "Public decoder and display preparation, cached filesystem, no GPU rendering; first decode includes first-use ICC initialization, not disk-cold I/O",
+  "warm_decode_ms": [
+    0.2503658125,
+    0.23932431250000002,
+    0.24432537500000007,
+    0.24215887500000005,
+    0.240234375
+  ],
+  "warm_prepare_ms": [
+    0.018192781250000005,
+    0.017207093750000003,
+    0.017240875000000003,
+    0.01720309375,
+    0.017219968750000005
+  ]
+}

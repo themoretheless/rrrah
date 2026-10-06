@@ -1,0 +1,14 @@
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `test` profile [optimized + debuginfo] target(s) in 31.77s
+     Running unittests src/lib.rs (/tmp/rrrah-required-corpus-target/debug/deps/rrrah_decode-ba819a410a3037cb)
+
+running 6 tests
+test jpeg_cmyk::tests::conflicting_adobe_transforms_are_refused_before_pixel_allocation ... ok
+test jpeg_cmyk::tests::cmyk_source_admission_refuses_before_decode_and_releases_memory ... ok
+test jpeg_cmyk::tests::repeated_consistent_adobe_transform_preserves_samples ... ok
+test jpeg_cmyk::tests::profiled_ycck_jpeg_matches_independent_oracle_and_releases_memory ... ok
+test jpeg_cmyk::tests::profiled_cmyk_jpeg_matches_independent_oracle_and_releases_memory ... ok
+test jpeg_cmyk::tests::asymmetric_profiled_jpegs_preserve_all_eight_exif_orientations ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 840 filtered out; finished in 0.02s
+

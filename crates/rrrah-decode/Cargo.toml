@@ -7,6 +7,8 @@ license.workspace = true
 
 [dependencies]
 hayro = "=0.7.1"
+zune-jpeg = "=0.5.15"
+zune-core = "=0.5.3"
 basis-universal = "=0.3.1"
 jpegxr = "=0.3.1"
 charls = { version = "=0.4.2", features = ["static"] }
@@ -28,6 +30,7 @@ libheif-rs = { version = "=3.0.0", default-features = false, features = ["v1_17"
 astcenc-sys = "=0.2.0"
 
 [dev-dependencies]
+moxcms = { version = "=0.8.1", default-features = false, features = ["options", "extended_range"] }
 serde_json.workspace = true
 criterion = "0.5"
 

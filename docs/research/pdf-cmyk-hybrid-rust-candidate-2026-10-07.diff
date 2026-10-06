@@ -1,0 +1,41 @@
+--- /Users/themoretheless/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/moxcms-0.8.1/src/conversions/lut4.rs	2006-07-24 05:21:28
++++ /tmp/rrrah-cmyk-hybrid-clean-lut4.rs	2026-10-07 02:52:41
+@@ -135,6 +135,29 @@
+ 
+ #[cfg(feature = "any_to_any")]
+ impl<T: Copy + PointeeSizeExpressible + AsPrimitive<f32>> KatanaLut4x3<T> {
++    fn hybrid_fetch(&self, c: f32, m: f32, y: f32, k: f32) -> Vector3f {
++        let scale = (self.grid_size - 1) as f32;
++        let coordinates = [c, m, y, k].map(|v| v.clamp(0.0, 1.0) * scale);
++        let lower = coordinates.map(|v| (v.floor() as usize).min(self.grid_size as usize - 2));
++        let fractions = std::array::from_fn::<_, 4, _>(|i| coordinates[i] - lower[i] as f32);
++        let mut order = [1usize, 2, 3];
++        order.sort_by(|a, b| fractions[*b].total_cmp(&fractions[*a]));
++        let weights = [1.0-fractions[order[0]], fractions[order[0]]-fractions[order[1]], fractions[order[1]]-fractions[order[2]], fractions[order[2]]];
++        let n = self.grid_size as usize;
++        let mut result = [0.0; 3];
++        for side in 0..2 {
++            let mut point = lower;
++            point[0] += side;
++            let outer = if side == 0 { 1.0-fractions[0] } else { fractions[0] };
++            for step in 0..4 {
++                let base = (((point[0]*n+point[1])*n+point[2])*n+point[3])*3;
++                for channel in 0..3 { result[channel] += outer*weights[step]*self.clut[base+channel]; }
++                if step < 3 { point[order[step]] += 1; }
++            }
++        }
++        Vector3f { v: result }
++    }
++
+     fn to_pcs_impl<Fetch: Fn(f32, f32, f32, f32) -> Vector3f>(
+         &self,
+         input: &[T],
+@@ -184,7 +207,7 @@
+ 
+         // If Source PCS is LAB trilinear should be used
+         if self.pcs == DataColorSpace::Lab || self.pcs == DataColorSpace::Xyz {
+-            return self.to_pcs_impl(input, |x, y, z, w| l_tbl.quadlinear_vec3(x, y, z, w));
++            return self.to_pcs_impl(input, |x, y, z, w| self.hybrid_fetch(x, y, z, w));
+         }
+ 
+         match self.interpolation_method {

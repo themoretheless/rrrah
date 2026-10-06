@@ -1,0 +1,27 @@
+   Compiling hayro-interpret v0.7.0 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret)
+   Compiling hayro v0.7.1
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `test` profile [optimized + debuginfo] target(s) in 25.23s
+     Running unittests src/lib.rs (/tmp/rrrah-required-corpus-target/debug/deps/rrrah_decode-d9037624ebf22adb)
+
+running 17 tests
+test pdf::tests::renderer_overflow_extents_are_rejected_before_output_allocation ... ok
+test pdf::tests::malformed_invoked_form_geometry_refuses_without_output_reservation ... ok
+test pdf::tests::corrupt_embedded_image_refuses_incomplete_render_and_releases_credit ... ok
+test pdf::tests::page_rotation_preserves_extent_and_matches_poppler ... ok
+test pdf::tests::unsupported_invoked_object_kind_refuses_without_rendering ... ok
+test pdf::tests::nested_form_fonts_inherit_resources_and_cycles_refuse ... ok
+test pdf::tests::missing_invoked_object_refuses_in_page_and_inherited_form ... ok
+test pdf::tests::fractional_page_extents_keep_partial_edge_pixels ... ok
+test pdf::tests::half_alpha_red_is_straight_and_matches_poppler_white_composite ... ok
+test pdf::tests::malformed_source_and_source_admission_release_credit ... ok
+test pdf::tests::invalid_and_excessive_user_units_refuse_without_retained_credit ... ok
+test pdf::tests::device_cmyk_hybrid_matches_full_domain_independent_oracle ... ok
+test pdf::tests::page_user_unit_scales_geometry_and_pixels ... ok
+test pdf::tests::unsupported_selected_font_refuses_before_render_allocation ... ok
+test pdf::tests::device_cmyk_float_fills_match_independent_littlecms ... ok
+test pdf::tests::selected_pages_match_authored_samples_and_release_budget ... ok
+test pdf::tests::embedded_cmyk8_image_matches_full_domain_littlecms ... ok
+
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 821 filtered out; finished in 0.00s
+

@@ -1,0 +1,51 @@
+--- /Users/themoretheless/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/hayro-interpret-0.7.0/src/color.rs	2006-07-24 05:21:28
++++ vendor/hayro-interpret/src/color.rs	2026-10-07 02:39:12
+@@ -334,21 +334,16 @@
+ }
+ 
+ impl ToRgb for ColorSpace {
++    fn prefers_float_samples(&self) -> bool {
++        matches!(self.0.as_ref(), ColorSpaceType::DeviceCmyk)
++    }
++
+     fn convert_f32(&self, input: &[f32], output: &mut [u8], manual_scale: bool) -> Option<()> {
+         match self.0.as_ref() {
+             ColorSpaceType::DeviceCmyk => {
+-                if input.len() == 4 {
+-                    let converted = [
+-                        f32_to_u8(input[0]),
+-                        f32_to_u8(input[1]),
+-                        f32_to_u8(input[2]),
+-                        f32_to_u8(input[3]),
+-                    ];
+-                    CMYK_TRANSFORM.convert_u8(&converted, output)
+-                } else {
+-                    let converted = input.iter().copied().map(f32_to_u8).collect::<Vec<_>>();
+-                    CMYK_TRANSFORM.convert_u8(&converted, output)
+-                }
++                // Preserve PDF operands until the ICC transform; rounding CMYK
++                // first loses visible precision in gradients and vector fills.
++                CMYK_TRANSFORM.convert_f32(input, output, false)
+             }
+             ColorSpaceType::DeviceGray => {
+                 for (gray, output) in input.iter().zip(output.chunks_exact_mut(3)) {
+@@ -1072,7 +1067,7 @@
+         // We prefer using the u8 variant for single samples, which is especially
+         // important for ICC profiles to avoid constructing the (more expensive)
+         // f32 variant.
+-        if self.supports_u8() {
++        if !self.prefers_float_samples() && self.supports_u8() {
+             let converted = input
+                 .iter()
+                 .copied()
+@@ -1087,6 +1082,10 @@
+         self.convert_f32(input, output, manual_scale)
+     }
+ 
++    fn prefers_float_samples(&self) -> bool {
++        false
++    }
++
+     fn convert_f32(&self, input: &[f32], output: &mut [u8], manual_scale: bool) -> Option<()>;
+     fn supports_u8(&self) -> bool {
+         false

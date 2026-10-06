@@ -1,0 +1,11 @@
+--- /Users/themoretheless/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/moxcms-0.8.1/src/conversions/lut_transforms.rs	2006-07-24 05:21:28
++++ /tmp/rrrah-cmyk-grid33-probe/moxcms/src/conversions/lut_transforms.rs	2026-10-07 02:45:23
+@@ -372,7 +372,7 @@
+             return Err(CmsError::UnsupportedProfileConnection);
+         }
+ 
+-        const GRID_SIZE: usize = 17;
++        const GRID_SIZE: usize = 33;
+ 
+         #[cfg(feature = "any_to_any")]
+         let is_katana_required_for_source = source

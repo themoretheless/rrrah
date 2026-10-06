@@ -1,0 +1,146 @@
+{
+  "fixture_sha256": "20e32ad2763eeba1c4c01864f2a00822f6e56811a6173379f99231f1637d16e2",
+  "profile_sha256": "73e1ba37d2bad5bab2a964f40a9eed96209666efc067c3322626214bbef234a0",
+  "native_sha256": "e76d8fed287ba94073910324545ee28ec717a9f44a9072d6d7b0b40388f61103",
+  "littlecms_encoded_version": 2190,
+  "library_sha256": "6c472f0956c937e85747a4f7c5987dec7c54a6c807006f50fe2e1df1e82ec5e5",
+  "normalized_f32_cmyk": [
+    [
+      0.9583333134651184,
+      0.0416666679084301,
+      0.0,
+      0.0
+    ],
+    [
+      0.875,
+      0.125,
+      0.0,
+      0.0
+    ],
+    [
+      0.7916666865348816,
+      0.2083333283662796,
+      0.0,
+      0.0
+    ],
+    [
+      0.7083333134651184,
+      0.2916666567325592,
+      0.0,
+      0.0
+    ],
+    [
+      0.625,
+      0.375,
+      0.0,
+      0.0
+    ],
+    [
+      0.5416666865348816,
+      0.4583333432674408,
+      0.0,
+      0.0
+    ],
+    [
+      0.4583333432674408,
+      0.5416666865348816,
+      0.0,
+      0.0
+    ],
+    [
+      0.375,
+      0.625,
+      0.0,
+      0.0
+    ],
+    [
+      0.2916666567325592,
+      0.7083333134651184,
+      0.0,
+      0.0
+    ],
+    [
+      0.2083333283662796,
+      0.7916666865348816,
+      0.0,
+      0.0
+    ],
+    [
+      0.125,
+      0.875,
+      0.0,
+      0.0
+    ],
+    [
+      0.0416666679084301,
+      0.9583333134651184,
+      0.0,
+      0.0
+    ]
+  ],
+  "results": [
+    {
+      "intent": 0,
+      "input_mode": "float_cmyk_percent",
+      "max_channel_difference": 3,
+      "different_pixels": 72,
+      "reference_first_row_hex": "00a9ea00a4e2009dda3f96d2648eca7d86c2927dbaa473b2b568aac559a1d44499e32590"
+    },
+    {
+      "intent": 0,
+      "input_mode": "hayro_quantized_cmyk8",
+      "max_channel_difference": 1,
+      "different_pixels": 8,
+      "reference_first_row_hex": "00aaea00a4e2039dda3c96d2648eca7d86c2917dbaa473b2b567aac558a1d44599e32290"
+    },
+    {
+      "intent": 1,
+      "input_mode": "float_cmyk_percent",
+      "max_channel_difference": 3,
+      "different_pixels": 72,
+      "reference_first_row_hex": "00a9ea00a4e2009dda3f96d2648eca7d86c2927dbaa473b2b568aac559a1d44499e32590"
+    },
+    {
+      "intent": 1,
+      "input_mode": "hayro_quantized_cmyk8",
+      "max_channel_difference": 1,
+      "different_pixels": 8,
+      "reference_first_row_hex": "00aaea00a4e2039dda3c96d2648eca7d86c2917dbaa473b2b567aac558a1d44599e32290"
+    },
+    {
+      "intent": 2,
+      "input_mode": "float_cmyk_percent",
+      "max_channel_difference": 3,
+      "different_pixels": 72,
+      "reference_first_row_hex": "00a9ea00a4e2009dda3f96d2648eca7d86c2927dbaa473b2b568aac559a1d44499e32590"
+    },
+    {
+      "intent": 2,
+      "input_mode": "hayro_quantized_cmyk8",
+      "max_channel_difference": 1,
+      "different_pixels": 8,
+      "reference_first_row_hex": "00aaea00a4e2039dda3c96d2648eca7d86c2917dbaa473b2b567aac558a1d44599e32290"
+    },
+    {
+      "intent": 3,
+      "input_mode": "float_cmyk_percent",
+      "max_channel_difference": 3,
+      "different_pixels": 72,
+      "reference_first_row_hex": "00a9ea00a4e2009dda3f96d2648eca7d86c2927dbaa473b2b568aac559a1d44499e32590"
+    },
+    {
+      "intent": 3,
+      "input_mode": "hayro_quantized_cmyk8",
+      "max_channel_difference": 1,
+      "different_pixels": 8,
+      "reference_first_row_hex": "00aaea00a4e2039dda3c96d2648eca7d86c2917dbaa473b2b567aac558a1d44599e32290"
+    }
+  ],
+  "limitations": [
+    "One opaque strip fixture and identical ICC bytes; RGB output is quantized to u8.",
+    "Direct float output exactly equals rejected float-patched PDF; direct byte output exactly equals production PDF for all 96 pixels.",
+    "Does not qualify all PDF/AI colors, rendering intents, masks, blends or PostScript.",
+    "Strict Poppler AI gate remains unchanged."
+  ],
+  "experiment": "Direct moxcms 0.8.1 float executor without PDF parsing/rasterization; output expanded from 12 strip samples."
+}

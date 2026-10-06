@@ -1,0 +1,21 @@
+{
+  "oracle": "Unchanged GoPro InvertSpatialQuant16s/InvertHorizontal16s/dequantization functions, separate C host allocator",
+  "commit": "446c736a38fb14f51343605c0780d347dc602f89",
+  "cases": 32,
+  "samples": 2280,
+  "prescale": 0,
+  "source_dimensions": "3..6 x 3..6",
+  "odd_and_even_output_dimensions": true,
+  "factors": [
+    1,
+    12,
+    24,
+    96
+  ],
+  "reference_sha256": {
+    "inverse.c": "b861586368f12fd8b2dd09fe6104278cb5072153757e16e861b2e3476795e45b",
+    "spatial-original.inc": "f5459fc2ec26034599d894be2c476fc724bc6e39e402a3561a788f214caa0d65",
+    "horizontal-original.inc": "830ed487a9f033db60ca0809da8a7b53da8a6acb8a747a7562f0f7b298a468c0"
+  },
+  "golden_sha256": "cdca6a99911aef060e897d6c10537ffe0a551a25a20efb7e6ce21df3d4b2cfb3"
+}

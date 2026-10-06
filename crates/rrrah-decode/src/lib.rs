@@ -5,6 +5,7 @@
 #![allow(clippy::missing_errors_doc, clippy::cast_precision_loss)]
 
 mod bay;
+mod jpeg_cmyk;
 pub use bay::{BaySensorError, BaySensorLayout, unpack_bay_sensor};
 
 mod ciff;
@@ -542,3 +543,6 @@ pub fn raster_external_dependencies(request: &DecodeRequest, header: &[u8]) -> V
         Vec::new()
     }
 }
+
+/// Native VC-5 framing and managed sensor reconstruction; DNG admission is separate.
+pub mod vc5;

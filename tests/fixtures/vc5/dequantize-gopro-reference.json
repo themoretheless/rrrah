@@ -1,0 +1,26 @@
+{
+  "oracle": "Unmodified official GoPro companding.c, dequantize.c and pixel.h, release NDEBUG saturation",
+  "commit": "446c736a38fb14f51343605c0780d347dc602f89",
+  "reference_sha256": {
+    "companding.c": "548956c7479671821b36beabccdc9c47fc872499b1e35a46d94e7587f68e29d9",
+    "dequantize.c": "a25fa4a20a431cba49e48c4d1d7ac8e2bc7283627f13884dda245961a1784e85",
+    "pixel.h": "792508612de7ac6f9c6d1fdf76a2c829c09aeb5d5e421aa777331dd8ad4925a5"
+  },
+  "factors": [
+    0,
+    1,
+    12,
+    24,
+    48,
+    96,
+    144,
+    65535
+  ],
+  "magnitude_range": [
+    -255,
+    255
+  ],
+  "cases": 4088,
+  "golden_sha256": "66335c5f002a97ddf1bc7416acc2fcc83e39b7f3e98f7940aea21c05130a1ef8",
+  "exact_reproduction": true
+}

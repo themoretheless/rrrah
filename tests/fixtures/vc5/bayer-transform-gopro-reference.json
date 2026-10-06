@@ -1,0 +1,20 @@
+{
+  "commit": "446c736a38fb14f51343605c0780d347dc602f89",
+  "oracle": "Unchanged SetupDecoderLogCurve and PackComponentsToRAW; test-only C host",
+  "log_codes": 4096,
+  "cells": 768,
+  "output_bits": [
+    12,
+    14,
+    16
+  ],
+  "reference_sha256": {
+    "logcurve.c": "3e652c29a8bc7c712767ff090c2e06731fa4357aba7f8c70afa418d586c7e03a",
+    "pack-raw.c": "91904a2e89c9fe18bb91897fed55cc5ef0ff90c5d13d6b58f6fc51458b85797b",
+    "pack-original.inc": "2e27dd6a039f876598dbd78bc8cb87fb23519fd530c1be5de3b20ff5d336c588"
+  },
+  "golden_sha256": {
+    "logcurve-gopro.u16le": "1df45e572cfe3207f618f3a454f22367685c99e242e213b56432dcf4c39f8217",
+    "bayer-cell-gopro.u16le": "d86a9a866e305e4ae4afc12ed468138472c9e3dc8a0ceadf18ad4ad69c647d84"
+  }
+}

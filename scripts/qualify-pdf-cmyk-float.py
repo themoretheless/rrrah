@@ -61,19 +61,25 @@ try:
             ("float_cmyk_percent", float_input, (1 << 22) | (6 << 16) | (4 << 3) | 4),
             ("hayro_quantized_cmyk8", quantized_input, (6 << 16) | (4 << 3) | 1),
         ]:
-            executor = create_transform(source_profile, format_code, destination, rgb8, intent, 0)
-            assert executor, "LittleCMS refused the requested transform"
-            output = (c.c_ubyte * (96 * 3))()
-            try:
-                transform(executor, samples, output, 96)
-            finally:
-                delete(executor)
-            reference = bytes(output)
-            errors = [abs(a - b) for a, b in zip(actual, reference)]
-            rows.append({"intent": intent, "input_mode": mode,
-                         "max_channel_difference": max(errors),
-                         "different_pixels": sum(actual[i:i+3] != reference[i:i+3] for i in range(0, len(actual), 3)),
-                         "reference_first_row_hex": reference[:36].hex()})
+            # Public cmsFLAGS_NOOPTIMIZE=0x0100; keep the default baseline.
+            for flags in (0, 0x0100):
+                for output_name, output_format, output_type in (
+                    ("rgb8", rgb8, c.c_ubyte),
+                    ("rgb_float", (1 << 22) | (4 << 16) | (3 << 3) | 4, c.c_float),
+                ):
+                    executor = create_transform(source_profile, format_code, destination, output_format, intent, flags)
+                    assert executor, "LittleCMS refused the requested transform"
+                    output = (output_type * (96 * 3))()
+                    try:
+                        transform(executor, samples, output, 96)
+                    finally:
+                        delete(executor)
+                    reference = bytes(output) if output_name == "rgb8" else bytes(max(0, min(255, int(v * 255 + 0.5))) for v in output)
+                    errors = [abs(a - b) for a, b in zip(actual, reference)]
+                    rows.append({"intent": intent, "input_mode": mode, "flags": flags, "output_mode": output_name,
+                                 "max_channel_difference": max(errors),
+                                 "different_pixels": sum(actual[i:i+3] != reference[i:i+3] for i in range(0, len(actual), 3)),
+                                 "reference_first_row_hex": reference[:36].hex()})
 finally:
     close(destination)
     close(source_profile)

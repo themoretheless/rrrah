@@ -1,7 +1,7 @@
 //! Selected PDF pages at one pixel per point; managed major buffers, not parser scratch.
 //! DeviceCMYK currently uses Hayro's fixed CGATS001Compat-v2-micro ICC profile.
-//! Hayro 0.7.0 quantizes DeviceCMYK float operands to u8 before its ICC transform;
-//! the independent float-CMYK diagnostic records the resulting precision loss.
+//! Repository-patched DeviceCMYK float fills use original-stage hybrid ICC interpolation.
+//! The independent float-CMYK diagnostic qualifies the pinned fixed profile.
 //! Marking the rendered buffer sRGB describes the output encoding; it does not
 //! qualify source color conversion. The external AI and CMYK patch comparisons
 //! in docs/research record remaining color differences against Poppler.
@@ -219,6 +219,154 @@ pub(crate) fn decode(bytes: &[u8], request: &DecodeRequest) -> Result<DecodedRas
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn embedded_ycck_jpeg_app14_matches_independent_oracle() {
+        let budget = MemoryBudget::new(1024 * 1024);
+        let mut request = DecodeRequest::new("ycck-jpeg.pdf");
+        request.memory_budget = Some(budget.clone());
+        let image = decode(
+            include_bytes!("../../../tests/fixtures/pdf/ycck-jpeg-app14.pdf"),
+            &request,
+        )
+        .unwrap();
+        assert_eq!((image.width(), image.height()), (64, 8));
+        let RasterPixels::Rgba8(values) = image.pixels() else {
+            panic!()
+        };
+        let expected = include_bytes!("../../../tests/fixtures/pdf/ycck-jpeg-app14-littlecms.rgba");
+        assert_eq!(values.len(), expected.len());
+        for (i, (&actual, &reference)) in values.iter().zip(expected.iter()).enumerate() {
+            if i % 4 == 3 {
+                assert_eq!(actual, reference);
+            } else {
+                assert!(
+                    actual.abs_diff(reference) <= 1,
+                    "YCCK sample {} channel {}: {actual} != {reference}",
+                    i / 4,
+                    i % 4
+                );
+            }
+        }
+        drop(image);
+        assert_eq!(budget.used(), 0);
+    }
+
+    #[test]
+    fn embedded_cmyk_jpeg_app14_decode_inversion_matches_independent_oracle() {
+        let budget = MemoryBudget::new(1024 * 1024);
+        let mut request = DecodeRequest::new("cmyk-jpeg.pdf");
+        request.memory_budget = Some(budget.clone());
+        let image = decode(
+            include_bytes!("../../../tests/fixtures/pdf/cmyk-jpeg-app14.pdf"),
+            &request,
+        )
+        .unwrap();
+        assert_eq!((image.width(), image.height()), (64, 8));
+        let RasterPixels::Rgba8(values) = image.pixels() else {
+            panic!()
+        };
+        assert_eq!(
+            &**values,
+            include_bytes!("../../../tests/fixtures/pdf/cmyk-jpeg-app14-littlecms.rgba")
+        );
+        drop(image);
+        assert_eq!(budget.used(), 0);
+    }
+
+    #[test]
+    fn embedded_cmyk8_image_matches_full_domain_littlecms() {
+        let budget = MemoryBudget::new(4 * 1024 * 1024);
+        let mut request = DecodeRequest::new("cmyk-image.pdf");
+        request.memory_budget = Some(budget.clone());
+        let image = decode(
+            include_bytes!("../../../tests/fixtures/pdf/cmyk-image8.pdf"),
+            &request,
+        )
+        .unwrap();
+        assert_eq!((image.width(), image.height()), (4721, 1));
+        let RasterPixels::Rgba8(values) = image.pixels() else {
+            panic!()
+        };
+        let expected = include_bytes!("../../../tests/fixtures/pdf/cmyk-image8-littlecms.rgba");
+        assert_eq!(values.len(), expected.len());
+        for (i, (&actual, &reference)) in values.iter().zip(expected.iter()).enumerate() {
+            if i % 4 == 3 {
+                assert_eq!(actual, reference);
+            } else {
+                assert!(
+                    actual.abs_diff(reference) <= 1,
+                    "sample {} channel {}: {actual} != {reference}",
+                    i / 4,
+                    i % 4
+                );
+            }
+        }
+        drop(image);
+        assert_eq!(budget.used(), 0);
+    }
+
+    #[test]
+    fn device_cmyk_hybrid_matches_full_domain_independent_oracle() {
+        let bytes = include_bytes!("../../../tests/fixtures/pdf/cmyk-full-domain-input.f32le");
+        let reference = include_bytes!("../../../tests/fixtures/pdf/cmyk-full-domain-littlecms.rgb8");
+        assert_eq!(bytes.len(), 4721 * 4 * 4);
+        assert_eq!(reference.len(), 4721 * 3);
+        let input: Vec<f32> = bytes
+            .chunks_exact(4)
+            .map(|b| f32::from_le_bytes(b.try_into().unwrap()))
+            .collect();
+        assert!(input.iter().all(|v| v.is_finite() && (0.0..=1.0).contains(v)));
+        let profile = moxcms::ColorProfile::new_from_slice(include_bytes!(
+            "../../../vendor/hayro-interpret/assets/CGATS001Compat-v2-micro.icc"
+        ))
+        .unwrap();
+        let executor = profile
+            .create_transform_f32(
+                moxcms::Layout::Rgba,
+                &moxcms::ColorProfile::new_srgb(),
+                moxcms::Layout::Rgb,
+                moxcms::TransformOptions {
+                    rrrah_cmyk_hybrid: true,
+                    ..Default::default()
+                },
+            )
+            .unwrap();
+        let mut output = vec![0.0; reference.len()];
+        executor.transform(&input, &mut output).unwrap();
+        for (index, (&actual, &expected)) in output.iter().zip(reference.iter()).enumerate() {
+            assert!(actual.is_finite());
+            let quantized = (actual.clamp(0.0, 1.0) * 255.0 + 0.5) as u8;
+            assert!(
+                quantized.abs_diff(expected) <= 1,
+                "CMYK sample {} channel {}: {quantized} != {expected}",
+                index / 3,
+                index % 3
+            );
+        }
+    }
+
+    #[test]
+    fn device_cmyk_float_fills_match_independent_littlecms() {
+        let budget = MemoryBudget::new(1024 * 1024);
+        let mut request = DecodeRequest::new("cmyk.pdf");
+        request.memory_budget = Some(budget.clone());
+        let image = decode(
+            include_bytes!("../../../tests/fixtures/pdf/gradient-center-strips-cmyk.pdf"),
+            &request,
+        )
+        .unwrap();
+        assert_eq!((image.width(), image.height()), (12, 8));
+        let RasterPixels::Rgba8(values) = image.pixels() else {
+            panic!()
+        };
+        assert_eq!(
+            &**values,
+            include_bytes!("../../../tests/fixtures/pdf/cmyk-float-littlecms.rgba")
+        );
+        drop(image);
+        assert_eq!(budget.used(), 0);
+    }
+
     #[test]
     fn unsupported_invoked_object_kind_refuses_without_rendering() {
         let original = std::str::from_utf8(include_bytes!(
