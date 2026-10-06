@@ -1,0 +1,16 @@
+{
+  "change": "Grouped whole-container admission uses fallible request/token/id/snapshot/diagnostic/invalid-source storage and sorted source IDs.",
+  "validation": {
+    "container_groups_presentation_kind_tests": 13,
+    "failed": 0,
+    "dedup_lib_no_deps_clippy": "passed"
+  },
+  "source_sha256": {
+    "crates/rrrah-dedup/src/container.rs": "a7cfde6b19ab184b34257e42d7b500e0aca935be1330e4ae2358050aefe7839c"
+  },
+  "limits": [
+    "Automatic directory container discovery storage remains unqualified.",
+    "Quadratic repeated whole-container decode remains.",
+    "Actual allocator failure, complete shared byte budget and RSS bounds not proved."
+  ]
+}

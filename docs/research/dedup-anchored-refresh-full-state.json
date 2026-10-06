@@ -1,0 +1,45 @@
+{
+  "status": "both_platforms_passed_with_source_drift",
+  "scope": "Fresh all-feature all-target anchored integration regression; complete contract remains open",
+  "platforms": {
+    "macos": {
+      "session": 65464,
+      "start_snapshot": "docs/research/dedup-anchored-refresh-full-macos-start.json",
+      "log": "docs/research/dedup-anchored-refresh-full-macos.log",
+      "result": {
+        "exit": 0,
+        "passed": 326,
+        "failed": 0,
+        "ignored": 0,
+        "groups": 55,
+        "source_drift": [
+          "crates/rrrah-dedup/src/warp.rs",
+          "crates/rrrah-dedup/tests/projective_geometry.rs"
+        ],
+        "scope": "Broad regression terminal success, new photometric implementation added during run; not atomic current-source proof"
+      }
+    },
+    "linux": {
+      "session": 32990,
+      "start_snapshot": "docs/research/dedup-anchored-refresh-full-linux-start.json",
+      "log": "docs/research/dedup-anchored-refresh-full-linux.log",
+      "result": {
+        "exit": 0,
+        "passed": 328,
+        "failed": 0,
+        "ignored": 0,
+        "groups": 55,
+        "source_drift": [
+          "crates/rrrah-decode/src/lib.rs",
+          "crates/rrrah-dedup/src/local_collection.rs",
+          "crates/rrrah-dedup/src/local_scan.rs",
+          "crates/rrrah-dedup/src/warp.rs",
+          "crates/rrrah-dedup/tests/projective_files.rs",
+          "crates/rrrah-dedup/tests/projective_geometry.rs"
+        ],
+        "log_sha256": "e3957ffe8a0e88c6ff8752a9a2b03999bf2ad0d58a80086348c32b753a6fcaa3",
+        "scope": "Terminal full regression from earlier anchored build; source changed during run, not current complete qualification"
+      }
+    }
+  }
+}

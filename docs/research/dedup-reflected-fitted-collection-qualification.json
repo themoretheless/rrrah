@@ -1,0 +1,23 @@
+{
+  "scope": "Explicit linear reflected fitting propagated through collection policy; spatial file fitting entrypoint",
+  "checks": [
+    "16 collection regression tests pass",
+    "eight-file natural reflected brightness collection equals complete fitted pair oracle",
+    "exactly four accepted scene pairs and 24 negatives, all accepted pairs retain strict and fitted evidence",
+    "6858 indexed features, 2763278 descriptor hits, 28 proposed and four freshly confirmed pairs",
+    "four natural brightness positives also pass spatial fitted file comparison",
+    "six cross-scene fitted file negatives remain rejected",
+    "library-only Clippy passes"
+  ],
+  "limits": [
+    "Natural fitted collection and spatial file tests are focused, with 11 photo tests filtered each",
+    "Natural fitted spatial collection/recursive-root runtime qualification still pending",
+    "Range/display projection/filtered reflected modes explicitly unsupported",
+    "Known preview corpus, not held-out captured mirrors, burst/look-alike calibration or full RAW"
+  ],
+  "source_sha256": {
+    "crates/rrrah-dedup/src/local_collection.rs": "2ec893e5352915de66ae1448ebb783948df1299e114dd2e347c47a1a484932a0",
+    "crates/rrrah-dedup/src/local_scan.rs": "45782bed465915f6542ed24dea2d3ef5d61e7b30e6fb7ee97edfc75d776ee195",
+    "crates/rrrah-dedup/tests/photo_files.rs": "9eacc43189773f715fa749e341e0a810a907c728a35a4993824130b2a89ca61a"
+  }
+}

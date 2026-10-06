@@ -1,0 +1,52 @@
+{
+  "status": "passed",
+  "change": "Unix save_atomic synchronizes parent directory after atomic replacement; PublicationSync explicitly reports post-publication sync failure",
+  "tests": {
+    "macos_minimal_lib_and_cache": 18,
+    "linux_all_feature_lib_and_cache": 43,
+    "linux_ext4_process_cache_suite": 6
+  },
+  "filesystem": "persistent Linux VM ext4 /dev/root, validated by df -T",
+  "checks": [
+    "injected directory-sync failure observes fully published independently readable file",
+    "post-publication failure has distinct error stage",
+    "retry succeeds",
+    "pre-publication cancellation/process exit retains previous cache",
+    "concurrent writers publish complete single-writer caches"
+  ],
+  "logs": {
+    "macos": {
+      "path": "docs/research/dedup-cache-directory-sync-macos.log",
+      "sha256": "7027238d261f7715b3b3fdc4a37b1b27ee6317f0fe56bb4a4a4da5670adc9d9d"
+    },
+    "linux": {
+      "path": "docs/research/dedup-cache-directory-sync-linux.log",
+      "sha256": "d1e2bfc55f60ffbc2f5346bea66df410ef591d247151a1878e5585196c26eec0"
+    },
+    "linux-disk": {
+      "path": "docs/research/dedup-cache-directory-sync-linux-disk.log",
+      "sha256": "49872a5d5ba8a0c9474063a9f5de9d1cc2e45581bb08f9c2af3b7c040721f04f"
+    },
+    "filesystem": {
+      "path": "docs/research/dedup-cache-directory-sync-filesystem.log",
+      "sha256": "0ceac3efdf981a736a8d438d68f03554b77086972d51bf017c44bea9ebde5e65"
+    },
+    "clippy": {
+      "path": "docs/research/dedup-cache-directory-sync-clippy.log",
+      "sha256": "8c99be0879887903da60b6714aa28e1c1a980d910760b842f3360d58597e5df4"
+    }
+  },
+  "source_hashes": {
+    "crates/rrrah-dedup/src/cache.rs": "93e8d8e6b4ca2ccb318d437b2a05a3636864d3002d04180e70d43e5623635c9b",
+    "scripts/run-dedup-linux-native.sh": "57526fd4f70ff6e838d604537de0966e9b7b85b4c71ed7ac26f179c94b70c7c9"
+  },
+  "hash_timing": "post-validation; no atomic prelaunch snapshot",
+  "clippy": "minimal scoped passed",
+  "limits": [
+    "ext4 process exit tests do not simulate VM/kernel crash or power loss",
+    "sync failure injection is deterministic hook, not real OS fsync failure",
+    "non-Unix directory synchronization remains absent",
+    "successful sync remains filesystem/storage dependent",
+    "full acceptance requirements incomplete"
+  ]
+}

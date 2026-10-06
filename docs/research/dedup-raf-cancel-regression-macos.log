@@ -1,0 +1,19 @@
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.23s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_decode-fef1cf096a77eef0)
+
+running 12 tests
+test camtiff::raf::tests::rejects_rotated_super_ccd_layout ... ok
+test camtiff::raf::tests::rejects_xtrans_via_raf_directory_tag ... ok
+test camtiff::raf::tests::honours_cancellation_per_row ... ok
+test camtiff::raf::tests::rejects_fuji_proprietary_compression_without_soi ... ok
+test camtiff::raf::tests::rejects_unsupported_compression_tag ... ok
+test camtiff::raf::tests::parses_header_selects_fuji_ifd_and_decodes_lsb_packed_bayer ... ok
+test camtiff::raf::tests::rejects_xtrans_via_thirty_six_black_levels ... ok
+test camtiff::raf::tests::rejects_cfa_pattern_with_non_rgb_colors ... ok
+test camtiff::raf::tests::rejects_broken_headers_with_typed_errors ... ok
+test camtiff::raf::tests::decodes_uncompressed_sixteen_bit_with_container_byte_order ... ok
+test camtiff::raf::tests::uncompressed_xtrans_preserves_directory_phase_and_black_grid ... ok
+test camtiff::raf::tests::rejects_non_2x2_cfa_repeat_pattern_dim ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 808 filtered out; finished in 0.00s
+

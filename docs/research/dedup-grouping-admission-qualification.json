@@ -1,0 +1,24 @@
+{
+  "change": "Fallible hash membership tables, sorted entry/edge vectors, bounded group/member vector growth and per-entry cancellation.",
+  "validation": {
+    "groups_pixel_search_scan_sequence_visual_tests": 35,
+    "groups_tests_after_expanded_graph_oracle": 3,
+    "graph_cases": 64,
+    "failed": 0,
+    "dedup_lib_clippy_no_deps": "passed"
+  },
+  "checks": [
+    "Every group is a complete-link clique; every accepted edge retained.",
+    "Reversing IDs, edge order and edge direction gives identical grouping for all 64 graphs.",
+    "One-shot cancellation at every callback position on all 64 graphs returns error without grouping; healthy retry returns same result."
+  ],
+  "source_sha256": {
+    "crates/rrrah-dedup/src/groups.rs": "16ad05e4631ca8ec39d8df16e1507262f53539fac7cbedc9cd382227a15dd49e",
+    "crates/rrrah-dedup/tests/groups.rs": "ed5aba2e4cd629f4aad2559862e6ee6d18f3acd3f4308f9eae67ffac84d2e05c"
+  },
+  "limits": [
+    "No allocator exhaustion injection.",
+    "No complete shared byte-budget/RSS accounting.",
+    "Sorting remains indivisible; cancellation latency for large sorts not measured."
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "index": 190,
+  "repository": "mrighele/zfs-find-deduped",
+  "commit": "e9664740b41fee269a96331c7699e4d12ddb2d63",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Queries already-deduped ZFS files; reports filesystem state rather than independently comparing content.",
+  "available_source_evidence": [
+    {
+      "path": "zfs_find_deduped.py",
+      "local": "02-zfs_find_deduped.py",
+      "url": "https://github.com/mrighele/zfs-find-deduped/blob/e9664740b41fee269a96331c7699e4d12ddb2d63/zfs_find_deduped.py",
+      "sha256": "bf549ea676a3fa82a96802b94ecefe8d1c79277faf4488d331d05af400c0402c",
+      "truncated": false,
+      "lines": 97,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/mrighele/zfs-find-deduped/blob/e9664740b41fee269a96331c7699e4d12ddb2d63/README.md",
+      "sha256": "aa7b02a1c566a2b4a0781e60ef4afd40e3e7dd7b86967780dd2c30ccf0d10e28",
+      "truncated": false,
+      "lines": 45,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/mrighele/zfs-find-deduped/blob/e9664740b41fee269a96331c7699e4d12ddb2d63/LICENSE",
+      "sha256": "3c5db45d667480fdab1dbd8e43904f65f9c8dd4a23f3b0ebc2975cad3e23e468",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

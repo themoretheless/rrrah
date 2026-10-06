@@ -1,0 +1,195 @@
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `test` profile [optimized + debuginfo] target(s) in 30.67s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_decode-fef1cf096a77eef0)
+
+running 173 tests
+test camtiff::color::tests::sony_encrypted_metadata_has_correct_channel_order ... ok
+ARW cancellation checkpoints: 2
+test camtiff::color::tests::nikon_rational_white_balance_uses_green_relative_rb ... ok
+test camtiff::arw::tests::rejects_missing_cfa_tags_with_typed_error ... ok
+test camtiff::arw::tests::parses_header_selects_raw_ifd_and_reads_metadata ... ok
+test camtiff::arw::tests::rejects_unsupported_compression_with_typed_error ... ok
+test camtiff::color::tests::panasonic_white_balance_reads_actual_directory_values ... ok
+test camtiff::arw::tests::rejects_arw2_width_not_multiple_of_32 ... ok
+test camtiff::arw::tests::rejects_arw1_huffman_curve_variant_with_typed_error ... ok
+test camtiff::arw::tests::decodes_uncompressed_sixteen_bit_words ... ok
+test camtiff::arw::tests::decodes_sony_32767_uncompressed_twelve_bit_variant ... ok
+test camtiff::arw::tests::decodes_uncompressed_lsb_packed_twelve_bit ... ok
+test camtiff::arw::tests::decodes_arw2_craw_delta_blocks ... ok
+test camtiff::arw::tests::rejects_arw2_block_with_equal_extrema_indices ... ok
+test camtiff::arw::tests::cancelled_callback_aborts_decode ... ok
+test camtiff::color::tests::sony_rejects_invalid_metadata_ranges ... ok
+test camtiff::color::tests::wb_uses_measured_channels ... ok
+test camtiff::cr2::tests::rejects_dangling_raw_ifd_pointer ... ok
+test camtiff::dcs_sensor::tests::native_response_curve_matches_first_oracle_sample ... ignored, requires CC0 DCS520C source and independent sensor oracle
+test camtiff::cr2::tests::parses_header_signature_and_selects_raw_ifd_via_pointer ... ok
+test camtiff::dcs_sensor::tests::original_tiff_public_route_is_managed_and_matches_oracle ... ignored, requires original CC0 DCS520C TIFF and independent sensor oracle
+test camtiff::cr2::tests::rejects_non_cfa_photometric ... ok
+test camtiff::cr2::tests::rejects_unsupported_compression ... CR2 cancellation checkpoints: 11
+RRRAH_ARW_FIXTURE is not set; skipping ARW fixture regression
+ok
+RRRAH_CR2_FIXTURE is not set; skipping CR2 fixture regression
+RRRAH_ORF_FIXTURE is not set; skipping ORF fixture regression
+test camtiff::dcs_sensor::tests::real_sensor_and_wb_match_independent_oracle ... RRRAH_NEF_FIXTURE is not set; skipping NEF fixture regression
+ignored, requires CC0 DCS520C source and independent sensor oracle
+RRRAH_PEF_FIXTURE is not set; skipping PEF fixture regression
+test camtiff::erf::tests::rd1_color_parameters_match_independent_oracle_and_reject_bad_wb ... ignored, requires pinned CC0 Epson R-D1 ERF object 2680
+RRRAH_RAF_FIXTURE is not set; skipping RAF fixture regression
+test camtiff::dcs_sensor::tests::cancelled_empty_source_has_no_allocation ... ok
+RRRAH_RW2_FIXTURE is not set; skipping RW2 fixture regression
+test camtiff::cr2::tests::rejects_wrong_signature_and_non_little_endian ... ok
+test camtiff::cr2::tests::rejects_slice_geometry_mismatch ... ok
+test camtiff::cr2::tests::decodes_ljpeg_slices_into_row_major_sensor_order ... ok
+test camtiff::cr2::tests::decodes_unsliced_stream_as_identity ... ok
+test camtiff::cr2::tests::reads_metadata_from_dng_like_cr2_tags ... ok
+test camtiff::cr2::tests::cancellation_during_decode_is_typed ... ok
+test camtiff::fixture_regression::configured_arw_fixture_decodes_sensor_samples ... ok
+test camtiff::fixture_regression::configured_cr2_fixture_decodes_sensor_samples ... ok
+test camtiff::fixture_regression::configured_orf_fixture_decodes_sensor_samples ... ok
+test camtiff::fixture_regression::configured_nef_fixture_decodes_sensor_samples ... ok
+test camtiff::fixture_regression::configured_pef_fixture_decodes_sensor_samples ... ok
+test camtiff::fixture_regression::configured_raf_fixture_decodes_sensor_samples ... ok
+test camtiff::hasselblad::tests::real_3fr_retains_embedded_precision_and_rejects_zero_neutral ... ignored, requires external pinned CC0 Hasselblad X1D object 2058
+test camtiff::fixture_regression::configured_rw2_fixture_decodes_sensor_samples ... ok
+test camtiff::hasselblad_entropy::tests::complete_real_sensor_matches_oracle_and_truncation_cancels ... ignored, requires pinned CC0 Hasselblad CFV-50 FFF source and LibRaw dump
+test camtiff::hasselblad_entropy::tests::paired_prefix_vs_bitwise_full_sensor_timing ... ignored, requires pinned CC0 FFF source; paired full-sensor performance run
+test camtiff::kodak_65000::tests::real_full_sensor_matches_libraw ... ignored, requires pinned Kodak DCS760C DCR object 1347 and LibRaw sensor dump
+test camtiff::hasselblad_entropy::tests::tiny_predictor8_rejects_truncated_words_bad_codes_and_mismatched_dimensions ... ok
+test camtiff::hasselblad_entropy::tests::prefix_lookup_preserves_long_codes_and_short_final_tail ... ok
+test camtiff::hasselblad_entropy::tests::tiny_predictor8_signed_pairs_and_row_reset ... ok
+test camtiff::kodak_65000::tests::synthetic_prediction_and_partial_block_are_exact ... ok
+test camtiff::kodak_dcr_color::tests::all_native_wb_selectors_match_independent_oracle ... ignored, requires CC0 Kodak DCS760C source; six independently pinned WB modes
+test camtiff::kodak_65000::tests::synthetic_invalid_prediction_dimensions_and_cancel_reject ... ok
+test camtiff::kodak_65000::tests::synthetic_packed_fallback_retains_all_twelve_bits ... ok
+test camtiff::kodak_dcr_color::tests::native_daylight_wb_matches_libraw ... ignored, requires CC0 Kodak DCS760C source
+test camtiff::leaf_packets::tests::real_native_packets_match_independent_wb ... ignored, requires pinned Leaf Aptus 22 MOS
+test camtiff::mef_sensor::tests::real_zd_full_sensor_matches_oracle ... ignored, requires external Mamiya ZD source and independent sensor oracle
+test camtiff::makernote_color::tests::canon_unknown_colordata_version_is_rejected ... ok
+NEF cancellation checkpoints: 5
+test camtiff::makernote_color::tests::vendor_makernotes_read_as_shot_channels ... ok
+test camtiff::mef_sensor::tests::packed_boundaries_admission_cancel_and_ownership ... ok
+NEF cancellation checkpoints: 5
+test camtiff::nef::tests::decodes_little_endian_packed_12bit_round_trip ... ok
+test camtiff::nef::tests::decodes_big_endian_packed_12bit_round_trip ... ok
+test camtiff::nef::tests::decodes_12bit_lossless_makernote_format3_mixed_byte_order ... ok
+test camtiff::nef::tests::decodes_12bit_lossless_makernote_format1_plain ... ok
+test camtiff::nef::tests::honors_cancelled_callback ... ok
+test camtiff::nef::tests::decodes_14bit_lossless_makernote_format2_last_curve_tag_wins ... ok
+test camtiff::nef::tests::decodes_multi_strip_14bit ... ok
+test camtiff::nef::tests::nrw_guard_rejects_unqualified_nef_camera ... ok
+test camtiff::leaf_packets::tests::native_wb_and_packet_boundaries ... ok
+test camtiff::nef::tests::decodes_12bit_lossy_interpolated_curve_with_split ... ok
+test camtiff::nef::tests::rejects_broken_makernote_tiff_header ... ok
+test camtiff::nef::tests::honors_cancelled_callback_compressed ... ok
+test camtiff::nef::tests::rejects_curve_out_of_range_samples ... ok
+test camtiff::nef::tests::p7800_unpacked_checks_mode_layout_endianness_and_cancellation ... ok
+test camtiff::nef::tests::rejects_makernote_without_curve_tag ... ok
+test camtiff::nef::tests::rejects_missing_cfa_tags ... ok
+test camtiff::nef::tests::rejects_nikon_lossless_16bit ... ok
+test camtiff::nef::tests::rejects_nikon_lossless_multi_strip ... ok
+test camtiff::nef::tests::rejects_nikon_lossless_without_makernote ... ok
+test camtiff::nef::tests::rejects_non_rgb_bayer_cfa ... ok
+test camtiff::nef::tests::rejects_other_compressions_with_typed_error ... ok
+test camtiff::nef::tests::rejects_truncated_curve_blob ... ok
+test camtiff::nef::tests::rejects_truncated_entropy_stream ... ok
+ORF cancellation checkpoints: 3
+test camtiff::nef::tests::rejects_truncated_strip_data ... ok
+test camtiff::nef::tests::rejects_unsupported_bit_depth ... ok
+test camtiff::nef::tests::seed_order_matches_the_canonical_rawspeed_layout ... ok
+test camtiff::nef::tests::selects_the_sub_ifd_raw_directory ... ok
+test camtiff::nef::tests::undefined_cfa_pattern_preserves_bayer_cells_and_rejects_invalid_colors ... ok
+test camtiff::olympus_entropy::tests::truncated_stream_and_cancellation_are_errors ... ok
+test camtiff::olympus_entropy::tests::zero_residuals_predict_full_sensor_plane ... ok
+test camtiff::orf::tests::recognizes_orf_magics ... ok
+test camtiff::orf::tests::parse_container_rejects_non_orf_bytes ... ok
+test camtiff::orf::tests::olympus12_unpacking_matches_dcraw_reference ... ok
+test camtiff::orf::tests::cancellation_is_typed ... ok
+test camtiff::orf::tests::rejects_missing_cfa_tags ... ok
+test camtiff::orf::tests::rejects_unsupported_bit_depth ... ok
+PEF cancellation checkpoints: 3
+test camtiff::orf::tests::rejects_non_bayer_cfa ... ok
+test camtiff::orf::tests::rejects_unsupported_compression ... ok
+test camtiff::orf::tests::rejects_unverifiable_packed_byte_count ... ok
+test camtiff::orf::tests::selects_subifd_and_reads_metadata ... ok
+test camtiff::orf::tests::uncompressed16_decodes_little_endian ... ok
+test camtiff::orf::tests::white_level_defaults_to_full_scale ... ok
+test camtiff::pef::tests::compression_65535_multiple_strips_is_a_typed_rejection ... ok
+test camtiff::pef::tests::compression_65535_invalid_code_length_is_a_typed_rejection ... ok
+test camtiff::pef::tests::compression_65535_inline_short_table_is_a_typed_rejection ... ok
+test camtiff::pef::tests::compression_65535_ambiguous_table_is_a_typed_rejection ... ok
+test camtiff::pef::tests::cancellation_returns_cancelled ... ok
+test camtiff::pef::tests::compression_65535_cancelled_returns_cancelled ... ok
+test camtiff::pef::tests::compression_65535_odd_width_is_a_typed_rejection ... ok
+test camtiff::pef::tests::compression_65535_out_of_range_sample_is_a_typed_rejection ... ok
+test camtiff::pef::tests::compression_65535_truncated_stream_is_a_typed_rejection ... ok
+test camtiff::pef::tests::compression_65535_truncated_table_is_a_typed_rejection ... ok
+test camtiff::pef::tests::compression_65535_without_huffman_tag_is_a_typed_rejection ... ok
+test camtiff::pef::tests::compression_65535_without_makernote_is_a_typed_rejection ... ok
+test camtiff::pef::tests::compression_65535_wrong_table_field_type_is_a_typed_rejection ... ok
+test camtiff::pef::tests::dng_level_and_white_balance_tags_override_defaults ... ok
+test camtiff::pef::tests::lossless_jpeg_strip_round_trip ... ok
+test camtiff::pef::tests::metadata_from_synthetic_pef ... ok
+test camtiff::pef::tests::missing_cfa_tags_are_a_typed_rejection ... ok
+test camtiff::pef::tests::multi_strip_packed_decode ... ok
+test camtiff::pef::tests::packed_12_and_14_bit_round_trip ... ok
+test camtiff::pef::tests::pentax_jpeg_extreme_samples_round_trip ... ok
+test camtiff::pef::tests::pentax_jpeg_makernote_table_round_trip ... ok
+test camtiff::pef::tests::unknown_compression_is_a_typed_rejection ... ok
+test camtiff::phaseone::tests::public_iiq_router_managed_memory_and_full_sensor ... ignored, requires pinned P20+ IIQ and corrected oracle
+test camtiff::pef::tests::unsupported_bit_depth_is_a_typed_rejection ... ok
+test camtiff::phaseone::tests::real_clustered_columns_match_full_independent_sensors ... ignored, requires controlled P20+ clustered-column variants and LibRaw corrected oracles
+test camtiff::phaseone::tests::real_native_pipeline_matches_independent_full_sensor_and_color ... ignored, requires pinned P20+ source and original full corrected oracle
+test camtiff::phaseone::tests::real_pipeline_stage_timing_preserves_oracle ... ignored, external P20+ source/oracle; informational per-stage timing, no wall-clock gate
+test camtiff::phaseone_calibration::tests::adjacent_columns_use_valid_diagonal_neighbours_at_sensor_edges ... ok
+test camtiff::phaseone_calibration::tests::real_flat_field_specialization_paired ... ignored, P20+ external source and stage oracles; paired informational benchmark
+test camtiff::phaseone_calibration::tests::real_native_black_and_flat_fields_match_stage_oracles ... ignored, requires P20+ native sensor and independent black/flat-field stage oracles
+test camtiff::phaseone_calibration::tests::real_pixel_repair_and_flat_fields_match_independent_sensor ... ignored, requires P20+ sensor and independent corrected oracle with column entries disabled
+test camtiff::phaseone_calibration::tests::black_saturation_chroma_and_field_bounds ... ok
+test camtiff::phaseone_calibration::tests::isolated_columns_preserve_constant_sensor_and_validate_before_mutation ... ok
+test camtiff::phaseone_calibration::tests::pixel_defects_use_valid_neighbours_and_reject_malformed_records ... ok
+test camtiff::phaseone_container::tests::real_private_sensor_and_calibration_payloads ... ignored, requires pinned P20+ IIQ source
+test camtiff::phaseone_container::tests::private_directory_bounds_and_duplicate_tags ... ok
+test camtiff::phaseone_entropy::tests::real_format3_matches_full_independent_sensor ... ignored, requires pinned Phase One P20+ IIQ object 4366 and independent sensor oracle
+test camtiff::phaseone_entropy::tests::predictor_reuse_signed_steps_and_row_reset ... ok
+test camtiff::phaseone_entropy::tests::absolute_tail_and_invalid_geometry ... ok
+test camtiff::raf::tests::rejects_broken_headers_with_typed_errors ... ok
+test camtiff::raf::tests::rejects_cfa_pattern_with_non_rgb_colors ... ok
+test camtiff::raf::tests::decodes_uncompressed_sixteen_bit_with_container_byte_order ... ok
+test camtiff::raf::tests::parses_header_selects_fuji_ifd_and_decodes_lsb_packed_bayer ... ok
+test camtiff::raf::tests::honours_cancellation_per_row ... ok
+test camtiff::raf::tests::rejects_fuji_proprietary_compression_without_soi ... ok
+test camtiff::raf::tests::rejects_non_2x2_cfa_repeat_pattern_dim ... ok
+test camtiff::raf::tests::rejects_rotated_super_ccd_layout ... ok
+test camtiff::raf::tests::rejects_unsupported_compression_tag ... ok
+RW2 cancellation checkpoints: 3
+test camtiff::raf::tests::rejects_xtrans_via_raf_directory_tag ... ok
+test camtiff::raf::tests::rejects_xtrans_via_thirty_six_black_levels ... ok
+test camtiff::raf::tests::uncompressed_xtrans_preserves_directory_phase_and_black_grid ... ok
+test camtiff::rw2::tests::decodes_unpacked_16_bit_strips ... ok
+test camtiff::rw2::tests::decodes_panasonic_packed_delta_paths ... ok
+test camtiff::rw2::tests::decodes_lossless_jpeg_strip ... ok
+test camtiff::rw2::tests::decodes_panasonic_packed_constant_rows ... ok
+test camtiff::rw2::tests::keeps_rgb_linearity_limits_and_rejects_partial_or_invalid_limits ... ok
+test camtiff::rw2::tests::parse_container_recognizes_iiu_signature ... ok
+test camtiff::rw2::tests::legacy_panasonic_left_aligned_samples_and_black_level ... ok
+test camtiff::rw2::tests::legacy_fz8_packed_pairs_are_bounded_and_cancellable ... ok
+test camtiff::rw2::tests::reads_panasonic_metadata_tags ... ok
+test camtiff::rw2::tests::honours_cancellation ... ok
+test camtiff::rw2::tests::rejects_missing_cfa ... ok
+test camtiff::rw2::tests::rejects_multi_strip_lossless_jpeg ... ok
+test camtiff::rw2::tests::rejects_non_rw2_signature ... ok
+test camtiff::rw2::tests::rejects_unsupported_compression ... ok
+test camtiff::rw2::tests::rejects_unsupported_uncompressed_bit_depth ... ok
+test camtiff::rw2::tests::selects_the_directory_with_sensor_tags ... ok
+test camtiff::srf_sensor::tests::real_full_encrypted_sensor_matches_independent_oracle ... ignored, requires pinned DSC-F828 SRF and independent LibRaw unpack oracle
+test camtiff::srf_sensor::tests::cipher_continues_across_chunks_and_sensor_rejects_truncation ... ok
+test camtiff::tests::generic_selection_prefers_the_large_cfa_directory ... ok
+test camtiff::tests::camera_recipes_are_distinct_from_existing_backends ... ok
+test camtiff::tests::camera_recipes_use_the_expected_backend_revisions ... ok
+test camtiff::tests::parse_rejects_directory_cycles ... ok
+test camtiff::tests::implemented_quirks_fail_typed_without_not_implemented ... ok
+test camtiff::color::tests::profiles_are_exact_and_invertible ... ok
+test camtiff::arw::tests::dsc_r1_words_are_big_endian_inside_little_endian_tiff ... ok
+
+test result: ok. 151 passed; 0 failed; 22 ignored; 0 measured; 647 filtered out; finished in 0.05s
+

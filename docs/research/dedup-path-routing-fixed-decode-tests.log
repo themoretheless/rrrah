@@ -1,0 +1,42 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: function `error` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:4:4
+  |
+4 | fn error(message: &str) -> DecodeError {
+  |    ^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `packed_12` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:9:4
+  |
+9 | fn packed_12(
+  |    ^^^^^^^^^
+
+warning: function `decode_zd` is never used
+  --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:48:15
+   |
+48 | pub(super) fn decode_zd(
+   |               ^^^^^^^^^
+
+warning: `rrrah-decode` (lib) generated 3 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 22.82s
+     Running tests/decode.rs (target/debug/deps/decode-5a0200c3e292c20e)
+
+running 13 tests
+test corrupt_missing_cancelled_and_frame_out_of_range_are_errors ... ok
+test public_selected_decode_rejects_a_source_changed_after_output_admission ... ok
+test icc_conversion_cancellation_releases_partial_output ... ok
+test cached_content_does_not_bypass_extension_selected_decoder_errors ... ok
+test cache_hits_revalidate_source_and_cancellation_before_returning_evidence ... ok
+test layered_xcf_duplicates_preserve_color_errors_and_managed_ownership ... ok
+test actual_files_ignore_comments_but_not_changed_pixels ... ok
+test mutation_during_processing_never_admits_cached_evidence ... ok
+test tiff_shaped_raw_never_uses_generic_page_fallback ... ok
+test pre_icc_fix_persisted_recipe_cannot_reuse_current_fingerprint ... ok
+test cached_file_fingerprints_reuse_only_current_content_and_recipe ... ok
+test cached_page_selection_and_color_assumptions_never_cross_reuse ... ok
+test multiblock_cache_hit_cancellation_preserves_retry_and_releases_memory ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.12s
+

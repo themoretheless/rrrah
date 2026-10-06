@@ -1,0 +1,105 @@
+{
+  "repository": "SylphxAI/media-curator",
+  "metadata": {
+    "name": "SylphxAI/media-curator",
+    "url": "https://github.com/SylphxAI/media-curator",
+    "description": "Archived 2026-09-25 \u2014 see czkawka / Immich for photo dedup; Sylphx OSS: anymd, repomap, lockdocs",
+    "language": "TypeScript",
+    "stars": 8,
+    "license": "MIT",
+    "archived": true,
+    "pushed_at": "2026-09-25T11:27:25Z",
+    "default_branch": "main",
+    "queries": [
+      "dedup in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/SylphxAI/media-curator/blob/6a6da4db7e4cc4748b84a8d3808bf14b04d3424c/README.md",
+      "sha256": "8ad134bc3270d4016b379b6b107a87cac700db807a4b68b5ce74faafdccdc302",
+      "truncated": false,
+      "lines": 695,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/SylphxAI/media-curator/blob/6a6da4db7e4cc4748b84a8d3808bf14b04d3424c/LICENSE",
+      "sha256": "c99a79e7d3e4e99e5dce5a44bf1ee73509b57d1b084c8ff63a4d6b2a78ce0ded",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "src/deduplicator.ts",
+      "local": "02-deduplicator.ts",
+      "url": "https://github.com/SylphxAI/media-curator/blob/6a6da4db7e4cc4748b84a8d3808bf14b04d3424c/src/deduplicator.ts",
+      "sha256": "c7cfd59541b3190070ed7ca202431fe14da1b3cf269bd15b4aecd22f657c9efc",
+      "truncated": false,
+      "lines": 331,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/jobs/FileHashBaseJob.ts",
+      "local": "03-FileHashBaseJob.ts",
+      "url": "https://github.com/SylphxAI/media-curator/blob/6a6da4db7e4cc4748b84a8d3808bf14b04d3424c/src/jobs/FileHashBaseJob.ts",
+      "sha256": "76ee3f94d1accccf74b91d328f18a753f5bd2b4d5ac2def062ca5cc7784d4402",
+      "truncated": false,
+      "lines": 41,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/worker/perceptualHashWorker.ts",
+      "local": "04-perceptualHashWorker.ts",
+      "url": "https://github.com/SylphxAI/media-curator/blob/6a6da4db7e4cc4748b84a8d3808bf14b04d3424c/src/worker/perceptualHashWorker.ts",
+      "sha256": "d6ca77b37b168efca082437616707e93f795247e2f44b63504d398bcc33172ec",
+      "truncated": false,
+      "lines": 51,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/deduplicator.integration.bun.test.ts",
+      "local": "05-deduplicator.integration.bun.test.ts",
+      "url": "https://github.com/SylphxAI/media-curator/blob/6a6da4db7e4cc4748b84a8d3808bf14b04d3424c/tests/deduplicator.integration.bun.test.ts",
+      "sha256": "4682fafa22afa91f8cbc794a77bb4ab9253cb379d2a6d1803d798264b43a753d",
+      "truncated": false,
+      "lines": 427,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "crates/media-curator-cli/src/dedup.rs",
+      "local": "06-dedup.rs",
+      "url": "https://github.com/SylphxAI/media-curator/blob/6a6da4db7e4cc4748b84a8d3808bf14b04d3424c/crates/media-curator-cli/src/dedup.rs",
+      "sha256": "ad7159f35f7a7f93149ab097b1c603cd589abdf86d72f6cb266eeb8030cff926",
+      "truncated": false,
+      "lines": 233,
+      "source": true,
+      "test": false
+    }
+  ],
+  "errors": [],
+  "commit": "6a6da4db7e4cc4748b84a8d3808bf14b04d3424c",
+  "tree_truncated": false,
+  "source_file_count": 73,
+  "test_file_count": 21,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "crates/media-curator-cli/src/dedup.rs",
+    "src/deduplicator.ts",
+    "src/jobs/FileHashBaseJob.ts",
+    "tests/deduplicator.integration.bun.test.ts"
+  ]
+}

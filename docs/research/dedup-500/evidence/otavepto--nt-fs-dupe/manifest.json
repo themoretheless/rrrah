@@ -1,0 +1,136 @@
+{
+  "repository": "otavepto/nt-fs-dupe",
+  "metadata": {
+    "name": "otavepto/nt-fs-dupe",
+    "url": "https://github.com/otavepto/nt-fs-dupe",
+    "description": "Nt Filesystem dupe. Library for file & module redirection and hiding, by hooking Nt APIs",
+    "language": "C++",
+    "stars": 29,
+    "license": "Unlicense",
+    "archived": false,
+    "pushed_at": "2024-08-07T06:16:29Z",
+    "default_branch": "main",
+    "queries": [
+      "dupe in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/otavepto/nt-fs-dupe/blob/2f4037ca36100aa95bed1b86f43b25607e411d02/README.md",
+      "sha256": "2e965df28385183d51bbf24d6fd2ab92344dd4a95acc9d8ec572ade248eb1db2",
+      "truncated": false,
+      "lines": 164,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/otavepto/nt-fs-dupe/blob/2f4037ca36100aa95bed1b86f43b25607e411d02/LICENSE",
+      "sha256": "6b0382b16279f26ff69014300541967a356a666eb0b91b422f6862f6b7dad17e",
+      "truncated": false,
+      "lines": 24,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "nt_file_dupe/libs/Detours/LICENSE",
+      "local": "02-LICENSE",
+      "url": "https://github.com/otavepto/nt-fs-dupe/blob/2f4037ca36100aa95bed1b86f43b25607e411d02/nt_file_dupe/libs/Detours/LICENSE",
+      "sha256": "7c77a44a8acd9b41fdc209864a8016b3d430b5d0e09309818d5b7444336df744",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "dll_interface/src/nt_file_dupe.cpp",
+      "local": "03-nt_file_dupe.cpp",
+      "url": "https://github.com/otavepto/nt-fs-dupe/blob/2f4037ca36100aa95bed1b86f43b25607e411d02/dll_interface/src/nt_file_dupe.cpp",
+      "sha256": "8f4ab8594cc9f2e7953b201c74f30a6793c2299d373de8fa16bcec14b11b103b",
+      "truncated": false,
+      "lines": 35,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "dll_interface/include/nt_file_dupe.hpp",
+      "local": "04-nt_file_dupe.hpp",
+      "url": "https://github.com/otavepto/nt-fs-dupe/blob/2f4037ca36100aa95bed1b86f43b25607e411d02/dll_interface/include/nt_file_dupe.hpp",
+      "sha256": "d635550caf3fbef0c8b7ec85b785aadede0fd50f427515126d1cef2916ef7afa",
+      "truncated": false,
+      "lines": 42,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "nt_file_dupe/src/Configs/Configs.cpp",
+      "local": "05-Configs.cpp",
+      "url": "https://github.com/otavepto/nt-fs-dupe/blob/2f4037ca36100aa95bed1b86f43b25607e411d02/nt_file_dupe/src/Configs/Configs.cpp",
+      "sha256": "c83f36a1e1ea4e1684184a0450e54ffdc98c97d3243c8bef782d685528d1b17e",
+      "truncated": false,
+      "lines": 412,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "test_dll_prevent_load/dllmain.cpp",
+      "local": "06-dllmain.cpp",
+      "url": "https://github.com/otavepto/nt-fs-dupe/blob/2f4037ca36100aa95bed1b86f43b25607e411d02/test_dll_prevent_load/dllmain.cpp",
+      "sha256": "78a8d58ba117a66cdf41bf095e8af0f432ba854b6ef1515026c3476788c34f59",
+      "truncated": false,
+      "lines": 27,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "nt_file_dupe/src/Helpers/dbglog.cpp",
+      "local": "07-dbglog.cpp",
+      "url": "https://github.com/otavepto/nt-fs-dupe/blob/2f4037ca36100aa95bed1b86f43b25607e411d02/nt_file_dupe/src/Helpers/dbglog.cpp",
+      "sha256": "1d95fa505caa49c78f398797acd8c5ab830591e930ccb2e7c1f32692d05fa71c",
+      "truncated": false,
+      "lines": 79,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "nt_file_dupe/src/Hooks/Hooks.cpp",
+      "local": "08-Hooks.cpp",
+      "url": "https://github.com/otavepto/nt-fs-dupe/blob/2f4037ca36100aa95bed1b86f43b25607e411d02/nt_file_dupe/src/Hooks/Hooks.cpp",
+      "sha256": "4350e54a77c4c83bb86db15b0076a536550c44b4dd3155481ca273f4e8949ee6",
+      "truncated": false,
+      "lines": 349,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/tests.cpp",
+      "local": "09-tests.cpp",
+      "url": "https://github.com/otavepto/nt-fs-dupe/blob/2f4037ca36100aa95bed1b86f43b25607e411d02/tests/tests.cpp",
+      "sha256": "24a857a8d346569f3773832bb36307f411c590ec63ff165f07129541d708c58c",
+      "truncated": false,
+      "lines": 683,
+      "source": true,
+      "test": true
+    }
+  ],
+  "errors": [],
+  "commit": "2f4037ca36100aa95bed1b86f43b25607e411d02",
+  "tree_truncated": false,
+  "source_file_count": 63,
+  "test_file_count": 1,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "nt_file_dupe/libs/Detours/LICENSE",
+    "dll_interface/src/nt_file_dupe.cpp",
+    "nt_file_dupe/src/Helpers/dbglog.cpp",
+    "nt_file_dupe/src/Hooks/Hooks.cpp",
+    "tests/tests.cpp"
+  ]
+}

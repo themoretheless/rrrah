@@ -1,0 +1,97 @@
+{
+  "repository": "noxdafox/rabbitmq-message-deduplication",
+  "metadata": {
+    "name": "noxdafox/rabbitmq-message-deduplication",
+    "url": "https://github.com/noxdafox/rabbitmq-message-deduplication",
+    "description": "RabbitMQ Plugin for filtering message duplicates",
+    "language": "Elixir",
+    "stars": 333,
+    "license": "MPL-2.0",
+    "archived": false,
+    "pushed_at": "2026-10-01T14:09:38Z",
+    "default_branch": "main",
+    "queries": [
+      "duplicate in:name,description",
+      "duplicates in:name,description",
+      "dedup in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/noxdafox/rabbitmq-message-deduplication/blob/88e548356699f7f17d3144723956eaddf1e6a9c8/README.md",
+      "sha256": "dad6034dac479c7d92b21fda4102a62ec5acb2641906f6eaa210c77085f55301",
+      "truncated": false,
+      "lines": 110,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/noxdafox/rabbitmq-message-deduplication/blob/88e548356699f7f17d3144723956eaddf1e6a9c8/LICENSE",
+      "sha256": "1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5",
+      "truncated": false,
+      "lines": 373,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "lib/rabbitmq_message_deduplication.ex",
+      "local": "02-rabbitmq_message_deduplication.ex",
+      "url": "https://github.com/noxdafox/rabbitmq-message-deduplication/blob/88e548356699f7f17d3144723956eaddf1e6a9c8/lib/rabbitmq_message_deduplication.ex",
+      "sha256": "a102d2b486baf017292e45f421a5f4d9dcb6b8a00e53dc6f6995b378cdf1387f",
+      "truncated": false,
+      "lines": 29,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "lib/rabbitmq_message_deduplication/rabbit_message_deduplication_exchange.ex",
+      "local": "03-rabbit_message_deduplication_exchange.ex",
+      "url": "https://github.com/noxdafox/rabbitmq-message-deduplication/blob/88e548356699f7f17d3144723956eaddf1e6a9c8/lib/rabbitmq_message_deduplication/rabbit_message_deduplication_exchange.ex",
+      "sha256": "fc564701226f10a238307ca24df7217bfc2a7812c9411fe0ebba56180157c1e4",
+      "truncated": false,
+      "lines": 269,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "lib/rabbitmq_message_deduplication/rabbit_message_deduplication_policies.ex",
+      "local": "04-rabbit_message_deduplication_policies.ex",
+      "url": "https://github.com/noxdafox/rabbitmq-message-deduplication/blob/88e548356699f7f17d3144723956eaddf1e6a9c8/lib/rabbitmq_message_deduplication/rabbit_message_deduplication_policies.ex",
+      "sha256": "3bd2f4ccd3477d1161b75eccdfbca2387d468ecd5dbb87523079644133eb995e",
+      "truncated": false,
+      "lines": 73,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "test/exchange_SUITE.erl",
+      "local": "05-exchange_SUITE.erl",
+      "url": "https://github.com/noxdafox/rabbitmq-message-deduplication/blob/88e548356699f7f17d3144723956eaddf1e6a9c8/test/exchange_SUITE.erl",
+      "sha256": "6f2475fe778e99e5194ed15db3ef2f5062c3db02cf9078272e295140197114c1",
+      "truncated": false,
+      "lines": 247,
+      "source": true,
+      "test": true
+    }
+  ],
+  "errors": [],
+  "commit": "88e548356699f7f17d3144723956eaddf1e6a9c8",
+  "tree_truncated": false,
+  "source_file_count": 10,
+  "test_file_count": 2,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "lib/rabbitmq_message_deduplication.ex",
+    "lib/rabbitmq_message_deduplication/rabbit_message_deduplication_exchange.ex",
+    "lib/rabbitmq_message_deduplication/rabbit_message_deduplication_policies.ex",
+    "test/exchange_SUITE.erl"
+  ]
+}

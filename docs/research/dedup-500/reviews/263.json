@@ -1,0 +1,78 @@
+{
+  "index": 263,
+  "repository": "hamedrnik/dedup_signature",
+  "commit": "3ff117ae593b7e6fcc0ce30f93c82e4c5ee843ee",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Rust lookup3 signatures with tests; general fingerprint primitive, not exact content or image normalization.",
+  "available_source_evidence": [
+    {
+      "path": "src/hash.rs",
+      "local": "02-hash.rs",
+      "url": "https://github.com/hamedrnik/dedup_signature/blob/3ff117ae593b7e6fcc0ce30f93c82e4c5ee843ee/src/hash.rs",
+      "sha256": "d7b062346c8e8e64dfd07dda131940d600fb835524b8ec5d0b228f74e4f6c07f",
+      "truncated": false,
+      "lines": 248,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/lib.rs",
+      "local": "03-lib.rs",
+      "url": "https://github.com/hamedrnik/dedup_signature/blob/3ff117ae593b7e6fcc0ce30f93c82e4c5ee843ee/src/lib.rs",
+      "sha256": "ab273ea236c73d16e6bc5367cde4f4d68cb0e332db195077c0d1b593dad02be6",
+      "truncated": false,
+      "lines": 22,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/generator/lookup3_signature.rs",
+      "local": "04-lookup3_signature.rs",
+      "url": "https://github.com/hamedrnik/dedup_signature/blob/3ff117ae593b7e6fcc0ce30f93c82e4c5ee843ee/src/generator/lookup3_signature.rs",
+      "sha256": "9ad9ff5b37fe8afa2948019cedd974df02dccbbe05cfd0479507d78aa30650e0",
+      "truncated": false,
+      "lines": 53,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/test_lookup3_signature.rs",
+      "local": "05-test_lookup3_signature.rs",
+      "url": "https://github.com/hamedrnik/dedup_signature/blob/3ff117ae593b7e6fcc0ce30f93c82e4c5ee843ee/tests/test_lookup3_signature.rs",
+      "sha256": "76ac1e6a07fd01f8a388084add3bd04f4c240654a821d58d82bbf6dfedea4e40",
+      "truncated": false,
+      "lines": 58,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "LGPL-3.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 2,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/hamedrnik/dedup_signature/blob/3ff117ae593b7e6fcc0ce30f93c82e4c5ee843ee/README.md",
+      "sha256": "ab7a7850ee51facc15fdfba19ca0a1774733a23bce5ee392f0d462db334f468f",
+      "truncated": false,
+      "lines": 120,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "COPYING",
+      "local": "01-COPYING",
+      "url": "https://github.com/hamedrnik/dedup_signature/blob/3ff117ae593b7e6fcc0ce30f93c82e4c5ee843ee/COPYING",
+      "sha256": "97628afebc60f026f5c2b25d7491c46a5c4ee61f693e7cfa07fbd2c03605979b",
+      "truncated": false,
+      "lines": 166,
+      "source": false,
+      "test": false
+    }
+  ]
+}

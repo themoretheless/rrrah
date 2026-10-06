@@ -1,0 +1,79 @@
+   Compiling rrrah-dedup v0.1.0 (/workspace/crates/rrrah-dedup)
+   Compiling rrrah-decode v0.1.0 (/workspace/crates/rrrah-decode)
+warning: function `error` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:4:4
+  |
+4 | fn error(message: &str) -> DecodeError {
+  |    ^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `packed_12` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:9:4
+  |
+9 | fn packed_12(
+  |    ^^^^^^^^^
+
+warning: function `decode_zd` is never used
+  --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:48:15
+   |
+48 | pub(super) fn decode_zd(
+   |               ^^^^^^^^^
+
+warning: `rrrah-decode` (lib) generated 3 warnings
+warning: linker stderr: /validation/sysroot/usr/bin/ld: /validation/target/debug/deps/libjpegxr-8d01a0594e000fc4.rlib(2e643c6506a180d9-strenc.o): in function `StrIOEncInit':
+         /validation/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/jpegxr-0.3.1/jxrlib/image/encode/strenc.c:485:(.text.StrIOEncInit+0xf0): the use of `tmpnam' is dangerous, better use `mkstemp'
+  |
+  = note: `#[warn(linker_messages)]` on by default
+
+warning: linker stdout: /validation/sysroot/usr/bin/ld: /validation/target/debug/deps/libjpegxr-8d01a0594e000fc4.rlib(2e643c6506a180d9-strenc.o): note: the message above does not take linker garbage collection into account
+
+warning: `rrrah-dedup` (test "presentation_digest") generated 2 warnings
+warning: `rrrah-dedup` (test "container") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "decode") generated 2 warnings (2 duplicates)
+    Finished `test` profile [optimized + debuginfo] target(s) in 22.90s
+     Running tests/container.rs (/validation/target/debug/deps/container-355d995398ebc4e5)
+
+running 13 tests
+test automatic_directory_search_groups_renamed_containers_and_retains_detection_failures ... ok
+test dcx_icon_and_cursor_page_modes_use_existing_full_decoders ... ok
+test batch_full_presentations_preserve_negative_and_error_evidence ... ok
+test complete_animation_groups_remove_stale_edges_and_keep_healthy_group ... ok
+test exhaustive_scan_does_not_filter_on_zero_duration_first_frame ... ok
+test indexed_recursive_corrupt_animation_is_inconclusive_and_preserves_healthy_edges ... ok
+test indexed_recursive_source_change_removes_stale_edges_and_retry_restores_them ... ok
+test complete_page_comparison_rejects_last_page_changes_and_limits ... ok
+test recursive_complete_animation_groups_preserve_paths_aliases_and_errors ... ok
+test generation_change_at_final_group_admission_returns_no_result ... ok
+test mixed_recursive_indexed_presentations_cover_all_three_scope_classes ... ok
+test selected_frame_does_not_establish_whole_animation_identity ... ok
+test indexed_recursive_modes_retain_labelled_groups_with_candidate_only_budget ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.44s
+
+     Running tests/decode.rs (/validation/target/debug/deps/decode-6065013c56a45757)
+
+running 12 tests
+test cached_file_fingerprints_reuse_only_current_content_and_recipe ... ok
+test actual_files_ignore_comments_but_not_changed_pixels ... ok
+test cache_hits_revalidate_source_and_cancellation_before_returning_evidence ... ok
+test corrupt_missing_cancelled_and_frame_out_of_range_are_errors ... ok
+test layered_xcf_duplicates_preserve_color_errors_and_managed_ownership ... ok
+test mutation_during_processing_never_admits_cached_evidence ... ok
+test pre_icc_fix_persisted_recipe_cannot_reuse_current_fingerprint ... ok
+test public_selected_decode_rejects_a_source_changed_after_output_admission ... ok
+test tiff_shaped_raw_never_uses_generic_page_fallback ... ok
+test icc_conversion_cancellation_releases_partial_output ... ok
+test cached_page_selection_and_color_assumptions_never_cross_reuse ... ok
+test multiblock_cache_hit_cancellation_preserves_retry_and_releases_memory ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.36s
+
+     Running tests/presentation_digest.rs (/validation/target/debug/deps/presentation_digest-4b1b9309d3a56bc0)
+
+running 2 tests
+test timeline_keys_preserve_cross_encoding_splits_zero_prefix_and_labelled_negatives ... ok
+test page_keys_cover_every_page_across_compression_and_byte_order ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+

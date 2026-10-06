@@ -1,0 +1,36 @@
+{
+  "status": "full_converter_crop_observed",
+  "source_sha256": "ea436ba459a7478d7b338428656fae905469de269f928749f3388db2b7b0d53f",
+  "reference_source_sha256": "d18d9e43a096eea04eee2148e53068f8fa45ce95395d97128b1aa37b477eab43",
+  "reference_source_url": "https://raw.githubusercontent.com/ncruces/dcraw/master/dcraw.c",
+  "compile": [
+    "cc",
+    "-O2",
+    "-DNO_JASPER",
+    "-DNO_JPEG",
+    "-DNO_LCMS",
+    "reference.c",
+    "-lm"
+  ],
+  "arguments": [
+    "-4",
+    "-W",
+    "-o",
+    "0",
+    "-c"
+  ],
+  "ppm_dimensions": [
+    2267,
+    1513
+  ],
+  "ppm_maximum": 65535,
+  "ppm_bytes": 20579845,
+  "ppm_sha256": "23efa671255f7e8f069f0cbf157635471070fd065209a4a6028526e1da4eb66c",
+  "crop_area_sensor_half_open": [
+    18,
+    8,
+    2285,
+    1521
+  ],
+  "scope": "Full independent converter output dimensions; pixel/color equality not yet compared."
+}

@@ -1,0 +1,44 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: function `error` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:4:4
+  |
+4 | fn error(message: &str) -> DecodeError {
+  |    ^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `packed_12` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:9:4
+  |
+9 | fn packed_12(
+  |    ^^^^^^^^^
+
+warning: function `decode_zd` is never used
+  --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:48:15
+   |
+48 | pub(super) fn decode_zd(
+   |               ^^^^^^^^^
+
+warning: `rrrah-decode` (lib) generated 3 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 8.38s
+     Running tests/projective_files.rs (target/debug/deps/projective_files-af2b447668e34079)
+
+running 1 test
+
+thread 'real_preview_perspective_derivatives' (3036168) panicked at crates/rrrah-dedup/tests/projective_files.rs:39:2:
+2414: correspondences=11 geometry=Some(ProjectiveEvidence { transform: ProjectiveTransform { matrix: [[1.0098158159184478, 0.06056588890102016, -6.90845200648954], [0.014689464141982245, 1.0710646608830618, -10.532345733055962], [-0.00016109379524070156, 0.00048669270780851584, 0.9607237327543147]] }, inliers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], squared_error: 4.154458738273776, hypotheses: 330 }) pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 68480, compared_pixels: 62012, matched_pixels: 19599, maximum_channel_error: 0.8575813927095742, squared_error: 2627.550176442598 }, reverse: WarpEvidence { source_pixels: 68480, compared_pixels: 67238, matched_pixels: 23850, maximum_channel_error: 0.8456585985266668, squared_error: 2824.4946117916083 } })
+2418: correspondences=12 geometry=Some(ProjectiveEvidence { transform: ProjectiveTransform { matrix: [[1.0257407244992363, -0.019180492072596787, 3.164844194680626], [0.013788274162660413, 1.0256728977362728, -2.758515985563747], [-0.0001229811510836442, 0.00013880043514714405, 1.0149383769728924]] }, inliers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], squared_error: 2.6518467611007153, hypotheses: 495 }) pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 68480, compared_pixels: 64971, matched_pixels: 41753, maximum_channel_error: 1.0, squared_error: 763.1216220007173 }, reverse: WarpEvidence { source_pixels: 68480, compared_pixels: 67373, matched_pixels: 50428, maximum_channel_error: 0.9939075127474242, squared_error: 453.7476765433797 } })
+2883: correspondences=20 geometry=Some(ProjectiveEvidence { transform: ProjectiveTransform { matrix: [[1.0063943163821514, -0.023435505946303083, 4.029477724669093], [0.01614497191156524, 1.0055298139521789, -2.501622354432918], [-0.00014777664712212774, 8.328088719328097e-5, 1.0055477307230887]] }, inliers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19], squared_error: 6.736032785235422, hypotheses: 4845 }) pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 19200, compared_pixels: 18136, matched_pixels: 14723, maximum_channel_error: 0.4161898842188662, squared_error: 41.64697773929221 }, reverse: WarpEvidence { source_pixels: 19200, compared_pixels: 18579, matched_pixels: 16910, maximum_channel_error: 0.34376452347404396, squared_error: 23.334384031921 } })
+5025: correspondences=17 geometry=Some(ProjectiveEvidence { transform: ProjectiveTransform { matrix: [[1.0115372503443139, -0.006458652070634993, 2.9301841311455235], [0.012251069441781084, 1.0240213780345744, -2.3299724473887693], [-0.00012080337374682314, 0.00020151048217931442, 0.9998723682695064]] }, inliers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], squared_error: 2.0835508025246927, hypotheses: 2380 }) pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 76800, compared_pixels: 73593, matched_pixels: 63476, maximum_channel_error: 0.6062420027719867, squared_error: 382.8415157373357 }, reverse: WarpEvidence { source_pixels: 76800, compared_pixels: 75188, matched_pixels: 66355, maximum_channel_error: 0.5385480346459223, squared_error: 297.2895148631387 } })
+5495: correspondences=15 geometry=Some(ProjectiveEvidence { transform: ProjectiveTransform { matrix: [[1.0384386905605425, -0.02005608548660955, 0.21807376101583031], [0.01571240924736247, 1.0274827285158532, -3.157045772172779], [-8.316886458050711e-5, 9.659366474349251e-5, 1.0085644401072915]] }, inliers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], squared_error: 2.973543701883724, hypotheses: 1365 }) pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 76800, compared_pixels: 72124, matched_pixels: 33737, maximum_channel_error: 0.7758223414421082, squared_error: 1211.106808814659 }, reverse: WarpEvidence { source_pixels: 76800, compared_pixels: 76359, matched_pixels: 41829, maximum_channel_error: 0.771330479584943, squared_error: 1074.7417763751253 } })
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test real_preview_perspective_derivatives ... FAILED
+
+failures:
+
+failures:
+    real_preview_perspective_derivatives
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.28s
+
+error: test failed, to rerun pass `-p rrrah-dedup --test projective_files`

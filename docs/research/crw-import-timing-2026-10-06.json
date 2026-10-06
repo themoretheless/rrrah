@@ -1,0 +1,24 @@
+{
+  "reps": 20,
+  "warmups": 1,
+  "wall_ms": {
+    "p50": 129.148584,
+    "p95": 138.953334
+  },
+  "source_ms": {
+    "p50": 0.5405,
+    "p95": 0.603583
+  },
+  "decode_ms": {
+    "p50": 128.560334,
+    "p95": 138.367208
+  },
+  "managed_peak_bytes": 20824002,
+  "pixel_blake3": "56c6b5fae934c31009dc1a33cfab0a113ae849abc7b10c05854968bbd50421fc",
+  "date": "2026-10-06",
+  "source_sha256": "b0730eb3a67cc2281a32e0b2ee104199246928d954a68b7e5b72366514c73d02",
+  "profile": "dev optimized + debuginfo; warm OS file cache",
+  "scope": "NativeRawDecoder import wall time, before hashing and excluding rendering/presentation",
+  "command": "cargo run -p rrrah-decode --example raw_import_timing --locked --target-dir /tmp/rrrah-required-corpus-target -- /tmp/rrrah-10d.crw 20",
+  "log_sha256": "665ca53431eee199927e7626172a526f34c41d562d57cc04928d75900efad4c7"
+}

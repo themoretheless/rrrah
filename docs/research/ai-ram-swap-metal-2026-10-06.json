@@ -1,0 +1,23 @@
+{
+  "sources": [
+    {
+      "name": "VectorApple.ai",
+      "source": "https://media.githubusercontent.com/media/opendesigndev/illustrator-parser-pdfcpu/225c40c9f5d0ea3ff0e793ee1dacc386c198c3d4/__tests__/fixtures/VectorApple.ai",
+      "sha256": "c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06",
+      "bytes": 1062861
+    },
+    {
+      "name": "one.ai",
+      "source": "https://media.githubusercontent.com/media/opendesigndev/illustrator-parser-pdfcpu/225c40c9f5d0ea3ff0e793ee1dacc386c198c3d4/__tests__/fixtures/one.ai",
+      "sha256": "97786949c268233a446e1738fb9c2f941e4d109811bd2f972948cdb7a45d64b4",
+      "bytes": 204049
+    }
+  ],
+  "test": "real_ai_pages_swap_preserves_pixels_and_metal_frame",
+  "result": "1 passed, ignored test explicitly run",
+  "adapter": "Metal Apple M4 Max",
+  "selected_pages": 3,
+  "swap_roundtrips": 6,
+  "evidence": "Native RGBA8 and prepared RGBA32Float preserve all samples, dimensions, page selection and color encoding. RAM admission pressure refuses restore without counting corruption, then retry succeeds. Restored Metal offscreen frame equals the pre-swap native-render baseline. Queue credits and all managed pixel owners release to zero.",
+  "scope": "Transport/GPU preservation only; no independent AI pixel correctness, physical presentation, CUDA/NVIDIA or HDR qualification."
+}

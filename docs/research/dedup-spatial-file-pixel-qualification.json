@@ -1,0 +1,36 @@
+{
+  "scope": "One full-resolution CR2 / independently developed embedded-ICC TIFF pair; not broad RAW coverage",
+  "probe": "raw_raster_probe --verify-spatial",
+  "policy": {
+    "grid": [
+      16,
+      12
+    ],
+    "per_cell": 3,
+    "pixel_tolerance": 0.03,
+    "minimum_matched_fraction": 0.9,
+    "minimum_coverage_fraction": 0.3
+  },
+  "geometry_inliers": 104,
+  "forward": {
+    "source_pixels": 24000000,
+    "compared_pixels": 24000000,
+    "matched_pixels": 21430992,
+    "maximum_channel_error": 1384.4217923215688
+  },
+  "reverse": {
+    "source_pixels": 24216480,
+    "compared_pixels": 23985854,
+    "matched_pixels": 21431685,
+    "maximum_channel_error": 1385.4075030480967
+  },
+  "candidate": false,
+  "managed_used_after": 0,
+  "managed_peak_bytes": 965485168,
+  "interpretation": "Geometry succeeds; strict linear residuals fail the unchanged 90 percent acceptance threshold. Very large channel outliers require separate RAW development qualification. No threshold widened.",
+  "validation": {
+    "local_collection_tests": 5,
+    "local_scan_tests": 11,
+    "selected_clippy": "passed"
+  }
+}

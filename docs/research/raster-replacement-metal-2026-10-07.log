@@ -1,0 +1,13 @@
+   Compiling rrrah-gpu v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu)
+    Finished `test` profile [optimized + debuginfo] target(s) in 2.05s
+     Running tests/resource_lease.rs (/tmp/rrrah-required-corpus-target/debug/deps/resource_lease-8129f30d5856efe2)
+
+running 3 tests
+resource lease adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+replacement adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+test raster_replacement_accounts_for_old_texture_and_queued_upload ... ok
+test texture_upload_holds_credit_without_frame_or_explicit_resource_snapshot ... ok
+test submitted_resources_keep_credit_after_renderer_destruction_until_completion ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.41s
+

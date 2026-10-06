@@ -1,0 +1,56 @@
+{
+  "source_sha256": "ea436ba459a7478d7b338428656fae905469de269f928749f3388db2b7b0d53f",
+  "sensor_section_offset": 232,
+  "sensor_section_length": 7564688,
+  "mapping_bytes": 2048,
+  "code_table_bytes": 4096,
+  "compressed_stream_bytes": 7552392,
+  "row_offsets_bytes": 6124,
+  "mapping_signed_range": [
+    -16384,
+    16384
+  ],
+  "nonzero_codes": 677,
+  "code_lengths": {
+    "4": 7,
+    "5": 6,
+    "6": 8,
+    "7": 9,
+    "8": 14,
+    "9": 20,
+    "10": 29,
+    "11": 66,
+    "12": 56,
+    "13": 42,
+    "14": 49,
+    "15": 60,
+    "16": 55,
+    "17": 76,
+    "18": 66,
+    "19": 31,
+    "20": 23,
+    "21": 23,
+    "22": 25,
+    "23": 8,
+    "24": 4
+  },
+  "first_row_offsets": [
+    0,
+    3468,
+    6936,
+    10404,
+    13872
+  ],
+  "last_row_offsets": [
+    7545456,
+    7548924
+  ],
+  "status": "borrowed layout admission; sample decompression pending",
+  "reference_source": "https://github.com/LibRaw/LibRaw/blob/0.22.2/src/x3f/x3f_utils_patched.cpp",
+  "reference_source_sha256": "0b642f723dc843e3c2c80c0f09869bbf4fd1ca46e4183034becb5cdda70bdda4",
+  "limitations": [
+    "No independent decoded sensor samples yet.",
+    "Mapped differences use signed 16-bit interpretation; predictor wrap and automatic legacy offset still need qualification.",
+    "Monotone row offsets are an admitted subset, not all X3F layouts."
+  ]
+}

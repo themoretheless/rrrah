@@ -1,0 +1,114 @@
+{
+  "repository": "GoogleCloudPlatform/dataflow-pubsub-dedup",
+  "metadata": {
+    "name": "GoogleCloudPlatform/dataflow-pubsub-dedup",
+    "url": "https://github.com/GoogleCloudPlatform/dataflow-pubsub-dedup",
+    "description": null,
+    "language": "Java",
+    "stars": 18,
+    "license": "Apache-2.0",
+    "archived": false,
+    "pushed_at": "2026-07-23T22:07:18Z",
+    "default_branch": "master",
+    "queries": [
+      "dedup in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/GoogleCloudPlatform/dataflow-pubsub-dedup/blob/8dfab8db47a0160051e5edbe93a981982bf32ac9/README.md",
+      "sha256": "f27b54634386bd00fec9a4272a6f2407d3186d893b893479bbc6b8f9bd5fa706",
+      "truncated": false,
+      "lines": 28,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/GoogleCloudPlatform/dataflow-pubsub-dedup/blob/8dfab8db47a0160051e5edbe93a981982bf32ac9/LICENSE",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "truncated": false,
+      "lines": 202,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "bqschemas/bqviews.sh",
+      "local": "02-bqviews.sh",
+      "url": "https://github.com/GoogleCloudPlatform/dataflow-pubsub-dedup/blob/8dfab8db47a0160051e5edbe93a981982bf32ac9/bqschemas/bqviews.sh",
+      "sha256": "b8dc946af765fe5a30fcc722bc3a3d70a5fc244178d2ddeedee1f9c9f32a0c44",
+      "truncated": false,
+      "lines": 29,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "bqschemas/createtables.sh",
+      "local": "03-createtables.sh",
+      "url": "https://github.com/GoogleCloudPlatform/dataflow-pubsub-dedup/blob/8dfab8db47a0160051e5edbe93a981982bf32ac9/bqschemas/createtables.sh",
+      "sha256": "e84c4c25e6b21e10781bc37ffd9d077765afaba9b598398e980641b8a515cf0a",
+      "truncated": false,
+      "lines": 32,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "datagen/datagen.py",
+      "local": "04-datagen.py",
+      "url": "https://github.com/GoogleCloudPlatform/dataflow-pubsub-dedup/blob/8dfab8db47a0160051e5edbe93a981982bf32ac9/datagen/datagen.py",
+      "sha256": "799d673243444de2d214a7d1cd55a20f6ae4f590d566a8e42b4ebd217685d621",
+      "truncated": false,
+      "lines": 156,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "beam_df_dedup/src/main/java/com/google/examples/dfdedup/DedupWithDistinct.java",
+      "local": "05-DedupWithDistinct.java",
+      "url": "https://github.com/GoogleCloudPlatform/dataflow-pubsub-dedup/blob/8dfab8db47a0160051e5edbe93a981982bf32ac9/beam_df_dedup/src/main/java/com/google/examples/dfdedup/DedupWithDistinct.java",
+      "sha256": "cc928e051090feef9c9ea886d8a2e5a515a3ccbaeb58de7af2642ed4632063c6",
+      "truncated": false,
+      "lines": 99,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "beam_df_dedup/src/main/java/com/google/examples/dfdedup/DedupWithPubSubIO.java",
+      "local": "06-DedupWithPubSubIO.java",
+      "url": "https://github.com/GoogleCloudPlatform/dataflow-pubsub-dedup/blob/8dfab8db47a0160051e5edbe93a981982bf32ac9/beam_df_dedup/src/main/java/com/google/examples/dfdedup/DedupWithPubSubIO.java",
+      "sha256": "839fb2fd88cb81421023f15b589cb6236d8b4f4b6dea4161548f393e1f607858",
+      "truncated": false,
+      "lines": 57,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "beam_df_dedup/src/main/java/com/google/examples/dfdedup/DedupWithState.java",
+      "local": "07-DedupWithState.java",
+      "url": "https://github.com/GoogleCloudPlatform/dataflow-pubsub-dedup/blob/8dfab8db47a0160051e5edbe93a981982bf32ac9/beam_df_dedup/src/main/java/com/google/examples/dfdedup/DedupWithState.java",
+      "sha256": "475ea0e17fd536fa3a2676da7e2bf049f5f5ed908aff567e6785a76ec235db6e",
+      "truncated": false,
+      "lines": 58,
+      "source": true,
+      "test": false
+    }
+  ],
+  "errors": [],
+  "commit": "8dfab8db47a0160051e5edbe93a981982bf32ac9",
+  "tree_truncated": false,
+  "source_file_count": 16,
+  "test_file_count": 0,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "beam_df_dedup/src/main/java/com/google/examples/dfdedup/DedupWithDistinct.java",
+    "beam_df_dedup/src/main/java/com/google/examples/dfdedup/DedupWithPubSubIO.java",
+    "beam_df_dedup/src/main/java/com/google/examples/dfdedup/DedupWithState.java"
+  ]
+}

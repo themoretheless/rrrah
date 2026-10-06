@@ -1,0 +1,41 @@
+{
+  "status": "full_corpus_and_extended_lifecycle_passed_both_platforms",
+  "macos_indexed_gate_passed": true,
+  "ordinary_collection_regression_passed": 17,
+  "scope": "Three-file collection: snow-scene base, authored perspective derivative and different scene. Shared descriptor retrieval, file snapshots, native decode and final batch invalidation; selected-frame visual candidates only.",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/local_scan.rs": "dbc7aa69a952917ca82ca5ab07d4d505fe674913e2acc356e2607829b209fd66",
+    "crates/rrrah-dedup/src/local_collection.rs": "b3c07b97575b6bf1217d14f088097f4e9bc45e9002a87d1422d5e2f17b3ee329",
+    "crates/rrrah-dedup/tests/projective_files.rs": "bc0ab17dbb2b56ea27746cab1a57c1ff4d67905c494eb027f3e4d8dc6759c533",
+    "scripts/run-dedup-linux-native.sh": "e60097f70cdbea066d8f9f9041b4752bf9cc8c995ae759d15559e963b7c889fe"
+  },
+  "remaining": [
+    "Captured perspective/lookalike/real burst evaluation",
+    "Windows and measured large collection performance"
+  ],
+  "linux_indexed_gate_passed": true,
+  "ordinary_local_scan_regression_passed": 11,
+  "own_all_features_library_clippy_passed": true,
+  "note": "Final Option::zip lint repair is behavior-preserving and postdates runtime tests; broad dependency Clippy failed separately on rrrah-memory documentation lints",
+  "macos_collection_lifecycle_passed": true,
+  "lifecycle_scope": [
+    "Three identity-copy files",
+    "One-shot final cancellation refuses report",
+    "Pair capacity refusal",
+    "Per-pair registration work refusal is retained as issues",
+    "Mutation during first decode removes changed source while preserving healthy identity pair"
+  ],
+  "linux_collection_lifecycle_passed": true,
+  "macos_full_corpus_index_equality_passed": true,
+  "full_corpus_files": 12,
+  "full_corpus_direct_pairs": 66,
+  "authored_positive_pairs_required": 6,
+  "linux_full_corpus_index_equality_passed": true,
+  "macos_final_generation_cancel_and_retry_passed": true,
+  "macos_late_source_mutation_passed": true,
+  "late_source_scope": "Append at last source hash cancellation checkpoint before stamp validation; discard all source-3 pairs, preserve pair 1/2",
+  "linux_final_generation_cancel_and_retry_passed": true,
+  "linux_late_source_mutation_passed": true,
+  "recursive_gate_passed_macos": true,
+  "recursive_gate_passed_linux": true
+}

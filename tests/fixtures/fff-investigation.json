@@ -1,0 +1,387 @@
+{
+  "status": "native-CFV-50-sensor-color-implemented",
+  "source": {
+    "id": 1637,
+    "license": "CC0-1.0",
+    "sha256": "3b68a04f14d4a95e8c4a29007ece53e993aefa0a7f50b3571970a51ac64acaa4",
+    "bytes": 79439514
+  },
+  "oracle": {
+    "libraw_version": "0.22.2-Release",
+    "make": "Hasselblad",
+    "model": "CFV-50",
+    "width": 8282,
+    "height": 6240,
+    "crop": [
+      42,
+      4,
+      8199,
+      6156
+    ],
+    "wb": [
+      2.30078125,
+      1,
+      1.459594727,
+      0
+    ],
+    "black": 256,
+    "cblack": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "white": 65535,
+    "cfa": [
+      "R",
+      "G",
+      "G",
+      "B"
+    ],
+    "xyz_to_camera": [
+      [
+        0.5279999971,
+        -0.06140000001,
+        0.003899999894
+      ],
+      [
+        -0.4950000048,
+        1.242599964,
+        0.2842999995
+      ],
+      [
+        -0.09390000254,
+        0.2433999926,
+        0.5968000293
+      ],
+      [
+        0,
+        0,
+        0
+      ]
+    ],
+    "camera_to_rgb": [
+      [
+        2.322189331,
+        -0.9647634625,
+        -0.3574258089
+      ],
+      [
+        -0.1941074878,
+        1.758446693,
+        -0.5643391609
+      ],
+      [
+        -0.02815597132,
+        -0.6136764288,
+        1.641832471
+      ]
+    ],
+    "file_color_matrices": [
+      {
+        "parsedfields": 0,
+        "illuminant": 65535,
+        "xyz_to_camera": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "parsedfields": 0,
+        "illuminant": 65535,
+        "xyz_to_camera": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ]
+      }
+    ]
+  },
+  "sensor_sha256": "e55818567f47067b6fa1daa2d79cff21522699db0d42193d3c5f3d6202d15b8f",
+  "directories": [
+    {
+      "offset": 8,
+      "width": 1168,
+      "height": 876,
+      "tags": {
+        "258": [
+          8,
+          8,
+          8
+        ],
+        "259": 1,
+        "273": [
+          606684
+        ],
+        "279": [
+          3069504
+        ],
+        "277": 3,
+        "278": 876,
+        "271": "Hasselblad",
+        "272": "Hasselblad CFV-50",
+        "50728": [
+          8192,
+          18848,
+          8192,
+          8192,
+          8192,
+          11957
+        ]
+      }
+    },
+    {
+      "offset": 512,
+      "width": 8282,
+      "height": 6240,
+      "tags": {
+        "258": 16,
+        "259": 7,
+        "273": [
+          9825436
+        ],
+        "279": [
+          69614078
+        ],
+        "277": 1,
+        "278": 6240,
+        "50714": [
+          256,
+          1
+        ],
+        "50717": 65535,
+        "50719": [
+          54,
+          16
+        ],
+        "50720": [
+          8176,
+          6132
+        ]
+      }
+    },
+    {
+      "offset": 1536,
+      "width": 1168,
+      "height": 876,
+      "tags": {
+        "258": [
+          16,
+          16,
+          16
+        ],
+        "259": 1,
+        "273": [
+          3686428
+        ],
+        "279": [
+          6139008
+        ],
+        "277": 3,
+        "278": 876
+      }
+    },
+    {
+      "offset": 605584,
+      "width": 1168,
+      "height": 876,
+      "tags": {
+        "258": [
+          8,
+          8,
+          8
+        ],
+        "259": 1,
+        "273": [
+          606684
+        ],
+        "279": [
+          3069504
+        ],
+        "277": 3,
+        "278": 876
+      }
+    }
+  ],
+  "payload_prefix_hex": "ffd8ffc3000b101860205a01001100ffffc4002400000201040203010101010100000000000607050408090a030b01020c000d0e0f10ffda0008010000080000fffbdffff7ffffffd774bfeff59785df628e64fada058c47d8172b3efa9001640dc2911c",
+  "remaining": "Cache/swap, GPU, malformed native routing and photographic color qualification pending",
+  "entropy_probe": {
+    "rows_compared": 16,
+    "samples_compared": 132512,
+    "byte_exact_against_LibRaw": true,
+    "word_order": "little-endian u32, MSB-first inside word",
+    "residual_order": "two Huffman categories followed by two amplitudes",
+    "prediction": "two horizontal parity chains; initial 32768 each row",
+    "special_residual": "unsigned amplitude 65535 maps to -32768",
+    "scope": "first sixteen rows only; full native Rust decoder pending",
+    "primary_reference": "https://github.com/LibRaw/LibRaw/blob/0.22.0/src/decoders/load_mfbacks.cpp"
+  },
+  "native_entropy_qualification": {
+    "samples": 51679680,
+    "all_samples_byte_exact_against_LibRaw": true,
+    "truncated_entropy_rejected": true,
+    "pre_cancelled_decode_rejected": true,
+    "implementation": "crates/rrrah-decode/src/camtiff/hasselblad_entropy.rs",
+    "scope": "entropy only; backend memory admission, metadata and image routing pending"
+  },
+  "native": {
+    "make": "Hasselblad",
+    "model": "Hasselblad CFV-50",
+    "width": 8282,
+    "height": 6240,
+    "wb": [
+      2.3007813,
+      1.0,
+      1.4595947,
+      1.0
+    ],
+    "black_grid": [
+      256.0
+    ],
+    "white": [
+      65535.0
+    ],
+    "cfa": [
+      "R",
+      "G",
+      "G",
+      "B"
+    ],
+    "xyz_to_camera": [
+      [
+        0.528,
+        -0.0614,
+        0.0039
+      ],
+      [
+        -0.495,
+        1.2426,
+        0.2843
+      ],
+      [
+        -0.0939,
+        0.2434,
+        0.5968
+      ],
+      [
+        0.0,
+        0.0,
+        0.0
+      ]
+    ],
+    "camera_to_rgb": [
+      [
+        2.3221893,
+        -0.96476346,
+        -0.3574258
+      ],
+      [
+        -0.19410749,
+        1.7584467,
+        -0.56433916
+      ],
+      [
+        -0.028155971,
+        -0.6136764,
+        1.6418325
+      ]
+    ],
+    "crop": [
+      54,
+      16,
+      8176,
+      6132
+    ],
+    "managed_memory": {
+      "limit": 268435456,
+      "used": 103359360,
+      "peak": 182798874,
+      "pixel_capacity": 103359360,
+      "managed": true
+    }
+  },
+  "profile_source": "LibRaw 0.22.0 colordata.cpp 50-Coated-FFF",
+  "integration": {
+    "adapter": "Metal Apple M4 Max",
+    "tests_passed": 1,
+    "frame": [
+      128,
+      96
+    ],
+    "checks": [
+      "all sensor samples exact against LibRaw",
+      "persistent cache metadata/pixels exact",
+      "swap memory-pressure retry preserves entry",
+      "whole GPU frame exact before and after restores"
+    ],
+    "memory_mb": 256
+  },
+  "cache_timing": {
+    "scope": "warm files, no GPU/window, four warmups and sixteen rotating-order measured rounds",
+    "cpu_limit_bytes": 536870912,
+    "cpu_peak_bytes": 286158234,
+    "cpu_final_bytes": 0,
+    "p50_ms": {
+      "decode": 1232.09825,
+      "disk": 69.959333,
+      "swap": 69.498041,
+      "ram": 0.000171
+    },
+    "p95_ms": {
+      "decode": 1382.579208,
+      "disk": 81.82775,
+      "swap": 80.612583,
+      "ram": 0.000198
+    }
+  },
+  "paired_entropy_timing": {
+    "warmup_pairs": 4,
+    "measured_pairs": 8,
+    "alternating_order": true,
+    "full_output_equality_each_pair": true,
+    "bitwise_p50_ms": 1233.224833,
+    "bitwise_p95_ms": 1243.255833,
+    "prefix_p50_ms": 844.488208,
+    "prefix_p95_ms": 854.250209,
+    "paired_gain_min_ms": 376.358375,
+    "paired_gain_max_ms": 398.358708,
+    "scope": "resident input entropy only on pinned CFV-50; no GPU/window"
+  }
+}

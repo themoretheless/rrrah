@@ -1,0 +1,78 @@
+{
+  "index": 420,
+  "repository": "mattpodolak/advhash",
+  "commit": "cbb922741546dc7d7d9cbe500f80ffd25b79e13d",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Adversarial perceptual-hash collision fixtures/experiments; directly motivates negative tests and confidence separation.",
+  "available_source_evidence": [
+    {
+      "path": "advhash/hashes.py",
+      "local": "02-hashes.py",
+      "url": "https://github.com/mattpodolak/advhash/blob/cbb922741546dc7d7d9cbe500f80ffd25b79e13d/advhash/hashes.py",
+      "sha256": "eb8f566d933bb9cb0c13a3f4be276083c7d835913f3d57f863eea7be25a0654e",
+      "truncated": false,
+      "lines": 75,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "advhash/hash/dhash.py",
+      "local": "03-dhash.py",
+      "url": "https://github.com/mattpodolak/advhash/blob/cbb922741546dc7d7d9cbe500f80ffd25b79e13d/advhash/hash/dhash.py",
+      "sha256": "b155009ff7214f11584a30670174ec17174fa2b0c7312b66c9597c06b7be3e09",
+      "truncated": false,
+      "lines": 69,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "advhash/utils/compare.py",
+      "local": "04-compare.py",
+      "url": "https://github.com/mattpodolak/advhash/blob/cbb922741546dc7d7d9cbe500f80ffd25b79e13d/advhash/utils/compare.py",
+      "sha256": "ddf99cd6bda0d57bb8cd69789415c1129b37d70c5c7ff7e921116a033214c040",
+      "truncated": false,
+      "lines": 7,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "test/test_hashes.py",
+      "local": "05-test_hashes.py",
+      "url": "https://github.com/mattpodolak/advhash/blob/cbb922741546dc7d7d9cbe500f80ffd25b79e13d/test/test_hashes.py",
+      "sha256": "b1b889e23c9d42b685df7729612128c57442d4e32375862f1b4db241c292bedf",
+      "truncated": false,
+      "lines": 40,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "GPL-3.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 9,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/mattpodolak/advhash/blob/cbb922741546dc7d7d9cbe500f80ffd25b79e13d/README.md",
+      "sha256": "3c30d3816afe0ce6ea3c7b0dfb12e501ced06208f1a333acaec32878a34f789b",
+      "truncated": false,
+      "lines": 99,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/mattpodolak/advhash/blob/cbb922741546dc7d7d9cbe500f80ffd25b79e13d/LICENSE",
+      "sha256": "8b1ba204bb69a0ade2bfcf65ef294a920f6bb361b317dba43c7ef29d96332b9b",
+      "truncated": false,
+      "lines": 674,
+      "source": false,
+      "test": false
+    }
+  ]
+}

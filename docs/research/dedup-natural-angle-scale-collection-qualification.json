@@ -1,0 +1,77 @@
+{
+  "command": "cargo test -p rrrah-dedup --all-features --test photo_files indexed_natural -- --nocapture",
+  "validation": {
+    "passed": 2,
+    "failed": 0,
+    "filtered": 6
+  },
+  "cohorts": [
+    {
+      "derivative": "crop",
+      "features": 3381,
+      "descriptor_hits": 581291
+    },
+    {
+      "derivative": "rotate",
+      "features": 3689,
+      "descriptor_hits": 1276361
+    },
+    {
+      "derivative": "resize",
+      "features": 3288,
+      "descriptor_hits": 605856
+    }
+  ],
+  "per_cohort": {
+    "files": 8,
+    "exhaustive_pairs": 28,
+    "expected_accepted_edges": [
+      [
+        0,
+        1
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        4,
+        5
+      ],
+      [
+        6,
+        7
+      ]
+    ],
+    "positive_pairs": 4,
+    "negative_pairs": 24,
+    "indexed_pixel_verifications": 4
+  },
+  "thresholds_changed": false,
+  "source_sha256": {
+    "crates/rrrah-dedup/tests/fixtures/photos/830-base.png": "943fc72128ba36baed63f5fa54a7681f090923ec086135746f57a094806d5652",
+    "crates/rrrah-dedup/tests/fixtures/photos/830-rotate.png": "9f457b5500249a1a00ceebec386068591ab5640f7d1a63bb468da1449ff5e8c1",
+    "crates/rrrah-dedup/tests/fixtures/photos/830-resize.png": "f65b0287bcc29602d703e17748a5edb9766bb41b7da9c4d3e203ac6d024fe1a4",
+    "crates/rrrah-dedup/tests/fixtures/photos/830-crop.png": "31f96204f7eb908a0102ef0c440d6b69339e82b488b1be46ebf52328209fefba",
+    "crates/rrrah-dedup/tests/fixtures/photos/898-base.png": "259e512cf451db4d5a05b1b35cbb0a5f0a9a09527236ac1eb8650648a7eed401",
+    "crates/rrrah-dedup/tests/fixtures/photos/898-rotate.png": "7873e7d6b8d73e6c9234e25737cde27d5b0ddad431cead1e6ec593cf2e9036b1",
+    "crates/rrrah-dedup/tests/fixtures/photos/898-resize.png": "c3c774178078d87b5ef6389f493faa69b90ec651854a7670acbc2ecd87581d7c",
+    "crates/rrrah-dedup/tests/fixtures/photos/898-crop.png": "d206f2bbb975117577d31b20e343295a7700d7058af8ea4f99add1eab31f8dfe",
+    "crates/rrrah-dedup/tests/fixtures/photos/1084-base.png": "6c610a3de1962c93925d41d401efbdf83cc95548bf82f1962ef51347569642e9",
+    "crates/rrrah-dedup/tests/fixtures/photos/1084-rotate.png": "18b2fe9a6d40698a9122913599ab90a2b9ef70dffb3ef0a1b8a57ee58d35ba06",
+    "crates/rrrah-dedup/tests/fixtures/photos/1084-resize.png": "443ac23be51a452cb8264d154b19f6287c34bfb798c6aab9e5b6185c2d8e4182",
+    "crates/rrrah-dedup/tests/fixtures/photos/1084-crop.png": "276a328173d54b8136f834ccdcf4586c04e16cd8fb00e8ac8c55eb9a7cd797c6",
+    "crates/rrrah-dedup/tests/fixtures/photos/1294-base.png": "33f2f8ae054dec2682ad7f18811f229f1c6c0676e889871a271bb9c773fe9c5a",
+    "crates/rrrah-dedup/tests/fixtures/photos/1294-rotate.png": "c6cc05bc816009b1b188023d2919ebc9ffeb2a3a886e7c9062f4b12668649556",
+    "crates/rrrah-dedup/tests/fixtures/photos/1294-resize.png": "391351fd89cfe927c413adb49d88b03d43a244cf030ae16993c5c8bfbfe53040",
+    "crates/rrrah-dedup/tests/fixtures/photos/1294-crop.png": "132644207aeb64865729bbdaa3decce60d837aeba95b432cfb3bca361b40ce99",
+    "crates/rrrah-dedup/tests/fixtures/photos/manifest.json": "0842a3f329c469d2aa95521ae73f8e188de480dd47c149d5c281dd775321c9ad",
+    "crates/rrrah-dedup/tests/photo_files.rs": "5292860c3db33869ca71066e75915843416043683168b07f83fc4357b606646c"
+  },
+  "limits": [
+    "Four known embedded camera-preview scenes; not held-out corpus or full sensor development.",
+    "Explicit radius-3 encoded-sRGB filtered photometric policy; strict residuals remain separate evidence.",
+    "No captured bursts/look-alikes, alternate camera development or general confidence calibration.",
+    "Focused tests only, six other photo tests filtered."
+  ]
+}

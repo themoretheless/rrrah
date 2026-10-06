@@ -1,0 +1,46 @@
+{
+  "status": "complete_measurement_one_refusal_one_baseline_candidate_loss",
+  "required_pairs": 580,
+  "build_exit": 0,
+  "probe": "/Users/themoretheless/.codex/tmp/rrrah-dedup-hpatches/photo-probe-anchored",
+  "probe_sha256": "a06aa7c2f8f6bbba4ee097536cf37ee80417436e3c858e56b589e73273c7477a",
+  "settings": {
+    "features": 500,
+    "trials": 2048,
+    "seed": "0x1234abcd",
+    "maximum_inverse_corner_shift": 1.0,
+    "minimum_gain": 0.2,
+    "maximum_gain": 5.0,
+    "maximum_offset": 0.1,
+    "minimum_fit_samples": 16
+  },
+  "scope": "Complete independent measurement, not duplicate-label accuracy. One baseline loss and one inaccurate model prevent default promotion. Source correspondence labels are not duplicate labels.",
+  "remaining": [
+    "Two-lane full native/file/index qualification",
+    "Independent paired portfolio evaluation",
+    "Semantic/burst captured positives and negatives",
+    "Remaining complete library contract"
+  ],
+  "session": 85940,
+  "exit": 1,
+  "completed_pairs": 580,
+  "successful_pairs": 579,
+  "execution_failure_pairs": 1,
+  "candidates": 10,
+  "candidate_gains": 3,
+  "candidate_losses": 1,
+  "geometry_models": 419,
+  "model_grid_diagnostics": {
+    "median_at_most_2_pixels": 405,
+    "no_model": 161,
+    "median_above_2_pixels": 13,
+    "median_above_10_pixels": 1
+  },
+  "integrity_passed": true,
+  "verified_prepared_images": 696,
+  "artifacts": [
+    "docs/research/dedup-hpatches-anchored-complete-analysis.json",
+    "docs/research/dedup-hpatches-anchored-complete-paired.json",
+    "docs/research/dedup-hpatches-anchored-complete-integrity.json"
+  ]
+}

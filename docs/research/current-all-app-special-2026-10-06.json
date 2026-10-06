@@ -1,0 +1,32 @@
+{
+  "passed": 13,
+  "failed": 0,
+  "ignored": 0,
+  "cases": [
+    "foreground_loader_tests::raw_thumbnail_source_and_preview_share_managed_root",
+    "foreground_loader_tests::source_kind_pressure_preserves_visible_then_releases_unpinned_raw",
+    "raw_ram_preload_tests::idle_timer_spills_real_raw_and_restores_sensor_values",
+    "foreground_loader_tests::real_ai_pages_use_shared_ram_hits_and_independent_prefetch_keys",
+    "gallery::tests::raw_prefetch_count_limit_counts_retained_neighbours_after_missing_file",
+    "raw_ram_preload_tests::native_raw_preload_hits_ram_and_disk_without_transferring_visible_pin",
+    "gallery::tests::raw_prefetch_count_limit_preserves_highest_priority_neighbour",
+    "gallery::tests::raster_selection_warms_real_raw_neighbour_without_nonraw_failures",
+    "gallery::tests::raw_prefetch_respects_shared_budget_and_recovers_after_release",
+    "gallery::tests::raw_prefetch_byte_limit_preserves_present_priority_neighbour",
+    "thumbnail_retry_tests::thumbnail_budget_callbacks_progress_without_surface_redraw",
+    "foreground_loader_tests::metal_upload_retains_raw_lease_until_submission_completion",
+    "raw_load_policy::tests::real_3fr_decode_admission_refusal_recovers_disk_and_swap"
+  ],
+  "source_hashes": {
+    "/tmp/rrrah-sony-f828.srf": "07739f94bcab0c7e198d418ac65172d0dce04bb84a7683ecffd0bfe4b32f6d79",
+    "/tmp/rrrah-raw-corpus/3221.sr2": "921c5f2513dd1671a9089e73fc778fc3573bc4cb70a3a555d0414661d0e62274",
+    "/tmp/rrrah-raw-corpus/2058.3fr": "395acb2c706dc10270c58ec261e42a5e36f6ac8c39d2a767e86e83648aa318a3",
+    "/tmp/rrrah-ai-upstream/VectorApple.ai": "c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06",
+    "/tmp/rrrah-ai-upstream/one.ai": "97786949c268233a446e1738fb9c2f941e4d109811bd2f972948cdb7a45d64b4"
+  },
+  "log": "/tmp/rrrah-current-all-app-special.log",
+  "limitations": [
+    "Corpus origin not freshly authenticated",
+    "Coverage is these application resource-flow scenarios, not universal format/color/display qualification"
+  ]
+}

@@ -1,0 +1,89 @@
+uid=1000 gid=1000 groups=1000
+Linux 6.8.0-117-generic aarch64 GNU/Linux
+rustc 1.98.0 (88d9e12ae 2026-08-18)
+    Updating crates.io index
+     Locking 27 packages to latest Rust 1.98.0 compatible versions
+      Adding blake3 v1.8.5 (available: v1.8.7)
+      Adding thiserror v2.0.19 (available: v2.0.21)
+      Adding thiserror-impl v2.0.19 (available: v2.0.21)
+ Downloading crates ...
+  Downloaded arrayref v0.3.9
+  Downloaded errno v0.3.14
+  Downloaded cfg-if v1.0.5
+  Downloaded shlex v2.0.1
+  Downloaded quote v1.0.47
+  Downloaded thiserror v2.0.19
+  Downloaded find-msvc-tools v0.1.14
+  Downloaded arrayvec v0.7.8
+  Downloaded bitflags v2.13.2
+  Downloaded once_cell v1.21.4
+  Downloaded fastrand v2.5.0
+  Downloaded constant_time_eq v0.4.2
+  Downloaded unicode-ident v1.0.26
+  Downloaded tempfile v3.27.0
+  Downloaded getrandom v0.4.3
+  Downloaded thiserror-impl v2.0.19
+  Downloaded proc-macro2 v1.0.107
+  Downloaded cc v1.6.0
+  Downloaded blake3 v1.8.5
+  Downloaded syn v3.0.6
+  Downloaded rustix v1.1.5
+  Downloaded libc v0.2.190
+  Downloaded linux-raw-sys v0.12.1
+   Compiling proc-macro2 v1.0.107
+   Compiling quote v1.0.47
+   Compiling unicode-ident v1.0.26
+   Compiling find-msvc-tools v0.1.14
+   Compiling shlex v2.0.1
+   Compiling libc v0.2.190
+   Compiling cc v1.6.0
+   Compiling getrandom v0.4.3
+   Compiling rustix v1.1.5
+   Compiling cfg-if v1.0.5
+   Compiling thiserror v2.0.19
+   Compiling syn v3.0.6
+   Compiling linux-raw-sys v0.12.1
+   Compiling bitflags v2.13.2
+   Compiling blake3 v1.8.5
+   Compiling arrayvec v0.7.8
+   Compiling once_cell v1.21.4
+   Compiling arrayref v0.3.9
+   Compiling constant_time_eq v0.4.2
+   Compiling fastrand v2.5.0
+   Compiling thiserror-impl v2.0.19
+   Compiling tempfile v3.27.0
+   Compiling rrrah-dedup v0.1.0 (/work)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.01s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_dedup-9827813147053f30)
+
+running 2 tests
+test exact::collision_tests::final_content_validation_rejects_change_even_when_metadata_matches ... ok
+test exact::collision_tests::colliding_samples_and_full_hashes_still_partition_by_bytes ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/content_snapshot.rs (target/debug/deps/content_snapshot-0a21a7f9372bfccb)
+
+running 1 test
+test full_digest_rejects_equal_length_mutation_and_budget_excess ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/exact_files.rs (target/debug/deps/exact_files-46b20b37f1aa0842)
+
+running 12 tests
+test copies_empty_files_and_equal_size_negatives ... ok
+test fifo_replacement_does_not_block_or_hide_healthy_copies ... ok
+test hardlink_aliases_and_followed_symlink_cycles ... ok
+test missing_input_and_overlap_do_not_lose_valid_results ... ok
+test non_utf8_paths_preserve_exact_identity_and_duplicates ... ok
+test same_length_mutation_during_sample_is_detected ... ok
+test size_depth_and_entry_limits_are_visible ... ok
+test unavailable_non_utf8_path_preserves_diagnostic_bytes ... ok
+test unreadable_file_is_explicit_and_does_not_hide_healthy_copies ... ok
+test same_samples_different_middle_are_not_duplicates ... ok
+test cancellation_during_full_hash_is_bounded ... ok
+test changing_any_member_does_not_hide_healthy_duplicates ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.31s
+

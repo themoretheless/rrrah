@@ -1,0 +1,130 @@
+{
+  "date": "2026-10-06",
+  "adapter": "Metal Apple M4 Max",
+  "platform": "macOS-26.7.1-arm64-arm-64bit-Mach-O",
+  "entrypoint": "raw_view_timing",
+  "profile": "cargo dev local opt-level 1, dependencies opt-level 3",
+  "target": [
+    1920,
+    1080
+  ],
+  "scope": "warm filesystem, uncached native RAW decode to completed offscreen SDR GPU frame; no display/presentation; 3 warmups 15 measured loads, 3 warmups 60 resident zoom/pan frames",
+  "correctness": "decoded sensor pixels compared each iteration; GPU completion waited for each submission; GPU pixel readback not performed by this timing entrypoint",
+  "managed_cpu": {
+    "limit": 268435456,
+    "peak": 124360466,
+    "final_used": 0
+  },
+  "managed_gpu": {
+    "limit": 268435456,
+    "peak": 146800640,
+    "final_used": 0
+  },
+  "results": [
+    {
+      "file": "IMG_9043.CR3",
+      "source_sha256": "d06cbb10e84882cf130430bdc88ed2652c2622b96dea8d6a854c09e3bee37e59",
+      "sensor_dimensions": [
+        6188,
+        4120
+      ],
+      "stages": {
+        "decode_ms": {
+          "samples": 15,
+          "p50_ms": 45.02,
+          "p95_ms": 46.043
+        },
+        "upload_enqueue_ms": {
+          "samples": 15,
+          "p50_ms": 16.236,
+          "p95_ms": 16.61
+        },
+        "frame_complete_ms": {
+          "samples": 15,
+          "p50_ms": 11.102,
+          "p95_ms": 12.463
+        },
+        "total_ms": {
+          "samples": 15,
+          "p50_ms": 72.353,
+          "p95_ms": 74.69
+        }
+      },
+      "resident_zoom_pan": {
+        "samples": 60,
+        "p50_ms": 1.373,
+        "p95_ms": 1.895
+      }
+    },
+    {
+      "file": "1826.mrw",
+      "source_sha256": "713819e33e5302ec864d576d57223cfc8dcf46e8d45e0ae744d1fec40290a89f",
+      "sensor_dimensions": [
+        3016,
+        2008
+      ],
+      "stages": {
+        "decode_ms": {
+          "samples": 15,
+          "p50_ms": 5.462,
+          "p95_ms": 5.598
+        },
+        "upload_enqueue_ms": {
+          "samples": 15,
+          "p50_ms": 2.503,
+          "p95_ms": 2.902
+        },
+        "frame_complete_ms": {
+          "samples": 15,
+          "p50_ms": 1.46,
+          "p95_ms": 1.646
+        },
+        "total_ms": {
+          "samples": 15,
+          "p50_ms": 9.392,
+          "p95_ms": 9.986
+        }
+      },
+      "resident_zoom_pan": {
+        "samples": 60,
+        "p50_ms": 0.656,
+        "p95_ms": 1.103
+      }
+    },
+    {
+      "file": "830.dng",
+      "source_sha256": "7a594b66b54f99bb5aba4627c78abfc41213d6911ea54e4f5d2dd6c8505f6968",
+      "sensor_dimensions": [
+        4352,
+        2868
+      ],
+      "stages": {
+        "decode_ms": {
+          "samples": 15,
+          "p50_ms": 203.891,
+          "p95_ms": 206.055
+        },
+        "upload_enqueue_ms": {
+          "samples": 15,
+          "p50_ms": 7.386,
+          "p95_ms": 7.818
+        },
+        "frame_complete_ms": {
+          "samples": 15,
+          "p50_ms": 7.926,
+          "p95_ms": 8.82
+        },
+        "total_ms": {
+          "samples": 15,
+          "p50_ms": 219.376,
+          "p95_ms": 221.286
+        }
+      },
+      "resident_zoom_pan": {
+        "samples": 60,
+        "p50_ms": 0.64,
+        "p95_ms": 2.051
+      }
+    }
+  ]
+}

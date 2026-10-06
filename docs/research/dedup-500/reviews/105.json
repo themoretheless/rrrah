@@ -1,0 +1,58 @@
+{
+  "index": 105,
+  "repository": "sunhanaix/dedup_files",
+  "commit": "6aa92d34f28654b9b942b8822634ebca2670be1b",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Threaded file MD5 dictionaries explicitly assume no collisions; rrrah must add full byte confirmation.",
+  "available_source_evidence": [
+    {
+      "path": "dedup_files.py",
+      "local": "02-dedup_files.py",
+      "url": "https://github.com/sunhanaix/dedup_files/blob/6aa92d34f28654b9b942b8822634ebca2670be1b/dedup_files.py",
+      "sha256": "ed11e2646a5c91fe48f828ddccc28372cf8a1ae167fd2891079ca63352dc268b",
+      "truncated": false,
+      "lines": 242,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "util.py",
+      "local": "03-util.py",
+      "url": "https://github.com/sunhanaix/dedup_files/blob/6aa92d34f28654b9b942b8822634ebca2670be1b/util.py",
+      "sha256": "5590f58511c711dfba6dc56fb62704398d027f487f04699475638c13c8fd0ea9",
+      "truncated": false,
+      "lines": 190,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "Apache-2.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/sunhanaix/dedup_files/blob/6aa92d34f28654b9b942b8822634ebca2670be1b/README.md",
+      "sha256": "dbec936cfe0bd0e8f91588d81890e6cce754488faff5942cfe322323c662c177",
+      "truncated": false,
+      "lines": 30,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/sunhanaix/dedup_files/blob/6aa92d34f28654b9b942b8822634ebca2670be1b/LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "truncated": false,
+      "lines": 201,
+      "source": false,
+      "test": false
+    }
+  ]
+}

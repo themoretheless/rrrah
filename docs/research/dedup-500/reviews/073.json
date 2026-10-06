@@ -1,0 +1,68 @@
+{
+  "index": 73,
+  "repository": "twpayne/find-duplicates",
+  "commit": "ea0d9afe789786172b46815162b3464909bc2d2c",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "shortlist",
+  "finding": "Go DupFinder offers error handler, buffer, include filter and pluggable hashes; useful API/error isolation reference with tests.",
+  "license_metadata": "MIT",
+  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "tests_detected": 1,
+  "upstream_tests_run": false,
+  "available_source_evidence": [
+    {
+      "path": "internal/dupfind/dupfinder.go",
+      "local": "02-dupfinder.go",
+      "url": "https://github.com/twpayne/find-duplicates/blob/ea0d9afe789786172b46815162b3464909bc2d2c/internal/dupfind/dupfinder.go",
+      "sha256": "54694574210c7248940a678fc5ff22257df40557c5d50bc6d36653dbf6d8518b",
+      "truncated": false,
+      "lines": 342,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "main.go",
+      "local": "03-main.go",
+      "url": "https://github.com/twpayne/find-duplicates/blob/ea0d9afe789786172b46815162b3464909bc2d2c/main.go",
+      "sha256": "57074b902954acb9a72ce6dace9198d91d526c4500bd8c691a7ac1537c88e00f",
+      "truncated": false,
+      "lines": 132,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "internal/dupfind/dupfinder_test.go",
+      "local": "04-dupfinder_test.go",
+      "url": "https://github.com/twpayne/find-duplicates/blob/ea0d9afe789786172b46815162b3464909bc2d2c/internal/dupfind/dupfinder_test.go",
+      "sha256": "875db480146c7f95d1aa0c111e69b3f2db4774c56ed4fb6a3555db9046c43c62",
+      "truncated": false,
+      "lines": 332,
+      "source": true,
+      "test": true
+    }
+  ],
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/twpayne/find-duplicates/blob/ea0d9afe789786172b46815162b3464909bc2d2c/README.md",
+      "sha256": "7a9825cd5594e03e080c646e3b75147bcdfd271611ce795dd64c252a86c41206",
+      "truncated": false,
+      "lines": 83,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/twpayne/find-duplicates/blob/ea0d9afe789786172b46815162b3464909bc2d2c/LICENSE",
+      "sha256": "8c50aee6703cfbc76ec88d4374ac49630c087db82a585e615b72e2df47c89f99",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

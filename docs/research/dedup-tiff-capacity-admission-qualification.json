@@ -1,0 +1,23 @@
+{
+  "change": "TIFF directory metadata and ICC reservations ensure actual vector capacity before source read.",
+  "validation": {
+    "pages_container_raster_equality_tests": 22,
+    "final_pages_tests": 11,
+    "budget_cases": 14,
+    "failed": 0,
+    "dedup_lib_no_deps_clippy": "passed"
+  },
+  "checks": [
+    "Classic TIFF and BigTIFF at seven budget limits include failures and successes.",
+    "Every result/error releases all managed credit; measured managed peak <= limit.",
+    "Healthy retry after low-budget refusal recovers expected three-page count."
+  ],
+  "source_sha256": {
+    "crates/rrrah-dedup/src/pages.rs": "fef59f10ac0071bc02afce6caaf7c6e9b6a9ae9fb54b329b35b1367c9b7d08df",
+    "crates/rrrah-dedup/tests/pages.rs": "183b6b25213fc74c4e475741f1fbdf8f0a0b33d4a3ad0fba7721ad5f7d68d52e"
+  },
+  "limits": [
+    "Managed counters only, not OS RSS or all decoder allocation coverage.",
+    "Allocator rounding excess path inspected, not injected with custom allocator."
+  ]
+}

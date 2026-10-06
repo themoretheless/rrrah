@@ -1,0 +1,60 @@
+{
+  "status": "sampled_development_corpus_passed_both_platforms",
+  "macos_session": 41767,
+  "linux_session": 50788,
+  "scope": "Twelve development fixtures, all 66 direct comparisons versus indexed sampled retrieval; all six authored same-source perspective positives required",
+  "settings": {
+    "features": 500,
+    "trials": 2048,
+    "seed": "0x1234abcd",
+    "max_hits": 20000000
+  },
+  "source_sha256": {
+    "crates/rrrah-dedup/src/geometry.rs": "33c820f858bf8a58e1354d2bbb5bcb4b6ea762e43e31c2019a9e6b779d89df9e",
+    "crates/rrrah-dedup/src/local_scan.rs": "bd854497a332e502474ec8d407cea478bb1b424968125b6e2721bba17737ec89",
+    "crates/rrrah-dedup/src/local_collection.rs": "bfd72ba68836bfcda4a6b3840f2c734165c6e242f89a472f3b7d86980e2e8a9c",
+    "crates/rrrah-dedup/tests/projective_files.rs": "4370eb8635375dfb9895364ccf7a0ed1b7d9a4dc98fb1739207aa90675d76c9b"
+  },
+  "remaining": [
+    "Terminal results and any failures",
+    "Independent captured-pair recall and negative calibration",
+    "Large-scale resource qualification"
+  ],
+  "macos": {
+    "exit": 0,
+    "passed": 1,
+    "ignored": 0,
+    "all_direct_pairs": 66,
+    "known_positives": 6,
+    "index_matches_direct": true,
+    "scope": "Before added explicit 14 unrelated-source rejection assertions"
+  },
+  "negative_extension_source_sha256": "76730ba5862f3ac383bc35485ae0c0be8063482123f93acd8ea3e88061dffe40",
+  "linux": {
+    "exit": 0,
+    "passed": 1,
+    "ignored": 0,
+    "all_direct_pairs": 66,
+    "known_positives": 6,
+    "index_matches_direct": true,
+    "scope": "Prior to source addition of explicit fourteen unrelated-scene assertions"
+  },
+  "macos_negative_extension": {
+    "exit": 0,
+    "passed": 1,
+    "ignored": 0,
+    "required_unrelated_scene_pairs": 14,
+    "required_positive_pairs": 6,
+    "all_pairs": 66,
+    "index_matches_direct": true
+  },
+  "linux_negative_extension": {
+    "exit": 0,
+    "passed": 1,
+    "ignored": 0,
+    "required_unrelated_scene_pairs": 14,
+    "required_positive_pairs": 6,
+    "all_pairs": 66,
+    "index_matches_direct": true
+  }
+}

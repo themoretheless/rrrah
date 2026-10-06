@@ -1,0 +1,175 @@
+{
+  "change": "Radius >=256 bypasses metric retrieval, directly compares every fingerprint and sorts identical evidence.",
+  "validation": {
+    "visual_scan_before_new_test": 12,
+    "final_visual_tests": 7,
+    "failed": 0,
+    "dedup_lib_no_deps_clippy": "passed",
+    "scale_queries_oracle_equal": 60
+  },
+  "rows": [
+    {
+      "entries": 1000,
+      "radius": 0,
+      "queries": 4,
+      "build_seconds": 0.0041295,
+      "index_seconds": 1.9125e-05,
+      "exhaustive_seconds": 2.7040999999999997e-05,
+      "hits": 4,
+      "oracle_equal": true
+    },
+    {
+      "entries": 1000,
+      "radius": 8,
+      "queries": 4,
+      "build_seconds": 0.0041295,
+      "index_seconds": 5.304100000000001e-05,
+      "exhaustive_seconds": 2.6791999999999997e-05,
+      "hits": 4,
+      "oracle_equal": true
+    },
+    {
+      "entries": 1000,
+      "radius": 32,
+      "queries": 4,
+      "build_seconds": 0.0041295,
+      "index_seconds": 0.000690291,
+      "exhaustive_seconds": 2.6916e-05,
+      "hits": 4,
+      "oracle_equal": true
+    },
+    {
+      "entries": 1000,
+      "radius": 128,
+      "queries": 4,
+      "build_seconds": 0.0041295,
+      "index_seconds": 0.003227918,
+      "exhaustive_seconds": 8.3459e-05,
+      "hits": 3983,
+      "oracle_equal": true
+    },
+    {
+      "entries": 1000,
+      "radius": 256,
+      "queries": 4,
+      "build_seconds": 0.0041295,
+      "index_seconds": 0.00010899999999999999,
+      "exhaustive_seconds": 9.4917e-05,
+      "hits": 4000,
+      "oracle_equal": true
+    },
+    {
+      "entries": 10000,
+      "radius": 0,
+      "queries": 4,
+      "build_seconds": 0.080282792,
+      "index_seconds": 9.291000000000001e-06,
+      "exhaustive_seconds": 0.00026658300000000003,
+      "hits": 4,
+      "oracle_equal": true
+    },
+    {
+      "entries": 10000,
+      "radius": 8,
+      "queries": 4,
+      "build_seconds": 0.080282792,
+      "index_seconds": 0.000217959,
+      "exhaustive_seconds": 0.000264,
+      "hits": 4,
+      "oracle_equal": true
+    },
+    {
+      "entries": 10000,
+      "radius": 32,
+      "queries": 4,
+      "build_seconds": 0.080282792,
+      "index_seconds": 0.007537709,
+      "exhaustive_seconds": 0.000256,
+      "hits": 4,
+      "oracle_equal": true
+    },
+    {
+      "entries": 10000,
+      "radius": 128,
+      "queries": 4,
+      "build_seconds": 0.080282792,
+      "index_seconds": 0.047425000999999994,
+      "exhaustive_seconds": 0.000944584,
+      "hits": 39882,
+      "oracle_equal": true
+    },
+    {
+      "entries": 10000,
+      "radius": 256,
+      "queries": 4,
+      "build_seconds": 0.080282792,
+      "index_seconds": 0.0011252509999999999,
+      "exhaustive_seconds": 0.00104425,
+      "hits": 40000,
+      "oracle_equal": true
+    },
+    {
+      "entries": 50000,
+      "radius": 0,
+      "queries": 4,
+      "build_seconds": 0.949333,
+      "index_seconds": 3.3667e-05,
+      "exhaustive_seconds": 0.001261333,
+      "hits": 4,
+      "oracle_equal": true
+    },
+    {
+      "entries": 50000,
+      "radius": 8,
+      "queries": 4,
+      "build_seconds": 0.949333,
+      "index_seconds": 0.0012312500000000001,
+      "exhaustive_seconds": 0.001871625,
+      "hits": 4,
+      "oracle_equal": true
+    },
+    {
+      "entries": 50000,
+      "radius": 32,
+      "queries": 4,
+      "build_seconds": 0.949333,
+      "index_seconds": 0.10053495999999999,
+      "exhaustive_seconds": 0.0014432919999999999,
+      "hits": 4,
+      "oracle_equal": true
+    },
+    {
+      "entries": 50000,
+      "radius": 128,
+      "queries": 4,
+      "build_seconds": 0.949333,
+      "index_seconds": 0.601314291,
+      "exhaustive_seconds": 0.005497208,
+      "hits": 199469,
+      "oracle_equal": true
+    },
+    {
+      "entries": 50000,
+      "radius": 256,
+      "queries": 4,
+      "build_seconds": 0.949333,
+      "index_seconds": 0.006056666,
+      "exhaustive_seconds": 0.005669541,
+      "hits": 200000,
+      "oracle_equal": true
+    }
+  ],
+  "source_sha256": {
+    "crates/rrrah-dedup/src/visual.rs": "87a7da97752a304b7eba5ea81366ee889fbdaa0d493aa63c90ace48646573b94",
+    "crates/rrrah-dedup/tests/visual.rs": "44c71be763846ae7a2fafb7a4e851e537457656924cdefdc1ad56fda79368329"
+  },
+  "checks": [
+    "Full-radius/all-transform result equality with exhaustive oracle.",
+    "Cancellation at every direct-path callback for four entries with/without transforms, followed by healthy retry."
+  ],
+  "limits": [
+    "Single-run synthetic timings; not confidence intervals or real image workload.",
+    "Radius 32..255 performance gap remains; build cost unchanged.",
+    "No memory/RSS guarantee."
+  ]
+}

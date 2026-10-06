@@ -1,0 +1,95 @@
+{
+  "repository": "MaksimRudakov/alertly",
+  "metadata": {
+    "name": "MaksimRudakov/alertly",
+    "url": "https://github.com/MaksimRudakov/alertly",
+    "description": "Webhook-to-Telegram notifier for Alertmanager and Kubewatch: dedup, rate limiting, interactive silence buttons, Helm chart",
+    "language": "Go",
+    "stars": 10,
+    "license": "MIT",
+    "archived": false,
+    "pushed_at": "2026-10-01T09:24:06Z",
+    "default_branch": "main",
+    "queries": [
+      "dedup in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/MaksimRudakov/alertly/blob/b343e79a71505b80abe3dd6d85f83f1b9f540688/README.md",
+      "sha256": "56b80a071698a1c3a27338ecccda8935dd4bd088b6304839f00a8887c6a8b96e",
+      "truncated": false,
+      "lines": 426,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/MaksimRudakov/alertly/blob/b343e79a71505b80abe3dd6d85f83f1b9f540688/LICENSE",
+      "sha256": "a6e69caf3f108a1302fd628e1828f09604b8f8507079ca753cf236800d09b164",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "internal/dedup/dedup.go",
+      "local": "02-dedup.go",
+      "url": "https://github.com/MaksimRudakov/alertly/blob/b343e79a71505b80abe3dd6d85f83f1b9f540688/internal/dedup/dedup.go",
+      "sha256": "87a915fb0cd4af0ec3879e827be4a9a236f59f99e90643f8a3a27652febe63b2",
+      "truncated": false,
+      "lines": 137,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "cmd/alertly/main.go",
+      "local": "03-main.go",
+      "url": "https://github.com/MaksimRudakov/alertly/blob/b343e79a71505b80abe3dd6d85f83f1b9f540688/cmd/alertly/main.go",
+      "sha256": "02141f863031ea4c8467116d3000b98568f10bb2535def8628a962510657f0c0",
+      "truncated": false,
+      "lines": 396,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "internal/alertmanager/cache.go",
+      "local": "04-cache.go",
+      "url": "https://github.com/MaksimRudakov/alertly/blob/b343e79a71505b80abe3dd6d85f83f1b9f540688/internal/alertmanager/cache.go",
+      "sha256": "90280d2505e8c2766ebbe6cd4fd053f5cf78ce58721991e407cee14ccc9c126d",
+      "truncated": false,
+      "lines": 104,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "internal/dedup/dedup_test.go",
+      "local": "05-dedup_test.go",
+      "url": "https://github.com/MaksimRudakov/alertly/blob/b343e79a71505b80abe3dd6d85f83f1b9f540688/internal/dedup/dedup_test.go",
+      "sha256": "86095f84b599fd121d9d4b7ac77e01a685adc9e030878e3b916210775084c7b1",
+      "truncated": false,
+      "lines": 157,
+      "source": true,
+      "test": true
+    }
+  ],
+  "errors": [],
+  "commit": "b343e79a71505b80abe3dd6d85f83f1b9f540688",
+  "tree_truncated": false,
+  "source_file_count": 54,
+  "test_file_count": 22,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "internal/dedup/dedup.go",
+    "cmd/alertly/main.go",
+    "internal/alertmanager/cache.go",
+    "internal/dedup/dedup_test.go"
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "status": "reproduced_unresolved",
+  "case": "1084-base.png versus 1084-mirror-brightness.png",
+  "policy": "4x4 grid, 20 features per cell; unchanged matching, geometry and photometric thresholds",
+  "correspondences": 294,
+  "exact_mirror_correspondences": 289,
+  "displaced_correspondences": 5,
+  "selected_transform": {
+    "a": 1.0037176614381749,
+    "b": 0.003412100224078224,
+    "translation": [
+      319.6158586270117,
+      0.1200346302709221
+    ]
+  },
+  "known_fixture_transform": {
+    "a": 1,
+    "b": 0,
+    "translation": [
+      319,
+      0
+    ],
+    "reflection": true
+  },
+  "accepted_pairs": [
+    [
+      0,
+      1
+    ],
+    [
+      2,
+      3
+    ],
+    [
+      6,
+      7
+    ]
+  ],
+  "required_pairs": [
+    [
+      0,
+      1
+    ],
+    [
+      2,
+      3
+    ],
+    [
+      4,
+      5
+    ],
+    [
+      6,
+      7
+    ]
+  ],
+  "regression_test": "spatial_reflected_brightness_collection_matches_complete_spatial_oracle",
+  "prior_evidence_correction": "Earlier four-pair spatial qualification used uncapped reflected right features in file verification. Current symmetric policy exposes a geometry-selection failure; previous broad spatial qualification is insufficient.",
+  "source_hashes": {
+    "crates/rrrah-dedup/src/local.rs": "22a293472ee97403b1e89361c6d610ab3d1732559560f06326315872966e2cf3",
+    "crates/rrrah-dedup/src/geometry.rs": "58bf2f734859fa5187a5f60899387a60a9ff8e421effc0bd1eb7bd7bac52a713",
+    "crates/rrrah-dedup/src/local_scan.rs": "fce879981b012fa9868267e9fe42564d1fe957805c6becc0c3b0ce1b171e9c0b"
+  },
+  "raw_log_sha256": "1ad2d2f2058a431b418955046213dc751a259d87822954f72e228ad86ca7654f",
+  "known_geometry_test": {
+    "result": "passed",
+    "tests": 1,
+    "log_sha256": "3c5910d03563b9c923e126a20890d4b50e50f4299ca5f9224467400e417894a7",
+    "scope": "Known fixture mapping verifies unchanged bidirectional pixel threshold; automatic model selection remains unresolved"
+  },
+  "regression_source_sha256": "d2df78e56b099ab6ee74c18235addeab871dc225d2527e5cb988a721833de072"
+}

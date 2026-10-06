@@ -1,0 +1,93 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+warning: function `error` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:4:4
+  |
+4 | fn error(message: &str) -> DecodeError {
+  |    ^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `packed_12` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:9:4
+  |
+9 | fn packed_12(
+  |    ^^^^^^^^^
+
+warning: function `decode_zd` is never used
+  --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:48:15
+   |
+48 | pub(super) fn decode_zd(
+   |               ^^^^^^^^^
+
+warning: `rrrah-decode` (lib) generated 3 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 19.11s
+     Running tests/decode.rs (target/debug/deps/decode-5a0200c3e292c20e)
+
+running 14 tests
+test mutation_during_processing_never_admits_cached_evidence ... FAILED
+test cached_file_fingerprints_reuse_only_current_content_and_recipe ... FAILED
+test cached_page_selection_and_color_assumptions_never_cross_reuse ... FAILED
+test pre_icc_fix_persisted_recipe_cannot_reuse_current_fingerprint ... FAILED
+test cache_hits_revalidate_source_and_cancellation_before_returning_evidence ... FAILED
+test cached_content_does_not_bypass_extension_selected_decoder_errors ... FAILED
+test public_selected_decode_rejects_a_source_changed_after_output_admission ... ok
+test tiff_shaped_raw_never_uses_generic_page_fallback ... FAILED
+test corrupt_missing_cancelled_and_frame_out_of_range_are_errors ... ok
+test actual_files_ignore_comments_but_not_changed_pixels ... ok
+test layered_xcf_duplicates_preserve_color_errors_and_managed_ownership ... ok
+test cached_wal_tracks_external_palette_changes_and_removal ... ok
+test icc_conversion_cancellation_releases_partial_output ... ok
+test multiblock_cache_hit_cancellation_preserves_retry_and_releases_memory ... ok
+
+failures:
+
+---- mutation_during_processing_never_admits_cached_evidence stdout ----
+
+thread 'mutation_during_processing_never_admits_cached_evidence' (2099169) panicked at crates/rrrah-dedup/tests/decode.rs:189:5:
+assertion failed: matches!(result, Err(CachedError::Source(SnapshotError::Changed)))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- cached_file_fingerprints_reuse_only_current_content_and_recipe stdout ----
+
+thread 'cached_file_fingerprints_reuse_only_current_content_and_recipe' (2099162) panicked at crates/rrrah-dedup/tests/decode.rs:113:83:
+called `Result::unwrap()` on an `Err` value: Source(Io(Error { kind: UnexpectedEof, message: "failed to fill whole buffer" }))
+
+---- cached_page_selection_and_color_assumptions_never_cross_reuse stdout ----
+
+thread 'cached_page_selection_and_color_assumptions_never_cross_reuse' (2099163) panicked at crates/rrrah-dedup/tests/decode.rs:559:87:
+called `Result::unwrap()` on an `Err` value: Source(Io(Error { kind: UnexpectedEof, message: "failed to fill whole buffer" }))
+
+---- pre_icc_fix_persisted_recipe_cannot_reuse_current_fingerprint stdout ----
+
+thread 'pre_icc_fix_persisted_recipe_cannot_reuse_current_fingerprint' (2099170) panicked at crates/rrrah-dedup/tests/decode.rs:324:6:
+called `Result::unwrap()` on an `Err` value: Source(Io(Error { kind: UnexpectedEof, message: "failed to fill whole buffer" }))
+
+---- cache_hits_revalidate_source_and_cancellation_before_returning_evidence stdout ----
+
+thread 'cache_hits_revalidate_source_and_cancellation_before_returning_evidence' (2099160) panicked at crates/rrrah-dedup/tests/decode.rs:388:86:
+called `Result::unwrap()` on an `Err` value: Source(Io(Error { kind: UnexpectedEof, message: "failed to fill whole buffer" }))
+
+---- cached_content_does_not_bypass_extension_selected_decoder_errors stdout ----
+
+thread 'cached_content_does_not_bypass_extension_selected_decoder_errors' (2099161) panicked at crates/rrrah-dedup/tests/decode.rs:630:90:
+called `Result::unwrap()` on an `Err` value: Source(Io(Error { kind: UnexpectedEof, message: "failed to fill whole buffer" }))
+
+---- tiff_shaped_raw_never_uses_generic_page_fallback stdout ----
+
+thread 'tiff_shaped_raw_never_uses_generic_page_fallback' (2099172) panicked at crates/rrrah-dedup/tests/decode.rs:268:9:
+camera.cr2: Source(Io(Error { kind: UnexpectedEof, message: "failed to fill whole buffer" }))
+
+
+failures:
+    cache_hits_revalidate_source_and_cancellation_before_returning_evidence
+    cached_content_does_not_bypass_extension_selected_decoder_errors
+    cached_file_fingerprints_reuse_only_current_content_and_recipe
+    cached_page_selection_and_color_assumptions_never_cross_reuse
+    mutation_during_processing_never_admits_cached_evidence
+    pre_icc_fix_persisted_recipe_cannot_reuse_current_fingerprint
+    tiff_shaped_raw_never_uses_generic_page_fallback
+
+test result: FAILED. 7 passed; 7 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.16s
+
+error: test failed, to rerun pass `-p rrrah-dedup --test decode`

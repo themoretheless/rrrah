@@ -1,0 +1,26 @@
+{
+  "status": "implementation_gap_confirmed",
+  "sources": {
+    "crates/rrrah-dedup/src/exact.rs": "63d2c3a1a26918d0f693810c7583a9430185f6b674e3ffd33b5f88fc47204f17",
+    "crates/rrrah-dedup/tests/exact_files.rs": "f41ecd83074e7fec8e3a5b7cc5bcef7334b89056b6d2ee4b6e367f1287578eb7",
+    "rust-toolchain.toml": "0c9b811689c2817b6404b2858b3e8f7aebf513af379da94774521025b7008863"
+  },
+  "findings": [
+    "Unix uses device/inode; non-Unix uses canonical paths only.",
+    "Hardlink/symlink integration test is cfg(unix) and does not exercise Windows.",
+    "Active project toolchain is stable; Windows volume/file-index std methods documented as nightly-only.",
+    "Existing same-file 1.0.6 Windows source documents its 64-bit ID limitation on ReFS and need to retain handles.",
+    "No Windows target or runtime currently installed."
+  ],
+  "required_implementation": [
+    "Stable safe adapter exposing volume and 128-bit file identity where supported, with owned handle lifetime.",
+    "Explicit error or accurately stated limitation if physical identity is unavailable; canonical path cannot establish distinct physical copies.",
+    "Native Windows hardlink, replacement, alias and ReFS cases before qualifying support."
+  ],
+  "references": [
+    "https://doc.rust-lang.org/std/os/windows/fs/trait.MetadataExt.html"
+  ],
+  "limits": [
+    "No Windows code added or runtime qualification performed."
+  ]
+}

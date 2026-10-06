@@ -1,0 +1,23 @@
+{
+  "change": "Fallible coordinate uniqueness tables, hypothesis/refinement inlier storage and fallback evidence copy.",
+  "validation": {
+    "geometry_local_collection_pyramid_tests": 21,
+    "geometry_tests_after_checkpoint_addition": 5,
+    "failed": 0,
+    "dedup_lib_clippy_no_deps": "passed"
+  },
+  "checks": [
+    "Existing degeneracy and exact least-squares refinement oracles preserved.",
+    "Every callback position in four-point geometry fixture cancels once with no partial evidence.",
+    "Healthy retry recovers identical geometry and support.",
+    "Ten indexed collection integration tests retain expected edges."
+  ],
+  "source_sha256": {
+    "crates/rrrah-dedup/src/geometry.rs": "cc4d982648b3c3522c0b8754a61146cbf6c91d0832df299f03688418bdcf4820",
+    "crates/rrrah-dedup/tests/geometry.rs": "12a5918286d7960fc677bbb9fb956269c05875f636d178203d99af776d834c69"
+  },
+  "limits": [
+    "No actual allocator-failure injection or shared byte-budget accounting for geometry tables.",
+    "Per-hypothesis inlier storage remains allocated independently; performance/RSS not measured."
+  ]
+}

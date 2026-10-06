@@ -1,0 +1,56 @@
+{
+  "scope": "Internal CRW full-sensor acceptance with external tables",
+  "manifest_sha256": "f52b6a40d4f8b7644ce2a8281131e6eb562f6accf7d7ec20c5a195ce953a8f86",
+  "cases": [
+    {
+      "id": 1307,
+      "passed": true,
+      "source_sha256": "4ee482f2b6f9f1a8d370703ea04e9f2abaa49356973a7f56b229af93a78e8a2e",
+      "oracle_sha256": "8ac62f45a4ee04efebed7900eb46dd263dc4a03a96c4fe711dc41b6bec6078fe",
+      "table_sha256": "94fb55465b45059889b7e5588d7c44311f1ec529ba3ce073bfda6b950d830683",
+      "log": "docs/research/current-crw-internal-2026-10-06-1307.log",
+      "log_sha256": "1dd5cca82411d0bb9f9af026c7a48b5cc258f7c12be36bee17c3b5f9dddaec97",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-decode",
+        "--lib",
+        "real_full_sensor_entropy",
+        "--locked",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target",
+        "--",
+        "--ignored",
+        "--nocapture"
+      ]
+    },
+    {
+      "id": 2027,
+      "passed": true,
+      "source_sha256": "b0730eb3a67cc2281a32e0b2ee104199246928d954a68b7e5b72366514c73d02",
+      "oracle_sha256": "3aecb01756492569734885710dafd6ffc26421ac0b5a7fa1c151973d48cd389a",
+      "table_sha256": "1f96c603f8c2f9d47bd5c1b2c8fa25fc87507f8f6c66cbbccaadc6b5af4f6ac0",
+      "log": "docs/research/current-crw-internal-2026-10-06-2027.log",
+      "log_sha256": "44618613eefb0cdb9f4fa6c3ae5230dcab05b422b7348702178a0d189ce569f8",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-decode",
+        "--lib",
+        "real_full_sensor_entropy",
+        "--locked",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target",
+        "--",
+        "--ignored",
+        "--nocapture"
+      ]
+    }
+  ],
+  "limitations": [
+    "No public CRW opening, table shipping, GPU or physical display qualification.",
+    "D30 sensor-only; 10D tests additionally exercise internal calibrated mosaic/thumbnail."
+  ]
+}

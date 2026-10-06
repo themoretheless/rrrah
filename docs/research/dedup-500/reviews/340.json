@@ -1,0 +1,68 @@
+{
+  "index": 340,
+  "repository": "towel42-com/FindDupe",
+  "commit": "c56d4706d6e1f237efa92be060338549eff05e88",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "C++ two-directory file finder with MD5 workers; no detected test corpus, mutation behavior unqualified.",
+  "available_source_evidence": [
+    {
+      "path": "MainWindow/FileFinder.cpp",
+      "local": "02-FileFinder.cpp",
+      "url": "https://github.com/towel42-com/FindDupe/blob/c56d4706d6e1f237efa92be060338549eff05e88/MainWindow/FileFinder.cpp",
+      "sha256": "f6cd3ace7ad44c20025bd2a76752db0d7ab9ee11e49f7afb02272a219891d2ac",
+      "truncated": false,
+      "lines": 178,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "MainWindow/FileFinder.h",
+      "local": "03-FileFinder.h",
+      "url": "https://github.com/towel42-com/FindDupe/blob/c56d4706d6e1f237efa92be060338549eff05e88/MainWindow/FileFinder.h",
+      "sha256": "eb87340fa736a1fa7ff78865f45882a2fa569ff82a6b60d4744c5a39a02cddab",
+      "truncated": false,
+      "lines": 80,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "MainWindow/MainWindow.cpp",
+      "local": "04-MainWindow.cpp",
+      "url": "https://github.com/towel42-com/FindDupe/blob/c56d4706d6e1f237efa92be060338549eff05e88/MainWindow/MainWindow.cpp",
+      "sha256": "5004209168e88879d1909c5c739831a28fd608a426277814243eea26208d57f3",
+      "truncated": false,
+      "lines": 945,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/towel42-com/FindDupe/blob/c56d4706d6e1f237efa92be060338549eff05e88/README.md",
+      "sha256": "1ec8c6385c8a84cfdac1cf990009f0c8c5c6cc78ba903928e5a958e3faba317a",
+      "truncated": false,
+      "lines": 2,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/towel42-com/FindDupe/blob/c56d4706d6e1f237efa92be060338549eff05e88/LICENSE",
+      "sha256": "e975a374adb764a8cb7920c3822987e6c6d195ecce9906d99306931d670532cc",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

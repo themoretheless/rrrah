@@ -1,0 +1,78 @@
+{
+  "index": 366,
+  "repository": "Fl1s/turron",
+  "commit": "c29206a56756309d721c930dde8e829c72b39d56",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "needs-deeper-source",
+  "finding": "Video snippet hash service events/entrypoint selected; actual comparison math not established by excerpts.",
+  "available_source_evidence": [
+    {
+      "path": "hashing-service/src/main/java/org/turron/service/HashingServiceApplication.java",
+      "local": "02-HashingServiceApplication.java",
+      "url": "https://github.com/Fl1s/turron/blob/c29206a56756309d721c930dde8e829c72b39d56/hashing-service/src/main/java/org/turron/service/HashingServiceApplication.java",
+      "sha256": "7ad05aba1c999cbfca685e5926345e5ff0fe8b2b28a4382e44d747848db5cb2e",
+      "truncated": false,
+      "lines": 17,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "hashing-service/src/main/java/org/turron/service/event/SnippetFrameHashedEvent.java",
+      "local": "03-SnippetFrameHashedEvent.java",
+      "url": "https://github.com/Fl1s/turron/blob/c29206a56756309d721c930dde8e829c72b39d56/hashing-service/src/main/java/org/turron/service/event/SnippetFrameHashedEvent.java",
+      "sha256": "b9d17742ffeb2c2e75f488a2099a554e1f9909be7956e861fcab1e8524af032d",
+      "truncated": false,
+      "lines": 16,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "hashing-service/src/main/java/org/turron/service/event/SourceFrameHashedEvent.java",
+      "local": "04-SourceFrameHashedEvent.java",
+      "url": "https://github.com/Fl1s/turron/blob/c29206a56756309d721c930dde8e829c72b39d56/hashing-service/src/main/java/org/turron/service/event/SourceFrameHashedEvent.java",
+      "sha256": "34cfb1ccbdd820216f4931ff7599a6838d88af3bd79ab776b192c60edd69a03e",
+      "truncated": false,
+      "lines": 16,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "hashing-service/src/main/java/org/turron/service/listener/HashingListener.java",
+      "local": "05-HashingListener.java",
+      "url": "https://github.com/Fl1s/turron/blob/c29206a56756309d721c930dde8e829c72b39d56/hashing-service/src/main/java/org/turron/service/listener/HashingListener.java",
+      "sha256": "c31b272a245467c656ef70e51acd71c5c335701995fb5869eec14c94e4934dc3",
+      "truncated": false,
+      "lines": 31,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "Apache-2.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/Fl1s/turron/blob/c29206a56756309d721c930dde8e829c72b39d56/README.md",
+      "sha256": "c324000505363827947c53e4e68dd4b7ed7701b3a5e223c8436256dc0971402a",
+      "truncated": false,
+      "lines": 443,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/Fl1s/turron/blob/c29206a56756309d721c930dde8e829c72b39d56/LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "truncated": false,
+      "lines": 201,
+      "source": false,
+      "test": false
+    }
+  ]
+}

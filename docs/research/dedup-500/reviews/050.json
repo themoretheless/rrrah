@@ -1,0 +1,98 @@
+{
+  "index": 50,
+  "repository": "jvirkki/dupd",
+  "commit": "33907bbcfd5fe8b63f54d4f55438fa222ea880aa",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Full memcmp comparator and hashing modules show hash-then-byte-confirm pattern; GPL reference with hashlist tests.",
+  "license_metadata": "GPL-3.0",
+  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "tests_detected": 1,
+  "upstream_tests_run": false,
+  "available_source_evidence": [
+    {
+      "path": "src/copying.c",
+      "local": "02-copying.c",
+      "url": "https://github.com/jvirkki/dupd/blob/33907bbcfd5fe8b63f54d4f55438fa222ea880aa/src/copying.c",
+      "sha256": "95f5553001c17fdea14368c61c22f5e2bd05d6fcbafb12ea2ee66a5d7a27aa39",
+      "truncated": false,
+      "lines": 734,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/filecompare.c",
+      "local": "03-filecompare.c",
+      "url": "https://github.com/jvirkki/dupd/blob/33907bbcfd5fe8b63f54d4f55438fa222ea880aa/src/filecompare.c",
+      "sha256": "8c46fd3b8175227318f2f575cb3cbf5789b02285ae2b228e0d3540ac814b7c2d",
+      "truncated": false,
+      "lines": 133,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/filecompare.h",
+      "local": "04-filecompare.h",
+      "url": "https://github.com/jvirkki/dupd/blob/33907bbcfd5fe8b63f54d4f55438fa222ea880aa/src/filecompare.h",
+      "sha256": "f422b902137a10ffdac36286835a6d3f0da078f8db26a411280fff5723dbb912",
+      "truncated": false,
+      "lines": 57,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/hash.c",
+      "local": "05-hash.c",
+      "url": "https://github.com/jvirkki/dupd/blob/33907bbcfd5fe8b63f54d4f55438fa222ea880aa/src/hash.c",
+      "sha256": "4dcb1c9360f42f8ff1524874ba4666fefa4deeeb00c3423486d61967beb6da36",
+      "truncated": false,
+      "lines": 568,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/test_hashlist.c",
+      "local": "06-test_hashlist.c",
+      "url": "https://github.com/jvirkki/dupd/blob/33907bbcfd5fe8b63f54d4f55438fa222ea880aa/src/test_hashlist.c",
+      "sha256": "f8849c3f755ef28500eee0f75960e0a8e3f4814be6a14339bbb2dd72d5f44f46",
+      "truncated": false,
+      "lines": 122,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/validate.pl",
+      "local": "07-validate.pl",
+      "url": "https://github.com/jvirkki/dupd/blob/33907bbcfd5fe8b63f54d4f55438fa222ea880aa/tests/validate.pl",
+      "sha256": "0a832f29a5fb6b1053f8e2def265d94314f7ca994b776ec56aaf8a1947685cfd",
+      "truncated": false,
+      "lines": 56,
+      "source": true,
+      "test": true
+    }
+  ],
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README",
+      "local": "00-README",
+      "url": "https://github.com/jvirkki/dupd/blob/33907bbcfd5fe8b63f54d4f55438fa222ea880aa/README",
+      "sha256": "9a780bfb1fed8d70a92f833887cdbbefa8ad487af41b531da1ce73bbff2f669e",
+      "truncated": false,
+      "lines": 29,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "COPYING",
+      "local": "01-COPYING",
+      "url": "https://github.com/jvirkki/dupd/blob/33907bbcfd5fe8b63f54d4f55438fa222ea880aa/COPYING",
+      "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "truncated": false,
+      "lines": 674,
+      "source": false,
+      "test": false
+    }
+  ]
+}

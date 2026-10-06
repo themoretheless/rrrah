@@ -78,6 +78,26 @@ const MAX_IMAGE_SAMPLES: usize = 128 * 1024 * 1024;
 const MAX_CFA_CELLS: usize = 256;
 const MAX_LINEARIZATION_ENTRIES: usize = 65_536;
 
+/// Inspect every bounded TIFF directory, including SubIFDs. Sensor markers
+/// are authoritative even when a rendered preview occupies IFD0.
+pub(crate) fn has_sensor_image(data: &[u8]) -> Result<bool, DngError> {
+    let tiff = Tiff::parse(data, TiffLimits::default())?;
+    for directory in collect_directories_with_chains(&tiff, true)? {
+        if directory.entry(TAG_DNG_VERSION)?.is_some()
+            || directory.entry(TAG_CFA_PATTERN)?.is_some()
+            || directory.entry(TAG_CFA_REPEAT_PATTERN_DIM)?.is_some()
+        {
+            return Ok(true);
+        }
+        if let Some(entry) = directory.entry(TAG_PHOTOMETRIC_INTERPRETATION)?
+            && matches!(entry.unsigned_scalar()?, 32_803 | 34_892)
+        {
+            return Ok(true);
+        }
+    }
+    Ok(false)
+}
+
 /// Parses the highest-resolution primary CFA image from a classic TIFF or
 /// `BigTIFF` DNG payload.
 #[allow(clippy::too_many_lines)]
@@ -252,6 +272,36 @@ pub(crate) fn parse(data: &[u8]) -> Result<DngImage<'_>, DngError> {
         },
         storage,
     })
+}
+
+/// Read bounded opcode blobs from the selected sensor IFD. Wire integers are
+/// big endian independently of the TIFF byte order.
+pub(crate) fn opcode_lists(data: &[u8]) -> Result<rrrah_core::develop::OpcodeLists, String> {
+    let tiff = Tiff::parse(data, TiffLimits::default()).map_err(|e| e.to_string())?;
+    let directories = collect_directories(&tiff).map_err(|e| e.to_string())?;
+    let raw = select_raw_ifd(&directories).map_err(|e| e.to_string())?;
+    let mut lists = rrrah_core::develop::OpcodeLists::default();
+    for (tag, out) in [
+        (51008, &mut lists.list1),
+        (51009, &mut lists.list2),
+        (51022, &mut lists.list3),
+    ] {
+        if let Some(entry) = raw.entry(tag).map_err(|e| e.to_string())? {
+            if !matches!(entry.field_type, FieldType::Undefined | FieldType::Byte) {
+                return Err("opcode tag must contain byte data".into());
+            }
+            *out = rrrah_core::develop::parse_opcode_list(entry.raw_bytes()).map_err(|e| e.to_string())?;
+        }
+    }
+    if !lists.list1.is_empty()
+        && raw
+            .entry(TAG_LINEARIZATION_TABLE)
+            .map_err(|e| e.to_string())?
+            .is_some()
+    {
+        return Err("OpcodeList1 with LinearizationTable is not supported".into());
+    }
+    Ok(lists)
 }
 
 #[derive(Debug)]
@@ -487,6 +537,15 @@ impl<'a> Directory<'a> {
 }
 
 fn collect_directories<'a>(tiff: &Tiff<'a>) -> Result<Vec<Directory<'a>>, DngError> {
+    collect_directories_with_chains(tiff, false)
+}
+
+// Generic camera TIFF classification admits bounded linked SubIFDs. Strict
+// DNG decoding retains its existing no-SubIFD-chain admission contract.
+fn collect_directories_with_chains<'a>(
+    tiff: &Tiff<'a>,
+    allow_sub_chains: bool,
+) -> Result<Vec<Directory<'a>>, DngError> {
     let mut queue = VecDeque::from([(tiff.first_ifd_offset(), true, 0_usize)]);
     let mut seen = HashSet::new();
     let mut directories = Vec::new();
@@ -506,14 +565,23 @@ fn collect_directories<'a>(tiff: &Tiff<'a>) -> Result<Vec<Directory<'a>>, DngErr
             });
         }
         let ifd = tiff.parse_ifd(offset)?;
-        if !is_top_level && ifd.next_ifd_offset != 0 {
+        if !allow_sub_chains && !is_top_level && ifd.next_ifd_offset != 0 {
             return Err(DngError::SubIfdChain {
                 offset,
                 next: ifd.next_ifd_offset,
             });
         }
-        let sub_offsets = ifd
-            .entry(TAG_SUB_IFDS)?
+        let sub_entry = ifd.entry(TAG_SUB_IFDS)?;
+        // Bound scheduled work BEFORE materializing a potentially huge offset
+        // vector. Completed, pending and current directories share one cap.
+        let scheduled = directories.len() + queue.len() + 1 + usize::from(ifd.next_ifd_offset != 0);
+        let remaining = MAX_DIRECTORIES.saturating_sub(scheduled);
+        if scheduled > MAX_DIRECTORIES || sub_entry.is_some_and(|entry| entry.count > remaining as u64) {
+            return Err(DngError::DirectoryLimit {
+                limit: MAX_DIRECTORIES,
+            });
+        }
+        let sub_offsets = sub_entry
             .map(Entry::unsigned_values)
             .transpose()?
             .unwrap_or_default();
@@ -523,8 +591,8 @@ fn collect_directories<'a>(tiff: &Tiff<'a>) -> Result<Vec<Directory<'a>>, DngErr
             }
             queue.push_back((sub_offset, false, depth + 1));
         }
-        if is_top_level && ifd.next_ifd_offset != 0 {
-            queue.push_back((ifd.next_ifd_offset, true, 0));
+        if ifd.next_ifd_offset != 0 {
+            queue.push_back((ifd.next_ifd_offset, is_top_level, depth));
         }
         directories.push(Directory { ifd });
     }
@@ -2057,6 +2125,45 @@ pub mod bench_support {
 mod tests {
     use super::*;
 
+    // Inspired by storytold/lightcraft's raw/tests/robust.rs: exercise damaged
+    // valid files as well as rejection. Deterministic mutations need no RNG or
+    // external camera corpus. Decode is bounded independently of parser limits.
+    #[test]
+    fn damaged_dngs_never_panic() {
+        fn exercise(bytes: &[u8]) {
+            let _ = has_sensor_image(bytes);
+            if let Ok(image) = parse(bytes)
+                && u64::from(image.width) * u64::from(image.height) <= 4096
+            {
+                let _ = image.decode_u16(&|| false);
+            }
+        }
+
+        let original = synthetic_sub_ifd_dng();
+        // Ensure the seed reaches actual decoding, rather than only rejection.
+        assert_eq!(
+            parse(&original)
+                .unwrap()
+                .decode_u16(&|| false)
+                .unwrap()
+                .pixels
+                .len(),
+            6
+        );
+        for length in 0..original.len() {
+            let result = std::panic::catch_unwind(|| exercise(&original[..length]));
+            assert!(result.is_ok(), "DNG panic after truncation to {length} bytes");
+        }
+        for offset in 0..original.len() {
+            for mask in [0x01, 0x80, 0xff] {
+                let mut damaged = original.clone();
+                damaged[offset] ^= mask;
+                let result = std::panic::catch_unwind(|| exercise(&damaged));
+                assert!(result.is_ok(), "DNG panic at byte {offset}, xor {mask:#04x}");
+            }
+        }
+    }
+
     #[test]
     fn selects_raw_sub_ifd_and_parses_required_metadata() {
         let bytes = synthetic_sub_ifd_dng();
@@ -2093,6 +2200,79 @@ mod tests {
             image.decode_u16(&|| false).unwrap().pixels,
             [0, 17, 34, 51, 68, 85]
         );
+    }
+
+    #[test]
+    fn exact_directory_cap_accepts_but_extra_next_link_refuses() {
+        let mut bytes = synthetic_sub_ifd_dng();
+        let count = usize::from(u16::from_le_bytes([bytes[8], bytes[9]]));
+        let position = (0..count)
+            .map(|i| 10 + i * 12)
+            .find(|&p| u16::from_le_bytes([bytes[p], bytes[p + 1]]) == TAG_SUB_IFDS)
+            .unwrap();
+        let mut offsets = vec![256u32]; // Existing sensor directory.
+        for _ in 0..MAX_DIRECTORIES - 2 {
+            offsets.push(u32::try_from(bytes.len()).unwrap());
+            bytes.extend_from_slice(&[0; 6]);
+        }
+        let array = u32::try_from(bytes.len()).unwrap();
+        for offset in &offsets {
+            bytes.extend_from_slice(&offset.to_le_bytes());
+        }
+        bytes[position + 4..position + 8].copy_from_slice(&(offsets.len() as u32).to_le_bytes());
+        bytes[position + 8..position + 12].copy_from_slice(&array.to_le_bytes());
+        assert!(has_sensor_image(&bytes).unwrap());
+        assert!(parse(&bytes).is_ok()); // Root + 255 distinct children.
+        let extra = u32::try_from(bytes.len()).unwrap();
+        bytes.extend_from_slice(&[0; 6]);
+        let root_next = 10 + count * 12;
+        bytes[root_next..root_next + 4].copy_from_slice(&extra.to_le_bytes());
+        assert!(matches!(
+            has_sensor_image(&bytes),
+            Err(DngError::DirectoryLimit { .. })
+        ));
+        assert!(matches!(parse(&bytes), Err(DngError::DirectoryLimit { .. })));
+    }
+
+    #[test]
+    fn oversized_subifd_fanout_refuses_before_offset_vector_allocation() {
+        let mut bytes = synthetic_sub_ifd_dng();
+        let count = usize::from(u16::from_le_bytes([bytes[8], bytes[9]]));
+        let position = (0..count)
+            .map(|i| 10 + i * 12)
+            .find(|&p| u16::from_le_bytes([bytes[p], bytes[p + 1]]) == TAG_SUB_IFDS)
+            .unwrap();
+        let offsets = u32::try_from(bytes.len()).unwrap();
+        for _ in 0..MAX_DIRECTORIES {
+            bytes.extend_from_slice(&256u32.to_le_bytes());
+        }
+        bytes[position + 4..position + 8].copy_from_slice(&(MAX_DIRECTORIES as u32).to_le_bytes());
+        bytes[position + 8..position + 12].copy_from_slice(&offsets.to_le_bytes());
+        // Root plus 256 scheduled children cannot fit the 256-directory cap.
+        assert!(matches!(parse(&bytes), Err(DngError::DirectoryLimit { .. })));
+        assert!(matches!(
+            has_sensor_image(&bytes),
+            Err(DngError::DirectoryLimit { .. })
+        ));
+    }
+
+    #[test]
+    fn camera_classification_admits_linked_subifds_but_rejects_cycles() {
+        let mut bytes = synthetic_sub_ifd_dng();
+        let raw_ifd = 256_usize;
+        let count = usize::from(u16::from_le_bytes([bytes[raw_ifd], bytes[raw_ifd + 1]]));
+        let next = raw_ifd + 2 + count * 12;
+        let tail = u32::try_from(bytes.len()).unwrap();
+        bytes.extend_from_slice(&[0; 6]); // Empty TIFF directory with no next link.
+        bytes[next..next + 4].copy_from_slice(&tail.to_le_bytes());
+        assert!(has_sensor_image(&bytes).unwrap());
+        assert!(matches!(parse(&bytes), Err(DngError::SubIfdChain { .. })));
+        // Generic classification retains bounded cycle rejection.
+        bytes[next..next + 4].copy_from_slice(&8u32.to_le_bytes());
+        assert!(matches!(
+            has_sensor_image(&bytes),
+            Err(DngError::DirectoryCycle { .. })
+        ));
     }
 
     #[test]

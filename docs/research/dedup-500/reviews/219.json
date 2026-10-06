@@ -1,0 +1,78 @@
+{
+  "index": 219,
+  "repository": "linhongseba/Product-Deduplication",
+  "commit": "e8e240ba0bdb080c44bb5ac6c48da43b67c97e7f",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Product TFIDF/cosine and SuperBit LSH; semantic candidate recall concepts, not pixel identity.",
+  "available_source_evidence": [
+    {
+      "path": "code/src/main/itemsim/FindSimilarItem.java",
+      "local": "02-FindSimilarItem.java",
+      "url": "https://github.com/linhongseba/Product-Deduplication/blob/e8e240ba0bdb080c44bb5ac6c48da43b67c97e7f/code/src/main/itemsim/FindSimilarItem.java",
+      "sha256": "4f2bb6cc18c533eb7cd3d9c46dc742e8f79beae0c1e37af0837db6e9ed32b74b",
+      "truncated": false,
+      "lines": 200,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "code/src/main/itemsim/LinearSimilarity.java",
+      "local": "03-LinearSimilarity.java",
+      "url": "https://github.com/linhongseba/Product-Deduplication/blob/e8e240ba0bdb080c44bb5ac6c48da43b67c97e7f/code/src/main/itemsim/LinearSimilarity.java",
+      "sha256": "54ed78e0fbc0ab83f60c827621613b1847f5566071c8dfb6af19558289e93c9a",
+      "truncated": false,
+      "lines": 23,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "code/src/main/itemsim/SimilarityMeasure.java",
+      "local": "04-SimilarityMeasure.java",
+      "url": "https://github.com/linhongseba/Product-Deduplication/blob/e8e240ba0bdb080c44bb5ac6c48da43b67c97e7f/code/src/main/itemsim/SimilarityMeasure.java",
+      "sha256": "b5aa834bb621b0afdce06f25f3f0ee2f962ebeab25dcdf60f220d2c90c310ce2",
+      "truncated": false,
+      "lines": 10,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "code/src/test/itemsim/FindSimilarItemTest.java",
+      "local": "05-FindSimilarItemTest.java",
+      "url": "https://github.com/linhongseba/Product-Deduplication/blob/e8e240ba0bdb080c44bb5ac6c48da43b67c97e7f/code/src/test/itemsim/FindSimilarItemTest.java",
+      "sha256": "9d4d60b8f403975575e4bd94ea1cc8affdff6c611df3d5568a51c71b6047b9e9",
+      "truncated": false,
+      "lines": 30,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "Apache-2.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 16,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/linhongseba/Product-Deduplication/blob/e8e240ba0bdb080c44bb5ac6c48da43b67c97e7f/README.md",
+      "sha256": "18c51bff27e60a51847890163ad6b98a39a3dbb102abcd40fe6a277f026c90e2",
+      "truncated": false,
+      "lines": 198,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/linhongseba/Product-Deduplication/blob/e8e240ba0bdb080c44bb5ac6c48da43b67c97e7f/LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "truncated": false,
+      "lines": 201,
+      "source": false,
+      "test": false
+    }
+  ]
+}

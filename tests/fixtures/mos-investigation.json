@@ -1,0 +1,275 @@
+{
+  "format": "MOS",
+  "status": "qualified Leaf Aptus 22 native subset; other MOS cameras/layouts unqualified",
+  "source": {
+    "asset": 3196,
+    "license": "CC0",
+    "sha256": "8a1a101cb3940b0648af54a721d92e6fb8612dd29a0909036ea2753196a00ec2",
+    "bytes": 23423633
+  },
+  "oracle": {
+    "libraw_version": "0.22.2-Release",
+    "make": "Leaf",
+    "model": "Aptus 22",
+    "width": 4008,
+    "height": 5344,
+    "crop": [
+      0,
+      0,
+      4008,
+      5344
+    ],
+    "wb": [
+      1.209766984,
+      1,
+      1.465053797,
+      0
+    ],
+    "black": 0,
+    "cblack": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "white": 16383,
+    "cfa": [
+      "R",
+      "G",
+      "G",
+      "B"
+    ],
+    "xyz_to_camera": [
+      [
+        0.8235999942,
+        0.1746000051,
+        -0.1313000023
+      ],
+      [
+        -0.8251000047,
+        1.595299959,
+        0.2427999973
+      ],
+      [
+        -0.3671999872,
+        0.5785999894,
+        0.5770999789
+      ],
+      [
+        0,
+        0,
+        0
+      ]
+    ],
+    "camera_to_rgb": [
+      [
+        2.199323893,
+        -1.483071566,
+        0.2837477624
+      ],
+      [
+        -0.03001866117,
+        1.468234181,
+        -0.438215524
+      ],
+      [
+        0.09251240641,
+        -1.033205986,
+        1.940693498
+      ]
+    ],
+    "file_color_matrices": [
+      {
+        "parsedfields": 0,
+        "illuminant": 65535,
+        "xyz_to_camera": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "parsedfields": 0,
+        "illuminant": 65535,
+        "xyz_to_camera": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ]
+      }
+    ]
+  },
+  "sensor_sha256": "ac1428fcf7739eccabd887037a91afebc44f82a17b0a4c594d1539e7afdf369a",
+  "storage": {
+    "byte_order": "big",
+    "compression": 99,
+    "tile_offset": 531582,
+    "tile_bytes": 22892051,
+    "jpeg_width": 2004,
+    "jpeg_height": 5344,
+    "jpeg_precision": 16,
+    "jpeg_components": 2,
+    "restart_interval": 16032
+  },
+  "packet_container": {
+    "tag": 34310,
+    "offset": 4968,
+    "bytes": 526614,
+    "marker": "PKTS",
+    "header_bytes": 52,
+    "name_bytes": 40,
+    "length_endianness": "big",
+    "qualification": {
+      "native_wb": "matches independent LibRaw within 1e-6",
+      "bounds": {
+        "max_bytes": 8388608,
+        "max_depth": 16,
+        "max_packets": 4096,
+        "max_numeric_bytes": 256
+      },
+      "rejections": [
+        "truncated prefixes",
+        "duplicate calibration",
+        "excessive nesting",
+        "zero/out-of-range WB",
+        "missing/extra numeric coefficients",
+        "unqualified back type",
+        "packet escapes parent"
+      ],
+      "scope": "standalone native metadata parser; container integration pending"
+    }
+  },
+  "native_metadata_candidates": {
+    "ShootObj_back_type": 12,
+    "CaptProf_number_of_planes": 1,
+    "CaptProf_mosaic_pattern": [
+      1,
+      3,
+      2,
+      0
+    ],
+    "CaptProf_raw_data_rotation": 0,
+    "ImgProf_rotation_angle": 90,
+    "NeutObj_neutrals": [
+      3270,
+      2703,
+      3270,
+      2232
+    ]
+  },
+  "remaining": [
+    "other cameras and layouts",
+    "cold storage and physical navigation",
+    "physical display/HDR qualification"
+  ],
+  "entropy_investigation": {
+    "strict_dng_decode": "rejected",
+    "error": "NonzeroQuantizationSelector { component_id: 1, selector: 1 }",
+    "sensor_equality": "all 21418752 samples matched LibRaw 0.22.2; standalone entropy only",
+    "requirement": "format-scoped MOS compatibility; retain strict DNG validation",
+    "compatibility": "qualified exact SOF3 precision16 two-component header; SOF IDs0/1 mapped to SOS IDs1/2; selector1 accepted only for this header",
+    "remaining": "container, native color metadata, managed allocations, cache and GPU integration not qualified"
+  },
+  "native_decode": {
+    "backend_id": 19,
+    "backend_revision": 1,
+    "full_sensor_equal": true,
+    "managed_limit": 134217728,
+    "managed_peak": 66261137,
+    "managed_output": 42837504,
+    "color_tolerance": 1e-06
+  },
+  "integration": {
+    "adapter": "Metal Apple M4 Max",
+    "frame_extent": [
+      128,
+      96
+    ],
+    "full_frame": "native equals independent-sensor/profile reference; RAM/disk/swap frames equal reference",
+    "ram": "shared managed pixels; consumer lease prevents limit shrink until released",
+    "disk": "full sensor and metadata exact, 64MiB quota",
+    "swap": "64MiB quota/count1; bounded queue64MiB/count1; full metadata and sensor exact; memory-pressure restore retry succeeds",
+    "teardown": "managed CPU usage and queue occupancy return to zero",
+    "negative_cases": [
+      "zero WB",
+      "unqualified back type",
+      "PKTS length escapes parent",
+      "oversized JPEG geometry",
+      "truncated sensor",
+      "unqualified rotation"
+    ],
+    "negative_budget": "8MiB refusal returns managed usage to zero",
+    "evidence": [
+      "/tmp/rrrah-mos-metal.log",
+      "/tmp/rrrah-mos-rejection-integration.log"
+    ]
+  },
+  "cache_timing": {
+    "date": "2026-10-06",
+    "warmup_rounds": 4,
+    "measured_rounds": 16,
+    "rotating_order": true,
+    "scope": "warm files; full sensor/metadata checked outside timing; excludes GPU and physical display",
+    "p50_p95_ms": {
+      "decode": [
+        333.715417,
+        334.738708
+      ],
+      "disk": [
+        28.811584,
+        29.240292
+      ],
+      "swap": [
+        27.804666,
+        28.100583
+      ],
+      "ram": [
+        0.000163,
+        0.00018
+      ]
+    },
+    "root_limit_bytes": 268435456,
+    "root_peak_bytes": 109098641,
+    "restore_peak_bytes": 42837504,
+    "evidence": [
+      "target/bench/mos-cache/current.csv",
+      "target/bench/mos-cache/current.log"
+    ]
+  }
+}

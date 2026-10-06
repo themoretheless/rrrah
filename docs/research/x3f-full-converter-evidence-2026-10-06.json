@@ -1,0 +1,31 @@
+{
+  "status": "full_converter_comparison_failed",
+  "mismatches": 10520375,
+  "max_difference": 261,
+  "instrumentation": "dump signed sensor-frame channels immediately before black-border crop; no arithmetic modified",
+  "converter_options": [
+    "-4",
+    "-W",
+    "-o",
+    "0",
+    "-c"
+  ],
+  "files": {
+    "rrrah-dcraw-foveon-reference.c": {
+      "sha256": "d18d9e43a096eea04eee2148e53068f8fa45ce95395d97128b1aa37b477eab43",
+      "bytes": 344284
+    },
+    "rrrah-dcraw-instrumented.c": {
+      "sha256": "ed3009e1a14424a349286e3b28ae7eb82e553d90229f2f9727061d3efb7110f9",
+      "bytes": 344618
+    },
+    "rrrah-sd10-full-converter.i32le": {
+      "sha256": "9dd13a709233055514b154b1ece50330bc64f741116a9ef3a8f86370abc2c9fb",
+      "bytes": 42329088
+    },
+    "rrrah-sd10-instrumented.ppm": {
+      "sha256": "3c0a1d6f7f71164ec3739e03a1bb321db706684c446177ef663f08ffd8c82b33",
+      "bytes": 20579845
+    }
+  }
+}

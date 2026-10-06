@@ -10,7 +10,7 @@ use rrrah_core::{
 
 use crate::{
     AdaptTimings, DecodeError, DecodeOutput, DecodeRequest, DecodeTimings, NativeDecodeTimings, RawDecoder,
-    bounded_io::read_bounded,
+    bounded_io::read_managed,
     cr3::{
         assemble::{
             ParallelDecodeError, StreamingDecodeError, decode_four_planes, decode_four_planes_streaming,
@@ -88,6 +88,7 @@ struct NativeAdaptationSummary {
     height: u32,
     image_description: Iad1,
     profile: EosR8Profile,
+    sensor_levels: crate::cr3::ctmd::EosR8SensorLevels,
     as_shot_white_balance: EosR8AsShotWhiteBalance,
     orientation: Orientation,
 }
@@ -98,6 +99,7 @@ impl NativeAdaptationSummary {
             config,
             metadata,
             as_shot_white_balance,
+            sensor_levels,
             ..
         } = frame;
         Self {
@@ -105,6 +107,7 @@ impl NativeAdaptationSummary {
             height: config.compression.image_height,
             image_description: config.image_description,
             profile: metadata.profile,
+            sensor_levels,
             as_shot_white_balance,
             orientation: metadata.orientation,
         }
@@ -118,7 +121,7 @@ impl NativeAdaptationSummary {
 /// whenever decoded pixels or metadata can change.
 pub const NATIVE_EOS_R8_MOSAIC_CONTRACT_1: MosaicRecipeManifest = MosaicRecipeManifest::new(
     NATIVE_CR3_BACKEND_ID,
-    1,
+    3,
     1,
     1,
     NATIVE_DECODE_FLAGS,
@@ -128,25 +131,22 @@ pub const NATIVE_EOS_R8_MOSAIC_CONTRACT_1: MosaicRecipeManifest = MosaicRecipeMa
 #[derive(Debug, Clone, Copy, Default)]
 pub struct NativeCr3Decoder;
 
-impl RawDecoder for NativeCr3Decoder {
-    fn mosaic_recipe(&self, _request: &DecodeRequest) -> Result<MosaicRecipeManifest, DecodeError> {
-        Ok(NATIVE_EOS_R8_MOSAIC_CONTRACT_1)
-    }
-
-    fn decode(&self, request: &DecodeRequest) -> Result<DecodeOutput, DecodeError> {
-        let total_started = Instant::now();
+impl NativeCr3Decoder {
+    /// Shared CR3 pipeline for filesystem and managed in-memory source owners.
+    /// Entropy worker borrows end before source release and metadata adaptation.
+    pub(crate) fn decode_source<S: std::ops::Deref<Target = [u8]>>(
+        &self,
+        request: &DecodeRequest,
+        data: S,
+        source_open: std::time::Duration,
+        total_started: Instant,
+    ) -> Result<DecodeOutput, DecodeError> {
         request.check_cancelled()?;
         if request.image_index != 0 {
             return Err(DecodeError::UnsupportedImageIndex {
                 index: request.image_index,
             });
         }
-
-        let source_started = Instant::now();
-        let data = read_bounded(request)?;
-        let source_open = source_started.elapsed();
-        request.check_cancelled()?;
-
         let decoder_select_started = Instant::now();
         let frame = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| parse(&data)))
             .map_err(|_| DecodeError::DecoderPanicked)?
@@ -155,13 +155,24 @@ impl RawDecoder for NativeCr3Decoder {
         request.check_cancelled()?;
 
         let raw_image_started = Instant::now();
+        // Reserve the full sensor output before the assembler allocates it.
+        // Entropy scratch/plane rows and compressed source remain separate work.
+        let output_bytes = u64::from(frame.config.compression.image_width)
+            .checked_mul(u64::from(frame.config.compression.image_height))
+            .and_then(|n| n.checked_mul(2))
+            .ok_or(DecodeError::DimensionOverflow)?;
+        let reservation = request
+            .memory_budget
+            .as_ref()
+            .map(|budget| budget.try_reserve(output_bytes))
+            .transpose()?;
         let (pixels, native) = decode_sensor_pixels(&frame, request)?;
         let adaptation = NativeAdaptationSummary::from_frame(frame);
         drop(data);
         let raw_image = raw_image_started.elapsed();
         request.check_cancelled()?;
 
-        let (mosaic, adapt) = adapt_native_frame(&adaptation, pixels)?;
+        let (mosaic, adapt) = adapt_native_frame(&adaptation, pixels, reservation)?;
         let adapt_metadata = adapt.total;
         let raw_decode = decoder_select.saturating_add(raw_image);
         request.check_cancelled()?;
@@ -180,6 +191,29 @@ impl RawDecoder for NativeCr3Decoder {
                 total: total_started.elapsed(),
             },
         })
+    }
+}
+
+impl RawDecoder for NativeCr3Decoder {
+    fn mosaic_recipe(&self, _request: &DecodeRequest) -> Result<MosaicRecipeManifest, DecodeError> {
+        Ok(NATIVE_EOS_R8_MOSAIC_CONTRACT_1)
+    }
+
+    fn decode(&self, request: &DecodeRequest) -> Result<DecodeOutput, DecodeError> {
+        let total_started = Instant::now();
+        request.check_cancelled()?;
+        if request.image_index != 0 {
+            return Err(DecodeError::UnsupportedImageIndex {
+                index: request.image_index,
+            });
+        }
+
+        let source_started = Instant::now();
+        let data = read_managed(request)?;
+        let source_open = source_started.elapsed();
+        request.check_cancelled()?;
+
+        self.decode_source(request, data, source_open, total_started)
     }
 }
 
@@ -275,6 +309,7 @@ fn map_parallel_error(error: ParallelDecodeError<LosslessError>) -> DecodeError 
 fn adapt_native_frame(
     frame: &NativeAdaptationSummary,
     pixels: Vec<u16>,
+    reservation: Option<rrrah_core::Reservation>,
 ) -> Result<(DecodedMosaic, AdaptTimings), DecodeError> {
     let total_started = Instant::now();
 
@@ -294,9 +329,9 @@ fn adapt_native_frame(
         width: 2,
         height: 2,
         components: 1,
-        values: profile.black_level.into_iter().collect(),
+        values: frame.sensor_levels.black.into_iter().map(f32::from).collect(),
     };
-    let white_level = WhiteLevel(vec![profile.white_level]);
+    let white_level = WhiteLevel(vec![f32::from(u16::MAX >> (16 - profile.bits_per_sample))]);
     let levels = levels_started.elapsed();
 
     let color_started = Instant::now();
@@ -341,7 +376,10 @@ fn adapt_native_frame(
         crop_area,
         orientation: frame.orientation,
     };
-    let mosaic = DecodedMosaic::new(metadata, Arc::new(pixels))?;
+    let mosaic = match reservation {
+        Some(reservation) => DecodedMosaic::new(metadata, reservation.try_adopt(pixels)?)?,
+        None => DecodedMosaic::new(metadata, Arc::new(pixels))?,
+    };
     let finalize = finalize_started.elapsed();
     let total = total_started.elapsed();
 
@@ -367,6 +405,40 @@ mod tests {
 
     use super::*;
     use crate::GenerationToken;
+
+    #[test]
+    #[ignore = "requires local EOS R8 tests/IMG_9043.CR3 fixture"]
+    fn cr3_output_budget_reserves_before_decode_and_retains_owners() {
+        let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/IMG_9043.CR3");
+        let mut request = DecodeRequest::new(path);
+        let zero = rrrah_core::MemoryBudget::new(0);
+        request.memory_budget = Some(zero.clone());
+        assert!(matches!(
+            NativeCr3Decoder.decode(&request),
+            Err(DecodeError::Memory(_))
+        ));
+        assert_eq!(zero.used(), 0);
+        request.memory_budget = None;
+        let reference = NativeCr3Decoder.decode(&request).unwrap();
+        let output_bytes = reference.mosaic.pixels.capacity_bytes();
+        let source_bytes = std::fs::metadata(&request.path).unwrap().len();
+        let budget = rrrah_core::MemoryBudget::new(output_bytes + source_bytes);
+        request.memory_budget = Some(budget.clone());
+        let decoded = NativeCr3Decoder.decode(&request).unwrap();
+        assert!(decoded.mosaic.pixels.is_managed());
+        assert_eq!(budget.peak(), output_bytes + source_bytes);
+        assert_eq!(decoded.mosaic.pixels, reference.mosaic.pixels);
+        assert_eq!(decoded.mosaic.metadata, reference.mosaic.metadata);
+        let owner = decoded.mosaic.clone();
+        drop(decoded);
+        assert_eq!(budget.used(), owner.pixels.capacity_bytes());
+        assert!(matches!(
+            NativeCr3Decoder.decode(&request),
+            Err(DecodeError::Memory(_))
+        ));
+        drop(owner);
+        assert_eq!(budget.used(), 0);
+    }
 
     #[test]
     #[allow(clippy::format_collect)]

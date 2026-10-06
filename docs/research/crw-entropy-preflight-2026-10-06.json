@@ -1,0 +1,20 @@
+{
+  "scope": "CRW minimum entropy preflight before output admission",
+  "default_passed": 720,
+  "ignored": 40,
+  "real_10d_passed": 1,
+  "logs": {
+    "/tmp/rrrah-crw-entropy-admission.log": "ecef4ce49bd1ad64e150d264f4b73f6be893b467cf38d3487935b8a3c31d4f77",
+    "/tmp/rrrah-crw-entropy-admission-real.log": "41466ff879575177e6a9e589023fe92b28fb072f25de9ba5f686b07b89679fcc"
+  },
+  "proof": "Every 64-sample block requires at least two one-bit symbols; source bytes must be at least ceil(block_count/4).",
+  "contracts": [
+    "Impossible sensor geometry with tiny entropy refuses before output budget peak grows",
+    "Exact four-block/one-byte boundary succeeds",
+    "Full 10D sensor regression remains exact"
+  ],
+  "limitations": [
+    "Necessary lower bound only; does not prove entropy validity or bound source/parser/driver RSS.",
+    "CRW public color/viewer support remains pending."
+  ]
+}

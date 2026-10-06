@@ -1,0 +1,88 @@
+{
+  "index": 445,
+  "repository": "bsmi021/pil-agent-plugin",
+  "commit": "2c97fc3586d02b438cc6d6a774f3b77c0ca8878f",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Image measurement plugin has alpha truth and alignment calibration gates; strong independent normalization-test design candidate.",
+  "available_source_evidence": [
+    {
+      "path": "calibration/alignment_gate.py",
+      "local": "03-alignment_gate.py",
+      "url": "https://github.com/bsmi021/pil-agent-plugin/blob/2c97fc3586d02b438cc6d6a774f3b77c0ca8878f/calibration/alignment_gate.py",
+      "sha256": "82335c0db0afffbb506b1c620226d59d79c8cde65ef7a46a61d8c04706cc701e",
+      "truncated": false,
+      "lines": 381,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "calibration/alpha_truth.py",
+      "local": "04-alpha_truth.py",
+      "url": "https://github.com/bsmi021/pil-agent-plugin/blob/2c97fc3586d02b438cc6d6a774f3b77c0ca8878f/calibration/alpha_truth.py",
+      "sha256": "4addf4b00d70ab0e018f85ce46ad804e315a5560e63434a1c877c99e3e85e5df",
+      "truncated": false,
+      "lines": 406,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "calibration/components_gate.py",
+      "local": "05-components_gate.py",
+      "url": "https://github.com/bsmi021/pil-agent-plugin/blob/2c97fc3586d02b438cc6d6a774f3b77c0ca8878f/calibration/components_gate.py",
+      "sha256": "22dc6dcd7b5cf86d68f75a5f382e39268eab299ff251aabdc70c3d17a481d981",
+      "truncated": false,
+      "lines": 453,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/conftest.py",
+      "local": "06-conftest.py",
+      "url": "https://github.com/bsmi021/pil-agent-plugin/blob/2c97fc3586d02b438cc6d6a774f3b77c0ca8878f/tests/conftest.py",
+      "sha256": "569cbe0cdb8b7394f09c1888e1d1e7c2f5fcc7f8fefb68751f3d386bcb8d322a",
+      "truncated": false,
+      "lines": 215,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 61,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/bsmi021/pil-agent-plugin/blob/2c97fc3586d02b438cc6d6a774f3b77c0ca8878f/README.md",
+      "sha256": "73367fcba121735c1a79ce4607faa53622e300c459d816bdfe5559d6d7c326f3",
+      "truncated": false,
+      "lines": 925,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/bsmi021/pil-agent-plugin/blob/2c97fc3586d02b438cc6d6a774f3b77c0ca8878f/LICENSE",
+      "sha256": "e3f0f2429ea6ca5329956ee6ef7a3be5dfe52df32084e25e21f0d3c89e3f4d85",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "plugins/blender-inspect/LICENSE",
+      "local": "02-LICENSE",
+      "url": "https://github.com/bsmi021/pil-agent-plugin/blob/2c97fc3586d02b438cc6d6a774f3b77c0ca8878f/plugins/blender-inspect/LICENSE",
+      "sha256": "e3f0f2429ea6ca5329956ee6ef7a3be5dfe52df32084e25e21f0d3c89e3f4d85",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

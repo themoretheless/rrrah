@@ -1,0 +1,91 @@
+{
+  "experiment": "Read full swap blocks directly into initialized output instead of copying from internal block buffer",
+  "decision": "rejected; original production reader retained",
+  "reason": "Direct swap p50 32.922 ms versus repeated original 33.529 ms; uncontrolled run variance and concurrent shifts in other tiers prevent a causal performance conclusion.",
+  "source_sha256": "9c0d47cc2dd550eb6dc26c4ba2b2874b67f5c89e79dff5c472abf0ac6b2f6178",
+  "profile": "dev optimized + debuginfo",
+  "budget_mib": 256,
+  "runs": [
+    {
+      "implementation": "buffered initial",
+      "timings": {
+        "decode": {
+          "p50_ms": 55.273958,
+          "p95_ms": 60.11175
+        },
+        "disk": {
+          "p50_ms": 38.859458,
+          "p95_ms": 42.814416
+        },
+        "swap": {
+          "p50_ms": 37.942958,
+          "p95_ms": 40.180625
+        },
+        "ram": {
+          "p50_ms": 0.000199,
+          "p95_ms": 0.000259
+        }
+      },
+      "evidence": {
+        "docs/research/rrrah-cr3-current-cache-profile-2026-10-06.csv": "8e5de4c08e4096507f0c6f5affe3a5e2304c43559c908d943bb4176a300bca1b",
+        "docs/research/rrrah-cr3-current-cache-profile-2026-10-06.log": "2c09fccb6a3c0790b4deda705ecb1e7702f8190f49cb0db4d1a9a6781463cffd"
+      }
+    },
+    {
+      "implementation": "direct read experiment",
+      "timings": {
+        "decode": {
+          "p50_ms": 44.422791,
+          "p95_ms": 45.098916
+        },
+        "disk": {
+          "p50_ms": 34.241917,
+          "p95_ms": 36.818792
+        },
+        "swap": {
+          "p50_ms": 32.922292,
+          "p95_ms": 34.178583
+        },
+        "ram": {
+          "p50_ms": 0.000176,
+          "p95_ms": 0.000199
+        }
+      },
+      "evidence": {
+        "docs/research/rrrah-cr3-direct-read-cache-2026-10-06.csv": "9af01ecff7203c1bc08ca2bbb9c69af00c26090ab65290fa248c8fd2932e8e4d",
+        "docs/research/rrrah-cr3-direct-read-cache-2026-10-06.log": "d89c8efcd75d908c6ea8e02262388f017fb1176122aca140daa3c3e5caa3a418"
+      }
+    },
+    {
+      "implementation": "buffered repeat",
+      "timings": {
+        "decode": {
+          "p50_ms": 57.305417,
+          "p95_ms": 75.186709
+        },
+        "disk": {
+          "p50_ms": 34.6765,
+          "p95_ms": 39.260958
+        },
+        "swap": {
+          "p50_ms": 33.528625,
+          "p95_ms": 36.399375
+        },
+        "ram": {
+          "p50_ms": 0.000175,
+          "p95_ms": 0.000181
+        }
+      },
+      "evidence": {
+        "docs/research/rrrah-cr3-buffered-repeat-2026-10-06.csv": "0458599aff585188f4cd1d526d55f491d7962f59a94f7d3e73c1aa3620e25797",
+        "docs/research/rrrah-cr3-buffered-repeat-2026-10-06.log": "e48e82349204196d2cc4017680162d0f6320b9df2368c459bc3271cf03e49575"
+      }
+    }
+  ],
+  "prototype_tests": "rrrah-swap unit, cancelled_restore integration and doctests passed; /tmp/rrrah-swap-direct-read-tests.log",
+  "limitations": [
+    "Sequential runs, warm OS cache, one real source.",
+    "No CPU profile proving copy cost dominance.",
+    "No production performance change retained."
+  ]
+}

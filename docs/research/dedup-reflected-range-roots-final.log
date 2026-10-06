@@ -1,0 +1,36 @@
+    Blocking waiting for file lock on build directory
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: function `error` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:4:4
+  |
+4 | fn error(message: &str) -> DecodeError {
+  |    ^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `packed_12` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:9:4
+  |
+9 | fn packed_12(
+  |    ^^^^^^^^^
+
+warning: function `decode_zd` is never used
+  --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:48:15
+   |
+48 | pub(super) fn decode_zd(
+   |               ^^^^^^^^^
+
+warning: `rrrah-decode` (lib) generated 3 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 34.54s
+     Running tests/photo_files.rs (/tmp/rrrah-dedup-target/debug/deps/photo_files-4e5b78f1f6fb0410)
+
+running 2 tests
+test recursive_ranged_reflection_keeps_frame_selection_and_factory_guards ... ok
+ranged roots spatial=false display=false: files=5 aliases=1 errors=1 proposed=6 confirmed=2
+ranged roots spatial=false display=true: files=5 aliases=1 errors=1 proposed=6 confirmed=2
+ranged roots spatial=true display=false: files=5 aliases=1 errors=1 proposed=6 confirmed=2
+ranged roots spatial=true display=true: files=5 aliases=1 errors=1 proposed=6 confirmed=2
+test recursive_ranged_reflections_preserve_oracle_aliases_errors_and_modes ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 25 filtered out; finished in 23.73s
+

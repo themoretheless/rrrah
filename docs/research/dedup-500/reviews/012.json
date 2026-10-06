@@ -1,0 +1,78 @@
+{
+  "index": 12,
+  "repository": "RazgrizHsu/immich-deduper",
+  "commit": "2e9d71e7834619bac5750d0a5a4f31b4d52357a3",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Immich similarity-page/API code; server/application dependencies and selected excerpts leave actual matcher qualification open.",
+  "license_metadata": "GPL-3.0",
+  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "tests_detected": 7,
+  "upstream_tests_run": false,
+  "available_source_evidence": [
+    {
+      "path": "src/pages/similar.py",
+      "local": "02-similar.py",
+      "url": "https://github.com/RazgrizHsu/immich-deduper/blob/2e9d71e7834619bac5750d0a5a4f31b4d52357a3/src/pages/similar.py",
+      "sha256": "9eae15e1a8c59e7de48e285e922dd8c897b71f0c4a9ee455672b74654a5197a3",
+      "truncated": false,
+      "lines": 1251,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/api.py",
+      "local": "03-api.py",
+      "url": "https://github.com/RazgrizHsu/immich-deduper/blob/2e9d71e7834619bac5750d0a5a4f31b4d52357a3/src/api.py",
+      "sha256": "249f0d9e43bc9928338eaa15b5ae3026c9610032bee60c7052b523e485d6d3a7",
+      "truncated": false,
+      "lines": 185,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/app.py",
+      "local": "04-app.py",
+      "url": "https://github.com/RazgrizHsu/immich-deduper/blob/2e9d71e7834619bac5750d0a5a4f31b4d52357a3/src/app.py",
+      "sha256": "11ef035bc31f9119a9e99eda5364cc9a1764c76a9a4884a0d532de80e559af44",
+      "truncated": false,
+      "lines": 138,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/model.py",
+      "local": "05-model.py",
+      "url": "https://github.com/RazgrizHsu/immich-deduper/blob/2e9d71e7834619bac5750d0a5a4f31b4d52357a3/tests/model.py",
+      "sha256": "8e9ec3c4d9b903ced8d83489aadb154352f375c20202b801c232ddadd29d6ca9",
+      "truncated": false,
+      "lines": 1156,
+      "source": true,
+      "test": true
+    }
+  ],
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/RazgrizHsu/immich-deduper/blob/2e9d71e7834619bac5750d0a5a4f31b4d52357a3/README.md",
+      "sha256": "852914f3f7a5f83c0c99ab4eeea363f994dd3cec894f8dd6f7894361db42bfaa",
+      "truncated": false,
+      "lines": 687,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/RazgrizHsu/immich-deduper/blob/2e9d71e7834619bac5750d0a5a4f31b4d52357a3/LICENSE",
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "truncated": false,
+      "lines": 674,
+      "source": false,
+      "test": false
+    }
+  ]
+}

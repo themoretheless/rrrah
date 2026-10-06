@@ -1,0 +1,24 @@
+{
+  "status": "all_580_pair_baseline_running",
+  "scope": "Publisher geometric correspondence pairs, not established duplicate labels; explicit strict/filtered mode has no fitted color gain",
+  "policy_frozen": {
+    "features": 32,
+    "geometry_tolerance": 2,
+    "minimum_inliers": 10,
+    "pixel_tolerance": 0.03,
+    "minimum_coverage": 0.3,
+    "minimum_matched": 0.9,
+    "registration_radius": 1,
+    "registration_rounds": 128,
+    "registration_stride": 8
+  },
+  "source_sha256": {
+    "crates/rrrah-dedup/examples/photo_probe.rs": "7220322da8a33664e88944909da4b03b81e05841a5326babdf919f262efb7f8a",
+    "scripts/qualify-dedup-hpatches.py": "898c545c1ca82195a207893d57a4753d4a42e791c64ebdca61aa95ef489081e2"
+  },
+  "early_observation": "First i_ajuntament pair has 20 inliers but estimated and published-geometry filtered agreement about two thirds, below acceptance; lighting/color behavior needs separate analysis after full baseline",
+  "remaining": "Complete 580 measurements, geometric accuracy/negative evaluation, Linux verification and explicit photometric/projective mode review",
+  "partial_analysis": "docs/research/dedup-hpatches-analysis-partial.json",
+  "interpretation": "Dominant early illumination failures have too few correspondences; existing-model registered grid medians and published-geometry pixel failures are tracked independently. No duplicate labels or recall claim from geometric pairs.",
+  "next": "Complete baseline without overwriting probe binary; improve feature repeatability and independently qualify explicit photometric planar evidence."
+}

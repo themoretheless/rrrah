@@ -1,0 +1,35 @@
+{
+  "scope": "Descriptor-indexed two-file collection refusal of 24 authored partial-copy collages; exact pair comparator oracle",
+  "source_sha256": {
+    "crates/rrrah-dedup/tests/photo_collages.rs": "0a701006135db678308cd25293f8f0694a6fec87fa19271759aed450c3f92d8d",
+    "crates/rrrah-dedup/src/local_collection.rs": "b4917a01d3ec61d0028ea7852796c04f637320ffa50d20f3c90992a0b8494542",
+    "crates/rrrah-dedup/tests/fixtures/photo-collages/manifest.json": "21356e506e51e16cc0d3b6ac7094f3fef6e1de038822664b412d6e8d4456fa6a"
+  },
+  "cases": 24,
+  "source_scenes": [
+    830,
+    898,
+    1084,
+    1294
+  ],
+  "preserved_percent": [
+    40,
+    70
+  ],
+  "accepted": 0,
+  "unknown_errors": 0,
+  "residual_rejections": 20,
+  "no_geometry": 4,
+  "indexed_matches_reference_decisions": true,
+  "validation": {
+    "test_exit_code": 0,
+    "clippy_exit_code": 0,
+    "diff_check": "passed"
+  },
+  "limitations": [
+    "Authored composites from existing camera-preview scenes; no captured burst qualification",
+    "Two-file index batches; multi-file all-cross-collage collection not qualified",
+    "Constrained fitting remains within gain 0.2..5 and absolute offset 0.1; no bounds relaxed",
+    "No runtime performance claim"
+  ]
+}

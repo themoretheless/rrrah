@@ -1,0 +1,19 @@
+{
+  "status": "Extension routing fix qualified on macOS and native Linux",
+  "finding": "Identical BMP bytes at .bmp and .pict paths share current cache recipe, although extension-dependent PICT routing rejects the latter fresh decode. Cached evidence bypasses that error.",
+  "logs": [
+    "dedup-path-routing-bmp.log",
+    "dedup-path-routing-pict.log",
+    "dedup-path-routing-regression-before.log",
+    "dedup-path-routing-fixed-decode-tests.log"
+  ],
+  "regression": "cached_content_does_not_bypass_extension_selected_decoder_errors",
+  "next_work": "Include actual decoder routing semantics in recipe, preserving valid content-based reuse; audit all extension-dependent branches",
+  "fix": "Normalized native extension bytes included in recipe; path names remain excluded; same extension/case-insensitive rename reuse preserved",
+  "fix_limit": "Different extension hints occupy distinct cache namespaces even if magic ultimately selects the same decoder",
+  "macos": "13 decode integration tests passed, exit 0; new regression failed before fix and passed after",
+  "linux_session": 75608,
+  "linux_log": "dedup-path-routing-fixed-linux-tests.log",
+  "source_sha256": "6cee2450cf1297d82d1a2e6f223dce1cc07dea9e62adddd693a262de19b5df66",
+  "linux_status": "13 decode tests passed, terminal exit 0"
+}

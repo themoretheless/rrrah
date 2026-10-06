@@ -1,0 +1,607 @@
+{
+  "source_sha256": "ea436ba459a7478d7b338428656fae905469de269f928749f3388db2b7b0d53f",
+  "status": "passed",
+  "scope": "Pinned SD10 sensor/CAMF, black, sensor corrections, highlights, noise curves, two hue passes and explicit-identity-target transform arithmetic; final color unqualified",
+  "remaining": [
+    "Actual display-target convention and derived-luminance filtering",
+    "Pixel color transform, subsequent chroma smoothing and crop",
+    "Final display color and viewer",
+    "Other X3F variants"
+  ],
+  "oracle_artifacts": {
+    "legacy_frame": {
+      "sha256": "47f97dda637ec5eac5394021d981fb876b9383df2d57f748eaf4530606c98d1c",
+      "bytes": 42329088
+    },
+    "legacy_guide": {
+      "sha256": "b810e02a0fbd255ff104de1d1225881e79d2617297bfd437d8e8504cde6e632e",
+      "bytes": 1320192
+    },
+    "legacy_color": {
+      "sha256": "61e579829b04ae13319fb8e7563b4da25f2992cbecb9038b3e4f00a2f003e525",
+      "bytes": 42329088
+    },
+    "legacy_wide": {
+      "sha256": "1ca881b3e9ab2610cae9d1af78970b47f5039c0f5baaa97324fa3c14a6222842",
+      "bytes": 42329088
+    },
+    "legacy_hue": {
+      "sha256": "2ec4b677bdbe2fabc62e0f68361e864e0cef4c188b03ce6529271531bc30a754",
+      "bytes": 42329088
+    },
+    "legacy_curves": {
+      "sha256": "505dcee4b5be09fa9f4956f8071480f31bc6f9eb9b77e3e437b19a085837cb7f",
+      "bytes": 4570
+    },
+    "legacy_transform": {
+      "sha256": "50d9b0b0e83dd92f32bdc594b1fbb175050889ecca63a6bd9f75d0b89e615aae",
+      "bytes": 44
+    },
+    "derived_chroma": {
+      "sha256": "84b5edc46b8f5f8a96065f13793784bbe89a4e7584c3351d8f6c9177cc2a9064",
+      "bytes": 42329088
+    },
+    "derived_guide": {
+      "sha256": "798109aa5b5befd80350ec8d16f0498ba667eb41372502f71ad16def04ce9057",
+      "bytes": 1320192
+    },
+    "derived_color": {
+      "sha256": "fef4ce0e9787927f4297941b63668205e26f002b4f8edf343c69aafab99e79b2",
+      "bytes": 42329088
+    },
+    "derived_wide": {
+      "sha256": "b281e06543d31c12102cad22378706082daf175e9e3b54b5c67604a2d4650552",
+      "bytes": 42329088
+    },
+    "derived_hue": {
+      "sha256": "770cf5056e6a36e26c9faca109778548e49dec698f7ef39a96ace6dfeddae3a5",
+      "bytes": 42329088
+    },
+    "derived_curves": {
+      "sha256": "05b6f1f2817eb39042af59b10d57a71ce0836a32566a59b7592a50c38b6f9931",
+      "bytes": 4570
+    },
+    "guide": {
+      "sha256": "52e5138594ae3868fd4f07cd68c1051deecaee8a3b312740e730f5ccc667a374",
+      "bytes": 1320192
+    },
+    "chroma": {
+      "sha256": "4db021adc45c52ab213252b2a7dbfda310fd3af71d89e4e0154e9c6803a92f0d",
+      "bytes": 42329088
+    },
+    "color": {
+      "sha256": "8cc04d6a47a3488bcad930d906b0e4acbe135f5adcbcb2b6941da8d497158439",
+      "bytes": 42329088
+    },
+    "transform": {
+      "sha256": "2208a4b3bf5220485ca5b49b2c42ce0eac5a9a74bc5deb844c1570c0bead52c6",
+      "bytes": 44
+    },
+    "wide_hue": {
+      "sha256": "adebe0e3ab82405e1c026045cdb2723836d773422a0c18b0c82ab4f41494bc94",
+      "bytes": 42329088
+    },
+    "hue": {
+      "sha256": "4832608d9f4a7ad33298a29e7f7844e13eccca4303def0a940036be30218f252",
+      "bytes": 42329088
+    },
+    "curves": {
+      "sha256": "4e61bbcd80c69a56489308cdb851c8f1f0d8bd7fb09b6573d1b82e4bcdb71af9",
+      "bytes": 4574
+    },
+    "highlights": {
+      "sha256": "79cb4011a7ed7e41be8dc7c5f6315a1b9cb9268d7c85ecf452605aaca5b1ce31",
+      "bytes": 42329088
+    },
+    "red": {
+      "sha256": "3b99acb2bc57ca9a451e06e8953142d71a63ac5f134421798c42d9924f2b7550",
+      "bytes": 42329088
+    },
+    "repaired": {
+      "sha256": "f9b55e97941f2feb1a43c6fe97a41932af1cc58618d61436b98a74742b109ca9",
+      "bytes": 42329088
+    },
+    "corrected": {
+      "sha256": "7a81770e16f28c5397a6b3288bac0025eec3b95742938a2e6e7d07571c1e6db7",
+      "bytes": 42329088
+    },
+    "sensor": {
+      "sha256": "44a331ab98772b5c41c5670963d73975cbedf962ac752feeaaacaaede86c7b35",
+      "bytes": 21164544
+    },
+    "camf": {
+      "sha256": "d18fd95fd66c4229c3b503fee5301daece59e787646149cc8a5126ed71f54509",
+      "bytes": 52520
+    },
+    "black": {
+      "sha256": "92483672146821d00cea4d5a29993820fc5af8db57803ed6566850258bca6c62",
+      "bytes": 18372
+    },
+    "smooth": {
+      "sha256": "62980b25ea3ba20e93546bdc7d52ccd51c708c7a8eec9384c9a056d6d183bab6",
+      "bytes": 18372
+    },
+    "scene": {
+      "sha256": "1bb5ff0c1ef4fac5a4e3ab2462d4f97ab2cb66a6a3a233cb5673abdcd2d45bff",
+      "bytes": 18372
+    }
+  },
+  "tests_passed": 29,
+  "commands": [
+    {
+      "command": [
+        "c++",
+        "-std=c++17",
+        "-DUSE_X3FTOOLS",
+        "/Users/themoretheless/Documents/Sources/rrrah/scripts/x3f-channel-oracle.cpp",
+        "-I/private/tmp/LibRaw-0.22.2",
+        "/private/tmp/LibRaw-0.22.2/lib/.libs/libraw.a",
+        "-L/opt/homebrew/lib",
+        "-llcms2",
+        "-lz",
+        "-o",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/x3f-channel-oracle"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "c++",
+        "-std=c++17",
+        "-DUSE_X3FTOOLS",
+        "/Users/themoretheless/Documents/Sources/rrrah/scripts/x3f-camf-oracle.cpp",
+        "-I/private/tmp/LibRaw-0.22.2",
+        "/private/tmp/LibRaw-0.22.2/lib/.libs/libraw.a",
+        "-L/opt/homebrew/lib",
+        "-llcms2",
+        "-lz",
+        "-o",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/x3f-camf-oracle"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/x3f-channel-oracle",
+        "/private/tmp/rrrah-sigma-sd10.x3f",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/sensor.u16le"
+      ],
+      "exit_code": 0,
+      "output": "LibRaw 0.22.2-Release X3FTOOLS=1\n0.22.2-Release Sigma SD10 2304x1531 pitch=13824\n"
+    },
+    {
+      "command": [
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/x3f-camf-oracle",
+        "/private/tmp/rrrah-sigma-sd10.x3f",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/camf.bin"
+      ],
+      "exit_code": 0,
+      "output": "0.22.2-Release CAMF bytes=52520\n"
+    },
+    {
+      "command": [
+        "c++",
+        "-std=c++17",
+        "-O2",
+        "-ffp-contract=off",
+        "/Users/themoretheless/Documents/Sources/rrrah/scripts/x3f-black-row-reference.cpp",
+        "-o",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/x3f-black-row-reference"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "c++",
+        "-std=c++17",
+        "-O2",
+        "-ffp-contract=off",
+        "/Users/themoretheless/Documents/Sources/rrrah/scripts/x3f-black-smoothing-reference.cpp",
+        "-o",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/x3f-black-smoothing-reference"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "c++",
+        "-std=c++17",
+        "-O2",
+        "-ffp-contract=off",
+        "/Users/themoretheless/Documents/Sources/rrrah/scripts/x3f-sensor-reference.cpp",
+        "-o",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/x3f-sensor-reference"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "c++",
+        "-std=c++17",
+        "-O2",
+        "-ffp-contract=off",
+        "/Users/themoretheless/Documents/Sources/rrrah/scripts/x3f-badpixel-reference.cpp",
+        "-o",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/x3f-badpixel-reference"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "c++",
+        "-std=c++17",
+        "-O2",
+        "-ffp-contract=off",
+        "/Users/themoretheless/Documents/Sources/rrrah/scripts/x3f-red-reference.cpp",
+        "-o",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/x3f-red-reference"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "c++",
+        "-std=c++17",
+        "-O2",
+        "-ffp-contract=off",
+        "/Users/themoretheless/Documents/Sources/rrrah/scripts/x3f-highlights-reference.cpp",
+        "-o",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/x3f-highlights-reference"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "c++",
+        "-std=c++17",
+        "-O2",
+        "-ffp-contract=off",
+        "/Users/themoretheless/Documents/Sources/rrrah/scripts/x3f-curves-reference.cpp",
+        "-o",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/x3f-curves-reference"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "c++",
+        "-std=c++17",
+        "-O2",
+        "-ffp-contract=off",
+        "/Users/themoretheless/Documents/Sources/rrrah/scripts/x3f-hue-reference.cpp",
+        "-o",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/x3f-hue-reference"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "c++",
+        "-std=c++17",
+        "-O2",
+        "-ffp-contract=off",
+        "/Users/themoretheless/Documents/Sources/rrrah/scripts/x3f-transform-reference.cpp",
+        "-o",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/x3f-transform-reference"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "c++",
+        "-std=c++17",
+        "-O2",
+        "-ffp-contract=off",
+        "/Users/themoretheless/Documents/Sources/rrrah/scripts/x3f-pixel-transform-reference.cpp",
+        "-o",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/x3f-pixel-transform-reference"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "c++",
+        "-std=c++17",
+        "-O2",
+        "-ffp-contract=off",
+        "/Users/themoretheless/Documents/Sources/rrrah/scripts/x3f-chroma-reference.cpp",
+        "-o",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/x3f-chroma-reference"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/x3f-black-row-reference",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/sensor.u16le",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/camf.bin",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/black.f32le"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/x3f-black-smoothing-reference",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/black.f32le",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/smooth.f32le"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/x3f-black-smoothing-reference",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/black.f32le",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/scene.f32le",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/sensor.u16le"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/x3f-sensor-reference",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/sensor.u16le",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/camf.bin",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/scene.f32le",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/corrected.i32le"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/x3f-badpixel-reference",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/corrected.i32le",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/camf.bin",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/repaired.i32le"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/x3f-red-reference",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/repaired.i32le",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/red.i32le"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/x3f-highlights-reference",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/red.i32le",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/camf.bin",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/highlights.i32le"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/x3f-curves-reference",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/camf.bin",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/curves.bin"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/x3f-hue-reference",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/highlights.i32le",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/curves.bin",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/hue.i32le"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/x3f-hue-reference",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/hue.i32le",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/curves.bin",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/wide-hue.i32le",
+        "wide"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/x3f-transform-reference",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/camf.bin",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/transform.bin"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/x3f-transform-reference",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/camf.bin",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/legacy-transform.bin",
+        "legacy"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/x3f-curves-reference",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/camf.bin",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/derived-curves.bin",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/transform.bin"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/x3f-pixel-transform-reference",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/wide-hue.i32le",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/curves.bin",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/transform.bin",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/color.i32le"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/x3f-chroma-reference",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/color.i32le",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/curves.bin",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/guide.i16le",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/chroma.i32le"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/x3f-hue-reference",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/highlights.i32le",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/derived-curves.bin",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/derived-hue.i32le"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/x3f-hue-reference",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/derived-hue.i32le",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/derived-curves.bin",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/derived-wide.i32le",
+        "wide"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/x3f-pixel-transform-reference",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/derived-wide.i32le",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/derived-curves.bin",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/transform.bin",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/derived-color.i32le"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/x3f-chroma-reference",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/derived-color.i32le",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/derived-curves.bin",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/derived-guide.i16le",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/derived-chroma.i32le"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/x3f-curves-reference",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/camf.bin",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/legacy-curves.bin",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/legacy-transform.bin"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/x3f-hue-reference",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/highlights.i32le",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/legacy-curves.bin",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/legacy-hue.i32le"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/x3f-hue-reference",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/legacy-hue.i32le",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/legacy-curves.bin",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/legacy-wide.i32le",
+        "wide"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/x3f-pixel-transform-reference",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/legacy-wide.i32le",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/legacy-curves.bin",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/legacy-transform.bin",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/legacy-color.i32le"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/x3f-chroma-reference",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/legacy-color.i32le",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/legacy-curves.bin",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/legacy-guide.i16le",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-x3f-qualification-pr8ijpk2/legacy-frame.i32le"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-decode",
+        "--lib",
+        "x3f::",
+        "--locked",
+        "--target-dir",
+        "/tmp/rrrah-required-corpus-target",
+        "--",
+        "--include-ignored",
+        "--nocapture"
+      ],
+      "exit_code": 0,
+      "output": "   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)\n    Finished `test` profile [optimized + debuginfo] target(s) in 33.62s\n     Running unittests src/lib.rs (/tmp/rrrah-required-corpus-target/debug/deps/rrrah_decode-fef1cf096a77eef0)\n\nrunning 29 tests\ntest x3f::tests::image_header_refuses_truncation_and_reports_reserved_sensor_encoding ... ok\ntest x3f::tests::camf_float_access_refuses_nonfinite_wrong_type_and_bad_indices ... ok\ntest x3f::tests::invalid_ranges_versions_dimensions_and_cancellation ... ok\ntest x3f::tests::dark_drift_interpolates_all_channels_and_rejects_bad_rows ... ok\ntest x3f::tests::camf_property_links_refuse_truncation_offsets_and_cancel ... ok\ntest x3f::tests::bad_pixels_neighbor_mask_origin_edges_signed_means_and_cancel ... ok\ntest x3f::tests::black_smoothing_constant_outlier_invalid_and_cancel ... ok\ntest x3f::tests::black_scene_adjustment_sample_stride_signed_values_and_refusal ... ok\ntest x3f::tests::camf_matrix_rejects_corrupt_dimensions_ranges_and_overflow ... ok\ntest x3f::tests::borrowed_unknown_section_and_all_truncated_prefixes ... ok\ntest x3f::tests::camf_type2_budget_cancellation_and_round_trip ... ok\ntest x3f::tests::crop_channels_exact_rows_bounds_budget_cancel_and_lease ... ok\ntest x3f::tests::chroma_smoothing_zero_border_budget_and_cancellation ... ok\ntest x3f::tests::highlights_threshold_transition_saturation_and_invalid_calibration ... ok\ntest x3f::tests::legacy_tables_refuse_prefix_collisions_row_aliasing_and_cancel ... ok\ntest x3f::tests::chroma_guide_bottom_up_partial_blocks_budget_and_cancel ... ok\ntest x3f::tests::linear_output_matrix_truncation_clamp_budget_release ... ok\ntest x3f::tests::noise_curve_domain_symmetry_finite_budget_and_cancellation ... ok\ntest x3f::tests::hue_smoothing_constant_impulse_edges_budget_and_cancel ... ok\ntest x3f::tests::linear_raster_preserves_values_color_alpha_and_lease ... ok\ntest x3f::tests::pixel_transform_rounding_clamps_validation_and_cancel ... ok\ntest x3f::tests::post_polynomial_fixed_point_terms_and_overflow ... ok\ntest x3f::tests::red_sharpen_constant_impulse_edges_other_channels_budget_and_cancel ... ok\ntest x3f::tests::properties_validate_offsets_unicode_and_cancellation ... ok\ntest x3f::tests::shield_columns_filter_trim_and_invalid_ranges ... ok\ntest x3f::tests::spatial_gain_bilinear_grid_boundaries_and_invalid_values ... ok\ntest x3f::tests::shield_mean_signed_samples_bounds_and_cancellation ... ok\ntest x3f::tests::wide_hue_smoothing_constant_impulse_border_and_release ... ok\nSD10 transform coefficients and luminance exact for explicit identity target\nSD10 legacy Foveon target transform exact\nSD10 eight noise curves exact at independently derived luminance\nSD10 eight noise curves exact at explicit luminance=1\nSD10 CAMF type2 hash=ce9ce4cf96dc1be8ddd46330ce1cd11e1f99ba00ae3500ef15a8bb3dca62f621\nSD10 initial black rows max error=0\nSD10 smoothed black max error=0\nSD10 scene black max error=0\nSD10 full-converter sensor correction mismatches=0 max difference=0\nSD10 full independent converter mismatches=0 max difference=0\nSD10 native linear output exact against full converter 16-bit PPM\nSD10 raster linear float transport exact; all leases released\nSD10 linear sRGB output exact against full converter PPM\nSD10 full converter crop exact 2267x1513\nSD10 managed legacy Foveon target full frame exact\nSD10 repaired channels exact; repaired pixels=148\nSD10 red sharpened channels exact\nSD10 highlight channels exact\nSD10 complete derived-luminance filter chain exact for explicit identity target\nSD10 managed complete processing exact; output lease released\nSD10 managed processing budget failures and post-allocation cancellation release to zero\nSD10 first hue pass channels exact at explicit luminance=1\nSD10 second hue pass channels exact at explicit luminance=1\nSD10 pixel transform exact for explicit identity target and luminance=1 curves\nSD10 final chroma and quarter guide exact at explicit test target/curves\nSD10 corrected channels mismatches=0 max difference=0\nSD10 native legacy offset=202 sensor hash=f9bf415ffe3f10bb837abc69f0e755ead1ede72a1cbd9ae9a02abd63a67d64bc\ntest x3f::tests::sigma_sd10_inventory_distinguishes_sensor_from_previews ... ok\n\ntest result: ok. 29 passed; 0 failed; 0 ignored; 0 measured; 788 filtered out; finished in 7.71s\n\n"
+    }
+  ],
+  "helpers": {
+    "qualify-x3f-sd10.py": "cf0f1ee37ca81d45e4ad1d48ce07051e22c59fc8d0a4f783b7aea60110b72e5e",
+    "x3f-channel-oracle.cpp": "dd04883cce86249af16050d4afcf836cd691b591119fd7503ec64f4dce48b3e1",
+    "x3f-camf-oracle.cpp": "a04ade1dfa23589c2792db1f3aaed21a8dafe6084f2079536bfc51a83461239b",
+    "x3f-black-row-reference.cpp": "2fe616e7f53bb0d0a1e803e1d59c37cc8f941e88ffe8dc28e6526e84dc9a2df1",
+    "x3f-black-smoothing-reference.cpp": "83b0372096d5b1a0de98005ac0e7f69a21a927686c60d149597d8c4d1d0dd851",
+    "x3f-sensor-reference.cpp": "6519ce17efcd68c56cedad7aeb3b40689d9b91fd29a09c8f90d44739273593ab",
+    "x3f-badpixel-reference.cpp": "b1493dde98917de271414c854fa53824b036bf9bf0906e9b2f77e318c4d1ea9a",
+    "x3f-red-reference.cpp": "483292a343e7c5bb7bbbf1bdf4869d3ba0405b63e274e218bc3974ebe42b8550",
+    "x3f-highlights-reference.cpp": "264830e133d4e1ceb4879fa14f5e285d316555e2a8c085fb142fae145a4c6485",
+    "x3f-curves-reference.cpp": "de086e280ad62b8aeba70268947b0cb0d228168db3a34d9cf389ce188d9f8d7b",
+    "x3f-hue-reference.cpp": "d8a2ed0532a6ec7d10c96ad7b961072400041dda958a24cd0d076ae00376ddae",
+    "x3f-transform-reference.cpp": "af923a2821c62d474c412fa85c99f749962e666a47e3747cb3bb34e6392411f3",
+    "x3f-pixel-transform-reference.cpp": "9382c8c1a29e1a0ed495e9fbd9924909a0779c378861aa5ecb4090f6d9466c53",
+    "x3f-chroma-reference.cpp": "85cff37f4d9840ea281003c241e99b8b9e3f09c3f482e748c0e8cbb8376ce80c"
+  }
+}

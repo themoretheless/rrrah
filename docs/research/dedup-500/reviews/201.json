@@ -1,0 +1,88 @@
+{
+  "index": 201,
+  "repository": "Shopify/dedup",
+  "commit": "4fdec9b106658bc89558c1cbb00b332817924e00",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Ruby frozen-string interning/dedup; memory runtime utility.",
+  "available_source_evidence": [
+    {
+      "path": "lib/dedup.rb",
+      "local": "02-dedup.rb",
+      "url": "https://github.com/Shopify/dedup/blob/4fdec9b106658bc89558c1cbb00b332817924e00/lib/dedup.rb",
+      "sha256": "103e7ff3be7a6f9e9050a4f16e9ad435e5092359186083dccf4c2e8cbdb95426",
+      "truncated": false,
+      "lines": 70,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "ext/dedup/dedup.c",
+      "local": "03-dedup.c",
+      "url": "https://github.com/Shopify/dedup/blob/4fdec9b106658bc89558c1cbb00b332817924e00/ext/dedup/dedup.c",
+      "sha256": "ff7c735250f9847b8ca5de53aeb090129633225d98fa6f74e8eeaa5922efb7cc",
+      "truncated": false,
+      "lines": 111,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "ext/dedup/extconf.rb",
+      "local": "04-extconf.rb",
+      "url": "https://github.com/Shopify/dedup/blob/4fdec9b106658bc89558c1cbb00b332817924e00/ext/dedup/extconf.rb",
+      "sha256": "403e3f5273007603254580c13b6400f8ca93974959e4b2cf464a74f08485b49d",
+      "truncated": false,
+      "lines": 11,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "test/dedup_test.rb",
+      "local": "05-dedup_test.rb",
+      "url": "https://github.com/Shopify/dedup/blob/4fdec9b106658bc89558c1cbb00b332817924e00/test/dedup_test.rb",
+      "sha256": "73f907727d27bcb57e27207e30a330a238e29c554431b3e9043ee5c23539f9ba",
+      "truncated": false,
+      "lines": 102,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "benchmark/deep_intern.rb",
+      "local": "06-deep_intern.rb",
+      "url": "https://github.com/Shopify/dedup/blob/4fdec9b106658bc89558c1cbb00b332817924e00/benchmark/deep_intern.rb",
+      "sha256": "171766866076fc56a902dea9a73d6935179a17118f4043d7dea0aea29912bc76",
+      "truncated": false,
+      "lines": 26,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 2,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/Shopify/dedup/blob/4fdec9b106658bc89558c1cbb00b332817924e00/README.md",
+      "sha256": "e531b8e828bddd6e0584871e30b5c3f632a963dee03bda573db871d597d56c2f",
+      "truncated": false,
+      "lines": 49,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE.txt",
+      "local": "01-LICENSE.txt",
+      "url": "https://github.com/Shopify/dedup/blob/4fdec9b106658bc89558c1cbb00b332817924e00/LICENSE.txt",
+      "sha256": "0aef3277dc9272a060c6a448241d75db316523012a787fcec228a1af4bc3e777",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

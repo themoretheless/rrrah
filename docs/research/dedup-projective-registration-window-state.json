@@ -1,0 +1,38 @@
+{
+  "status": "authored_derivative_and_file_gates_passed_both_platforms",
+  "registration_policy": {
+    "radius": 1,
+    "stride": 8,
+    "rounds": 128,
+    "max_sample_pairs": 64000000
+  },
+  "final_policy_unchanged": {
+    "tolerance": 0.03,
+    "minimum_coverage_fraction": 0.3,
+    "minimum_matched_fraction": 0.9,
+    "filter_radius": 1
+  },
+  "macos_positive_passed": 6,
+  "positive_total": 6,
+  "unrelated_pairs_rejected": 14,
+  "macos_unit_passed": 12,
+  "linux_unit_passed": 12,
+  "minimal_lib_clippy_passed": true,
+  "scope": "Six pinned previews transformed with Pillow; independent known geometry diagnostic remains separate; not captured perspective/burst validation",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/warp.rs": "aa54687637d2c8de88b541434b780e9a70354b2ffc1691eb282244bf77443469",
+    "crates/rrrah-dedup/src/local_scan.rs": "659c8bb79a4c1432ab2b70c3244691129b0ec8a859b17e3995582f873851a3f0",
+    "crates/rrrah-dedup/tests/projective_geometry.rs": "bc0192ed823a671227c39fd9064a776da974a1e6dde36ea07ecc1ff8e4df4bfd",
+    "crates/rrrah-dedup/tests/projective_files.rs": "f2729e6767c7d074425aa4abf5282bd6b8905d4175c0981a4af49478e03ea20e"
+  },
+  "remaining": [
+    "Collection/index integration",
+    "Captured perspective and difficult unrelated/lookalike negatives",
+    "Measured resource/latency qualification"
+  ],
+  "macos_full_file_tests_passed": 16,
+  "macos_registration_phase_lifecycle_test_passed": true,
+  "evaluation_note": "Six authored derivatives were used in algorithm development; not untouched holdout or captured perspective pairs",
+  "linux_full_file_tests_passed": 16,
+  "linux_registration_phase_lifecycle_test_passed": true
+}

@@ -1,0 +1,83 @@
+{
+  "completed": 1,
+  "required": 580,
+  "complete": false,
+  "diagnoses": {
+    "candidate": 1
+  },
+  "by_sequence_type": {
+    "i": {},
+    "v": {
+      "candidate": 1
+    }
+  },
+  "model_grid_diagnostics": {
+    "median_at_most_2_pixels": 1
+  },
+  "rows": [
+    {
+      "sequence": "v_bees",
+      "target_index": 4,
+      "status": "ok",
+      "candidate": true,
+      "geometry_grid": {
+        "valid_points": 22,
+        "invalid_predictions": 0,
+        "median_pixels": 0.6882983023204067,
+        "maximum_pixels": 2.375704646970934
+      },
+      "registered_grid": {
+        "valid_points": 22,
+        "invalid_predictions": 0,
+        "median_pixels": 0.13596603793417691,
+        "maximum_pixels": 0.7045981203210487
+      },
+      "published_geometry_filtered_pass": true,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "candidate",
+      "portfolio": {
+        "chosen_lane": 1,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 22,
+              "invalid_predictions": 0,
+              "median_pixels": 0.37874881053397713,
+              "maximum_pixels": 1.9067716763832157
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 22,
+              "invalid_predictions": 0,
+              "median_pixels": 0.13596603793417691,
+              "maximum_pixels": 0.7045981203210487
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": true
+          }
+        }
+      }
+    }
+  ],
+  "scope": "Incomplete reports remain incomplete. Publisher geometric labels are not duplicate truth; pixel criterion retains the frozen policy. Published-geometry pixel rejection is not proof of accurate estimated geometry or a photometric cause. Finite grid samples and their medians are diagnostics, not continuous transform certificates. Grid residuals assume the recorded pixel-center convention.",
+  "portfolio_grid_diagnostics": {
+    "anchored": {
+      "median_at_most_2_pixels": 1
+    },
+    "unanchored": {
+      "median_at_most_2_pixels": 1
+    }
+  },
+  "portfolio_accepted_lane_grid_diagnostics": {
+    "anchored": {},
+    "unanchored": {
+      "median_at_most_2_pixels": 1
+    }
+  },
+  "portfolio_selection_counts": {
+    "unanchored": 1
+  }
+}

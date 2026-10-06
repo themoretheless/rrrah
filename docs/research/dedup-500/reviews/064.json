@@ -1,0 +1,78 @@
+{
+  "index": 64,
+  "repository": "hecomi/UnityRemoteDesktopDuplication",
+  "commit": "a42f0c96ff07f7819853a54509e3f9d3e2588421",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Desktop Duplication API captures/streams desktop frames; duplicates means capture API, not comparison.",
+  "license_metadata": "MIT",
+  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "available_source_evidence": [
+    {
+      "path": "Assets/uRemoteDesktopDuplication/Scripts/DesktopEncoder.cs",
+      "local": "03-DesktopEncoder.cs",
+      "url": "https://github.com/hecomi/UnityRemoteDesktopDuplication/blob/a42f0c96ff07f7819853a54509e3f9d3e2588421/Assets/uRemoteDesktopDuplication/Scripts/DesktopEncoder.cs",
+      "sha256": "6fba11d501beba72ecded05f46eaf60b80e1ac794966d476d08e654977080d63",
+      "truncated": false,
+      "lines": 73,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "Assets/uRemoteDesktopDuplication/Scripts/DesktopReceiver.cs",
+      "local": "04-DesktopReceiver.cs",
+      "url": "https://github.com/hecomi/UnityRemoteDesktopDuplication/blob/a42f0c96ff07f7819853a54509e3f9d3e2588421/Assets/uRemoteDesktopDuplication/Scripts/DesktopReceiver.cs",
+      "sha256": "1deda2b6eb36981a5d63f3b8b911d90103f68504189e94197993b54b2efb6190",
+      "truncated": false,
+      "lines": 74,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "Assets/uRemoteDesktopDuplication/Scripts/DesktopSender.cs",
+      "local": "05-DesktopSender.cs",
+      "url": "https://github.com/hecomi/UnityRemoteDesktopDuplication/blob/a42f0c96ff07f7819853a54509e3f9d3e2588421/Assets/uRemoteDesktopDuplication/Scripts/DesktopSender.cs",
+      "sha256": "69785eabb1b68838423be0df46d8ce7f69d065c9ec98f6a3d296959d15a7409b",
+      "truncated": false,
+      "lines": 31,
+      "source": true,
+      "test": false
+    }
+  ],
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/hecomi/UnityRemoteDesktopDuplication/blob/a42f0c96ff07f7819853a54509e3f9d3e2588421/README.md",
+      "sha256": "af85db9dcf22306bfc73fc6843b1178df4c1d6667182f68263b549a4b603a6b5",
+      "truncated": false,
+      "lines": 27,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE.md",
+      "local": "01-LICENSE.md",
+      "url": "https://github.com/hecomi/UnityRemoteDesktopDuplication/blob/a42f0c96ff07f7819853a54509e3f9d3e2588421/LICENSE.md",
+      "sha256": "13a99cf86751aaba1de43ab6c3adaab44760e08cbd23eb63965920f7c39f7d3f",
+      "truncated": false,
+      "lines": 20,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE_NvPipe",
+      "local": "02-LICENSE_NvPipe",
+      "url": "https://github.com/hecomi/UnityRemoteDesktopDuplication/blob/a42f0c96ff07f7819853a54509e3f9d3e2588421/LICENSE_NvPipe",
+      "sha256": "0de92292733c27bf9f792641e999bab9cc5f650a4b0a677f0d8cd54f7571782d",
+      "truncated": false,
+      "lines": 29,
+      "source": false,
+      "test": false
+    }
+  ]
+}

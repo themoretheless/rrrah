@@ -1,0 +1,88 @@
+{
+  "index": 318,
+  "repository": "jwilsson/domtokenlist",
+  "commit": "4c643cd6aef8b8051822d86f60a4cdbccdca7dd2",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "DOMTokenList/classList polyfill; collection uniqueness, not media content.",
+  "available_source_evidence": [
+    {
+      "path": "src/DOMTokenList-newest.js",
+      "local": "02-DOMTokenList-newest.js",
+      "url": "https://github.com/jwilsson/domtokenlist/blob/4c643cd6aef8b8051822d86f60a4cdbccdca7dd2/src/DOMTokenList-newest.js",
+      "sha256": "ff7f45a9ae5bf544bfd2277322ef2c2d61ee261dce83af02a64549d2d5c60433",
+      "truncated": false,
+      "lines": 46,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/DOMTokenList.js",
+      "local": "03-DOMTokenList.js",
+      "url": "https://github.com/jwilsson/domtokenlist/blob/4c643cd6aef8b8051822d86f60a4cdbccdca7dd2/src/DOMTokenList.js",
+      "sha256": "fa9d8d491837aa9a5dfad3988e2d79364093603391349a78e83100cb71d28a0a",
+      "truncated": false,
+      "lines": 129,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/classList.js",
+      "local": "04-classList.js",
+      "url": "https://github.com/jwilsson/domtokenlist/blob/4c643cd6aef8b8051822d86f60a4cdbccdca7dd2/src/classList.js",
+      "sha256": "fcdf0addf62255c3fc75e183f2b5ed4464751c515000e76cbdf2e9150e53ab7f",
+      "truncated": false,
+      "lines": 13,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/tests-DOMTokenList-newest.js",
+      "local": "05-tests-DOMTokenList-newest.js",
+      "url": "https://github.com/jwilsson/domtokenlist/blob/4c643cd6aef8b8051822d86f60a4cdbccdca7dd2/tests/tests-DOMTokenList-newest.js",
+      "sha256": "cc579f78a00cac9901cfea15658261c22bd19cefa6caf96ddafc6ada9dc83727",
+      "truncated": false,
+      "lines": 34,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "tests/index.html",
+      "local": "06-index.html",
+      "url": "https://github.com/jwilsson/domtokenlist/blob/4c643cd6aef8b8051822d86f60a4cdbccdca7dd2/tests/index.html",
+      "sha256": "b0077a60ac9b613354fe785a543e4fa1d2ff061036ea0508d193f6c59b187667",
+      "truncated": false,
+      "lines": 32,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 6,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/jwilsson/domtokenlist/blob/4c643cd6aef8b8051822d86f60a4cdbccdca7dd2/README.md",
+      "sha256": "d5cf782059ea0139456f0ff2023bf0854e1c5988de143f387e35e11a0ec1a725",
+      "truncated": false,
+      "lines": 30,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE.md",
+      "local": "01-LICENSE.md",
+      "url": "https://github.com/jwilsson/domtokenlist/blob/4c643cd6aef8b8051822d86f60a4cdbccdca7dd2/LICENSE.md",
+      "sha256": "c63708083845712f9355fe51b580776e8b5e60856b691e85dc899c0682eb447d",
+      "truncated": false,
+      "lines": 7,
+      "source": false,
+      "test": false
+    }
+  ]
+}

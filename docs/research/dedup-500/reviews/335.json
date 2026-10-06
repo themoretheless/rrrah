@@ -1,0 +1,68 @@
+{
+  "index": 335,
+  "repository": "garlic-bred/book-savestate",
+  "commit": "1827eaf0caaa9b534ae380c2f7a3aa3861ada12c",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Minecraft item/chunk save-state mod; unrelated duplication domain.",
+  "available_source_evidence": [
+    {
+      "path": "src/main/java/com/bread/BookSavestate.java",
+      "local": "02-BookSavestate.java",
+      "url": "https://github.com/garlic-bred/book-savestate/blob/1827eaf0caaa9b534ae380c2f7a3aa3861ada12c/src/main/java/com/bread/BookSavestate.java",
+      "sha256": "d6efe717805acba572444fb1afce01112a166bf59582143716abc03200c749f6",
+      "truncated": false,
+      "lines": 105,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/main/java/com/bread/mixin/ClientPlayerInteractionManagerMixin.java",
+      "local": "03-ClientPlayerInteractionManagerMixin.java",
+      "url": "https://github.com/garlic-bred/book-savestate/blob/1827eaf0caaa9b534ae380c2f7a3aa3861ada12c/src/main/java/com/bread/mixin/ClientPlayerInteractionManagerMixin.java",
+      "sha256": "98c231fb509b5bca7b16af0fdffdf1285a47bcada5cfca853131dbe949745fd4",
+      "truncated": false,
+      "lines": 45,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/main/java/com/bread/mixin/HandledScreenMixin.java",
+      "local": "04-HandledScreenMixin.java",
+      "url": "https://github.com/garlic-bred/book-savestate/blob/1827eaf0caaa9b534ae380c2f7a3aa3861ada12c/src/main/java/com/bread/mixin/HandledScreenMixin.java",
+      "sha256": "067d9c823b8736beca6c6a1e4aa20951732700d22ecdb5ad3ec51c91be5a9d7b",
+      "truncated": false,
+      "lines": 23,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "CC0-1.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/garlic-bred/book-savestate/blob/1827eaf0caaa9b534ae380c2f7a3aa3861ada12c/README.md",
+      "sha256": "06b364515557f06c1a5a9fa33a88a515ca99440898107296c9913a53911d97b8",
+      "truncated": false,
+      "lines": 34,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/garlic-bred/book-savestate/blob/1827eaf0caaa9b534ae380c2f7a3aa3861ada12c/LICENSE",
+      "sha256": "6d489af6292662d9e36d34ce49423784984a5f6e41d7b58f49b01264df59fa03",
+      "truncated": false,
+      "lines": 121,
+      "source": false,
+      "test": false
+    }
+  ]
+}

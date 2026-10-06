@@ -1,0 +1,75 @@
+{
+  "scope": "Internal CRW full-sensor acceptance with external tables",
+  "manifest_sha256": "f52b6a40d4f8b7644ce2a8281131e6eb562f6accf7d7ec20c5a195ce953a8f86",
+  "cases": [
+    {
+      "id": 1307,
+      "passed": true,
+      "source_sha256": "4ee482f2b6f9f1a8d370703ea04e9f2abaa49356973a7f56b229af93a78e8a2e",
+      "oracle_sha256": "8ac62f45a4ee04efebed7900eb46dd263dc4a03a96c4fe711dc41b6bec6078fe",
+      "table_sha256": "94fb55465b45059889b7e5588d7c44311f1ec529ba3ce073bfda6b950d830683",
+      "log": "docs/research/current-crw-internal-metal-2026-10-06-1307.log",
+      "log_sha256": "455ccb84a910e327801276f46a5a2de85a8fe3f653f79c6d6bd485f378d3c923",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-decode",
+        "--lib",
+        "real_full_sensor_entropy",
+        "--locked",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target",
+        "--",
+        "--ignored",
+        "--nocapture"
+      ]
+    },
+    {
+      "id": 2027,
+      "passed": true,
+      "source_sha256": "b0730eb3a67cc2281a32e0b2ee104199246928d954a68b7e5b72366514c73d02",
+      "oracle_sha256": "3aecb01756492569734885710dafd6ffc26421ac0b5a7fa1c151973d48cd389a",
+      "table_sha256": "1f96c603f8c2f9d47bd5c1b2c8fa25fc87507f8f6c66cbbccaadc6b5af4f6ac0",
+      "log": "docs/research/current-crw-internal-metal-2026-10-06-2027.log",
+      "log_sha256": "8cb0bcf2f3c1c43a83dd0822a752dad66d550a6b57b23458d0d76cc25bc100d9",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-decode",
+        "--lib",
+        "real_full_sensor_entropy",
+        "--locked",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target",
+        "--",
+        "--ignored",
+        "--nocapture"
+      ]
+    }
+  ],
+  "limitations": [
+    "Explicit CRW import with external table data; automatic viewer routing absent.",
+    "Metal proof covers native-output preservation; no independent color or physical display oracle."
+  ],
+  "metal": {
+    "passed": true,
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rrrah",
+      "--test",
+      "crw_swap_metal",
+      "--locked",
+      "--target-dir",
+      "/private/tmp/rrrah-required-corpus-target",
+      "--",
+      "--ignored",
+      "--nocapture"
+    ],
+    "log": "docs/research/current-crw-internal-metal-2026-10-06-metal.log",
+    "log_sha256": "922721f4ac62511e4bd81d1b478434056cc6910b4bcdf54ee5de1404273469a9"
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "scope": "Current preflight build only; warm filesystem/process CPU decode and prepare. No paired before/after overhead conclusion, GPU latency or pixel qualification.",
+  "rows": [
+    {
+      "path": "tests/fixtures/pdf/red-green-pages.pdf",
+      "index": 0,
+      "iterations": 20,
+      "load_p50_ms": 0.021667000000000002,
+      "load_p95_ms": 0.027084,
+      "prepare_p50_ms": 0.0005,
+      "prepare_p95_ms": 0.000583,
+      "cpu_ready_p50_ms": 0.022208000000000002,
+      "cpu_ready_p95_ms": 0.028709,
+      "display_blake3": "1c8976eda77444dbd8b7fc3ee16ac87240d1b2fce16692acc221a6527e1a3738",
+      "cache": "warm filesystem; process warm; no decoded image cache"
+    },
+    {
+      "path": "tests/fixtures/pdf/cairo-text-shapes-large.pdf",
+      "index": 0,
+      "iterations": 20,
+      "load_p50_ms": 4.304667,
+      "load_p95_ms": 4.4704999999999995,
+      "prepare_p50_ms": 6.217416,
+      "prepare_p95_ms": 6.377666,
+      "cpu_ready_p50_ms": 10.525958000000001,
+      "cpu_ready_p95_ms": 10.853290999999999,
+      "display_blake3": "4750c5c8597c87cc1c7171a0ffac8a299861c11a6351cafd4152b2519b956c75",
+      "cache": "warm filesystem; process warm; no decoded image cache"
+    },
+    {
+      "path": "/tmp/rrrah-ai-upstream/VectorApple.ai",
+      "index": 0,
+      "iterations": 20,
+      "load_p50_ms": 216.460041,
+      "load_p95_ms": 234.872167,
+      "prepare_p50_ms": 0.259541,
+      "prepare_p95_ms": 0.268708,
+      "cpu_ready_p50_ms": 216.7195,
+      "cpu_ready_p95_ms": 235.13662499999998,
+      "display_blake3": "437f0a7fad63e16331a18407e2de7a0cf112a581a6d3ed622c48ead88d4c3f14",
+      "cache": "warm filesystem; process warm; no decoded image cache"
+    },
+    {
+      "path": "/tmp/rrrah-ai-upstream/one.ai",
+      "index": 0,
+      "iterations": 20,
+      "load_p50_ms": 2.208416,
+      "load_p95_ms": 2.297417,
+      "prepare_p50_ms": 3.66725,
+      "prepare_p95_ms": 3.7635,
+      "cpu_ready_p50_ms": 5.881708000000001,
+      "cpu_ready_p95_ms": 5.999833000000001,
+      "display_blake3": "83c4c2dd000118e3bbd7c3a78f780e91b3a97a187e912cb14ba16543585b7b73",
+      "cache": "warm filesystem; process warm; no decoded image cache"
+    },
+    {
+      "path": "/tmp/rrrah-ai-upstream/one.ai",
+      "index": 1,
+      "iterations": 20,
+      "load_p50_ms": 0.10145900000000001,
+      "load_p95_ms": 0.107458,
+      "prepare_p50_ms": 0.10825,
+      "prepare_p95_ms": 0.10875,
+      "cpu_ready_p50_ms": 0.2095,
+      "cpu_ready_p95_ms": 0.216083,
+      "display_blake3": "16708155f4f8922e0d727803857b075f79197a7dc899a6a13b6169691ee4ad74",
+      "cache": "warm filesystem; process warm; no decoded image cache"
+    }
+  ]
+}

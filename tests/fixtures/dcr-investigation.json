@@ -1,0 +1,402 @@
+{
+  "status": "native-DCS760C-sensor-color-implemented",
+  "source": {
+    "id": 1347,
+    "license": "CC0-1.0",
+    "sha256": "d0e6bd0a3339daff884e73a08fed8e75b20fe05bba438fc185e3f0bd019d0da8",
+    "bytes": 7547392
+  },
+  "oracle": {
+    "libraw_version": "0.22.2-Release",
+    "make": "Kodak",
+    "model": "DCS760C",
+    "width": 3040,
+    "height": 2016,
+    "crop": [
+      0,
+      0,
+      3040,
+      2016
+    ],
+    "wb": [
+      2842,
+      2504,
+      4668,
+      2504
+    ],
+    "black": 0,
+    "cblack": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "white": 4095,
+    "cfa": [
+      "G",
+      "R",
+      "B",
+      "G"
+    ],
+    "xyz_to_camera": [
+      [
+        1.662299991,
+        -0.6309000254,
+        -0.1411000043
+      ],
+      [
+        -0.4343999922,
+        1.39230001,
+        0.03229999915
+      ],
+      [
+        0.2284999937,
+        0.02740000002,
+        0.2926000059
+      ],
+      [
+        0,
+        0,
+        0
+      ]
+    ],
+    "camera_to_rgb": [
+      [
+        1.591069579,
+        -0.1861687452,
+        -0.4049008787
+      ],
+      [
+        -0.1939469427,
+        1.257216573,
+        -0.06326965243
+      ],
+      [
+        -0.4414206445,
+        -0.4716336131,
+        1.913054228
+      ]
+    ],
+    "file_color_matrices": [
+      {
+        "parsedfields": 0,
+        "illuminant": 65535,
+        "xyz_to_camera": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "parsedfields": 0,
+        "illuminant": 65535,
+        "xyz_to_camera": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ]
+      }
+    ]
+  },
+  "sensor_sha256": "ebf9adb8df2bb8b813bf33cd7f3ca3951290abeb89be20a531947cae89257893",
+  "directories": [
+    {
+      "offset": 12982,
+      "width": 380,
+      "height": 252,
+      "tags": {
+        "258": [
+          16,
+          16,
+          16
+        ],
+        "259": 1,
+        "273": [
+          126464
+        ],
+        "279": [
+          574560
+        ],
+        "277": 3,
+        "278": 252,
+        "271": "Kodak",
+        "272": "DCS760C"
+      }
+    },
+    {
+      "offset": 12592,
+      "width": 380,
+      "height": 252,
+      "tags": {
+        "258": [
+          16,
+          16,
+          16
+        ],
+        "259": 1,
+        "273": [
+          126464
+        ],
+        "279": [
+          574560
+        ],
+        "277": 3,
+        "278": 252
+      }
+    },
+    {
+      "offset": 12058,
+      "width": 3040,
+      "height": 2016,
+      "tags": {
+        "258": 12,
+        "259": 65000,
+        "273": [
+          804352
+        ],
+        "279": [
+          5703212
+        ],
+        "277": 1,
+        "278": 2016,
+        "33422": [
+          1,
+          0,
+          2,
+          1
+        ]
+      }
+    },
+    {
+      "offset": 12360,
+      "width": 760,
+      "height": 504,
+      "tags": {
+        "258": [
+          12,
+          12,
+          12
+        ],
+        "259": 65000,
+        "273": [
+          6508032
+        ],
+        "279": [
+          1035048
+        ],
+        "277": 3,
+        "278": 504
+      }
+    }
+  ],
+  "remaining": "Broader camera profiles and photographic color accuracy pending",
+  "native_entropy": {
+    "samples": 6128640,
+    "all_samples_byte_exact_against_LibRaw": true,
+    "truncated_stream_rejected": true,
+    "implementation": "crates/rrrah-decode/src/camtiff/kodak_65000.rs",
+    "scope": "single-plane identity-curve entropy only; WB/orientation/backend admission/router pending"
+  },
+  "native": {
+    "make": "Kodak",
+    "model": "DCS760C",
+    "width": 3040,
+    "height": 2016,
+    "wb": [
+      1.134984,
+      1.0,
+      1.8642173,
+      1.0
+    ],
+    "black_grid": [
+      0.0
+    ],
+    "white": [
+      4095.0
+    ],
+    "cfa": [
+      "G",
+      "R",
+      "B",
+      "G"
+    ],
+    "xyz_to_camera": [
+      [
+        1.6623,
+        -0.6309,
+        -0.1411
+      ],
+      [
+        -0.4344,
+        1.3923,
+        0.0323
+      ],
+      [
+        0.2285,
+        0.0274,
+        0.2926
+      ],
+      [
+        0.0,
+        0.0,
+        0.0
+      ]
+    ],
+    "camera_to_rgb": [
+      [
+        1.5910696,
+        -0.18616875,
+        -0.40490088
+      ],
+      [
+        -0.19394694,
+        1.2572166,
+        -0.06326965
+      ],
+      [
+        -0.44142064,
+        -0.4716336,
+        1.9130542
+      ]
+    ],
+    "crop": [
+      0,
+      0,
+      3040,
+      2016
+    ],
+    "managed_memory": {
+      "limit": 134217728,
+      "used": 12257280,
+      "peak": 19804672,
+      "pixel_capacity": 12257280,
+      "managed": true
+    }
+  },
+  "integration": {
+    "adapter": "Metal Apple M4 Max",
+    "tests_passed": 1,
+    "checks": [
+      "full sensor exact",
+      "persistent pixels/metadata exact",
+      "swap pressure refusal and retry",
+      "whole 128x96 GPU frame exact against independent reference"
+    ]
+  },
+  "response_curve": {
+    "tag": 2317,
+    "entries": 4096,
+    "original": "identity",
+    "modified_oracle_case": "each curve entry i replaced by floor(i/2)",
+    "modified_full_sensor_byte_exact_against_LibRaw": true
+  },
+  "required_corpus": {
+    "cases_passed": 25,
+    "memory_mb": 256,
+    "includes_local_cr3": true
+  },
+  "rejection_qualification": {
+    "cases": 5,
+    "managed_memory_final_zero": true,
+    "uppercase_sensor_route": true,
+    "insufficient_memory_budget_mb": 8
+  },
+  "wb_modes_independent_qualification": [
+    {
+      "selector": 0,
+      "wb": [
+        1.134984,
+        1.0,
+        1.8642173,
+        1.0
+      ],
+      "all_sensor_samples_exact": true
+    },
+    {
+      "selector": 1,
+      "wb": [
+        0.8613914,
+        1.0,
+        2.392459,
+        1.0
+      ],
+      "all_sensor_samples_exact": true
+    },
+    {
+      "selector": 2,
+      "wb": [
+        1.4614949,
+        1.0,
+        2.1098528,
+        1.0
+      ],
+      "all_sensor_samples_exact": true
+    },
+    {
+      "selector": 3,
+      "wb": [
+        1.1355386,
+        1.0,
+        1.8624445,
+        1.0
+      ],
+      "all_sensor_samples_exact": true
+    },
+    {
+      "selector": 4,
+      "wb": [
+        1.1257632,
+        1.0,
+        2.0122101,
+        1.0
+      ],
+      "all_sensor_samples_exact": true
+    },
+    {
+      "selector": 5,
+      "wb": [
+        1.0829688,
+        1.0,
+        1.8743849,
+        1.0
+      ],
+      "all_sensor_samples_exact": true
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: function `error` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:4:4
+  |
+4 | fn error(message: &str) -> DecodeError {
+  |    ^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `packed_12` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:9:4
+  |
+9 | fn packed_12(
+  |    ^^^^^^^^^
+
+warning: function `decode_zd` is never used
+  --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:48:15
+   |
+48 | pub(super) fn decode_zd(
+   |               ^^^^^^^^^
+
+warning: `rrrah-decode` (lib) generated 3 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 14.95s
+     Running tests/decode.rs (/tmp/rrrah-dedup-target/debug/deps/decode-5a0200c3e292c20e)
+
+running 9 tests
+test corrupt_missing_cancelled_and_frame_out_of_range_are_errors ... ok
+test public_selected_decode_rejects_a_source_changed_after_output_admission ... ok
+test mutation_during_processing_never_admits_cached_evidence ... ok
+test layered_xcf_duplicates_preserve_color_errors_and_managed_ownership ... ok
+test actual_files_ignore_comments_but_not_changed_pixels ... ok
+test tiff_shaped_raw_never_uses_generic_page_fallback ... ok
+test pre_icc_fix_persisted_recipe_cannot_reuse_current_fingerprint ... ok
+test icc_conversion_cancellation_releases_partial_output ... ok
+test cached_file_fingerprints_reuse_only_current_content_and_recipe ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/pixel_search.rs (/tmp/rrrah-dedup-target/debug/deps/pixel_search-e8535cb037a13475)
+
+running 15 tests
+test opaque_uniform_png_and_independently_encoded_bmp_are_discovered_as_equal ... ok
+test recursive_request_factory_preserves_explicit_hdr_color_and_discovered_paths ... ok
+test untagged_hdr_requires_color_qualification_even_with_encoded_srgb_assumption ... ok
+test changed_source_discards_every_stale_decision_and_preserves_healthy_pairs ... ok
+test indexed_source_changed_before_its_decode_is_not_admitted_as_fresh ... ok
+test final_generation_change_and_transient_user_cancel_return_no_report ... ok
+test explicitly_qualified_linear_hdr_matches_endianness_without_losing_precision_or_scale ... ok
+test indexed_roots_preserve_non_utf8_diagnostics_without_losing_healthy_equality ... ok
+test indexed_changed_source_discards_stale_pairs ... ok
+test recursive_pixel_search_keeps_corrupt_and_missing_sources_as_diagnostics ... ok
+test indexed_pixel_permission_error_preserves_healthy_pairs_and_recovers ... ok
+test indexed_recursive_search_isolates_corruption_and_preserves_overlapping_roots ... ok
+test indexed_final_generation_and_transient_cancel_return_no_report ... ok
+test indexed_two_key_groups_are_deterministic_across_request_orders ... ok
+test indexed_unique_collection_fits_zero_pair_budget_and_decodes_once_per_key ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+
+     Running tests/scan.rs (/tmp/rrrah-dedup-target/debug/deps/scan-191c9d95467ecbab)
+
+running 6 tests
+test confirmation_mutation_generation_and_memory_are_inconclusive ... ok
+test pixel_group_final_checks_observe_generation_cancellation ... ok
+test recursive_visual_discovery_keeps_aliases_and_errors_visible ... ok
+test group_admission_invalidates_edges_from_changed_source ... ok
+test batch_errors_cache_and_pair_evidence_are_integrated ... ok
+test tiff_page_fingerprints_and_confirmation_share_profile_and_limits ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/visual.rs (/tmp/rrrah-dedup-target/debug/deps/visual-357263cc598dcf1c)
+
+running 6 tests
+test fallible_insert_enforces_total_ids_without_partial_mutation ... ok
+test duplicate_ids_budgets_and_cancel_do_not_return_partial_indexes ... ok
+test fallible_search_result_caps_are_inconclusive_and_leave_index_unchanged ... ok
+test cancellation_inside_large_collision_bucket_is_observed ... ok
+test cancelled_insertions_preserve_collision_buckets_and_deep_trees ... ok
+test complete_recipe_index_matches_exhaustive_oracle ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+

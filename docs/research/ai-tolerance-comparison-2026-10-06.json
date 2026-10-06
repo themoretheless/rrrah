@@ -1,0 +1,57 @@
+{
+  "scope": "standalone dev-profile Hayro render; parsing and output copy excluded;3warmups9samples; transparent output white composite; only tolerance varies",
+  "rows": [
+    {
+      "name": "VectorApple",
+      "mode": "baseline",
+      "different_pixels": 54657,
+      "max_channel_error": 255,
+      "timing": "samples_ms=[4954.865333, 4967.880667, 4969.051458, 5010.746791, 5019.918041999999, 5025.95425, 5589.405917, 5854.176083, 7107.685208000001] median_ms=5019.918041999999 max_ms=7107.685208000001",
+      "source_sha256": "c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06",
+      "native_bytes": 294000,
+      "oracle_expected_rgba_bytes": 296184,
+      "extent_valid": false,
+      "comparison_status": "invalid: standalone default viewport differs from production ceil viewport; disregard pixel metrics"
+    },
+    {
+      "name": "VectorApple",
+      "mode": "tight",
+      "different_pixels": 54671,
+      "max_channel_error": 255,
+      "timing": "samples_ms=[4985.2369579999995, 4994.76525, 5000.9985830000005, 5007.636416, 5038.117916, 5050.706125, 5063.63975, 5866.802041999999, 6845.125916999999] median_ms=5038.117916 max_ms=6845.125916999999",
+      "source_sha256": "c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06",
+      "native_bytes": 294000,
+      "oracle_expected_rgba_bytes": 296184,
+      "extent_valid": false,
+      "comparison_status": "invalid: standalone default viewport differs from production ceil viewport; disregard pixel metrics"
+    },
+    {
+      "name": "one",
+      "mode": "baseline",
+      "different_pixels": 2790,
+      "max_channel_error": 115,
+      "timing": "samples_ms=[153.53662500000002, 153.64575, 153.93325, 154.058208, 154.286917, 154.517041, 154.518417, 154.941958, 157.732292] median_ms=154.286917 max_ms=157.732292",
+      "source_sha256": "97786949c268233a446e1738fb9c2f941e4d109811bd2f972948cdb7a45d64b4",
+      "native_bytes": 4196352,
+      "oracle_expected_rgba_bytes": 4196352,
+      "extent_valid": true
+    },
+    {
+      "name": "one",
+      "mode": "tight",
+      "different_pixels": 2551,
+      "max_channel_error": 60,
+      "timing": "samples_ms=[154.639166, 154.658833, 155.010708, 155.04375000000002, 155.524375, 155.8425, 156.012292, 156.389958, 156.628959] median_ms=155.524375 max_ms=156.628959",
+      "source_sha256": "97786949c268233a446e1738fb9c2f941e4d109811bd2f972948cdb7a45d64b4",
+      "native_bytes": 4196352,
+      "oracle_expected_rgba_bytes": 4196352,
+      "extent_valid": true
+    }
+  ],
+  "limitations": [
+    "Sequential modes, not alternating paired timing",
+    "Production PDF request preflight and admission excluded",
+    "No strict Poppler parity established",
+    "VectorApple metrics invalid due default viewport extent mismatch; only one.ai comparison valid"
+  ]
+}

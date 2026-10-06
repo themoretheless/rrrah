@@ -1,0 +1,78 @@
+{
+  "index": 482,
+  "repository": "vaibhavhrt/dart_imagehash",
+  "commit": "0f75fde7f2964abf59a34755c2403f4f7df3c02f",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Dart average/difference hashes validate hashSize>=2, with ImageHash bit representation and test file; independent vectors still need running.",
+  "available_source_evidence": [
+    {
+      "path": "lib/src/average_hash.dart",
+      "local": "02-average_hash.dart",
+      "url": "https://github.com/vaibhavhrt/dart_imagehash/blob/0f75fde7f2964abf59a34755c2403f4f7df3c02f/lib/src/average_hash.dart",
+      "sha256": "5b347327243f1ded5ab4cd3b42c0fded1acad1012ddace1884a5d6dd420da290",
+      "truncated": false,
+      "lines": 36,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "lib/src/difference_hash.dart",
+      "local": "03-difference_hash.dart",
+      "url": "https://github.com/vaibhavhrt/dart_imagehash/blob/0f75fde7f2964abf59a34755c2403f4f7df3c02f/lib/src/difference_hash.dart",
+      "sha256": "ec44e0ce8fb39a079454f05ea793a5b5c555861d49e49f34e93a725c7ae0a510",
+      "truncated": false,
+      "lines": 62,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "lib/src/image_hasher.dart",
+      "local": "04-image_hasher.dart",
+      "url": "https://github.com/vaibhavhrt/dart_imagehash/blob/0f75fde7f2964abf59a34755c2403f4f7df3c02f/lib/src/image_hasher.dart",
+      "sha256": "43a4b1ffdea612d32fdc2197eef0c38190c532b7fbe0c0e600205910e743fe71",
+      "truncated": false,
+      "lines": 224,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "test/imagehash_test.dart",
+      "local": "05-imagehash_test.dart",
+      "url": "https://github.com/vaibhavhrt/dart_imagehash/blob/0f75fde7f2964abf59a34755c2403f4f7df3c02f/test/imagehash_test.dart",
+      "sha256": "5f86c7fc57ccf0d10ef2a42dd99926ca344a65f7d87447dfc314db4e2f94b966",
+      "truncated": false,
+      "lines": 290,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "BSD-3-Clause",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 1,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/vaibhavhrt/dart_imagehash/blob/0f75fde7f2964abf59a34755c2403f4f7df3c02f/README.md",
+      "sha256": "ea51895cc6a76895d18c4589371dc5dbec53f3eaaba02cf541ee4913a47039b1",
+      "truncated": false,
+      "lines": 103,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/vaibhavhrt/dart_imagehash/blob/0f75fde7f2964abf59a34755c2403f4f7df3c02f/LICENSE",
+      "sha256": "036741f8b0b21712baaddfcc17a01519667709e8f1c3cde62b13538760adcdb3",
+      "truncated": false,
+      "lines": 25,
+      "source": false,
+      "test": false
+    }
+  ]
+}

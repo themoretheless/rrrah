@@ -1,0 +1,73 @@
+{
+  "repository": "ragibson/SMS-MMS-deduplication",
+  "metadata": {
+    "name": "ragibson/SMS-MMS-deduplication",
+    "url": "https://github.com/ragibson/SMS-MMS-deduplication",
+    "description": "Tool to remove duplicate text messages (SMS/MMS/RCS). RCS support is available for some clients.",
+    "language": "Python",
+    "stars": 34,
+    "license": "MIT",
+    "archived": false,
+    "pushed_at": "2026-08-30T21:19:28Z",
+    "default_branch": "main",
+    "queries": [
+      "dedup in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/ragibson/SMS-MMS-deduplication/blob/7e33a7e1df7ae9f4fb04028f5c0cc7f90fa5ae07/README.md",
+      "sha256": "c7e0745964b413e8f807b490877146ca36d26a113b73899478cf0570ac2b34d2",
+      "truncated": false,
+      "lines": 199,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/ragibson/SMS-MMS-deduplication/blob/7e33a7e1df7ae9f4fb04028f5c0cc7f90fa5ae07/LICENSE",
+      "sha256": "df8d46e79c7ce63661a720a925ffb8f18e4e3046a097af00506879b9c9396d31",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "dedupe_texts.py",
+      "local": "02-dedupe_texts.py",
+      "url": "https://github.com/ragibson/SMS-MMS-deduplication/blob/7e33a7e1df7ae9f4fb04028f5c0cc7f90fa5ae07/dedupe_texts.py",
+      "sha256": "8f2d2fccaad82f286c7bf456382d5f1355bb93a350bb106eb236e2a3b655804a",
+      "truncated": false,
+      "lines": 422,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/test_multiple_duplicates.py",
+      "local": "03-test_multiple_duplicates.py",
+      "url": "https://github.com/ragibson/SMS-MMS-deduplication/blob/7e33a7e1df7ae9f4fb04028f5c0cc7f90fa5ae07/tests/test_multiple_duplicates.py",
+      "sha256": "8b8b54acea26b880caf43b539b0fbedde830b0554a599cb41d88b77452079f0f",
+      "truncated": false,
+      "lines": 21,
+      "source": true,
+      "test": true
+    }
+  ],
+  "errors": [],
+  "commit": "7e33a7e1df7ae9f4fb04028f5c0cc7f90fa5ae07",
+  "tree_truncated": false,
+  "source_file_count": 10,
+  "test_file_count": 9,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "dedupe_texts.py",
+    "tests/test_multiple_duplicates.py"
+  ]
+}

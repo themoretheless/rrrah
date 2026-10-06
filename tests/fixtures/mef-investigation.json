@@ -1,0 +1,110 @@
+{
+  "status": "native-managed-sensor-qualified-WB-unresolved",
+  "id": 562,
+  "license": "CC-BY-NC-SA-4.0",
+  "url": "https://raw.pixls.us/getfile.php/562/nice/Mamiya - ZD.MEF",
+  "source_sha256": "bcd63507c3c4cc3ea1bad2945e3f88cb4677a1a3c762e1acc38df4445714eb7c",
+  "oracle": {
+    "libraw_version": "0.22.2-Release",
+    "make": "Mamiya",
+    "model": "ZD",
+    "width": 4016,
+    "height": 5344,
+    "crop": [
+      0,
+      0,
+      4016,
+      5344
+    ],
+    "wb": [
+      0,
+      1,
+      0,
+      0
+    ],
+    "black": 0,
+    "cblack": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "white": 4095,
+    "cfa": [
+      "R",
+      "G",
+      "G",
+      "B"
+    ],
+    "xyz_to_camera": [
+      [
+        0.7645000219,
+        0.2578999996,
+        -0.1362999976
+      ],
+      [
+        -0.868900001,
+        1.671700001,
+        0.2014999986
+      ],
+      [
+        -0.3711999953,
+        0.5940999985,
+        0.5960999727
+      ],
+      [
+        0,
+        0,
+        0
+      ]
+    ],
+    "camera_to_rgb": [
+      [
+        2.287914276,
+        -1.533669114,
+        0.2457549125
+      ],
+      [
+        -0.01535167731,
+        1.333883166,
+        -0.3185315132
+      ],
+      [
+        0.07452435046,
+        -0.9362688661,
+        1.861744523
+      ]
+    ]
+  },
+  "reason": "Independent LibRaw oracle returns unavailable camera WB [0,1,0,0]; examined native MakerNote tags0x82/0x83/0x84/0x88 are all zero. Native color viewing is not qualified and no neutral WB substitute is admitted.",
+  "sensor_contract": {
+    "width": 4016,
+    "height": 5344,
+    "bits": 12,
+    "packing": "MSB-first pairs: A<<4|B>>4, (B&15)<<8|C",
+    "strip_offset": 4383052,
+    "strip_bytes": 32192256,
+    "output_bytes": 42923008,
+    "oracle_sha256": "3daa5dcb996733310dc06971f75066c74ded92d2f645cc25fc61878dd574eb1b",
+    "native_evidence": "/tmp/rrrah-mef-sensor-native.log",
+    "scope": "private sensor foundation, not public color viewing"
+  },
+  "wb_revalidation": {
+    "tool": "ExifTool 13.59",
+    "evidence": "/tmp/rrrah-mef-exiftool-color.json",
+    "reported": "ExifIFD WhiteBalance auto=0 only; no camera gain coefficients reported"
+  },
+  "public_route_revalidation": {
+    "date": "2026-10-06",
+    "source_sha256_verified": true,
+    "result": "typed refusal before color after linked SubIFD traversal: TIFF tag 4084 uses unsupported field type 4084",
+    "fallback_to_preview": false,
+    "managed_memory_after_refusal": 0,
+    "test": "image_router::tests::unqualified_mef_refuses_public_view_without_preview_fallback_or_leak",
+    "command": "RRRAH_MEF_SOURCE=/tmp/rrrah-mamiya-zd.mef cargo test -p rrrah-decode unqualified_mef_refuses_public --target-dir /tmp/rrrah-required-corpus-target -- --ignored --nocapture",
+    "log": "/tmp/rrrah-mef-chain-routing.log",
+    "passed": 1
+  }
+}

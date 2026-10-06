@@ -1,0 +1,52 @@
+{
+  "status": "complete_measurement_accuracy_gate_not_met",
+  "session": 3850,
+  "required_cases": 3,
+  "registration": {
+    "radius": 1,
+    "stride": 8,
+    "rounds": 128,
+    "max_sample_pairs": 64000000
+  },
+  "objective": {
+    "space": "encoded_srgb",
+    "minimum_samples": 16,
+    "minimum_variance": 1e-05,
+    "minimum_gain": 0.2,
+    "maximum_gain": 5,
+    "maximum_offset": 0.1
+  },
+  "probe": "/Users/themoretheless/.codex/tmp/rrrah-dedup-hpatches/photo-probe-photo-registration",
+  "build_exit": 0,
+  "source_sha256": {
+    "crates/rrrah-dedup/examples/photo_probe.rs": "6df3d0cb3ab2f264cda012c5c4025857b4ce72a4acbce9733cccf4af350c0e74",
+    "scripts/qualify-dedup-registration-drift.py": "3d329088a2e1bb472ebb56280eec4b1b56902bb12053fabca8319a1310968518"
+  },
+  "scope": "Known registration-drift geometry only; no final candidate acceptance claim",
+  "execution_exit": 0,
+  "results": [
+    {
+      "sequence": "i_bologna",
+      "target_index": 4,
+      "old_median": 12.922342633343012,
+      "new_median": 9.050591967076633,
+      "new_maximum": 16.878003238426402
+    },
+    {
+      "sequence": "i_bologna",
+      "target_index": 5,
+      "old_median": 12.056751035217253,
+      "new_median": 10.538080341905241,
+      "new_maximum": 11.807870652459044
+    },
+    {
+      "sequence": "i_contruction",
+      "target_index": 5,
+      "old_median": 32.901897583867125,
+      "new_median": 17.02866871426327,
+      "new_maximum": 61.91765094907485
+    }
+  ],
+  "finding": "Bounded affine nuisance fit reduces drift but all three remain above two pixels; no production correction qualification",
+  "next": "Constrain registration by explicit trusted initial geometry/support while preserving unanchored comparison and final independent pixel confirmation"
+}

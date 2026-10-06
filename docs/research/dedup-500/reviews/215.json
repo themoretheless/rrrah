@@ -1,0 +1,58 @@
+{
+  "index": 215,
+  "repository": "marirs/dedupe_yara_rule",
+  "commit": "fbbd71127ffb71cf7162d0fca66e183bd4ffbee9",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "YARA rule regex extraction/verification; rule text rather than file/image content.",
+  "available_source_evidence": [
+    {
+      "path": "dedupe_yara_rule.py",
+      "local": "02-dedupe_yara_rule.py",
+      "url": "https://github.com/marirs/dedupe_yara_rule/blob/fbbd71127ffb71cf7162d0fca66e183bd4ffbee9/dedupe_yara_rule.py",
+      "sha256": "962dcbde8942576731f4b9f5b7a288d62f3c09f8900083b7b637bb409a9dc7ca",
+      "truncated": false,
+      "lines": 411,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "verify_yara_rules.py",
+      "local": "03-verify_yara_rules.py",
+      "url": "https://github.com/marirs/dedupe_yara_rule/blob/fbbd71127ffb71cf7162d0fca66e183bd4ffbee9/verify_yara_rules.py",
+      "sha256": "f6244929cfb220720d74d5ec413582903226a54f8e385c70325596bd094e193b",
+      "truncated": false,
+      "lines": 99,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "GPL-3.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/marirs/dedupe_yara_rule/blob/fbbd71127ffb71cf7162d0fca66e183bd4ffbee9/README.md",
+      "sha256": "9d824fd93c4490cb6e03ee1f77df0b46bc73b28831380c19edc30b00a724721b",
+      "truncated": false,
+      "lines": 68,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/marirs/dedupe_yara_rule/blob/fbbd71127ffb71cf7162d0fca66e183bd4ffbee9/LICENSE",
+      "sha256": "589ed823e9a84c56feb95ac58e7cf384626b9cbf4fda2a907bc36e103de1bad2",
+      "truncated": false,
+      "lines": 674,
+      "source": false,
+      "test": false
+    }
+  ]
+}

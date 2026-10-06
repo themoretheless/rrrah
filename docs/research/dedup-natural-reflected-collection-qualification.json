@@ -1,0 +1,47 @@
+{
+  "scope": "Strict reflected indexed collection on eight known natural-camera-preview PNGs",
+  "files": 8,
+  "independent_scenes": 4,
+  "exhaustive_pairs": 28,
+  "accepted_pairs": [
+    [
+      0,
+      1
+    ],
+    [
+      2,
+      3
+    ],
+    [
+      4,
+      5
+    ],
+    [
+      6,
+      7
+    ]
+  ],
+  "rejected_pairs": 24,
+  "indexed_features": 7076,
+  "descriptor_hits": 3032048,
+  "proposed_pairs": 28,
+  "peak_managed_bytes": 4375552,
+  "checks": [
+    "indexed accepted pairs exactly equal complete reflected pair enumeration",
+    "all eight inputs analysed, no file/pair/source issues",
+    "managed credit releases to zero",
+    "one focused photo test passed, nine other photo tests filtered"
+  ],
+  "limits": [
+    "Index proposed all 28 pairs, so no confirmation-work reduction demonstrated",
+    "Peak managed credit excludes index/unmanaged bookkeeping and is not RSS",
+    "Known preview corpus, not held-out full-RAW or captured mirror/burst/look-alike qualification",
+    "Single run; 47.50-second test includes exhaustive oracle and index construction, not isolated throughput"
+  ],
+  "source_sha256": {
+    "crates/rrrah-dedup/tests/photo_files.rs": "8df3e9c39c290e14ae9c1e5f344ef35eb367175abb9532301cb57ddd803b50b0",
+    "crates/rrrah-dedup/src/local_collection.rs": "e139c064fb5518ca67c7e210fafd6be84e6864034438f8d23f4b1eb269009b3c",
+    "crates/rrrah-dedup/src/local_scan.rs": "c9f9860ef9b1c3deab18ca37edb27eb2d462276dab2e93f6f2fe9072948f538c",
+    "crates/rrrah-dedup/tests/fixtures/photos/reflections-manifest.json": "baca59f5b5c35d992e4c02894da84dce71fb1c2a2064459ced9edce8bf9057e9"
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "index": 459,
+  "repository": "DimitriosPournarkas/MediaDuplicateFinder",
+  "commit": "8a0b62604dc6f361234ce2788b666c96e9b446dd",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "C++/Python media comparer combines pHash and Office TFIDF/cosine; evidence classes need explicit separation.",
+  "available_source_evidence": [
+    {
+      "path": "duplicate_gui.py",
+      "local": "02-duplicate_gui.py",
+      "url": "https://github.com/DimitriosPournarkas/MediaDuplicateFinder/blob/8a0b62604dc6f361234ce2788b666c96e9b446dd/duplicate_gui.py",
+      "sha256": "17eaa3c6204e5e780e8c510e6e447cd721295fc9bbf5243923293caf1103dc75",
+      "truncated": false,
+      "lines": 925,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "office_comparer_batch.py",
+      "local": "03-office_comparer_batch.py",
+      "url": "https://github.com/DimitriosPournarkas/MediaDuplicateFinder/blob/8a0b62604dc6f361234ce2788b666c96e9b446dd/office_comparer_batch.py",
+      "sha256": "1649b00f3b1d8c1831faeceb8ccacb7cf6df921da676332e644a537a52da4d78",
+      "truncated": false,
+      "lines": 249,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "main_cli.cpp",
+      "local": "04-main_cli.cpp",
+      "url": "https://github.com/DimitriosPournarkas/MediaDuplicateFinder/blob/8a0b62604dc6f361234ce2788b666c96e9b446dd/main_cli.cpp",
+      "sha256": "eb9f605c582526f35c75729f44d1cbf941f72ef6519826bb7e5ac54c7f37ef32",
+      "truncated": false,
+      "lines": 804,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/DimitriosPournarkas/MediaDuplicateFinder/blob/8a0b62604dc6f361234ce2788b666c96e9b446dd/README.md",
+      "sha256": "4b77203dca0aaba273038f2e257a4ec2653a5d0b1d0c5faedaf148ad31a64926",
+      "truncated": false,
+      "lines": 235,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/DimitriosPournarkas/MediaDuplicateFinder/blob/8a0b62604dc6f361234ce2788b666c96e9b446dd/LICENSE",
+      "sha256": "3d2fc51b6a9610c9b2f783134a43d2444860b1641c4429dc762dd8858ac4e529",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

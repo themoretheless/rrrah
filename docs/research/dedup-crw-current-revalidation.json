@@ -1,0 +1,60 @@
+{
+  "checks": {
+    "dedup-crw-real-2027.log": {
+      "passed": 1,
+      "ignored": 0,
+      "filtered": 758
+    },
+    "dedup-crw-real-1307.log": {
+      "passed": 1,
+      "ignored": 0,
+      "filtered": 758
+    },
+    "dedup-crw-real-entropy-2027.log": {
+      "passed": 1,
+      "ignored": 0,
+      "filtered": 758
+    },
+    "dedup-crw-real-entropy-1307.log": {
+      "passed": 1,
+      "ignored": 0,
+      "filtered": 758
+    },
+    "dedup-crw-entropy-final.log": {
+      "passed": 9,
+      "ignored": 2,
+      "filtered": 748
+    },
+    "dedup-ciff-revalidation.log": {
+      "passed": 5,
+      "ignored": 2,
+      "filtered": 752
+    },
+    "dedup-current-integration-revalidation.log": {
+      "passed": 31,
+      "ignored": 0,
+      "filtered": 0
+    }
+  },
+  "initial_snapshot_files": 229,
+  "changed_since_initial_snapshot": [
+    "crates/rrrah-decode/src/crw_entropy.rs"
+  ],
+  "entropy_final_stable_hashes": {
+    "before": "eb8787a5a00cceab3aed7a65ec32307440d00477f17ccbf3e300c1da7ae38ed4",
+    "after": "eb8787a5a00cceab3aed7a65ec32307440d00477f17ccbf3e300c1da7ae38ed4"
+  },
+  "external_source_and_oracle_sha256": {
+    "/tmp/rrrah-d30.crw": "4ee482f2b6f9f1a8d370703ea04e9f2abaa49356973a7f56b229af93a78e8a2e",
+    "/tmp/rrrah-d30-current-libraw.u16le": "8ac62f45a4ee04efebed7900eb46dd263dc4a03a96c4fe711dc41b6bec6078fe",
+    "/tmp/rrrah-10d.crw": "b0730eb3a67cc2281a32e0b2ee104199246928d954a68b7e5b72366514c73d02",
+    "/tmp/rrrah-10d-current-libraw.u16le": "3aecb01756492569734885710dafd6ffc26421ac0b5a7fa1c151973d48cd389a"
+  },
+  "camera_table_sha256": "94fb55465b45059889b7e5588d7c44311f1ec529ba3ce073bfda6b950d830683",
+  "limits": [
+    "Targeted revalidation, not another complete suite",
+    "D30 entropy compares entire independent sensor and managed ownership; 10D entropy test verifies low-plane layout only",
+    "Real camera fixture tests do not prove full developed color or duplicate-search accuracy",
+    "Concurrent entropy edit caused initial run instability; final entropy tests stable"
+  ]
+}

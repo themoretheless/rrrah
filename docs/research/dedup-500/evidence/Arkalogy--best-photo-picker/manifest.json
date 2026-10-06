@@ -1,0 +1,106 @@
+{
+  "repository": "Arkalogy/best-photo-picker",
+  "metadata": {
+    "name": "Arkalogy/best-photo-picker",
+    "url": "https://github.com/Arkalogy/best-photo-picker",
+    "description": "Pick the best photos from large libraries. Quality scoring, perceptual dedup, and per-person boost \u2014 runs entirely on your machine, no cloud.",
+    "language": "Python",
+    "stars": 15,
+    "license": "MIT",
+    "archived": false,
+    "pushed_at": "2026-10-05T13:23:28Z",
+    "default_branch": "main",
+    "queries": [
+      "dedup in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/Arkalogy/best-photo-picker/blob/b59ce09aa78c7fda1931ebbb8cf087539d9d1b71/README.md",
+      "sha256": "ca5244fbbd7e850e33bc2faa575ecb2fbcdcc9afaf20a3e297f1bb3efc646841",
+      "truncated": false,
+      "lines": 639,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/Arkalogy/best-photo-picker/blob/b59ce09aa78c7fda1931ebbb8cf087539d9d1b71/LICENSE",
+      "sha256": "68b8faaf38131829bf710594fa54d9fcd677963c6e26128bc220e4005abd45ca",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "bpp/web/static/vendor/leaflet/LICENSE",
+      "local": "02-LICENSE",
+      "url": "https://github.com/Arkalogy/best-photo-picker/blob/b59ce09aa78c7fda1931ebbb8cf087539d9d1b71/bpp/web/static/vendor/leaflet/LICENSE",
+      "sha256": "02a461bc49b48e684effb992b5c41036052e83d359ff20b6727cdb70d311c272",
+      "truncated": false,
+      "lines": 25,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "bpp/io_scan.py",
+      "local": "03-io_scan.py",
+      "url": "https://github.com/Arkalogy/best-photo-picker/blob/b59ce09aa78c7fda1931ebbb8cf087539d9d1b71/bpp/io_scan.py",
+      "sha256": "f07a6bd8c6bba0d755d730503c1d45125a549dfe76eb1aab458199c3be8fd2f8",
+      "truncated": false,
+      "lines": 102,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "bpp/db/dedupe.py",
+      "local": "04-dedupe.py",
+      "url": "https://github.com/Arkalogy/best-photo-picker/blob/b59ce09aa78c7fda1931ebbb8cf087539d9d1b71/bpp/db/dedupe.py",
+      "sha256": "d38c1b34d206ce3149fa26e3cf8807d339139596cecca50ec6507279d023026d",
+      "truncated": false,
+      "lines": 241,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "bpp/dedupe/phash.py",
+      "local": "05-phash.py",
+      "url": "https://github.com/Arkalogy/best-photo-picker/blob/b59ce09aa78c7fda1931ebbb8cf087539d9d1b71/bpp/dedupe/phash.py",
+      "sha256": "5f95f24206a937578c96dcb881e72af143d7564937118c06a9066fa0d74ac738",
+      "truncated": false,
+      "lines": 147,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/test_dedupe_phash.py",
+      "local": "06-test_dedupe_phash.py",
+      "url": "https://github.com/Arkalogy/best-photo-picker/blob/b59ce09aa78c7fda1931ebbb8cf087539d9d1b71/tests/test_dedupe_phash.py",
+      "sha256": "6fb6dc5240cbc4f641a58e350e0205a3c9d5ae46e915af94f067416e63241524",
+      "truncated": false,
+      "lines": 152,
+      "source": true,
+      "test": true
+    }
+  ],
+  "errors": [],
+  "commit": "b59ce09aa78c7fda1931ebbb8cf087539d9d1b71",
+  "tree_truncated": false,
+  "source_file_count": 536,
+  "test_file_count": 251,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "bpp/web/static/vendor/leaflet/LICENSE",
+    "bpp/dedupe/phash.py",
+    "bpp/io_scan.py",
+    "bpp/db/dedupe.py",
+    "tests/test_dedupe_phash.py"
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "index": 220,
+  "repository": "Ryuk17/AudioDeduplication",
+  "commit": "e7630518a26c5fcd5bcf22af1b8ffe370b0f27eb",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "wrapper",
+  "finding": "Audio perceptual hash imports pHash source; nested licensing and audio feature domain must be reviewed independently.",
+  "available_source_evidence": [
+    {
+      "path": "src/audiophash.cpp",
+      "local": "02-audiophash.cpp",
+      "url": "https://github.com/Ryuk17/AudioDeduplication/blob/e7630518a26c5fcd5bcf22af1b8ffe370b0f27eb/src/audiophash.cpp",
+      "sha256": "91f8ec3cd39c4e1642877ac267a7833c8a934143c8c10909e981da4352e2fb13",
+      "truncated": false,
+      "lines": 314,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/audiophash.h",
+      "local": "03-audiophash.h",
+      "url": "https://github.com/Ryuk17/AudioDeduplication/blob/e7630518a26c5fcd5bcf22af1b8ffe370b0f27eb/src/audiophash.h",
+      "sha256": "6dbd8f283b002cfee63d000b711df3f8dc5228500d467fbaef1ccdfe1efc7643",
+      "truncated": false,
+      "lines": 106,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/pHash.cpp",
+      "local": "04-pHash.cpp",
+      "url": "https://github.com/Ryuk17/AudioDeduplication/blob/e7630518a26c5fcd5bcf22af1b8ffe370b0f27eb/src/pHash.cpp",
+      "sha256": "e7c7d8ac499febd2bc18563aa599b3fd955c2da14ab1e16a659bc8dc1f67d6d9",
+      "truncated": false,
+      "lines": 211,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "test/test.cpp",
+      "local": "05-test.cpp",
+      "url": "https://github.com/Ryuk17/AudioDeduplication/blob/e7630518a26c5fcd5bcf22af1b8ffe370b0f27eb/test/test.cpp",
+      "sha256": "c974aa8bd2c84ece58d9f5fbcd87880f172103af5e75ad8a85e23e309a92671d",
+      "truncated": false,
+      "lines": 132,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "src/pHash.h",
+      "local": "06-pHash.h",
+      "url": "https://github.com/Ryuk17/AudioDeduplication/blob/e7630518a26c5fcd5bcf22af1b8ffe370b0f27eb/src/pHash.h",
+      "sha256": "8e071cc96bd424a6cfc8ac0325e6865f6a96ac8173b8d974c40754b904848090",
+      "truncated": false,
+      "lines": 436,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "Apache-2.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 1,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/Ryuk17/AudioDeduplication/blob/e7630518a26c5fcd5bcf22af1b8ffe370b0f27eb/README.md",
+      "sha256": "a5d3a19478f96b3b8c29de6bd7013f7c9aed35208d0e1a7728312aece66e5502",
+      "truncated": false,
+      "lines": 2,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/Ryuk17/AudioDeduplication/blob/e7630518a26c5fcd5bcf22af1b8ffe370b0f27eb/LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "truncated": false,
+      "lines": 201,
+      "source": false,
+      "test": false
+    }
+  ]
+}

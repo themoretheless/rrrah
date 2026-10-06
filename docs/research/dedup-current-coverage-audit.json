@@ -1,0 +1,151 @@
+{
+  "objective": "библиотека покрывает все кейсы",
+  "contract_sha256": "f98bffcfc3a13cc8f7410f45dbb5d5ad0d51d2e34c91a130c5605e9f448f483a",
+  "requirements": [
+    {
+      "requirement": "Renamed copies, arbitrary types, empty files",
+      "current_evidence": "`exact_files.rs`: streaming BLAKE3 and full byte confirmation",
+      "remaining": "Broader filesystem/platform corpus; injected sample/full collisions now pass byte-confirmed partitioning",
+      "completion": "not_proved"
+    },
+    {
+      "requirement": "Same size, different contents",
+      "current_evidence": "Equal-size and equal-edge/different-middle negatives",
+      "remaining": "Injected constant sample/full digest fixture passes; wider platform qualification remains",
+      "completion": "not_proved"
+    },
+    {
+      "requirement": "Repeated paths, symlinks, hardlinks",
+      "current_evidence": "Unix overlap, aliases and followed-cycle fixtures",
+      "remaining": "Windows volume/file-index implementation cross-checks; native Windows identity/hardlinks/replacement tests and other non-Unix targets remain pending",
+      "completion": "not_proved"
+    },
+    {
+      "requirement": "Missing, unreadable, changing files",
+      "current_evidence": "Per-file errors, snapshot validation, equal-length mutation, decode-time mutation",
+      "remaining": "Representative attribution/retry and FIFO replacement pass; non-UTF8 diagnostics pass on macOS; current Linux non-root standalone exact-source tests qualify non-UTF8 files and read denial; native decoder and non-Unix coverage remain",
+      "completion": "not_proved"
+    },
+    {
+      "requirement": "Cancellation and large files",
+      "current_evidence": "Bounded exact reads, index-node/bucket cancellation, explicit resource errors",
+      "remaining": "Core/ICC conversion cancellation checkpoints pass; indivisible ICC setup, underlying decoder latency and large-file measurements remain",
+      "completion": "not_proved"
+    },
+    {
+      "requirement": "Recursive directories and overlapping roots",
+      "current_evidence": "Deterministic traversal, configurable symlink/depth/entry policy",
+      "remaining": "scan_visual_roots integrates bounded discovery, aliases and diagnostics; broad nested/symlink/platform corpus remains",
+      "completion": "not_proved"
+    },
+    {
+      "requirement": "Same pixels, different encoding/metadata",
+      "current_evidence": "Canonical RGBA8/linear HDR equality; BMP metadata and TIFF lossless-compression matrix",
+      "remaining": "confirm_pixels/confirm_pixel_groups integrated with fresh source validation; broader independently encoded cross-format corpus remains",
+      "completion": "not_proved"
+    },
+    {
+      "requirement": "RAW versus developed raster",
+      "current_evidence": "Native full development; independent full-resolution DNG/NEF/ORF TIFF pairs pass strict spatial geometry/pixels; one unrelated RAW/TIFF pair rejects",
+      "remaining": "Strict CR2 render still rejects; explicit display-projection mode accepts the known four-camera RAW/TIFF collection with 24 cross-scene negatives rejected. Broader camera/development/color and held-out/burst/look-alike qualification remain",
+      "completion": "not_proved"
+    },
+    {
+      "requirement": "Resize/recompression/exposure/color changes",
+      "current_evidence": "Explicit filtered policies accept 20/20 real preview positives at radius 3 in both linear and encoded sRGB; strict residuals retained",
+      "remaining": "Held-out calibration, real bursts/look-alikes, scalable collection search and confidence evidence remain",
+      "completion": "not_proved"
+    },
+    {
+      "requirement": "EXIF orientation/rotations/reflections",
+      "current_evidence": "D4 fingerprint/index oracle; decoder orientation path",
+      "remaining": "Eight-orientation independent TIFF matrix passes; other formats and broader orientation corpus pending",
+      "completion": "not_proved"
+    },
+    {
+      "requirement": "Crops/borders/watermarks/edits",
+      "current_evidence": "Exact unscaled HDR/alpha region containment, explicit coordinates and budgets",
+      "remaining": "Native translation-local corner/BRIEF extraction, mutual matching, geometry and bidirectional pixels tested together; dyadic scale pyramid and quarter turns tested; arbitrary-angle/continuous-scale and real edited-crop corpus pending",
+      "completion": "not_proved"
+    },
+    {
+      "requirement": "Uniform images and burst negatives",
+      "current_evidence": "Information gates, informative checker collision and separate exact selected-frame discovery, including uniform PNG/BMP",
+      "remaining": "Real captured uniform/burst negatives and semantic false-positive calibration",
+      "completion": "not_proved"
+    },
+    {
+      "requirement": "Transparency/HDR/color profiles",
+      "current_evidence": "Canonical invisible RGB, signed-zero normalization, HDR precision, per-page TIFF ICC; independent LittleCMS normal/boundary grids expose and qualify single-gamma zero-endpoint correction",
+      "remaining": "Broad ICC/alpha/HDR qualification, cross-profile precision policy and untagged color policy",
+      "completion": "not_proved"
+    },
+    {
+      "requirement": "Animation and multipage images",
+      "current_evidence": "All composited GIF/APNG/WebP frames, exact timeline/repetition; DCX/ICO/CUR/TIFF pages and selected-page ICC",
+      "remaining": "Timeline splits/zero-duration prefixes pass across GIF/APNG/WebP; full-container bounded batch/exhaustive search integrated; broad disposal/container corpus and scale performance remain",
+      "completion": "not_proved"
+    },
+    {
+      "requirement": "Unsupported/corrupt images",
+      "current_evidence": "Exact scan independent of image decoding; explicit visual errors",
+      "remaining": "Combined recursive directory/visual report integrated; broader malformed format corpus remains",
+      "completion": "not_proved"
+    },
+    {
+      "requirement": "Grouping",
+      "current_evidence": "Complete-link partition tested on all 64 four-node graphs; all accepted edges retained",
+      "remaining": "Pixel-confirmation groups now revalidate batch-wide source snapshots and remove changed-source edges; complete-container grouped scanner integrated; recursive complete-presentation grouping integrated with explicit per-path modes; automatic content-based mode detection/recursive grouping integrated; broader concurrent-mutation corpus remains",
+      "completion": "not_proved"
+    },
+    {
+      "requirement": "Repeated scans",
+      "current_evidence": "Content/recipe/frame-keyed bounded checksummed cache, atomic save, per-file and batch reuse; mutation rejected before admission",
+      "remaining": "Automatic complete decoder/recipe identity; broader platform/power-loss cache qualification (macOS process publication/exit fixtures below)",
+      "completion": "not_proved"
+    },
+    {
+      "requirement": "Resource budgets and scale",
+      "current_evidence": "Byte/pixel/frame/cache/work/result budgets; streaming source reads and metric indexes",
+      "remaining": "Indexed construction limits/cancellation details, decoder allocation completeness, measured scale/latency/memory",
+      "completion": "not_proved"
+    }
+  ],
+  "complete": false,
+  "platform_evidence_revalidation": {
+    "linux_current_exact_source": "passed 18 tests under UID 1000; hashes verified",
+    "evidence": "dedup-exact-checkpoint-cancellation-qualification.json",
+    "remaining": "Native Linux decoding and Windows not qualified"
+  },
+  "next_required_work": [
+    "Repeat Linux exact qualification on current source; native decoder and Windows remain separate.",
+    "Complete shared memory admission for detector/index/scanner allocations and measure large-scale work.",
+    "Independent CR2 development and held-out transformed/edited/burst negatives.",
+    "Broad color/container/cache and remaining original contract requirements."
+  ],
+  "current_full_suite": {
+    "passed": 182,
+    "failed": 0,
+    "ignored": 0,
+    "filtered": 0,
+    "suites": 38
+  },
+  "current_full_suite_scope": "182-test pass precedes verified exact-scan addition; focused current tests pass",
+  "exact_scale_evidence": "dedup-exact-current-scale-qualification.json",
+  "cache_process_evidence": "dedup-cache-process-qualification.json",
+  "automatic_local_recipe_evidence": "dedup-built-source-recipe-qualification.json",
+  "minimal_source_portability_evidence": "dedup-portable-minimal-recipe-qualification.json",
+  "display_projection_primitive_evidence": "dedup-display-projection-qualification.json",
+  "display_projection_file_evidence": "dedup-display-file-policy-qualification.json",
+  "display_camera_evidence": "dedup-display-camera-qualification.json",
+  "native_linux_decoder_attempt": "dedup-linux-native-environment-attempt.json",
+  "concurrent_source_changes_requiring_revalidation": [],
+  "current_memory_revalidation": "dedup-current-memory-revalidation.json",
+  "latest_revalidation_scope": "Focused current memory and selected dedup tests; full suite and native camera repro remain separate.",
+  "audit_basis": "Current 18-row acceptance contract; each row retains remaining work. Running regression suite is not broad completion evidence.",
+  "current_regression_state": "dedup-current-full-revalidation-state.json",
+  "current_linux_regression_state": "dedup-current-full-linux-revalidation-state.json",
+  "runtime_font_cache_evidence": "dedup-runtime-font-cache-audit.json",
+  "native_cache_evidence": "dedup-native-resource-cache-audit.json",
+  "wal_dependency_evidence": "dedup-wal-palette-cache-audit.json"
+}

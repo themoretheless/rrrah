@@ -1,0 +1,98 @@
+{
+  "index": 440,
+  "repository": "ClaudiuCeia/dhash",
+  "commit": "9ae9b1daea9591d9cd477b0de58609059e5f1fab",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "TS 64-bit dHash options/tests across JS runtimes; qualify pixel preprocessing and bit order.",
+  "available_source_evidence": [
+    {
+      "path": "src/dhash.ts",
+      "local": "02-dhash.ts",
+      "url": "https://github.com/ClaudiuCeia/dhash/blob/9ae9b1daea9591d9cd477b0de58609059e5f1fab/src/dhash.ts",
+      "sha256": "57add649ae960a59622ba85c1feb033f7828546b471c85ae908d79d45a492a9b",
+      "truncated": false,
+      "lines": 258,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "mod.ts",
+      "local": "03-mod.ts",
+      "url": "https://github.com/ClaudiuCeia/dhash/blob/9ae9b1daea9591d9cd477b0de58609059e5f1fab/mod.ts",
+      "sha256": "102b87a3942c69c02d772c0178c0856380860e32e20c5d620ad258fbd6efb2fa",
+      "truncated": false,
+      "lines": 7,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "scripts/check_manifests.ts",
+      "local": "04-check_manifests.ts",
+      "url": "https://github.com/ClaudiuCeia/dhash/blob/9ae9b1daea9591d9cd477b0de58609059e5f1fab/scripts/check_manifests.ts",
+      "sha256": "e268810a735fdb8ec20a244747ea36aec6cbed3cd94afaae4f5a0a23942e1425",
+      "truncated": false,
+      "lines": 89,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/dhash.test.ts",
+      "local": "05-dhash.test.ts",
+      "url": "https://github.com/ClaudiuCeia/dhash/blob/9ae9b1daea9591d9cd477b0de58609059e5f1fab/tests/dhash.test.ts",
+      "sha256": "f1298c59a75b453aec271d571be165c154829b8a43e8a5c1ddb6f1582d5c94b0",
+      "truncated": false,
+      "lines": 321,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "examples/compare.ts",
+      "local": "06-compare.ts",
+      "url": "https://github.com/ClaudiuCeia/dhash/blob/9ae9b1daea9591d9cd477b0de58609059e5f1fab/examples/compare.ts",
+      "sha256": "c21a7f533b9e07c69d22d17ea12204105dec975b4cd6294249cd011907d246e5",
+      "truncated": false,
+      "lines": 18,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "examples/compare-bytes.ts",
+      "local": "07-compare-bytes.ts",
+      "url": "https://github.com/ClaudiuCeia/dhash/blob/9ae9b1daea9591d9cd477b0de58609059e5f1fab/examples/compare-bytes.ts",
+      "sha256": "e0257cc629bec372fe52e3b7b475ce9b3c797cc7195c76090fbe9041b936afc3",
+      "truncated": false,
+      "lines": 25,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 3,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/ClaudiuCeia/dhash/blob/9ae9b1daea9591d9cd477b0de58609059e5f1fab/README.md",
+      "sha256": "730a637a94eb99077c42337b95a916ede865de8bc5f471d6d872d4e38119ac56",
+      "truncated": false,
+      "lines": 374,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/ClaudiuCeia/dhash/blob/9ae9b1daea9591d9cd477b0de58609059e5f1fab/LICENSE",
+      "sha256": "464022067fa7cf085f7829694aa40c9ff5d070a2e7c9e3b0539c1d0bb2ebe597",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

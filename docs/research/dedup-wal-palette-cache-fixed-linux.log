@@ -1,0 +1,52 @@
+   Compiling rrrah-decode v0.1.0 (/workspace/crates/rrrah-decode)
+warning: function `error` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:4:4
+  |
+4 | fn error(message: &str) -> DecodeError {
+  |    ^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `packed_12` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:9:4
+  |
+9 | fn packed_12(
+  |    ^^^^^^^^^
+
+warning: function `decode_zd` is never used
+  --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:48:15
+   |
+48 | pub(super) fn decode_zd(
+   |               ^^^^^^^^^
+
+warning: `rrrah-decode` (lib) generated 3 warnings
+   Compiling rrrah-dedup v0.1.0 (/workspace/crates/rrrah-dedup)
+warning: linker stderr: /validation/sysroot/usr/bin/ld: /validation/target/debug/deps/libjpegxr-8d01a0594e000fc4.rlib(2e643c6506a180d9-strenc.o): in function `StrIOEncInit':
+         /validation/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/jpegxr-0.3.1/jxrlib/image/encode/strenc.c:485:(.text.StrIOEncInit+0xf0): the use of `tmpnam' is dangerous, better use `mkstemp'
+  |
+  = note: `#[warn(linker_messages)]` on by default
+
+warning: linker stdout: /validation/sysroot/usr/bin/ld: /validation/target/debug/deps/libjpegxr-8d01a0594e000fc4.rlib(2e643c6506a180d9-strenc.o): note: the message above does not take linker garbage collection into account
+
+warning: `rrrah-dedup` (test "decode") generated 2 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 2m 27s
+     Running tests/decode.rs (/validation/target/debug/deps/decode-6065013c56a45757)
+
+running 14 tests
+test cached_content_does_not_bypass_extension_selected_decoder_errors ... ok
+test actual_files_ignore_comments_but_not_changed_pixels ... ok
+test cached_file_fingerprints_reuse_only_current_content_and_recipe ... ok
+test corrupt_missing_cancelled_and_frame_out_of_range_are_errors ... ok
+test cache_hits_revalidate_source_and_cancellation_before_returning_evidence ... ok
+test cached_wal_tracks_external_palette_changes_and_removal ... ok
+test layered_xcf_duplicates_preserve_color_errors_and_managed_ownership ... ok
+test mutation_during_processing_never_admits_cached_evidence ... ok
+test pre_icc_fix_persisted_recipe_cannot_reuse_current_fingerprint ... ok
+test public_selected_decode_rejects_a_source_changed_after_output_admission ... ok
+test tiff_shaped_raw_never_uses_generic_page_fallback ... ok
+test icc_conversion_cancellation_releases_partial_output ... ok
+test cached_page_selection_and_color_assumptions_never_cross_reuse ... ok
+test multiblock_cache_hit_cancellation_preserves_retry_and_releases_memory ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.63s
+

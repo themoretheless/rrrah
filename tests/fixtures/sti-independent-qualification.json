@@ -1,0 +1,159 @@
+{
+  "upstream_commit": "c527753eb635216c21bfcbeb058b6ed86823072a",
+  "upstream": "https://github.com/ja2-stracciatella/ja2-stracciatella",
+  "oracle": "Unmodified upstream Rust STCI parser plus extracted unmodified Blt8BPPDataTo16BPPBufferTransparent with identity palette and unwritten-pixel sentinel; wrapper ignores sprite placement for standalone subimages",
+  "oracle_source_sha256": {
+    "rrrah-upstream-stci-mod.rs": "a20549f2cfaacf32a5bfd1c1a6c50cae7b353f760075315c6243f352c2557f14",
+    "rrrah-upstream-stci-indexed.rs": "e0b71f6fc9c7d79aff8c3c158dd77e3ae1561462846ec4548651e642ada79cca",
+    "rrrah-upstream-etrle.rs": "d2ab13e6c1a1a4d46454a18e87e670e035928d17e331a7f91c1560f948a26238",
+    "rrrah-upstream-stci-blitters.cc": "1c1c6280f54b2dd9501a23037c9898253b01fbee5c8df5ab3a2d533f387805c3"
+  },
+  "asset_storage": "external files in /tmp; redistribution license unqualified",
+  "cases": [
+    {
+      "file": "inventory-graphic-not-found-big.sti",
+      "url": "https://raw.githubusercontent.com/ja2-stracciatella/ja2-stracciatella/c527753eb635216c21bfcbeb058b6ed86823072a/assets/externalized/sti/interface/inventory/inventory-graphic-not-found-big.sti",
+      "sha256": "6500fd5ffaa173eae3a980fe504e09958f247cc8b172eac7e7cbff74312f3b6d",
+      "status": "native and prepared samples, dimensions/count and actual Metal exact",
+      "images": "0 100 50 (0, 0)\n",
+      "reference_planes": [
+        {
+          "file": "inventory-graphic-not-found-big.sti-image-0.rgba",
+          "sha256": "75440d937dd4a83ee428d380d641355655057208a80e893468d07fc9d56cd2ce"
+        }
+      ]
+    },
+    {
+      "file": "inventory-graphic-not-found-small-bp.sti",
+      "url": "https://raw.githubusercontent.com/ja2-stracciatella/ja2-stracciatella/c527753eb635216c21bfcbeb058b6ed86823072a/assets/externalized/sti/interface/inventory/inventory-graphic-not-found-small-bp.sti",
+      "sha256": "b9d9343dfd96a9e2cf5cf8629915a2ed4cb116e7e7a8810eeb67bedcbc1b40b8",
+      "status": "native and prepared samples, dimensions/count and actual Metal exact",
+      "images": "0 50 25 (0, 0)\n",
+      "reference_planes": [
+        {
+          "file": "inventory-graphic-not-found-small-bp.sti-image-0.rgba",
+          "sha256": "237b4d3ff2f8f5553bba0393fadd93c7469316bfa278184fd6ab8010d6183d25"
+        }
+      ]
+    },
+    {
+      "file": "inventory-graphic-not-found-small-sp.sti",
+      "url": "https://raw.githubusercontent.com/ja2-stracciatella/ja2-stracciatella/c527753eb635216c21bfcbeb058b6ed86823072a/assets/externalized/sti/interface/inventory/inventory-graphic-not-found-small-sp.sti",
+      "sha256": "9e5bc7932f0e123cc05cad5ddaf65bce68d951d4f4b612517865da38718bc0e3",
+      "status": "native and prepared samples, dimensions/count and actual Metal exact",
+      "images": "0 25 15 (0, 0)\n",
+      "reference_planes": [
+        {
+          "file": "inventory-graphic-not-found-small-sp.sti-image-0.rgba",
+          "sha256": "d46a5aeb09c88a38915449de40e3e6000e128793a5d0c8261440239160c08e81"
+        }
+      ]
+    },
+    {
+      "file": "loadscreentab.sti",
+      "url": "https://raw.githubusercontent.com/ja2-stracciatella/ja2-stracciatella/c527753eb635216c21bfcbeb058b6ed86823072a/assets/externalized/sti/interface/loadscreentab.sti",
+      "sha256": "13e99157264502fa338ecd309ebcbe24cd91cfefdbe8a98be1bf3de1704f2dc3",
+      "status": "native and prepared samples, dimensions/count and actual Metal exact",
+      "images": "0 64 30 (0, 0)\n1 64 30 (0, 0)\n2 64 30 (0, 0)\n3 64 30 (0, 0)\n",
+      "reference_planes": [
+        {
+          "file": "loadscreentab.sti-image-0.rgba",
+          "sha256": "f34b5fd579780c20219468b8b7488fa273526a1b9e148c53edeb26c5257bb271"
+        },
+        {
+          "file": "loadscreentab.sti-image-1.rgba",
+          "sha256": "48a78651c25a1a035cfc61f8b39d2534a616f60652d205c0536f817aeaa7cbe2"
+        },
+        {
+          "file": "loadscreentab.sti-image-2.rgba",
+          "sha256": "59ad527a1c619074198b9d830f4548683000108b81ef4be394a34f80a212165c"
+        },
+        {
+          "file": "loadscreentab.sti-image-3.rgba",
+          "sha256": "d78a32a512a5e88b2b2e9780fc52678c09553d208cef7bf6664e437e63afe69a"
+        }
+      ]
+    },
+    {
+      "file": "save-load-addons.sti",
+      "url": "https://raw.githubusercontent.com/ja2-stracciatella/ja2-stracciatella/c527753eb635216c21bfcbeb058b6ed86823072a/assets/externalized/sti/interface/save-load-addons.sti",
+      "sha256": "4cc17ce6a5a1f58d7be988057013a7defe9bef868ade7a063a210934a1aa9e8d",
+      "status": "native and prepared samples, dimensions/count and actual Metal exact",
+      "images": "0 575 30 (0, 0)\n1 575 30 (0, 0)\n2 15 15 (0, 0)\n3 15 15 (0, 0)\n4 15 15 (0, 0)\n",
+      "reference_planes": [
+        {
+          "file": "save-load-addons.sti-image-0.rgba",
+          "sha256": "64b89ab624ff9474e274102d82b87f233b63e6bc43b26fea38369ff7766b0df2"
+        },
+        {
+          "file": "save-load-addons.sti-image-1.rgba",
+          "sha256": "c06cd8f358cd4910f1bb4bd7c5ca93a6847ca7ebf220efef3df971b2e6dd4de4"
+        },
+        {
+          "file": "save-load-addons.sti-image-2.rgba",
+          "sha256": "58d8148647671b25b0404ce7ff3f9d697987f26a932a1eee9619d5e4007110c8"
+        },
+        {
+          "file": "save-load-addons.sti-image-3.rgba",
+          "sha256": "7e762c4a8b80011b04ef804ae27e4f4e2decb3424c0b2b8802338e7ca1511ad5"
+        },
+        {
+          "file": "save-load-addons.sti-image-4.rgba",
+          "sha256": "e9fc8bf5aef672f253c595a05db0fbda18547ef584a9bbd853fb9e7c0f09d646"
+        }
+      ]
+    },
+    {
+      "file": "scroll-bar.sti",
+      "url": "https://raw.githubusercontent.com/ja2-stracciatella/ja2-stracciatella/c527753eb635216c21bfcbeb058b6ed86823072a/assets/externalized/sti/interface/scroll-bar.sti",
+      "sha256": "25589b7cf714d1af92594733d8fd2c9de7f4f700dece3f7af606d3a13bc263c2",
+      "status": "native and prepared samples, dimensions/count and actual Metal exact",
+      "images": "0 23 23 (0, 0)\n1 23 23 (0, 0)\n2 23 23 (0, 0)\n3 23 23 (0, 0)\n4 23 23 (0, 0)\n5 19 19 (0, 0)\n",
+      "reference_planes": [
+        {
+          "file": "scroll-bar.sti-image-0.rgba",
+          "sha256": "51c269f713f189060b155838346beda65e67769c8ba1d61a50e6f5dc1bccc023"
+        },
+        {
+          "file": "scroll-bar.sti-image-1.rgba",
+          "sha256": "53a51aadb68acbf59bb8905d46ecabdf2cd46b1870cb5648d823440b77f3aa40"
+        },
+        {
+          "file": "scroll-bar.sti-image-2.rgba",
+          "sha256": "c238721ae3a0ae03e702b0e74f5ee311fd2f25545ae092f15c6ab207178c2a15"
+        },
+        {
+          "file": "scroll-bar.sti-image-3.rgba",
+          "sha256": "3db579fb43728b4bb091f9973c48cec6cab3acbeb96eac8604db039f8f727b4f"
+        },
+        {
+          "file": "scroll-bar.sti-image-4.rgba",
+          "sha256": "0c7c96fd4b0cbf3623c36669a3a182381ab3051c54ffe722327da5986a4067bc"
+        },
+        {
+          "file": "scroll-bar.sti-image-5.rgba",
+          "sha256": "671720b8f35c4e30f532cbdbc8629d4ffb970f7dd9c5720f3e5c2602a163a7db"
+        }
+      ]
+    },
+    {
+      "file": "SkillTraitSmallGreyIdent.sti",
+      "url": "https://raw.githubusercontent.com/ja2-stracciatella/ja2-stracciatella/c527753eb635216c21bfcbeb058b6ed86823072a/assets/externalized/sti/laptop/SkillTraitSmallGreyIdent.sti",
+      "sha256": "a4c9d311d9f974fc47008699537d6dcbdc54387d9bfdc3b63fc973ccaabd4171",
+      "status": "native and prepared samples, dimensions/count and actual Metal exact",
+      "images": "0 161 24 (0, 0)\n1 161 24 (0, 0)\n",
+      "reference_planes": [
+        {
+          "file": "SkillTraitSmallGreyIdent.sti-image-0.rgba",
+          "sha256": "0a1f289d866768a6d3424964f235d5f25c25b6b545026ac5235643c040f650bd"
+        },
+        {
+          "file": "SkillTraitSmallGreyIdent.sti-image-1.rgba",
+          "sha256": "983cd12120a4906ae06546053d7ba94ca975779690c756105ed639b2cc8d3927"
+        }
+      ]
+    }
+  ],
+  "limitations": "Indexed ETRLE only; no independent RGB/zlib, color interpretation, physical display, or application-data qualification",
+  "storage_qualification": "40 native/prepared combinations: RAM leases, streaming swap exact samples/selection/color, restore pressure preserves entries, exact actual Metal readback; managed allocations release after final owners"
+}

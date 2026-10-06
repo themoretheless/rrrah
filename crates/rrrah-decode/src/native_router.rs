@@ -13,10 +13,23 @@ use crate::{
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum NativeFormat {
+    Erf,
+    Kdc,
+    Srw,
+    ThreeFr,
+    Fff,
+    Dcr,
+    Dcs,
+    Mos,
+    Iiq,
+    Srf,
     Cr3,
+    Crw,
     Dng,
     Cr2,
     Nef,
+    Nrw,
+    Mrw,
     Arw,
     Orf,
     Pef,
@@ -32,14 +45,27 @@ impl NativeFormat {
             .map(str::to_ascii_lowercase)
             .as_deref()
         {
+            Some("erf") => Ok(Self::Erf),
+            Some("kdc") => Ok(Self::Kdc),
+            Some("srw") => Ok(Self::Srw),
+            Some("3fr") => Ok(Self::ThreeFr),
+            Some("fff") => Ok(Self::Fff),
+            Some("dcr") => Ok(Self::Dcr),
+            Some("dcs") => Ok(Self::Dcs),
+            Some("mos") => Ok(Self::Mos),
+            Some("iiq") => Ok(Self::Iiq),
+            Some("srf") => Ok(Self::Srf),
+            Some("crw") => Ok(Self::Crw),
             Some("cr3") => Ok(Self::Cr3),
             Some("dng" | "tif" | "tiff") => Ok(Self::Dng),
             Some("cr2") => Ok(Self::Cr2),
             Some("nef") => Ok(Self::Nef),
-            Some("arw") => Ok(Self::Arw),
+            Some("mrw") => Ok(Self::Mrw),
+            Some("nrw") => Ok(Self::Nrw),
+            Some("arw" | "sr2") => Ok(Self::Arw),
             Some("orf") => Ok(Self::Orf),
-            Some("pef") => Ok(Self::Pef),
-            Some("rw2") => Ok(Self::Rw2),
+            Some("pef" | "ptx") => Ok(Self::Pef),
+            Some("rw2" | "rwl") => Ok(Self::Rw2),
             Some("raf") => Ok(Self::Raf),
             _ => Err(DecodeError::UnsupportedFormat {
                 path: path.to_owned(),
@@ -52,16 +78,40 @@ impl NativeFormat {
     /// (CR3, CR2, ORF, RW2, RAF) always wins over the extension; a generic
     /// TIFF-family or unknown magic keeps the extension's choice.
     fn resolve(path: &Path) -> Result<Self, DecodeError> {
-        let by_extension = Self::from_path(path)?;
-        Ok(Self::refine(by_extension, sniff_file(path)))
+        let sniffed = sniff_file(path);
+        let by_extension = match Self::from_path(path) {
+            Ok(format) => format,
+            Err(error) => match sniffed {
+                Some(
+                    SniffedFormat::Cr3
+                    | SniffedFormat::Crw
+                    | SniffedFormat::Cr2
+                    | SniffedFormat::Orf
+                    | SniffedFormat::Rw2
+                    | SniffedFormat::Mrw
+                    | SniffedFormat::Raf
+                    | SniffedFormat::TiffFamily,
+                ) => Self::Dng,
+                _ => return Err(error),
+            },
+        };
+        if by_extension == Self::Dng
+            && sniffed == Some(SniffedFormat::TiffFamily)
+            && crate::sniff::is_kodak_dcs520(path)
+        {
+            return Ok(Self::Dcs);
+        }
+        Ok(Self::refine(by_extension, sniffed))
     }
 
     fn refine(by_extension: Self, sniffed: Option<SniffedFormat>) -> Self {
         match sniffed {
+            Some(SniffedFormat::Crw) => Self::Crw,
             Some(SniffedFormat::Cr3) => Self::Cr3,
             Some(SniffedFormat::Cr2) => Self::Cr2,
             Some(SniffedFormat::Orf) => Self::Orf,
             Some(SniffedFormat::Rw2) => Self::Rw2,
+            Some(SniffedFormat::Mrw) => Self::Mrw,
             Some(SniffedFormat::Raf) => Self::Raf,
             Some(SniffedFormat::TiffFamily | SniffedFormat::Unknown) | None => by_extension,
         }
@@ -75,10 +125,23 @@ pub struct NativeRawDecoder;
 macro_rules! dispatch {
     ($format:expr, $method:ident, $request:expr) => {
         match $format {
+            NativeFormat::Erf => NativeCameraDecoder::new(CameraFormat::Erf).$method($request),
+            NativeFormat::Kdc => NativeCameraDecoder::new(CameraFormat::Kdc).$method($request),
+            NativeFormat::Srw => NativeCameraDecoder::new(CameraFormat::Srw).$method($request),
+            NativeFormat::ThreeFr => NativeCameraDecoder::new(CameraFormat::ThreeFr).$method($request),
+            NativeFormat::Fff => NativeCameraDecoder::new(CameraFormat::Fff).$method($request),
+            NativeFormat::Iiq => NativeCameraDecoder::new(CameraFormat::Iiq).$method($request),
+            NativeFormat::Srf => NativeCameraDecoder::new(CameraFormat::Srf).$method($request),
+            NativeFormat::Mos => NativeCameraDecoder::new(CameraFormat::Mos).$method($request),
+            NativeFormat::Dcs => NativeCameraDecoder::new(CameraFormat::Dcs).$method($request),
+            NativeFormat::Dcr => NativeCameraDecoder::new(CameraFormat::Dcr).$method($request),
+            NativeFormat::Crw => crate::NativeCrwDecoder.$method($request),
             NativeFormat::Cr3 => NativeCr3Decoder.$method($request),
             NativeFormat::Dng => NativeDngDecoder.$method($request),
             NativeFormat::Cr2 => NativeCameraDecoder::new(CameraFormat::Cr2).$method($request),
             NativeFormat::Nef => NativeCameraDecoder::new(CameraFormat::Nef).$method($request),
+            NativeFormat::Mrw => crate::NativeMrwDecoder.$method($request),
+            NativeFormat::Nrw => NativeCameraDecoder::new(CameraFormat::Nrw).$method($request),
             NativeFormat::Arw => NativeCameraDecoder::new(CameraFormat::Arw).$method($request),
             NativeFormat::Orf => NativeCameraDecoder::new(CameraFormat::Orf).$method($request),
             NativeFormat::Pef => NativeCameraDecoder::new(CameraFormat::Pef).$method($request),
@@ -90,10 +153,18 @@ macro_rules! dispatch {
 
 impl RawDecoder for NativeRawDecoder {
     fn mosaic_recipe(&self, request: &DecodeRequest) -> Result<MosaicRecipeManifest, DecodeError> {
+        request.check_cancelled()?;
+        if request.image_index != 0 {
+            return Err(DecodeError::UnsupportedImageIndex { index: request.image_index });
+        }
         dispatch!(NativeFormat::resolve(&request.path)?, mosaic_recipe, request)
     }
 
     fn decode(&self, request: &DecodeRequest) -> Result<DecodeOutput, DecodeError> {
+        request.check_cancelled()?;
+        if request.image_index != 0 {
+            return Err(DecodeError::UnsupportedImageIndex { index: request.image_index });
+        }
         dispatch!(NativeFormat::resolve(&request.path)?, decode, request)
     }
 }
@@ -101,6 +172,33 @@ impl RawDecoder for NativeRawDecoder {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn unsupported_raw_index_precedes_format_resolution_and_source_io() {
+        for extension in ["cr3", "tiff", "nef", "mrw", "unknown"] {
+            for index in [1, usize::MAX] {
+                let mut request = DecodeRequest::new(format!("/rrrah-absent-indexed-source.{extension}"));
+                request.image_index = index;
+                assert!(matches!(NativeRawDecoder.mosaic_recipe(&request),
+                    Err(DecodeError::UnsupportedImageIndex { index: actual }) if actual == index));
+                assert!(matches!(NativeRawDecoder.decode(&request),
+                    Err(DecodeError::UnsupportedImageIndex { index: actual }) if actual == index));
+            }
+        }
+    }
+    #[test]
+    fn cancelled_router_refuses_before_opening_or_resolving_source() {
+        for extension in ["cr3", "tiff", "nef", "unknown"] {
+            let mut request = DecodeRequest::new(format!("/rrrah-absent-cancelled-source.{extension}"));
+            request.cancellation = Some(crate::GenerationToken::new(
+                std::sync::Arc::new(std::sync::atomic::AtomicU64::new(2)), 1,
+            ));
+            let budget = rrrah_core::MemoryBudget::new(0);
+            request.memory_budget = Some(budget.clone());
+            assert!(matches!(NativeRawDecoder.mosaic_recipe(&request), Err(DecodeError::Cancelled)));
+            assert!(matches!(NativeRawDecoder.decode(&request), Err(DecodeError::Cancelled)));
+            assert_eq!(budget.peak(), 0);
+        }
+    }
 
     #[test]
     fn routes_extensions_case_insensitively() {
@@ -127,13 +225,31 @@ mod tests {
             ("a.CR2", NativeFormat::Cr2),
             ("a.nef", NativeFormat::Nef),
             ("a.NEF", NativeFormat::Nef),
+            ("a.nrw", NativeFormat::Nrw),
+            ("a.NRW", NativeFormat::Nrw),
             ("a.arw", NativeFormat::Arw),
             ("a.ARW", NativeFormat::Arw),
+            ("a.mrw", NativeFormat::Mrw),
+            ("a.erf", NativeFormat::Erf),
+            ("a.kdc", NativeFormat::Kdc),
+            ("a.srw", NativeFormat::Srw),
+            ("a.SRW", NativeFormat::Srw),
+            ("a.3fr", NativeFormat::ThreeFr),
+            ("a.3FR", NativeFormat::ThreeFr),
+            ("a.KDC", NativeFormat::Kdc),
+            ("a.ERF", NativeFormat::Erf),
+            ("a.MRW", NativeFormat::Mrw),
+            ("a.sr2", NativeFormat::Arw),
+            ("a.SR2", NativeFormat::Arw),
             ("a.orf", NativeFormat::Orf),
             ("a.ORF", NativeFormat::Orf),
             ("a.pef", NativeFormat::Pef),
             ("a.PEF", NativeFormat::Pef),
+            ("a.ptx", NativeFormat::Pef),
+            ("a.PTX", NativeFormat::Pef),
             ("a.rw2", NativeFormat::Rw2),
+            ("a.rwl", NativeFormat::Rw2),
+            ("a.RWL", NativeFormat::Rw2),
             ("a.RW2", NativeFormat::Rw2),
             ("a.raf", NativeFormat::Raf),
             ("a.RAF", NativeFormat::Raf),
@@ -155,6 +271,7 @@ mod tests {
             (SniffedFormat::Orf, NativeFormat::Orf),
             (SniffedFormat::Rw2, NativeFormat::Rw2),
             (SniffedFormat::Raf, NativeFormat::Raf),
+            (SniffedFormat::Mrw, NativeFormat::Mrw),
         ] {
             for extension_format in [
                 NativeFormat::Cr3,

@@ -1,0 +1,17 @@
+{
+  "scope": "One full-resolution CR2 versus independently developed embedded-ICC TIFF; explicit unfiltered linear photometric mode",
+  "command": "raw_raster_probe /tmp/rrrah-raw-corpus/1294.cr2 /tmp/rrrah-independent-rendered/1294.tiff --verify-spatial-photometric",
+  "policy": {
+    "residual_tolerance": 0.03,
+    "minimum_samples": 1000,
+    "minimum_variance": 1e-05,
+    "minimum_gain": 0.2,
+    "maximum_gain": 5.0,
+    "maximum_offset": 0.1
+  },
+  "result": "Pixels(Fit(OutsidePolicy { channel: 0 }))",
+  "managed_used_after": 0,
+  "managed_peak_bytes": 965485168,
+  "clippy": "passed",
+  "interpretation": "Bounded linear photometric fit cannot qualify this pair. No thresholds were changed; cause of extreme RAW residuals and nonlinear transfer remains unresolved."
+}

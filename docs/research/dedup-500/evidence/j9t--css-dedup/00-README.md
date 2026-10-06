@@ -1,0 +1,324 @@
+# CSS Dedup, the CSS Declaration Deduplicator
+
+[![npm version](https://img.shields.io/npm/v/css-dedup.svg)](https://www.npmjs.com/package/css-dedup) [![Build status](https://github.com/j9t/css-dedup/workflows/Tests/badge.svg)](https://github.com/j9t/css-dedup/actions) [![Socket](https://badge.socket.dev/npm/package/css-dedup)](https://socket.dev/npm/package/css-dedup) [![GitHub Sponsors](https://badgen.net/static/Support/Open%20Source/cyan)](https://github.com/sponsors/j9t)
+
+CSS Dedup is a CSS maintainability and performance optimization tool that finds—and, when requested and where safe, consolidates—duplicate CSS declarations. It implements the technique of [using declarations just once (“UDJO”)](https://webglossary.info/terms/udjo/) as [described in 2008](https://meiert.com/blog/css-organization-and-efficiency/) and [detailed in 2017](https://meiert.com/blog/dry-css/): the same normalized property–value pair shouldn’t appear in more than one rule within the same scope. Where it does, CSS Dedup reports it—and allows to optimize the respective style sheet.
+
+**Note: CSS Dedup is still brand-new 🆕 and needs to be battle-tested 🧪. Please [report any issues](https://github.com/j9t/css-dedup/issues).**
+
+## Example Optimization
+
+Given:
+
+```css
+.a {
+  color: red;
+  font-weight: bold;
+}
+
+.b {
+  color: red;
+}
+```
+
+```shell
+$ npx css-dedup default.css
+(root)
+  duplicate   color: red
+    .a (line 2)
+    .b (line 7)
+
+Summary for /path/to/default.css:
+Findings -f (-a)  Savings with: -f  -f -s           -f -a           -f -a -s
+1 (1)             -10 B (-15.6%)    -10 B (-15.6%)  -10 B (-15.6%)  -10 B (-15.6%)
+Legend: -f: --fix, -a: --aggressive, -s: --savings-only
+```
+
+(A cell reads `n/a` when no findings would be safe to apply, or if `--savings-only` would decline every merge on offer for growing the file.)
+
+Running with `--fix` folds `.a` and `.b` into a single rule for the shared declaration:
+
+```css
+.a {
+  font-weight: bold;
+}
+
+.a, .b {
+  color: red;
+}
+```
+
+```shell
+$ npx css-dedup --fix default.css
+
+Summary:
+* 1 declaration consolidated: Reduced duplication and saved 10 bytes (64 → 54 bytes, -15.6%)
+* Wrote default.css
+```
+
+Since duplicate declarations cost bytes wherever they live—in the style sheet itself, and (uncompressed) over the wire—the byte counts reflect two payoffs at once: less to maintain, and less to transfer.
+
+The two aren’t always aligned, though: Folding a declaration into a shared selector list adds that list’s bytes back, so consolidating one that only has a couple of long, otherwise-unrelated selectors in common can end up costing more than it removes. CSS Dedup’s two modes call this out, so it’s a decision you can make consciously—it’s worth it if you value using declarations once for maintainability, yet not if you’re optimizing purely for transfer size. (`--fix --savings-only` automates that call, merge by merge: Every consolidation that would grow the style sheet is left out, and the ones that pay for themselves still apply.)
+
+## Usage
+
+### CLI
+
+```shell
+npx css-dedup [options] [path…]
+```
+
+Pass one or more paths—each is analyzed (and, with `--fix`, atomically replaced) independently. Without a path, CSS Dedup analyzes the current directory. A directory is searched recursively for .css files (skipping node_modules and dotfolders); the result is unrolled into that same per-file list, so mixing files and directories works, too. Pass `-` instead of a file to read CSS from STDIN (can’t be combined with other file arguments); in `--fix` mode this prints the consolidated CSS to STDOUT, rather than writing a file, so it composes in a pipeline (status/summary output moves to STDERR in that case, keeping STDOUT pure CSS).
+
+The input is CSS. A preprocessor source named as an argument (.scss, .sass, .less, .styl) is skipped. Run CSS Dedup on the compiled style sheet instead—duplication in a preprocessor source is often deliberate (one mixin used in ten places), it only becomes real duplication after compilation, and the byte figures the report is built around describe what actually ships. The reason for skipping rather than trying: Constructs like `@include`, `@extend`, `#{…}`, and `@if` decide what a rule finally contains, which is exactly what the merge-safety checks would need to see to know whether moving a declaration across rules is safe.
+
+| Option | Description |
+| --- | --- |
+| `--fix`, `-f` | Consolidate declarations that are safe to merge automatically, atomically replacing each file (or printing to STDOUT for `-`) |
+| `--aggressive`, `-a` | Also apply merges that are probably—but not provably—safe (see [aggressive mode](#aggressive-mode)); only applies together with `--fix`, since report mode’s table already previews both variants automatically |
+| `--savings-only`, `-s` | Leave out each consolidation that would make the file bigger rather than smaller, keeping the ones that save bytes (checked per merge); only applies together with `--fix`, since report mode doesn’t write |
+| `--ignore-selector <pattern>`, `-i` | Regular expression for selectors to exclude from analysis (repeatable) |
+| `--no-ignore-selectors-defaults`, `-n` | Disable the built-in selector hack ignore list |
+| `--ignore-path <pattern>`, `-p` | Regular expression tested against each file’s path, relative to the working directory; a match excludes the file (repeatable) |
+| `--exit-zero`, `-z` | Exit with status 0 even when findings are skipped as unsafe to auto-merge or withheld by `--savings-only`; a file that fails to read or parse still exits 1 |
+| `--no-exit-zero`, `-e` | Override `exitZero: true` from a config file for the respective run |
+| `--quiet`, `-q` | Suppress the per-file findings/skipped-group detail listing (and its file-path header); summaries still print |
+| `--config <path>`, `-c <path>` | Path to a config file (defaults to `css-dedup.config.js` in the working directory, if present) |
+| `--help`, `-h` | Show usage information |
+
+`--ignore-selector` and `--ignore-path` are singular because they’re repeatable flags—each occurrence (`-i pattern1 -i pattern2`) adds one pattern. The corresponding config-file options, `ignoreSelectors` and `ignorePaths`, take an array. `--ignore-path` excludes whole files by path rather than by selector content, matched against each file’s path relative to the working directory—useful for keeping a directory scan out of a build output folder (`node_modules` and dotfolders are always skipped; nothing else is otherwise).
+
+Without `--fix`, CSS Dedup only reports. Report mode still runs the same safety checks `--fix` would, though, so a finding that is considered unsafe to auto-merge (an intervening declaration on some other selector, say) is called out right there, alongside the byte estimate for whatever is safe—rather than the estimate silently going missing for that group. Exit code is `1` if default-mode rules find anything to report (or, with `--fix`, anything skipped as unsafe or withheld by `--savings-only`) in any of the given files—an aggressive-only finding that default rules wouldn’t otherwise report doesn’t, on its own, flip the exit code.
+
+CSS Dedup only ever merges what it can prove safe: A duplicate group flagged unsafe to auto-merge is never merged, `--exit-zero` or not, and the finding still prints exactly the same either way—nothing about the flag changes what gets analyzed or reported, only what happens to the exit code. That’s for a build step that must otherwise succeed (e.g., a minification pipeline gating CI): `--fix` should not produce anything wrong (that would be a bug), so failing the build over a finding it just left on record for later is a separate call from whether the CSS itself is fine. Exit `1` still applies to a file that couldn’t be read or parsed.
+
+A file that fails to parse—invalid CSS, or a non-standard dialect PostCSS doesn’t accept—doesn’t stop the run: Its error is reported and CSS Dedup moves on to the rest.
+
+Large multi-file runs spread consolidation across worker threads, without changing what is reported. `CSS_DEDUP_WORKERS` overrides the thread count (`0` or `1` processes files one at a time).
+
+By default, every finding and every skipped-as-unsafe group is listed in full, with its reasoning (e.g., which intervening declaration blocked a merge)—useful for deciding whether to hand-fix something or reach for `--aggressive`, but often more than a build log needs. `--quiet` drops that per-file detail listing (and the file-path header that precedes it), while still printing each file’s summary and the overall summary for a multi-file run—both already state the finding/skipped counts on their own. Re-run without `--quiet` to see the detail behind those counts.
+
+Note: `--fix` rewrites CSS text only—it doesn’t regenerate a source map. If a rewritten file references one (a `/*# sourceMappingURL=… */` comment, typically left by a build tool), CSS Dedup notes that the map no longer describes the file. Treat such a map as invalid rather than approximate, and rebuild it: Every consolidation shifts the positions the map records, and the shift accumulates down the file—worst in a minified style sheet, where everything sits on one line and every mapping is keyed by column, so an origin the browser reports can land in an entirely different source file. (What dev tools _show_ stays correct either way—they parse the style sheet they downloaded; only the attribution back to source goes wrong, which misleads about where to edit rather than about what applies.) To keep maps intact, run CSS Dedup before your minifier, or drop it into the build via [the PostCSS plugin](#postcss-plugin)—PostCSS then generates one correct map covering the whole pipeline. The map reference itself is never removed: CSS Dedup doesn’t own that file and can’t restore it.
+
+Regenerating the map instead of reporting it [isn’t planned](https://github.com/j9t/css-dedup/issues/25), deliberately. It would mean overwriting a file you never named—one whose path comes from a comment inside the style sheet—and replacing a knowably-stale map with a generated one whose accuracy CSS Dedup can’t verify. And when the map the annotation points at isn’t present at rewrite time (common for a style sheet post-processed away from the build that made it), the regenerated map silently degrades into describing the built style sheet rather than the original sources, with nothing to signal the difference. Reordering the pipeline avoids this.
+
+### Config File
+
+For settings that should apply on every run—typically a project’s own `ignoreSelectors`—drop a `css-dedup.config.js` in the working directory (or point `--config` at one elsewhere, under any name).
+
+These are the supported options with their defaults (each can be omitted):
+
+```js
+// css-dedup.config.js
+export default {
+  aggressive: false,              // set to `true` to also allow probably-safe merges
+  savingsOnly: false,             // set to `true` to leave out the individual merges that would grow the file (`--fix` runs only)
+  ignoreSelectors: [],            // additional selector patterns to exclude, e.g., `[/^\.legacy-/]`
+  ignoreSelectorsDefaults: true,  // set to `false` to disable the built-in hack list
+  ignorePaths: [],                // file paths to exclude, matched relative to the working directory, e.g., `[/dist\//]`
+  exitZero: false                 // set to `true` to exit 0 regardless of findings still on record
+};
+```
+
+CLI flags layer on top of the config file rather than replacing it: `--ignore-selector` patterns are added to `ignoreSelectors` from the config, `--ignore-path` patterns are added to `ignorePaths`, and `--no-ignore-selectors-defaults` always wins over `ignoreSelectorsDefaults: true` in the config. `aggressive` and `savingsOnly` are consolidation policies, so they only take effect on `--fix` runs, deciding what gets merged and whether the file is written. `exitZero` applies regardless of `--fix`, since report mode’s exit code signals the same thing `--fix` mode’s does—findings still on record, nothing merged; `--no-exit-zero` always wins over `exitZero: true` in the config, the same way `--no-ignore-selectors-defaults` wins over its own default.
+
+### Programmatic Use
+
+Install CSS Dedup in your project, e.g., via `npm i -D css-dedup`, then import and use what you need:
+
+```js
+import { analyze, dedup } from 'css-dedup';
+
+const { findings } = analyze(css);
+const { css: output, applied, skipped } = dedup(css);
+```
+
+`analyze()` is report mode; `dedup()` is fix mode.
+
+Both functions accept an options object:
+
+```js
+{
+  from: 'path/to/file.css',         // forwarded to PostCSS; names the file in syntax-error messages
+  aggressive: false,                // set to `true` to also allow probably-safe merges
+  savingsOnly: false,               // set to `true` to withhold each merge that would grow the style sheet (`dedup()` only)
+  ignoreSelectors: [/^\.legacy-/],  // additional selector patterns to exclude
+  ignoreSelectorsDefaults: true     // set to `false` to disable the built-in hack list
+}
+```
+
+`analyze()` returns `{ findings }`, an array of objects:
+
+```js
+{
+  scope,        // `root`, or the at-rule chain the rules live in, e.g., `@media (min-width: 768px)`
+  key,          // normalized `prop: value` (plus ` !important` if set)
+  redundant,    // “true” if the same declaration repeats within one rule, absent otherwise
+  repeated,     // “true” if this flags a selector (list) written more than once in one scope;
+                // `key` is then the selector list, and occurrences carry no `prop`/`value`
+  occurrences,  // [{ selector, selectors, prop, value, line }, …]
+}
+```
+
+`dedup()` returns `{ css, applied, skipped, bytes }`: `css` is the rewritten style sheet; `applied` lists what it did—each entry has `redundant: true` if it just dropped a same-rule (or same-at-rule-block) duplicate, `folded: true` if it folded a rule repeating the same selector into a later one, absent if it folded selectors from separate rules into one; `skipped` lists duplicate groups (and blocked same-selector folds) it left untouched along with why; and `bytes` is `{ before, after, saved }`—UTF-8 byte counts of the style sheet before and after, since that’s what changes over the wire, not the character count, covering everything `--fix` did as one net figure.
+
+`saved` is `before - after`, so it’s negative on the rare file where the added selector-list text outweighs the removed declarations—dropping a same-rule duplicate never costs bytes, only folding selectors from separate rules can. With `savingsOnly: true`, each merge that would make `saved` more negative is withheld on its own, leaving the rest in place: `css` comes back with whatever paid for itself applied, `bytes` reports what actually happened, and the declined merges arrive as `withheld: { count, bytes }`—how many, and the byte counts the style sheet would have had with them applied too (`withheld` is absent whenever nothing was withheld). A file offering nothing but growing merges therefore still comes back untouched, with `applied` empty; one that mixes them keeps its savings. `dedupRoot()` (the same function, operating on an already-parsed PostCSS root instead of a CSS string) returns the same shape minus `css`.
+
+`dedup()` additionally returns `sourceMapStale: true` when the style sheet passed in carried a `/*# sourceMappingURL=… */` comment _and_ the run actually rewrote it—the CLI’s source map caveat in machine-readable form, so a wrapper can surface it instead of shipping a broken map unnoticed. It’s absent otherwise, including when nothing was applied or every merge was withheld, since the style sheet (and hence the map’s accuracy) is then unchanged. `dedupRoot()` doesn’t report it, deliberately: It’s what [the PostCSS plugin](#postcss-plugin) calls, and that path stringifies through PostCSS, which emits a correct map of its own.
+
+### PostCSS Plugin
+
+For dropping CSS Dedup into an existing PostCSS pipeline (alongside Autoprefixer, cssnano, etc.) instead of running it as a separate file-based pass, import the plugin from `css-dedup/plugin`:
+
+```js
+import postcss from 'postcss';
+import cssdedup from 'css-dedup/plugin';
+
+// Report mode: Duplicate/redundant declarations surface as PostCSS warnings
+const result = await postcss([cssdedup()]).process(css, { from: 'default.css' });
+console.log(result.warnings());
+
+// Fix mode: Rewrites the root in place; skipped merges still surface as warnings
+const fixed = await postcss([cssdedup({ fix: true })]).process(css, { from: 'default.css' });
+console.log(fixed.css);
+```
+
+The plugin takes the same options as `analyze()`/`dedup()`, plus `fix: true` to switch it into consolidation mode (`aggressive: true` and `savingsOnly: true` work here, too—withheld merges are left out of the root and surface as a warning). Since CSS Dedup is a source-hygiene tool—more like `stylelint --fix` than a bundle optimizer—it fits well early in a pipeline, on hand-authored CSS, before Autoprefixer and before minification; running it after either may overlap with work those tools do. (CSS Dedup also works as a last step, however, as with applying `--savings-only` optimizations to minified files.)
+
+## How It Works
+
+CSS Dedup:
+
+1. …**parses** the CSS with [PostCSS](https://postcss.org/).
+
+2. …**scopes** rules by their DRY boundary—the root style sheet, the contents of an `@media`/`@supports`/`@layer` condition, or one specific nested rule (native CSS nesting).
+   - Declarations are only ever compared within the same scope: A rule’s own declarations are never compared against those of rules nested inside it, and rules in different `@layer`s (or different `@media`/`@supports` conditions) can’t share a merged rule.
+   - For _reporting_, two blocks with the _same_ condition are the same scope even when written separately in the source (e.g., two `@media (min-width: 768px) {}` blocks in different parts of the file)—matching is whitespace-insensitive but case-sensitive, since `@layer` names and selectors can be case-significant.
+   - `--fix` is more conservative here: It only ever folds rules that already live in the same physical block, since merging across two separate blocks would relocate a declaration past whatever sits between those blocks in the source—including rules in an entirely different scope, which the merge-safety check (step 6) has no visibility into. A duplicate split across two same-condition blocks is therefore reported, not auto-merged (unless `--aggressive` is enabled—see [aggressive mode](#aggressive-mode)).
+   - Statement-form at-rules with no block (`@layer reset, base;`) are skipped.
+
+3. …**excludes** selectors matching a hack pattern (vendor-prefixed pseudo-classes/elements, legacy IE selector hacks) from analysis by default—grouping those into a shared selector list risks the whole rule being dropped by browsers that don’t recognize the selector.
+
+4. …**normalizes** each remaining declaration for comparison.
+   - Skips the contents of quoted strings, `url()`, and custom property _names_ throughout—those are case-sensitive, so `var(--Foo)`/`var(--foo)` and `--Foo`/`--foo` are never treated as equal. Everything around such a protected segment still normalizes, though: `VAR( --brand )` matches `var(--brand)`, and `var(--m, 0px)` matches `var(--m,0)`.
+   - Compares custom property _values_ verbatim (`--brand: #FFF` and `--brand: #fff` don’t match)—they’re substituted as-is wherever `var()` references them—possibly somewhere case-sensitive—and scripts can read them back via `getPropertyValue()`, so no two spellings are provably interchangeable (even `--x: 0px` and `--x: 0` differ—only one is a valid `z-index: var(--x)`).
+   - Collapses whitespace, including just inside parentheses and around commas (`rgb( 255, 0, 0 )` matches `rgb(255,0,0)`), and folds value case—except for properties whose value is (or can contain) an author-defined custom ident (`animation-name`, `counter-reset`, `container-name`, and similar), since those are case-_sensitive_ per CSS, unlike the predefined keywords everywhere else; `animation-name: Foo` and `animation-name: foo` can name two different `@keyframes` blocks, so folding them would risk a false duplicate.
+   - Collapses zero-value length units (`0px`/`0svh`/`0cqw` → `0`)—angle/time/frequency/resolution units like `0deg`/`0s` are left alone, since unitless zero isn’t valid there. Zero percentages (`0%`) are collapsed to `0`, too, except for a short list of properties where a percentage can resolve against an indefinite reference size.
+   - Collapses redundant decimal zeros (`.5`/`0.5`/`0.50` → `.5`, `1.0` → `1`), drops a redundant leading `+` sign (`+2px` → `2px`), and ignores whitespace around `/` separators (`12px/1.5` matches `12px / 1.5`).
+   - Canonicalizes equivalent color spellings: `white`, `#fff`, `#ffffff`, `#ffffffff`, `rgb(255, 255, 255)`, and `rgb(255 255 255)` all compare equal, as do `transparent` and `rgba(0, 0, 0, 0)`. Only lossless textual equivalences count—`hsl()` and percentage channels involve rounding, so they’re left alone (except in [aggressive mode](#aggressive-mode), which accepts the rounding).
+   - Treats `font-weight: bold`/`700` and `normal`/`400` as equivalent (the longhand only—picking the weight out of the `font` shorthand would require parsing the value).
+   - Collapses repeated shorthand values, following the omission rules in reverse: `margin: 0 0` matches `margin: 0`, `padding: 1px 2px 1px 2px` matches `1px 2px`, `border-radius: 1px/1px` matches `1px`, and two-value pairs like `gap`/`overflow`/`place-items` collapse the same way.
+   - Treats the `border`/`outline` `none` and `0` values as equivalent.
+   - Canonicalizes `<time>` values to milliseconds: `0.3s` matches `300ms`. Always exact—converting `s` to `ms` is a decimal-point shift, never rounding—so this runs regardless of aggressive mode, the same as the zero-value and decimal collapsing above.
+   - Sorts `min()`/`max()` arguments, including nested calls: `min(100%, 500px)` matches `min(500px, 100%)`, since mathematical min/max is commutative. `clamp()`’s three arguments are positional (minimum, preferred, maximum) and are left in place, as is `minmax()` (grid track sizing—a different function, despite the name).
+   - In [aggressive mode](#aggressive-mode) only: Canonicalizes `<angle>` values to degrees—`90deg` matches `0.25turn` and `100grad`. `grad`/`turn` convert to degrees exactly; `rad` involves π, so that conversion is rounded, the same lossy-but-aggressive-only treatment `hsl()` gets above.
+
+5. …**reports** any normalized declaration that occurs in more than one rule within a scope, and separately flags declarations repeated within a single rule—including within a selector-less at-rule block like `@font-face` or `@page`, which have declarations of their own but, unlike two rules, are never compared against each other (there’s no selector list to fold two `@font-face` blocks into). It also reports a selector (list) written more than once within one scope—the same smell one level up from a repeated declaration—matched as a set, so `.a, .b` and `.b, .a` count as the same selector list; only within one physical block, though, since two same-condition `@media` blocks repeat their selectors by construction.
+
+6. …**consolidates** (with `--fix`) only when it’s provably safe.
+   - First, a declaration repeated within the same rule (or the same selector-less at-rule block) is collapsed to its last occurrence—unconditionally safe, since nothing moves across a rule boundary, so none of the checks below apply to it.
+   - Rules repeating the same selector (list) within one scope are folded into the last of them, earlier declarations first—which preserves every same-selector cascade outcome—but only if nothing in between touches any of the moved properties (the same intervening-rule check the declaration merges below use). Rules holding anything but declarations (nested rules, say) stay put.
+   - Identical rules—two or more rules whose declarations are exactly the same set of shared declarations—are folded into one rule with the combined selector list, rather than being split per declaration, provided their declaration order agrees wherever the properties overlap (and the usual intervening-rule check clears).
+   - Entangled duplicate groups (groups sharing rules) that fit no coordinated shape aren’t simply abandoned: Each group’s safe stretches of occurrences still consolidate individually, into a fresh rule placed at the stretch’s end. No shared rule’s selector is ever rewritten, so nothing leaks between the groups, and a member whose own later declarations overlap the shared property sits the merge out (relocating the declaration past its own tail would flip which one wins).
+   - Then, a duplicate group spread across separate rules is merged by folding its selectors into the last occurrence—one line per selector if that’s already how the file writes multi-selector rules, comma-separated on one line otherwise.
+   - Keeps whichever of the group’s equivalent raw spellings is shortest (e.g., `.5` over `0.50`)—CSS Dedup only picks among spellings already present in the source, so it doesn’t synthesize a shorter one, which would be a minifier’s job.
+   - Removes the declaration from the other occurrences—but only if no other rule between the first and last occurrence also sets that property or a shorthand/longhand overlapping it (`margin` and `margin-left`, `border-color` and `border-top-color`, etc.), for any selector.
+   - One narrow exception to “any other rule”: If that rule’s selector is provably mutually exclusive with the group’s—right now, that only covers an exact-match attribute value on the same attribute, on what is provably the same element (`html[lang="da"] a` vs. `html[lang="de"] a`, since an attribute can only ever hold one value and `html` is unique per document)—it can’t actually match the same element, so it’s not a threat to this particular merge and doesn’t block it. ([Aggressive mode](#aggressive-mode) widens this exception to selectors that are merely _likely_ disjoint.) “Provably the same element” means the differing attribute sits on the selector’s subject, is connected to it purely through `>`/`+` combinators, or sits on `html`/`:root`; across a descendant or `~` combinator, `.x[data-v="1"] p` and `.x[data-v="2"] p` can match the very same `p` (nested `.x` wrappers), so those don’t count as exclusive.
+   - If a merged rule (including the last occurrence itself) also carries a declaration for an overlapping property, that declaration is split out into its own small rule—keeping that occurrence’s own, original selector—placed right after the merged rule, rather than blocking the merge outright: Folding every selector onto one shared declaration block would otherwise hand that overlapping extra to selectors that never had it. Exception: If that extra is itself duplicated elsewhere in the same scope, it’s left alone and the whole merge is skipped instead, since splitting it here would orphan that other duplicate’s own merge.
+   - If something does block it, the merge is skipped and reported rather than risking a cascade change. A blocker fences, though—it doesn’t forbid: Occurrences on the same side of it still consolidate among themselves (their own spans are clean, so the same safety argument applies), and the group is reported as skipped either way, since the duplicate keeps existing across the blocker.
+   - Consolidation runs to a fixed point: One merge can unblock or create another (a fresh merged rule may repeat an existing rule’s selector list, an emptied rule stops fencing a span), so the passes repeat until nothing changes.
+   - With `--savings-only`, each merge is weighed before it stands: The consolidation is performed, the style sheet measured, and the merge undone again if it turned out to cost bytes. The unit is the smallest one that can be applied alone—usually a single duplicate group, each run separately where a blocker splits one, and a whole cluster where groups share a rule. The strategies that can’t cost bytes (collapsing a repeat within one rule, folding two same-selector rules) aren’t weighed. Measuring the real thing beats predicting it—a merge that empties a rule or a conditional block saves far more than its declaration arithmetic suggests.
+
+Overall, CSS Dedup is conservative by design and will leave some safe merges for manual review.
+
+`test/fixtures/*.css` contains small example style sheets that exercise each of these behaviors, including nesting (`nesting.css`) and `@layer` (`layers.css`)—run `node bin/css-dedup.js test/fixtures/<file>.css` (add `--fix` for `merge-safety.css`) to see them in action.
+
+### Aggressive Mode
+
+By default, CSS Dedup only consolidates what it can prove safe. `--aggressive` (`-a`) also allows merges that are _probably_ safe:
+
+* **Merging across separately-written same-condition blocks.** Two `@media (min-width: 768px)` blocks apply under the exact same runtime condition, so their duplicates consolidate—usually the biggest single lever on real files. The accepted risk: Rules from _other_ scopes sitting between the two blocks stay invisible to the intervening-rule safety check, so a merge could move a declaration past one that matters. A conditional block this empties (`@media`, `@supports`, `@container`) is removed; an emptied `@layer` shell is kept, since a layer’s first appearance sets the layer order.
+
+* **Assuming rules with disjoint-looking selectors don’t overlap.** An intervening rule whose subject compound shares no class, ID, or type with the group’s (e.g., `.btn:hover` between two `.card` occurrences) no longer blocks a merge. Almost always right with BEM-style class naming—but nothing stops one element from carrying both classes, which is why this isn’t provable. Anything the heuristic can’t read confidently (escapes, `:is()`/`:not()` and friends) still blocks.
+
+* **Rounding-based color equivalences.** `hsl(0 0% 100%)` ≡ `#fff`, and percentage `rgb()` channels (`rgb(100% 0% 0%)` ≡ `#f00`)—excluded by default because the equivalence goes through browser rounding rather than being purely textual.
+
+* **Rounding-based angle equivalences.** `<angle>` values canonicalize to degrees: `90deg` ≡ `0.25turn` ≡ `100grad`. `grad`/`turn` convert exactly, but `rad` involves π, so any non-zero `rad` value is rounded to compare—the whole feature is gated behind the flag rather than splitting it by which unit pair happens to be exact.
+
+* **Property aliases.** `word-wrap`/`overflow-wrap` and `grid-gap`/`gap` (plus the row/column variants) are pure synonyms in current browsers, so their duplicates merge—keeping the last occurrence’s spelling, which changes the legacy-support surface (a browser old enough to know only `word-wrap` loses the declaration when `overflow-wrap` is the spelling kept).
+
+What aggressive mode deliberately does _not_ do: drop same-rule overrides with differing values (`color: red; color: oklch(…)`). That pattern is CSS’s fallback mechanism for progressive enhancement, and there is no way to tell an intentional fallback from an accident. (Overrides that are really the same color spelled two ways—`color: #fff; color: hsl(0 0% 100%)`—do collapse, via the color equivalence above.)
+
+The byte economics don’t change with the flag—aggressive mode just unlocks more merges, each carrying the same trade-off between the declaration removed and the selector-list bytes added. Cross-block merges usually save, since they remove whole rules or blocks; declaration-only merges between rules with long selectors can grow the file, so `--aggressive` can also tip a style sheet further into growth. Either way, report mode’s table shows both variants side-by-side (the `-f -a`/`-f -a -s` columns), so that trade-off is visible before you decide.
+
+## Working on CSS Dedup
+
+Note: This section assumes working with dependencies installed (`npm i`).
+
+### Tests
+
+```shell
+npm test
+```
+
+Runs the type tests (`tsc`, against `test/types.test.ts`) and then the suites in `test/`, split by area: `analyze.test.js` (selector handling and detection), `dedup.test.js` (consolidation, aggressive mode, `--savings-only`), `cli.test.js` (the command line, exit codes, fixtures, parallel runs), `format.test.js` (the byte figures, summary clauses, and report table layout, in process), and `plugin.test.js`. Shared fixtures and the CLI spawn helpers live in `test/helpers.js`.
+
+`npm run lint` (or `lint:fix`) covers the rest.
+
+### Benchmarks
+
+```shell
+npm run benchmark
+```
+
+Times both entry points against a generated 1,500-rule style sheet, or against files or directories passed as arguments. Alongside each timing it prints what the pass actually did (declarations applied, groups skipped, bytes saved)—those numbers are the guard rail, since a speedup that changes any of them is a behavior change rather than a speedup. Only compare figures taken against the same input.
+
+### Layout
+
+```text
+bin/
+  css-dedup.js         Executable entry point—wiring only
+
+src/
+  index.js             Public API (re-exports only)
+  plugin.js            PostCSS plugin wrapper
+  analyze.js           Read-only detection (step 5 above)
+  consolidate.js       The fixed-point loop and the result shape
+  merge.js             The merge strategies (step 6 above)
+
+  lib/                 Engine internals
+    scopes.js          What counts as one DRY boundary (step 2)
+    style.js           Reading the file’s own formatting conventions
+    normalization.js   Declaration equivalence (step 4)
+    colors.js          Color equivalence
+    selectors.js       Selector splitting, disjointness proofs
+    shorthands.js      Shorthand/longhand overlap
+    hacks.js           The default selector ignore list (step 3)
+    caches.js          Per-run memoization lifecycle
+    transaction.js     Snapshot/rollback, for weighing one merge’s bytes
+    util.js            Shared helpers
+
+  cli/                 CLI internals
+    options.js         Flags, config file, run settings
+    targets.js         File discovery and reading
+    file-pass.js       One file’s work, as a structured-cloneable payload
+    pool.js            Worker pool (and the worker script itself)
+    render.js          Everything that reaches the terminal
+    report.js          The report table: data and layout
+    format.js          Byte figures and their prose
+
+test/
+  fixtures/            Example style sheets each behavior is exercised against
+```
+
+The step numbers refer to [How It Works](#how-it-works) above, which is where the behavior itself is described—the modules follow that order. `bin/` holds only the executable, matching the sibling tools; everything the CLI does lives under `src/cli/`.
+
+Memoization is per run throughout: The selector, property, and separator caches are reset at the start of every `analyzeRoot()`/`dedupRoot()` call, so a long-lived process (a PostCSS watch build) doesn’t accumulate every selector it has ever seen.
+
+***
+
+You might like some of my other work:
+
+* Optimization tools: [hihtml](https://github.com/j9t/hihtml) · [HTML Minifier Next](https://github.com/j9t/html-minifier-next) · [ObsoHTML](https://github.com/j9t/obsohtml) · CSS Dedup · [Image Guard](https://github.com/j9t/image-guard) · [Compressor.js Next](https://github.com/j9t/compressorjs-next) · [.htaccess Punk](https://github.com/j9t/htaccess-punk)
+* Defense tools: [IA Defensa](https://iadefensa.com/solutions/)
+* Resources for quality web development: [Articles](https://meiert.com/topics/development/) · [Books](https://meiert.com/topics/books/) (including [_On Web Development_](https://meiert.com/blog/on-web-development-2/)) · [News](https://frontenddogma.com/) · [Terminology](https://webglossary.info/)

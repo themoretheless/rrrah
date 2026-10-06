@@ -1,0 +1,57 @@
+# Copyright Kevin Deldycke <kevin@deldycke.com> and contributors.
+#
+# This program is Free Software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+"""Allow the module to be run as a CLI. I.e.:
+
+```{code-block} shell-session
+
+$ python -m mail_deduplicate
+```
+"""
+
+from __future__ import annotations
+
+
+def main():
+    """Execute the CLI.
+
+    Indirection via this `main()` method was [required to reconcile](https://github.com/python-poetry/poetry/issues/5981):
+
+        - plain inline package call: `python -m mail_deduplicate`,
+        - `pyproject.toml` entry point: `mdedup = 'mail_deduplicate.__main__:main`,
+        - Nuitka's main module invocation requirement:
+          `python -m nuitka (...) mail_deduplicate/__main__.py`
+
+    That way we can deduce all three cases from the entry point.
+
+    The CLI's display name doesn't need to be forced here: `click-extra`'s
+    `Command.main()` already defaults `prog_name` to the command's name, so even
+    `python -m mail_deduplicate --version` reports itself as `mdedup`.
+    """
+    from multiprocessing import freeze_support
+
+    # `--jobs` hashes in worker processes, which re-launch this executable to start.
+    # In a frozen binary that re-launch lands here instead of in the worker bootstrap,
+    # so without this call each worker would run the whole CLI again. A no-op
+    # everywhere else.
+    freeze_support()
+
+    from mail_deduplicate.cli import mdedup
+
+    mdedup()
+
+
+if __name__ == "__main__":
+    main()

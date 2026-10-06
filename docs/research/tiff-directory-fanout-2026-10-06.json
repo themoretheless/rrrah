@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-06",
+  "scope": "DNG directory walker and generic TIFF sensor classification scheduled-reference bound; not all decoder scratch admission or RSS qualification",
+  "limit": 256,
+  "change": "check completed + queued + current + next-linked directories and declared SubIFD count before unsigned_values allocation",
+  "regression": "root with 256 declared child offsets refuses DirectoryLimit in strict parse and generic sensor classification",
+  "results": {
+    "passed": 640,
+    "ignored": 35,
+    "failed": 0
+  },
+  "command": "cargo test -p rrrah-decode --lib --target-dir /tmp/rrrah-required-corpus-target",
+  "log": "/tmp/rrrah-tiff-fanout-tests.log",
+  "boundary_regression": {
+    "passed": 1,
+    "log": "/tmp/rrrah-tiff-directory-boundary.log",
+    "cases": [
+      "root plus 255 distinct children accepts in strict DNG and generic TIFF classification",
+      "adding one root next-IFD link rejects DirectoryLimit in both paths"
+    ],
+    "command": "cargo test -p rrrah-decode exact_directory_cap --target-dir /tmp/rrrah-required-corpus-target"
+  }
+}

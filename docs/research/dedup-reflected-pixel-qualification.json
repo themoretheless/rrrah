@@ -1,0 +1,22 @@
+{
+  "scope": "Reflected strict linear premultiplied pixel verification, both original grids, no mirrored image allocation",
+  "checks": [
+    "18 geometry/warp/photometric/filtered tests pass",
+    "horizontal reflection and diagonal reflection validate forward and inverse",
+    "negative/HDR channels and partial alpha retained; invisible RGB irrelevant",
+    "visible edits lower matched counts both ways",
+    "all observed cancellation checkpoints refuse partial evidence and retry succeeds",
+    "source pixel-work budget refuses",
+    "library-only Clippy passed"
+  ],
+  "limits": [
+    "Reflected descriptors and file/collection integration remain open",
+    "Reflected photometric/filtered policy integration remains open",
+    "Authored grids do not calibrate natural-photo reflections",
+    "Perspective unsupported"
+  ],
+  "source_sha256": {
+    "crates/rrrah-dedup/src/warp.rs": "ea4033f307524993f7253e667763adff1083a74f35709ca282d4bec5f66dfb25",
+    "crates/rrrah-dedup/tests/warp.rs": "f472978aa99b55b5ee5c110ca4b26fab0dacdc42d9b1485c8693260773e890d1"
+  }
+}

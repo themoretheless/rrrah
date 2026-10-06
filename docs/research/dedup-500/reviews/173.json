@@ -1,0 +1,68 @@
+{
+  "index": 173,
+  "repository": "kevinpollet/pocket-deduper",
+  "commit": "66946a71d090bff489a61c393078c1ccb7e0f095",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Pocket list URL deduplication; remote bookmark identities.",
+  "available_source_evidence": [
+    {
+      "path": "pocket-deduper.go",
+      "local": "02-pocket-deduper.go",
+      "url": "https://github.com/kevinpollet/pocket-deduper/blob/66946a71d090bff489a61c393078c1ccb7e0f095/pocket-deduper.go",
+      "sha256": "b34ac4687134c688cafbd3537d773fbfcad7b3fbad427c39e0dad992ded0d82d",
+      "truncated": false,
+      "lines": 78,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "deduper/deduper.go",
+      "local": "03-deduper.go",
+      "url": "https://github.com/kevinpollet/pocket-deduper/blob/66946a71d090bff489a61c393078c1ccb7e0f095/deduper/deduper.go",
+      "sha256": "b4210cb3d33c6cc553bfd398dd32e36223e7032ed71d7093b91098ae25d819d6",
+      "truncated": false,
+      "lines": 20,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "client/auth.go",
+      "local": "04-auth.go",
+      "url": "https://github.com/kevinpollet/pocket-deduper/blob/66946a71d090bff489a61c393078c1ccb7e0f095/client/auth.go",
+      "sha256": "85388a4bd82d5038885810e3b331db8c5f1a729a5c9b616103d73bd94a01ae33",
+      "truncated": false,
+      "lines": 147,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/kevinpollet/pocket-deduper/blob/66946a71d090bff489a61c393078c1ccb7e0f095/README.md",
+      "sha256": "bb7f722fe4d9a3845ba0615e5c7242f0bba747112f8ff4ca3e6e7109c7e12458",
+      "truncated": false,
+      "lines": 51,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/kevinpollet/pocket-deduper/blob/66946a71d090bff489a61c393078c1ccb7e0f095/LICENSE",
+      "sha256": "c6d053ffb28190bc5f8515c1df3a9e55d8ede0cf1993564dbb35756e83dd7593",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

@@ -1,0 +1,212 @@
+{
+  "status": "qualified_controlled_recursive_filtered_reflection_not_goal_complete",
+  "platform": "macOS Unix; no non-Unix identity claim",
+  "directory_fixture": {
+    "healthy_files": 4,
+    "corrupt_files": 1,
+    "scenes": [
+      830,
+      1084
+    ],
+    "nested_directory": true,
+    "overlapping_parent_child_roots": true,
+    "physical_hardlink_alias": true,
+    "symlink_cycle": true,
+    "expected_physical_files": 5,
+    "expected_alias_groups": 1
+  },
+  "matrix": [
+    {
+      "spatial": false,
+      "space": "LinearSrgb",
+      "fit": "RejectOutsidePolicy",
+      "files": 5,
+      "aliases": 1,
+      "file_errors": 1,
+      "proposed_pairs": 6,
+      "fresh_confirmations": 2
+    },
+    {
+      "spatial": false,
+      "space": "LinearSrgb",
+      "fit": "ConstrainedLeastSquares",
+      "files": 5,
+      "aliases": 1,
+      "file_errors": 1,
+      "proposed_pairs": 6,
+      "fresh_confirmations": 2
+    },
+    {
+      "spatial": false,
+      "space": "EncodedSrgb",
+      "fit": "RejectOutsidePolicy",
+      "files": 5,
+      "aliases": 1,
+      "file_errors": 1,
+      "proposed_pairs": 6,
+      "fresh_confirmations": 2
+    },
+    {
+      "spatial": false,
+      "space": "EncodedSrgb",
+      "fit": "ConstrainedLeastSquares",
+      "files": 5,
+      "aliases": 1,
+      "file_errors": 1,
+      "proposed_pairs": 6,
+      "fresh_confirmations": 2
+    },
+    {
+      "spatial": true,
+      "space": "LinearSrgb",
+      "fit": "RejectOutsidePolicy",
+      "files": 5,
+      "aliases": 1,
+      "file_errors": 1,
+      "proposed_pairs": 6,
+      "fresh_confirmations": 2
+    },
+    {
+      "spatial": true,
+      "space": "LinearSrgb",
+      "fit": "ConstrainedLeastSquares",
+      "files": 5,
+      "aliases": 1,
+      "file_errors": 1,
+      "proposed_pairs": 6,
+      "fresh_confirmations": 2
+    },
+    {
+      "spatial": true,
+      "space": "EncodedSrgb",
+      "fit": "RejectOutsidePolicy",
+      "files": 5,
+      "aliases": 1,
+      "file_errors": 1,
+      "proposed_pairs": 6,
+      "fresh_confirmations": 2
+    },
+    {
+      "spatial": true,
+      "space": "EncodedSrgb",
+      "fit": "ConstrainedLeastSquares",
+      "files": 5,
+      "aliases": 1,
+      "file_errors": 1,
+      "proposed_pairs": 6,
+      "fresh_confirmations": 2
+    }
+  ],
+  "truth_and_oracle": {
+    "direct_pairs_per_configuration": 6,
+    "labelled_positive_pairs_per_configuration": 2,
+    "independent_scene_labels_per_configuration": [
+      830,
+      1084
+    ],
+    "cross_scene_negatives_per_configuration": 4,
+    "direct_oracle_pairs_total": 48,
+    "indexed_oracle_equal": true,
+    "strict_pixels_retained": true,
+    "selected_space_and_fit_mode_retained": true,
+    "request_factory_preserves_every_returned_path": true
+  },
+  "factory_guards": [
+    "Unavailable frame 1: five errors, zero analysed files/pairs",
+    "Invalid filter refused before request factory",
+    "Invalid spatial grid refused before request factory",
+    "Path substitution refused",
+    "Early caller cancellation refused before factory",
+    "Five discovered files with max_files four refused before factory",
+    "Zero total-feature allowance returns Budget without partial report",
+    "Cancelled factory generation token returns Cancelled",
+    "Managed memory released after each path"
+  ],
+  "checks": {
+    "matrix": {
+      "path": "docs/research/dedup-reflected-filter-roots-matrix.log",
+      "sha256": "4428d2ddbaf48b65f883d4c1ad945efd604703fdab675266448e219a0147e70e",
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "filtered_out": 21
+    },
+    "guards": {
+      "path": "docs/research/dedup-reflected-filter-roots-guards.log",
+      "sha256": "5725b510d428c6ec11b9116175918116d2f315e0c164cca7c20559f57f885974",
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "filtered_out": 21
+    }
+  },
+  "source_scope": {
+    "library_source_sha256": {
+      "crates/rrrah-dedup/src/cache.rs": "e439c6f3a89f01a3100bbf7254028458ac060526e02166ba5e682884bb8417d0",
+      "crates/rrrah-dedup/src/groups.rs": "16ad05e4631ca8ec39d8df16e1507262f53539fac7cbedc9cd382227a15dd49e",
+      "crates/rrrah-dedup/src/sequence.rs": "0a56a6fb8fbed7040078700378c0f831bdc8b59e8827b1f6d572e42f59e3eecd",
+      "crates/rrrah-dedup/src/linear.rs": "9ba055f4a73063eed2d757e47cbd6d0b1b53b9f1fed6c1cbd777d3106141e059",
+      "crates/rrrah-dedup/src/local.rs": "22a293472ee97403b1e89361c6d610ab3d1732559560f06326315872966e2cf3",
+      "crates/rrrah-dedup/src/local_index.rs": "b35290716a8ec36aea39756e616ae61242c4b81520380feff3f2680e23b43244",
+      "crates/rrrah-dedup/src/pixel_index.rs": "a54c13d2a23c047d6095520a2d6cbc3bad0ff704646c3f745ae4169cd2caeace",
+      "crates/rrrah-dedup/src/animated.rs": "c5e768e1cacdeadc27a311d6387fd60412ea0af78d7ab64b8ac8402610c876ee",
+      "crates/rrrah-dedup/src/ordinal.rs": "e1c1d1b0e41b1c5adb26d1085a9d131d3888f03af20a33b60140ed86e35e45fe",
+      "crates/rrrah-dedup/src/lib.rs": "c86bb3792362f504faedf37e0960ceeef5a15f7ca7401eb738f715069881a639",
+      "crates/rrrah-dedup/src/pixels.rs": "3e92d2f598988430b86364d297cdad809c22ac77454bfccec88089980bc6d548",
+      "crates/rrrah-dedup/src/pyramid.rs": "fe1be3e4ee9e656149962a5f6c7cf4a8ea475a825be8528d89830234b737c786",
+      "crates/rrrah-dedup/src/presentation_kind.rs": "81dfc393bce7403647cd410df9114f6997d5929a7eab82f2c77f159f1c9e3671",
+      "crates/rrrah-dedup/src/decode.rs": "c38bb0f215ea86765b74bb67dbe1f5620cbd9ddcaea17297b263980ba37a90cd",
+      "crates/rrrah-dedup/src/raster.rs": "f1225873a1c642bbf9bc36c4c0a4e418f2afe5a176cdb775a2f18815461b9b20",
+      "crates/rrrah-dedup/src/local_scan.rs": "9249a66612d9329deaaace7292139ae39e4bd1d7326dcad690bc0707e893ff13",
+      "crates/rrrah-dedup/src/geometry.rs": "f21029b01e4f761382d8049c39b41078022359272f44a2dba1ba1fc3b9be660a",
+      "crates/rrrah-dedup/src/warp.rs": "f7013aa9d81bedd4b6165825c081a2dab205ee04f02fd7f460473382ced74568",
+      "crates/rrrah-dedup/src/scan.rs": "9e833b7c4ba6135de0dd9e27c818d8c9b1afbcc1425b87925f8f3069e5f7677a",
+      "crates/rrrah-dedup/src/visual.rs": "755c8718ed19c9388d9f6f8078b0823208b24d8dd46f5feca53029e3d0794715",
+      "crates/rrrah-dedup/src/local_collection.rs": "03691725fe86873449e0b1afa91802488d5f2d6af199e78f9825faa920e84973",
+      "crates/rrrah-dedup/src/crop.rs": "98ac2f42ea6deb584f879bfa58f5e10c40ae6ff7548b6f618cae7706309130f3",
+      "crates/rrrah-dedup/src/container.rs": "0001a40249f8817586ea36aa629e3f08a5fcb669ae10adf1c232e1e40e231ca4",
+      "crates/rrrah-dedup/src/exact.rs": "398df029bf7b98e2b066e6a9716521c13406b2241244def7bcc3d56431126341",
+      "crates/rrrah-dedup/src/pages.rs": "fef59f10ac0071bc02afce6caaf7c6e9b6a9ae9fb54b329b35b1367c9b7d08df"
+    },
+    "implementation_unchanged_from_previous_routing_qualification": true,
+    "test_source_sha256": "2300f2877229812858f7cb69e4bd6a9162adfd2755a7fb59482c8d3451dd4c1c",
+    "test_function_sha256": {
+      "recursive_filtered_reflections_preserve_oracle_aliases_errors_and_modes": "dfb47d82c062694dc5e456b24c7414d0abbdc8a8f10f4f680e68422790b3eec5",
+      "recursive_filtered_reflection_keeps_frame_selection_and_factory_guards": "74c1ae8cc44e206d3c97e56ee318630819aa6e968e3f530ad2f56d4195d7b0d7"
+    },
+    "guard_snapshot_changed_at_artifact_creation": {
+      "crates/rrrah-dedup/tests/photo_files.rs": {
+        "pre_guard_sha256": "4a10c63f60241e15857ea4581f5c30eb3fca6fa22829a46a78d9628e1d919c5a",
+        "current_sha256": "2300f2877229812858f7cb69e4bd6a9162adfd2755a7fb59482c8d3451dd4c1c"
+      },
+      "crates/rrrah-decode/src/pict.rs": {
+        "pre_guard_sha256": "8b6607d319342139adc2c74d409367445db2fbccd556a885f2c6abfe43061c33",
+        "current_sha256": "711781fc0fa510de5830c313b4469f93a53a4eec136d445175e214c173e119cd"
+      },
+      "crates/rrrah-memory/src/lib.rs": {
+        "pre_guard_sha256": "acf481abcc4d97583353c3a5bbe2caff145b38b57f83455c9b32beb6e92b1ed9",
+        "current_sha256": "241fdc5fda2b8f3964c4fd6cdcab5717423a02896879332c66967b0982f16ae0"
+      }
+    },
+    "staged_validation_note": "Current guard function passed before the separate matrix test received its final independent scene-label assertion. The matrix was then rerun with that assertion. Library implementation stayed unchanged; these two targeted invocations are not a full crate rerun.",
+    "dependency_caveat": "PICT decoder and rrrah-memory library source changed between the guard snapshot and artifact creation. These targeted logs qualify their compiled versions; they do not prove current decoder-wide or memory-subsystem coverage."
+  },
+  "fixture_hashes": {
+    "830-base.png": "943fc72128ba36baed63f5fa54a7681f090923ec086135746f57a094806d5652",
+    "1084-base.png": "6c610a3de1962c93925d41d401efbdf83cc95548bf82f1962ef51347569642e9",
+    "830-mirror-jpeg.png": "1a7d77d069718f13d8260b85d43b7229d30bc8ca9a4ce437acf531cc36e641c3",
+    "1084-mirror-jpeg.png": "246161dbb867331e532fc19c3f89a31069e231600005134db777b68835389690"
+  },
+  "remaining": [
+    "Broader directory and alias-retarget mutation corpus",
+    "Non-Unix physical identity",
+    "Reflected range fitting/display projection",
+    "Ordinary alternative geometry confirmation",
+    "Perspective matching",
+    "Held-out/burst/look-alike image qualification",
+    "Scalable whole-container indexing",
+    "RSS/shared-allocation and other incomplete acceptance-contract rows"
+  ]
+}

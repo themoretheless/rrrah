@@ -1,0 +1,95 @@
+{
+  "repository": "bakdata/dedupe",
+  "metadata": {
+    "name": "bakdata/dedupe",
+    "url": "https://github.com/bakdata/dedupe",
+    "description": "Java DSL for (online) deduplication",
+    "language": "Java",
+    "stars": 24,
+    "license": "MIT",
+    "archived": false,
+    "pushed_at": "2026-10-05T07:59:51Z",
+    "default_branch": "master",
+    "queries": [
+      "dedup in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/bakdata/dedupe/blob/fe34c67d7276cd2706270c72903c52733fe8d836/README.md",
+      "sha256": "628138a1ccc9260fa83e94532fa7b590c5b8c074bca82cf4f4e7226f1eda66a3",
+      "truncated": false,
+      "lines": 195,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/bakdata/dedupe/blob/fe34c67d7276cd2706270c72903c52733fe8d836/LICENSE",
+      "sha256": "c3f3232072d4c5deb2128db6a9390c39996b91eb3c7dc43d076eec59ffa7531b",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "core/src/main/java/com/bakdata/dedupe/deduplication/Deduplication.java",
+      "local": "02-Deduplication.java",
+      "url": "https://github.com/bakdata/dedupe/blob/fe34c67d7276cd2706270c72903c52733fe8d836/core/src/main/java/com/bakdata/dedupe/deduplication/Deduplication.java",
+      "sha256": "1fb5dac538b60d802e44ea6f3dd53e3dfd79a561db5b3697865d36c1a1d7b98d",
+      "truncated": false,
+      "lines": 92,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "core/src/main/java/com/bakdata/dedupe/duplicate_detection/DuplicateDetection.java",
+      "local": "03-DuplicateDetection.java",
+      "url": "https://github.com/bakdata/dedupe/blob/fe34c67d7276cd2706270c72903c52733fe8d836/core/src/main/java/com/bakdata/dedupe/duplicate_detection/DuplicateDetection.java",
+      "sha256": "6dd0192b2893b0440e177734d21a002ca4c1b561fa684c6e776718c6f99fc563",
+      "truncated": false,
+      "lines": 79,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "core/src/main/java/com/bakdata/dedupe/duplicate_detection/PossibleDuplicateHandler.java",
+      "local": "04-PossibleDuplicateHandler.java",
+      "url": "https://github.com/bakdata/dedupe/blob/fe34c67d7276cd2706270c72903c52733fe8d836/core/src/main/java/com/bakdata/dedupe/duplicate_detection/PossibleDuplicateHandler.java",
+      "sha256": "9688330e0fedb2a49048d87f1ee759ad4c03fc38d366fc109d508ced350866c3",
+      "truncated": false,
+      "lines": 103,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "common/src/test/java/com/bakdata/dedupe/similarity/MatchingSimilarityTest.java",
+      "local": "05-MatchingSimilarityTest.java",
+      "url": "https://github.com/bakdata/dedupe/blob/fe34c67d7276cd2706270c72903c52733fe8d836/common/src/test/java/com/bakdata/dedupe/similarity/MatchingSimilarityTest.java",
+      "sha256": "ec406ae7583de804bcad421727d978b4c3be8fd4d7f970a8d05475dc1ef667f6",
+      "truncated": false,
+      "lines": 127,
+      "source": true,
+      "test": true
+    }
+  ],
+  "errors": [],
+  "commit": "fe34c67d7276cd2706270c72903c52733fe8d836",
+  "tree_truncated": false,
+  "source_file_count": 112,
+  "test_file_count": 8,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "core/src/main/java/com/bakdata/dedupe/deduplication/Deduplication.java",
+    "core/src/main/java/com/bakdata/dedupe/duplicate_detection/DuplicateDetection.java",
+    "core/src/main/java/com/bakdata/dedupe/duplicate_detection/PossibleDuplicateHandler.java",
+    "common/src/test/java/com/bakdata/dedupe/similarity/MatchingSimilarityTest.java"
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "index": 189,
+  "repository": "snowx-dev/SnowFastULP",
+  "commit": "536cc3b674761b32adaa7bcac6e650b63821c1e6",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Bounded fingerprint progress and cancellation tests; text/credential dump domain and AGPL, not visual pipeline.",
+  "available_source_evidence": [
+    {
+      "path": "internal/history/fingerprint_all.go",
+      "local": "03-fingerprint_all.go",
+      "url": "https://github.com/snowx-dev/SnowFastULP/blob/536cc3b674761b32adaa7bcac6e650b63821c1e6/internal/history/fingerprint_all.go",
+      "sha256": "82a942b493ce41141e6304f8396b6b3731fb3d42490d5b0de729e7d818c06275",
+      "truncated": false,
+      "lines": 186,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "internal/history/hash.go",
+      "local": "04-hash.go",
+      "url": "https://github.com/snowx-dev/SnowFastULP/blob/536cc3b674761b32adaa7bcac6e650b63821c1e6/internal/history/hash.go",
+      "sha256": "7327f3e5c96e64b4ce8f0864829f92f93e8b47a314685342ef9241f8abfd56b1",
+      "truncated": false,
+      "lines": 368,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "internal/ulpengine/dedup.go",
+      "local": "05-dedup.go",
+      "url": "https://github.com/snowx-dev/SnowFastULP/blob/536cc3b674761b32adaa7bcac6e650b63821c1e6/internal/ulpengine/dedup.go",
+      "sha256": "833f8010069e80ab22736e621483772dcff4ee271cc0494c8d63ede58333fad8",
+      "truncated": false,
+      "lines": 856,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "internal/history/fingerprint_all_cancel_unix_test.go",
+      "local": "06-fingerprint_all_cancel_unix_test.go",
+      "url": "https://github.com/snowx-dev/SnowFastULP/blob/536cc3b674761b32adaa7bcac6e650b63821c1e6/internal/history/fingerprint_all_cancel_unix_test.go",
+      "sha256": "cc206302c588cbd3fb71e0e2a06bfa1cafca00e5f798e777ac3035692236450f",
+      "truncated": false,
+      "lines": 73,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "AGPL-3.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 354,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/snowx-dev/SnowFastULP/blob/536cc3b674761b32adaa7bcac6e650b63821c1e6/README.md",
+      "sha256": "b08564ffe071bf33000a0fc898d4f2068160eff28596eb2c8c1c536ef278476e",
+      "truncated": false,
+      "lines": 104,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/snowx-dev/SnowFastULP/blob/536cc3b674761b32adaa7bcac6e650b63821c1e6/LICENSE",
+      "sha256": "0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0",
+      "truncated": false,
+      "lines": 661,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "third_party/yekazip/LICENSE",
+      "local": "02-LICENSE",
+      "url": "https://github.com/snowx-dev/SnowFastULP/blob/536cc3b674761b32adaa7bcac6e650b63821c1e6/third_party/yekazip/LICENSE",
+      "sha256": "0a531075bff0abc78db942ee30ee56a95e8dcac3fdf48f7f32c059878a4a2aad",
+      "truncated": false,
+      "lines": 20,
+      "source": false,
+      "test": false
+    }
+  ]
+}

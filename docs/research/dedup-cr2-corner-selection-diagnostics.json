@@ -1,0 +1,110 @@
+{
+  "scope": "Diagnostic detector-selection isolation using independently known CR2 active-crop translation; no automatic candidate acceptance",
+  "source_sha256": {
+    "crates/rrrah-dedup/examples/raw_raster_probe.rs": "5ed3fb9caa8d850073defc6430afd7689a92e440c0c90fd9a83206729336116c"
+  },
+  "cases": {
+    "tiff": {
+      "raw_selected_features": 497,
+      "target_selected_features": 484,
+      "expected_translation": [
+        12,
+        10
+      ],
+      "position_tolerance": 2,
+      "source_positions_with_selected_target": 0,
+      "best_variant_distances_at_known_positions": [],
+      "mutual_correspondences": 0,
+      "geometry_inliers": 0
+    },
+    "ppm": {
+      "raw_selected_features": 497,
+      "target_selected_features": 493,
+      "expected_translation": [
+        12,
+        10
+      ],
+      "position_tolerance": 2,
+      "source_positions_with_selected_target": 60,
+      "best_variant_distances_at_known_positions": [
+        5,
+        5,
+        6,
+        7,
+        8,
+        8,
+        8,
+        9,
+        9,
+        9,
+        10,
+        10,
+        11,
+        11,
+        11,
+        11,
+        12,
+        12,
+        12,
+        13,
+        13,
+        14,
+        14,
+        14,
+        15,
+        16,
+        17,
+        17,
+        17,
+        17,
+        17,
+        18,
+        18,
+        19,
+        19,
+        20,
+        20,
+        20,
+        21,
+        21,
+        22,
+        25,
+        28,
+        29,
+        29,
+        29,
+        29,
+        31,
+        31,
+        33,
+        34,
+        35,
+        35,
+        39,
+        40,
+        40,
+        41,
+        42,
+        55,
+        56
+      ],
+      "mutual_correspondences": 45,
+      "geometry_inliers": 40
+    }
+  },
+  "finding": "TIFF has zero selected corners near expected translated RAW corners; PPM has 60, all descriptor distances 5..56. Current strongest-corner selection loses common positions for ICC render before correspondence matching. This does not establish descriptor robustness at unselected ICC coordinates.",
+  "validation": {
+    "native_diagnostic_exit_codes": [
+      0,
+      0
+    ],
+    "clippy_example_exit_code": 0
+  },
+  "next_work": "Evaluate bounded spatially balanced or adaptive feature selection, retaining geometry/pixel proof and false-positive controls",
+  "remaining": [
+    "Known shift is diagnostic oracle input, not production matching prior",
+    "Detector coverage and orientation stability under ICC transfer differences",
+    "Feature budgets and managed allocation accounting",
+    "Full RAW/raster candidate verification, held-out positives and negatives"
+  ]
+}

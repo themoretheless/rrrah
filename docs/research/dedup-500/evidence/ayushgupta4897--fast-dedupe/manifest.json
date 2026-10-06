@@ -1,0 +1,115 @@
+{
+  "repository": "ayushgupta4897/fast-dedupe",
+  "metadata": {
+    "name": "ayushgupta4897/fast-dedupe",
+    "url": "https://github.com/ayushgupta4897/fast-dedupe",
+    "description": "A minimalist but optimized Python package for deduplication tasks leveraging RapidFuzz internally, enabling super-fast approximate duplicate detection within a dataset with minimal config.",
+    "language": "Python",
+    "stars": 18,
+    "license": "MIT",
+    "archived": false,
+    "pushed_at": "2025-04-02T06:52:21Z",
+    "default_branch": "main",
+    "queries": [
+      "dedup in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/ayushgupta4897/fast-dedupe/blob/779ab732c045e6dd93b67647e6b609846afa3e20/README.md",
+      "sha256": "bda3841c24e6b717855ba84a1f11d2dec7b75519ccdfb98291231329c95324c7",
+      "truncated": false,
+      "lines": 396,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/ayushgupta4897/fast-dedupe/blob/779ab732c045e6dd93b67647e6b609846afa3e20/LICENSE",
+      "sha256": "4f90e8388e6ab1d865dde54e9cb3c7f50e74423efe1c912a63b1f00ca2ec0812",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "fastdedupe/similarity.py",
+      "local": "02-similarity.py",
+      "url": "https://github.com/ayushgupta4897/fast-dedupe/blob/779ab732c045e6dd93b67647e6b609846afa3e20/fastdedupe/similarity.py",
+      "sha256": "9b0f564dd0340dd0f95a0c33c296f3d16f34a9f6e5ea92b85f145ae847f5318f",
+      "truncated": false,
+      "lines": 803,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "fastdedupe/__init__.py",
+      "local": "03-__init__.py",
+      "url": "https://github.com/ayushgupta4897/fast-dedupe/blob/779ab732c045e6dd93b67647e6b609846afa3e20/fastdedupe/__init__.py",
+      "sha256": "1b3f33fda4796aee20ca0caafe567508ab64ae19476acccbd9653bd53c051828",
+      "truncated": false,
+      "lines": 35,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "fastdedupe/__main__.py",
+      "local": "04-__main__.py",
+      "url": "https://github.com/ayushgupta4897/fast-dedupe/blob/779ab732c045e6dd93b67647e6b609846afa3e20/fastdedupe/__main__.py",
+      "sha256": "8cc54432e6e6139cfde63617bcbc7a9fe6d3bc9cbc3193dd3e34155033a7569d",
+      "truncated": false,
+      "lines": 12,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "fastdedupe/tests/test_similarity.py",
+      "local": "05-test_similarity.py",
+      "url": "https://github.com/ayushgupta4897/fast-dedupe/blob/779ab732c045e6dd93b67647e6b609846afa3e20/fastdedupe/tests/test_similarity.py",
+      "sha256": "6f4b598ddbb07001508c9464cac2a0b275ed9fe24b016a5540d60780fb661858",
+      "truncated": false,
+      "lines": 220,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "fastdedupe/cli.py",
+      "local": "06-cli.py",
+      "url": "https://github.com/ayushgupta4897/fast-dedupe/blob/779ab732c045e6dd93b67647e6b609846afa3e20/fastdedupe/cli.py",
+      "sha256": "d3650fddd6f20a3858f964d19249259f0dfad905a55e071ff182ed471951a351",
+      "truncated": false,
+      "lines": 291,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "examples/similarity_comparison.py",
+      "local": "07-similarity_comparison.py",
+      "url": "https://github.com/ayushgupta4897/fast-dedupe/blob/779ab732c045e6dd93b67647e6b609846afa3e20/examples/similarity_comparison.py",
+      "sha256": "394b747a0e6e626a082a198f2d116b1594522b1ed61a704a354e07ae7570d10c",
+      "truncated": false,
+      "lines": 166,
+      "source": true,
+      "test": false
+    }
+  ],
+  "errors": [],
+  "commit": "779ab732c045e6dd93b67647e6b609846afa3e20",
+  "tree_truncated": false,
+  "source_file_count": 17,
+  "test_file_count": 5,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "examples/similarity_comparison.py",
+    "fastdedupe/similarity.py",
+    "fastdedupe/__main__.py",
+    "fastdedupe/tests/test_similarity.py"
+  ]
+}

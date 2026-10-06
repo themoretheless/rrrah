@@ -1,0 +1,78 @@
+{
+  "index": 369,
+  "repository": "azr/phash",
+  "commit": "83f69b14d767949950c8db70f0f631f982e667bb",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Pure Go DCT/keypoint/distance routines with tests; useful independent math oracle after preprocessing validation.",
+  "available_source_evidence": [
+    {
+      "path": "distance.go",
+      "local": "02-distance.go",
+      "url": "https://github.com/azr/phash/blob/83f69b14d767949950c8db70f0f631f982e667bb/distance.go",
+      "sha256": "e947676ce0a21c37d50038bf1e6b61d8c45d63e4621d4dc134b42e0660296da3",
+      "truncated": false,
+      "lines": 10,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "dtc.go",
+      "local": "03-dtc.go",
+      "url": "https://github.com/azr/phash/blob/83f69b14d767949950c8db70f0f631f982e667bb/dtc.go",
+      "sha256": "a07d2eb171d12df473ebf1dad1df04ecc30ef8af3ccfd4bd93063089b4699082",
+      "truncated": false,
+      "lines": 133,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "find_keypoints.go",
+      "local": "04-find_keypoints.go",
+      "url": "https://github.com/azr/phash/blob/83f69b14d767949950c8db70f0f631f982e667bb/find_keypoints.go",
+      "sha256": "9b4ac67b7b9d4311da0858e8f948297b830a26ab796e2458e591e7a1b7b8de70",
+      "truncated": false,
+      "lines": 21,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "distance_test.go",
+      "local": "05-distance_test.go",
+      "url": "https://github.com/azr/phash/blob/83f69b14d767949950c8db70f0f631f982e667bb/distance_test.go",
+      "sha256": "c8ebc2973f6714684ecbb439cfe4f1740c2d024f853c312535fee18d01f179ea",
+      "truncated": false,
+      "lines": 26,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 7,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/azr/phash/blob/83f69b14d767949950c8db70f0f631f982e667bb/README.md",
+      "sha256": "e6230c119fc2952b33d1c6ad0c3173fdb8b7a1fb5aa81f404e3b2f60d7a72b25",
+      "truncated": false,
+      "lines": 26,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/azr/phash/blob/83f69b14d767949950c8db70f0f631f982e667bb/LICENSE",
+      "sha256": "38092767d91cb533e25c12fbeb2465045ee0b0c10cd58d293b2eace5d2f100ab",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

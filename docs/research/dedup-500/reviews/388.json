@@ -1,0 +1,88 @@
+{
+  "index": 388,
+  "repository": "brett-lempereur/ish",
+  "commit": "bbdc45bcf55de61b38b4108871199a117aecd1be",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Go average/difference hashes and explicit RGB grayscale lookup; useful grayscale weighting oracle with tests.",
+  "available_source_evidence": [
+    {
+      "path": "average.go",
+      "local": "02-average.go",
+      "url": "https://github.com/brett-lempereur/ish/blob/bbdc45bcf55de61b38b4108871199a117aecd1be/average.go",
+      "sha256": "a6b1b057f8d2570c9a7d26905f873b78c7e568a200d6f296d4306bf90ba6375a",
+      "truncated": false,
+      "lines": 66,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "difference.go",
+      "local": "03-difference.go",
+      "url": "https://github.com/brett-lempereur/ish/blob/bbdc45bcf55de61b38b4108871199a117aecd1be/difference.go",
+      "sha256": "4d8218662716fe478fcd984382e95c9cf537c79cf9c3572cfe5576b07ae1fb9e",
+      "truncated": false,
+      "lines": 63,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "grayscale.go",
+      "local": "04-grayscale.go",
+      "url": "https://github.com/brett-lempereur/ish/blob/bbdc45bcf55de61b38b4108871199a117aecd1be/grayscale.go",
+      "sha256": "cc6eaed94690aacee996148b07a802483cf37e362c16b5e9cab319319c770886",
+      "truncated": false,
+      "lines": 74,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "average_test.go",
+      "local": "05-average_test.go",
+      "url": "https://github.com/brett-lempereur/ish/blob/bbdc45bcf55de61b38b4108871199a117aecd1be/average_test.go",
+      "sha256": "b578d4f34d5857fdc10063f6a83883df983440fabd61729f061ed5a92b082ac1",
+      "truncated": false,
+      "lines": 35,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "example/dhash.go",
+      "local": "06-dhash.go",
+      "url": "https://github.com/brett-lempereur/ish/blob/bbdc45bcf55de61b38b4108871199a117aecd1be/example/dhash.go",
+      "sha256": "664a9ee8592e6900e5f5fef70a2a106df0ca769678e06cd54053811ecc554508",
+      "truncated": false,
+      "lines": 27,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "BSD-2-Clause",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 5,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/brett-lempereur/ish/blob/bbdc45bcf55de61b38b4108871199a117aecd1be/README.md",
+      "sha256": "107741450c623d8d1bfac931c503270181328a70785210c3e3fc91f728f57d80",
+      "truncated": false,
+      "lines": 70,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE.md",
+      "local": "01-LICENSE.md",
+      "url": "https://github.com/brett-lempereur/ish/blob/bbdc45bcf55de61b38b4108871199a117aecd1be/LICENSE.md",
+      "sha256": "e2a60b6335bbbb3c4a2a6e7f149d94c00183d1ffb415dbdf2bed9c73212af640",
+      "truncated": false,
+      "lines": 22,
+      "source": false,
+      "test": false
+    }
+  ]
+}

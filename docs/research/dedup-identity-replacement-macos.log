@@ -1,0 +1,41 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+    Finished `test` profile [optimized + debuginfo] target(s) in 5.52s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_dedup-e1c451b346790d9e)
+
+running 12 tests
+test exact::collision_tests::read_buffer_capacity_failure_is_explicit_and_retry_succeeds ... ok
+test tests::empty_and_duplicate_fingerprints ... ok
+test tests::traversal_work_exhaustion_is_distinct_from_failure ... ok
+test warp::encoded_signal_tests::extended_srgb_landmarks_match_independent_decimal_oracle_without_clipping ... ok
+test warp::encoded_signal_tests::transfer_precedes_premultiplication_and_bilinear_sampling ... ok
+test tests::collision_membership_keeps_arbitrary_order_and_pair_identity ... ok
+test warp::bounded_fit_tests::boundary_fit_matches_exhaustive_rectangle_and_beats_independent_clipping ... ok
+test tests::indexed_search_matches_independent_exhaustive_scan ... ok
+test exact::collision_tests::final_content_validation_rejects_change_even_when_metadata_matches ... ok
+test exact::collision_tests::verified_observations_detect_metadata_invisible_pruned_mutations ... ok
+test exact::collision_tests::colliding_samples_and_full_hashes_still_partition_by_bytes ... ok
+test cache::publication_tests::directory_sync_failure_reports_already_published_complete_cache ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+     Running tests/exact_files.rs (target/debug/deps/exact_files-2ee295f0e15ba296)
+
+running 15 tests
+test unavailable_non_utf8_path_preserves_diagnostic_bytes ... ok
+test size_depth_and_entry_limits_are_visible ... ok
+test same_length_mutation_during_sample_is_detected ... ok
+test same_bytes_and_modified_time_do_not_hide_physical_file_replacement ... ok
+test hardlink_aliases_and_followed_symlink_cycles ... ok
+test cancellation_during_full_hash_is_bounded ... ok
+test same_samples_different_middle_are_not_duplicates ... ok
+test missing_input_and_overlap_do_not_lose_valid_results ... ok
+test physical_hardlinks_are_aliases_while_copied_bytes_are_separate_files ... ok
+test unreadable_file_is_explicit_and_does_not_hide_healthy_copies ... ok
+test copies_empty_files_and_equal_size_negatives ... ok
+test verified_scan_preserves_groups_and_observes_every_admitted_file ... ok
+test fifo_replacement_does_not_block_or_hide_healthy_copies ... ok
+test verified_scan_discards_groups_for_one_shot_cancel_at_every_checkpoint ... ok
+test changing_any_member_does_not_hide_healthy_duplicates ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.36s
+

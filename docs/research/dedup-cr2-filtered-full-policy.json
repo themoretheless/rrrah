@@ -1,0 +1,21 @@
+{
+  "scope": "Prespecified explicit full-resolution filtered CR2/TIFF experiment; process running at record time",
+  "mode": "raw_raster_probe --verify-spatial-filtered",
+  "policy": {
+    "radius": 1,
+    "color_space": "EncodedSrgb",
+    "fit": "ConstrainedLeastSquares",
+    "maximum_sample_pairs": 900000000,
+    "residual_tolerance": 0.03,
+    "minimum_matched_fraction": 0.9,
+    "minimum_coverage_fraction": 0.3,
+    "gain_range": [
+      0.2,
+      5.0
+    ],
+    "maximum_offset": 0.1
+  },
+  "preserved": "Strict linear bidirectional evidence retained separately; no clipping or exact-pixel claim",
+  "validation": "Example build and selected Clippy passed",
+  "outcome": "pending"
+}

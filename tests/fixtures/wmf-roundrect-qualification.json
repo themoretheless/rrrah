@@ -1,0 +1,20 @@
+{
+  "renderer": "libwmf 0.2.16 bundled GD",
+  "qualified": false,
+  "case": "10x10 solid red null-pen roundrect, corner ellipse diameter 10",
+  "native_expected_corner": [
+    0,
+    0,
+    0,
+    0
+  ],
+  "external_corner": [
+    255,
+    0,
+    0,
+    255
+  ],
+  "source_function": "src/ipa/xgd/draw.h::wmf_gd_draw_rectangle",
+  "source_sha256": "2595a461f0234aabf91366373fa9884f1c0ca11b208ce5c37a33e35ede68ba62",
+  "reason": "GD draw_rectangle implementation calls gdImageFilledRectangle/gdImageRectangle and does not use corner ellipse dimensions; cannot qualify curved corner shape"
+}

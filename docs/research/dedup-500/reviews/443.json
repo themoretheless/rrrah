@@ -1,0 +1,88 @@
+{
+  "index": 443,
+  "repository": "imhmdb/veridical",
+  "commit": "286966f0e060c3b2fb33a9496a0624aa7d401fef",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Telegram/WhatsApp rumor voting bot; no independent visual engine in selected code.",
+  "available_source_evidence": [
+    {
+      "path": "manage.py",
+      "local": "02-manage.py",
+      "url": "https://github.com/imhmdb/veridical/blob/286966f0e060c3b2fb33a9496a0624aa7d401fef/manage.py",
+      "sha256": "6dcb44988f1439586047c5d4f1806bc06c37ab3b649d1fdeff9af710531fb843",
+      "truncated": false,
+      "lines": 21,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "bots/__init__.py",
+      "local": "03-__init__.py",
+      "url": "https://github.com/imhmdb/veridical/blob/286966f0e060c3b2fb33a9496a0624aa7d401fef/bots/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "truncated": false,
+      "lines": 0,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "bots/admin.py",
+      "local": "04-admin.py",
+      "url": "https://github.com/imhmdb/veridical/blob/286966f0e060c3b2fb33a9496a0624aa7d401fef/bots/admin.py",
+      "sha256": "b2e328e31f08dc907100505521d13ee6a9ea67a240655d051120011ce49cfaf8",
+      "truncated": false,
+      "lines": 3,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "bots/tests.py",
+      "local": "05-tests.py",
+      "url": "https://github.com/imhmdb/veridical/blob/286966f0e060c3b2fb33a9496a0624aa7d401fef/bots/tests.py",
+      "sha256": "9ab6c6191360e63c1b4c9b5659aef348a743c9e078be68190917369e4e9563e8",
+      "truncated": false,
+      "lines": 3,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "bots/apps.py",
+      "local": "06-apps.py",
+      "url": "https://github.com/imhmdb/veridical/blob/286966f0e060c3b2fb33a9496a0624aa7d401fef/bots/apps.py",
+      "sha256": "725ecf3313126c5e77e8333e3d021520096df2934717488f4dceb77cf2bf89b5",
+      "truncated": false,
+      "lines": 5,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 2,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/imhmdb/veridical/blob/286966f0e060c3b2fb33a9496a0624aa7d401fef/README.md",
+      "sha256": "6c4de8f8223a36e23848af4f51ef3b73352fa4c83e5da0f5ffc6f6eb3708a3f0",
+      "truncated": false,
+      "lines": 13,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/imhmdb/veridical/blob/286966f0e060c3b2fb33a9496a0624aa7d401fef/LICENSE",
+      "sha256": "c4ff33b7357db96c11dbc544c5d5112a33fd419c8a1269e2d88be61aad0c2e92",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

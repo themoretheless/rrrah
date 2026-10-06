@@ -1,0 +1,115 @@
+{
+  "repository": "witold-andelie/revio",
+  "metadata": {
+    "name": "witold-andelie/revio",
+    "url": "https://github.com/witold-andelie/revio",
+    "description": "Agentic code review CLI \u2014 LangGraph orchestrates 13 deterministic static analyzers   (oxlint/bandit/clippy/spotbugs/golangci/cppcheck) + LLM reasoning across 23 languages including industrial PLC.   Grounding validator kills hallucinated paths. RAG over your guidelines. dedup --fix actually edits files with   multi-step undo (no git required).",
+    "language": "Python",
+    "stars": 8,
+    "license": "Apache-2.0",
+    "archived": false,
+    "pushed_at": "2026-07-26T14:10:48Z",
+    "default_branch": "main",
+    "queries": [
+      "dedup in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/witold-andelie/revio/blob/1a528594d8c2a5f52041762c67f69d83eda22d02/README.md",
+      "sha256": "5d372f682c6c69d44a5a646a550b06e13e4224907e9efaea62aa36999724bb9f",
+      "truncated": false,
+      "lines": 960,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/witold-andelie/revio/blob/1a528594d8c2a5f52041762c67f69d83eda22d02/LICENSE",
+      "sha256": "05624c2196a14971d1a182c1b4b8e490aa3d9f0e9a42fbfd3b7584fd7ae1a218",
+      "truncated": false,
+      "lines": 201,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "src/revio/detect/fingerprint.py",
+      "local": "02-fingerprint.py",
+      "url": "https://github.com/witold-andelie/revio/blob/1a528594d8c2a5f52041762c67f69d83eda22d02/src/revio/detect/fingerprint.py",
+      "sha256": "ab2dd4ff32cfbe5155a71c4bf8e7109d90c78f9fe02c38060df64aa4f4eb6cfb",
+      "truncated": false,
+      "lines": 395,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/revio/layers/rag/retriever.py",
+      "local": "03-retriever.py",
+      "url": "https://github.com/witold-andelie/revio/blob/1a528594d8c2a5f52041762c67f69d83eda22d02/src/revio/layers/rag/retriever.py",
+      "sha256": "26d5ac6a1585621d0ff0fb6ffd3783b2ed209bf902a76264214a89441b878fa0",
+      "truncated": false,
+      "lines": 48,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/revio/__init__.py",
+      "local": "04-__init__.py",
+      "url": "https://github.com/witold-andelie/revio/blob/1a528594d8c2a5f52041762c67f69d83eda22d02/src/revio/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "truncated": false,
+      "lines": 0,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/__init__.py",
+      "local": "05-__init__.py",
+      "url": "https://github.com/witold-andelie/revio/blob/1a528594d8c2a5f52041762c67f69d83eda22d02/tests/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "truncated": false,
+      "lines": 0,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "src/revio/agent/cpp_tools.py",
+      "local": "06-cpp_tools.py",
+      "url": "https://github.com/witold-andelie/revio/blob/1a528594d8c2a5f52041762c67f69d83eda22d02/src/revio/agent/cpp_tools.py",
+      "sha256": "94bc715f077c84ae716aa28335cc2c5c56628c251ea56424871da690e3d8e027",
+      "truncated": false,
+      "lines": 73,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/fixtures/js_sample/src/server.js",
+      "local": "07-server.js",
+      "url": "https://github.com/witold-andelie/revio/blob/1a528594d8c2a5f52041762c67f69d83eda22d02/tests/fixtures/js_sample/src/server.js",
+      "sha256": "5f12c51451067de4fcd84dbd18aeb53c13f930469f468d291e465888ff6ef43d",
+      "truncated": false,
+      "lines": 32,
+      "source": true,
+      "test": true
+    }
+  ],
+  "errors": [],
+  "commit": "1a528594d8c2a5f52041762c67f69d83eda22d02",
+  "tree_truncated": false,
+  "source_file_count": 146,
+  "test_file_count": 23,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "src/revio/detect/fingerprint.py",
+    "src/revio/layers/rag/retriever.py",
+    "src/revio/agent/cpp_tools.py",
+    "tests/fixtures/js_sample/src/server.js"
+  ]
+}

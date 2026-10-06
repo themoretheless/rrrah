@@ -1,0 +1,12 @@
+{
+  "scope": "eight legacy XCF mask/gray cases through native decode, explicit color policy, swap and actual Metal readback",
+  "passed": 1,
+  "cases": 8,
+  "log": "/tmp/rrrah-xcf-gray-swap-metal.log",
+  "source_sha256": "7405eadf120fa45fd49454e220984bf017069ee2bf205ab88ff11a6bf0aeafbb",
+  "limitations": [
+    "Untagged color explicitly assumed sRGB",
+    "Offscreen SDR readback; no physical HDR",
+    "No modern XCF/groups/effects qualification"
+  ]
+}

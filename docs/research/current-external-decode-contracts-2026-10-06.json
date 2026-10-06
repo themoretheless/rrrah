@@ -1,0 +1,23 @@
+{
+  "passed": 3,
+  "failed": 0,
+  "logs": [
+    "/tmp/rrrah-current-external-3fr.log",
+    "/tmp/rrrah-current-external-erf.log",
+    "/tmp/rrrah-current-external-xcf.log"
+  ],
+  "source_hashes": {
+    "/tmp/rrrah-raw-corpus/2058.3fr": "395acb2c706dc10270c58ec261e42a5e36f6ac8c39d2a767e86e83648aa318a3",
+    "/tmp/rrrah-raw-corpus/2680.erf": "09d8e533d93116294a9f3e161ed868e929454c7b946e083b644bd6bb75bcb5e4",
+    "/tmp/rrrah-xcf-gimp/gimp-2-6-file.xcf": "a1557a22fd7ba5d8185447c932a708bd2369910203081590e45e3a3cabe46636"
+  },
+  "scope": [
+    "3FR embedded matrix precision and zero-WB rejection",
+    "ERF known black/WB parameters plus bad-WB/truncation rejection",
+    "Selected external XCF layer/mask ownership and partial cancellation rollback"
+  ],
+  "limitations": [
+    "No general all-camera or full XCF qualification",
+    "Source origins not newly authenticated"
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "index": 281,
+  "repository": "Cutehacks/duperagent",
+  "commit": "42c5b422a8869f7180c59ff96bddbcf38ca17257",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "QML HTTP request client clone; no content comparison.",
+  "available_source_evidence": [
+    {
+      "path": "duperagent.cpp",
+      "local": "02-duperagent.cpp",
+      "url": "https://github.com/Cutehacks/duperagent/blob/42c5b422a8869f7180c59ff96bddbcf38ca17257/duperagent.cpp",
+      "sha256": "3cc8560edeb4be63ab84f171598af1e7d9c67a1d17a6d22d10e657e10f3e2171",
+      "truncated": false,
+      "lines": 258,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "duperagent.h",
+      "local": "03-duperagent.h",
+      "url": "https://github.com/Cutehacks/duperagent/blob/42c5b422a8869f7180c59ff96bddbcf38ca17257/duperagent.h",
+      "sha256": "4c64d5c8d03e685897012c5aec1eb05527a370d3720ebd6ed7bc7eb68b72d992",
+      "truncated": false,
+      "lines": 71,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "config.cpp",
+      "local": "04-config.cpp",
+      "url": "https://github.com/Cutehacks/duperagent/blob/42c5b422a8869f7180c59ff96bddbcf38ca17257/config.cpp",
+      "sha256": "009415f131e6ae9665cf0fddfab553bdf2b3e16d073c8f8b4c7b115310d91171",
+      "truncated": false,
+      "lines": 117,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/tst_duperagent.cpp",
+      "local": "05-tst_duperagent.cpp",
+      "url": "https://github.com/Cutehacks/duperagent/blob/42c5b422a8869f7180c59ff96bddbcf38ca17257/tests/tst_duperagent.cpp",
+      "sha256": "06306064542b28836f8c5a822360714fd7ff3dc5b96bb1194591d118faf82cc0",
+      "truncated": false,
+      "lines": 5,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "cookiejar.cpp",
+      "local": "06-cookiejar.cpp",
+      "url": "https://github.com/Cutehacks/duperagent/blob/42c5b422a8869f7180c59ff96bddbcf38ca17257/cookiejar.cpp",
+      "sha256": "34bf98e1c65bd17214fc1f4c8265f1b0369b0d460f77be9d91a2a30330724af4",
+      "truncated": false,
+      "lines": 141,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 1,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/Cutehacks/duperagent/blob/42c5b422a8869f7180c59ff96bddbcf38ca17257/README.md",
+      "sha256": "22c43f46bcacf13c442f90720b20f9d6079feb3563ee28d6a5a4ce11b0fdf1a8",
+      "truncated": false,
+      "lines": 460,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/Cutehacks/duperagent/blob/42c5b422a8869f7180c59ff96bddbcf38ca17257/LICENSE",
+      "sha256": "12aac60391a50ede1d250a5bbddbeb1c14970960cec42712b4e3d95b19ac2184",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

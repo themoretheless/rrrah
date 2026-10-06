@@ -1,0 +1,32 @@
+{
+  "scope": "Per-file decode requests for recursive canonical pixel indexing",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/pixel_index.rs": "900e341fedcdcba77260dc0bb3be2af32d6ab31528b9b38e424fb94ac265b08e",
+    "crates/rrrah-dedup/tests/pixel_search.rs": "e29a5849f340546473e730650b2b347828b261602c595ab63e552babe1f00e98"
+  },
+  "api": "scan_indexed_pixel_roots_with_requests",
+  "default_api": "strict requests unchanged",
+  "qualification": [
+    "Nested overlapping roots: two default untagged-HDR color errors",
+    "Explicit known linear sRGB: one exact equal PFM pair",
+    "Unavailable selected frame: two per-file issues, no analysed entries",
+    "Stale per-file generation token: ScanError::Cancelled without report",
+    "Path substitution: InvalidPolicy before index processing",
+    "Invalid decode limits: reject before factory invocation",
+    "Memory reservations released"
+  ],
+  "validation": {
+    "pixel_search_tests_passed": 12,
+    "new_tests": 1,
+    "clippy": "passed all features tests/examples no-deps -D warnings",
+    "single_new_full_suite_run": false
+  },
+  "limitations": [
+    "Request assumptions remain caller declarations, not independent calibration",
+    "API added only for canonical pixel root index; other root convenience APIs retain strict defaults"
+  ],
+  "commands": [
+    "cargo test -p rrrah-dedup --all-features --test pixel_search",
+    "cargo clippy -p rrrah-dedup --all-features --tests --examples --no-deps -- -D warnings"
+  ]
+}

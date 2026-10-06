@@ -1,0 +1,25 @@
+{
+  "independent_sensor": {
+    "exit_code": 0,
+    "required": 29,
+    "passed": 29,
+    "report": "dedup-rw2-real-independent-report.json",
+    "native_sha256": "35d6d0ab85ac4c36d7541c94da0a0047e66fc945888398b6bd086d060580d7fd"
+  },
+  "rw2_development": {
+    "macos": {
+      "exit_code": 0,
+      "baseline_matched": true,
+      "report": "dedup-rw2-real-macos-report.json",
+      "probe_sha256": "6d98d10fb0c8862a565e3fa3e20db25305fd54a26c0d2705df88cbf6b7a690e5"
+    },
+    "linux": {
+      "exit_code": 0,
+      "baseline_matched": true,
+      "report": "dedup-rw2-real-linux-report.json",
+      "probe_sha256": "af08be3dfd101789034918c513935f2f4f77c22ae70eaf7649902fe8cb525b80"
+    }
+  },
+  "source_sha256": "fedae3aaec0c556fa0a53a8ccb79c6dc876c662377e522e19a2e205aa41ec35c",
+  "scope": "Post-change independent sensor/color-metadata regression across 29 RAWs; GH2 RW2 full development, managed-budget/cancellation recovery, baseline pixel digest on macOS/Linux. Not independent rendered-color fidelity or real-file internal cancellation latency."
+}

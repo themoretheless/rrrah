@@ -1,0 +1,68 @@
+{
+  "index": 33,
+  "repository": "platisd/duplicate-code-detection-tool",
+  "commit": "f0413b1571a98b653f617a59fec0097001e18c0e",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Source-code/document similarity reporting rather than photo matching or exact-file detection.",
+  "license_metadata": "MIT",
+  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "available_source_evidence": [
+    {
+      "path": "duplicate_code_detection.py",
+      "local": "02-duplicate_code_detection.py",
+      "url": "https://github.com/platisd/duplicate-code-detection-tool/blob/f0413b1571a98b653f617a59fec0097001e18c0e/duplicate_code_detection.py",
+      "sha256": "b5f887df4aeeb9a6e01e3a2ccb465a747ee3dd49f78e0679a5c4c0308c027063",
+      "truncated": false,
+      "lines": 434,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "entrypoint.sh",
+      "local": "03-entrypoint.sh",
+      "url": "https://github.com/platisd/duplicate-code-detection-tool/blob/f0413b1571a98b653f617a59fec0097001e18c0e/entrypoint.sh",
+      "sha256": "2a45abfbaf57a8921f17ea524494a121ac2953ed4f58f90c172b568dc7fbe2ea",
+      "truncated": false,
+      "lines": 24,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "run_action.py",
+      "local": "04-run_action.py",
+      "url": "https://github.com/platisd/duplicate-code-detection-tool/blob/f0413b1571a98b653f617a59fec0097001e18c0e/run_action.py",
+      "sha256": "7b9c9ae44611175b6b8bfc1b9cf26ddaa548ab789bf55763fdc7503abe615053",
+      "truncated": false,
+      "lines": 237,
+      "source": true,
+      "test": false
+    }
+  ],
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/platisd/duplicate-code-detection-tool/blob/f0413b1571a98b653f617a59fec0097001e18c0e/README.md",
+      "sha256": "3d6b2ef10dec12e8ebcbcce7e1584a98fb8ac9faba6e5b5d7cc9dce52b827d0e",
+      "truncated": false,
+      "lines": 176,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/platisd/duplicate-code-detection-tool/blob/f0413b1571a98b653f617a59fec0097001e18c0e/LICENSE",
+      "sha256": "4008b95e6fa4de6f315e967e7f3ce76700171114db18997d95aed76df406d542",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

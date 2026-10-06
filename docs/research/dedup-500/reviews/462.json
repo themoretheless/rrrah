@@ -1,0 +1,88 @@
+{
+  "index": 462,
+  "repository": "Ximaz/youtube-search",
+  "commit": "5cc68574c98c2284d140c94462aaa9ca2dc834e2",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "YouTube thumbnail pHash and hash-client queue; useful asynchronous processing, app-specific visual thresholds.",
+  "available_source_evidence": [
+    {
+      "path": "server/api/comment-scan.post.ts",
+      "local": "02-comment-scan.post.ts",
+      "url": "https://github.com/Ximaz/youtube-search/blob/5cc68574c98c2284d140c94462aaa9ca2dc834e2/server/api/comment-scan.post.ts",
+      "sha256": "c943fb7629a75f28089bb2e84173d160b9e66fc1ebcf6c6143c75bcc670b2693",
+      "truncated": false,
+      "lines": 56,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "server/lib/image/hash.ts",
+      "local": "03-hash.ts",
+      "url": "https://github.com/Ximaz/youtube-search/blob/5cc68574c98c2284d140c94462aaa9ca2dc834e2/server/lib/image/hash.ts",
+      "sha256": "69be3acdf906474022cada859430414f5702f03029e7491e0ad2cc3da49fe4a1",
+      "truncated": false,
+      "lines": 12,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "server/lib/image/hashClient.ts",
+      "local": "04-hashClient.ts",
+      "url": "https://github.com/Ximaz/youtube-search/blob/5cc68574c98c2284d140c94462aaa9ca2dc834e2/server/lib/image/hashClient.ts",
+      "sha256": "883361cfd3081e65819732c22ae7fdd8678711416b234fefc3ba234d7df92aa5",
+      "truncated": false,
+      "lines": 28,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "vitest.config.ts",
+      "local": "05-vitest.config.ts",
+      "url": "https://github.com/Ximaz/youtube-search/blob/5cc68574c98c2284d140c94462aaa9ca2dc834e2/vitest.config.ts",
+      "sha256": "649e4cdf592152cf7179af8b82f66bf43de00208202a0e3749eff9f82892f49a",
+      "truncated": false,
+      "lines": 13,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "test/crypto.test.ts",
+      "local": "06-crypto.test.ts",
+      "url": "https://github.com/Ximaz/youtube-search/blob/5cc68574c98c2284d140c94462aaa9ca2dc834e2/test/crypto.test.ts",
+      "sha256": "9a51fbfcaaccf83e6d2fd2f59329ecdb64bca8b3926b05a78e45a861d673aa06",
+      "truncated": false,
+      "lines": 27,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "Unlicense",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 6,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/Ximaz/youtube-search/blob/5cc68574c98c2284d140c94462aaa9ca2dc834e2/README.md",
+      "sha256": "1f49cb69635aa78a516a1f13462fdc8302be9bdebeac0482f12baff708f81ee7",
+      "truncated": false,
+      "lines": 188,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/Ximaz/youtube-search/blob/5cc68574c98c2284d140c94462aaa9ca2dc834e2/LICENSE",
+      "sha256": "6b0382b16279f26ff69014300541967a356a666eb0b91b422f6862f6b7dad17e",
+      "truncated": false,
+      "lines": 24,
+      "source": false,
+      "test": false
+    }
+  ]
+}

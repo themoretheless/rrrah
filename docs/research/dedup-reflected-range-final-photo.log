@@ -1,0 +1,35 @@
+    Blocking waiting for file lock on build directory
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: function `error` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:4:4
+  |
+4 | fn error(message: &str) -> DecodeError {
+  |    ^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `packed_12` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:9:4
+  |
+9 | fn packed_12(
+  |    ^^^^^^^^^
+
+warning: function `decode_zd` is never used
+  --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:48:15
+   |
+48 | pub(super) fn decode_zd(
+   |               ^^^^^^^^^
+
+warning: `rrrah-decode` (lib) generated 3 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 26.36s
+     Running tests/photo_files.rs (/tmp/rrrah-dedup-target/debug/deps/photo_files-4e5b78f1f6fb0410)
+
+running 1 test
+1084 automatically selected reflected transform: Transform { a: 1.0000610698374428, b: -9.253005673095763e-6, translation: [319.0090101537495, -0.008937696083236801] }
+indexed_features=3780 descriptor_hits=745464 proposed_pairs=28 pixel_verification_pairs=4 peak_managed_bytes=3874560
+1084 automatically selected reflected transform: Transform { a: 1.0000610698374428, b: -9.253005673095763e-6, translation: [319.0090101537495, -0.008937696083236801] }
+indexed_features=3780 descriptor_hits=745464 proposed_pairs=28 pixel_verification_pairs=4 peak_managed_bytes=3874560
+test reflected_range_and_display_collection_match_all_labelled_pairs ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 24 filtered out; finished in 18.61s
+

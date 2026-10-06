@@ -14,3 +14,13 @@ Third-party components (see Cargo.lock for the complete dependency graph):
 The exact license texts for redistributed third-party components must be bundled
 by the release process (for example with cargo-about/cargo-deny). This prototype
 does not grant a license to Adobe trademarks or camera vendor metadata.
+
+RAW quality development contains modified Apache-2.0 source from ArtCraft
+(storytold/lightcraft), revision 294012742e277d95e59db0072c88bfd3d296f6cc.
+Original sources: crates/raw/src/demosaic/{ahd,xtrans}.rs,
+crates/raw/src/highlight.rs, crates/raw/src/opcodes.rs, crates/color/src/spline.rs.
+See third_party/lightcraft/LICENSE-APACHE for the original license.
+
+Canon CRW table-zero numerical data is derived from LibRaw 0.22.2/dcraw under
+CDDL-1.0. Copyright 2019-2025 LibRaw LLC and 1997-2018 Dave Coffin.
+Source representation, attribution and license: crates/rrrah-decode/data/crw/.

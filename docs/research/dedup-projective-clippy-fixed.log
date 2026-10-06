@@ -1,0 +1,12 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+error: adding items after statements is confusing, since items exist from the start of the scope
+  --> crates/rrrah-dedup/src/geometry.rs:85:5
+   |
+85 |     type NormalizedFour = ([[f64; 2]; 4], [f64; 2], f64);
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#items_after_statements
+   = note: `-D clippy::items-after-statements` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::items_after_statements)]`
+
+error: could not compile `rrrah-dedup` (lib) due to 1 previous error

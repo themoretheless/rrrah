@@ -1,0 +1,58 @@
+{
+  "index": 187,
+  "repository": "khusdasz-cmd/aigc-dedup-tool",
+  "commit": "b2de233e7488f566a430907292de5276e9161c8a",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Academic text rewriting to reduce overlap; changes text rather than discovering image copies.",
+  "available_source_evidence": [
+    {
+      "path": ".claude/skills/aigc-dedup/scripts/l4_check.py",
+      "local": "02-l4_check.py",
+      "url": "https://github.com/khusdasz-cmd/aigc-dedup-tool/blob/b2de233e7488f566a430907292de5276e9161c8a/.claude/skills/aigc-dedup/scripts/l4_check.py",
+      "sha256": "87048743743d30ff2eda30df2defdce90b8e9627057186216fb5c681591809df",
+      "truncated": false,
+      "lines": 425,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": ".claude/skills/aigc-dedup/scripts/l5_iterative.py",
+      "local": "03-l5_iterative.py",
+      "url": "https://github.com/khusdasz-cmd/aigc-dedup-tool/blob/b2de233e7488f566a430907292de5276e9161c8a/.claude/skills/aigc-dedup/scripts/l5_iterative.py",
+      "sha256": "dfbf4967f64750b191bdc6388acab3fa5cfb42f246be942bf429a01b476368be",
+      "truncated": false,
+      "lines": 522,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/khusdasz-cmd/aigc-dedup-tool/blob/b2de233e7488f566a430907292de5276e9161c8a/README.md",
+      "sha256": "6f32038667890821cf4b572394b19d8856e48c0fed6fe7a4a4480f81084f728b",
+      "truncated": false,
+      "lines": 61,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/khusdasz-cmd/aigc-dedup-tool/blob/b2de233e7488f566a430907292de5276e9161c8a/LICENSE",
+      "sha256": "f40576424285bbd2b26a5f9c29f38ba278d19dc45aa75284a6f80be5e7c15d68",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

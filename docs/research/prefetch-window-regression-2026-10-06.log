@@ -1,0 +1,61 @@
+warning: function `error` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:4:4
+  |
+4 | fn error(message: &str) -> DecodeError {
+  |    ^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `packed_12` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:9:4
+  |
+9 | fn packed_12(
+  |    ^^^^^^^^^
+
+warning: function `decode_zd` is never used
+  --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:48:15
+   |
+48 | pub(super) fn decode_zd(
+   |               ^^^^^^^^^
+
+warning: `rrrah-decode` (lib) generated 3 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.80s
+     Running unittests src/main.rs (/tmp/rrrah-required-corpus-target/debug/deps/rrrah-9f57a70452950339)
+
+running 33 tests
+test gallery::tests::foreground_bit_prevents_new_store_admission_without_losing_state ... ok
+test gallery::tests::raster_selection_warms_real_crw_neighbour ... ignored, requires pinned EOS 10D via RRRAH_CRW_SOURCE
+test gallery::tests::raster_selection_warms_real_raw_neighbour_without_nonraw_failures ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture
+test gallery::tests::extension_filter_is_case_insensitive ... ok
+test gallery::tests::prefetch_plan_handles_edges_without_duplicates ... ok
+test gallery::tests::prefetch_plan_is_forward_biased_and_bounded ... ok
+test gallery::tests::raw_prefetch_byte_limit_preserves_present_priority_neighbour ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture
+test gallery::tests::jobs_are_bounded_around_selection ... ok
+test gallery::tests::raw_prefetch_count_limit_counts_retained_neighbours_after_missing_file ... ignored, requires external Sony DSC-F828 SRF fixture
+test gallery::tests::raw_prefetch_count_limit_preserves_highest_priority_neighbour ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture
+test gallery::tests::foreground_pause_invalidates_pending_then_resumes_fresh_generation ... ok
+test gallery::tests::raw_prefetch_backward_window_is_bounded_at_gallery_edges ... ok
+test gallery::tests::configured_raw_window_reaches_worker_and_is_clamped ... ok
+test gallery::tests::mixed_gallery_submits_raw_neighbours_from_raster_or_model_selection ... ok
+test gallery::tests::raw_prefetch_paths_are_two_back_then_five_ahead ... ok
+test gallery::tests::raw_prefetch_paths_swap_window_when_travelling_backward ... ok
+test gallery::tests::raw_prefetch_respects_shared_budget_and_recovers_after_release ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture
+test gallery::tests::raw_prefetch_shutdown_cancels_only_its_own_lifetime ... ok
+test gallery::tests::raw_prefetch_window_is_bounded_at_both_gallery_edges ... ok
+test gallery::tests::raw_queue_is_latest_wins_and_bounded_to_one_command ... ok
+test gallery::tests::sibling_folder_tiles_handles_missing_parent_and_filesystem_root ... ok
+test gallery::tests::new_camera_formats_enter_gallery_and_directional_prefetch_window ... ok
+test gallery::tests::raw_worker_skips_ordinary_tiff_without_decoding_failure ... ok
+test gallery::tests::sibling_folder_tiles_ignores_symlinked_dirs ... ok
+test gallery::tests::sibling_folder_tiles_lists_only_dirs_with_supported_images ... ok
+test gallery::tests::neighbour_windows_match_distance_contract_for_every_small_gallery ... ok
+test gallery::tests::rapid_navigation_never_accumulates_raw_commands ... ok
+test gallery::tests::dropping_thumbnail_prefetcher_cancels_active_loader ... ok
+test gallery::tests::thumbnail_queue_replaces_stale_pending_window_at_capacity ... ok
+test gallery::tests::thumbnail_submit_discards_already_ready_stale_generation ... ok
+test gallery::tests::thumbnail_viewport_cancels_active_loader ... ok
+test gallery::tests::thumbnail_worker_drops_an_inflight_stale_generation ... ok
+test gallery::tests::streaming_folder_limit_preserves_sorted_prefix_and_name_ties ... ok
+
+test result: ok. 27 passed; 0 failed; 6 ignored; 0 measured; 130 filtered out; finished in 0.03s
+

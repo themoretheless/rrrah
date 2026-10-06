@@ -1,0 +1,94 @@
+{
+  "repository": "jlesage/docker-dupeguru",
+  "metadata": {
+    "name": "jlesage/docker-dupeguru",
+    "url": "https://github.com/jlesage/docker-dupeguru",
+    "description": "Docker container for dupeGuru",
+    "language": "Python",
+    "stars": 154,
+    "license": "MIT",
+    "archived": false,
+    "pushed_at": "2026-09-22T15:13:50Z",
+    "default_branch": "master",
+    "queries": [
+      "dupe in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/jlesage/docker-dupeguru/blob/702498cfa2108dfab8665be2204e791618d95f62/README.md",
+      "sha256": "cad57406256317aec229d0e4f82ceee6e1dce4ddc380bd65fa199aa94ff8cbd2",
+      "truncated": false,
+      "lines": 877,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/jlesage/docker-dupeguru/blob/702498cfa2108dfab8665be2204e791618d95f62/LICENSE",
+      "sha256": "7b16b6a2ddca0dac1888db017a515467f316aa120adc49d6050d8ada2baf2bc1",
+      "truncated": false,
+      "lines": 22,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "rootfs/etc/cont-init.d/55-dupeguru.sh",
+      "local": "02-55-dupeguru.sh",
+      "url": "https://github.com/jlesage/docker-dupeguru/blob/702498cfa2108dfab8665be2204e791618d95f62/rootfs/etc/cont-init.d/55-dupeguru.sh",
+      "sha256": "fba34b3f2dbbfd9c533fef537b0d89ef84a67166286d892704617c18c32c8d9f",
+      "truncated": false,
+      "lines": 21,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "rootfs/startapp.sh",
+      "local": "03-startapp.sh",
+      "url": "https://github.com/jlesage/docker-dupeguru/blob/702498cfa2108dfab8665be2204e791618d95f62/rootfs/startapp.sh",
+      "sha256": "8e7e4061f996b1a1904402eab99dc8b67300feb93464090693e79b8bea7efcc4",
+      "truncated": false,
+      "lines": 14,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "rootfs/usr/share/dupeguru/send2trash/__init__.py",
+      "local": "04-__init__.py",
+      "url": "https://github.com/jlesage/docker-dupeguru/blob/702498cfa2108dfab8665be2204e791618d95f62/rootfs/usr/share/dupeguru/send2trash/__init__.py",
+      "sha256": "51af469660dcc393bae7ef7f8a8fbdd94fbf7deb4c84504f3eb868eb517e9877",
+      "truncated": false,
+      "lines": 32,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "rootfs/usr/share/dupeguru/send2trash/plat_docker.py",
+      "local": "05-plat_docker.py",
+      "url": "https://github.com/jlesage/docker-dupeguru/blob/702498cfa2108dfab8665be2204e791618d95f62/rootfs/usr/share/dupeguru/send2trash/plat_docker.py",
+      "sha256": "afa0b59bf2164cf306b5758c48da9759fe998d9bc3ea458c802d0d61eaf230a4",
+      "truncated": false,
+      "lines": 111,
+      "source": true,
+      "test": false
+    }
+  ],
+  "errors": [],
+  "commit": "702498cfa2108dfab8665be2204e791618d95f62",
+  "tree_truncated": false,
+  "source_file_count": 4,
+  "test_file_count": 0,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "rootfs/etc/cont-init.d/55-dupeguru.sh",
+    "rootfs/startapp.sh",
+    "rootfs/usr/share/dupeguru/send2trash/plat_docker.py"
+  ]
+}

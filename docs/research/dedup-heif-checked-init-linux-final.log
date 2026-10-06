@@ -1,0 +1,19 @@
+warning: linker stderr: /validation/sysroot/usr/bin/ld: /validation/target/debug/deps/libjpegxr-61e4c82e0f52fb6c.rlib(2e643c6506a180d9-strenc.o): in function `StrIOEncInit':
+         /validation/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/jpegxr-0.3.1/jxrlib/image/encode/strenc.c:485:(.text.StrIOEncInit+0xf0): the use of `tmpnam' is dangerous, better use `mkstemp'
+  |
+  = note: `#[warn(linker_messages)]` on by default
+
+warning: linker stdout: /validation/sysroot/usr/bin/ld: /validation/target/debug/deps/libjpegxr-61e4c82e0f52fb6c.rlib(2e643c6506a180d9-strenc.o): note: the message above does not take linker garbage collection into account
+
+warning: `rrrah-decode` (lib test) generated 2 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.60s
+     Running unittests src/lib.rs (/validation/target/debug/deps/rrrah_decode-c11902d0fca8bb48)
+
+running 4 tests
+test heif::tests::hevc_brands_do_not_capture_avif ... ok
+test heif::tests::truncated_native_container_and_excessive_dimensions_are_rejected ... ok
+test heif::tests::twelve_bit_samples_remain_distinct ... ok
+test heif::tests::profiled_image_reaches_display ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 816 filtered out; finished in 0.00s
+

@@ -1,0 +1,70 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: function `error` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:4:4
+  |
+4 | fn error(message: &str) -> DecodeError {
+  |    ^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `packed_12` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:9:4
+  |
+9 | fn packed_12(
+  |    ^^^^^^^^^
+
+warning: function `decode_zd` is never used
+  --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:48:15
+   |
+48 | pub(super) fn decode_zd(
+   |               ^^^^^^^^^
+
+warning: `rrrah-decode` (lib) generated 3 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 13.40s
+     Running tests/animated.rs (/tmp/rrrah-dedup-target/debug/deps/animated-f7c32f10868277bd)
+
+running 3 tests
+test changed_gif_timing_prevents_whole_animation_equality ... ok
+test complete_existing_composition_fixtures_decode_and_compare ... ok
+test independent_cross_container_timeline_splits_and_negatives ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/container.rs (/tmp/rrrah-dedup-target/debug/deps/container-9cc69093f9b2b030)
+
+running 9 tests
+test exhaustive_scan_does_not_filter_on_zero_duration_first_frame ... ok
+test generation_change_at_final_group_admission_returns_no_result ... ok
+test dcx_icon_and_cursor_page_modes_use_existing_full_decoders ... ok
+test recursive_complete_animation_groups_preserve_paths_aliases_and_errors ... ok
+test selected_frame_does_not_establish_whole_animation_identity ... ok
+test batch_full_presentations_preserve_negative_and_error_evidence ... ok
+test automatic_directory_search_groups_renamed_containers_and_retains_detection_failures ... ok
+test complete_animation_groups_remove_stale_edges_and_keep_healthy_group ... ok
+test complete_page_comparison_rejects_last_page_changes_and_limits ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+     Running tests/pages.rs (/tmp/rrrah-dedup-target/debug/deps/pages-d48a1e9593483bae)
+
+running 10 tests
+test all_dcx_pages_and_changed_second_page_are_compared ... ok
+test untagged_tiff_requires_explicit_color_transform ... ok
+test cursor_hotspot_and_invalid_resource_offsets_are_not_ignored ... ok
+test every_icon_resource_is_compared_including_the_last ... ok
+test complete_tiff_pages_with_icc_detect_last_page_changes_and_cycles ... ok
+test selected_tiff_pages_use_their_own_profile_and_keep_complete_count ... ok
+test identical_tiff_samples_with_different_page_profiles_produce_distinct_colors ... ok
+test independent_tiff_precision_and_orientation_are_preserved ... ok
+test independently_encoded_tiff_endian_bigtiff_and_compression_matrix ... ok
+test public_selected_frame_honors_tiff_page_profiles_metadata_and_explicit_limits ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+
+     Running tests/presentation_kind.rs (/tmp/rrrah-dedup-target/debug/deps/presentation_kind-f4b9dd9168be17be)
+
+running 1 test
+test content_detection_ignores_extensions_and_preserves_sensor_routing ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

@@ -1,0 +1,30 @@
+    Blocking waiting for file lock on build directory
+   Compiling rrrah-dedup v0.1.0 (/workspace/crates/rrrah-dedup)
+    Finished `test` profile [optimized + debuginfo] target(s) in 3m 16s
+     Running tests/projective_geometry.rs (/validation/target/debug/deps/projective_geometry-2ca9eaaa948a5890)
+
+running 11 tests
+test perspective_inverse_grid_catches_unsampled_edit ... ok
+test perspective_mapping_and_permutations ... ok
+test perspective_pixels_hdr_edits_horizon_and_cancel ... ok
+test invalid_horizon_and_cancel_checkpoints ... ok
+test full_support_refinement_beats_minimal_hypotheses_on_noisy_points ... ok
+test robust_perspective_outliers_budget_and_cancellation ... ok
+test projective_filter_preserves_strict_edits_and_terminal_cancellation ... ok
+test sampled_projective_recovers_large_outlier_set_with_fixed_work ... ok
+test sampled_projective_cancellation_discards_models_and_retry_is_deterministic ... ok
+test photometric_registration_keeps_geometry_under_affine_encoded_light_change ... ok
+     Running tests/warp.rs (/validation/target/debug/deps/warp-ed7520e306523881)
+test pixel_registration_reduces_known_offset_and_obeys_terminal_limits ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.02s
+
+
+running 4 tests
+test reflected_grids_preserve_hdr_alpha_and_inverse_with_atomic_cancel ... ok
+test reverse_verification_catches_edits_between_scaled_sample_centers ... ok
+test bilinear_sampling_keeps_alpha_and_invisible_rgb_separate ... ok
+test crop_overlap_and_single_pixel_edits_are_explicit ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+

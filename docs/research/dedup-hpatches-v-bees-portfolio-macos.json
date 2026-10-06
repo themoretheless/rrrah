@@ -1,0 +1,248 @@
+{
+  "sequence": "v_bees",
+  "target_index": 4,
+  "probe_sha256": "78f67dd602e36d8094ea018810a66930f6abaec2b9bbfc9873f26755a7b53b86",
+  "manifest_sha256": "93685ae9e965da7d740ffd777139a5dfa5f5716ec3e7ab8aa2f1721cc9021764",
+  "input": {
+    "sequence": "v_bees",
+    "target_index": 4,
+    "left": {
+      "source_member": "hpatches-sequences-release/v_bees/1.ppm",
+      "source_sha256": "8bc2f12a2c692d21a06eb79960dc405e7665b104910cbe60d3c61f4922db183f",
+      "source_size": [
+        1129,
+        846
+      ],
+      "normalized_path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-hpatches/normalized/v_bees/1.png",
+      "normalized_sha256": "046b535271e98781cc5c0e26817d5d07a5b48e355ad5bd76b067e981f02d2ceb",
+      "normalized_size": [
+        320,
+        240
+      ]
+    },
+    "right": {
+      "source_member": "hpatches-sequences-release/v_bees/4.ppm",
+      "source_sha256": "22a88326a37c06b8a5ff3c95432bdd7f6de569c8491cba48a8d696130c8bf1d7",
+      "source_size": [
+        1129,
+        846
+      ],
+      "normalized_path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-hpatches/normalized/v_bees/4.png",
+      "normalized_sha256": "32fe620083764e0f72adb9e9161f0c1fe854900dad000c1729bff9927c76bfda",
+      "normalized_size": [
+        320,
+        240
+      ]
+    },
+    "original_homography": [
+      [
+        0.6416,
+        -0.085322,
+        103.05
+      ],
+      [
+        -0.075608,
+        0.76092,
+        33.323
+      ],
+      [
+        -0.00022058,
+        -3.8989e-05,
+        1.0011
+      ]
+    ],
+    "normalized_homography": [
+      [
+        0.6418788269062501,
+        -0.08519718604693313,
+        29.048932558401095
+      ],
+      [
+        -0.07539629923736703,
+        0.7609692236125002,
+        9.340315936533313
+      ],
+      [
+        -0.0007782338125,
+        -0.000137436225,
+        1.0007719494812501
+      ]
+    ],
+    "homography_member": "hpatches-sequences-release/v_bees/H_1_4",
+    "homography_sha256": "b010ca6f24f1e18ae368dba5fe3219030ebaae35f90bbc51492f6e538c87fd25"
+  },
+  "returncode": 0,
+  "stderr": "",
+  "scope": "Fixed-policy two-lane candidate recovery diagnostic, not duplicate truth or complete qualification",
+  "evidence": {
+    "status": "ok",
+    "candidate": true,
+    "correspondences": 165,
+    "inliers": 165,
+    "geometry": [
+      [
+        0.759614478758722,
+        -0.08534853474580968,
+        32.26346484761504
+      ],
+      [
+        -0.08675130375609533,
+        0.9036670332444633,
+        10.311894460783947
+      ],
+      [
+        -0.0008937767177721218,
+        -9.542761723412023e-05,
+        1.1695567047142161
+      ]
+    ],
+    "registered": [
+      [
+        0.000619789404531022,
+        -8.160136435070651e-05,
+        0.027873034536780125
+      ],
+      [
+        -7.290673432389521e-05,
+        0.0007340103923704699,
+        0.009139711544170988
+      ],
+      [
+        -7.47605093627765e-07,
+        -1.2372655959701388e-07,
+        0.0009640530150717131
+      ]
+    ],
+    "strict_counts": [
+      [
+        60901,
+        74830,
+        76800
+      ],
+      [
+        51900,
+        60802,
+        76800
+      ]
+    ],
+    "filtered_counts": [
+      [
+        66509,
+        73714,
+        76800
+      ],
+      [
+        55477,
+        59742,
+        76800
+      ]
+    ],
+    "oracle_filtered_counts": [
+      [
+        66945,
+        73689,
+        76800
+      ],
+      [
+        55675,
+        59856,
+        76800
+      ]
+    ],
+    "portfolio": {
+      "accepted_lanes": [
+        false,
+        true
+      ],
+      "chosen_lane": 1,
+      "anchored": {
+        "registered": [
+          [
+            0.0006730246150323232,
+            -7.92896712351385e-05,
+            0.028983999204648846
+          ],
+          [
+            -7.84705988935643e-05,
+            0.0007990134609342474,
+            0.009504731872400049
+          ],
+          [
+            -8.021880814340372e-07,
+            -9.125556082256832e-08,
+            0.0010381680978469906
+          ]
+        ],
+        "strict_counts": [
+          [
+            58919,
+            74768,
+            76800
+          ],
+          [
+            50040,
+            60643,
+            76800
+          ]
+        ],
+        "filtered_counts": [
+          [
+            64798,
+            73652,
+            76800
+          ],
+          [
+            54365,
+            59583,
+            76800
+          ]
+        ]
+      },
+      "unanchored": {
+        "registered": [
+          [
+            0.000619789404531022,
+            -8.160136435070651e-05,
+            0.027873034536780125
+          ],
+          [
+            -7.290673432389521e-05,
+            0.0007340103923704699,
+            0.009139711544170988
+          ],
+          [
+            -7.47605093627765e-07,
+            -1.2372655959701388e-07,
+            0.0009640530150717131
+          ]
+        ],
+        "strict_counts": [
+          [
+            60901,
+            74830,
+            76800
+          ],
+          [
+            51900,
+            60802,
+            76800
+          ]
+        ],
+        "filtered_counts": [
+          [
+            66509,
+            73714,
+            76800
+          ],
+          [
+            55477,
+            59742,
+            76800
+          ]
+        ]
+      }
+    },
+    "managed_used": 0,
+    "managed_peak": 3300000
+  }
+}

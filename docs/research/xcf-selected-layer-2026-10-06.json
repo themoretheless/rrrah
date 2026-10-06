@@ -1,0 +1,43 @@
+{
+  "source": "/tmp/rrrah-xcf-gimp/gimp-2-6-file.xcf",
+  "source_sha256": "a1557a22fd7ba5d8185447c932a708bd2369910203081590e45e3a3cabe46636",
+  "api": "rrrah_decode::decode_xcf_layer",
+  "selected_layer_count": 2,
+  "mask": {
+    "width": 25,
+    "height": 251,
+    "samples": 6275,
+    "all_zero": true
+  },
+  "checks": [
+    "native indexed fixture byte identity",
+    "last-owner managed release",
+    "out-of-range layer index refusal",
+    "zero-budget refusal",
+    "pre-cancel priority before malformed source",
+    "external GIMP layer and mask native retained-byte accounting",
+    "cancellation after managed allocation rolls back all retained output"
+  ],
+  "runs": [
+    {
+      "log": "/tmp/rrrah-xcf-selected-full.log",
+      "passed": 695,
+      "ignored": 36
+    },
+    {
+      "log": "/tmp/rrrah-xcf-selected-mask-final.log",
+      "passed": 1,
+      "ignored": 0
+    }
+  ],
+  "implementation_sha256": {
+    "crates/rrrah-decode/src/xcf.rs": "830de9cf468dd8e66fd901681ff2341f0667a3176c1dddc1193fcca594a192a2",
+    "crates/rrrah-decode/src/lib.rs": "e17a06a8c183793c193c618dc14b8cd7175a7a687dde95b39978b07043e7d3e9"
+  },
+  "limits": [
+    "Native samples only; no full-file flattening or viewer routing.",
+    "No color conversion, effects evaluation or blend semantics qualification.",
+    "Source bytes are borrowed and outside managed pixel budget.",
+    "Indexed fixture RGBA semantics are not evaluated by this API."
+  ]
+}

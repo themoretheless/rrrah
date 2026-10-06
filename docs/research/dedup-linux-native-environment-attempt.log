@@ -1,0 +1,72 @@
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon  11.49MB
+Step 1/2 : FROM rustlang/rust:nightly-slim
+ ---> 0ec37cc707a2
+Step 2/2 : RUN apt-get update && apt-get install -y --no-install-recommends build-essential cmake pkg-config libclang-dev libheif-dev libopenjp2-7-dev libjxr-dev liblcms2-dev zlib1g-dev fonts-dejavu-core && rm -rf /var/lib/apt/lists/*
+ ---> Running in c1fe1e5193dc
+Get:1 http://deb.debian.org/debian trixie InRelease [140 kB]
+Get:2 http://deb.debian.org/debian trixie-updates InRelease [47.3 kB]
+Get:3 http://deb.debian.org/debian-security trixie-security InRelease [43.4 kB]
+Get:4 http://deb.debian.org/debian trixie/main arm64 Packages [9614 kB]
+Get:5 http://deb.debian.org/debian trixie-updates/main arm64 Packages [4424 B]
+Get:6 http://deb.debian.org/debian-security trixie-security/main arm64 Packages [265 kB]
+Fetched 10.1 MB in 2s (6383 kB/s)
+Reading package lists...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following additional packages will be installed:
+  bzip2 cmake-data dpkg-dev fonts-dejavu-mono g++ g++-14
+  g++-14-aarch64-linux-gnu g++-aarch64-linux-gnu libarchive13t64 libbrotli-dev
+  libbrotli1 libclang-19-dev libclang-common-19-dev libclang1-19 libcom-err2
+  libcurl4t64 libdav1d7 libde265-0 libdpkg-perl libedit2 libexpat1 libffi8
+  libgc1 libgdbm-compat4t64 libgdbm6t64 libgnutls30t64 libgssapi-krb5-2
+  libheif-plugin-dav1d libheif-plugin-libde265 libheif1 libjsoncpp26
+  libjxr0t64 libk5crypto3 libkeyutils1 libkrb5-3 libkrb5support0 liblcms2-2
+  libldap2 libllvm19 libncursesw6 libnghttp2-14 libnghttp3-9 libobjc-14-dev
+  libobjc4 libopenjp2-7 libp11-kit0 libperl5.40 libpkgconf3 libproc2-0
+  libpsl5t64 librhash1 librtmp1 libsasl2-2 libsasl2-modules-db libsharpyuv-dev
+  libsharpyuv0 libssh2-1t64 libstdc++-14-dev libtasn1-6 libuv1t64 libxml2
+  libz3-4 make patch perl perl-base perl-modules-5.40 pkgconf pkgconf-bin
+  procps xz-utils
+Suggested packages:
+  bzip2-doc cmake-doc cmake-format elpa-cmake-mode ninja-build debian-keyring
+  debian-tag2upload-keyring gcc-14-doc lrzip sq | sqop | rsop | gosop
+  | pgpainless-cli | gpg-sq | gnupg sensible-utils git bzr gdbm-l10n
+  gnutls-bin krb5-doc krb5-user libheif-plugin-ffmpegdec
+  libheif-plugin-jpegdec libheif-plugin-jpegenc libheif-plugin-j2kdec
+  libheif-plugin-j2kenc libheif-plugin-kvazaar libheif-plugin-rav1e
+  libheif-plugin-svtenc liblcms2-utils libstdc++-14-doc make-doc ed
+  diffutils-doc perl-doc libterm-readline-gnu-perl
+  | libterm-readline-perl-perl libtap-harness-archive-perl
+Recommended packages:
+  fakeroot sq | sqop | rsop | gosop | pgpainless-cli | gpg-sq | gnupg
+  libalgorithm-merge-perl libclang-rt-19-dev libfile-fcntllock-perl
+  liblocale-gettext-perl libheif-plugin-x265 libheif-plugin-aomenc
+  krb5-locales libldap-common libgpm2 publicsuffix libsasl2-modules netbase
+  psmisc linux-sysctl-defaults
+The following NEW packages will be installed:
+  build-essential bzip2 cmake cmake-data dpkg-dev fonts-dejavu-core
+  fonts-dejavu-mono g++ g++-14 g++-14-aarch64-linux-gnu g++-aarch64-linux-gnu
+  libarchive13t64 libbrotli-dev libbrotli1 libclang-19-dev
+  libclang-common-19-dev libclang-dev libclang1-19 libcom-err2 libcurl4t64
+  libdav1d7 libde265-0 libdpkg-perl libedit2 libexpat1 libffi8 libgc1
+  libgdbm-compat4t64 libgdbm6t64 libgnutls30t64 libgssapi-krb5-2 libheif-dev
+  libheif-plugin-dav1d libheif-plugin-libde265 libheif1 libjsoncpp26
+  libjxr-dev libjxr0t64 libk5crypto3 libkeyutils1 libkrb5-3 libkrb5support0
+  liblcms2-2 liblcms2-dev libldap2 libllvm19 libncursesw6 libnghttp2-14
+  libnghttp3-9 libobjc-14-dev libobjc4 libopenjp2-7 libopenjp2-7-dev
+  libp11-kit0 libperl5.40 libpkgconf3 libproc2-0 libpsl5t64 librhash1 librtmp1
+  libsasl2-2 libsasl2-modules-db libsharpyuv-dev libsharpyuv0 libssh2-1t64
+  libstdc++-14-dev libtasn1-6 libuv1t64 libxml2 libz3-4 make patch perl
+  perl-modules-5.40 pkg-config pkgconf pkgconf-bin procps xz-utils zlib1g-dev
+The following packages will be upgraded:
+  perl-base
+1 upgraded, 80 newly installed, 0 to remove and 13 not upgraded.
+Need to get 117 MB of archives.
+After this operation, 732 MB of additional disk space will be used.
+[91mE: You don't have enough free space in /var/cache/apt/archives/.
+[0mThe command '/bin/sh -c apt-get update && apt-get install -y --no-install-recommends build-essential cmake pkg-config libclang-dev libheif-dev libopenjp2-7-dev libjxr-dev liblcms2-dev zlib1g-dev fonts-dejavu-core && rm -rf /var/lib/apt/lists/*' returned a non-zero code: 100

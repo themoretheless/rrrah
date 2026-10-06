@@ -1,0 +1,78 @@
+{
+  "index": 277,
+  "repository": "jRimbault/yadf",
+  "commit": "48230a0a83ea855abdef4bde087e765cc2fbf95a",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "shortlist",
+  "finding": "Rust pluggable hash and positioned head/tail file reads; relevant streaming/prefilter tests, confirmation still to examine.",
+  "available_source_evidence": [
+    {
+      "path": "src/hasher.rs",
+      "local": "02-hasher.rs",
+      "url": "https://github.com/jRimbault/yadf/blob/48230a0a83ea855abdef4bde087e765cc2fbf95a/src/hasher.rs",
+      "sha256": "9a3e841949dcbf331cdd9d74c7f615343af5ea10259015941f9d677d4c3de2ed",
+      "truncated": false,
+      "lines": 143,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/fs/hash.rs",
+      "local": "03-hash.rs",
+      "url": "https://github.com/jRimbault/yadf/blob/48230a0a83ea855abdef4bde087e765cc2fbf95a/src/fs/hash.rs",
+      "sha256": "6f6ff68405a6c3807657bbecaf437f682a1dad1256461cf6b442b0e68cfa0c11",
+      "truncated": false,
+      "lines": 113,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/args.rs",
+      "local": "04-args.rs",
+      "url": "https://github.com/jRimbault/yadf/blob/48230a0a83ea855abdef4bde087e765cc2fbf95a/src/args.rs",
+      "sha256": "b6b2ab8db7872fa4d5610f444d44504ae51e436e656ebae4cb614c0cff386e77",
+      "truncated": false,
+      "lines": 190,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/integration.rs",
+      "local": "05-integration.rs",
+      "url": "https://github.com/jRimbault/yadf/blob/48230a0a83ea855abdef4bde087e765cc2fbf95a/tests/integration.rs",
+      "sha256": "32901e366c503aabc00ce735affeebd30205668855c1039fb657c8881cf59432",
+      "truncated": false,
+      "lines": 210,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 3,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/jRimbault/yadf/blob/48230a0a83ea855abdef4bde087e765cc2fbf95a/README.md",
+      "sha256": "959043d88f52e1834ab119238f9c6956fcf6b0793fa5b4b72d00165f5a095193",
+      "truncated": false,
+      "lines": 179,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/jRimbault/yadf/blob/48230a0a83ea855abdef4bde087e765cc2fbf95a/LICENSE",
+      "sha256": "946c11246cc6d67388473b847a7178b595079a27fb10d0ae3002d3c936570b3c",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

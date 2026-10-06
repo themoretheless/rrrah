@@ -1,0 +1,25 @@
+{
+  "qualification": "Fallible descriptor collection file/target/pair storage",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/local_index.rs": "b35290716a8ec36aea39756e616ae61242c4b81520380feff3f2680e23b43244",
+    "crates/rrrah-dedup/tests/local_index.rs": "0e85a797693f1e4e745de45963573b8a3003d20f6c43b027258622dabdc0ac9e"
+  },
+  "validation": {
+    "local_collection": 8,
+    "local_index": 7,
+    "failed": 0,
+    "clippy_library_and_local_index": "passed"
+  },
+  "evidence": [
+    "File owners are stored in a fallibly grown Vec and sorted by ID; duplicate detection uses a fallibly reserved HashSet.",
+    "Distinct target IDs and pair counters reserve capacity fallibly before insertion.",
+    "Targets and final pairs are sorted; left-to-right directed descriptor metric is retained.",
+    "Shared-feature counters use checked addition.",
+    "New three-file fixture validates each file/feature/hit/counter/result limit independently and complete sorted results after failed attempts.",
+    "Existing exhaustive matching, spatial/range collection, source mutation and cancellation tests pass."
+  ],
+  "limits": [
+    "Collection scanner source snapshots/report tables and other independent APIs remain outside this allocation qualification.",
+    "Actual OS OOM is not injected; no full shared-memory accounting, RSS or latency qualification."
+  ]
+}

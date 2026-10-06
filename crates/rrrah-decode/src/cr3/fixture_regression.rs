@@ -231,14 +231,8 @@ fn assert_metadata_contract(frame: &native::NativeFrame<'_>) {
         frame.metadata.profile.cfa,
         [CfaColor::Red, CfaColor::Green, CfaColor::Green, CfaColor::Blue]
     );
-    assert_eq!(
-        frame.metadata.profile.black_level.map(f32::to_bits),
-        [512.0_f32.to_bits(); 4]
-    );
-    assert_eq!(
-        frame.metadata.profile.white_level.to_bits(),
-        12_735.0_f32.to_bits()
-    );
+    assert_eq!(frame.sensor_levels.black, [512; 4]);
+    assert_eq!(frame.sensor_levels.normal_white, 12_735);
     assert_eq!(
         frame
             .metadata
@@ -278,7 +272,7 @@ fn assert_ctmd_contract(frame: &native::NativeFrame<'_>, contract: FixtureContra
             frame.as_shot_white_balance.red_numerator,
             frame.as_shot_white_balance.red_denominator,
             frame.as_shot_white_balance.blue_numerator,
-            frame.as_shot_white_balance.blue_denominator,
+            frame.as_shot_white_balance.second_green,
         ],
         contract.white_balance_ratio
     );

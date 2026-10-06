@@ -1,0 +1,20 @@
+    Blocking waiting for file lock on build directory
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+error: 6 bindings with single-character names in scope
+   --> crates/rrrah-dedup/src/geometry.rs:568:9
+    |
+568 |     let n = support.len() as f64;
+    |         ^
+...
+586 |         let p = points[index];
+    |             ^
+587 |         let [x,y] = std::array::from_fn(|axis| (p.source[axis]-center[0][axis])/scale[0]);
+    |              ^ ^
+588 |         let [u,v] = std::array::from_fn(|axis| (p.target[axis]-center[1][axis])/scale[1]);
+    |              ^ ^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#many_single_char_names
+    = note: `-D clippy::many-single-char-names` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::many_single_char_names)]`
+
+error: could not compile `rrrah-dedup` (lib) due to 1 previous error

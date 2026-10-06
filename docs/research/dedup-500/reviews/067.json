@@ -1,0 +1,88 @@
+{
+  "index": 67,
+  "repository": "Hao0321/claude-skill-code-cleanup",
+  "commit": "7f147ce60e40e10e2c82232861bec9f1ee6bcd93",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Code/prompt cleanup audit and snapshot hashes; software hygiene rather than an image/file duplicate library.",
+  "license_metadata": "MIT",
+  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "tests_detected": 2,
+  "upstream_tests_run": false,
+  "available_source_evidence": [
+    {
+      "path": "code-cleanup-helper/scripts/audit.py",
+      "local": "02-audit.py",
+      "url": "https://github.com/Hao0321/claude-skill-code-cleanup/blob/7f147ce60e40e10e2c82232861bec9f1ee6bcd93/code-cleanup-helper/scripts/audit.py",
+      "sha256": "f19dfbbc45c5e606f3171497d94c25b60cfb59d9bd4f128aa7c0bda91135446f",
+      "truncated": false,
+      "lines": 40,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "code-cleanup-helper/scripts/audit_core.py",
+      "local": "03-audit_core.py",
+      "url": "https://github.com/Hao0321/claude-skill-code-cleanup/blob/7f147ce60e40e10e2c82232861bec9f1ee6bcd93/code-cleanup-helper/scripts/audit_core.py",
+      "sha256": "ded4e1f2c910384a195093b8ffda28cc212f0dc96a034e193b833bae60e00ef4",
+      "truncated": false,
+      "lines": 1434,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "code-cleanup-helper/scripts/check_audit_snapshot.py",
+      "local": "04-check_audit_snapshot.py",
+      "url": "https://github.com/Hao0321/claude-skill-code-cleanup/blob/7f147ce60e40e10e2c82232861bec9f1ee6bcd93/code-cleanup-helper/scripts/check_audit_snapshot.py",
+      "sha256": "7610ea1f861f1861ce03dd1a89179176b477041b5368e6fc59cdefd61b4663ba",
+      "truncated": false,
+      "lines": 171,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "code-cleanup-helper/scripts/security_assessment_selftest.py",
+      "local": "05-security_assessment_selftest.py",
+      "url": "https://github.com/Hao0321/claude-skill-code-cleanup/blob/7f147ce60e40e10e2c82232861bec9f1ee6bcd93/code-cleanup-helper/scripts/security_assessment_selftest.py",
+      "sha256": "303d10311ce683dea93596df4a33fb1b6ef5b1b9558d14b729f784650b1abe4f",
+      "truncated": false,
+      "lines": 343,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "code-cleanup-helper/scripts/self_test.py",
+      "local": "06-self_test.py",
+      "url": "https://github.com/Hao0321/claude-skill-code-cleanup/blob/7f147ce60e40e10e2c82232861bec9f1ee6bcd93/code-cleanup-helper/scripts/self_test.py",
+      "sha256": "4232d5bde30468a0f9c4c7b0486f6a6cea2b5639427fb534a0923656c31948cb",
+      "truncated": false,
+      "lines": 608,
+      "source": true,
+      "test": true
+    }
+  ],
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/Hao0321/claude-skill-code-cleanup/blob/7f147ce60e40e10e2c82232861bec9f1ee6bcd93/README.md",
+      "sha256": "b47a5caac76ca7e7319e9f2e8cd6760da21e993d88b76fd41552e44560f822b1",
+      "truncated": false,
+      "lines": 93,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/Hao0321/claude-skill-code-cleanup/blob/7f147ce60e40e10e2c82232861bec9f1ee6bcd93/LICENSE",
+      "sha256": "0c06c0405b3d6f289800831dd68b329cb283c544cc1ee454d9b19e0e54b1e6d9",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "repository": "ChenghaoMou/text-dedup",
+  "metadata": {
+    "name": "ChenghaoMou/text-dedup",
+    "url": "https://github.com/ChenghaoMou/text-dedup",
+    "description": "All-in-one text de-duplication",
+    "language": "Python",
+    "stars": 763,
+    "license": "Apache-2.0",
+    "archived": false,
+    "pushed_at": "2026-03-09T10:24:42Z",
+    "default_branch": "main",
+    "queries": [
+      "duplicate in:name,description",
+      "duplicates in:name,description",
+      "dedup in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/ChenghaoMou/text-dedup/blob/7538f3ec6a28e72a86de5978e58655175b46a11e/README.md",
+      "sha256": "88ad9452d769056c9f004cc802a0604027ee6b847790a3b9e515aa51bcde7b29",
+      "truncated": false,
+      "lines": 288,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/ChenghaoMou/text-dedup/blob/7538f3ec6a28e72a86de5978e58655175b46a11e/LICENSE",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "truncated": false,
+      "lines": 202,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "src/text_dedup/minhash.py",
+      "local": "02-minhash.py",
+      "url": "https://github.com/ChenghaoMou/text-dedup/blob/7538f3ec6a28e72a86de5978e58655175b46a11e/src/text_dedup/minhash.py",
+      "sha256": "4b53ae7a7d220a1901062a421592d5f0d2ea143bda1e7aeeb92dfb550279c5fa",
+      "truncated": false,
+      "lines": 244,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/text_dedup/simhash.py",
+      "local": "03-simhash.py",
+      "url": "https://github.com/ChenghaoMou/text-dedup/blob/7538f3ec6a28e72a86de5978e58655175b46a11e/src/text_dedup/simhash.py",
+      "sha256": "a2195a17d454b4c291df96bf014f0b27bb101f30523b00f35b36b5343209421e",
+      "truncated": false,
+      "lines": 245,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/text_dedup/utils/hashfunc.py",
+      "local": "04-hashfunc.py",
+      "url": "https://github.com/ChenghaoMou/text-dedup/blob/7538f3ec6a28e72a86de5978e58655175b46a11e/src/text_dedup/utils/hashfunc.py",
+      "sha256": "00ecbc35b3a0ba833753d80afc620ab3c766f225a32c8ca69fd3de7ffc6effee",
+      "truncated": false,
+      "lines": 105,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/test_utils/test_hashfunc.py",
+      "local": "05-test_hashfunc.py",
+      "url": "https://github.com/ChenghaoMou/text-dedup/blob/7538f3ec6a28e72a86de5978e58655175b46a11e/tests/test_utils/test_hashfunc.py",
+      "sha256": "d40ccd82cb8f2aca810b3b4f80224134c7b566c1002dd178d9dfaa24238795df",
+      "truncated": false,
+      "lines": 216,
+      "source": true,
+      "test": true
+    }
+  ],
+  "errors": [],
+  "commit": "7538f3ec6a28e72a86de5978e58655175b46a11e",
+  "tree_truncated": false,
+  "source_file_count": 50,
+  "test_file_count": 12,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "src/text_dedup/minhash.py",
+    "src/text_dedup/simhash.py",
+    "src/text_dedup/utils/hashfunc.py",
+    "tests/test_utils/test_hashfunc.py"
+  ]
+}

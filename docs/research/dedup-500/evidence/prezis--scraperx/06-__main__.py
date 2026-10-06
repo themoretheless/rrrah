@@ -1,0 +1,783 @@
+#!/usr/bin/env python3
+"""CLI for ScraperX — X/Twitter + YouTube scraper + blockchain explorer.
+
+Usage:
+    python -m scraperx https://x.com/user/status/123456
+    python -m scraperx https://x.com/user/status/123456 --json
+    python -m scraperx https://x.com/user/status/123456 --thread
+    python -m scraperx https://x.com/elonmusk              # profile
+    python -m scraperx https://youtube.com/watch?v=ID
+    python -m scraperx basescan 0xADDRESS                  # Basescan address
+    python -m scraperx dexscreener 0xADDRESS               # DexScreener token
+    scraperx https://x.com/user/status/123456               # if pip installed
+"""
+
+import argparse
+import json
+import logging
+import sys
+
+from scraperx.video_discovery import discover_videos
+from scraperx.vimeo_scraper import VimeoScraper, _is_vimeo_url
+
+from .profile import PROFILE_URL_RE, get_profile, parse_profile_url
+from .scraper import TWEET_URL_RE, Tweet, XScraper
+from .search import search_tweets
+from .youtube_scraper import YOUTUBE_URL_RE, YouTubeScraper
+
+
+def _is_youtube_url(url: str) -> bool:
+    return bool(YOUTUBE_URL_RE.search(url))
+
+
+def _is_tweet_url(url: str) -> bool:
+    return bool(TWEET_URL_RE.search(url))
+
+
+def _is_profile_url(url: str) -> bool:
+    return bool(PROFILE_URL_RE.search(url))
+
+
+def main():
+    # Check if first arg is a subcommand
+    if len(sys.argv) > 1:
+        subcmd = sys.argv[1]
+        if subcmd == "search":
+            _main_search()
+            return
+        if subcmd == "basescan":
+            _main_basescan()
+            return
+        if subcmd == "dexscreener":
+            _main_dexscreener()
+            return
+        if subcmd == "screenshot":
+            _main_screenshot()
+            return
+        if subcmd == "discover":
+            _main_discover()
+            return
+        if subcmd == "page-title":
+            _main_page_title()
+            return
+        if subcmd == "label-extract":
+            _main_label_extract()
+            return
+        if subcmd == "chips":
+            _main_chips()
+            return
+        if subcmd == "github":
+            from scraperx.github_analyzer.cli import main_github
+
+            sys.exit(main_github())
+        if subcmd == "trending":
+            from scraperx.github_analyzer.cli import main_trending
+
+            sys.exit(main_trending())
+        if subcmd == "gh-discover":
+            from scraperx.gh_discover import main_gh_discover
+
+            sys.exit(main_gh_discover())
+        if subcmd == "tv-resolve":
+            from scraperx.tv_symbol_resolver import main_tv_resolve
+
+            sys.exit(main_tv_resolve())
+        if subcmd == "doctor":
+            from scraperx.doctor import main as doctor_main
+
+            sys.exit(doctor_main())
+        if subcmd == "docs-crawl":
+            from scraperx.docs_crawler import _main_docs_crawl
+
+            sys.exit(_main_docs_crawl())
+    _main_url()
+
+
+def _main_search():
+    parser = argparse.ArgumentParser(prog="scraperx search", description="Search tweets via DuckDuckGo + FxTwitter")
+    parser.add_argument("_cmd", help=argparse.SUPPRESS)  # consume "search"
+    parser.add_argument("query", nargs="+", help="Search query")
+    parser.add_argument("--limit", "-n", type=int, default=10, help="Max results (default: 10)")
+    parser.add_argument("--time", "-t", choices=["d", "w", "m", "y"], help="Time filter")
+    parser.add_argument("--json", action="store_true", help="Output JSON")
+    parser.add_argument("--fast", action="store_true", help="Skip enrichment")
+    parser.add_argument("-v", "--verbose", action="store_true", help="Debug logging")
+    args = parser.parse_args()
+
+    logging.basicConfig(
+        level=logging.DEBUG if args.verbose else logging.WARNING,
+        format="%(levelname)s: %(message)s",
+    )
+    _handle_search(args)
+
+
+def _main_url():
+    parser = argparse.ArgumentParser(description="Scrape X/Twitter tweets, profiles, threads, or YouTube transcripts")
+    parser.add_argument("url", nargs="?", help="Tweet URL, profile URL, or YouTube URL")
+    parser.add_argument("--json", action="store_true", help="Output raw JSON")
+    parser.add_argument("--thread", action="store_true", help="Fetch full thread")
+    parser.add_argument("--cookies", help="Path to cookies file for yt-dlp")
+    parser.add_argument("--whisper-model", default="base", help="Whisper model (base/medium/large)")
+    parser.add_argument("--force-whisper", action="store_true", help="Skip auto-captions, use whisper")
+    parser.add_argument("--silent-video-frames", type=int, default=8,
+                        help="N frames to OCR when video has no audio (tweet videos). 0 = disable")
+    parser.add_argument("-v", "--verbose", action="store_true", help="Debug logging")
+    args = parser.parse_args()
+
+    logging.basicConfig(
+        level=logging.DEBUG if args.verbose else logging.WARNING,
+        format="%(levelname)s: %(message)s",
+    )
+
+    if not args.url:
+        parser.print_help()
+        sys.exit(1)
+
+    if _is_youtube_url(args.url):
+        _handle_youtube(args)
+    elif _is_vimeo_url(args.url):
+        _handle_vimeo(args)
+    elif _is_tweet_url(args.url):
+        if args.thread:
+            _handle_thread(args)
+        else:
+            _handle_tweet(args)
+    elif _is_profile_url(args.url):
+        _handle_profile(args)
+    else:
+        # Try as bare handle (e.g., "elonmusk" or "@elonmusk")
+        handle = args.url.lstrip("@")
+        if handle.isalnum() or "_" in handle:
+            args.url = handle
+            _handle_profile_by_handle(args)
+        else:
+            print(f"ERROR: Unrecognized URL format: {args.url}", file=sys.stderr)
+            sys.exit(1)
+
+
+def _handle_youtube(args):
+    scraper = YouTubeScraper(whisper_model=args.whisper_model)
+    try:
+        result = scraper.get_transcript(args.url, force_whisper=args.force_whisper)
+    except (RuntimeError, ValueError) as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        sys.exit(1)
+
+    if args.json:
+        out = {
+            "video_id": result.video_id,
+            "title": result.title,
+            "channel": result.channel,
+            "duration_seconds": result.duration_seconds,
+            "transcript_method": result.transcript_method,
+            "transcript_path": result.transcript_path,
+            "transcript_length": len(result.transcript),
+        }
+        print(json.dumps(out, indent=2, ensure_ascii=False))
+    else:
+        print(f"{result.title} ({result.channel})")
+        print(f"Duration: {result.duration_seconds // 60}min")
+        print(f"Method: {result.transcript_method}")
+        print("---")
+        if len(result.transcript) > 2000:
+            print(result.transcript[:2000])
+            print(f"\n... [{len(result.transcript) - 2000} more chars]")
+            print(f"Full transcript: {result.transcript_path}")
+        else:
+            print(result.transcript)
+
+
+def _handle_vimeo(args):
+    scraper = VimeoScraper()
+    try:
+        result = scraper.get_transcript(args.url, force_whisper=args.force_whisper)
+    except (RuntimeError, ValueError) as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        sys.exit(1)
+
+    if args.json:
+        out = {
+            "provider": result.provider,
+            "video_id": result.video_id,
+            "title": result.title,
+            "author": result.author,
+            "duration_seconds": result.duration_seconds,
+            "canonical_url": result.canonical_url,
+            "transcript": result.transcript,
+            "transcript_method": result.transcript_method,
+        }
+        print(json.dumps(out, indent=2, ensure_ascii=False))
+    else:
+        print(f"Title: {result.title}")
+        print(f"Author: {result.author}")
+        print(f"Duration: {int(result.duration_seconds) // 60}min")
+        print(f"Method: {result.transcript_method}")
+        print("---")
+        print(f"\nTranscript:\n{result.transcript}")
+
+
+def _main_discover():
+    parser = argparse.ArgumentParser(
+        prog="scraperx discover", description="Detect embedded videos on an arbitrary webpage"
+    )
+    parser.add_argument("_cmd", help=argparse.SUPPRESS)  # consume "discover"
+    parser.add_argument("url", help="Webpage URL to scan for embedded videos")
+    parser.add_argument("--json", action="store_true", help="Output JSON")
+    parser.add_argument("--timeout", type=int, default=15, help="Fetch timeout in seconds (default: 15)")
+    parser.add_argument("-v", "--verbose", action="store_true", help="Debug logging")
+    args = parser.parse_args()
+
+    logging.basicConfig(
+        level=logging.DEBUG if args.verbose else logging.WARNING,
+        format="%(levelname)s: %(message)s",
+    )
+
+    try:
+        refs = discover_videos(args.url, timeout=args.timeout)
+    except Exception as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        sys.exit(1)
+
+    if args.json:
+        out = [
+            {
+                "provider": r.provider,
+                "id": r.id,
+                "canonical_url": r.canonical_url,
+                "embed_url": r.embed_url,
+                "page_url": r.page_url,
+                "referer": r.referer,
+                "extra": r.extra,
+            }
+            for r in refs
+        ]
+        print(json.dumps(out, indent=2, ensure_ascii=False))
+    else:
+        if not refs:
+            print(f"No videos detected on {args.url}")
+            return
+        print(f"Detected {len(refs)} video(s) on {args.url}:\n")
+        for i, r in enumerate(refs, 1):
+            print(f"[{i}] {r.provider}  id={r.id}")
+            print(f"    canonical: {r.canonical_url}")
+            print(f"    embed:     {r.embed_url}")
+            if r.extra:
+                print(f"    extra:     {r.extra}")
+            print()
+
+
+def _tweet_to_dict(tweet: Tweet) -> dict:
+    """Serialize a Tweet to dict, recursively including quoted_tweet."""
+    d = {
+        "id": tweet.id,
+        "text": tweet.text,
+        "author": tweet.author,
+        "author_handle": tweet.author_handle,
+        "likes": tweet.likes,
+        "retweets": tweet.retweets,
+        "replies": tweet.replies,
+        "views": tweet.views,
+        "media_urls": tweet.media_urls,
+        "article_title": tweet.article_title,
+        "article_text": tweet.article_text,
+        "source_method": tweet.source_method,
+    }
+    if tweet.quoted_tweet:
+        d["quoted_tweet"] = _tweet_to_dict(tweet.quoted_tweet)
+    return d
+
+
+def _print_quoted_tweet(tweet: Tweet, indent: int = 2) -> None:
+    """Print a quoted tweet with indentation, recursing for nested quotes."""
+    prefix = " " * indent + "| "
+    print(f"\n{' ' * indent}[Quote] @{tweet.author_handle} ({tweet.author}):")
+    for line in tweet.text.splitlines():
+        print(f"{prefix}{line}")
+    if tweet.article_title:
+        print(f"{prefix}")
+        print(f"{prefix}[Article: {tweet.article_title}]")
+        if tweet.article_text:
+            for line in tweet.article_text.splitlines()[:10]:
+                print(f"{prefix}  {line}")
+            total_lines = len(tweet.article_text.splitlines())
+            if total_lines > 10:
+                print(f"{prefix}  ... [{total_lines - 10} more lines]")
+    if tweet.media_urls:
+        print(f"{prefix}Media: {len(tweet.media_urls)} file(s)")
+    stats = []
+    if tweet.likes:
+        stats.append(f"{tweet.likes} likes")
+    if tweet.retweets:
+        stats.append(f"{tweet.retweets} RT")
+    if tweet.views:
+        stats.append(f"{tweet.views} views")
+    if stats:
+        print(f"{prefix}{' | '.join(stats)}")
+    if tweet.quoted_tweet:
+        _print_quoted_tweet(tweet.quoted_tweet, indent + 2)
+
+
+def _maybe_transcribe_silent_video(media_urls: list[str], n_frames: int) -> dict | None:
+    """If a tweet's media is a silent video (twimg.com/amplify_video, no audio
+    track), OCR-transcribe the frames and return a dict. Returns None if no
+    eligible video or transcription is disabled.
+
+    Used by _handle_tweet to auto-fill the gap exposed on 2026-05-17 (gitlawb
+    OpenGateway demo tweet). See ~/ai/global-graph/patterns/silent-video-frame-ocr-fallback.md.
+    """
+    if n_frames <= 0 or not media_urls:
+        return None
+    video_url = next(
+        (u for u in media_urls if any(t in u for t in (".mp4", "video.twimg.com", "amplify_video"))),
+        None,
+    )
+    if not video_url:
+        return None
+    try:
+        from scraperx.silent_video_ocr import (
+            transcribe_silent_video,
+            SilentVideoNotAvailable,
+        )
+        result = transcribe_silent_video(video_url, n_frames=n_frames)
+        # Only attach if it really was silent (otherwise leave to whisper paths)
+        if result.has_audio:
+            return None
+        return result.to_dict()
+    except SilentVideoNotAvailable:
+        return {"error": "silent-video deps missing — install scraperx[silent-video]"}
+    except Exception as e:
+        return {"error": f"silent_video_ocr failed: {type(e).__name__}: {e}"}
+
+
+def _handle_tweet(args):
+    scraper = XScraper(ytdlp_cookies=args.cookies)
+    try:
+        tweet = scraper.get_tweet(args.url)
+    except (RuntimeError, ValueError) as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        sys.exit(1)
+
+    # Auto-transcribe silent video media via frame OCR
+    svo = _maybe_transcribe_silent_video(
+        list(tweet.media_urls or []), getattr(args, "silent_video_frames", 8)
+    )
+
+    if args.json:
+        out = _tweet_to_dict(tweet)
+        if svo:
+            out["silent_video_transcript"] = svo
+        print(json.dumps(out, indent=2, ensure_ascii=False))
+    else:
+        print(f"@{tweet.author_handle} ({tweet.author})")
+        print("---")
+        print(tweet.text)
+        if tweet.article_title:
+            print(f"\n[Article: {tweet.article_title}]")
+        if tweet.media_urls:
+            print(f"\nMedia: {len(tweet.media_urls)} file(s)")
+            for u in tweet.media_urls:
+                print(f"  {u}")
+        if svo:
+            print(f"\n[Silent-video OCR ({svo.get('n_frames_sampled', 0)} frames @ "
+                  f"{svo.get('duration_sec', 0):.1f}s)]")
+            print(svo.get("summary", "(no summary)"))
+        if tweet.quoted_tweet:
+            _print_quoted_tweet(tweet.quoted_tweet)
+        print(f"\n{tweet.likes} likes | {tweet.retweets} RT | {tweet.views} views")
+        print(f"(via {tweet.source_method})")
+
+
+def _handle_thread(args):
+    from .thread import get_thread
+
+    try:
+        thread = get_thread(args.url)
+    except (RuntimeError, ValueError) as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        sys.exit(1)
+
+    if args.json:
+        tweets_out = []
+        for t in thread.all_tweets:
+            tweets_out.append(_tweet_to_dict(t))
+        out = {
+            "total_tweets": thread.total_tweets,
+            "tweets": tweets_out,
+        }
+        print(json.dumps(out, indent=2, ensure_ascii=False))
+    else:
+        print(f"Thread by @{thread.root_tweet.author_handle} ({thread.total_tweets} tweets)")
+        print("===")
+        for i, t in enumerate(thread.all_tweets, 1):
+            print(f"\n[{i}/{thread.total_tweets}]")
+            print(t.text)
+            if t.media_urls:
+                print(f"  Media: {len(t.media_urls)} file(s)")
+            if t.quoted_tweet:
+                _print_quoted_tweet(t.quoted_tweet)
+
+
+def _handle_profile(args):
+    try:
+        handle = parse_profile_url(args.url)
+    except ValueError as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        sys.exit(1)
+    args.url = handle
+    _handle_profile_by_handle(args)
+
+
+def _handle_profile_by_handle(args):
+    handle = args.url.lstrip("@")
+    try:
+        profile = get_profile(handle)
+    except (RuntimeError, ValueError) as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        sys.exit(1)
+
+    if args.json:
+        out = {
+            "handle": profile.handle,
+            "name": profile.name,
+            "bio": profile.bio,
+            "followers": profile.followers,
+            "following": profile.following,
+            "tweets_count": profile.tweets_count,
+            "likes_count": profile.likes_count,
+            "joined": profile.joined,
+            "location": profile.location,
+            "website": profile.website,
+            "verified": profile.verified,
+            "source_method": profile.source_method,
+        }
+        print(json.dumps(out, indent=2, ensure_ascii=False))
+    else:
+        v = " [verified]" if profile.verified else ""
+        print(f"@{profile.handle} ({profile.name}){v}")
+        print("---")
+        if profile.bio:
+            print(profile.bio)
+        print(f"\n{profile.followers:,} followers | {profile.following:,} following | {profile.tweets_count:,} tweets")
+        if profile.location:
+            print(f"Location: {profile.location}")
+        if profile.website:
+            print(f"Website: {profile.website}")
+        if profile.joined:
+            print(f"Joined: {profile.joined}")
+        print(f"(via {profile.source_method})")
+
+
+def _handle_search(args):
+    query = " ".join(args.query)
+    try:
+        tweets = search_tweets(
+            query,
+            limit=args.limit,
+            time_filter=getattr(args, "time", None),
+            enrich=not args.fast,
+        )
+    except Exception as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        sys.exit(1)
+
+    if not tweets:
+        print("No tweets found.", file=sys.stderr)
+        sys.exit(0)
+
+    if args.json:
+        out = []
+        for t in tweets:
+            out.append(
+                {
+                    "id": t.id,
+                    "text": t.text,
+                    "author": t.author,
+                    "author_handle": t.author_handle,
+                    "likes": t.likes,
+                    "retweets": t.retweets,
+                    "replies": t.replies,
+                    "views": t.views,
+                    "media_urls": t.media_urls,
+                    "source_method": t.source_method,
+                }
+            )
+        print(json.dumps(out, indent=2, ensure_ascii=False))
+    else:
+        print(f"Found {len(tweets)} tweets for: {query}\n")
+        for i, t in enumerate(tweets, 1):
+            print(f"[{i}] @{t.author_handle} ({t.author})")
+            text_preview = t.text[:200] + ("..." if len(t.text) > 200 else "")
+            print(f"    {text_preview}")
+            if t.likes or t.views:
+                print(f"    {t.likes} likes | {t.retweets} RT | {t.views:,} views")
+            print(f"    https://x.com/{t.author_handle}/status/{t.id}")
+            print(f"    (via {t.source_method})")
+            print()
+
+
+def _main_basescan():
+    from .screenshot import PlaywrightNotAvailable, scrape_basescan_address
+
+    parser = argparse.ArgumentParser(
+        prog="scraperx basescan", description="Scrape Basescan address info via headless browser"
+    )
+    parser.add_argument("_cmd", help=argparse.SUPPRESS)  # consume "basescan"
+    parser.add_argument("address", help="Ethereum address (0x...)")
+    parser.add_argument("--json", action="store_true", help="Output JSON")
+    parser.add_argument("--timeout", type=int, default=30000, help="Timeout ms (default: 30000)")
+    parser.add_argument("-v", "--verbose", action="store_true", help="Debug logging")
+    args = parser.parse_args()
+
+    logging.basicConfig(
+        level=logging.DEBUG if args.verbose else logging.WARNING,
+        format="%(levelname)s: %(message)s",
+    )
+
+    try:
+        result = scrape_basescan_address(args.address, timeout=args.timeout)
+    except (PlaywrightNotAvailable, ValueError, RuntimeError) as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        sys.exit(1)
+
+    if args.json:
+        out = {
+            "address": result.address,
+            "is_contract": result.is_contract,
+            "eth_balance": result.eth_balance,
+            "eth_value_usd": result.eth_value_usd,
+            "token_holdings_count": result.token_holdings_count,
+            "transaction_count": result.transaction_count,
+            "contract_creator": result.contract_creator,
+            "contract_name": result.contract_name,
+            "source_method": result.source_method,
+        }
+        print(json.dumps(out, indent=2, ensure_ascii=False))
+    else:
+        kind = "Contract" if result.is_contract else "EOA (Externally Owned Account)"
+        print(f"Address: {result.address}")
+        print(f"Type: {kind}")
+        if result.contract_name:
+            print(f"Contract Name: {result.contract_name}")
+        if result.eth_balance:
+            usd_part = f" (${result.eth_value_usd})" if result.eth_value_usd else ""
+            print(f"ETH Balance: {result.eth_balance} ETH{usd_part}")
+        if result.transaction_count:
+            print(f"Transactions: {result.transaction_count:,}")
+        if result.token_holdings_count:
+            print(f"Token Holdings: {result.token_holdings_count}")
+        if result.contract_creator:
+            print(f"Creator: {result.contract_creator}")
+        print(f"(via {result.source_method})")
+
+
+def _main_dexscreener():
+    from .screenshot import PlaywrightNotAvailable, scrape_dexscreener_token
+
+    parser = argparse.ArgumentParser(
+        prog="scraperx dexscreener", description="Scrape DexScreener token info on Base chain via headless browser"
+    )
+    parser.add_argument("_cmd", help=argparse.SUPPRESS)  # consume "dexscreener"
+    parser.add_argument("address", help="Token contract address (0x...)")
+    parser.add_argument("--json", action="store_true", help="Output JSON")
+    parser.add_argument("--timeout", type=int, default=30000, help="Timeout ms (default: 30000)")
+    parser.add_argument("-v", "--verbose", action="store_true", help="Debug logging")
+    args = parser.parse_args()
+
+    logging.basicConfig(
+        level=logging.DEBUG if args.verbose else logging.WARNING,
+        format="%(levelname)s: %(message)s",
+    )
+
+    try:
+        result = scrape_dexscreener_token(args.address, timeout=args.timeout)
+    except (PlaywrightNotAvailable, ValueError, RuntimeError) as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        sys.exit(1)
+
+    if args.json:
+        out = {
+            "address": result.address,
+            "name": result.name,
+            "symbol": result.symbol,
+            "price": result.price,
+            "price_change_24h": result.price_change_24h,
+            "liquidity": result.liquidity,
+            "volume_24h": result.volume_24h,
+            "market_cap": result.market_cap,
+            "fdv": result.fdv,
+            "pair_count": result.pair_count,
+            "source_method": result.source_method,
+        }
+        print(json.dumps(out, indent=2, ensure_ascii=False))
+    else:
+        title = result.name
+        if result.symbol:
+            title += f" ({result.symbol})"
+        if title:
+            print(title)
+        print(f"Address: {result.address}")
+        if result.price:
+            change = f" ({result.price_change_24h})" if result.price_change_24h else ""
+            print(f"Price: {result.price}{change}")
+        if result.liquidity:
+            print(f"Liquidity: ${result.liquidity}")
+        if result.volume_24h:
+            print(f"Volume 24h: ${result.volume_24h}")
+        if result.market_cap:
+            print(f"Market Cap: ${result.market_cap}")
+        if result.fdv:
+            print(f"FDV: ${result.fdv}")
+        if result.pair_count:
+            print(f"Pairs: {result.pair_count}")
+        print(f"(via {result.source_method})")
+
+
+def _main_screenshot():
+    from .screenshot import PlaywrightNotAvailable, screenshot_url
+
+    parser = argparse.ArgumentParser(
+        prog="scraperx screenshot",
+        description="Take a headless background screenshot of any URL",
+    )
+    parser.add_argument("_cmd", help=argparse.SUPPRESS)  # consume "screenshot"
+    parser.add_argument("url", help="URL to screenshot")
+    parser.add_argument("-o", "--output", default="screenshot.png", help="Output path (default: screenshot.png)")
+    parser.add_argument("--full-page", action="store_true", help="Capture full scrollable page")
+    parser.add_argument("--wait", default=None, help="CSS selector to wait for before screenshot")
+    parser.add_argument("--timeout", type=int, default=30000, help="Timeout in ms (default: 30000)")
+    parser.add_argument("--width", type=int, default=1280, help="Viewport width")
+    parser.add_argument("--height", type=int, default=900, help="Viewport height")
+    parser.add_argument("-v", "--verbose", action="store_true")
+    args = parser.parse_args()
+
+    if args.verbose:
+        logging.basicConfig(level=logging.DEBUG)
+
+    try:
+        path = screenshot_url(
+            args.url,
+            output_path=args.output,
+            full_page=args.full_page,
+            wait_selector=args.wait,
+            timeout=args.timeout,
+            viewport=(args.width, args.height),
+        )
+        print(f"Screenshot saved: {path}")
+    except PlaywrightNotAvailable as e:
+        print(f"Error: {e}", file=sys.stderr)
+        sys.exit(1)
+    except Exception as e:
+        print(f"Error: {e}", file=sys.stderr)
+        sys.exit(1)
+
+
+def _main_page_title():
+    from .explorer_label import page_title
+
+    parser = argparse.ArgumentParser(
+        prog="scraperx page-title",
+        description="Print the <title> tag text for a URL (block-explorers handled, others best-effort)",
+    )
+    parser.add_argument("_cmd", help=argparse.SUPPRESS)  # consume "page-title"
+    parser.add_argument("url", help="URL to fetch")
+    parser.add_argument("--timeout", type=int, default=15, help="Timeout in seconds (default: 15)")
+    parser.add_argument("-v", "--verbose", action="store_true", help="Debug logging")
+    args = parser.parse_args()
+
+    logging.basicConfig(
+        level=logging.DEBUG if args.verbose else logging.WARNING,
+        format="%(levelname)s: %(message)s",
+    )
+    try:
+        print(page_title(args.url, timeout=args.timeout))
+    except Exception as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        sys.exit(1)
+
+
+def _main_label_extract():
+    from .explorer_label import ExplorerNotSupported, extract_label
+
+    parser = argparse.ArgumentParser(
+        prog="scraperx label-extract",
+        description="Extract the human label from a block-explorer URL (Etherscan family, Solscan, Tronscan, ...)",
+    )
+    parser.add_argument("_cmd", help=argparse.SUPPRESS)  # consume "label-extract"
+    parser.add_argument("url", help="Block-explorer URL (e.g. https://etherscan.io/address/0x...)")
+    parser.add_argument("--json", action="store_true", help="Output JSON")
+    parser.add_argument("--timeout", type=int, default=15, help="Timeout in seconds (default: 15)")
+    parser.add_argument("-v", "--verbose", action="store_true", help="Debug logging")
+    args = parser.parse_args()
+
+    logging.basicConfig(
+        level=logging.DEBUG if args.verbose else logging.WARNING,
+        format="%(levelname)s: %(message)s",
+    )
+    try:
+        result = extract_label(args.url, timeout=args.timeout)
+    except ExplorerNotSupported as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        sys.exit(2)
+    except Exception as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        sys.exit(1)
+
+    if args.json:
+        out = {
+            "url": result.url,
+            "title": result.title,
+            "address": result.address,
+            "label": result.label,
+            "exchange_guess": result.exchange_guess,
+            "chain": result.chain,
+            "explorer": result.explorer,
+            "source": result.source,
+            "chips": list(result.chips),
+            "errors": result.errors,
+        }
+        print(json.dumps(out, indent=2, ensure_ascii=False))
+    else:
+        print(f"URL:     {result.url}")
+        print(f"Title:   {result.title or '-'}")
+        print(f"Address: {result.address or '-'}")
+        print(f"Label:   {result.label or '(no label assigned by explorer)'}")
+        if result.exchange_guess:
+            print(f"Guess:   {result.exchange_guess}")
+        print(f"Chain:   {result.chain or '-'}")
+        if result.chips:
+            print(f"Chips:   {', '.join(result.chips)}")
+        print(f"Source:  {result.source}")
+
+
+def _main_chips():
+    from .explorer_label import ExplorerNotSupported, extract_label
+
+    parser = argparse.ArgumentParser(
+        prog="scraperx chips",
+        description="Print just the metadata chips from an Etherscan-family address page (one per line)",
+    )
+    parser.add_argument("_cmd", help=argparse.SUPPRESS)  # consume "chips"
+    parser.add_argument("url", help="Block-explorer URL (e.g. https://etherscan.io/address/0x...)")
+    parser.add_argument("--timeout", type=int, default=15, help="Timeout in seconds (default: 15)")
+    parser.add_argument("-v", "--verbose", action="store_true", help="Debug logging")
+    args = parser.parse_args()
+
+    logging.basicConfig(
+        level=logging.DEBUG if args.verbose else logging.WARNING,
+        format="%(levelname)s: %(message)s",
+    )
+    try:
+        result = extract_label(args.url, timeout=args.timeout)
+    except ExplorerNotSupported as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        sys.exit(2)
+    except Exception as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        sys.exit(1)
+
+    for chip in result.chips:
+        print(chip)
+
+
+if __name__ == "__main__":
+    main()

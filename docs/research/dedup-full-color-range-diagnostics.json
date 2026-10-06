@@ -1,0 +1,13 @@
+{
+  "scope": "Full selected-frame RGB range scan of one native CR2 and independent ICC TIFF",
+  "probe_environment": "RRRAH_FULL_RANGE=1",
+  "observations": [
+    "FULL_RANGE input=0 dimensions=(6000,4000) minimum=[-11.2865305, -0.099394485, -4.522645] minimum_locations=[(3940, 1224), (5654, 1100), (3940, 1224)] maximum=[8.029227, 18.17808, 2.273302] maximum_locations=[(4567, 1094), (3940, 1224), (4975, 1065)] mean=[0.15708839541197467, 0.11910636520537306, 0.1579090844083721] above_1_2_10_100=[[964614, 484953, 0, 0], [510459, 1403, 3, 0], [1170810, 498271, 0, 0]]",
+    "FULL_RANGE input=1 dimensions=(6024,4020) minimum=[-1383.7443, -1382.9362, -1382.843] minimum_locations=[(3711, 0), (2193, 0), (4407, 0)] maximum=[1.6096429, 0.9999891, 1.1042702] maximum_locations=[(4550, 3822), (2165, 0), (4493, 1226)] mean=[-0.5748932325694853, -0.5392644476337111, 0.10190444422939393] above_1_2_10_100=[[873258, 0, 0, 0], [0, 0, 0, 0], [834, 0, 0, 0]]",
+    "input 0: linear channel means [0.156994674809539, 0.11919675126500806, 0.15766478257273775], above-one channels 110/3072, negative channels 3/3072",
+    "input 1: linear channel means [0.11181879959359264, 0.11448447286631591, 0.11239191424635919], above-one channels 33/3072, negative channels 0/3072",
+    "{\"raw_dimensions\":[6000,4000],\"raster_dimensions\":[6024,4020],\"global_distance\":106,\"right_transform\":0,\"informative\":true,\"managed_peak\":952041344}"
+  ],
+  "finding": "Extreme negative values are in normalized TIFF output, not solely RAW development. TIFF minima occur at y=0. Earlier 32x32 ICC sampling did not cover these boundary pixels. ICC/normalization correctness for full frame remains unproved.",
+  "next": "Independent LittleCMS comparison of pathological boundary samples; inspect native transform handling near black. No clipping workaround applied."
+}

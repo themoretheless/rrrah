@@ -1,0 +1,29 @@
+{
+  "api": "LinearExposureCompute::execute_managed_with_cancel",
+  "adapter": "Metal Apple M4 Max",
+  "runs": [
+    {
+      "command": "RRRAH_GPU_BACKEND=metal cargo test -p rrrah-gpu --test compute_readback --locked --target-dir /tmp/rrrah-required-corpus-target -- --nocapture",
+      "log": "/tmp/rrrah-compute-cancellation-metal.log",
+      "passed": 1,
+      "ignored": 2
+    },
+    {
+      "log": "/tmp/rrrah-compute-cancel-gpu-unit.log",
+      "passed": 47,
+      "ignored": 0
+    }
+  ],
+  "source_sha256": {
+    "crates/rrrah-gpu/src/compute.rs": "51bfd85614db8c22d3efcfeb90806c35af80f6504b11360a5a2e204a5f91f1a6",
+    "crates/rrrah-gpu/tests/compute_readback.rs": "07fd2c9ca82a747f319a61fcda43153583ddd76603c265b699f02786e67290d0",
+    "crates/rrrah-gpu/shaders/linear_exposure.wgsl": "2f0346f2e9e6ccafcd99b90354f93e7bf24f673b554052dd4b1f364e323ea665"
+  },
+  "scope": "Early/after-reservation/after-readback cooperative cancellation releases managed output and GPU reservation. Compatibility wrapper remains; submitted work completes before return. Existing HDR alpha/tail/multiple dispatch oracle passes.",
+  "limits": [
+    "No viewer compute integration or navigation timing proof.",
+    "No physical HDR/CUDA/NVIDIA qualification.",
+    "Large/full-sensor compute tests remain ignored in this run.",
+    "Driver/pipeline overhead is outside managed GPU allocation accounting."
+  ]
+}

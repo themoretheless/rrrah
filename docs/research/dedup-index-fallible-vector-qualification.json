@@ -1,0 +1,20 @@
+{
+  "change": "Fallible bounded vector growth during descriptor-index construction and pair materialization",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/local.rs": "1b2f0783db7bcdcee6df093df42b3325f87e53e6334ef65b1bc9fc19f02bfd97",
+    "crates/rrrah-dedup/src/local_index.rs": "ac8c580cfc40b7194774751503d2adfc5a06e5cebeb7e81c249016b5d4d59d1f",
+    "crates/rrrah-dedup/src/visual.rs": "c8d94dd21ab224992e537a68e3983727604d1943255c8f5ce4837f7194a687e6"
+  },
+  "validation": {
+    "local_collection_tests": 8,
+    "local_index_tests": 6,
+    "visual_tests": 4,
+    "failed": 0,
+    "library_clippy": "passed"
+  },
+  "limits": [
+    "BTreeMap/BTreeSet and HammingIndex node/ID allocation remain infallible.",
+    "No full shared-memory admission or physical-memory bound is claimed."
+  ],
+  "behavior": "Fingerprint, slot, insufficient-file and accepted-pair vectors use checked fallible growth within existing count limits. Pair materialization checks cancellation and result limits before insertion."
+}

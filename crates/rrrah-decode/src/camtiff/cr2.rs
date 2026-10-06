@@ -183,7 +183,7 @@ impl CameraQuirks for Cr2Quirks {
             required_scalar(FORMAT, raw, tags::IMAGE_LENGTH)?,
             tags::IMAGE_LENGTH,
         )?;
-        let bits = required_scalar(FORMAT, raw, tags::BITS_PER_SAMPLE)?;
+        let bits = u64::from(cr2_precision(container, raw)?);
         let bits_per_sample = u8::try_from(bits)
             .ok()
             .filter(|bits| (2..=16).contains(bits))
@@ -249,7 +249,7 @@ impl CameraQuirks for Cr2Quirks {
                 "EOS-1D family 3984-wide layout needs a two-column shift quirk that is not implemented",
             ));
         }
-        let bits = required_scalar(FORMAT, raw, tags::BITS_PER_SAMPLE)?;
+        let bits = u64::from(cr2_precision(container, raw)?);
         let bits_per_sample = u8::try_from(bits)
             .ok()
             .filter(|bits| (2..=16).contains(bits))
@@ -262,24 +262,18 @@ impl CameraQuirks for Cr2Quirks {
 
         let compression =
             optional_scalar(FORMAT, raw, tags::COMPRESSION)?.unwrap_or(tags::COMPRESSION_UNCOMPRESSED);
-        if compression != tags::COMPRESSION_LOSSLESS_JPEG {
+        if !matches!(compression, 6 | tags::COMPRESSION_LOSSLESS_JPEG) {
             return Err(camera_error(
                 FORMAT,
                 format!("unsupported compression {compression}; CR2 support is limited to lossless JPEG (7)"),
             ));
         }
         match optional_scalar(FORMAT, raw, tags::PHOTOMETRIC_INTERPRETATION)? {
-            Some(tags::PHOTOMETRIC_CFA) => {}
+            Some(tags::PHOTOMETRIC_CFA) | None => {}
             Some(actual) => {
                 return Err(camera_error(
                     FORMAT,
                     format!("unsupported PhotometricInterpretation {actual}; only CFA (32803) is decodable"),
-                ));
-            }
-            None => {
-                return Err(camera_error(
-                    FORMAT,
-                    "raw IFD is missing PhotometricInterpretation",
                 ));
             }
         }
@@ -523,8 +517,7 @@ fn cfa_color(value: u64) -> Result<CfaColor, DecodeError> {
 fn read_cfa(raw: &CameraDirectory<'_>) -> Result<CfaPattern, DecodeError> {
     let pattern_values = match optional_unsigned_vec(raw, tags::CFA_PATTERN)? {
         Some(values) => values,
-        None => optional_unsigned_vec(raw, TAG_DNG_CFA_PATTERN)?
-            .ok_or_else(|| camera_error(FORMAT, "raw IFD has no CFAPattern (33422 or 0xC612)"))?,
+        None => optional_unsigned_vec(raw, TAG_DNG_CFA_PATTERN)?.unwrap_or_else(|| vec![0, 1, 1, 2]),
     };
     let (rows, columns) = match optional_unsigned_vec(raw, tags::CFA_REPEAT_PATTERN_DIM)? {
         Some(dims) => {
@@ -646,6 +639,26 @@ fn read_white_level(raw: &CameraDirectory<'_>, bits_per_sample: u8) -> Result<Wh
         _ => vec![finite_f32(full_scale, "WhiteLevel")?],
     };
     Ok(WhiteLevel(values))
+}
+
+fn cr2_precision(container: &CameraFile<'_>, raw: &CameraDirectory<'_>) -> Result<u8, DecodeError> {
+    if let Some(bits) = optional_scalar(FORMAT, raw, tags::BITS_PER_SAMPLE)? {
+        return u8::try_from(bits).map_err(|_| camera_error(FORMAT, "CR2 bit depth exceeds u8"));
+    }
+    let offsets = required_unsigned_vec(raw, tags::STRIP_OFFSETS)?;
+    let counts = required_unsigned_vec(raw, tags::STRIP_BYTE_COUNTS)?;
+    if offsets.len() != 1 || counts.len() != 1 {
+        return Err(camera_error(FORMAT, "CR2 precision probe needs one strip"));
+    }
+    let start = usize_from_u64(offsets[0], "strip offset")?;
+    let end = start
+        .checked_add(usize_from_u64(counts[0], "strip length")?)
+        .ok_or(DecodeError::DimensionOverflow)?;
+    let bytes = container
+        .data()
+        .get(start..end)
+        .ok_or_else(|| camera_error(FORMAT, "CR2 strip is outside file"))?;
+    lossless_jpeg::probe_precision(bytes).map_err(|e| map_ljpeg_error(&e))
 }
 
 /// Derives per-channel white-balance gains from `AsShotNeutral`, normalized
@@ -1327,5 +1340,6 @@ mod tests {
             matches!(error, DecodeError::Cancelled),
             "unexpected error: {error:?}"
         );
+        super::super::assert_pixel_cancellation_checkpoints(&quirks, &container, raw);
     }
 }

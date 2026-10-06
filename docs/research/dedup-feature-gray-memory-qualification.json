@@ -1,0 +1,16 @@
+{
+  "scope": "Shared file/collection feature extraction reserves one f64 grayscale plane in MemoryBudget",
+  "bytes": "width * height * 8, checked arithmetic; detector and oriented stages sequential",
+  "validation": {
+    "file_collection_tests": 19,
+    "owner_cancel_admission_test": 1,
+    "selected_clippy": "passed"
+  },
+  "owner_fixture": {
+    "budget": 4200,
+    "existing_owner_1001": "gray admission rejected with owner unchanged",
+    "existing_owner_1000": "extraction admitted, peak 4200, owner retained",
+    "cancellation": "gray reservation released, owner retained until dropped"
+  },
+  "remaining": "Corner candidate storage, retained features, descriptor-index allocations, decoder completeness, allocator overhead and RSS remain unqualified"
+}

@@ -5,9 +5,10 @@
 //! target semantics the application picks for its surface — and reads the
 //! pixels back to CPU through `copy_texture_to_buffer` + `map_async`.
 //!
-//! Everything degrades to "skip" when no GPU adapter is available:
-//! [`GpuReadback::new`] returns `None` and every test returns early, the same
-//! way the CR3 regression skips without `RRRAH_CR3_REGRESSION_DIR`.
+//! [`GpuReadback::new`] returns `None` when no suitable adapter is available.
+//! Hardware qualification uses [`qualification_gpu`], which requires a device
+//! unless `RRRAH_GPU_OPTIONAL=1` explicitly opts out. Such a skip is not proof
+//! of GPU correctness. Backend/vendor selection applies to adapter admission.
 //!
 //! Future checks (white balance, Bradford adaptation, gamut) plug in by
 //! building an input frame, calling [`GpuReadback::render`], and comparing
@@ -75,6 +76,44 @@ pub struct GpuReadback {
     adapter_name: String,
 }
 
+/// The same explicit backend mask as the viewer; invalid/unavailable requests
+/// fail before hardware qualification and cannot turn into an optional skip.
+pub fn headless_instance() -> wgpu::Instance {
+    let backend = std::env::var("RRRAH_GPU_BACKEND")
+        .unwrap_or_else(|error| match error {
+            std::env::VarError::NotPresent => "auto".into(),
+            error => panic!("invalid RRRAH_GPU_BACKEND: {error}"),
+        })
+        .parse::<rrrah_gpu::GpuBackend>()
+        .expect("valid RRRAH_GPU_BACKEND");
+    let mut descriptor = wgpu::InstanceDescriptor::new_without_display_handle();
+    backend
+        .configure(&mut descriptor)
+        .expect("requested backend enabled in build/platform");
+    wgpu::Instance::new(descriptor)
+}
+
+pub async fn request_adapter(
+    instance: &wgpu::Instance,
+    options: &wgpu::RequestAdapterOptions<'_, '_>,
+) -> Result<wgpu::Adapter, rrrah_gpu::BackendError> {
+    let vendor = std::env::var("RRRAH_GPU_VENDOR")
+        .unwrap_or_else(|error| match error {
+            std::env::VarError::NotPresent => "any".into(),
+            error => panic!("invalid RRRAH_GPU_VENDOR: {error}"),
+        })
+        .parse::<rrrah_gpu::GpuVendor>()
+        .expect("valid RRRAH_GPU_VENDOR");
+    let result = vendor.request_adapter(instance, options).await;
+    if vendor != rrrah_gpu::GpuVendor::Any && result.is_err() {
+        panic!(
+            "explicit GPU vendor qualification failed: {}",
+            result.as_ref().err().unwrap()
+        );
+    }
+    result
+}
+
 impl GpuReadback {
     /// Requests a headless adapter and device. Returns `None` — the signal
     /// for tests to skip — when no adapter or device is available.
@@ -83,16 +122,18 @@ impl GpuReadback {
     }
 
     async fn request() -> Option<Self> {
-        let instance = wgpu::Instance::new(wgpu::InstanceDescriptor::new_without_display_handle());
-        let adapter = instance
-            .request_adapter(&wgpu::RequestAdapterOptions {
+        let instance = headless_instance();
+        let adapter = request_adapter(
+            &instance,
+            &wgpu::RequestAdapterOptions {
                 power_preference: wgpu::PowerPreference::HighPerformance,
                 compatible_surface: None,
                 force_fallback_adapter: false,
                 apply_limit_buckets: false,
-            })
-            .await
-            .ok()?;
+            },
+        )
+        .await
+        .ok()?;
         let adapter_name = format!("{:?} {}", adapter.get_info().backend, adapter.get_info().name);
         let (device, queue) = adapter
             .request_device(&wgpu::DeviceDescriptor::default())
@@ -107,6 +148,31 @@ impl GpuReadback {
 
     pub fn adapter_name(&self) -> &str {
         &self.adapter_name
+    }
+
+    pub fn render_with_tiling(
+        &self,
+        mosaic: &DecodedMosaic,
+        size: [u32; 2],
+        tiling: rrrah_gpu::TilingOverrides,
+    ) -> RgbaFrame {
+        let (w, h) = mosaic.metadata.display_dimensions();
+        let fit = (size[0].saturating_sub(32).max(1) as f32 / w as f32)
+            .min(size[1].saturating_sub(32).max(1) as f32 / h as f32);
+        let cover = (size[0] as f32 / w as f32).max(size[1] as f32 / h as f32);
+        let mut renderer = RawRenderer::new(&self.device, READBACK_FORMAT);
+        renderer
+            .upload_mosaic_with_tiling(&self.device, &self.queue, mosaic, tiling)
+            .unwrap();
+        renderer.update_view(
+            &self.queue,
+            ViewParameters {
+                viewport: [size[0] as f32, size[1] as f32],
+                zoom: cover / fit,
+                ..ViewParameters::default()
+            },
+        );
+        self.read_frame(size, |encoder, target| renderer.encode(encoder, target))
     }
 
     /// Renders `mosaic` into a `size` offscreen target with the image scaled
@@ -141,7 +207,58 @@ impl GpuReadback {
             .upload_mosaic(&self.device, &self.queue, mosaic)
             .expect("synthetic mosaic must upload");
         renderer.update_view(&self.queue, view);
+        self.read_frame(size, |encoder, target| renderer.encode(encoder, target))
+    }
 
+    pub fn render_raster(
+        &self,
+        raster: &rrrah_core::DecodedRaster,
+        view: ViewParameters,
+        size: [u32; 2],
+    ) -> RgbaFrame {
+        let mut renderer = rrrah_gpu::RasterRenderer::new(&self.device, READBACK_FORMAT);
+        renderer
+            .upload(&self.device, &self.queue, raster)
+            .expect("prepared raster must upload");
+        renderer.update_view(&self.queue, view);
+        self.read_frame(size, |encoder, target| renderer.encode(encoder, target))
+    }
+
+    pub fn render_developed_raw(
+        &self,
+        raster: &rrrah_core::DecodedRaster,
+        view: ViewParameters,
+        size: [u32; 2],
+        curve: &rrrah_core::develop::MonotoneCurve,
+    ) -> RgbaFrame {
+        let mut renderer = rrrah_gpu::RasterRenderer::new(&self.device, READBACK_FORMAT);
+        renderer.upload(&self.device, &self.queue, raster).unwrap();
+        renderer.set_raw_development(&self.queue, curve);
+        renderer.update_view(&self.queue, view);
+        self.read_frame(size, |encoder, target| renderer.encode(encoder, target))
+    }
+
+    pub fn render_model<T: Copy + Into<f64>>(
+        &self,
+        triangles: &[[[T; 3]; 3]],
+        size: [u32; 2],
+        yaw: f32,
+        pitch: f32,
+    ) -> RgbaFrame {
+        let mut renderer = rrrah_gpu::ModelRenderer::new(&self.device, READBACK_FORMAT);
+        renderer
+            .upload(&self.device, triangles.iter().copied())
+            .expect("model uploads");
+        renderer.resize(&self.device, size).expect("depth fits");
+        renderer.update_view(&self.queue, size[0] as f32 / size[1] as f32, yaw, pitch, 1.0);
+        self.read_frame(size, |encoder, target| renderer.encode(encoder, target))
+    }
+
+    fn read_frame(
+        &self,
+        size: [u32; 2],
+        encode: impl FnOnce(&mut wgpu::CommandEncoder, &wgpu::TextureView),
+    ) -> RgbaFrame {
         let target = self.device.create_texture(&wgpu::TextureDescriptor {
             label: Some("rrrah readback target"),
             size: wgpu::Extent3d {
@@ -172,7 +289,7 @@ impl GpuReadback {
             .create_command_encoder(&wgpu::CommandEncoderDescriptor {
                 label: Some("rrrah readback encoder"),
             });
-        renderer.encode(&mut encoder, &target_view);
+        encode(&mut encoder, &target_view);
         encoder.copy_texture_to_buffer(
             wgpu::TexelCopyTextureInfo {
                 texture: &target,
@@ -332,4 +449,18 @@ fn srgb_byte(linear: f64) -> u8 {
         1.055 * linear.powf(1.0 / 2.4) - 0.055
     };
     (encoded.clamp(0.0, 1.0) * 255.0).round() as u8
+}
+
+/// The dedicated color gate requires a device. CI may explicitly opt out on
+/// runners without graphics; that skip never counts as color qualification.
+pub fn qualification_gpu() -> Option<GpuReadback> {
+    let gpu = GpuReadback::new();
+    if gpu.is_none() {
+        if std::env::var_os("RRRAH_GPU_OPTIONAL").is_some_and(|value| value == "1") {
+            eprintln!("SKIP: no GPU; RRRAH_GPU_OPTIONAL=1 explicitly disables hardware qualification");
+        } else {
+            panic!("RAW qualification requires a GPU adapter");
+        }
+    }
+    gpu
 }

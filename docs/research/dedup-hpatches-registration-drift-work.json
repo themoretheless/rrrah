@@ -1,0 +1,18 @@
+{
+  "confirmed_cases": [
+    "i_bologna/4",
+    "i_bologna/5",
+    "i_contruction/5"
+  ],
+  "evidence": "docs/research/dedup-hpatches-registration-drift-cases.json",
+  "finding": "Initial known-grid median below one pixel; uncorrected encoded-SRGB registration increases median above ten pixels",
+  "proposed_next_gate": "Explicit bounded per-channel affine registration objective with fixed admitted samples, unchanged alpha and final pixel admission; compare against frozen existing objective",
+  "requirements": [
+    "Source/sample/work limits and cancellation remain explicit",
+    "No candidate acceptance based solely on fitted registration score",
+    "Qualify known-offset and illumination fixtures plus all three captured cases",
+    "Retain existing raw objective for reproducible comparison",
+    "Recheck all six authored positives, fourteen unrelated negatives and indexed/direct equivalence"
+  ],
+  "status": "implementation_pending"
+}

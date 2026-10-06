@@ -1,0 +1,49 @@
+{
+  "status": "both_platforms_passed_linux_source_drift",
+  "macos_session": 72771,
+  "macos_start_snapshot": "docs/research/dedup-sampled-refresh-full-macos-start.json",
+  "macos_log": "docs/research/dedup-sampled-refresh-full-macos.log",
+  "linux_negative_session": 98694,
+  "linux_negative_log": "docs/research/dedup-projective-sampled-exhaustive-negatives-linux.log",
+  "remaining": [
+    "Independent all-580 sampled and anchored evaluation",
+    "Fresh atomic current-source broad regression",
+    "Native Windows and remaining complete contract requirements"
+  ],
+  "scope": "Fresh broad regression after sampled integration; no full contract completion claim",
+  "linux_status": "terminal_success_with_source_drift",
+  "linux_start_snapshot": "docs/research/dedup-sampled-refresh-full-linux-start.json",
+  "linux_log": "docs/research/dedup-sampled-refresh-full-linux.log",
+  "macos_interim_source_drift": [],
+  "macos": {
+    "exit": 0,
+    "passed": 322,
+    "failed": 0,
+    "ignored": 0,
+    "groups": 55,
+    "source_drift": [],
+    "scope": "All-features/all-targets dedup macOS regression; this is not full contract qualification"
+  },
+  "linux_interim_source_drift": [
+    "crates/rrrah-dedup/src/warp.rs",
+    "crates/rrrah-dedup/tests/projective_geometry.rs"
+  ],
+  "linux_scope_note": "Photometric registration primitive added during full build; terminal result requires mixed-snapshot caveat",
+  "linux": {
+    "exit": 0,
+    "passed": 325,
+    "failed": 0,
+    "ignored": 0,
+    "groups": 55,
+    "source_drift": [
+      "crates/rrrah-dedup/examples/photo_probe.rs",
+      "crates/rrrah-dedup/src/local_collection.rs",
+      "crates/rrrah-dedup/src/local_scan.rs",
+      "crates/rrrah-dedup/src/warp.rs",
+      "crates/rrrah-dedup/tests/projective_files.rs",
+      "crates/rrrah-dedup/tests/projective_geometry.rs"
+    ],
+    "log_sha256": "36a90e7f9ad754509c3edb14f1c09599977ca298ed10b30d6da924d442d65c4c",
+    "scope": "Completed broad regression, source changed during run; not an atomic current-source or complete contract qualification"
+  }
+}

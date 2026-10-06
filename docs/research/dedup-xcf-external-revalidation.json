@@ -1,0 +1,20 @@
+{
+  "passed": 1,
+  "failed": 0,
+  "ignored": 0,
+  "source_sha256": {
+    "crates/rrrah-decode/src/xcf.rs": "3d4a83a8cc79284b75fd30c913e6e83ba498db928da292a92a788b52be3d7afc",
+    "crates/rrrah-memory/src/lib.rs": "acf481abcc4d97583353c3a5bbe2caff145b38b57f83455c9b32beb6e92b1ed9"
+  },
+  "changed": [],
+  "fixture": {
+    "path": "/tmp/rrrah-xcf-gimp/gimp-2-6-file.xcf",
+    "sha256": "a1557a22fd7ba5d8185447c932a708bd2369910203081590e45e3a3cabe46636"
+  },
+  "checks": [
+    "Two selected layers and black mask retain exact managed byte accounting.",
+    "Cancellation after allocation rolls back retained memory.",
+    "Unsupported legacy full composition explicitly refused."
+  ],
+  "scope": "Selected layers and mask only; complete XCF flattening and duplicate integration not qualified."
+}

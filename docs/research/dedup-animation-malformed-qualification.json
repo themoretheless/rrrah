@@ -1,0 +1,42 @@
+{
+  "status": "macOS and native Linux tests passed; scoped Clippy exited zero",
+  "tests": {
+    "macos": 5,
+    "linux": 5
+  },
+  "clippy_session": 54006,
+  "clippy_log": "/tmp/dedup-animation-malformed-clippy.log",
+  "scope": [
+    "Every truncated prefix refuses with typed decode error",
+    "Each chunk CRC damage refuses",
+    "Trailing data refuses",
+    "Managed reservations return to zero after each refusal",
+    "Same-path restored-file retry returns four frames"
+  ],
+  "prefixes": 374,
+  "source_snapshot": {
+    "crates/rrrah-dedup/tests/animated.rs": "1ba665b8c681b899e1fedda57e1787c5b96f594fd76a81af7d05207e43750e61",
+    "crates/rrrah-dedup/tests/fixtures/disposal/disposal-3.apng": "f3231f6e6e53c829b486f9f28342cb2dce5eb6816541da5d448ebe5ec707b5ca"
+  },
+  "snapshot_timing": "post-test capture, not atomic prelaunch",
+  "logs": {
+    "macos": {
+      "path": "docs/research/dedup-animation-malformed-macos.log",
+      "sha256": "5fc8e62750038a54a9e8025c58b761b2443e40736cfccb10482c8272b9ea1ddc"
+    },
+    "linux": {
+      "path": "docs/research/dedup-animation-malformed-linux.log",
+      "sha256": "fdece57bb1c643712af7f3b99c69d22bfe81232ece6701200feae95b6738ca86"
+    },
+    "clippy": {
+      "path": "docs/research/dedup-animation-malformed-clippy.log",
+      "sha256": "1b60c80590599f644032e30649951816365c771e296665797e61c45651d667b2"
+    }
+  },
+  "limits": [
+    "Single small authored APNG",
+    "No all-format malformed corpus claim",
+    "Managed memory counters do not measure total RSS",
+    "Full acceptance incomplete"
+  ]
+}

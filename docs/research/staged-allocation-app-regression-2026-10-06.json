@@ -1,0 +1,27 @@
+{
+  "scope": "application regression after staged allocation and exhaustive directional planning test",
+  "ordinary": {
+    "passed": 138,
+    "failed": 0,
+    "ignored": 13,
+    "log": "/tmp/rrrah-staged-neighbour-app-regression.log"
+  },
+  "real_raw_prefetch": {
+    "log": "/tmp/rrrah-staged-real-cr3-prefetch.log",
+    "excluded": "Sony SRF missing-file case requires separate external source",
+    "passed": 3,
+    "failed": 0,
+    "ignored": 0
+  },
+  "source_hashes": {
+    "crates/rrrah-memory/src/lib.rs": "3c49280a6c51d1a4d0aef3e635fe23e01b5b0f30851a74bcf764cbfd775530ad",
+    "crates/rrrah-gpu/src/compute.rs": "52e45c5593a091230922f0c7cb25d54d9708bb6b10f92eb30d16f26b934434ec",
+    "crates/rrrah-app/src/gallery.rs": "b830dc26c9fe735409db98f87c73726b1f1b595ebe08522e4770ebd2a004c9fd",
+    "crates/rrrah-app/src/main.rs": "688450db2b39c5b688f72d099ffcdb93d6ed1fdc3d2817622c8d1ef3db4c0648"
+  },
+  "limitations": [
+    "No all-format qualification",
+    "No live window latency measurement",
+    "No physical HDR or CUDA/NVIDIA proof"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "status": "Foveon full-color requirements audit; display remains Pending",
+  "source_sha256": "ea436ba459a7478d7b338428656fae905469de269f928749f3388db2b7b0d53f",
+  "reference_url": "https://raw.githubusercontent.com/ncruces/dcraw/master/dcraw.c",
+  "reference_sha256": "d18d9e43a096eea04eee2148e53068f8fa45ce95395d97128b1aa37b477eab43",
+  "illuminant_links": {
+    "Sunlight": "CamToXYZ_Flash",
+    "Shade": "CamToXYZ_Flash",
+    "Overcast": "CamToXYZ_Flash",
+    "Incandescent": "CamToXYZ_Flash",
+    "Fluorescent": "CamToXYZ_Flash",
+    "Flash": "CamToXYZ_Flash",
+    "Auto": "CamToXYZ_Flash",
+    "Custom": "CamToXYZ_Flash"
+  },
+  "missing_embedded_illuminant_targets": [],
+  "required_processing": [
+    "Resolve illuminant and correction matrices, normalize neutral response",
+    "Sensor dark drift and black shielding",
+    "Spatial gain interpolation",
+    "Polynomial channel correction",
+    "Bad-pixel correction and output crop",
+    "Color/chroma filtering and final transform"
+  ],
+  "implementation_policy": "Do not claim full color from WB matrix alone; missing calibration must be explicit"
+}

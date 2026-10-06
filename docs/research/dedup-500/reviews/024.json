@@ -1,0 +1,68 @@
+{
+  "index": 24,
+  "repository": "l3uddz/plex_dupefinder",
+  "commit": "61e63c8b36e869c5f57f8859a7399c05f097ebeb",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Plex media metadata scoring and delete API are server-specific; no independent image hashing in selected excerpts.",
+  "license_metadata": "GPL-3.0",
+  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "available_source_evidence": [
+    {
+      "path": "plex_dupefinder.py",
+      "local": "02-plex_dupefinder.py",
+      "url": "https://github.com/l3uddz/plex_dupefinder/blob/61e63c8b36e869c5f57f8859a7399c05f097ebeb/plex_dupefinder.py",
+      "sha256": "dc6570ec8eabc40aa818f7f91b6b506d94bdf9cb1b8a1a059df9220637af6464",
+      "truncated": false,
+      "lines": 458,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "config.py",
+      "local": "03-config.py",
+      "url": "https://github.com/l3uddz/plex_dupefinder/blob/61e63c8b36e869c5f57f8859a7399c05f097ebeb/config.py",
+      "sha256": "59c5c7a0b240b76d7b5e2113425427f24621a73ae3d17a4becf79c7c533be973",
+      "truncated": false,
+      "lines": 166,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "deletefiles.sh",
+      "local": "04-deletefiles.sh",
+      "url": "https://github.com/l3uddz/plex_dupefinder/blob/61e63c8b36e869c5f57f8859a7399c05f097ebeb/deletefiles.sh",
+      "sha256": "4ddb6969f3b6cb5ce6e306b070da4039ffa160897fc555caa75ca81d972ab6f4",
+      "truncated": false,
+      "lines": 11,
+      "source": true,
+      "test": false
+    }
+  ],
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/l3uddz/plex_dupefinder/blob/61e63c8b36e869c5f57f8859a7399c05f097ebeb/README.md",
+      "sha256": "bc54438455836ff1e9110fd4e69feabf20e5ad4a1779a42b90de55b5358f4bce",
+      "truncated": false,
+      "lines": 374,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE.md",
+      "local": "01-LICENSE.md",
+      "url": "https://github.com/l3uddz/plex_dupefinder/blob/61e63c8b36e869c5f57f8859a7399c05f097ebeb/LICENSE.md",
+      "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "truncated": false,
+      "lines": 674,
+      "source": false,
+      "test": false
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "index": 314,
+  "repository": "SillyTavern/Extension-DupeFinder",
+  "commit": "f77fa2e4067b95656da9e62dd687108ec590f2fb",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "SillyTavern character-data similarity groups; selected UI sources do not provide an image engine.",
+  "available_source_evidence": [
+    {
+      "path": "src/PanelBody.js",
+      "local": "02-PanelBody.js",
+      "url": "https://github.com/SillyTavern/Extension-DupeFinder/blob/f77fa2e4067b95656da9e62dd687108ec590f2fb/src/PanelBody.js",
+      "sha256": "bebb3a46ce187bcf17f7a1f681a1cf76104b101e610c499d8eb31a0ccfc4a238",
+      "truncated": false,
+      "lines": 291,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/PanelHeader.js",
+      "local": "03-PanelHeader.js",
+      "url": "https://github.com/SillyTavern/Extension-DupeFinder/blob/f77fa2e4067b95656da9e62dd687108ec590f2fb/src/PanelHeader.js",
+      "sha256": "51cb02aa533f8d51f96f701eb06ff33780a8595f8f1d1b1d7f8698dbe5442b68",
+      "truncated": false,
+      "lines": 17,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/SettingsManager.js",
+      "local": "04-SettingsManager.js",
+      "url": "https://github.com/SillyTavern/Extension-DupeFinder/blob/f77fa2e4067b95656da9e62dd687108ec590f2fb/src/SettingsManager.js",
+      "sha256": "a1748281abb9af840430803c67b2a7875e59a8795dbaf59850728b9a57e709b9",
+      "truncated": false,
+      "lines": 132,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "AGPL-3.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/SillyTavern/Extension-DupeFinder/blob/f77fa2e4067b95656da9e62dd687108ec590f2fb/README.md",
+      "sha256": "e166e8442ebac2b547db718845566b2b7eb84125db727d1762d373be0ce3a977",
+      "truncated": false,
+      "lines": 43,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/SillyTavern/Extension-DupeFinder/blob/f77fa2e4067b95656da9e62dd687108ec590f2fb/LICENSE",
+      "sha256": "8486a10c4393cee1c25392769ddd3b2d6c242d6ec7928e1414efff7dfb2f07ef",
+      "truncated": false,
+      "lines": 661,
+      "source": false,
+      "test": false
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "status": "passed",
+  "cases": [
+    {
+      "case": "unchanged",
+      "exit_code": 0,
+      "changed": [],
+      "added": [],
+      "missing": []
+    },
+    {
+      "case": "changed",
+      "exit_code": 1,
+      "changed": [
+        "crates/source.rs"
+      ],
+      "added": [],
+      "missing": []
+    },
+    {
+      "case": "added",
+      "exit_code": 1,
+      "changed": [],
+      "added": [
+        "crates/extra.rs"
+      ],
+      "missing": []
+    },
+    {
+      "case": "missing",
+      "exit_code": 1,
+      "changed": [],
+      "added": [],
+      "missing": [
+        "crates/source.rs"
+      ]
+    }
+  ],
+  "scope": "Small separate test roots; running snapshot never modified. Current hashes and file set only, no historical ABA guarantee."
+}

@@ -1,0 +1,17 @@
+   Compiling rrrah-cuda v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-cuda)
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.32s
+     Running unittests src/lib.rs (/tmp/rrrah-required-corpus-target/debug/deps/rrrah_cuda-f0352b093584e568)
+
+running 3 tests
+test tests::nvidia_full_output_boundaries_hdr_alpha_and_managed_limits ... ignored, requires CUDA-capable NVIDIA driver on 64-bit Linux/Windows; never a CPU fallback
+test tests::signed_hdr_and_alpha_are_accepted_but_nonfinite_and_overflow_refused ... ok
+test tests::unsupported_host_reports_cuda_unavailable_without_fallback ... ok
+
+test result: ok. 2 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests rrrah_cuda
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

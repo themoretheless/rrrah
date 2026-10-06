@@ -1,0 +1,95 @@
+{
+  "status": "passed",
+  "source_sha256": "c32f247eb372c3e66ad3b433518ec11f898fdc317c8432ebe025b46d4917bcf3",
+  "camf_sha256": "66a70fcc4b04f247954888f147e305713f7543bcaff7d350c34c3f7f5b093b75",
+  "reference_source_sha256": "1a0b6e70bb1921cc995603a220cc1132c2279404087cb849a4d3c7359d882e85",
+  "reference_binary_sha256": "87aab62c9df1656e50d6007af587e69df05d030f3033404899c120badbb81306",
+  "compiler_flags": [
+    "-std=c++17",
+    "-O2",
+    "-ffp-contract=off"
+  ],
+  "oracle_rows": [
+    {
+      "mode": "Auto",
+      "sha256": "053eddf72c818ae98ceaffcc4cd4afb20d56f6d380578e7e91731d6f7e5dde19",
+      "response": [
+        6.274590015411377,
+        6.896061420440674,
+        6.268211364746094
+      ],
+      "native_bits_exact": true
+    },
+    {
+      "mode": "Custom",
+      "sha256": "053eddf72c818ae98ceaffcc4cd4afb20d56f6d380578e7e91731d6f7e5dde19",
+      "response": [
+        6.274590015411377,
+        6.896061420440674,
+        6.268211364746094
+      ],
+      "native_bits_exact": true
+    },
+    {
+      "mode": "Flash",
+      "sha256": "0dde3d02121520352b6f0a7116cea02609c2d02e0a8b7db0300fd8f35c6ba95c",
+      "response": [
+        4.308307647705078,
+        5.134544372558594,
+        5.185903549194336
+      ],
+      "native_bits_exact": true
+    },
+    {
+      "mode": "Fluorescent",
+      "sha256": "756751acfb20fb0f2ec5a939ecfe7e22892f77e4ff37bac81c1ed6f22dd7f8a4",
+      "response": [
+        9.143547058105469,
+        9.74490737915039,
+        8.142823219299316
+      ],
+      "native_bits_exact": true
+    },
+    {
+      "mode": "Incandescent",
+      "sha256": "8b17f596b9343e703fb795dc3e1b58477c73b8fd51db810df6e680be9fdc66d3",
+      "response": [
+        14.767444610595703,
+        13.655546188354492,
+        10.226551055908203
+      ],
+      "native_bits_exact": true
+    },
+    {
+      "mode": "Overcast",
+      "sha256": "1ee1fb28e497e8dde3cc68a16f372fd5adbdcc541fb241c855e2593b232822bc",
+      "response": [
+        4.624632835388184,
+        5.420650482177734,
+        5.360744476318359
+      ],
+      "native_bits_exact": true
+    },
+    {
+      "mode": "Shade",
+      "sha256": "be823d73221e1a9887662fe6f1ef0d16f72d25d47f9adb6e3ae844907ab19d01",
+      "response": [
+        3.849416971206665,
+        4.714542865753174,
+        4.928400993347168
+      ],
+      "native_bits_exact": true
+    },
+    {
+      "mode": "Sunlight",
+      "sha256": "bb0051f4d60dc757305936ff3d253e08d29896fe5821ccacdf3fd73988718624",
+      "response": [
+        5.700430870056152,
+        6.371247291564941,
+        5.936980247497559
+      ],
+      "native_bits_exact": true
+    }
+  ],
+  "scope": "Eight SD14 calibrated WB neutrals only; full processing/color and viewer integration unqualified"
+}

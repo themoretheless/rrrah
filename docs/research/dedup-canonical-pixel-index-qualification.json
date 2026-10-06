@@ -1,0 +1,83 @@
+{
+  "scope": "Exact selected-frame canonical pixel-key index; not transformed/local-feature index",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/pixel_index.rs": "39912b67c9dc5b625acb1d56ddfb6ea7288862194db33f1559b02ad3a505faaf",
+    "crates/rrrah-dedup/src/raster.rs": "f1225873a1c642bbf9bc36c4c0a4e418f2afe5a176cdb775a2f18815461b9b20",
+    "crates/rrrah-dedup/tests/pixel_search.rs": "1b028e92f53b81d3a7451b2516eb5c5e035471efe6113925ddd5798003665ec9",
+    "crates/rrrah-dedup/tests/information.rs": "f633c7e95aff80b7b7d2c0bfc255dbf6aafaeac90c5d42dc8512a64c9683f163",
+    "crates/rrrah-dedup/tests/raster.rs": "5079a85005251ec9c0e62a164f2693759302043fc10c28f8ce390824d5e2f6ff"
+  },
+  "apis": [
+    "NormalizedRaster::selected_frame_digest",
+    "scan_indexed_pixels",
+    "scan_indexed_pixel_roots"
+  ],
+  "key_semantics": [
+    "Canonical linear-sRGB RGBA32 with dimensions, invisible RGB ignored and signed-zero canonicalized",
+    "Sample scale IEEE bits and optional cursor hotspot included",
+    "Container frame count/index excluded, same selected-frame semantics as direct comparison",
+    "BLAKE3 key is only a candidate filter; every same-key pair is directly confirmed"
+  ],
+  "measurements": {
+    "six_control_files": {
+      "index_decodes": 6,
+      "confirmation_pairs": 1,
+      "exhaustive_pairs": 15,
+      "equal_pairs": [
+        [
+          3,
+          4
+        ]
+      ]
+    },
+    "constant_injected_keys": {
+      "files": 4,
+      "confirmation_pairs": 6,
+      "equal_pairs": [
+        [
+          3,
+          4
+        ]
+      ],
+      "different_pairs": 5
+    },
+    "unique_authored_bmp_collection": {
+      "files": 128,
+      "index_decodes": 128,
+      "confirmation_pairs": 0,
+      "max_pairs": 0
+    }
+  },
+  "qualified": [
+    "Exhaustive equality equivalence on six fixtures",
+    "Injected complete hash collision never admits unequal pixels",
+    "Scale/hotspot key separation and container selection exclusion",
+    "Mutation after own decode and before source decode invalidates stale decisions",
+    "Final generation/transient callback cancellation returns no report",
+    "Recursive overlap, corrupt-file and missing-source diagnostics",
+    "Candidate-pair admission and memory reservations release"
+  ],
+  "validation": {
+    "latest_focused_tests": 25,
+    "clippy": "passed all features tests/examples no-deps -D warnings",
+    "current_full_suite": {
+      "passed": 144,
+      "failed": 0,
+      "ignored": 0,
+      "exit_code": 0
+    },
+    "diff_check": "passed"
+  },
+  "limitations": [
+    "Same-key groups can still require quadratic result/confirmation counts",
+    "No measured large-image throughput or physical memory proof",
+    "No persistent canonical-key cache",
+    "Not an index for crop/rotation/photometric similarity",
+    "Selected frame only; not whole-animation/container equality"
+  ],
+  "commands": [
+    "cargo test -p rrrah-dedup --all-features",
+    "cargo test -p rrrah-dedup --all-features --lib --test pixel_search --test information --test raster",
+    "cargo clippy -p rrrah-dedup --all-features --tests --examples --no-deps -- -D warnings"
+  ]
+}

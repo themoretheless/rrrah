@@ -1,0 +1,44 @@
+{
+  "implemented_scope": "Legacy v0-v3 normal-layer 8-bit XCF flattened raster route; v0 indexed refused",
+  "source_sha256": {
+    "crates/rrrah-decode/src/xcf.rs": "b0a3d7e481e6070ce1eb6aa8bdc545dd5200c3a21d42e17da901da733a129c7f",
+    "crates/rrrah-decode/src/raster.rs": "59929615e70b8e1be537d02ae00d2535e79d3b77cde11a45ee16f8f96caee872",
+    "crates/rrrah-decode/src/image_router.rs": "ca0b76188c83582d0e88d72ff62cad1dccffce66cf93ae707c10351adb2dc524",
+    "crates/rrrah-app/tests/hdr_raster_swap.rs": "86fd0f64b7f87d6be1d3d2d7e7adfffcfcb3e6a94a96e72ce953808640547355",
+    "tests/fixtures/xcf/profiled-normal-overlay-v1.xcf": "f3ea1a1d4cfabd56b4eabd1862fc2c35309d237847da2ac761170b09c25813c3"
+  },
+  "runs": [
+    {
+      "log": "/tmp/rrrah-xcf-raster-route-full.log",
+      "passed": 698,
+      "ignored": 36
+    },
+    {
+      "log": "/tmp/rrrah-xcf-route-viewer.log",
+      "passed": 137,
+      "ignored": 13
+    },
+    {
+      "log": "/tmp/rrrah-xcf-raster-swap-metal.log",
+      "passed": 1,
+      "fixture_cases": 6,
+      "adapter": "Metal Apple M4 Max",
+      "command": "RRRAH_GPU_BACKEND=metal cargo test -p rrrah --test hdr_raster_swap profiled_png_and_archives --locked --target-dir /tmp/rrrah-required-corpus-target -- --nocapture"
+    }
+  ],
+  "contracts": [
+    "Content signature routes XCF under .XCF and misleading .cr3 as raster.",
+    "ICC native bytes and ownership retained; output 8 plus ICC 588 = 596 managed bytes.",
+    "Explicit untagged-sRGB assumption required for color preparation.",
+    "ICC admission refusal releases pixels and returns typed memory error.",
+    "Nonzero image index refused.",
+    "Prepared offscreen output agrees with authored sRGB overlay within existing one-byte comparison tolerance.",
+    "Native and prepared swap transport preserve data and managed last-owner release."
+  ],
+  "limitations": [
+    "Authored arithmetic/ICC fixture, not independent GIMP full flatten/color oracle.",
+    "Groups/effects/non-normal blend and modern precision flatten remain unsupported.",
+    "No physical HDR or CUDA/NVIDIA qualification.",
+    "No native window presentation measured."
+  ]
+}

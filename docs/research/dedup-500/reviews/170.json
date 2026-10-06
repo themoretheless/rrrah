@@ -1,0 +1,78 @@
+{
+  "index": 170,
+  "repository": "Davidcreador/pi-dcp",
+  "commit": "848689ad96a5f2d615aac4d9d28367a2307d1549",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Tool-read overlap pruning and path validation; in-flight/context dedup only, no image algorithm.",
+  "available_source_evidence": [
+    {
+      "path": "lib/strategies/deduplication.ts",
+      "local": "02-deduplication.ts",
+      "url": "https://github.com/Davidcreador/pi-dcp/blob/848689ad96a5f2d615aac4d9d28367a2307d1549/lib/strategies/deduplication.ts",
+      "sha256": "09ddb9fb0de3339177dfc7175fa8ba35ab2fb6b32662bd6d578de1a83059a76e",
+      "truncated": false,
+      "lines": 86,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "lib/strategies/overlap-dedup.ts",
+      "local": "03-overlap-dedup.ts",
+      "url": "https://github.com/Davidcreador/pi-dcp/blob/848689ad96a5f2d615aac4d9d28367a2307d1549/lib/strategies/overlap-dedup.ts",
+      "sha256": "e8963df703c46260645ac7f18a4b83257376939928a69f6118ec5384e211303b",
+      "truncated": false,
+      "lines": 140,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "index.ts",
+      "local": "04-index.ts",
+      "url": "https://github.com/Davidcreador/pi-dcp/blob/848689ad96a5f2d615aac4d9d28367a2307d1549/index.ts",
+      "sha256": "fb8b6369a67e8dcb1f3cc0c377ec4bf0b5421e3ed1266283b820a1c56901e1e7",
+      "truncated": false,
+      "lines": 276,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "test/overlap-dedup.test.ts",
+      "local": "05-overlap-dedup.test.ts",
+      "url": "https://github.com/Davidcreador/pi-dcp/blob/848689ad96a5f2d615aac4d9d28367a2307d1549/test/overlap-dedup.test.ts",
+      "sha256": "f2058ccdff4d0baceb712de45a450b852892abde78f5f95a76ebdf71e89607ea",
+      "truncated": false,
+      "lines": 163,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "AGPL-3.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 18,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/Davidcreador/pi-dcp/blob/848689ad96a5f2d615aac4d9d28367a2307d1549/README.md",
+      "sha256": "619e33b5c219182d93b614654fd350223c4f5efaded79d2bdd9b32f43500b32e",
+      "truncated": false,
+      "lines": 515,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/Davidcreador/pi-dcp/blob/848689ad96a5f2d615aac4d9d28367a2307d1549/LICENSE",
+      "sha256": "0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0",
+      "truncated": false,
+      "lines": 661,
+      "source": false,
+      "test": false
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+warning: function `error` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:4:4
+  |
+4 | fn error(message: &str) -> DecodeError {
+  |    ^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `packed_12` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:9:4
+  |
+9 | fn packed_12(
+  |    ^^^^^^^^^
+
+warning: function `decode_zd` is never used
+  --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:48:15
+   |
+48 | pub(super) fn decode_zd(
+   |               ^^^^^^^^^
+
+warning: `rrrah-decode` (lib) generated 3 warnings
+    Finished `dev` profile [optimized + debuginfo] target(s) in 0.18s
+     Running `/tmp/rrrah-required-corpus-target/debug/examples/raw_view_timing --cache-only /tmp/rrrah-10d.crw`
+rrrah-10d.crw decode p50=123.993375ms p95=125.899291ms
+rrrah-10d.crw disk p50=8.352250ms p95=9.111042ms
+rrrah-10d.crw swap p50=8.094500ms p95=8.381625ms
+rrrah-10d.crw ram p50=0.000173ms p95=0.000199ms
+rrrah-10d.crw managed root used=0 peak=33860674 limit=67108864; restore used=0 peak=13036672 limit=26073344

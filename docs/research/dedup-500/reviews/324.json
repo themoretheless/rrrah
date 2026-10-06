@@ -1,0 +1,78 @@
+{
+  "index": 324,
+  "repository": "DragonOfMath/dupe-images",
+  "commit": "0c9b14a02ccd639760240e2a3b20defc3a697036",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Jimp duplicate-image checker/remover with test entrypoint; inspect pixel tolerance and mutation safeguards before reuse.",
+  "available_source_evidence": [
+    {
+      "path": "dupe-image-checker.js",
+      "local": "02-dupe-image-checker.js",
+      "url": "https://github.com/DragonOfMath/dupe-images/blob/0c9b14a02ccd639760240e2a3b20defc3a697036/dupe-image-checker.js",
+      "sha256": "a7ffe7aae5dd90b54144a6eb1ec9b7e49687455b92d7ef90fc6a3a94950066e9",
+      "truncated": false,
+      "lines": 225,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "dupe-image-remover.js",
+      "local": "03-dupe-image-remover.js",
+      "url": "https://github.com/DragonOfMath/dupe-images/blob/0c9b14a02ccd639760240e2a3b20defc3a697036/dupe-image-remover.js",
+      "sha256": "6a677e0a8cccb957fab0a04e46b1e1622a5db433437fbac250fbc25565459e10",
+      "truncated": false,
+      "lines": 116,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "index.js",
+      "local": "04-index.js",
+      "url": "https://github.com/DragonOfMath/dupe-images/blob/0c9b14a02ccd639760240e2a3b20defc3a697036/index.js",
+      "sha256": "621b2b6ff01d65559dd444dc0abbb43f5d8fbdc91b0dd3927c21b1193448f6fe",
+      "truncated": false,
+      "lines": 4,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "test.js",
+      "local": "05-test.js",
+      "url": "https://github.com/DragonOfMath/dupe-images/blob/0c9b14a02ccd639760240e2a3b20defc3a697036/test.js",
+      "sha256": "c9663043a0031cb878fe555550b396e3166b609cef65ee136519128282655f54",
+      "truncated": false,
+      "lines": 24,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 1,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/DragonOfMath/dupe-images/blob/0c9b14a02ccd639760240e2a3b20defc3a697036/README.md",
+      "sha256": "5a24ef7116af1094cfd05871224bbe2f56f1bf8cf7464e5cb80012d0ae7040ff",
+      "truncated": false,
+      "lines": 36,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/DragonOfMath/dupe-images/blob/0c9b14a02ccd639760240e2a3b20defc3a697036/LICENSE",
+      "sha256": "58fdf0d9cb149224bd9452d6bbf17ee42264f26c6707a66727e745b5a96b0296",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

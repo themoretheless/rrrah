@@ -1,0 +1,23 @@
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.09s
+     Running tests/exact_files.rs (target/debug/deps/exact_files-2ee295f0e15ba296)
+
+running 16 tests
+test size_depth_and_entry_limits_are_visible ... ok
+test same_samples_different_middle_are_not_duplicates ... ok
+test unavailable_non_utf8_path_preserves_diagnostic_bytes ... ok
+test missing_input_and_overlap_do_not_lose_valid_results ... ok
+test cancellation_during_full_hash_is_bounded ... ok
+test same_length_mutation_during_sample_is_detected ... ok
+test same_bytes_and_modified_time_do_not_hide_physical_file_replacement ... ok
+test hardlink_aliases_and_followed_symlink_cycles ... ok
+test physical_hardlinks_are_aliases_while_copied_bytes_are_separate_files ... ok
+test unreadable_file_is_explicit_and_does_not_hide_healthy_copies ... ok
+test copies_empty_files_and_equal_size_negatives ... ok
+test verified_scan_preserves_groups_and_observes_every_admitted_file ... ok
+test fifo_replacement_does_not_block_or_hide_healthy_copies ... ok
+test verified_scan_discards_groups_for_one_shot_cancel_at_every_checkpoint ... ok
+test nested_overlapping_roots_match_the_full_authored_partition ... ok
+test changing_any_member_does_not_hide_healthy_duplicates ... ok
+
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.59s
+

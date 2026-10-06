@@ -1,0 +1,66 @@
+{
+  "scope": "Bounded spatial oriented-corner selection recovers full-resolution CR2/profiled-TIFF geometry at unchanged match thresholds",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/local.rs": "0351dff6c43bfa40770964dcc39fceb67db9ba7b093855db2fdfb63570c4d0f9",
+    "crates/rrrah-dedup/tests/spatial.rs": "21a9e79d7ad2761d63f12f83c40c7ae802f2709c17785de82563491b749fa005",
+    "crates/rrrah-dedup/examples/raw_raster_probe.rs": "69f36115fe57255b27aa07dcc6a01a31c566d3aa02dd450f550693a2fa46a789"
+  },
+  "api": "extract_spatial_oriented",
+  "selection": {
+    "columns": 16,
+    "rows": 12,
+    "max_features_per_cell": 3,
+    "total_feature_cap": 500,
+    "descriptor_recipe": "OrientedScaleBriefV1 unchanged"
+  },
+  "positive": {
+    "raw": "1294.cr2",
+    "independent_render": "1294.tiff LibRaw ICC",
+    "features": [
+      491,
+      494
+    ],
+    "known_translated_position_overlap": 144,
+    "mutual_correspondences": 104,
+    "inliers": 104,
+    "estimated_translation": [
+      12.033307066040184,
+      9.982090869518515
+    ],
+    "transform_a": 0.9999944203112228,
+    "transform_b": 1.3412998531989066e-05,
+    "squared_error": 7.957297653353943,
+    "known_shift_diagnostic_only": [
+      12,
+      10
+    ],
+    "match_distance": 64,
+    "geometry_tolerance": 2,
+    "minimum_inliers": 10,
+    "previous_strongest_selection_correspondences": 0
+  },
+  "negative": {
+    "raw": "1294.cr2",
+    "independent_render_other_scene": "830.tiff",
+    "features": [
+      491,
+      490
+    ],
+    "mutual_correspondences": 0,
+    "geometry": null
+  },
+  "validation": {
+    "index_ordinal_pyramid_spatial_tests": 11,
+    "existing_local_file_collection_tests": 18,
+    "failed": 0,
+    "clippy_selected_targets_exit_code": 0,
+    "diff_check": "passed"
+  },
+  "limitations": [
+    "Optional primitive; file/collection extraction does not yet use spatial quotas",
+    "Geometry does not prove bidirectional pixel/color match",
+    "Only one independent RAW/raster positive and one real negative qualified",
+    "Grid depends on dimensions/crop; all transformed corpus not established",
+    "Count budgets bound work/storage; complete managed-allocation and sorting cancellation latency still open"
+  ]
+}

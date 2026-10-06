@@ -1,0 +1,68 @@
+{
+  "index": 222,
+  "repository": "alexjp/env-dedup",
+  "commit": "9df9f75c47bef6957245b0bf6f32720a67dad3a0",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "C environment-variable storage deduplication; process-memory strings.",
+  "available_source_evidence": [
+    {
+      "path": "env_dedup.c",
+      "local": "02-env_dedup.c",
+      "url": "https://github.com/alexjp/env-dedup/blob/9df9f75c47bef6957245b0bf6f32720a67dad3a0/env_dedup.c",
+      "sha256": "2d28b1c0c117bda07b12a1911c5a2e3412e8a6bd15c931b16486d64e2be3b435",
+      "truncated": false,
+      "lines": 122,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "env_dedup_dynamic.c",
+      "local": "03-env_dedup_dynamic.c",
+      "url": "https://github.com/alexjp/env-dedup/blob/9df9f75c47bef6957245b0bf6f32720a67dad3a0/env_dedup_dynamic.c",
+      "sha256": "44e255eb9621cc4eaeb691c031c9c9276d83e4227b44a49de286fe9fba67bdba",
+      "truncated": false,
+      "lines": 141,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "env_dedup_dynamic_optimised.c",
+      "local": "04-env_dedup_dynamic_optimised.c",
+      "url": "https://github.com/alexjp/env-dedup/blob/9df9f75c47bef6957245b0bf6f32720a67dad3a0/env_dedup_dynamic_optimised.c",
+      "sha256": "fd754de1e11c7d025bb58ab2be7ef05a44f43f55b280e0f697c08dabea95310d",
+      "truncated": false,
+      "lines": 151,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "GPL-3.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/alexjp/env-dedup/blob/9df9f75c47bef6957245b0bf6f32720a67dad3a0/README.md",
+      "sha256": "ffeed2e211865f34d1e2727ee622aa7776233a309a5e5568c064f771b26323c2",
+      "truncated": false,
+      "lines": 42,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/alexjp/env-dedup/blob/9df9f75c47bef6957245b0bf6f32720a67dad3a0/LICENSE",
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "truncated": false,
+      "lines": 674,
+      "source": false,
+      "test": false
+    }
+  ]
+}

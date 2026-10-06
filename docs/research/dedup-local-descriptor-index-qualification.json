@@ -1,0 +1,59 @@
+{
+  "scope": "Exact BRIEF descriptor index and equivalent mutual-nearest matching; not whole-collection transformed-file index",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/local_index.rs": "fc6cf83892fe92f81f3409fb0373c980e9e123ef46e201e91109203f200de219",
+    "crates/rrrah-dedup/src/lib.rs": "159f22d58ae44d831f276c1b46a94df98fe2de47f8bbeb736d5a6316884e788d",
+    "crates/rrrah-dedup/tests/local_index.rs": "cfa6e0a1594425dfd1ffbe5b4006d8dde68ff7e8377ddded305da07a05ca9a19"
+  },
+  "apis": [
+    "LocalDescriptorIndex::new",
+    "LocalDescriptorIndex::search",
+    "match_features_indexed"
+  ],
+  "retrieval_oracle": {
+    "recipes": 3,
+    "query_seeds": 4,
+    "radii": 8,
+    "entry_ids": 65,
+    "includes_u64_max_id": true,
+    "oracle": "Independent complete variant distances; same (distance,id) order"
+  },
+  "matching_oracle": {
+    "recipes": 3,
+    "thresholds": 8,
+    "ambiguous_duplicate_features": true,
+    "directed_asymmetric_variant_case": true,
+    "radius": "floor(4*maximum_distance/3) capped to 256",
+    "native_fixture": "rotation/base.png versus rotation/scale-216-angle-17.png: all exhaustive correspondences retained",
+    "left_features": 24,
+    "right_features": 31
+  },
+  "validation": {
+    "focused_tests_passed": 5,
+    "full_feature_suite": {
+      "passed": 153,
+      "failed": 0,
+      "ignored": 0,
+      "exit_code": 0
+    },
+    "clippy": "passed all features tests/examples no-deps -D warnings; existing decoder warnings remain",
+    "diff_check": "passed"
+  },
+  "limits": [
+    "Feature entries per side",
+    "Descriptor-search results",
+    "Total directed exact-radius hits; does not count metric-node visits",
+    "Cancellation during construction/search/matching, no partial outputs"
+  ],
+  "limitations": [
+    "Not integrated into native collection candidate pipeline",
+    "Not a geometry or pixel-equality decision",
+    "No measured large-corpus performance or physical allocation completeness",
+    "Reuses eight-slot metric recipe adapter with duplicate unused slots; pruning correctness qualified, overhead not benchmarked"
+  ],
+  "commands": [
+    "cargo test -p rrrah-dedup --all-features",
+    "cargo test -p rrrah-dedup --all-features --test local_index",
+    "cargo clippy -p rrrah-dedup --all-features --tests --examples --no-deps -- -D warnings"
+  ]
+}

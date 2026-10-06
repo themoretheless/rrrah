@@ -9,13 +9,17 @@
 use std::{fs::File, io::Read, path::Path};
 
 /// Maximum number of header bytes examined by the sniffer.
-pub(crate) const SNIFF_BYTES: usize = 256;
+// PICT file-data-fork framing ends at byte 552 (512-byte application header,
+// 10-byte picture frame and 30-byte version/header prefix).
+pub(crate) const SNIFF_BYTES: usize = 552;
 
 /// Coarse container classification from content alone.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub(crate) enum SniffedFormat {
     /// ISO BMFF with an `ftyp` major brand of `crx ` (Canon CR3).
     Cr3,
+    /// Canon CIFF container; camera subset is validated by the decoder.
+    Crw,
     /// Little-endian TIFF with the `CR\x02\0` signature at offset 8.
     Cr2,
     /// Classic TIFF or `BigTIFF`, byte order either way. Camera formats that
@@ -28,6 +32,8 @@ pub(crate) enum SniffedFormat {
     Rw2,
     /// Fujifilm RAF: `FUJIFILMCCD-RAW ` ASCII header.
     Raf,
+    /// Minolta big-endian MRM block container.
+    Mrw,
     /// No recognized signature.
     Unknown,
 }
@@ -35,6 +41,13 @@ pub(crate) enum SniffedFormat {
 /// Classifies a header slice. Pure and total: any input, including an empty
 /// one, maps to exactly one [`SniffedFormat`].
 pub(crate) fn sniff(header: &[u8]) -> SniffedFormat {
+    if (header.starts_with(b"II") || header.starts_with(b"MM"))
+        && header.get(6..14) == Some(b"HEAPCCDR") {
+        return SniffedFormat::Crw;
+    }
+    if header.starts_with(b"\0MRM") {
+        return SniffedFormat::Mrw;
+    }
     // RAF: fixed ASCII signature at offset 0.
     if header.starts_with(b"FUJIFILMCCD-RAW") {
         return SniffedFormat::Raf;
@@ -69,12 +82,23 @@ pub(crate) fn sniff(header: &[u8]) -> SniffedFormat {
 /// `None` when the file cannot be opened or read, so callers can fall back to
 /// extension-based routing.
 pub(crate) fn sniff_file(path: &Path) -> Option<SniffedFormat> {
-    let file = File::open(path).ok()?;
-    let mut header = Vec::with_capacity(SNIFF_BYTES);
-    file.take(u64::try_from(SNIFF_BYTES).ok()?)
-        .read_to_end(&mut header)
-        .ok()?;
-    Some(sniff(&header))
+    let (header, length) = read_header(File::open(path).ok()?).ok()?;
+    Some(sniff(&header[..length]))
+}
+
+/// Bounded stack storage, with no heap allocation for format detection.
+pub(crate) fn read_header(mut reader: impl Read) -> std::io::Result<([u8; SNIFF_BYTES], usize)> {
+    let mut bytes = [0_u8; SNIFF_BYTES];
+    let mut length = 0;
+    while length < bytes.len() {
+        match reader.read(&mut bytes[length..]) {
+            Ok(0) => break,
+            Ok(n) => length += n,
+            Err(error) if error.kind() == std::io::ErrorKind::Interrupted => continue,
+            Err(error) => return Err(error),
+        }
+    }
+    Ok((bytes, length))
 }
 
 #[cfg(test)]
@@ -148,5 +172,126 @@ mod tests {
         assert_eq!(sniff(b"\xff\xd8\xff\xe1Exif\0\0"), SniffedFormat::Unknown);
         assert_eq!(sniff(b"\x89PNG\r\n\x1a\n"), SniffedFormat::Unknown);
         assert_eq!(sniff(&[0_u8; 256]), SniffedFormat::Unknown);
+    }
+}
+
+/// Bounded classic-TIFF identity probe for Kodak's legacy DCS520C TIFF.
+/// Reads at most 128 root entries and two 64-byte ASCII strings; no sensor read.
+/// DNGVersion prevents routing a converted DNG through the native Kodak path.
+pub(crate) fn is_kodak_dcs520(path: &Path) -> bool {
+    use std::io::{Seek, SeekFrom};
+    fn probe(path: &Path) -> Option<bool> {
+        let mut file = File::open(path).ok()?;
+        let mut header = [0_u8; 8];
+        file.read_exact(&mut header).ok()?;
+        let little = match &header[..4] {
+            b"II\x2a\0" => true,
+            b"MM\0\x2a" => false,
+            _ => return None,
+        };
+        let u16_at = |b: &[u8]| {
+            if little {
+                u16::from_le_bytes(b.try_into().unwrap())
+            } else {
+                u16::from_be_bytes(b.try_into().unwrap())
+            }
+        };
+        let u32_at = |b: &[u8]| {
+            if little {
+                u32::from_le_bytes(b.try_into().unwrap())
+            } else {
+                u32::from_be_bytes(b.try_into().unwrap())
+            }
+        };
+        let root = u64::from(u32_at(&header[4..8]));
+        if root < 8 {
+            return None;
+        }
+        file.seek(SeekFrom::Start(root)).ok()?;
+        let mut count = [0; 2];
+        file.read_exact(&mut count).ok()?;
+        let count = u16_at(&count);
+        if count > 128 {
+            return None;
+        }
+        let mut identities = [None, None];
+        for i in 0..count {
+            file.seek(SeekFrom::Start(root + 2 + u64::from(i) * 12)).ok()?;
+            let mut entry = [0; 12];
+            file.read_exact(&mut entry).ok()?;
+            let tag = u16_at(&entry[..2]);
+            if tag == 50706 {
+                return Some(false);
+            }
+            let slot = match tag {
+                271 => 0,
+                272 => 1,
+                _ => continue,
+            };
+            if identities[slot].is_some() || u16_at(&entry[2..4]) != 2 {
+                return None;
+            }
+            let n = usize::try_from(u32_at(&entry[4..8])).ok()?;
+            if !(1..=64).contains(&n) {
+                return None;
+            }
+            let mut text = [0; 64];
+            if n <= 4 {
+                text[..n].copy_from_slice(&entry[8..8 + n]);
+            } else {
+                file.seek(SeekFrom::Start(u64::from(u32_at(&entry[8..12]))))
+                    .ok()?;
+                file.read_exact(&mut text[..n]).ok()?;
+            }
+            let expected: &[u8] = if slot == 0 { b"Kodak\0" } else { b"DCS520C\0" };
+            identities[slot] = Some(&text[..n] == expected);
+        }
+        Some(identities == [Some(true), Some(true)])
+    }
+    probe(path).unwrap_or(false)
+}
+
+#[cfg(test)]
+mod kodak_identity_tests {
+    #[test]
+    fn bounded_probe_requires_unique_native_identity_and_excludes_dng() {
+        let path = std::env::temp_dir().join(format!("rrrah-kodak-probe-{}.tif", std::process::id()));
+        for little in [true, false] {
+            let word = |v: u16| if little { v.to_le_bytes() } else { v.to_be_bytes() };
+            let long = |v: u32| if little { v.to_le_bytes() } else { v.to_be_bytes() };
+            let mut bytes = vec![0u8; 80];
+            bytes[..2].copy_from_slice(if little { b"II" } else { b"MM" });
+            bytes[2..4].copy_from_slice(&word(42));
+            bytes[4..8].copy_from_slice(&long(8));
+            bytes[8..10].copy_from_slice(&word(2));
+            for (i, tag, count, offset) in [(0, 271, 6, 60), (1, 272, 8, 66)] {
+                let p = 10 + i * 12;
+                bytes[p..p + 2].copy_from_slice(&word(tag));
+                bytes[p + 2..p + 4].copy_from_slice(&word(2));
+                bytes[p + 4..p + 8].copy_from_slice(&long(count));
+                bytes[p + 8..p + 12].copy_from_slice(&long(offset));
+            }
+            bytes[60..66].copy_from_slice(b"Kodak\0");
+            bytes[66..74].copy_from_slice(b"DCS520C\0");
+            std::fs::write(&path, &bytes).unwrap();
+            assert!(super::is_kodak_dcs520(&path));
+            let mut converted = bytes.clone();
+            converted[8..10].copy_from_slice(&word(3));
+            converted[34..36].copy_from_slice(&word(50706));
+            std::fs::write(&path, converted).unwrap();
+            assert!(!super::is_kodak_dcs520(&path));
+            let mut duplicate = bytes.clone();
+            duplicate[22..24].copy_from_slice(&word(271));
+            std::fs::write(&path, duplicate).unwrap();
+            assert!(!super::is_kodak_dcs520(&path));
+            let mut oversized = bytes.clone();
+            oversized[14..18].copy_from_slice(&long(65));
+            std::fs::write(&path, oversized).unwrap();
+            assert!(!super::is_kodak_dcs520(&path));
+            bytes[73] = b'X';
+            std::fs::write(&path, bytes).unwrap();
+            assert!(!super::is_kodak_dcs520(&path));
+        }
+        std::fs::remove_file(path).unwrap();
     }
 }

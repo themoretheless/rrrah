@@ -1,0 +1,88 @@
+{
+  "index": 285,
+  "repository": "EpicEric/duper",
+  "commit": "aa2d18e13c3cacfa9bc1c954d23c3a038540807d",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Serialization format parser and bindings; name duper is unrelated to duplicate search.",
+  "available_source_evidence": [
+    {
+      "path": "tree-sitter-duper/src/scanner.c",
+      "local": "03-scanner.c",
+      "url": "https://github.com/EpicEric/duper/blob/aa2d18e13c3cacfa9bc1c954d23c3a038540807d/tree-sitter-duper/src/scanner.c",
+      "sha256": "093a6cc5f43c88ea77c705f708962f8388eba321d23b9e9e38ac0e2702bbd9b9",
+      "truncated": false,
+      "lines": 163,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "duper-js-wasm/rust/src/duper_module.rs",
+      "local": "04-duper_module.rs",
+      "url": "https://github.com/EpicEric/duper/blob/aa2d18e13c3cacfa9bc1c954d23c3a038540807d/duper-js-wasm/rust/src/duper_module.rs",
+      "sha256": "bbf0a6736ccc218bf5647c7cc3fd9d59ccc746b889580a435f722b96e4d054a2",
+      "truncated": false,
+      "lines": 64,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "duper_uniffi/dotnet/DuperAttribute.cs",
+      "local": "05-DuperAttribute.cs",
+      "url": "https://github.com/EpicEric/duper/blob/aa2d18e13c3cacfa9bc1c954d23c3a038540807d/duper_uniffi/dotnet/DuperAttribute.cs",
+      "sha256": "8cb045409067cd976d06de326d6a13c8b1f9d86ff216e26ea42ac1664a1069d2",
+      "truncated": false,
+      "lines": 20,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "duper-js-node/tests/duper_value.test.ts",
+      "local": "06-duper_value.test.ts",
+      "url": "https://github.com/EpicEric/duper/blob/aa2d18e13c3cacfa9bc1c954d23c3a038540807d/duper-js-node/tests/duper_value.test.ts",
+      "sha256": "c1b1939e38d3df7d7b64fbcd2a48e6d11b5be97643db7783368edbad3ecb17ec",
+      "truncated": false,
+      "lines": 36,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 45,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/EpicEric/duper/blob/aa2d18e13c3cacfa9bc1c954d23c3a038540807d/README.md",
+      "sha256": "a30445aa49beacd07aeaa28c242f37e18e4a25e604c90962598518e64eecfc73",
+      "truncated": false,
+      "lines": 67,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/EpicEric/duper/blob/aa2d18e13c3cacfa9bc1c954d23c3a038540807d/LICENSE",
+      "sha256": "ea4da1d281949e1c1ef3a497b59c82ce8af10aaef75ebdcdda3a4273a11966d2",
+      "truncated": false,
+      "lines": 25,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "axum_duper/LICENSE",
+      "local": "02-LICENSE",
+      "url": "https://github.com/EpicEric/duper/blob/aa2d18e13c3cacfa9bc1c954d23c3a038540807d/axum_duper/LICENSE",
+      "sha256": "ea4da1d281949e1c1ef3a497b59c82ce8af10aaef75ebdcdda3a4273a11966d2",
+      "truncated": false,
+      "lines": 25,
+      "source": false,
+      "test": false
+    }
+  ]
+}

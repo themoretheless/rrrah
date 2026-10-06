@@ -1,0 +1,78 @@
+{
+  "index": 114,
+  "repository": "rpcpool/yellowstone-grpc-kafka",
+  "commit": "1daa7fd50461c31a2c6fe5d547bda2c3515620ac",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Solana/Kafka slot/hash message deduplication; application event identity.",
+  "available_source_evidence": [
+    {
+      "path": "src/kafka/dedup.rs",
+      "local": "02-dedup.rs",
+      "url": "https://github.com/rpcpool/yellowstone-grpc-kafka/blob/1daa7fd50461c31a2c6fe5d547bda2c3515620ac/src/kafka/dedup.rs",
+      "sha256": "dd558e14111d3ccb4d663b2815e2e68d1deb1a45b9430911e25fdfab0615b2e4",
+      "truncated": false,
+      "lines": 48,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/config.rs",
+      "local": "03-config.rs",
+      "url": "https://github.com/rpcpool/yellowstone-grpc-kafka/blob/1daa7fd50461c31a2c6fe5d547bda2c3515620ac/src/config.rs",
+      "sha256": "99ba2c74bbcae6f6c7d108cd76cfcda7e6a0ef14cd31454dafa93e45c41e1245",
+      "truncated": false,
+      "lines": 324,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/lib.rs",
+      "local": "04-lib.rs",
+      "url": "https://github.com/rpcpool/yellowstone-grpc-kafka/blob/1daa7fd50461c31a2c6fe5d547bda2c3515620ac/src/lib.rs",
+      "sha256": "92af971a76f1ec0dc788e17fbfc49f51461b972061d9c351f6057160e7c3d906",
+      "truncated": false,
+      "lines": 43,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/metrics.rs",
+      "local": "05-metrics.rs",
+      "url": "https://github.com/rpcpool/yellowstone-grpc-kafka/blob/1daa7fd50461c31a2c6fe5d547bda2c3515620ac/src/metrics.rs",
+      "sha256": "58fe5729d32de051b0ad76e7f40e7083720f466aaa8a00ecc3cc41adb587d0f5",
+      "truncated": false,
+      "lines": 160,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "AGPL-3.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/rpcpool/yellowstone-grpc-kafka/blob/1daa7fd50461c31a2c6fe5d547bda2c3515620ac/README.md",
+      "sha256": "ca1b0da2395a1531e80a2a597235f27b98b6a42baad2e5958899d1bdddd53c81",
+      "truncated": false,
+      "lines": 49,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/rpcpool/yellowstone-grpc-kafka/blob/1daa7fd50461c31a2c6fe5d547bda2c3515620ac/LICENSE",
+      "sha256": "8486a10c4393cee1c25392769ddd3b2d6c242d6ec7928e1414efff7dfb2f07ef",
+      "truncated": false,
+      "lines": 661,
+      "source": false,
+      "test": false
+    }
+  ]
+}

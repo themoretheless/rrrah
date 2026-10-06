@@ -20,7 +20,7 @@ const EOS_R8_LAYOUT_MARKER: u16 = 48;
 const LAYOUT_MARKER_INDEX: usize = 0;
 const RED_NUMERATOR_INDEX: usize = 105;
 const RED_DENOMINATOR_INDEX: usize = 106;
-const BLUE_DENOMINATOR_INDEX: usize = 107;
+const SECOND_GREEN_INDEX: usize = 107;
 const BLUE_NUMERATOR_INDEX: usize = 108;
 
 /// Resource limits for one already bounded CTMD sample.
@@ -175,17 +175,17 @@ pub(crate) struct EosR8AsShotWhiteBalance {
     pub(crate) red_numerator: u16,
     pub(crate) red_denominator: u16,
     pub(crate) blue_numerator: u16,
-    pub(crate) blue_denominator: u16,
+    pub(crate) second_green: u16,
 }
 
 impl EosR8AsShotWhiteBalance {
-    /// Converts the retained integer ratios to the decoder's RGGB gain order.
+    /// Converts RGGB correction levels to RGBG gains relative to the first green.
     pub(crate) fn gains(self) -> [f32; 4] {
         [
             f32::from(self.red_numerator) / f32::from(self.red_denominator),
             1.0,
-            f32::from(self.blue_numerator) / f32::from(self.blue_denominator),
-            1.0,
+            f32::from(self.blue_numerator) / f32::from(self.red_denominator),
+            f32::from(self.second_green) / f32::from(self.red_denominator),
         ]
     }
 }
@@ -194,6 +194,11 @@ impl EosR8AsShotWhiteBalance {
 pub(crate) fn extract_eos_r8_as_shot_white_balance(
     data: &[u8],
 ) -> Result<EosR8AsShotWhiteBalance, CtmdError> {
+    let (record_index, entry) = find_eos_r8_levels(data)?;
+    decode_eos_r8_white_balance(record_index, &entry)
+}
+
+fn find_eos_r8_levels(data: &[u8]) -> Result<(usize, Entry<'_>), CtmdError> {
     let ctmd = Ctmd::parse(data)?;
     let mut candidate: Option<(usize, Entry<'_>)> = None;
 
@@ -238,8 +243,38 @@ pub(crate) fn extract_eos_r8_as_shot_white_balance(
         candidate = Some((record.index(), entry.clone()));
     }
 
-    let (record_index, entry) = candidate.ok_or(CtmdError::MissingWhiteBalanceRecord)?;
-    decode_eos_r8_white_balance(record_index, &entry)
+    candidate.ok_or(CtmdError::MissingWhiteBalanceRecord)
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) struct EosR8SensorLevels {
+    pub(crate) black: [u16; 4],
+    pub(crate) normal_white: u16,
+    pub(crate) specular_white: u16,
+}
+
+pub(crate) fn extract_eos_r8_sensor_levels(data: &[u8]) -> Result<EosR8SensorLevels, CtmdError> {
+    let (record_index, entry) = find_eos_r8_levels(data)?;
+    // Type, count, marker and as-shot ratios identify the exact supported layout.
+    decode_eos_r8_white_balance(record_index, &entry)?;
+    let values = entry
+        .short_values()
+        .map_err(|source| CtmdError::InvalidWhiteBalanceValue { record_index, source })?;
+    let black = [values[636], values[637], values[638], values[639]];
+    let normal_white = values[640];
+    let specular_white = values[641];
+    if normal_white == 0
+        || normal_white > specular_white
+        || specular_white > 16383
+        || black.iter().any(|value| *value >= normal_white)
+    {
+        return Err(CtmdError::InvalidSensorLevels { record_index });
+    }
+    Ok(EosR8SensorLevels {
+        black,
+        normal_white,
+        specular_white,
+    })
 }
 
 fn decode_eos_r8_white_balance(
@@ -281,7 +316,7 @@ fn decode_eos_r8_white_balance(
 
     let red_numerator = levels[RED_NUMERATOR_INDEX];
     let red_denominator = levels[RED_DENOMINATOR_INDEX];
-    let blue_denominator = levels[BLUE_DENOMINATOR_INDEX];
+    let second_green = levels[SECOND_GREEN_INDEX];
     let blue_numerator = levels[BLUE_NUMERATOR_INDEX];
     if red_denominator == 0 {
         return Err(CtmdError::ZeroWhiteBalanceDenominator {
@@ -290,11 +325,11 @@ fn decode_eos_r8_white_balance(
             level_index: RED_DENOMINATOR_INDEX,
         });
     }
-    if blue_denominator == 0 {
+    if second_green == 0 {
         return Err(CtmdError::ZeroWhiteBalanceDenominator {
             record_index,
             channel: WhiteBalanceChannel::Blue,
-            level_index: BLUE_DENOMINATOR_INDEX,
+            level_index: SECOND_GREEN_INDEX,
         });
     }
 
@@ -302,7 +337,7 @@ fn decode_eos_r8_white_balance(
         red_numerator,
         red_denominator,
         blue_numerator,
-        blue_denominator,
+        second_green,
     })
 }
 
@@ -388,6 +423,9 @@ pub(crate) enum CtmdError {
         record_offset: usize,
     },
     MissingWhiteBalanceRecord,
+    InvalidSensorLevels {
+        record_index: usize,
+    },
     AmbiguousWhiteBalanceTags {
         record_index: usize,
         occurrences: usize,
@@ -425,6 +463,10 @@ impl fmt::Display for CtmdError {
     #[allow(clippy::too_many_lines)]
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
+            Self::InvalidSensorLevels { record_index } => write!(
+                formatter,
+                "CTMD record {record_index} has invalid EOS R8 sensor levels"
+            ),
             Self::TruncatedRecordLength { offset, remaining } => write!(
                 formatter,
                 "CTMD record length at byte {offset} is truncated ({remaining} bytes remain)"
@@ -593,7 +635,7 @@ mod tests {
                 red_numerator: 1_678,
                 red_denominator: 1_024,
                 blue_numerator: 1_659,
-                blue_denominator: 1_024,
+                second_green: 1_024,
             }
         );
         let gains = white_balance.gains();
@@ -601,6 +643,46 @@ mod tests {
         assert_eq!(gains[1].to_bits(), 1.0_f32.to_bits());
         assert_eq!(gains[2].to_bits(), (1_659.0_f32 / 1_024.0).to_bits());
         assert_eq!(gains[3].to_bits(), 1.0_f32.to_bits());
+    }
+
+    #[test]
+    fn retains_second_green_gain_without_renormalizing_blue() {
+        let mut levels = eos_r8_levels();
+        levels[RED_DENOMINATOR_INDEX] = 1000;
+        levels[SECOND_GREEN_INDEX] = 1200;
+        levels[BLUE_NUMERATOR_INDEX] = 1800;
+        let gains = extract_eos_r8_as_shot_white_balance(&tiff_record(&levels_tiff(&levels)))
+            .unwrap()
+            .gains();
+        assert_eq!(
+            gains.map(f32::to_bits),
+            [1.678_f32, 1.0, 1.8, 1.2].map(f32::to_bits)
+        );
+    }
+
+    #[test]
+    fn reads_dynamic_sensor_levels_and_rejects_invalid_ordering() {
+        let mut levels = eos_r8_levels();
+        levels[636..640].copy_from_slice(&[500, 501, 502, 503]);
+        levels[640] = 12000;
+        levels[641] = 14500;
+        let bytes = tiff_record(&levels_tiff(&levels));
+        assert_eq!(
+            extract_eos_r8_sensor_levels(&bytes).unwrap(),
+            EosR8SensorLevels {
+                black: [500, 501, 502, 503],
+                normal_white: 12000,
+                specular_white: 14500
+            }
+        );
+        for (normal, specular) in [(0, 14000), (15000, 14000), (12000, 17000), (400, 14000)] {
+            levels[640] = normal;
+            levels[641] = specular;
+            assert!(matches!(
+                extract_eos_r8_sensor_levels(&tiff_record(&levels_tiff(&levels))),
+                Err(CtmdError::InvalidSensorLevels { .. })
+            ));
+        }
     }
 
     #[test]
@@ -760,12 +842,12 @@ mod tests {
         ));
 
         let mut blue_zero = eos_r8_levels();
-        blue_zero[BLUE_DENOMINATOR_INDEX] = 0;
+        blue_zero[SECOND_GREEN_INDEX] = 0;
         assert!(matches!(
             extract_eos_r8_as_shot_white_balance(&tiff_record(&levels_tiff(&blue_zero))),
             Err(CtmdError::ZeroWhiteBalanceDenominator {
                 channel: WhiteBalanceChannel::Blue,
-                level_index: BLUE_DENOMINATOR_INDEX,
+                level_index: SECOND_GREEN_INDEX,
                 ..
             })
         ));
@@ -802,8 +884,11 @@ mod tests {
         levels[LAYOUT_MARKER_INDEX] = EOS_R8_LAYOUT_MARKER;
         levels[RED_NUMERATOR_INDEX] = 1_678;
         levels[RED_DENOMINATOR_INDEX] = 1_024;
-        levels[BLUE_DENOMINATOR_INDEX] = 1_024;
+        levels[SECOND_GREEN_INDEX] = 1_024;
         levels[BLUE_NUMERATOR_INDEX] = 1_659;
+        levels[636..640].copy_from_slice(&[512; 4]);
+        levels[640] = 12_735;
+        levels[641] = 14_008;
         levels
     }
 

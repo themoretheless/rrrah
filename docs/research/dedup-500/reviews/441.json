@@ -1,0 +1,88 @@
+{
+  "index": 441,
+  "repository": "AiLECS/netPDQContainer",
+  "commit": "52fb7a10bc785b55d505dba78b924e6c78e1cbf8",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "wrapper",
+  "finding": ".NET PDQ HTTP service; delegated PDQ code/license/source must be checked separately.",
+  "available_source_evidence": [
+    {
+      "path": "pdq/HashResult.cs",
+      "local": "02-HashResult.cs",
+      "url": "https://github.com/AiLECS/netPDQContainer/blob/52fb7a10bc785b55d505dba78b924e6c78e1cbf8/pdq/HashResult.cs",
+      "sha256": "b3bc0362889280cd4bd9fdb303323a4665e0ffa8398d25ac6d9b0078ec80f801",
+      "truncated": false,
+      "lines": 22,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "pdq/PDQHashCalculation.cs",
+      "local": "03-PDQHashCalculation.cs",
+      "url": "https://github.com/AiLECS/netPDQContainer/blob/52fb7a10bc785b55d505dba78b924e6c78e1cbf8/pdq/PDQHashCalculation.cs",
+      "sha256": "b0182b4667fdb4e0ff8afe2709ad571bf07c632f1195f0c63297a2d954acc1ff",
+      "truncated": false,
+      "lines": 25,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "services/HashService.cs",
+      "local": "04-HashService.cs",
+      "url": "https://github.com/AiLECS/netPDQContainer/blob/52fb7a10bc785b55d505dba78b924e6c78e1cbf8/services/HashService.cs",
+      "sha256": "27401d224df3392c607506258816b0e709c7e04e3585b69880a1b22ce050c9d0",
+      "truncated": false,
+      "lines": 105,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "Program.cs",
+      "local": "05-Program.cs",
+      "url": "https://github.com/AiLECS/netPDQContainer/blob/52fb7a10bc785b55d505dba78b924e6c78e1cbf8/Program.cs",
+      "sha256": "10ebf8b575962b62a1e8a50bf56a5fc365a1739f786db555623fb7b22cbb7927",
+      "truncated": false,
+      "lines": 32,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "Startup.cs",
+      "local": "06-Startup.cs",
+      "url": "https://github.com/AiLECS/netPDQContainer/blob/52fb7a10bc785b55d505dba78b924e6c78e1cbf8/Startup.cs",
+      "sha256": "41b196ea332f1b37d0ab46c8e79abd9d0475bfaab1146f011a38a5ab0007a80b",
+      "truncated": false,
+      "lines": 119,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "readme.md",
+      "local": "00-readme.md",
+      "url": "https://github.com/AiLECS/netPDQContainer/blob/52fb7a10bc785b55d505dba78b924e6c78e1cbf8/readme.md",
+      "sha256": "a22315376493cbb131818339ca57abe7dcdd6944894fe12464e5dab19014d53f",
+      "truncated": false,
+      "lines": 49,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "licence",
+      "local": "01-licence",
+      "url": "https://github.com/AiLECS/netPDQContainer/blob/52fb7a10bc785b55d505dba78b924e6c78e1cbf8/licence",
+      "sha256": "8c621913385563feecaffb8ea4787417e9acedf3108babc41a4b83f040b85aae",
+      "truncated": false,
+      "lines": 7,
+      "source": false,
+      "test": false
+    }
+  ]
+}

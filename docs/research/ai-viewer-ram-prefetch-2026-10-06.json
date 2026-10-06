@@ -1,0 +1,20 @@
+{
+  "sources": [
+    {
+      "name": "VectorApple.ai",
+      "source": "https://media.githubusercontent.com/media/opendesigndev/illustrator-parser-pdfcpu/225c40c9f5d0ea3ff0e793ee1dacc386c198c3d4/__tests__/fixtures/VectorApple.ai",
+      "sha256": "c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06",
+      "bytes": 1062861
+    },
+    {
+      "name": "one.ai",
+      "source": "https://media.githubusercontent.com/media/opendesigndev/illustrator-parser-pdfcpu/225c40c9f5d0ea3ff0e793ee1dacc386c198c3d4/__tests__/fixtures/one.ai",
+      "sha256": "97786949c268233a446e1738fb9c2f941e4d109811bd2f972948cdb7a45d64b4",
+      "bytes": 204049
+    }
+  ],
+  "test": "foreground_loader_tests::real_ai_pages_use_shared_ram_hits_and_independent_prefetch_keys",
+  "result": "1 passed, explicitly run ignored test",
+  "evidence": "Three page keys coexist in viewer RAM cache. Hits prohibit decode closure, share original float-buffer allocation and do not increase managed memory. Second page uses ordinary preload path. Dropping all cache owners returns root usage to zero.",
+  "scope": "Real source integration; no independent pixel equivalence, GPU, swap, cold IO or latency claim."
+}

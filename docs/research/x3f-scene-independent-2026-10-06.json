@@ -1,0 +1,17 @@
+{
+  "status": "Scene-adjusted black rows match separate C++ arithmetic; display unqualified",
+  "values_compared": 4593,
+  "max_absolute_error": 0,
+  "tests_passed": 17,
+  "precision": "float32 forward mean half; float64 sampled ratio and final addition; float32 stored result",
+  "reference_helper": "scripts/x3f-black-smoothing-reference.cpp",
+  "helper_sha256": "83b0372096d5b1a0de98005ac0e7f69a21a927686c60d149597d8c4d1d0dd851",
+  "oracle_sha256": "1bb5ff0c1ef4fac5a4e3ab2462d4f97ab2cb66a6a3a233cb5673abdcd2d45bff",
+  "log": "docs/research/x3f-scene-independent-2026-10-06.log",
+  "remaining": [
+    "Sensor correction integration",
+    "Independent final color image",
+    "Viewer integration",
+    "Broader X3F variants"
+  ]
+}

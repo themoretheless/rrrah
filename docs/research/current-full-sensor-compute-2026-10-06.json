@@ -1,0 +1,39 @@
+{
+  "adapter": "Metal Apple M4 Max",
+  "pixels": 25494560,
+  "dimensions": [
+    6188,
+    4120
+  ],
+  "resident_compute": {
+    "passed": 1,
+    "samples_ms": [
+      2.16875,
+      2.204542,
+      2.39975,
+      2.448458,
+      2.715916
+    ],
+    "median_ms": 2.39975,
+    "warmups": 3,
+    "validation": "first/middle/last samples only",
+    "log": "/tmp/rrrah-current-full-sensor-compute.log"
+  },
+  "managed_compute": {
+    "passed": 1,
+    "single_end_to_end_ms": 248.171,
+    "gpu_peak_bytes": 1223738992,
+    "cpu_peak_bytes": 815825920,
+    "final_used_bytes": 0,
+    "validation": "every pixel exact plus clone and last-owner release",
+    "log": "/tmp/rrrah-current-full-managed-compute.log"
+  },
+  "source_sha256": "fc47c900875ad0a3c2f4e3f2d0976d0967d823dbd39f0ffb8fb8b2422755308e",
+  "limitations": [
+    "Synthetic linear exposure; not full RAW demosaic or format decode",
+    "Resident compute excludes upload/readback; managed timing includes validation/allocation/upload/readback",
+    "Single managed timing is not a latency distribution",
+    "Driver/process RSS outside budgets",
+    "No NVIDIA/CUDA or physical HDR display proof"
+  ]
+}

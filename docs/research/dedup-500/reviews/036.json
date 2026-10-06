@@ -1,0 +1,78 @@
+{
+  "index": 36,
+  "repository": "tescolopio/Obsidian_FolderBridge",
+  "commit": "a6ac1e1514c7612ebce09dd1fc320343a4696f91",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Obsidian external mounts and file serving; duplication here is mount behavior.",
+  "license_metadata": "MIT",
+  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "tests_detected": 21,
+  "upstream_tests_run": false,
+  "available_source_evidence": [
+    {
+      "path": "src/mountScan.ts",
+      "local": "02-mountScan.ts",
+      "url": "https://github.com/tescolopio/Obsidian_FolderBridge/blob/a6ac1e1514c7612ebce09dd1fc320343a4696f91/src/mountScan.ts",
+      "sha256": "2723eff71980b48c94a2d26c2f61cc24526e9b61fd68bf4889b31f8c0059f000",
+      "truncated": false,
+      "lines": 124,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/CredentialStore.ts",
+      "local": "03-CredentialStore.ts",
+      "url": "https://github.com/tescolopio/Obsidian_FolderBridge/blob/a6ac1e1514c7612ebce09dd1fc320343a4696f91/src/CredentialStore.ts",
+      "sha256": "52bb2b3cca39025ad9364256c999efa71521e16af74536f5202afbe338182386",
+      "truncated": false,
+      "lines": 178,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/FileServer.ts",
+      "local": "04-FileServer.ts",
+      "url": "https://github.com/tescolopio/Obsidian_FolderBridge/blob/a6ac1e1514c7612ebce09dd1fc320343a4696f91/src/FileServer.ts",
+      "sha256": "bdaf6db960a6a2e52c73925f64e2dbec931bb8a72e967594488f279cc224f763",
+      "truncated": false,
+      "lines": 281,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/mountScan.test.ts",
+      "local": "05-mountScan.test.ts",
+      "url": "https://github.com/tescolopio/Obsidian_FolderBridge/blob/a6ac1e1514c7612ebce09dd1fc320343a4696f91/tests/mountScan.test.ts",
+      "sha256": "e4662a2e16530bc98616d5b0ab13dec6bedb3053b598b7c6d92e857c9643999a",
+      "truncated": false,
+      "lines": 361,
+      "source": true,
+      "test": true
+    }
+  ],
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/tescolopio/Obsidian_FolderBridge/blob/a6ac1e1514c7612ebce09dd1fc320343a4696f91/README.md",
+      "sha256": "f813e2a74338d4cb8058fae2994363e4ee19a517dea24c9fe8092b83054c3164",
+      "truncated": false,
+      "lines": 545,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/tescolopio/Obsidian_FolderBridge/blob/a6ac1e1514c7612ebce09dd1fc320343a4696f91/LICENSE",
+      "sha256": "d2e190e504b9f7be3882b00146d1ee75d018a6dbdb4917cb87ee7ed786d9bcc8",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

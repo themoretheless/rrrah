@@ -1,0 +1,16 @@
+{
+  "change": "Fallible whole-presentation confirmation request/candidate/result storage and exhaustive scan ID admission; explicit sorted candidate pairs.",
+  "validation": {
+    "animated_container_pages_presentation_kind_tests": 23,
+    "failed": 0,
+    "dedup_lib_no_deps_clippy": "passed"
+  },
+  "source_sha256": {
+    "crates/rrrah-dedup/src/container.rs": "f3b5fd8bce3d8e9031cab8166415cb83f160f548c4d295a62857c77ab0303a72"
+  },
+  "limits": [
+    "Grouped and automatic directory container storage still requires allocation review.",
+    "Exhaustive full-container comparison remains quadratic repeated decoding.",
+    "No allocator failure injection, complete shared memory admission or measured scaling."
+  ]
+}

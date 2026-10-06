@@ -1,0 +1,115 @@
+{
+  "repository": "Mattbusel/tokio-prompt-orchestrator",
+  "metadata": {
+    "name": "Mattbusel/tokio-prompt-orchestrator",
+    "url": "https://github.com/Mattbusel/tokio-prompt-orchestrator",
+    "description": "Tokio pipeline for serving LLM requests: bounded five-stage flow with dedup, circuit breakers, retries, rate limits and a dead-letter queue in front of Anthropic, OpenAI, llama.cpp or vLLM. REST, SSE, MCP, TUI.",
+    "language": "Rust",
+    "stars": 58,
+    "license": "MIT",
+    "archived": false,
+    "pushed_at": "2026-10-04T04:23:23Z",
+    "default_branch": "main",
+    "queries": [
+      "dedup in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/Mattbusel/tokio-prompt-orchestrator/blob/af07270f1a0eefd03c2794d53de00cef7cb6461f/README.md",
+      "sha256": "1be3f929be8998777a70ac432c8a6e89bb06e1a5a3d657fcb94da19adc58c91f",
+      "truncated": false,
+      "lines": 299,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/Mattbusel/tokio-prompt-orchestrator/blob/af07270f1a0eefd03c2794d53de00cef7cb6461f/LICENSE",
+      "sha256": "fb39ba2bf742117476aa78301357fdc86aff3a993da50bde0eed357253ff6a37",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "src/request_dedup.rs",
+      "local": "02-request_dedup.rs",
+      "url": "https://github.com/Mattbusel/tokio-prompt-orchestrator/blob/af07270f1a0eefd03c2794d53de00cef7cb6461f/src/request_dedup.rs",
+      "sha256": "72c2ea5bc6aca457f998cfe9b574de106bba6b8bbf694eea9f4490bc380f3744",
+      "truncated": false,
+      "lines": 405,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/retrieval.rs",
+      "local": "03-retrieval.rs",
+      "url": "https://github.com/Mattbusel/tokio-prompt-orchestrator/blob/af07270f1a0eefd03c2794d53de00cef7cb6461f/src/retrieval.rs",
+      "sha256": "56da482d9bfb7f94ab23d11b786ec85675d1e0af0e9becc0f8534c931b96421f",
+      "truncated": false,
+      "lines": 103,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/distributed/redis_dedup.rs",
+      "local": "04-redis_dedup.rs",
+      "url": "https://github.com/Mattbusel/tokio-prompt-orchestrator/blob/af07270f1a0eefd03c2794d53de00cef7cb6461f/src/distributed/redis_dedup.rs",
+      "sha256": "41be5a39aa3e0543af4e79e7b92ea87f014730f493707de5fc2d79e97b9bfa4b",
+      "truncated": false,
+      "lines": 495,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "scripts/mcp_dedup_test.sh",
+      "local": "05-mcp_dedup_test.sh",
+      "url": "https://github.com/Mattbusel/tokio-prompt-orchestrator/blob/af07270f1a0eefd03c2794d53de00cef7cb6461f/scripts/mcp_dedup_test.sh",
+      "sha256": "4158c348ab462bbcd1fa4a9e3db5ca821d1a770e3cee6733df298d9b6d7a2078",
+      "truncated": false,
+      "lines": 84,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "src/enhanced/dedup.rs",
+      "local": "06-dedup.rs",
+      "url": "https://github.com/Mattbusel/tokio-prompt-orchestrator/blob/af07270f1a0eefd03c2794d53de00cef7cb6461f/src/enhanced/dedup.rs",
+      "sha256": "d30308490f3cbccaa9b3e6cf5f89200e8dde915d10ef16a0e95ccf14425a9b43",
+      "truncated": false,
+      "lines": 1361,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/tui/widgets/dedup.rs",
+      "local": "07-dedup.rs",
+      "url": "https://github.com/Mattbusel/tokio-prompt-orchestrator/blob/af07270f1a0eefd03c2794d53de00cef7cb6461f/src/tui/widgets/dedup.rs",
+      "sha256": "284d2ddd63be07579c22df0b87eee3a10bc68babb91d4f30ebdd958af5295d68",
+      "truncated": false,
+      "lines": 137,
+      "source": true,
+      "test": false
+    }
+  ],
+  "errors": [],
+  "commit": "af07270f1a0eefd03c2794d53de00cef7cb6461f",
+  "tree_truncated": false,
+  "source_file_count": 281,
+  "test_file_count": 40,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "src/enhanced/dedup.rs",
+    "src/tui/widgets/dedup.rs",
+    "src/request_dedup.rs",
+    "scripts/mcp_dedup_test.sh"
+  ]
+}

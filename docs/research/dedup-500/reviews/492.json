@@ -1,0 +1,68 @@
+{
+  "index": 492,
+  "repository": "touhidrahman/eyecatching",
+  "commit": "72da4de1845b4cdecc8f826bf756cead43bde507",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "wrapper",
+  "finding": "Frontend screenshot CLI delegates aHash/pHash/dHash/wHash to ImageHash; no independent math.",
+  "available_source_evidence": [
+    {
+      "path": "comparative.py",
+      "local": "02-comparative.py",
+      "url": "https://github.com/touhidrahman/eyecatching/blob/72da4de1845b4cdecc8f826bf756cead43bde507/comparative.py",
+      "sha256": "576e7490c36f7f21bfaa680d2f6241f810d9c590b4c7c8863c9275929d11a594",
+      "truncated": false,
+      "lines": 45,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "controller.py",
+      "local": "03-controller.py",
+      "url": "https://github.com/touhidrahman/eyecatching/blob/72da4de1845b4cdecc8f826bf756cead43bde507/controller.py",
+      "sha256": "84ff8de8892dbecbfe11acb2ed6089152858b2abc180ef3b6d5cb6a26d20c124",
+      "truncated": false,
+      "lines": 352,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "eyecatching.py",
+      "local": "04-eyecatching.py",
+      "url": "https://github.com/touhidrahman/eyecatching/blob/72da4de1845b4cdecc8f826bf756cead43bde507/eyecatching.py",
+      "sha256": "d25f4a41ad6386342d2d120df228254cfb8ed02d896359b91ef4dbb46ebb664e",
+      "truncated": false,
+      "lines": 390,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/touhidrahman/eyecatching/blob/72da4de1845b4cdecc8f826bf756cead43bde507/README.md",
+      "sha256": "fe83f58bb4760b8b32f6f7e4b44601492f7c1acc61971e49548ee722c52576ea",
+      "truncated": false,
+      "lines": 91,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/touhidrahman/eyecatching/blob/72da4de1845b4cdecc8f826bf756cead43bde507/LICENSE",
+      "sha256": "e78016ebc433270f530e9b3c38ca97487d5374cc67094eab6b488fad830553a8",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

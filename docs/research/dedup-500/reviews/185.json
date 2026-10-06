@@ -1,0 +1,98 @@
+{
+  "index": 185,
+  "repository": "Landsbokasafn/deduplicator",
+  "commit": "41f165b9bf3b09b1850e8f823a9d6f32eba60336",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Heritrix crawl dedup processor/report; web archive identity persistence, no visual math established.",
+  "available_source_evidence": [
+    {
+      "path": "deduplicator-commons/src/main/java/is/landsbokasafn/deduplicator/DeDuplicatorConstants.java",
+      "local": "03-DeDuplicatorConstants.java",
+      "url": "https://github.com/Landsbokasafn/deduplicator/blob/41f165b9bf3b09b1850e8f823a9d6f32eba60336/deduplicator-commons/src/main/java/is/landsbokasafn/deduplicator/DeDuplicatorConstants.java",
+      "sha256": "426312a9b54b1fa1d7794455096301f79f0688fc2cfe64af241cc2c7fe7c30ad",
+      "truncated": false,
+      "lines": 26,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "deduplicator-heritrix/src/main/java/is/landsbokasafn/deduplicator/heritrix/DeDuplicator.java",
+      "local": "04-DeDuplicator.java",
+      "url": "https://github.com/Landsbokasafn/deduplicator/blob/41f165b9bf3b09b1850e8f823a9d6f32eba60336/deduplicator-heritrix/src/main/java/is/landsbokasafn/deduplicator/heritrix/DeDuplicator.java",
+      "sha256": "ea7cc03701fc6921c845f28bbb66c715bdc57d4186151686b6ece8150c97c458",
+      "truncated": false,
+      "lines": 255,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "deduplicator-heritrix/src/main/java/is/landsbokasafn/deduplicator/heritrix/DeDuplicatorReport.java",
+      "local": "05-DeDuplicatorReport.java",
+      "url": "https://github.com/Landsbokasafn/deduplicator/blob/41f165b9bf3b09b1850e8f823a9d6f32eba60336/deduplicator-heritrix/src/main/java/is/landsbokasafn/deduplicator/heritrix/DeDuplicatorReport.java",
+      "sha256": "4a54774c89becfce413e254c9031c5404ad57da26a0cb6b2c24d9f5557c26275",
+      "truncated": false,
+      "lines": 28,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "deduplicator-heritrix/src/test/java/is/landsbokasafn/deduplicator/heritrix/DeDuplicatorTest.java",
+      "local": "06-DeDuplicatorTest.java",
+      "url": "https://github.com/Landsbokasafn/deduplicator/blob/41f165b9bf3b09b1850e8f823a9d6f32eba60336/deduplicator-heritrix/src/test/java/is/landsbokasafn/deduplicator/heritrix/DeDuplicatorTest.java",
+      "sha256": "d5ae9a206e4ab2630b6ebd60806f4221b027abbd8e9b0d9506cc14f476a0910f",
+      "truncated": false,
+      "lines": 11,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "deduplicator-commons/src/main/java/is/landsbokasafn/deduplicator/IndexFields.java",
+      "local": "07-IndexFields.java",
+      "url": "https://github.com/Landsbokasafn/deduplicator/blob/41f165b9bf3b09b1850e8f823a9d6f32eba60336/deduplicator-commons/src/main/java/is/landsbokasafn/deduplicator/IndexFields.java",
+      "sha256": "e43b06cbccb6a4d3196f751fe701d53d5faa813d9b47dbabc79946ebce5ff091",
+      "truncated": false,
+      "lines": 40,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "Apache-2.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 2,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/Landsbokasafn/deduplicator/blob/41f165b9bf3b09b1850e8f823a9d6f32eba60336/README.md",
+      "sha256": "070334a9d6d5dff53a269157998b94e9bfd4406a2d759747c6b5ef235957eb39",
+      "truncated": false,
+      "lines": 12,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/Landsbokasafn/deduplicator/blob/41f165b9bf3b09b1850e8f823a9d6f32eba60336/LICENSE",
+      "sha256": "db1ed8cccea0d0fb5d92b7c59d9aa78a5bbcd047972519c6a21a4416937f2ebf",
+      "truncated": false,
+      "lines": 201,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "src/site/apt/license.apt",
+      "local": "02-license.apt",
+      "url": "https://github.com/Landsbokasafn/deduplicator/blob/41f165b9bf3b09b1850e8f823a9d6f32eba60336/src/site/apt/license.apt",
+      "sha256": "0c1d18aa640ce2adbd89d98f67d3270412d82c5facf13f28af35667aeff8ccb3",
+      "truncated": false,
+      "lines": 206,
+      "source": false,
+      "test": false
+    }
+  ]
+}

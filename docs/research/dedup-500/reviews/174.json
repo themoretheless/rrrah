@@ -1,0 +1,88 @@
+{
+  "index": 174,
+  "repository": "renatobardi/hapai",
+  "commit": "73848acfda71ae702da911a5cc7b4ec9564f5c35",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Assistant hook guardrails and artifact SHA256 checksums; no duplicate discovery algorithm.",
+  "available_source_evidence": [
+    {
+      "path": "install.sh",
+      "local": "02-install.sh",
+      "url": "https://github.com/renatobardi/hapai/blob/73848acfda71ae702da911a5cc7b4ec9564f5c35/install.sh",
+      "sha256": "9a81b6c2a2161c63fbca04e83cd192a5ade697687345d79f4498d91d54ebd9b0",
+      "truncated": false,
+      "lines": 277,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "exporters/export-antigravity.sh",
+      "local": "03-export-antigravity.sh",
+      "url": "https://github.com/renatobardi/hapai/blob/73848acfda71ae702da911a5cc7b4ec9564f5c35/exporters/export-antigravity.sh",
+      "sha256": "4a7ce9cc2a6b23b24167637227ac986ec47d90466f41ee73ab08b615bc04d273",
+      "truncated": false,
+      "lines": 40,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "exporters/export-copilot.sh",
+      "local": "04-export-copilot.sh",
+      "url": "https://github.com/renatobardi/hapai/blob/73848acfda71ae702da911a5cc7b4ec9564f5c35/exporters/export-copilot.sh",
+      "sha256": "2ac9d890176cdc9646ac1773e7af16b0ddf701f58c221b2d16a10eea97f8fd48",
+      "truncated": false,
+      "lines": 17,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/run-tests.sh",
+      "local": "05-run-tests.sh",
+      "url": "https://github.com/renatobardi/hapai/blob/73848acfda71ae702da911a5cc7b4ec9564f5c35/tests/run-tests.sh",
+      "sha256": "be5dfa884444772cfa63fb720afb5ecb4d2303f34b33d0c158f4265ece10b668",
+      "truncated": false,
+      "lines": 1366,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "_site/index.html",
+      "local": "06-index.html",
+      "url": "https://github.com/renatobardi/hapai/blob/73848acfda71ae702da911a5cc7b4ec9564f5c35/_site/index.html",
+      "sha256": "f43e0b0f30f62baa5727598bc448a09fff0caa5cfb7534b86603b83ff0606004",
+      "truncated": false,
+      "lines": 18,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 1,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/renatobardi/hapai/blob/73848acfda71ae702da911a5cc7b4ec9564f5c35/README.md",
+      "sha256": "e1c7133e8a2f9a0797fbcc38495e736abaf2e5115c0c9d765171afe0c63c2359",
+      "truncated": false,
+      "lines": 445,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/renatobardi/hapai/blob/73848acfda71ae702da911a5cc7b4ec9564f5c35/LICENSE",
+      "sha256": "c003a151449ae41c3edf14fc3f8b72499a763ad5944569e3d53873623cd22c20",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "repository": "khusdasz-cmd/aigc-dedup-tool",
+  "metadata": {
+    "name": "khusdasz-cmd/aigc-dedup-tool",
+    "url": "https://github.com/khusdasz-cmd/aigc-dedup-tool",
+    "description": "AIGC \u964d\u91cdskill\u662f\u4e00\u4e2a\u4e13\u95e8\u4e3a\u4e2d\u6587\u5b66\u672f\u8bba\u6587\u8bbe\u8ba1\u7684 AI \u964d\u91cd\u5f15\u64ce\uff0c\u5185\u7f6e\u4e8e Claude Code \u4e2d\u4f5c\u4e3a\u53ef\u8c03\u7528\u6280\u80fd\uff08skill\uff09\uff0c\u76ee\u6807\u662f\u901a\u8fc7\u7cfb\u7edf\u6027\u7684\u6587\u672c\u6539\u5199\uff0c\u964d\u4f4e\u8bba\u6587\u5728\u7ef4\u666e\uff0c\u77e5\u7f51\uff0c PaperYY\u3001PaperPass \u7b49\u68c0\u6d4b\u5668\u4e0a\u7684 AIGC \u7591\u4f3c\u7387\uff0c\u4f7f\u673a\u5668\u751f\u6210\u6587\u672c\u63a5\u8fd1\u4eba\u7c7b\u5199\u4f5c\u98ce\u683c\uff0c\u540c\u65f6\u4fdd\u7559\u539f\u610f\u548c\u5b66\u672f\u4e25\u8c28\u6027\u3002",
+    "language": "Python",
+    "stars": 14,
+    "license": "MIT",
+    "archived": false,
+    "pushed_at": "2026-05-31T07:32:58Z",
+    "default_branch": "main",
+    "queries": [
+      "dedup in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/khusdasz-cmd/aigc-dedup-tool/blob/b2de233e7488f566a430907292de5276e9161c8a/README.md",
+      "sha256": "6f32038667890821cf4b572394b19d8856e48c0fed6fe7a4a4480f81084f728b",
+      "truncated": false,
+      "lines": 61,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/khusdasz-cmd/aigc-dedup-tool/blob/b2de233e7488f566a430907292de5276e9161c8a/LICENSE",
+      "sha256": "f40576424285bbd2b26a5f9c29f38ba278d19dc45aa75284a6f80be5e7c15d68",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": ".claude/skills/aigc-dedup/scripts/l4_check.py",
+      "local": "02-l4_check.py",
+      "url": "https://github.com/khusdasz-cmd/aigc-dedup-tool/blob/b2de233e7488f566a430907292de5276e9161c8a/.claude/skills/aigc-dedup/scripts/l4_check.py",
+      "sha256": "87048743743d30ff2eda30df2defdce90b8e9627057186216fb5c681591809df",
+      "truncated": false,
+      "lines": 425,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": ".claude/skills/aigc-dedup/scripts/l5_iterative.py",
+      "local": "03-l5_iterative.py",
+      "url": "https://github.com/khusdasz-cmd/aigc-dedup-tool/blob/b2de233e7488f566a430907292de5276e9161c8a/.claude/skills/aigc-dedup/scripts/l5_iterative.py",
+      "sha256": "dfbf4967f64750b191bdc6388acab3fa5cfb42f246be942bf429a01b476368be",
+      "truncated": false,
+      "lines": 522,
+      "source": true,
+      "test": false
+    }
+  ],
+  "errors": [],
+  "commit": "b2de233e7488f566a430907292de5276e9161c8a",
+  "tree_truncated": false,
+  "source_file_count": 2,
+  "test_file_count": 0,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    ".claude/skills/aigc-dedup/scripts/l4_check.py",
+    ".claude/skills/aigc-dedup/scripts/l5_iterative.py"
+  ]
+}

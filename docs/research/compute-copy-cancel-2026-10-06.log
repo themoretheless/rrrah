@@ -1,0 +1,16 @@
+   Compiling rrrah-gpu v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu)
+    Finished `test` profile [optimized + debuginfo] target(s) in 3.59s
+     Running tests/compute_readback.rs (/tmp/rrrah-required-corpus-target/debug/deps/compute_readback-0f0df8525b3523e2)
+
+running 5 tests
+test full_sensor_linear_exposure_chunked_readback ... ignored, allocates about 0.8 GB of GPU buffers; full-resolution local qualification
+test full_sensor_managed_exposure_budgets_and_checks_every_pixel ... ignored, full-resolution managed compute uses about 2 GB of tracked buffers
+interleaved compute adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+compute adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+cancelled readback adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+test interleaved_exposure_preserves_bits_and_managed_raster_ownership ... ok
+test linear_exposure_compute_preserves_hdr_alpha_and_dispatch_tail ... ok
+test exposure_readback_cancellation_releases_mapping_and_allows_retry ... ok
+
+test result: ok. 3 passed; 0 failed; 2 ignored; 0 measured; 0 filtered out; finished in 0.09s
+

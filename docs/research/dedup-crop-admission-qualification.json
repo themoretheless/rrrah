@@ -1,0 +1,23 @@
+{
+  "change": "Bounded fallible crop placement vector growth.",
+  "validation": {
+    "crop_local_collection_tests": 17,
+    "crop_final_tests": 3,
+    "failed": 0,
+    "dedup_lib_no_deps_clippy": "passed"
+  },
+  "checks": [
+    "Uniform transparent crop retains six explicit ambiguous placements at exact result limit.",
+    "Every checkpoint one-shot cancellation rejects partial placements.",
+    "Healthy retry recovers identical placement list and work count.",
+    "Result and work exhaustion remain explicit inconclusive errors."
+  ],
+  "source_sha256": {
+    "crates/rrrah-dedup/src/crop.rs": "98ac2f42ea6deb584f879bfa58f5e10c40ae6ff7548b6f618cae7706309130f3",
+    "crates/rrrah-dedup/tests/crop.rs": "b8f2d6ea1bcd578d12230251aa5e71ede72ecf78547fc57c0f5ca0c2088cf4b6"
+  },
+  "limits": [
+    "Actual allocator exhaustion not injected.",
+    "Does not qualify transformed/captured crop corpus or complete shared byte-budget accounting."
+  ]
+}

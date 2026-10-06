@@ -1,0 +1,16 @@
+{
+  "status": "Prior process handles and /tmp logs are missing; terminal outcome unverified",
+  "macos_session": 31299,
+  "macos_log": "/tmp/dedup-post-alpha-full-macos.log",
+  "linux_log": "/tmp/dedup-post-alpha-full-linux.log",
+  "snapshot": "/tmp/dedup-post-alpha-full-snapshot.json",
+  "scope": "All rrrah-dedup targets, not all workspace packages; examples compile but main functions do not execute",
+  "limits": [
+    "Source may change concurrently; compare snapshot after completion",
+    "Does not satisfy held-out corpus, native Windows or all acceptance requirements"
+  ],
+  "linux_session": 57897,
+  "last_observation": "2026-10-06: write_stdin reports Unknown process id for 31299 and 57897; both referenced logs absent",
+  "completion": "Do not count prior full runs as passing; current minimal exact suite separately revalidated",
+  "post_launch_changes": "Exact snapshot acquired-size policy guard and deterministic regression added; full runs cannot alone certify this later change"
+}

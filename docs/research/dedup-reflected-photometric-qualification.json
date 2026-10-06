@@ -1,0 +1,28 @@
+{
+  "scope": "Explicit reflected linear gain/offset verification and selected-frame file comparison retaining strict evidence",
+  "checks": [
+    "31 collection/photometric/filtered/encoded/warp regression tests pass",
+    "four known natural reflected brightness positives accepted only in fitted mode",
+    "strict reflected pixel evidence identical before and after selecting fitting",
+    "six cross-scene negatives reject",
+    "authored reflected affine gains recover known coefficients, visible edit rejects exact match",
+    "all observed primitive cancellation checkpoints return no partial fitted evidence and retry identical",
+    "pixel-work budget refusal remains explicit",
+    "library-only Clippy passes"
+  ],
+  "limits": [
+    "Reflected fitted-color collection/spatial policy integration pending",
+    "Reflected filtered/range/display-projection modes pending",
+    "Known rendered previews; not held-out edited reflections, full RAW, bursts or look-alikes",
+    "No statistical confidence or broad color calibration"
+  ],
+  "source_sha256": {
+    "crates/rrrah-dedup/src/warp.rs": "ae7fa43451069ddd60a8aee21de4037b47ab2a834a15ffc96bf43283cbd271e2",
+    "crates/rrrah-dedup/src/local_scan.rs": "8d9cd8669df037ac2e265b6ef6d054f5f40a3b719a9fde9be5ec634978e162df",
+    "crates/rrrah-dedup/src/local_collection.rs": "b2baa0f718f0b951272440369de6e3c7af6c96f5a3060ce46ec733623e58388a",
+    "crates/rrrah-dedup/tests/photometric.rs": "f678d01d54fec690dab0185f7186530fae9eddacc55a67d96d182d096b46be26",
+    "crates/rrrah-dedup/tests/photo_files.rs": "69dea6cba6f91548807d79476779b93ffba1a322ec1b0078664ba32fb5ba32a3",
+    "scripts/generate-dedup-photo-reflections.py": "1671b8090b5d50cc08c8e0e4efba73ef4c93bde389843043119e1979affe0dbd",
+    "crates/rrrah-dedup/tests/fixtures/photos/reflections-manifest.json": "fef735ba7e78b54cce0709f321364a7e2570d21c5b6ceeec1265d817aa5a487c"
+  }
+}

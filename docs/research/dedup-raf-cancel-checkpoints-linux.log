@@ -1,0 +1,25 @@
+   Compiling rrrah-decode v0.1.0 (/workspace/crates/rrrah-decode)
+error[E0277]: `Cell<usize>` cannot be shared between threads safely
+    --> crates/rrrah-decode/src/camtiff/raf.rs:1313:62
+     |
+1313 |           let expected = quirks.decode_pixels(&container, raw, &|| {
+     |                                                                ^-- within this `{closure@crates/rrrah-decode/src/camtiff/raf.rs:1313:63: 1313:65}`
+     |  ______________________________________________________________|
+     | |
+1314 | |             calls.set(calls.get() + 1);
+1315 | |             false
+1316 | |         }).unwrap();
+     | |_________^ `Cell<usize>` cannot be shared between threads safely
+     |
+     = help: within `{closure@crates/rrrah-decode/src/camtiff/raf.rs:1313:63: 1313:65}`, the trait `std::marker::Sync` is not implemented for `Cell<usize>`
+     = note: if you want to do aliasing and mutation between multiple threads, use `std::sync::RwLock` or `std::sync::atomic::AtomicUsize` instead
+     = note: required because it appears within the type `&Cell<usize>`
+note: required because it's used within this closure
+    --> crates/rrrah-decode/src/camtiff/raf.rs:1313:63
+     |
+1313 |         let expected = quirks.decode_pixels(&container, raw, &|| {
+     |                                                               ^^
+     = note: required for the cast from `&{closure@crates/rrrah-decode/src/camtiff/raf.rs:1313:63: 1313:65}` to `&dyn Fn() -> bool + std::marker::Sync`
+
+For more information about this error, try `rustc --explain E0277`.
+error: could not compile `rrrah-decode` (lib test) due to 1 previous error

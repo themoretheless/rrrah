@@ -1,0 +1,27 @@
+warning: linker stderr: /validation/sysroot/usr/bin/ld: /validation/target/debug/deps/libjpegxr-61e4c82e0f52fb6c.rlib(2e643c6506a180d9-strenc.o): in function `StrIOEncInit':
+         /validation/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/jpegxr-0.3.1/jxrlib/image/encode/strenc.c:485:(.text.StrIOEncInit+0xf0): the use of `tmpnam' is dangerous, better use `mkstemp'
+  |
+  = note: `#[warn(linker_messages)]` on by default
+
+warning: linker stdout: /validation/sysroot/usr/bin/ld: /validation/target/debug/deps/libjpegxr-61e4c82e0f52fb6c.rlib(2e643c6506a180d9-strenc.o): note: the message above does not take linker garbage collection into account
+
+warning: `rrrah-decode` (lib test) generated 2 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.69s
+     Running unittests src/lib.rs (/validation/target/debug/deps/rrrah_decode-c11902d0fca8bb48)
+
+running 12 tests
+test camtiff::raf::tests::rejects_broken_headers_with_typed_errors ... ok
+test camtiff::raf::tests::rejects_cfa_pattern_with_non_rgb_colors ... ok
+test camtiff::raf::tests::honours_cancellation_per_row ... ok
+test camtiff::raf::tests::parses_header_selects_fuji_ifd_and_decodes_lsb_packed_bayer ... ok
+test camtiff::raf::tests::decodes_uncompressed_sixteen_bit_with_container_byte_order ... ok
+test camtiff::raf::tests::rejects_fuji_proprietary_compression_without_soi ... ok
+test camtiff::raf::tests::rejects_rotated_super_ccd_layout ... ok
+test camtiff::raf::tests::rejects_non_2x2_cfa_repeat_pattern_dim ... ok
+test camtiff::raf::tests::rejects_xtrans_via_raf_directory_tag ... ok
+test camtiff::raf::tests::rejects_unsupported_compression_tag ... ok
+test camtiff::raf::tests::rejects_xtrans_via_thirty_six_black_levels ... ok
+test camtiff::raf::tests::uncompressed_xtrans_preserves_directory_phase_and_black_grid ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 808 filtered out; finished in 0.00s
+

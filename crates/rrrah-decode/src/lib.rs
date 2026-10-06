@@ -4,22 +4,149 @@
 //! They read the full sensor mosaic and never substitute an embedded JPEG.
 #![allow(clippy::missing_errors_doc, clippy::cast_precision_loss)]
 
+mod bay;
+pub use bay::{BaySensorLayout, BaySensorError, unpack_bay_sensor};
+
+mod xcf;
+mod ciff;
+mod crw_entropy;
+mod crw;
+pub use crw::{NativeCrwDecoder, decode_crw_10d, decode_crw_10d_with_tables};
+pub use xcf::{XcfHeader, XcfHeaderError, XcfProperties, XcfProperty, parse_xcf_header, xcf_properties};
+pub use xcf::{XcfObjectTables, XcfOffsets, parse_xcf_object_tables};
+pub use xcf::{XcfLayer, parse_xcf_layer};
+pub use xcf::{XcfChannel, parse_xcf_channel};
+pub use xcf::XcfLayerAttributes;
+pub use xcf::XcfCompositionAttributes;
+pub use xcf::composite_xcf_normal_rgba8;
+pub use xcf::expand_xcf_legacy_u8_pixels;
+pub use xcf::prepare_xcf_legacy_rgba8;
+pub use xcf::XcfLayerGroup;
+pub use xcf::decode_xcf_samples;
+pub use xcf::composite_xcf_normal_rgba32f;
+pub use xcf::composite_xcf_normal_premultiplied_rgba32f;
+pub use xcf::{XcfLayerNode, parse_xcf_layer_tree};
+pub use xcf::xcf_icc_profile;
+pub use xcf::xcf_palette;
+pub use xcf::{XcfDecodedLayer, decode_xcf_layer};
+pub use xcf::{XcfFlattenedImage, flatten_xcf_legacy_normal};
+pub use xcf::decode_xcf_tile;
+pub use xcf::{XcfLevel, parse_xcf_hierarchy};
+pub use xcf::{XcfPixelError, decode_xcf_level};
+
+mod off_swap;
+pub use off_swap::{OffSwapError, off_swap_payload_len, read_off_swap_payload, write_off_swap_payload};
+mod off;
+pub use off::{OffColor, OffDecodeError, OffEncoding, OffFace, OffMesh, decode_off};
+mod ply_swap;
+pub use ply_swap::{PlySwapError, ply_swap_payload_len, read_ply_swap_payload, write_ply_swap_payload};
+mod ply;
+pub use ply::{
+    PlyDecodeError, PlyElement, PlyEncoding, PlyMesh, PlyProperty, PlyScalars, PlyType, PlyValues, decode_ply,
+};
+mod model;
+pub use model::{DecodedModel, ModelBuffer, ModelDecodeError, decode_model, is_supported_model_path};
+mod obj_swap;
+pub use obj_swap::{ObjSwapError, obj_swap_payload_len, read_obj_swap_payload, write_obj_swap_payload};
+mod obj;
+pub use obj::{ObjCorner, ObjDecodeError, ObjFace, ObjMesh, ObjTriangle, decode_obj};
+mod stl_swap;
+pub use stl_swap::{StlSwapError, read_stl_swap_payload, stl_swap_payload_len, write_stl_swap_payload};
+mod stl;
+pub use stl::{StlDecodeError, StlFacet, StlMesh, decode_stl};
+
+mod eip;
+mod x3f;
+pub use x3f::{decode_x3f_legacy, x3f_neutral_response, rotate_x3f_linear, decode_x3f_legacy_auto, x3f_linear_raster, x3f_linear_output, crop_x3f_channels, smooth_x3f_chroma, x3f_chroma_guide, transform_x3f_pixels, x3f_color_transform_auto, X3fColorTransform, smooth_x3f_hues_wide, smooth_x3f_hues, x3f_noise_curves_auto, X3fNoiseCurve, linearize_x3f_highlights_from_camf, linearize_x3f_highlights, sharpen_x3f_red, repair_x3f_bad_pixels_from_camf, repair_x3f_bad_pixels, smooth_x3f_black_rows, x3f_block_enabled, x3f_illuminant_matrix, x3f_wb_correction, visit_x3f_camf, X3fCamfEntry, X3fCamfMatrix, X3fCamf, X3fEntry, X3fError, X3fImageInfo, X3fInventory, X3fLegacyChannels, X3fLegacyHuffman, X3fProperties, inspect_x3f};
+pub use eip::{
+    EipEntry, EipError, EipManifest, EipRaw, EipSensor, decode_eip_sensor, inspect_eip, read_eip_raw,
+};
+
+mod animation;
+mod aseprite;
+pub use aseprite::{AsepriteImage, AsepriteTag, decode_aseprite};
+mod jpegls;
+mod jpegxr;
+mod sample;
+pub use jpegls::{JpegLsImage, decode_jpegls};
+mod jng;
+mod webp_animation;
+pub use webp_animation::{WebpImage, decode_webp_animation};
+mod gif_animation;
+pub use gif_animation::{GifImage, decode_gif};
+mod basis;
+mod pdf;
+mod emf;
+mod mng;
+mod sti;
+mod wmf;
+mod pict;
+pub use mng::{MngImage, decode_mng};
+mod apng;
+mod astc;
+pub use apng::{ApngImage, decode_apng};
+mod avif_color;
 mod bounded_io;
 mod camtiff;
+pub use camtiff::decode_mef_zd_sensor;
+pub use camtiff::erf::{EpsonMakerMetadata, read_erf_maker_metadata};
+mod mrw;
+pub use mrw::{MrwLayout, NativeMrwDecoder};
+mod cineon;
 mod cr3;
+mod cursor;
+mod dcx;
+mod dds;
+mod dicom;
 #[doc(hidden)] // Exposed only for criterion micro-benchmarks (`bench_support`); not public API.
 pub mod dng;
 mod dng_backend;
+mod dpx;
+mod exr_color;
+mod fits;
+mod heif;
+mod iff;
+mod image_router;
+mod jp2;
+mod jxl;
+mod kra;
+mod ktx;
+mod ktx2;
+mod macpaint;
+mod mrc;
 mod native_backend;
 mod native_router;
+mod nrrd;
+mod ora;
+mod pcx;
+mod pfm;
+mod pix;
+mod pkm;
+mod png_color;
+mod psd;
+mod pvr;
+mod raster;
+mod raster_color;
+#[cfg(test)]
+mod raster_corpus;
+mod rla;
+mod scientific;
+mod sgi;
 mod sniff;
+mod softimage;
+mod sun;
+mod svg;
+mod wad;
+mod wal;
+mod xbm;
+mod xpm;
 
 /// SHA-256 digest of the resolved workspace lockfile, shared by every native
 /// backend's semantic recipe. Must stay in sync with
 /// `scripts/native-cr3-semantic-lock.sha256`.
 pub(crate) const WORKSPACE_LOCK_DIGEST: [u8; 32] = [
-    0xab, 0x83, 0x34, 0x86, 0x28, 0xb8, 0xa9, 0x5b, 0x42, 0x58, 0x3e, 0x96, 0xbe, 0xd2, 0x2a, 0xa5, 0xba,
-    0x94, 0x4c, 0xda, 0xb5, 0x4f, 0xb7, 0x45, 0xbe, 0xb0, 0xa6, 0xa0, 0x98, 0xea, 0x37, 0x70,
+    0xfc, 0x7f, 0xa9, 0x6e, 0x12, 0x29, 0x5d, 0x02, 0x5b, 0x2d, 0xf0, 0xd3, 0x8b, 0xcd, 0xcb, 0x1e, 0xb6,
+    0x04, 0x3a, 0xfe, 0x0b, 0xeb, 0x34, 0x85, 0x6e, 0xe9, 0x20, 0x74, 0x08, 0x78, 0xb6, 0xf1,
 ];
 
 use std::{
@@ -46,7 +173,20 @@ pub trait RawDecoder: Send + Sync {
 pub struct DecodeRequest {
     pub path: PathBuf,
     pub image_index: usize,
+    /// Explicit producer-declared alpha association for RLA. None refuses
+    /// alpha-bearing RLA; color interpretation remains a separate policy.
+    pub rla_alpha_mode: Option<RlaAlphaMode>,
+    /// Explicit conventional interpretation for untagged TIFF, PNM, TGA and RLA.
+    /// Defaults to false. Embedded ICC and declared color metadata take priority;
+    /// unspecified linear/HDR primaries are never overridden by this setting.
+    pub assume_untagged_srgb: bool,
+    /// Explicit sRGB primaries/white point for samples already declared linear
+    /// but lacking primaries (e.g. PFM). Defaults to false; tagged color/ICC and
+    /// unspecified encoded samples are never overridden. Does not apply a transfer curve.
+    pub assume_untagged_linear_srgb: bool,
     pub cancellation: Option<GenerationToken>,
+    /// Optional admission for supported native decoder output allocations.
+    pub memory_budget: Option<rrrah_core::MemoryBudget>,
 }
 
 impl DecodeRequest {
@@ -54,7 +194,22 @@ impl DecodeRequest {
         Self {
             path: path.into(),
             image_index: 0,
+            rla_alpha_mode: None,
+            assume_untagged_srgb: false,
+            assume_untagged_linear_srgb: false,
             cancellation: None,
+            memory_budget: None,
+        }
+    }
+
+    pub(crate) fn qualify_linear_color(
+        &self,
+        color: rrrah_core::RasterColorSpace,
+    ) -> rrrah_core::RasterColorSpace {
+        if self.assume_untagged_linear_srgb && color == rrrah_core::RasterColorSpace::LinearRgbUnspecified {
+            rrrah_core::RasterColorSpace::LinearSrgb
+        } else {
+            color
         }
     }
 
@@ -75,15 +230,35 @@ impl DecodeRequest {
 pub struct GenerationToken {
     generation: Arc<AtomicU64>,
     expected: u64,
+    additional: Arc<[(Arc<AtomicU64>, u64)]>,
 }
 
 impl GenerationToken {
     pub fn new(generation: Arc<AtomicU64>, expected: u64) -> Self {
-        Self { generation, expected }
+        Self { generation, expected, additional: Arc::from([]) }
+    }
+
+    /// Cancellation from either owner terminates the shared operation. Flattened
+    /// conditions avoid recursive token traversal and deduplicate identical owners.
+    pub fn combine(&self, other: &Self) -> Self {
+        let mut additional = self.additional.to_vec();
+        for condition in std::iter::once((&other.generation, other.expected))
+            .chain(other.additional.iter().map(|(owner, expected)| (owner, *expected))) {
+            if Arc::ptr_eq(&self.generation, condition.0) && self.expected == condition.1 {
+                continue;
+            }
+            if !additional.iter().any(|(owner, expected)|
+                Arc::ptr_eq(owner, condition.0) && *expected == condition.1) {
+                additional.push((Arc::clone(condition.0), condition.1));
+            }
+        }
+        Self { generation: Arc::clone(&self.generation), expected: self.expected,
+            additional: additional.into() }
     }
 
     pub fn is_cancelled(&self) -> bool {
         self.generation.load(Ordering::Acquire) != self.expected
+            || self.additional.iter().any(|(owner, expected)| owner.load(Ordering::Acquire) != *expected)
     }
 }
 
@@ -138,6 +313,8 @@ pub struct DecodeOutput {
 
 #[derive(Debug, Error)]
 pub enum DecodeError {
+    #[error(transparent)]
+    Memory(#[from] rrrah_core::BufferError),
     #[error("failed to open RAW source {path}: {source}")]
     Io {
         path: PathBuf,
@@ -155,10 +332,10 @@ pub enum DecodeError {
     #[error("native {format} decoder failed: {message}")]
     NativeCamera { format: &'static str, message: String },
     #[error(
-        "unsupported RAW format for {path}; expected .cr3, .cr2, .nef, .arw, .orf, .pef, .rw2, .raf, .dng, .tif, or .tiff"
+        "unsupported RAW format for {path}; expected .cr3, .cr2, .nef, .nrw, .arw, .orf, .pef, .rw2, .raf, .dng, .tif, or .tiff"
     )]
     UnsupportedFormat { path: PathBuf },
-    #[error("native RAW backends support only image index 0, got {index}")]
+    #[error("image index {index} is unsupported for this source")]
     UnsupportedImageIndex { index: usize },
     #[error("RAW decoder panicked; decode untrusted files in a sandboxed worker")]
     DecoderPanicked,
@@ -191,15 +368,131 @@ mod tests {
         generation.store(8, Ordering::Release);
         assert!(token.is_cancelled());
     }
+    #[test]
+    fn combined_generation_tokens_cancel_from_either_owner_and_deduplicate() {
+        for changed in 0..3 {
+            let owners: Vec<_> = (0..3).map(|_| Arc::new(AtomicU64::new(1))).collect();
+            let tokens: Vec<_> = owners.iter().map(|owner| GenerationToken::new(owner.clone(), 1)).collect();
+            let mut combined = tokens[0].combine(&tokens[1]).combine(&tokens[2]);
+            for _ in 0..100 {
+                combined = combined.combine(&combined);
+            }
+            assert_eq!(combined.additional.len(), 2);
+            assert!(!combined.is_cancelled());
+            let retained = combined.clone();
+            owners[changed].store(2, Ordering::Release);
+            assert!(combined.is_cancelled());
+            assert!(retained.is_cancelled());
+            assert!(tokens[changed].is_cancelled());
+        }
+        let owner = Arc::new(AtomicU64::new(2));
+        let current = GenerationToken::new(owner.clone(), 2);
+        let obsolete = GenerationToken::new(owner, 1);
+        assert!(current.combine(&obsolete).is_cancelled());
+    }
 
     #[test]
     fn stale_request_is_rejected_without_io() {
         let generation = Arc::new(AtomicU64::new(12));
         let request = DecodeRequest {
+            rla_alpha_mode: None,
             path: "does-not-exist.CR3".into(),
             image_index: 0,
+            assume_untagged_srgb: false,
+            assume_untagged_linear_srgb: false,
             cancellation: Some(GenerationToken::new(generation, 11)),
+            memory_budget: None,
         };
         assert!(matches!(request.check_cancelled(), Err(DecodeError::Cancelled)));
+    }
+}
+
+pub use image_router::{
+    DecodedImage, ImageSourceKind, decode_image, decode_image_file, image_source_kind,
+    is_supported_image_path, is_supported_raw_path,
+};
+pub use mrc::{MrcImage, decode_mrc};
+pub use nrrd::{NrrdImage, decode_nrrd};
+pub use raster::{RasterDecodeError, decode_raster, decode_raster_file};
+pub use raster_color::{
+    RasterColorError, prepare_raster_for_display, prepare_raster_for_display_with_budget,
+    prepare_raster_for_display_with_budget_and_cancel,
+};
+pub use rla::{RlaAlphaMode, RlaFloatByteOrder, decode_rla_float_with_interpretation, decode_rla_with_interpretation};
+pub use scientific::{ScalarWindow, decode_raster_with_window};
+pub use wal::{decode_wal_with_palette, wal_palette_path};
+
+pub use fits::{FitsImage, FitsSamples, decode_fits};
+
+pub use pvr::{PvrImage, PvrMetadata, decode_pvr};
+
+/// Retrieve development instructions independently of cached sensor samples.
+pub fn raw_development_opcodes(
+    request: &DecodeRequest,
+) -> Result<rrrah_core::develop::OpcodeLists, DecodeError> {
+    request.check_cancelled()?;
+    if !request.path.extension().is_some_and(|e| {
+        e.eq_ignore_ascii_case("dng") || e.eq_ignore_ascii_case("tif") || e.eq_ignore_ascii_case("tiff")
+    }) {
+        return Ok(rrrah_core::develop::OpcodeLists::default());
+    }
+    let data = bounded_io::read_managed(request)?;
+    dng::opcode_lists(&data).map_err(DecodeError::NativeDng)
+}
+
+#[cfg(test)]
+mod linear_assumption_tests {
+    use super::DecodeRequest;
+    use rrrah_core::RasterColorSpace;
+    #[test]
+    fn explicit_linear_assumption_only_qualifies_unspecified_linear_primaries() {
+        let mut request = DecodeRequest::new("unused.pfm");
+        assert!(!request.assume_untagged_linear_srgb);
+        request.assume_untagged_srgb = true;
+        assert_eq!(
+            request.qualify_linear_color(RasterColorSpace::LinearRgbUnspecified),
+            RasterColorSpace::LinearRgbUnspecified
+        );
+        request.assume_untagged_linear_srgb = true;
+        assert_eq!(
+            request.qualify_linear_color(RasterColorSpace::LinearRgbUnspecified),
+            RasterColorSpace::LinearSrgb
+        );
+        for color in [
+            RasterColorSpace::Srgb,
+            RasterColorSpace::AssumedSrgb,
+            RasterColorSpace::LinearSrgb,
+            RasterColorSpace::Unspecified,
+            RasterColorSpace::Icc(vec![1, 2, 3]),
+        ] {
+            assert_eq!(request.qualify_linear_color(color.clone()), color);
+        }
+    }
+}
+
+/// Identity of the immutable system-font snapshot used by SVG text rendering.
+///
+/// # Errors
+/// Returns an error if a discovered font cannot be retained.
+pub fn svg_font_resource_identity() -> Result<[u8; 32], RasterDecodeError> {
+    svg::font_identity()
+}
+
+/// Identity of the currently available HEVC decoder inventory, ordered by priority.
+/// This is capability/version identity, not a digest of native library bytes.
+///
+/// # Errors
+/// Returns initialization errors or an excessive decoder inventory error.
+pub fn hevc_decoder_resource_identity() -> Result<[u8; 32], RasterDecodeError> {
+    heif::decoder_identity()
+}
+
+/// External files consumed by native raster dispatch for this request/header.
+/// Extension hints for otherwise recognized raster data do not add WAL dependencies.
+pub fn raster_external_dependencies(request: &DecodeRequest, header: &[u8]) -> Vec<PathBuf> {
+    if image::guess_format(header).is_err() {
+        wal::wal_palette_path(&request.path).into_iter().collect()
+    } else {
+        Vec::new()
     }
 }

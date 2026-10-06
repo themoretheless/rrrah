@@ -1,0 +1,26 @@
+{
+  "qualification": "Cancellable metric-index insertion",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/lib.rs": "f7e28bad57d9a844de121e4a43463ff5c4f4e82561b33914995f62b32552dafc",
+    "crates/rrrah-dedup/src/visual.rs": "dc8896033b915e9c6cbe52c2f9b1d86ed3063e3dfbd04667820aeaecac43b791",
+    "crates/rrrah-dedup/tests/visual.rs": "01555148532717be5b38cf375d5886ee5c16e078fd6bfcfdbcc490b82d4bd1d0"
+  },
+  "validation": {
+    "library_tests": 10,
+    "local_collection_tests": 8,
+    "local_index_tests": 6,
+    "visual_tests": 4,
+    "failed": 0,
+    "clippy_library_and_visual_tests": "passed"
+  },
+  "evidence": [
+    "Cancellation inside a 1000-id collision bucket preserves the original index.",
+    "Cancellation inside a 64-element one-bit-hash chain preserves the original index.",
+    "Successful retry adds one entry.",
+    "VisualIndex construction uses cancellable channel insertion; exhaustive search and collection equivalence pass."
+  ],
+  "limits": [
+    "Allocator operations remain indivisible.",
+    "Construction memory admission and complete decoder cancellation latency are not proved."
+  ]
+}

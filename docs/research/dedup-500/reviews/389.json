@@ -1,0 +1,78 @@
+{
+  "index": 389,
+  "repository": "teran/imgsum",
+  "commit": "c4926a0bb095a98d7cb0215e3c8af5c437019255",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Go image hasher/Lightroom-compatible CLI and tests; GPL and decoder policy need qualification.",
+  "available_source_evidence": [
+    {
+      "path": "image/hasher.go",
+      "local": "02-hasher.go",
+      "url": "https://github.com/teran/imgsum/blob/c4926a0bb095a98d7cb0215e3c8af5c437019255/image/hasher.go",
+      "sha256": "3580d70b37eacf799d3eef6c8b9d0135b7e5d2ec4d99a61dbd0916cf837a14b9",
+      "truncated": false,
+      "lines": 29,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "credits.go",
+      "local": "03-credits.go",
+      "url": "https://github.com/teran/imgsum/blob/c4926a0bb095a98d7cb0215e3c8af5c437019255/credits.go",
+      "sha256": "552b395b1f8380bad2536e08b323dccd2d591db080e2e2095be7a7a355f668ad",
+      "truncated": false,
+      "lines": 72,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "main.go",
+      "local": "04-main.go",
+      "url": "https://github.com/teran/imgsum/blob/c4926a0bb095a98d7cb0215e3c8af5c437019255/main.go",
+      "sha256": "e0fa4feea9ad9202998587856f421dd6429dcf25a4e7e85fded909ab8d0fed64",
+      "truncated": false,
+      "lines": 211,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "image/hasher_test.go",
+      "local": "05-hasher_test.go",
+      "url": "https://github.com/teran/imgsum/blob/c4926a0bb095a98d7cb0215e3c8af5c437019255/image/hasher_test.go",
+      "sha256": "d6295ff0d187c3eb02c277521090b576c0a6c0ce49afefd41e695988a8c987e2",
+      "truncated": false,
+      "lines": 45,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "GPL-2.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 1,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/teran/imgsum/blob/c4926a0bb095a98d7cb0215e3c8af5c437019255/README.md",
+      "sha256": "bf1599cce73d0c302318af9040c506300735a3a1b6041f80d3ce720c713ace35",
+      "truncated": false,
+      "lines": 66,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/teran/imgsum/blob/c4926a0bb095a98d7cb0215e3c8af5c437019255/LICENSE",
+      "sha256": "db296f2f7f35bca3a174efb0eb392b3b17bd94b341851429a3dff411b1c2fc73",
+      "truncated": false,
+      "lines": 339,
+      "source": false,
+      "test": false
+    }
+  ]
+}

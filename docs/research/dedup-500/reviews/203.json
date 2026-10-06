@@ -1,0 +1,78 @@
+{
+  "index": 203,
+  "repository": "MIXUULS/yuedu-source-dedupe",
+  "commit": "fc24b76a44a293ec625134a5f9424bd0e4d2ee08",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Android reading-source record buckets/name similarity; URL/provider entities.",
+  "available_source_evidence": [
+    {
+      "path": "app/src/main/java/com/mina/yuedu/core/DedupeEngine.java",
+      "local": "02-DedupeEngine.java",
+      "url": "https://github.com/MIXUULS/yuedu-source-dedupe/blob/fc24b76a44a293ec625134a5f9424bd0e4d2ee08/app/src/main/java/com/mina/yuedu/core/DedupeEngine.java",
+      "sha256": "8f60143e7c21b0cd3b07dc2b36280f15e5a0c70c735cfe974a3657d6af1d4708",
+      "truncated": false,
+      "lines": 119,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/core/NameSimilarity.java",
+      "local": "03-NameSimilarity.java",
+      "url": "https://github.com/MIXUULS/yuedu-source-dedupe/blob/fc24b76a44a293ec625134a5f9424bd0e4d2ee08/app/src/main/java/com/mina/yuedu/core/NameSimilarity.java",
+      "sha256": "3a3e562c8e75e86b751d53242f51bece2ea7b88aed145edfde3c598447a03162",
+      "truncated": false,
+      "lines": 248,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/model/DedupeMode.java",
+      "local": "04-DedupeMode.java",
+      "url": "https://github.com/MIXUULS/yuedu-source-dedupe/blob/fc24b76a44a293ec625134a5f9424bd0e4d2ee08/app/src/main/java/com/mina/yuedu/model/DedupeMode.java",
+      "sha256": "d02378e2c7a1fc5ddfc7f5f871b146dbcf321a9b8ed60f1fee01ee479b6d0f80",
+      "truncated": false,
+      "lines": 10,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "app/src/test/java/com/mina/yuedu/core/DedupeEngineTest.java",
+      "local": "05-DedupeEngineTest.java",
+      "url": "https://github.com/MIXUULS/yuedu-source-dedupe/blob/fc24b76a44a293ec625134a5f9424bd0e4d2ee08/app/src/test/java/com/mina/yuedu/core/DedupeEngineTest.java",
+      "sha256": "f4d62cebd0c8a50cf07a1df086cfcc744b88998d601c5d98c9c4171b781562f1",
+      "truncated": false,
+      "lines": 73,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 14,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/MIXUULS/yuedu-source-dedupe/blob/fc24b76a44a293ec625134a5f9424bd0e4d2ee08/README.md",
+      "sha256": "825375b485babb78f62cef6107eeeb2d3d914cc33999b90d5cb8b213856b6fea",
+      "truncated": false,
+      "lines": 206,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/MIXUULS/yuedu-source-dedupe/blob/fc24b76a44a293ec625134a5f9424bd0e4d2ee08/LICENSE",
+      "sha256": "6bc0ecab0dc100fb1a76e77a6ea7ab3b4b88160a87b718816b4f641e24d12721",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

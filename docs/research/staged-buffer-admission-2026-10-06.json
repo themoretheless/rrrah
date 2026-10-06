@@ -1,0 +1,23 @@
+{
+  "scope": "staged CPU/GPU admission and managed buffer ownership",
+  "storage": {
+    "passed": 166,
+    "failed": 0,
+    "ignored": 0,
+    "log": "/tmp/rrrah-staged-storage.log"
+  },
+  "compute": {
+    "passed": 1,
+    "log": "/tmp/rrrah-staged-compute.log",
+    "scope": "actual Metal compute readback, HDR samples, dispatch tail and cooperative cancellation"
+  },
+  "sources": {
+    "crates/rrrah-memory/src/lib.rs": "3c49280a6c51d1a4d0aef3e635fe23e01b5b0f30851a74bcf764cbfd775530ad",
+    "crates/rrrah-gpu/src/compute.rs": "52e45c5593a091230922f0c7cb25d54d9708bb6b10f92eb30d16f26b934434ec"
+  },
+  "limitations": [
+    "Budgets account managed credits, not total process or driver RSS",
+    "Submitted GPU work is not interrupted",
+    "No physical HDR or CUDA/NVIDIA qualification"
+  ]
+}

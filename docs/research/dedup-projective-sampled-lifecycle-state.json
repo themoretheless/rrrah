@@ -1,0 +1,28 @@
+{
+  "status": "targeted_passed_both_platforms",
+  "macos": {
+    "exit": 0,
+    "passed": 1,
+    "ignored": 0
+  },
+  "linux_session": 64338,
+  "coverage": [
+    "final generation invalidation and restored retry",
+    "one-shot final cancellation",
+    "pair limit before comparison",
+    "registration work refusals",
+    "mutation during initial decode",
+    "late source mutation removes every stale edge and preserves healthy pair",
+    "managed resources released"
+  ],
+  "scope": "Selected development corpus and observed filesystem checkpoints; no mutation after final observation or ABA proof",
+  "source_sha256": {
+    "crates/rrrah-dedup/tests/projective_files.rs": "49da6870b3294d5fced945d0d79dd01487ff378f3793fa5f7026f800b982ea0c",
+    "crates/rrrah-dedup/src/local_collection.rs": "bfd72ba68836bfcda4a6b3840f2c734165c6e242f89a472f3b7d86980e2e8a9c"
+  },
+  "linux": {
+    "exit": 0,
+    "passed": 1,
+    "ignored": 0
+  }
+}

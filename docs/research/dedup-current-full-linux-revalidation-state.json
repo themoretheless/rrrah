@@ -1,0 +1,30 @@
+{
+  "status": "passed",
+  "session": 67050,
+  "log": "docs/research/dedup-current-full-linux-incremental-retry.log",
+  "runtime_recovery": "Colima started successfully",
+  "cause": "Previously prepared VM /tmp sysroot is absent after VM restart; /validation/sysroot/usr/bin/gcc unavailable",
+  "next_action": "Reconstruct Linux-native sysroot; do not treat host case-colliding extraction as qualified",
+  "completion": "Current full rrrah-dedup Linux regression passed; does not prove full acceptance contract",
+  "prior_failed_log": "docs/research/dedup-current-full-linux-revalidation.log",
+  "sysroot": "/opt/rrrah-dedup-validation/sysroot",
+  "recovery": "Host extraction copied into persistent Linux VM filesystem; gcc --version passed. Full compile/test must qualify recovered sysroot; prior host extraction case-collision concerns retained.",
+  "last_observation": "Session 67050 terminal exit 0",
+  "previous_link_failure_log": "docs/research/dedup-current-full-linux-recovery-revalidation.log",
+  "runtime_libraries": "Official Ubuntu noble packages libgcc-s1, libstdc++6, libc6, libheif1, libdav1d7 extracted in Linux-native persistent sysroot; lib -> usr/lib restored; ldd confirms heif/dav1d dependencies resolved; official zlib1g restored after HEIF linker references revealed missing sysroot zlib",
+  "previous_zlib_link_failure_log": "docs/research/dedup-current-full-linux-runtime-fixed.log",
+  "runner_default": "Persistent /opt/rrrah-dedup-validation/sysroot; shell syntax check passed",
+  "previous_incremental_link_failure_log": "docs/research/dedup-current-full-linux-zlib-fixed.log",
+  "recovery_limit": "Missing internal LLVM symbols observed in information target; only its generated incremental directory quarantined, no proof of root cause yet",
+  "runtime_sha256": "dedup-linux-recovered-runtime-sha256.txt",
+  "completed_test_suites": 50,
+  "source_drift_since_macos_snapshot": [],
+  "passed_tests_so_far": 190,
+  "exit_code": 0,
+  "passed_tests": 286,
+  "limits": [
+    "Examples compiled, main functions not executed",
+    "Snapshot captured after macOS launch; not atomic build isolation",
+    "Native Windows, held-out cameras/bursts and broad resource/color qualification remain incomplete"
+  ]
+}

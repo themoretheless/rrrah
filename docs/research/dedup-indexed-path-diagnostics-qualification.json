@@ -1,0 +1,24 @@
+{
+  "scope": "Indexed recursive pixel discovery preserves unavailable non-UTF8 root diagnostic bytes and unaffected healthy duplicate edges",
+  "source_sha256": {
+    "crates/rrrah-dedup/tests/pixel_search.rs": "2a94920832e4ebed6f07cebaaccda547b2180c8fc1870a97ff5d3997df1d205c"
+  },
+  "platform": "macOS Unix API",
+  "fixture": {
+    "healthy_files": 3,
+    "healthy_equal_pairs": 3,
+    "unavailable_root": "x followed by byte ff followed by .png",
+    "traversal_issues": 1,
+    "diagnostic_path_bytes_unchanged": true,
+    "decode_or_source_issues": 0
+  },
+  "validation": {
+    "focused_test_exit_code": 0,
+    "clippy_exit_code": 0
+  },
+  "remaining": [
+    "Actual existing non-UTF8 filenames on Linux; macOS filesystem does not permit these names",
+    "Non-Unix filename and identity behavior",
+    "Unreadable path permission qualification"
+  ]
+}

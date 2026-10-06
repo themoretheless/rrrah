@@ -1,0 +1,63 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: function `error` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:4:4
+  |
+4 | fn error(message: &str) -> DecodeError {
+  |    ^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `packed_12` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:9:4
+  |
+9 | fn packed_12(
+  |    ^^^^^^^^^
+
+warning: function `decode_zd` is never used
+  --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:48:15
+   |
+48 | pub(super) fn decode_zd(
+   |               ^^^^^^^^^
+
+warning: `rrrah-decode` (lib) generated 3 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 12.78s
+     Running tests/photos_heldout.rs (target/debug/deps/photos_heldout-9e5858c4f50eef5a)
+
+running 3 tests
+test exact_pixels_keep_related_captures_and_other_scenes_distinct ... ok
+heldout positive 2414 resize: accepted
+heldout positive 2414 crop: accepted
+test unchanged_filter_policy_rejects_unrelated_heldout_scenes ... ok
+heldout positive 2414 rotate: accepted
+heldout positive 2414 brightness: accepted
+heldout positive 2414 jpeg: accepted
+heldout positive 2418 resize: accepted
+heldout positive 2418 crop: accepted
+heldout positive 2418 rotate: accepted
+heldout positive 2418 brightness: accepted
+heldout positive 2418 jpeg: accepted
+heldout positive 2883 resize: accepted
+heldout positive 2883 crop: accepted
+heldout positive 2883 rotate: accepted
+heldout positive 2883 brightness: accepted
+heldout positive 2883 jpeg: accepted
+heldout positive 5025 resize: accepted
+heldout positive 5025 crop: accepted
+heldout positive 5025 rotate: accepted
+heldout positive 5025 brightness: accepted
+heldout positive 5025 jpeg: accepted
+heldout positive 1425 resize: accepted
+heldout positive 1425 crop: accepted
+heldout positive 1425 rotate: accepted
+heldout positive 1425 brightness: accepted
+heldout positive 1425 jpeg: accepted
+heldout positive 5495 resize: accepted
+heldout positive 5495 crop: accepted
+heldout positive 5495 rotate: accepted
+test unchanged_filter_policy_accepts_heldout_derivatives has been running for over 60 seconds
+heldout positive 5495 brightness: accepted
+heldout positive 5495 jpeg: accepted
+test unchanged_filter_policy_accepts_heldout_derivatives ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 67.55s
+

@@ -1,0 +1,39 @@
+{
+  "tool": "macOS /usr/bin/sample",
+  "duration_seconds": 2,
+  "interval_ms": 1,
+  "benchmark": "raw_view_timing --cache-only tests/IMG_9074.CR3",
+  "source_sha256": "9c0d47cc2dd550eb6dc26c4ba2b2874b67f5c89e79dff5c472abf0ac6b2f6178",
+  "profile": "dev optimized + debuginfo",
+  "swap_subtree_observations": {
+    "total": 320,
+    "blake3_hasher_update": 232,
+    "managed_buffer_resize_with": 67,
+    "file_read": 17,
+    "memmove": 4
+  },
+  "interpretation": "Within sampled restore subtree, BLAKE3 and initialized allocation account for most observed stacks; copy appears minor. Counts are stack observations, not calibrated CPU time percentages.",
+  "resize_experiment": {
+    "change": "Vec::resize(length,value) versus resize_with(length,||value)",
+    "tests": {
+      "rrrah_cache": 114,
+      "rrrah_memory": 38
+    },
+    "baseline_swap_p50_ms": 33.109959,
+    "experimental_swap_p50_ms": 32.987291,
+    "decision": "rejected and reverted; no convincing improvement"
+  },
+  "limitations": [
+    "Mixed cache/decode benchmark with seed I/O; only identified swap subtree interpreted.",
+    "Short sampled profile, one source, warm OS cache, instrumented process.",
+    "No paired randomized speed comparison; timings under profiling not directly comparable to uninstrumented runs.",
+    "No performance changes retained, checksum verification unchanged."
+  ],
+  "evidence": {
+    "docs/research/rrrah-cr3-cache-cpu-2026-10-06.sample": "f9145b48f51280b8c39f81c93c09e42d55ed3391945de3fd32400a7a1ae34c1d",
+    "docs/research/rrrah-cr3-profile-run-2026-10-06.csv": "3913e6c47837e5a917ed575bf855e4b6076333cc13c7a36e54a650376fdd9e33",
+    "docs/research/rrrah-cr3-profile-run-2026-10-06.log": "7a4701b26e2b631ab60d8e5f2b2f38b6a006a786ac150937e38931d8b2834479",
+    "docs/research/rrrah-cr3-resize-cache-2026-10-06.csv": "97103dc1f092aebcb1cac27b180b719518ca310678ec955171f80c26e85a2807",
+    "docs/research/rrrah-cr3-resize-cache-2026-10-06.log": "a09c3f7b21d6e3c86309bcb0483956a127d2f599b19efe1848747d88cb87de91"
+  }
+}

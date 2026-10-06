@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-06",
+  "scope": "complete sensor output of NativeRawDecoder via raw_fixture_dump",
+  "source_sha256": "b0730eb3a67cc2281a32e0b2ee104199246928d954a68b7e5b72366514c73d02",
+  "samples": 6518336,
+  "sensor_sha256": "3aecb01756492569734885710dafd6ffc26421ac0b5a7fa1c151973d48cd389a",
+  "independent_oracle": "LibRaw 0.22.2 /tmp/rrrah-10d-current-libraw.u16le",
+  "byte_exact": true,
+  "command": "RRRAH_RAW_MEMORY_MB=64 cargo run -p rrrah-decode --example raw_fixture_dump --locked --target-dir /tmp/rrrah-required-corpus-target -- /tmp/rrrah-10d.crw /tmp/rrrah-10d-routed",
+  "log_sha256": "43a4d9474849fa6fee20e525c229ecdd85d08564ead3b8b5e1dfee6f5d14a2a4",
+  "limitations": [
+    "EOS 10D single pinned source",
+    "sensor equivalence only; metadata/color separately qualified",
+    "no physical display or latency claim"
+  ]
+}

@@ -1,0 +1,62 @@
+[package]
+name = "rrrah-dedup"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[features]
+default = []
+raster = ["dep:rrrah-core"]
+decode = ["raster", "dep:rrrah-decode"]
+
+[dependencies]
+rrrah-decode = { path = "../rrrah-decode", optional = true }
+rrrah-core = { path = "../rrrah-core", optional = true }
+blake3.workspace = true
+thiserror.workspace = true
+tempfile.workspace = true
+
+[target.'cfg(windows)'.dependencies]
+winapi-util = "0.1.11"
+
+[target.'cfg(unix)'.dependencies]
+libc = "0.2"
+
+[build-dependencies]
+blake3.workspace = true
+
+[lints]
+workspace = true
+
+[[example]]
+name = "raw_probe"
+required-features = ["decode"]
+
+[[example]]
+name = "photo_probe"
+required-features = ["decode"]
+
+[[example]]
+name = "raw_raster_probe"
+required-features = ["decode"]
+
+[[example]]
+name = "presentation_scale_probe"
+required-features = ["decode"]
+
+[[example]]
+name = "cache_hit_scale_probe"
+required-features = ["decode"]
+
+[[example]]
+name = "raster_memory_scale_probe"
+required-features = ["decode"]
+
+[[example]]
+name = "alpha_memory_scale_probe"
+required-features = ["decode"]
+
+[[example]]
+name = "font_cache_probe"
+required-features = ["decode"]

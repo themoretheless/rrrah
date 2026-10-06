@@ -1,0 +1,98 @@
+{
+  "index": 406,
+  "repository": "andry-tino/phash",
+  "commit": "0eae2c3c2754c6df1a02342c06b8fce898897312",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "wrapper",
+  "finding": "C#/C++ pHash with bundled image libraries; GPL backend, separate wrapper/vendor licensing from project metadata.",
+  "available_source_evidence": [
+    {
+      "path": "PHash/CSharpEndpoint/PHash.cs",
+      "local": "03-PHash.cs",
+      "url": "https://github.com/andry-tino/phash/blob/0eae2c3c2754c6df1a02342c06b8fce898897312/PHash/CSharpEndpoint/PHash.cs",
+      "sha256": "0f69cc031fbc63576127a3f37ead0e56064e853585a5ea827cc34a1164e3768a",
+      "truncated": false,
+      "lines": 171,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "PHash/PHash/phash.cpp",
+      "local": "04-phash.cpp",
+      "url": "https://github.com/andry-tino/phash/blob/0eae2c3c2754c6df1a02342c06b8fce898897312/PHash/PHash/phash.cpp",
+      "sha256": "a6e69ff3ec76796f73ab68a3a41e5a22ac9d8647c3a2320d0f5053b7ff0d51d9",
+      "truncated": false,
+      "lines": 1327,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "PHash/PHash/phash.h",
+      "local": "05-phash.h",
+      "url": "https://github.com/andry-tino/phash/blob/0eae2c3c2754c6df1a02342c06b8fce898897312/PHash/PHash/phash.h",
+      "sha256": "ebe5c77663e3eec3df1c878014318d4ba65c4d707efc57111dfb288469dff064",
+      "truncated": false,
+      "lines": 662,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "PHash/libpng-1419/lpng1419/pngtest.c",
+      "local": "06-pngtest.c",
+      "url": "https://github.com/andry-tino/phash/blob/0eae2c3c2754c6df1a02342c06b8fce898897312/PHash/libpng-1419/lpng1419/pngtest.c",
+      "sha256": "57a2d9b056d5d9e2870713409ed95c60d6b17172bd906f10aedf9b5dbd286fdf",
+      "truncated": false,
+      "lines": 1740,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "PHash/lpng1623/zlib-1.2.8/test/example.c",
+      "local": "07-example.c",
+      "url": "https://github.com/andry-tino/phash/blob/0eae2c3c2754c6df1a02342c06b8fce898897312/PHash/lpng1623/zlib-1.2.8/test/example.c",
+      "sha256": "63061f7e4978035e072d0906aae087605551352adef92d4499b533a79e25747c",
+      "truncated": false,
+      "lines": 601,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "GPL-3.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 7,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/andry-tino/phash/blob/0eae2c3c2754c6df1a02342c06b8fce898897312/README.md",
+      "sha256": "9a58277cf611f7668a1e2df5c14be907cda8dffe94047918f584373d87da5ba6",
+      "truncated": false,
+      "lines": 8,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/andry-tino/phash/blob/0eae2c3c2754c6df1a02342c06b8fce898897312/LICENSE",
+      "sha256": "589ed823e9a84c56feb95ac58e7cf384626b9cbf4fda2a907bc36e103de1bad2",
+      "truncated": false,
+      "lines": 674,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "PHash/libpng-1419/lpng1419/LICENSE",
+      "local": "02-LICENSE",
+      "url": "https://github.com/andry-tino/phash/blob/0eae2c3c2754c6df1a02342c06b8fce898897312/PHash/libpng-1419/lpng1419/LICENSE",
+      "sha256": "6b4a7a0b437707a80463285e2c1d9403e3df2affed583cd0443989313cd1161e",
+      "truncated": false,
+      "lines": 110,
+      "source": false,
+      "test": false
+    }
+  ]
+}

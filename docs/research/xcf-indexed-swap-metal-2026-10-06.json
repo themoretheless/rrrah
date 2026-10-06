@@ -1,0 +1,14 @@
+{
+  "scope": "authored legacy v1 indexed palette transport",
+  "cases": 10,
+  "passed": 1,
+  "log": "/tmp/rrrah-xcf-indexed-swap-metal.log",
+  "indexed_expected_rgba_hex": "112b5bffefb507ff",
+  "independent_oracle": "unqualified: pinned GimpFormats yields index channels as L/LA without applying colormap",
+  "failed_oracle_report": "xcf-indexed-legacy-flatten-2026-10-06.json",
+  "limitations": [
+    "Failed report is historical pre-manifest-correction evidence, not a passing qualification",
+    "Authored indexed alpha128 follows existing legacy binary-alpha threshold; not general variable alpha",
+    "No independent indexed GIMP flatten or physical display proof"
+  ]
+}

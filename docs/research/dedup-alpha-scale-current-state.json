@@ -1,0 +1,221 @@
+{
+  "status": "macOS and native Linux alpha probes passed; scoped Clippy exited zero",
+  "linux_session": 12956,
+  "linux_stdout": "/tmp/dedup-alpha-scale-linux.jsonl",
+  "linux_stderr": "/tmp/dedup-alpha-scale-linux-stderr.log",
+  "clippy_session": 66984,
+  "clippy_log": "/tmp/dedup-alpha-scale-clippy.log",
+  "macos": {
+    "measurements": [
+      {
+        "side": 1024,
+        "variant": "base.tiff",
+        "equal": true,
+        "decode_ns": 21126625
+      },
+      {
+        "side": 1024,
+        "variant": "hidden.png",
+        "equal": true,
+        "decode_ns": 18843125
+      },
+      {
+        "side": 1024,
+        "variant": "changed.png",
+        "equal": false,
+        "decode_ns": 18477125
+      },
+      {
+        "side": 2048,
+        "variant": "base.tiff",
+        "equal": true,
+        "decode_ns": 74123833
+      },
+      {
+        "side": 2048,
+        "variant": "hidden.png",
+        "equal": true,
+        "decode_ns": 69174708
+      },
+      {
+        "side": 2048,
+        "variant": "changed.png",
+        "equal": false,
+        "decode_ns": 71480917
+      },
+      {
+        "side": 4096,
+        "variant": "base.tiff",
+        "equal": true,
+        "decode_ns": 307131042
+      },
+      {
+        "side": 4096,
+        "variant": "hidden.png",
+        "equal": true,
+        "decode_ns": 261074459
+      },
+      {
+        "side": 4096,
+        "variant": "changed.png",
+        "equal": false,
+        "decode_ns": 256372041
+      }
+    ],
+    "whole_process_peak_rss_bytes": 812253184
+  },
+  "scope": [
+    "Independent straight-alpha PNG/RGB TIFF with ExtraSamples=unassociated alpha",
+    "Exact normalized equality at 1024/2048/4096 square sizes",
+    "Invisible RGB changes compare equal",
+    "Visible partial-alpha one-code edit compares different",
+    "Zero/one-byte budgets refuse; sufficient-budget retry succeeds",
+    "Managed reservations released after each size"
+  ],
+  "fixture_manifest": [
+    {
+      "name": "1024-base.tiff",
+      "sha256": "a0f11a3223287ca2130c5515c525a6a140184f9205c5681887115c273f6c9ffd"
+    },
+    {
+      "name": "1024-base.png",
+      "sha256": "d04ed0ea3d22ade24841a001db4f08db8cc431ff5981ebd77a8d6aa040f8461a"
+    },
+    {
+      "name": "1024-hidden.png",
+      "sha256": "e0699d18225b6c334130928d8c3cad44eefb0266e626bbeeff8064bbd7764b97"
+    },
+    {
+      "name": "1024-changed.png",
+      "sha256": "19300748abf7e2b49e11f9617e2bec0a59fb152f4bdf28b8fe473117cd71c254"
+    },
+    {
+      "name": "2048-base.tiff",
+      "sha256": "1c710eb61880cceb2972a0b7bba64039d400ebee6de40afbfbacab5b70108b74"
+    },
+    {
+      "name": "2048-base.png",
+      "sha256": "08a4bc499d402d986b9e6b6a078499f474dec6076f3ce39f6f766f7814f44520"
+    },
+    {
+      "name": "2048-hidden.png",
+      "sha256": "3b3d893bb97ee2f2c64e79045a71d82702fb80452e54e3b766c3a7a66708f3be"
+    },
+    {
+      "name": "2048-changed.png",
+      "sha256": "1e90030a8dfda310dc7cc64d20b9d4502dd575a682006b2596a28d8b308276b5"
+    },
+    {
+      "name": "4096-base.tiff",
+      "sha256": "5bb421b21c466efaf47a40005c20a67741c6daf4f41a576b4cb0c619f494033d"
+    },
+    {
+      "name": "4096-base.png",
+      "sha256": "4a80c0a0c252b74f2e9f2db5999e4614ae719d3c636d29575f62e4d93e611136"
+    },
+    {
+      "name": "4096-hidden.png",
+      "sha256": "87f45ea0d0320bdc834fd5440510530aa6b5d151a425b17b39f4673f7388bdba"
+    },
+    {
+      "name": "4096-changed.png",
+      "sha256": "e6217c12280953a60ce96849872e4fefe16de31cd0f4645983c910538d3d1c61"
+    }
+  ],
+  "source_snapshot": {
+    "scripts/generate-dedup-alpha-scale.py": "3a4519062ba3d541e41524ebe1297e7cf25d0d86cc2f0364ea83ea290b519064",
+    "crates/rrrah-dedup/examples/alpha_memory_scale_probe.rs": "cf84b80615b109f841398970d88a72e563c609702229c6953ee58d61db35f704"
+  },
+  "snapshot_timing": "post-macOS run, not atomic prelaunch",
+  "limits": [
+    "Authored gradient, two codecs",
+    "Unassociated alpha only; no HDR/ICC/RAW claim",
+    "Single decode per variant/size, not statistical benchmark",
+    "Whole-process RSS includes all operations",
+    "Full acceptance incomplete"
+  ],
+  "linux_exit_code": 0,
+  "linux": {
+    "measurements": [
+      {
+        "side": 1024,
+        "variant": "base.tiff",
+        "equal": true,
+        "decode_ns": 29693246
+      },
+      {
+        "side": 1024,
+        "variant": "hidden.png",
+        "equal": true,
+        "decode_ns": 25729824
+      },
+      {
+        "side": 1024,
+        "variant": "changed.png",
+        "equal": false,
+        "decode_ns": 20812298
+      },
+      {
+        "side": 2048,
+        "variant": "base.tiff",
+        "equal": true,
+        "decode_ns": 101342512
+      },
+      {
+        "side": 2048,
+        "variant": "hidden.png",
+        "equal": true,
+        "decode_ns": 89915965
+      },
+      {
+        "side": 2048,
+        "variant": "changed.png",
+        "equal": false,
+        "decode_ns": 84434759
+      },
+      {
+        "side": 4096,
+        "variant": "base.tiff",
+        "equal": true,
+        "decode_ns": 410245021
+      },
+      {
+        "side": 4096,
+        "variant": "hidden.png",
+        "equal": true,
+        "decode_ns": 332481280
+      },
+      {
+        "side": 4096,
+        "variant": "changed.png",
+        "equal": false,
+        "decode_ns": 329149056
+      }
+    ],
+    "whole_process_peak_rss_bytes": 644288512,
+    "rss_after_bytes": 40464384,
+    "storage": "isolated validation fixture folder; controlled tmpfs temp directory"
+  },
+  "logs": {
+    "macos-results": {
+      "path": "docs/research/dedup-alpha-scale-macos-results.log",
+      "sha256": "8bd8aef0440765f6cadb3df48bd9bdd7179c4817cb9edb62caa1579709c1dbb7"
+    },
+    "macos-time": {
+      "path": "docs/research/dedup-alpha-scale-macos-time.log",
+      "sha256": "f19e00308ec8140f47e07695498a240999c0baf9648552c75a6d06958ce3df5e"
+    },
+    "linux-results": {
+      "path": "docs/research/dedup-alpha-scale-linux-results.log",
+      "sha256": "1a761a4c6a4748463b5a64b4d372da2bde438cb539ae243985003de2affc515d"
+    },
+    "linux-stderr": {
+      "path": "docs/research/dedup-alpha-scale-linux-stderr.log",
+      "sha256": "ccc818bea2d90784e51af93587bef6f7b7045b4728105180f6e29acb3363f572"
+    },
+    "clippy": {
+      "path": "docs/research/dedup-alpha-scale-clippy.log",
+      "sha256": "1d00c0f814b4f8228ba2dcfbdf764b685d181881d34d22f32d214a30d46d46dd"
+    }
+  }
+}

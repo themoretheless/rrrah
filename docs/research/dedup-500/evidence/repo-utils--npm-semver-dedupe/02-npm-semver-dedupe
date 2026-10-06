@@ -1,0 +1,64 @@
+#!/usr/bin/env node
+
+var fs = require('fs')
+var path = require('path')
+var semver = require('semver')
+var rimraf = require('rimraf')
+
+dedupe(parse(process.cwd()), [])
+
+function dedupe(node, ancestors) {
+  var mods = node.modules
+  top:
+  for (var i = 0; i < mods.length; i++) {
+    var mod = mods[i]
+    for (var j = 0; j < ancestors.length; j++) {
+      if (ancestors[j].modules.some(function (x) {
+        if (x.name !== mod.name) return false
+        if (mod.major === 0) {
+          // to do: option to compare majors or minors
+          return mod.version === x.version
+        } else {
+          return mod.major === x.major
+        }
+      })) {
+        console.log('deleting "%s"', mod.pathname)
+        rimraf.sync(mod.pathname)
+        mods.splice(i--, 1)
+        continue top
+      }
+    }
+  }
+
+  mods.forEach(function (dep) {
+    if (!dep.linked) dedupe(dep, ancestors.concat(node))
+  })
+}
+
+function parse(pathname) {
+  var node_modules = path.join(pathname, 'node_modules')
+  var pkg = require(path.join(pathname, 'package.json'))
+  var name = pkg.name
+  var version = semver.parse(pkg.version)
+  var modules = []
+  if (fs.existsSync(node_modules)) {
+    modules = fs.readdirSync(node_modules).filter(dots).map(function (name) {
+      return parse(path.join(node_modules, name))
+    }).filter(Boolean)
+  }
+  return {
+    linked: fs.lstatSync(pathname).isSymbolicLink(),
+    pathname: pathname,
+    modules: modules,
+    name: name,
+    version: [version.major, version.minor, version.patch].join('.'),
+    major: version.major,
+    minor: version.minor,
+    patch: version.patch,
+  }
+}
+
+function dots(x) {
+  if (x[0] === '.') return false
+  return true
+}

@@ -1,0 +1,19 @@
+{
+  "scope": "CRW explicit import lease cache TTL/byte/count and swap/actual Metal",
+  "adapter": "Metal Apple M4 Max",
+  "passed": 1,
+  "log": "/tmp/rrrah-crw-ttl-swap-metal.log",
+  "log_sha256": "89c785221a55311e799a50e7f28d927b1f98c558b792ad2a1090c2058a47e206",
+  "contracts": [
+    "One-entry cache refuses replacement while leased",
+    "Tightened zero count/insufficient bytes refuse atomically",
+    "Expired lookup misses but existing cloned leases protect RAM and render",
+    "Last lease release transfers expired owned buffer without early RAM release",
+    "Swap releases RAM and preserves full metadata/sensor and Metal frame after retryable restore refusal"
+  ],
+  "limitations": [
+    "Real-time TTL test, not deterministic virtual-clock proof.",
+    "Generic lease cache composition, not automatic CRW viewer navigation/preload integration.",
+    "External table data; color correctness and physical HDR not qualified."
+  ]
+}

@@ -1,0 +1,114 @@
+{
+  "repository": "anubisascends/OmniCard",
+  "metadata": {
+    "name": "anubisascends/OmniCard",
+    "url": "https://github.com/anubisascends/OmniCard",
+    "description": "Scan, identify, and manage your trading card collection. Supports multiple TCGs with perceptual hash matching, OCR, set completion tracking, decklist checking, and a web companion.",
+    "language": "C#",
+    "stars": 3,
+    "license": "MIT",
+    "archived": false,
+    "pushed_at": "2026-10-03T12:19:44Z",
+    "default_branch": "master",
+    "queries": [
+      "perceptual hash in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/anubisascends/OmniCard/blob/9674f1d054cdc0b100b9bf647b15ffbad555ff35/README.md",
+      "sha256": "0757149203f83249c14921962f503ad632fc5e5e7e0914fa89b323071e60f965",
+      "truncated": false,
+      "lines": 140,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE.txt",
+      "local": "01-LICENSE.txt",
+      "url": "https://github.com/anubisascends/OmniCard/blob/9674f1d054cdc0b100b9bf647b15ffbad555ff35/LICENSE.txt",
+      "sha256": "ff4e0f17442da3a415e5c991ad1f34cf677972683f4e046d4ef668abbce9c71b",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "OmniCard.Collection/CollectionCardMatcher.cs",
+      "local": "02-CollectionCardMatcher.cs",
+      "url": "https://github.com/anubisascends/OmniCard/blob/9674f1d054cdc0b100b9bf647b15ffbad555ff35/OmniCard.Collection/CollectionCardMatcher.cs",
+      "sha256": "246b54fab1ae0d23e1e3cebfe684e4e105f6661984a001421f98e8699cbfa8b7",
+      "truncated": false,
+      "lines": 194,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "OmniCard.Imaging/OcrMatchingService.cs",
+      "local": "03-OcrMatchingService.cs",
+      "url": "https://github.com/anubisascends/OmniCard/blob/9674f1d054cdc0b100b9bf647b15ffbad555ff35/OmniCard.Imaging/OcrMatchingService.cs",
+      "sha256": "d68590c71f384d1c8bd94aeafcf08dd9ed8cbd23f2b486d03f7449e7bd71f10f",
+      "truncated": false,
+      "lines": 1450,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "OmniCard.Imaging/PerceptualHashService.cs",
+      "local": "04-PerceptualHashService.cs",
+      "url": "https://github.com/anubisascends/OmniCard/blob/9674f1d054cdc0b100b9bf647b15ffbad555ff35/OmniCard.Imaging/PerceptualHashService.cs",
+      "sha256": "a2a314ad5f6b2a8d29e52bd4c7242e3c742f1c4ddf32f1445544e3149d7645f5",
+      "truncated": false,
+      "lines": 442,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "OmniCard.Tests/Data/ArtHashMigrationTests.cs",
+      "local": "05-ArtHashMigrationTests.cs",
+      "url": "https://github.com/anubisascends/OmniCard/blob/9674f1d054cdc0b100b9bf647b15ffbad555ff35/OmniCard.Tests/Data/ArtHashMigrationTests.cs",
+      "sha256": "158fc50ec4a185a7f2be3fc57db4157405bc99f7a2fec1bc9e588d9d9427a527",
+      "truncated": false,
+      "lines": 72,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "OmniCard.Web/ClientApp/src/lib/scanBadges.tsx",
+      "local": "06-scanBadges.tsx",
+      "url": "https://github.com/anubisascends/OmniCard/blob/9674f1d054cdc0b100b9bf647b15ffbad555ff35/OmniCard.Web/ClientApp/src/lib/scanBadges.tsx",
+      "sha256": "5f773264d8d84edf7f917a5ee0453f1c5a5e7e071035d0bb68a48374d0d3b87d",
+      "truncated": false,
+      "lines": 134,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "OmniCard.Web/ClientApp/src/pages/ScanPage.tsx",
+      "local": "07-ScanPage.tsx",
+      "url": "https://github.com/anubisascends/OmniCard/blob/9674f1d054cdc0b100b9bf647b15ffbad555ff35/OmniCard.Web/ClientApp/src/pages/ScanPage.tsx",
+      "sha256": "5d0ef79f8e1ac48c7a0fe69de51e443baf819395e345f821745608cf3f1d70ce",
+      "truncated": false,
+      "lines": 1729,
+      "source": true,
+      "test": false
+    }
+  ],
+  "errors": [],
+  "commit": "9674f1d054cdc0b100b9bf647b15ffbad555ff35",
+  "tree_truncated": false,
+  "source_file_count": 674,
+  "test_file_count": 0,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE.txt",
+    "OmniCard.Collection/CollectionCardMatcher.cs",
+    "OmniCard.Web/ClientApp/src/lib/scanBadges.tsx",
+    "OmniCard.Web/ClientApp/src/pages/ScanPage.tsx"
+  ]
+}

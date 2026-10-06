@@ -46,9 +46,9 @@
 //!   vendor crop origin is even/even, so crop-relative and sensor-relative
 //!   phases coincide (cross-checked with dcraw `filters` and rawspeed
 //!   `cameras.xml`).
-//! - X-Trans (6x6) is a typed rejection. Detection, in order: RAF-directory
-//!   tag `0x131` (rejected inside `parse_container`), a non-2x2
-//!   `CFARepeatPatternDim`, or a 36-value `0xF00A` black level.
+//! - X-Trans (6x6) uses a validated RAF-directory tag `0x131`. Without that
+//!   authoritative pattern, a non-2x2 `CFARepeatPatternDim` or a 36-value
+//!   `0xF00A` black level is rejected.
 //! - Rotated Super-CCD (RAF-directory `0x130` bit 7) and pre-X-series RAF
 //!   variants without an embedded TIFF are typed rejections as well.
 //!
@@ -140,9 +140,9 @@ impl CameraQuirks for RafQuirks {
         }
 
         // The RAF directory holds the authoritative CFA-layout signals; it
-        // lives outside the embedded TIFF, so X-Trans and rotated Super-CCD
-        // bodies are rejected here, before any TIFF work.
-        Self::check_raf_directory(data)?;
+        // lives outside the embedded TIFF; validate its CFA and reject rotated
+        // Super-CCD before any TIFF work.
+        let (source_crop, source_cfa) = Self::check_raf_directory(data)?;
 
         let tiff_offset = usize::try_from(be_u32(data, OFF_FUJI_IFD_OFFSET)?)
             .map_err(|_| camera_error(FORMAT, "FujiIFD offset does not fit usize"))?;
@@ -164,7 +164,15 @@ impl CameraQuirks for RafQuirks {
         // Offsets inside the embedded TIFF (the raw-IFD pointer and the
         // strip offset) are relative to its own header, which is exactly
         // the start of this slice.
-        CameraFile::parse_tiff(FORMAT, payload)
+        let mut file = CameraFile::parse_tiff(FORMAT, payload)?;
+        let model = std::str::from_utf8(&data[0x1c..0x3c])
+            .map_err(|_| camera_error(FORMAT, "RAF model is not valid UTF-8"))?
+            .trim_end_matches('\0')
+            .trim();
+        file.source_model = (!model.is_empty()).then(|| model.to_owned());
+        file.source_crop = source_crop;
+        file.source_cfa = source_cfa;
+        Ok(file)
     }
 
     fn select_raw_ifd<'a>(
@@ -197,7 +205,10 @@ impl CameraQuirks for RafQuirks {
         let raw_ifd = RawIfd::resolve(container, raw)?;
         let (width, height) = geometry(&raw_ifd)?;
         let bits_per_sample = bits_per_sample(&raw_ifd)?;
-        let cfa = cfa_pattern(&raw_ifd)?;
+        let cfa = match &container.source_cfa {
+            Some(c) => c.clone(),
+            None => cfa_pattern(&raw_ifd)?,
+        };
         let black_level = black_level(&raw_ifd)?;
         let white_level = WhiteLevel(vec![((1_u32 << bits_per_sample) - 1) as f32]);
         let white_balance = white_balance(&raw_ifd)?;
@@ -208,7 +219,7 @@ impl CameraQuirks for RafQuirks {
         // Make/model/orientation live in the embedded JPEG's EXIF, which is
         // unreachable from the embedded-TIFF stage (see module docs).
         let make = "FUJIFILM".to_owned();
-        let model = "FUJIFILM camera".to_owned();
+        let model = container.source_model.clone().unwrap_or_default();
         Ok(CameraMetadata {
             make,
             model,
@@ -221,7 +232,7 @@ impl CameraQuirks for RafQuirks {
             white_balance,
             xyz_to_camera: [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0], [0.0; 3]],
             active_area: None,
-            crop_area: None,
+            crop_area: container.source_crop,
             orientation,
         })
     }
@@ -320,10 +331,12 @@ impl CameraQuirks for RafQuirks {
 
 impl RafQuirks {
     /// Parses the big-endian RAF directory and rejects CFA layouts this
-    /// backend must not decode: X-Trans (`0x131`) and rotated 45° Super-CCD
-    /// (`0x130` bit 7). Geometry from this directory is intentionally not
+    /// backend must not decode, and extracts X-Trans (`0x131`). Rotated Super-CCD
+    /// (`0x130` bit 7) is rejected. Geometry from this directory is intentionally not
     /// trusted ahead of the embedded TIFF tags.
-    fn check_raf_directory(data: &[u8]) -> Result<(), DecodeError> {
+    fn check_raf_directory(
+        data: &[u8],
+    ) -> Result<(Option<rrrah_core::Rect>, Option<CfaPattern>), DecodeError> {
         let dir_offset = usize::try_from(be_u32(data, OFF_RAF_DIRECTORY_OFFSET)?)
             .map_err(|_| camera_error(FORMAT, "RAF directory offset does not fit usize"))?;
         if dir_offset == 0 {
@@ -352,6 +365,9 @@ impl RafQuirks {
         let mut cursor = dir_offset
             .checked_add(4)
             .ok_or_else(|| camera_error(FORMAT, "overflow walking RAF directory"))?;
+        let mut source_cfa = None;
+        let mut crop_origin = None;
+        let mut crop_size = None;
         for _ in 0..entries {
             let header = data
                 .get(
@@ -373,12 +389,49 @@ impl RafQuirks {
                 .get(value_start..value_end)
                 .ok_or_else(|| camera_error(FORMAT, "RAF directory entry is truncated"))?;
             match tag {
+                0x110 | 0x111 => {
+                    if value.len() != 4 {
+                        return Err(camera_error(FORMAT, "RAF crop field must contain two u16 values"));
+                    }
+                    let pair = [
+                        u32::from(u16::from_be_bytes([value[0], value[1]])),
+                        u32::from(u16::from_be_bytes([value[2], value[3]])),
+                    ];
+                    let slot = if tag == 0x110 {
+                        &mut crop_origin
+                    } else {
+                        &mut crop_size
+                    };
+                    if slot.replace(pair).is_some() {
+                        return Err(camera_error(FORMAT, "duplicate RAF crop field"));
+                    }
+                }
                 raf_dir::XTRANS_PATTERN => {
-                    return Err(camera_error(
-                        FORMAT,
-                        "X-Trans (6x6) CFA is not supported: the project fast path decodes only 2x2 RGB Bayer; \
-                         RAF directory tag 0x131 marks this as an X-Trans file",
-                    ));
+                    if value.len() != 36 || source_cfa.is_some() || value.iter().any(|v| *v > 2) {
+                        return Err(camera_error(FORMAT, "invalid X-Trans RAF directory pattern"));
+                    }
+                    // RAF tag 0x131 stores the 6x6 pattern in reverse order.
+                    let cells = value
+                        .iter()
+                        .rev()
+                        .map(|c| match c {
+                            0 => CfaColor::Red,
+                            1 => CfaColor::Green,
+                            _ => CfaColor::Blue,
+                        })
+                        .collect::<Vec<_>>();
+                    if [CfaColor::Red, CfaColor::Green, CfaColor::Blue]
+                        .into_iter()
+                        .zip([8, 20, 8])
+                        .any(|(c, n)| cells.iter().filter(|p| **p == c).count() != n)
+                    {
+                        return Err(camera_error(FORMAT, "invalid X-Trans color counts"));
+                    }
+                    source_cfa = Some(CfaPattern {
+                        width: 6,
+                        height: 6,
+                        cells,
+                    });
                 }
                 raf_dir::LAYOUT if value.first().is_some_and(|byte| byte & 0x80 != 0) => {
                     return Err(camera_error(
@@ -390,7 +443,11 @@ impl RafQuirks {
             }
             cursor = value_end;
         }
-        Ok(())
+        match (crop_origin, crop_size) {
+            (Some(o), Some(z)) => Ok((Some(rrrah_core::Rect::new(o[1], o[0], z[1], z[0])), source_cfa)),
+            (None, None) => Ok((None, source_cfa)),
+            _ => Err(camera_error(FORMAT, "partial RAF crop metadata")),
+        }
     }
 }
 
@@ -608,16 +665,11 @@ fn black_level(raw: &RawIfd<'_>) -> Result<LevelGrid, DecodeError> {
     let grid = match values.len() {
         1 => (1, 1),
         4 => (2, 2),
-        36 => {
-            return Err(camera_error(
-                FORMAT,
-                "X-Trans (6x6) CFA is not supported: black level tag 0xf00a holds 36 values (6x6 grid)",
-            ));
-        }
+        36 => (6, 6),
         count => {
             return Err(camera_error(
                 FORMAT,
-                format!("black level tag 0xf00a has {count} values, expected 1 or 4"),
+                format!("black level tag 0xf00a has {count} values, expected 1, 4 or 36"),
             ));
         }
     };
@@ -631,6 +683,13 @@ fn black_level(raw: &RawIfd<'_>) -> Result<LevelGrid, DecodeError> {
         components: 1,
         values: levels,
     })
+}
+
+pub(super) fn has_white_balance(
+    container: &CameraFile<'_>,
+    raw: &CameraDirectory<'_>,
+) -> Result<bool, DecodeError> {
+    Ok(optional_values(&RawIfd::resolve(container, raw)?, fuji::WB_GRB_LEVELS)?.is_some())
 }
 
 /// White balance from Fuji's G/R/B levels (`0xf00e`), normalized to green.
@@ -1033,6 +1092,34 @@ mod tests {
     }
 
     #[test]
+    fn uncompressed_xtrans_preserves_directory_phase_and_black_grid() {
+        let pattern = [
+            1_u8, 2, 1, 1, 0, 1, 0, 1, 0, 2, 1, 2, 1, 2, 1, 1, 0, 1, 1, 0, 1, 1, 2, 1, 2, 1, 2, 0, 1, 0, 1,
+            0, 1, 1, 2, 1,
+        ];
+        let stored = pattern.iter().rev().copied().collect::<Vec<_>>();
+        let samples = (0..144)
+            .map(|i| [1000_u16, 2000, 3000][pattern[i / 12 % 6 * 6 + i % 12 % 6] as usize])
+            .collect::<Vec<_>>();
+        let raw = samples.iter().flat_map(|p| p.to_le_bytes()).collect::<Vec<_>>();
+        let black = (0..36).map(|i| i as u32).collect::<Vec<_>>();
+        let tiff = fuji_tiff(12, 12, 16, &black, Some([100, 200, 150]), Some(1), None, &raw);
+        let dir = raf_directory(&[(0x131, &stored)]);
+        let mut data = raf_header((0, 0), (0x94, dir.len() as u32), (0x200, tiff.len() as u32));
+        data.extend_from_slice(&dir);
+        data.resize(0x200, 0);
+        data.extend_from_slice(&tiff);
+        let quirks = RafQuirks;
+        let file = quirks.parse_container(&data).unwrap();
+        let ifd = quirks.select_raw_ifd(&file).unwrap();
+        let md = quirks.read_metadata(&file, ifd).unwrap();
+        assert_eq!((md.cfa.width, md.cfa.height), (6, 6));
+        assert_eq!(md.cfa.cells.iter().map(|c| *c as u8).collect::<Vec<_>>(), pattern);
+        assert_eq!((md.black_level.width, md.black_level.height), (6, 6));
+        assert_eq!(quirks.decode_pixels(&file, ifd, &|| false).unwrap(), samples);
+    }
+
+    #[test]
     fn rejects_xtrans_via_raf_directory_tag() {
         let mut bytes = raf_header((0, 0), (0x94, 44), (0x200, 16));
         let mut dir = raf_directory(&[(0x131, &[2_u8, 1, 1, 0, 1, 0][..])]);
@@ -1222,10 +1309,23 @@ mod tests {
         let quirks = RafQuirks;
         let container = quirks.parse_container(&data).unwrap();
         let raw = quirks.select_raw_ifd(&container).unwrap();
-        assert!(matches!(
-            quirks.decode_pixels(&container, raw, &|| true),
-            Err(DecodeError::Cancelled)
-        ));
+        use std::sync::atomic::{AtomicUsize, Ordering};
+        let calls = AtomicUsize::new(0);
+        let expected = quirks.decode_pixels(&container, raw, &|| {
+            calls.fetch_add(1, Ordering::Relaxed);
+            false
+        }).unwrap();
+        let checkpoints = calls.load(Ordering::Relaxed);
+        assert!(checkpoints > 1, "fixture must exercise cancellation after decode starts");
+        for target in 1..=checkpoints {
+            calls.store(0, Ordering::Relaxed);
+            let result = quirks.decode_pixels(&container, raw, &|| {
+                calls.fetch_add(1, Ordering::Relaxed);
+                calls.load(Ordering::Relaxed) == target
+            });
+            assert!(matches!(result, Err(DecodeError::Cancelled)), "checkpoint {target}: {result:?}");
+            assert_eq!(quirks.decode_pixels(&container, raw, &|| false).unwrap(), expected);
+        }
     }
 
     #[test]

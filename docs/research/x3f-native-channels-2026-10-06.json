@@ -1,0 +1,26 @@
+{
+  "source_sha256": "ea436ba459a7478d7b338428656fae905469de269f928749f3388db2b7b0d53f",
+  "status": "native legacy channel decode; independent oracle pending",
+  "sensor_dimensions": [
+    2304,
+    1531
+  ],
+  "channels": 3,
+  "sample_count": 10582272,
+  "legacy_offset": 202,
+  "native_sensor_blake3_u16le": "f9bf415ffe3f10bb837abc69f0e755ead1ede72a1cbd9ae9a02abd63a67d64bc",
+  "checks": "5 tests passed including real-source decode, synthetic offset, typed pressure, cancellation and final managed release",
+  "log": "docs/research/x3f-native-channels-2026-10-06.log",
+  "log_sha256": "8746010bb39934ddbf1b35ea87192349cf386429c909c7a340799936d941f864",
+  "independent_oracle": {
+    "tool": "LibRaw 0.22.2-Release",
+    "x3ftools_enabled": false,
+    "result": "Unsupported file format or not RAW file"
+  },
+  "limitations": [
+    "Native hash is reproducibility evidence, not independent pixel correctness.",
+    "Predictor uses signed wrapping accumulation and two-pass legacy offset.",
+    "WB, camera matrix, CAMF and sensor-to-display transform not implemented.",
+    "Pending independent X3F-enabled oracle; catalog remains Pending."
+  ]
+}

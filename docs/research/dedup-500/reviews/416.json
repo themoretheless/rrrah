@@ -1,0 +1,78 @@
+{
+  "index": 416,
+  "repository": "Paulogb98/DupFile-Analyzer",
+  "commit": "6493e51481e5c495969ef1cf8b9a27d5e614ebf3",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "shortlist",
+  "finding": "Rust SHA256 scanner plus pairwise Hamming candidates and scan test; review quadratic search and alias handling.",
+  "available_source_evidence": [
+    {
+      "path": "src/dedupe.rs",
+      "local": "02-dedupe.rs",
+      "url": "https://github.com/Paulogb98/DupFile-Analyzer/blob/6493e51481e5c495969ef1cf8b9a27d5e614ebf3/src/dedupe.rs",
+      "sha256": "059b36d4de6dabef45837004ee6d42a1acb7144c30e509a401646330a4240ced",
+      "truncated": false,
+      "lines": 188,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/scanner.rs",
+      "local": "03-scanner.rs",
+      "url": "https://github.com/Paulogb98/DupFile-Analyzer/blob/6493e51481e5c495969ef1cf8b9a27d5e614ebf3/src/scanner.rs",
+      "sha256": "e6de62b84ba8e21d558b442b78b60c23701f9881e21137e598342ef5abe03a83",
+      "truncated": false,
+      "lines": 346,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/hashing/content.rs",
+      "local": "04-content.rs",
+      "url": "https://github.com/Paulogb98/DupFile-Analyzer/blob/6493e51481e5c495969ef1cf8b9a27d5e614ebf3/src/hashing/content.rs",
+      "sha256": "53816d00145e9ff7d9451de4956de2b29c001b56331b926bea05398865e38beb",
+      "truncated": false,
+      "lines": 64,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/scan.rs",
+      "local": "05-scan.rs",
+      "url": "https://github.com/Paulogb98/DupFile-Analyzer/blob/6493e51481e5c495969ef1cf8b9a27d5e614ebf3/tests/scan.rs",
+      "sha256": "dc546043702c0c8f63fd2622fef7f0489391b07e1b0f5f3fd1a50a0feb3873d6",
+      "truncated": false,
+      "lines": 120,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 1,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/Paulogb98/DupFile-Analyzer/blob/6493e51481e5c495969ef1cf8b9a27d5e614ebf3/README.md",
+      "sha256": "3a0505da17ab76d7285b012953d06397fbf73291f08c148af470d52406231925",
+      "truncated": false,
+      "lines": 340,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/Paulogb98/DupFile-Analyzer/blob/6493e51481e5c495969ef1cf8b9a27d5e614ebf3/LICENSE",
+      "sha256": "2a27775043fb4f52a55cf0db7d42eb1c10a3c34e8b722bb73cfd4575877a16cf",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

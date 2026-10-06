@@ -1,0 +1,95 @@
+{
+  "repository": "tonalfitness/deduper",
+  "metadata": {
+    "name": "tonalfitness/deduper",
+    "url": "https://github.com/tonalfitness/deduper",
+    "description": "A go2 library to deduplicate expensive requests with a fixed worker pool",
+    "language": "Go",
+    "stars": 6,
+    "license": "MIT",
+    "archived": false,
+    "pushed_at": "2021-08-23T22:57:12Z",
+    "default_branch": "main",
+    "queries": [
+      "dedup in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/tonalfitness/deduper/blob/862d626705ba2828702986086932d42c918e2a4e/README.md",
+      "sha256": "239005d2245db21a683332939213b46e362528d3b453dcfcf7d9e844646ce1f9",
+      "truncated": false,
+      "lines": 103,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/tonalfitness/deduper/blob/862d626705ba2828702986086932d42c918e2a4e/LICENSE",
+      "sha256": "4018e673479fd80ab596d81d7851056f102aebd74624393b84a791e54a8b10d1",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "deduper.go",
+      "local": "02-deduper.go",
+      "url": "https://github.com/tonalfitness/deduper/blob/862d626705ba2828702986086932d42c918e2a4e/deduper.go",
+      "sha256": "86b704266ca1d6cb5f715395e206c03fddf383da1ec323d50d66c0882156c8bf",
+      "truncated": false,
+      "lines": 195,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "deduper_go1/deduper.go",
+      "local": "03-deduper.go",
+      "url": "https://github.com/tonalfitness/deduper/blob/862d626705ba2828702986086932d42c918e2a4e/deduper_go1/deduper.go",
+      "sha256": "b180f73d76f3d6d4479f942c1f08a4e8108425a7174b03767905e74c186d4fc8",
+      "truncated": false,
+      "lines": 197,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "deduper_test.go",
+      "local": "04-deduper_test.go",
+      "url": "https://github.com/tonalfitness/deduper/blob/862d626705ba2828702986086932d42c918e2a4e/deduper_test.go",
+      "sha256": "d62c3fdca22d3483a324b558cfc7af8cd071eaf8250a94df064cc01fc597a5cf",
+      "truncated": false,
+      "lines": 139,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "deduper_go1/example/main.go",
+      "local": "05-main.go",
+      "url": "https://github.com/tonalfitness/deduper/blob/862d626705ba2828702986086932d42c918e2a4e/deduper_go1/example/main.go",
+      "sha256": "82ab2fcacc42594c9810e73e94f83b74ffc615e0d4b7ad6fc49dbfe8e38a1312",
+      "truncated": false,
+      "lines": 62,
+      "source": true,
+      "test": false
+    }
+  ],
+  "errors": [],
+  "commit": "862d626705ba2828702986086932d42c918e2a4e",
+  "tree_truncated": false,
+  "source_file_count": 6,
+  "test_file_count": 2,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "deduper.go",
+    "deduper_go1/deduper.go",
+    "deduper_go1/example/main.go",
+    "deduper_test.go"
+  ]
+}

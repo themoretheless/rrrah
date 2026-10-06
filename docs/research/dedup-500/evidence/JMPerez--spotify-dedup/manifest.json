@@ -1,0 +1,117 @@
+{
+  "repository": "JMPerez/spotify-dedup",
+  "metadata": {
+    "name": "JMPerez/spotify-dedup",
+    "url": "https://github.com/JMPerez/spotify-dedup",
+    "description": "Remove duplicates from your Spotify Playlists",
+    "language": "TypeScript",
+    "stars": 1161,
+    "license": "MIT",
+    "archived": false,
+    "pushed_at": "2026-06-12T15:42:51Z",
+    "default_branch": "master",
+    "queries": [
+      "duplicate in:name,description",
+      "duplicates in:name,description",
+      "dedup in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/JMPerez/spotify-dedup/blob/5742217f733f9f0191c0be6f3cdc80bec57ae0de/README.md",
+      "sha256": "4f3d0b2410bb8b1b1815fd750595c3c1fb7bcda3e2b2e01dd21956705f19c976",
+      "truncated": false,
+      "lines": 35,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/JMPerez/spotify-dedup/blob/5742217f733f9f0191c0be6f3cdc80bec57ae0de/LICENSE",
+      "sha256": "47f0c7c0231635359212b0730f4be6f47cade0643af33fd4a116c448c85e8cf8",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "dedup/deduplicator.ts",
+      "local": "02-deduplicator.ts",
+      "url": "https://github.com/JMPerez/spotify-dedup/blob/5742217f733f9f0191c0be6f3cdc80bec57ae0de/dedup/deduplicator.ts",
+      "sha256": "4417a879a49242ba0e400db47b564348b207637a0780a5b34906dacb10febe80",
+      "truncated": false,
+      "lines": 205,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "dedup/customFetch.ts",
+      "local": "03-customFetch.ts",
+      "url": "https://github.com/JMPerez/spotify-dedup/blob/5742217f733f9f0191c0be6f3cdc80bec57ae0de/dedup/customFetch.ts",
+      "sha256": "38b85c295567f18cbcd62fe10743078c2ef37066e9f2ff47892e41788ba49945",
+      "truncated": false,
+      "lines": 224,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "dedup/library.ts",
+      "local": "04-library.ts",
+      "url": "https://github.com/JMPerez/spotify-dedup/blob/5742217f733f9f0191c0be6f3cdc80bec57ae0de/dedup/library.ts",
+      "sha256": "62bad24997dead78969b486ac02386904d8cf710b89f53c715609043560b651a",
+      "truncated": false,
+      "lines": 24,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "dedup/__tests__/deduplicator.test.ts",
+      "local": "05-deduplicator.test.ts",
+      "url": "https://github.com/JMPerez/spotify-dedup/blob/5742217f733f9f0191c0be6f3cdc80bec57ae0de/dedup/__tests__/deduplicator.test.ts",
+      "sha256": "205d70c375c2ce4e1a09e9addd68de7cb9e57678173531a3250f0cae08dd178f",
+      "truncated": false,
+      "lines": 213,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "components/duplicateTrackList.tsx",
+      "local": "06-duplicateTrackList.tsx",
+      "url": "https://github.com/JMPerez/spotify-dedup/blob/5742217f733f9f0191c0be6f3cdc80bec57ae0de/components/duplicateTrackList.tsx",
+      "sha256": "939ea64cc3d75c5316e8f8c0c039652c4e1a72a839dc54e3030a74384a50931e",
+      "truncated": false,
+      "lines": 7,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "components/duplicateTrackListItem.tsx",
+      "local": "07-duplicateTrackListItem.tsx",
+      "url": "https://github.com/JMPerez/spotify-dedup/blob/5742217f733f9f0191c0be6f3cdc80bec57ae0de/components/duplicateTrackListItem.tsx",
+      "sha256": "58c5d55162b5f17922f205190780d88a068e29f79afb28f495277d1c281ca51a",
+      "truncated": false,
+      "lines": 34,
+      "source": true,
+      "test": false
+    }
+  ],
+  "errors": [],
+  "commit": "5742217f733f9f0191c0be6f3cdc80bec57ae0de",
+  "tree_truncated": false,
+  "source_file_count": 78,
+  "test_file_count": 6,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "components/duplicateTrackList.tsx",
+    "components/duplicateTrackListItem.tsx",
+    "dedup/deduplicator.ts",
+    "dedup/__tests__/deduplicator.test.ts"
+  ]
+}

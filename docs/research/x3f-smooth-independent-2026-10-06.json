@@ -1,0 +1,20 @@
+{
+  "status": "Corrected native smoothing matches separate C++ arithmetic",
+  "samples_compared": 4593,
+  "max_absolute_error": 0,
+  "tests_passed": 16,
+  "fixed": [
+    "Conditional extrema clamp rather than unconditional median replacement",
+    "Float32 intermediate precision"
+  ],
+  "reference_helper": "scripts/x3f-black-smoothing-reference.cpp",
+  "helper_sha256": "450df73996c827cb5ab310fbd0ee4b2189cbeb9d3c2b28ec2e2bf7cf24d81174",
+  "input_sha256": "0a439fd9296c262215abd4c772c9d7eebca122946aceda0e27a4c28b98ddac1e",
+  "oracle_sha256": "62980b25ea3ba20e93546bdc7d52ccd51c708c7a8eec9384c9a056d6d183bab6",
+  "log": "docs/research/x3f-smooth-independent-2026-10-06.log",
+  "remaining": [
+    "Scene adjustment",
+    "Sensor correction integration",
+    "Whole-image display color qualification"
+  ]
+}

@@ -85,6 +85,19 @@ pub fn apply_exposure(rgb: [f32; 3], stops: f32) -> [f32; 3] {
     rgb.map(|channel| channel * gain)
 }
 
+/// Resolve a sensor-clipped camera highlight above the neutral display white.
+/// When every WB-corrected channel is at least white, their ratios cannot be
+/// trusted after sensor clipping. Use the lowest surviving corrected level as
+/// neutral intensity. Unclipped HDR and chromatic highlights remain untouched.
+pub fn reconstruct_clipped_camera_highlight(rgb: [f32; 3], sensor_clipped: bool) -> [f32; 3] {
+    let minimum = rgb.into_iter().fold(f32::INFINITY, f32::min);
+    if sensor_clipped && minimum >= 1.0 {
+        [minimum; 3]
+    } else {
+        rgb
+    }
+}
+
 /// ACES fitted tone map for preview. Input and output are non-negative linear
 /// values; the final display transfer function is intentionally separate.
 pub fn aces_fitted(value: f32) -> f32 {
@@ -292,6 +305,49 @@ pub fn camera_to_linear_srgb_precise(
         }
     }
     invert_3x3_f64(srgb_to_camera).ok_or(CameraProfileError::SingularMatrix)
+}
+
+/// Explicit four-distinct-plane transform, for sensors such as RGBE. Unlike
+/// the Bayer API, every row contributes to the least-squares reconstruction.
+/// Row normalization preserves neutral camera values. The left inverse is
+/// `(A^T A)^-1 A^T`, where A maps linear sRGB to normalized camera responses.
+/// The caller must supply four independently resolved, correctly ordered planes.
+pub fn camera4_to_linear_srgb_precise(
+    xyz_to_camera: [[f64; 3]; 4],
+) -> Result<[[f64; 4]; 3], CameraProfileError> {
+    if xyz_to_camera.iter().flatten().any(|v| !v.is_finite()) {
+        return Err(CameraProfileError::NonFiniteCoefficient);
+    }
+    let mut forward = [[0f64; 3]; 4];
+    for (input, output) in xyz_to_camera.iter().zip(forward.iter_mut()) {
+        for (column, value) in output.iter_mut().enumerate() {
+            *value = (0..3).map(|k| input[k] * SRGB_TO_XYZ_D65_F64[k][column]).sum();
+        }
+        let sum: f64 = output.iter().sum();
+        if !sum.is_finite() || sum.abs() < 1e-8 {
+            return Err(CameraProfileError::DegenerateRow);
+        }
+        for value in output {
+            *value /= sum;
+        }
+    }
+    let mut gram = [[0f64; 3]; 3];
+    for (i, row) in gram.iter_mut().enumerate() {
+        for (j, value) in row.iter_mut().enumerate() {
+            *value = forward.iter().map(|r| r[i] * r[j]).sum();
+        }
+    }
+    let inverse = invert_3x3_f64(gram).ok_or(CameraProfileError::SingularMatrix)?;
+    let mut result = [[0f64; 4]; 3];
+    for (i, row) in result.iter_mut().enumerate() {
+        for (j, value) in row.iter_mut().enumerate() {
+            *value = (0..3).map(|k| inverse[i][k] * forward[j][k]).sum();
+            if !value.is_finite() {
+                return Err(CameraProfileError::SingularMatrix);
+            }
+        }
+    }
+    Ok(result)
 }
 
 pub fn multiply_3x3_f64(left: [[f64; 3]; 3], right: [[f64; 3]; 3]) -> [[f64; 3]; 3] {
@@ -1015,5 +1071,69 @@ mod tests {
                 .expect("valid whites"),
         );
         assert_matrix_close_f64(selected, expected, 1.0e-12);
+    }
+}
+
+#[cfg(test)]
+mod four_plane_tests {
+    use super::*;
+    #[test]
+    fn rgbe_transform_matches_independent_sony_and_numpy_oracles() {
+        // Pinned CC0 DSC-F828 object 1351: LibRaw 0.22.2 cam_xyz and full rgb_cam.
+        let profile = [
+            [0.7924000025, -0.1909999996, -0.07769999653],
+            [-0.8226000071, 1.545899987, 0.2998000085],
+            [-0.1517000049, 0.2198999971, 0.6818000078],
+            [-0.7242000103, 1.140100002, 0.3481000066],
+        ];
+        let expected = [
+            [1.63739419, -0.252761811, -0.003541585058, -0.38109079],
+            [0.06718456, 0.8223665357, -0.5305757523, 0.6410246491],
+            [-0.0008971288335, -0.3551472425, 1.415327907, -0.05928355828],
+        ];
+        let matrix = camera4_to_linear_srgb_precise(profile).unwrap();
+        for (actual, reference) in matrix.iter().flatten().zip(expected.iter().flatten()) {
+            assert!((actual - reference).abs() < 1e-6);
+        }
+        for row in matrix {
+            assert!((row.iter().sum::<f64>() - 1.).abs() < 1e-12);
+        }
+        // Reconstruct three basis vectors from all four normalized sensor responses.
+        for rgb in [[1., 0., 0.], [0., 1., 0.], [0., 0., 1.], [0.2, 0.7, 1.3]] {
+            let camera = profile.map(|row| {
+                let response: [f64; 3] = std::array::from_fn(|column| {
+                    (0..3).map(|k| row[k] * SRGB_TO_XYZ_D65_F64[k][column]).sum()
+                });
+                response.iter().zip(rgb).map(|(a, b)| a * b).sum::<f64>() / response.iter().sum::<f64>()
+            });
+            for (row, reference) in matrix.iter().zip(rgb) {
+                let result: f64 = row.iter().zip(camera).map(|(a, b)| a * b).sum();
+                assert!((result - reference).abs() < 1e-12);
+            }
+        }
+        assert!(matrix.iter().all(|row| row[3].abs() > 0.01));
+        assert!(camera_to_linear_srgb_precise(profile).is_err());
+    }
+    #[test]
+    fn four_plane_transform_rejects_incomplete_and_rank_deficient_profiles() {
+        assert_eq!(
+            camera4_to_linear_srgb_precise([[0.; 3]; 4]),
+            Err(CameraProfileError::DegenerateRow)
+        );
+        assert_eq!(
+            camera4_to_linear_srgb_precise([[1.; 3]; 4]),
+            Err(CameraProfileError::SingularMatrix)
+        );
+        let mut profile = [[1.; 3]; 4];
+        profile[3][0] = f64::NAN;
+        assert_eq!(
+            camera4_to_linear_srgb_precise(profile),
+            Err(CameraProfileError::NonFiniteCoefficient)
+        );
+        profile[3][0] = f64::INFINITY;
+        assert_eq!(
+            camera4_to_linear_srgb_precise(profile),
+            Err(CameraProfileError::NonFiniteCoefficient)
+        );
     }
 }

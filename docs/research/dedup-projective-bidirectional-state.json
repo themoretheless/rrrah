@@ -1,0 +1,34 @@
+{
+  "status": "primitive-qualified",
+  "macos_session": 34562,
+  "scope": "Inverse planar mapping, shared pixel-work admission and bidirectional residuals; unsampled edit negative. First run exposed boundary roundoff loss, repaired with 16-epsilon dimension-scaled edge snapping. Linux fixed rerun pending.",
+  "linux_session": 39587,
+  "linux_log": "dedup-projective-minimal-regression-linux.log",
+  "clippy_exit_code": 0,
+  "sources": {
+    "crates/rrrah-dedup/src/geometry.rs": "60890c2b7fb6c5b7d6741c80fbe328378fd1da894b40b716ed7fa1a07f1cdc95",
+    "crates/rrrah-dedup/src/warp.rs": "075e3c96aeb1fa7a2c475eac762203d2402780012d27878773a7b0e1725573b5"
+  },
+  "targeted_platforms": {
+    "macos": {
+      "exit_code": 0,
+      "passed": 9,
+      "log": "dedup-projective-bidirectional-macos-fixed.log"
+    },
+    "linux": {
+      "exit_code": 0,
+      "passed": 9,
+      "log": "dedup-projective-bidirectional-linux-fixed.log"
+    }
+  },
+  "macos_minimal_regression": {
+    "exit_code": 0,
+    "passed": 119,
+    "ignored": 0
+  },
+  "linux_minimal_regression": {
+    "exit_code": 0,
+    "passed": 120,
+    "ignored": 0
+  }
+}

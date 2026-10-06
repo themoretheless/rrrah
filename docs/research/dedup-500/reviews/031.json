@@ -1,0 +1,68 @@
+{
+  "index": 31,
+  "repository": "GregoryFaust/samblaster",
+  "commit": "b642639117eafedc760d8b84c0d2c4872b0da084",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "SAM sequencing-read duplicate marking with custom hash tables; biological read equivalence is outside photo/file matching.",
+  "license_metadata": "MIT",
+  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "available_source_evidence": [
+    {
+      "path": "sbhash.cpp",
+      "local": "02-sbhash.cpp",
+      "url": "https://github.com/GregoryFaust/samblaster/blob/b642639117eafedc760d8b84c0d2c4872b0da084/sbhash.cpp",
+      "sha256": "74fa2845c98d0e4fe6635ad0e69642d33acb74644b1e13249c018539b3921eca",
+      "truncated": false,
+      "lines": 332,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "sbhash.h",
+      "local": "03-sbhash.h",
+      "url": "https://github.com/GregoryFaust/samblaster/blob/b642639117eafedc760d8b84c0d2c4872b0da084/sbhash.h",
+      "sha256": "db1387443b89a21de55403749fe42634a537d17e909847dadbec8a0bb9234a4c",
+      "truncated": false,
+      "lines": 64,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "samblaster.cpp",
+      "local": "04-samblaster.cpp",
+      "url": "https://github.com/GregoryFaust/samblaster/blob/b642639117eafedc760d8b84c0d2c4872b0da084/samblaster.cpp",
+      "sha256": "e1b85dba49dc1a0b4d75854aea433a918dd16a55f16b80fc5e232aed8e449bba",
+      "truncated": false,
+      "lines": 1919,
+      "source": true,
+      "test": false
+    }
+  ],
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/GregoryFaust/samblaster/blob/b642639117eafedc760d8b84c0d2c4872b0da084/README.md",
+      "sha256": "6e0fabf253ff6636ce8dba2c97f57d450052d7f886fa80b32e008b8cce5f6793",
+      "truncated": false,
+      "lines": 155,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE.txt",
+      "local": "01-LICENSE.txt",
+      "url": "https://github.com/GregoryFaust/samblaster/blob/b642639117eafedc760d8b84c0d2c4872b0da084/LICENSE.txt",
+      "sha256": "fcea409c0bf695fe6eb1577fd983ddda1b3efca67b788ec47216d807f08bcb33",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

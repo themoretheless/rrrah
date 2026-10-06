@@ -1,0 +1,37 @@
+{
+  "scope": "Linux exact-file filesystem qualification on unchanged native exact source, standalone no-decode crate wrapper",
+  "platform": {
+    "kernel": "Linux 6.8.0-117-generic aarch64",
+    "rust": "1.98.0",
+    "uid": 1000,
+    "filesystem": "tmpfs; isolated memory mount"
+  },
+  "source_sha256": {
+    "crates/rrrah-dedup/src/exact.rs": "344aeb36067f36189a52f6a75da194968e7d7922bf2f8db77a5797684cba58c0",
+    "crates/rrrah-dedup/tests/exact_files.rs": "2350d133e1120b46b929dd7d986039d7557cce1bdf36f9f8cf12bf1f35c3cc26"
+  },
+  "validation": {
+    "linux_exact_tests_passed": 12,
+    "failed": 0,
+    "ignored": 0,
+    "macos_exact_tests_passed": 11,
+    "clippy_exit_code": 0,
+    "clippy_scope": "No-decode exact_files target passed -D warnings",
+    "all_feature_clippy": "Blocked by current independent decoder pdf.rs TypedIter not Iterator compile error; not a pass"
+  },
+  "qualified": [
+    "Existing non-UTF8 filenames and duplicate grouping",
+    "Unavailable non-UTF8 diagnostic bytes",
+    "Real mode-000 read denial and recovery under non-root user",
+    "Hardlinks and followed symlink cycles",
+    "FIFO replacement",
+    "Metadata-observable mutation preserves healthy duplicates"
+  ],
+  "finding": "Initial Linux execution exposed equal timestamps on rapid same-size writes. The existing mutation fixture now explicitly changes modified time to qualify metadata-observable invalidation. This does not fix or qualify mutations invisible to metadata.",
+  "remaining": [
+    "Metadata-invisible same-size content mutations in exact sample-pruned branches",
+    "Linux native decoder and pixel/local collection integration",
+    "Windows identity and permissions",
+    "Large collection performance"
+  ]
+}

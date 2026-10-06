@@ -1,0 +1,78 @@
+{
+  "index": 393,
+  "repository": "MichaelXavier/phash",
+  "commit": "7ca85be786273bc4e7763b9b53d93010800eeea0",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "wrapper",
+  "finding": "Haskell FFI bindings to native pHash; no independent image algorithm or permissive-backend conclusion.",
+  "available_source_evidence": [
+    {
+      "path": "src/Data/PHash.hs",
+      "local": "02-PHash.hs",
+      "url": "https://github.com/MichaelXavier/phash/blob/7ca85be786273bc4e7763b9b53d93010800eeea0/src/Data/PHash.hs",
+      "sha256": "345ea92e5fccae0ed71bde5ae831dd2f020afc6182c1c1eb225ecb3fe331beca",
+      "truncated": false,
+      "lines": 42,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/Data/PHash/Image.hs",
+      "local": "03-Image.hs",
+      "url": "https://github.com/MichaelXavier/phash/blob/7ca85be786273bc4e7763b9b53d93010800eeea0/src/Data/PHash/Image.hs",
+      "sha256": "1ddd47067a8236f22ed87faac5216600c2335f9e7be033daac4eb2f29b3c1a48",
+      "truncated": false,
+      "lines": 39,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/Data/PHash/Types.hs",
+      "local": "04-Types.hs",
+      "url": "https://github.com/MichaelXavier/phash/blob/7ca85be786273bc4e7763b9b53d93010800eeea0/src/Data/PHash/Types.hs",
+      "sha256": "93dea35411dbf1c1ce72cad2969b4f92388857909737cd06941e16d70c26e9b0",
+      "truncated": false,
+      "lines": 16,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "test/DocTest.hs",
+      "local": "05-DocTest.hs",
+      "url": "https://github.com/MichaelXavier/phash/blob/7ca85be786273bc4e7763b9b53d93010800eeea0/test/DocTest.hs",
+      "sha256": "7ecadd49b3aabeae74b500bea85f9a28b7f0f259c24ae1a0441998a0f5511119",
+      "truncated": false,
+      "lines": 5,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "GPL-3.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 2,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/MichaelXavier/phash/blob/7ca85be786273bc4e7763b9b53d93010800eeea0/README.md",
+      "sha256": "a19f8553a8295d2fa5834298d85fd62a677b4049471b521d07c679d3a3a76368",
+      "truncated": false,
+      "lines": 34,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/MichaelXavier/phash/blob/7ca85be786273bc4e7763b9b53d93010800eeea0/LICENSE",
+      "sha256": "676ed4dca1fd8d938a2d7cd1d59266f6517c16cb1079498e7297d82c13190d4f",
+      "truncated": false,
+      "lines": 675,
+      "source": false,
+      "test": false
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "index": 415,
+  "repository": "AbdelmoussaouirEz/phasher",
+  "commit": "83faaebea6b9e04003ca3a33d67bea2d649d02c9",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "pHash command uses threshold zero as exact label; important caution: equal perceptual hash does not prove image equality.",
+  "available_source_evidence": [
+    {
+      "path": "hashing.py",
+      "local": "02-hashing.py",
+      "url": "https://github.com/AbdelmoussaouirEz/phasher/blob/83faaebea6b9e04003ca3a33d67bea2d649d02c9/hashing.py",
+      "sha256": "4c658ad5c5ea4974bbfaa47c1e995c1c2e2d0f4850ba0fa1edb80baa7edded08",
+      "truncated": false,
+      "lines": 93,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "commands/duplicates.py",
+      "local": "03-duplicates.py",
+      "url": "https://github.com/AbdelmoussaouirEz/phasher/blob/83faaebea6b9e04003ca3a33d67bea2d649d02c9/commands/duplicates.py",
+      "sha256": "386adb29bf2a48adac85e5ca2197d95cd7397cf889e4616d5272ac203e6eeb3d",
+      "truncated": false,
+      "lines": 111,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "commands/match.py",
+      "local": "04-match.py",
+      "url": "https://github.com/AbdelmoussaouirEz/phasher/blob/83faaebea6b9e04003ca3a33d67bea2d649d02c9/commands/match.py",
+      "sha256": "b10641e390f6138306fe095fe9a9cb608097cb848e5739545a3a0546a1d42f17",
+      "truncated": false,
+      "lines": 308,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/AbdelmoussaouirEz/phasher/blob/83faaebea6b9e04003ca3a33d67bea2d649d02c9/README.md",
+      "sha256": "f8f2efe6eda611a0bf6dde5080f56087fa29d149e5e15c448e72fdcc29e260b2",
+      "truncated": false,
+      "lines": 296,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/AbdelmoussaouirEz/phasher/blob/83faaebea6b9e04003ca3a33d67bea2d649d02c9/LICENSE",
+      "sha256": "a9bb05c3b5b1823a41e1fbb9be1f6c4ef3de9d1ee498238182859976bfbf8f86",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

@@ -1,0 +1,1662 @@
+/**
+ * Zotero Watch Folder - Preferences Panel Script
+ * Loaded via the `scripts` array in PreferencePanes.register().
+ * Runs inside a Cu.Sandbox(window) BEFORE the pane fragment is inserted,
+ * so DOM lookups must be deferred until Zotero fires 'load' on our vbox.
+ */
+
+(function () {
+    'use strict';
+
+    // Load FTL into the preferences window's l10n context.
+    // Must happen before document.l10n.translateFragment() is called by Zotero.
+    if (typeof MozXULElement !== 'undefined') {
+        MozXULElement.insertFTLIfNeeded("zotero-watch-folder.ftl");
+    }
+
+    const { FilePicker } = ChromeUtils.importESModule(
+        'chrome://zotero/content/modules/filePicker.mjs'
+    );
+
+    const PREF_PREFIX = 'extensions.zotero.watchFolder.';
+
+    function getPref(name) {
+        return Zotero.Prefs.get(PREF_PREFIX + name, true);
+    }
+
+    function setPref(name, value) {
+        Zotero.Prefs.set(PREF_PREFIX + name, value, true);
+    }
+
+    // ───────────────────────────────────────────────────────────────────
+    // DATA-4: BYTE-IDENTICAL INLINE COPIES of `relativePath` and
+    // `isWatchRootUnsafe` from `content/utils.mjs`. This prefs script runs
+    // inside a Cu.Sandbox and CANNOT `import` modules, so the guard is
+    // duplicated verbatim. If you change `isWatchRootUnsafe` (or its
+    // `relativePath` dependency) in utils.mjs, update these copies and keep
+    // them byte-identical. (`export ` is the only intentional difference.)
+    // ───────────────────────────────────────────────────────────────────
+    function relativePath(absolutePath, root) {
+      if (typeof absolutePath !== 'string' || typeof root !== 'string') return null;
+      // Normalize backslashes (Windows) to forward slashes; strip trailing slash on root.
+      const norm = (s) => s.replace(/\\/g, '/');
+      const a = norm(absolutePath);
+      let r = norm(root);
+      if (r.endsWith('/')) r = r.slice(0, -1);
+      if (a === r) return '';
+      const prefix = r + '/';
+      if (!a.startsWith(prefix)) return null;
+      return a.slice(prefix.length);
+    }
+
+    function isWatchRootUnsafe(watchRoot, dataDir) {
+      if (typeof watchRoot !== 'string' || watchRoot.length === 0) return null;
+      if (typeof dataDir !== 'string' || dataDir.length === 0) return null;
+      const norm = (s) => s.replace(/\\/g, '/').replace(/\/+$/, '');
+      const storageDir = norm(dataDir) + '/storage';
+      // Watch root equals or sits inside the data dir / storage subdir.
+      if (relativePath(watchRoot, dataDir) !== null) {
+        return 'The watch folder is inside (or equal to) the Zotero data directory. The plugin would treat Zotero\'s own managed files as imports. Choose a separate folder.';
+      }
+      if (relativePath(watchRoot, storageDir) !== null) {
+        return 'The watch folder is inside (or equal to) the Zotero "storage" directory. The plugin would treat Zotero\'s own attachment files as imports. Choose a separate folder.';
+      }
+      // Watch root is a PARENT of the data dir / storage subdir.
+      if (relativePath(dataDir, watchRoot) !== null) {
+        return 'The watch folder contains the Zotero data directory. The plugin could move or delete Zotero\'s own files. Choose a folder that does not contain your Zotero data.';
+      }
+      if (relativePath(storageDir, watchRoot) !== null) {
+        return 'The watch folder contains the Zotero "storage" directory. The plugin could move or delete Zotero\'s own attachment files. Choose a folder that does not contain your Zotero data.';
+      }
+      return null;
+    }
+
+    /**
+     * Build the human-readable path of a collection by walking parent chain.
+     * Used to show "Inbox" or "Inbox / Methods" in the sync-root display.
+     */
+    function collectionDisplayPath(collection) {
+        const segments = [];
+        let cursor = collection;
+        for (let i = 0; i < 64 && cursor; i++) {
+            segments.push(cursor.name);
+            if (!cursor.parentID) break;
+            cursor = Zotero.Collections.get(cursor.parentID);
+        }
+        return segments.reverse().join(' / ');
+    }
+
+    /**
+     * Refresh the sync-root readonly display from the stored key.
+     */
+    function refreshSyncRootDisplay() {
+        const display = document.getElementById('watch-folder-sync-root-display');
+        if (!display) return;
+        const key = getPref('syncRootCollectionKey');
+        if (!key) {
+            display.value = '(not configured — click Change… to pick one)';
+            return;
+        }
+        try {
+            const libraryID = getPref('syncRootLibraryID') || Zotero.Libraries.userLibraryID;
+            const collection = Zotero.Collections.getByLibraryAndKey(libraryID, key);
+            display.value = collection
+                ? collectionDisplayPath(collection)
+                : `(collection missing — was ${key})`;
+        } catch (e) {
+            display.value = `(error resolving: ${e.message})`;
+        }
+    }
+
+    /**
+     * Refresh the sync-warnings row from the bundle's warningSink.
+     * Hidden when there are no warnings.
+     */
+    function refreshWarningsDisplay() {
+        const row = document.getElementById('watch-folder-warnings-row');
+        const countEl = document.getElementById('watch-folder-warnings-count');
+        if (!row || !countEl) return;
+        const sink = Zotero.WatchFolder && Zotero.WatchFolder.warningSink;
+        const total = sink ? sink.getTotalCount() : 0;
+        countEl.value = String(total);
+        row.hidden = total === 0;
+        refreshAttentionStrip();
+    }
+
+    /**
+     * Open an alert with the recent warning entries (newest first).
+     * Caps display at the most recent 30 to keep the alert legible.
+     */
+    function viewWarnings() {
+        const sink = Zotero.WatchFolder && Zotero.WatchFolder.warningSink;
+        if (!sink) {
+            Services.prompt.alert(window, 'Watch Folder', 'Warning sink not available — plugin not fully loaded?');
+            return;
+        }
+        const recent = sink.getRecent(30);
+        if (recent.length === 0) {
+            Services.prompt.alert(window, 'Watch Folder', 'No sync warnings recorded.');
+            return;
+        }
+        const lines = recent.slice().reverse().map((w) => {
+            const ts = new Date(w.timestamp).toLocaleString();
+            const where = w.path ? ` (${w.path})` : (w.collectionKey ? ` (col ${w.collectionKey})` : '');
+            return `[${w.category}] ${ts}${where}\n  ${w.message || w.reason || ''}`;
+        });
+        const counts = sink.getCountsByCategory();
+        const summary = [...counts.entries()]
+            .map(([cat, n]) => `${cat}: ${n}`)
+            .join(' · ');
+        Services.prompt.alert(
+            window,
+            'Watch Folder — Sync warnings',
+            `Total ${sink.getTotalCount()}  (${summary})\n\n${lines.join('\n\n')}`,
+        );
+    }
+
+    function clearWarnings() {
+        const sink = Zotero.WatchFolder && Zotero.WatchFolder.warningSink;
+        if (!sink) return;
+        sink.clear();
+        refreshWarningsDisplay();
+    }
+
+    /**
+     * Refresh the conflict-blocked row count. Currently a display-only
+     * surface — full conflict-resolution actions are a follow-up.
+     */
+    function refreshConflictedDisplay() {
+        const row = document.getElementById('watch-folder-conflicted-row');
+        const countEl = document.getElementById('watch-folder-conflicted-count');
+        if (!row || !countEl) return;
+        const resolver = Zotero.WatchFolder && Zotero.WatchFolder.suppressionResolver;
+        const records = resolver && typeof resolver.listConflicted === 'function'
+            ? resolver.listConflicted() : [];
+        countEl.value = String(records.length);
+        row.hidden = records.length === 0;
+        refreshAttentionStrip();
+    }
+
+    /**
+     * Refresh the suppressed-items row count. Shows file count, and
+     * appends "(+M folders)" when there are also suppressed collection
+     * records (folder-resolution UX is still pending — surfacing the
+     * count keeps the user from being blind to them).
+     */
+    function refreshSuppressedDisplay() {
+        const row = document.getElementById('watch-folder-suppressed-row');
+        const countEl = document.getElementById('watch-folder-suppressed-count');
+        if (!row || !countEl) return;
+        const resolver = Zotero.WatchFolder && Zotero.WatchFolder.suppressionResolver;
+        const files = resolver ? resolver.listSuppressed() : [];
+        const folders = resolver && typeof resolver.listSuppressedCollections === 'function'
+            ? resolver.listSuppressedCollections()
+            : [];
+        // Readable count: "2 files", "3 folders", "2 files, 3 folders", or "0".
+        const countParts = [];
+        if (files.length) countParts.push(`${files.length} file${files.length === 1 ? '' : 's'}`);
+        if (folders.length) countParts.push(`${folders.length} folder${folders.length === 1 ? '' : 's'}`);
+        countEl.value = countParts.join(', ') || '0';
+        row.hidden = files.length === 0 && folders.length === 0;
+        // The folders Resolve button is independent of the files one: a user
+        // may have suppressed folders but no suppressed files (or vice versa).
+        const foldersBtn = document.getElementById('watch-folder-suppressed-resolve-folders-btn');
+        if (foldersBtn) foldersBtn.hidden = folders.length === 0;
+        const filesBtn = document.getElementById('watch-folder-suppressed-resolve-btn');
+        if (filesBtn) filesBtn.hidden = files.length === 0;
+        refreshAttentionStrip();
+    }
+
+    /**
+     * Iterate through suppressed FileRecords and ask the user what to do
+     * for each. Uses Services.prompt.select (an option list) because the
+     * 3-button confirmEx caps at 3 buttons but we need 4 actions + skip.
+     *
+     * For "Move outside watch folder" we open a FilePicker to choose the
+     * target directory. For all others the resolver does the work and we
+     * just refresh the display.
+     */
+    async function resolveSuppressed() {
+        const resolver = Zotero.WatchFolder && Zotero.WatchFolder.suppressionResolver;
+        if (!resolver) {
+            Services.prompt.alert(window, 'Watch Folder', 'Suppression resolver not available — plugin not fully loaded?');
+            return;
+        }
+        const records = resolver.listSuppressed();
+        if (records.length === 0) {
+            Services.prompt.alert(window, 'Watch Folder', 'No suppressed items.');
+            return;
+        }
+
+        const ACTIONS = [
+            { label: 'Re-add to Zotero sync root',         key: resolver.RESOLUTION_ACTION.REINSTATE },
+            { label: 'Keep local file, stop syncing it',   key: resolver.RESOLUTION_ACTION.KEEP_LOCAL },
+            { label: 'Move local file to trash',           key: resolver.RESOLUTION_ACTION.TRASH },
+            { label: 'Move local file outside watch folder', key: resolver.RESOLUTION_ACTION.MOVE_OUTSIDE },
+            { label: 'Skip for now',                       key: null },
+        ];
+        const labels = ACTIONS.map((a) => a.label);
+
+        let i = 0;
+        for (const record of records) {
+            i++;
+            const out = {};
+            const ok = Services.prompt.select(
+                window,
+                `Suppressed item ${i} of ${records.length}`,
+                `"${record.localPath}" lost its last Zotero sync-root membership.\n\nWhat do you want to do?`,
+                labels,
+                out,
+            );
+            if (!ok) break; // user cancelled the whole flow
+            const choice = ACTIONS[out.value];
+            if (!choice || !choice.key) continue; // skip-for-now
+
+            let opts = {};
+            if (choice.key === resolver.RESOLUTION_ACTION.MOVE_OUTSIDE) {
+                const fp = new FilePicker();
+                fp.init(window, 'Pick destination folder (outside watch folder)', fp.modeGetFolder);
+                const fpResult = await fp.show();
+                if (fpResult !== fp.returnOK) continue;
+                // FilePicker.file returns an nsIFile; suppressionResolver
+                // expects a string path. Different Zotero builds expose
+                // `.path`; fall back to String() if it's already a string.
+                opts.targetDir = (fp.file && typeof fp.file === 'object' && fp.file.path)
+                    ? fp.file.path
+                    : String(fp.file);
+            }
+
+            try {
+                const result = await resolver.resolve(record, choice.key, opts);
+                if (!result.ok) {
+                    Services.prompt.alert(
+                        window,
+                        'Watch Folder',
+                        `Failed to ${choice.label.toLowerCase()} for "${record.localPath}":\n${result.reason || ''}${result.error ? '\n' + result.error : ''}`,
+                    );
+                }
+            } catch (e) {
+                Services.prompt.alert(window, 'Watch Folder', `Error: ${e.message}`);
+            }
+        }
+        refreshSuppressedDisplay();
+        refreshWarningsDisplay();
+    }
+
+    /**
+     * Iterate through suppressed CollectionRecords (folders whose Zotero
+     * collection lost its last sync-root membership) and ask the user what
+     * to do for each. Mirrors resolveSuppressed() but dispatches to
+     * resolver.resolveCollection() with the COLLECTION_RESOLUTION_ACTION
+     * enum. For MOVE_OUTSIDE we open FilePicker to pick a target directory.
+     */
+    async function resolveSuppressedFolders() {
+        const resolver = Zotero.WatchFolder && Zotero.WatchFolder.suppressionResolver;
+        if (!resolver) {
+            Services.prompt.alert(window, 'Watch Folder', 'Suppression resolver not available — plugin not fully loaded?');
+            return;
+        }
+        if (typeof resolver.resolveCollection !== 'function'
+            || !resolver.COLLECTION_RESOLUTION_ACTION) {
+            Services.prompt.alert(window, 'Watch Folder', 'Folder resolution unavailable — plugin not fully loaded?');
+            return;
+        }
+        const records = typeof resolver.listSuppressedCollections === 'function'
+            ? resolver.listSuppressedCollections()
+            : [];
+        if (records.length === 0) {
+            Services.prompt.alert(window, 'Watch Folder', 'No suppressed folders.');
+            return;
+        }
+
+        const ACTIONS = [
+            { label: 'Re-create the Zotero collection',           key: resolver.COLLECTION_RESOLUTION_ACTION.REINSTATE },
+            { label: 'Keep local folder, stop syncing it',        key: resolver.COLLECTION_RESOLUTION_ACTION.KEEP_LOCAL },
+            { label: 'Move local folder to trash',                key: resolver.COLLECTION_RESOLUTION_ACTION.TRASH },
+            { label: 'Move local folder outside watch folder',    key: resolver.COLLECTION_RESOLUTION_ACTION.MOVE_OUTSIDE },
+            { label: 'Skip for now',                              key: null },
+        ];
+        const labels = ACTIONS.map((a) => a.label);
+
+        let i = 0;
+        for (const record of records) {
+            i++;
+            const out = {};
+            const ok = Services.prompt.select(
+                window,
+                `Suppressed folder ${i} of ${records.length}`,
+                `"${record.localPath}" lost its last Zotero sync-root membership.\n\nWhat do you want to do?`,
+                labels,
+                out,
+            );
+            if (!ok) break;
+            const choice = ACTIONS[out.value];
+            if (!choice || !choice.key) continue;
+
+            let opts = {};
+            if (choice.key === resolver.COLLECTION_RESOLUTION_ACTION.MOVE_OUTSIDE) {
+                const fp = new FilePicker();
+                fp.init(window, 'Pick destination folder (outside watch folder)', fp.modeGetFolder);
+                const fpResult = await fp.show();
+                if (fpResult !== fp.returnOK) continue;
+                opts.targetDir = (fp.file && typeof fp.file === 'object' && fp.file.path)
+                    ? fp.file.path
+                    : String(fp.file);
+            }
+
+            try {
+                const result = await resolver.resolveCollection(record, choice.key, opts);
+                if (!result.ok) {
+                    Services.prompt.alert(
+                        window,
+                        'Watch Folder',
+                        `Failed to ${choice.label.toLowerCase()} for "${record.localPath}":\n${result.reason || ''}${result.error ? '\n' + result.error : ''}`,
+                    );
+                }
+            } catch (e) {
+                Services.prompt.alert(window, 'Watch Folder', `Error: ${e.message}`);
+            }
+        }
+        refreshSuppressedDisplay();
+        refreshWarningsDisplay();
+    }
+
+    /**
+     * Iterate through conflict-blocked FileRecords (local hash drifted from
+     * the baseline; mirrorExecutor's conflict gate flipped to CONFLICT_BLOCKED)
+     * and ask the user how to resolve each. No targetDir needed — all three
+     * actions are local-state flips on the tracking record.
+     */
+    async function resolveConflicts() {
+        const resolver = Zotero.WatchFolder && Zotero.WatchFolder.suppressionResolver;
+        if (!resolver) {
+            Services.prompt.alert(window, 'Watch Folder', 'Suppression resolver not available — plugin not fully loaded?');
+            return;
+        }
+        if (typeof resolver.resolveConflict !== 'function'
+            || !resolver.CONFLICT_RESOLUTION_ACTION) {
+            Services.prompt.alert(window, 'Watch Folder', 'Conflict resolution unavailable — plugin not fully loaded?');
+            return;
+        }
+        const records = typeof resolver.listConflicted === 'function'
+            ? resolver.listConflicted()
+            : [];
+        if (records.length === 0) {
+            Services.prompt.alert(window, 'Watch Folder', 'No conflict-blocked items.');
+            return;
+        }
+
+        const ACTIONS = [
+            { label: 'Re-stamp baseline from current file (trust local edit)', key: resolver.CONFLICT_RESOLUTION_ACTION.RESTAMP_BASELINE },
+            { label: 'Discard local edit (restore from Zotero)',               key: resolver.CONFLICT_RESOLUTION_ACTION.DISCARD_LOCAL },
+            { label: 'Pause syncing this file',                                key: resolver.CONFLICT_RESOLUTION_ACTION.PAUSE_SYNC },
+            { label: 'Skip for now',                                           key: null },
+        ];
+        const labels = ACTIONS.map((a) => a.label);
+
+        let i = 0;
+        for (const record of records) {
+            i++;
+            const out = {};
+            const ok = Services.prompt.select(
+                window,
+                `Conflict-blocked item ${i} of ${records.length}`,
+                `"${record.localPath}" has a local edit that diverged from the baseline hash.\n\nHow do you want to resolve it?`,
+                labels,
+                out,
+            );
+            if (!ok) break;
+            const choice = ACTIONS[out.value];
+            if (!choice || !choice.key) continue;
+
+            try {
+                const result = await resolver.resolveConflict(record, choice.key, {});
+                if (!result.ok) {
+                    Services.prompt.alert(
+                        window,
+                        'Watch Folder',
+                        `Failed to ${choice.label.toLowerCase()} for "${record.localPath}":\n${result.reason || ''}${result.error ? '\n' + result.error : ''}`,
+                    );
+                }
+            } catch (e) {
+                Services.prompt.alert(window, 'Watch Folder', `Error: ${e.message}`);
+            }
+        }
+        refreshConflictedDisplay();
+        refreshWarningsDisplay();
+    }
+
+    /**
+     * Refresh the mode picker (radiogroup) to match the stored pref.
+     * Replaces the previous read-only display.
+     */
+    // Toggle the `.wf-sel` highlight (and "✓ current" badge) on the option
+    // card matching `selected`, clearing it from the others. Belt-and-braces
+    // on top of the native radio bullet, so the live choice is unmistakable.
+    function _markSelectedCard(idPrefix, values, selected) {
+        for (const v of values) {
+            const el = document.getElementById(idPrefix + v);
+            if (el) el.classList.toggle('wf-sel', v === selected);
+        }
+    }
+
+    function refreshModeRadio() {
+        const radio = document.getElementById('watch-folder-mode-radio');
+        if (!radio) return;
+        const mode = getPref('mode') || 'mode1';
+        // Only valid modes set the radio; unknown values leave it cleared.
+        if (mode === 'mode1' || mode === 'mode2' || mode === 'mode3') {
+            radio.value = mode;
+            _markSelectedCard('wf-mode-opt-', ['mode1', 'mode2', 'mode3'], mode);
+        }
+    }
+
+    /**
+     * Confirm-and-apply on mode change. Invoked by an option card's onclick
+     * (the radiogroups no longer use oncommand); we confirm before
+     * persisting. Cancel reverts the visual selection.
+     */
+    function changeMode(newMode) {
+        if (!newMode || (newMode !== 'mode1' && newMode !== 'mode2' && newMode !== 'mode3')) return;
+        const current = getPref('mode') || 'mode1';
+        if (newMode === current) return;
+
+        const descriptions = {
+            mode1: 'Import only — copy files in, never touch your Zotero collections from disk.',
+            mode2: 'Mirror without delete — keep Zotero collections in sync with folder layout. Disk deletions warn-only.',
+            mode3: 'Mirror with safe delete — also propagate deletions, with confirmations for bulk operations.',
+        };
+        const ok = Services.prompt.confirm(
+            window,
+            'Change sync mode?',
+            `Switching from "${current}" to "${newMode}".\n\n${descriptions[newMode]}\n\n`
+            + 'This changes how the plugin handles deletions and folder structure. '
+            + 'Existing tracked items keep their state; the new mode applies to subsequent changes.\n\nContinue?'
+        );
+        if (!ok) {
+            // Revert the visual selection.
+            refreshModeRadio();
+            return;
+        }
+        setPref('mode', newMode);
+        Zotero.debug(`[Watch Folder] Mode changed via prefs UI: ${current} → ${newMode}`);
+        refreshModeRadio(); // move the highlight + re-assert the radio to the new value
+        refreshDeletionUI(); // show/hide the Mode-3-only deletion-disposition group live
+        refreshExtDelUI();   // and the disk→Zotero external-deletion group
+        refreshStatusHeader(); // reflect the new mode in the header detail line
+    }
+
+    // ─── PDF storage strategy (orthogonal to sync mode) ───────────────────
+    const STORAGE_STRATEGIES = ['stored', 'linked_watch_folder', 'stored_plus_mirror'];
+
+    function _storageStrategyAPI() {
+        return Zotero.WatchFolder && Zotero.WatchFolder.storageStrategy;
+    }
+
+    function getStorageStrategyPref() {
+        const api = _storageStrategyAPI();
+        if (api && typeof api.getStorageStrategy === 'function') return api.getStorageStrategy();
+        return getPref('pdfStorageStrategy') || 'stored';
+    }
+
+    function refreshStorageStrategyUI() {
+        const strategy = getStorageStrategyPref();
+        const radio = document.getElementById('watch-folder-storage-radio');
+        if (radio && STORAGE_STRATEGIES.includes(strategy)) radio.value = strategy;
+        _markSelectedCard('wf-storage-opt-', STORAGE_STRATEGIES, strategy);
+
+        const api = _storageStrategyAPI();
+        const which = (api && typeof api.buttonForStrategy === 'function')
+            ? api.buttonForStrategy(strategy)
+            : (strategy === 'linked_watch_folder' ? 'reclaim'
+                : strategy === 'stored_plus_mirror' ? 'mirror' : null);
+        const reclaimBtn = document.getElementById('watch-folder-storage-reclaim-btn');
+        const mirrorBtn = document.getElementById('watch-folder-storage-mirror-btn');
+        if (reclaimBtn) reclaimBtn.hidden = which !== 'reclaim';
+        if (mirrorBtn) mirrorBtn.hidden = which !== 'mirror';
+
+        const isLinked = strategy === 'linked_watch_folder';
+        const warn = document.getElementById('watch-folder-storage-warning');
+        const restore = document.getElementById('watch-folder-storage-restore');
+        if (warn) warn.hidden = !isLinked;
+        if (restore) restore.hidden = !isLinked;
+    }
+
+    function changeStorageStrategy(value) {
+        if (!STORAGE_STRATEGIES.includes(value)) return;
+        const current = getStorageStrategyPref();
+        if (value === current) return;
+        const labels = {
+            stored: 'Store PDFs in Zotero',
+            linked_watch_folder: 'Link PDFs from watch folder',
+            stored_plus_mirror: 'Store in Zotero and mirror to watch folder',
+        };
+        const ok = Services.prompt.confirm(
+            window,
+            'Change PDF storage strategy?',
+            `Switching to "${labels[value]}".\n\n`
+            + 'This changes how NEWLY imported PDFs are stored. It does not move or convert your '
+            + 'existing PDFs — use the conversion button below for that.\n\nContinue?'
+        );
+        if (!ok) { refreshStorageStrategyUI(); return; }
+        setPref('pdfStorageStrategy', value);
+        Zotero.debug(`[Watch Folder] PDF storage strategy changed: ${current} → ${value}`);
+        refreshStorageStrategyUI();
+        refreshStatusHeader(); // reflect the new storage strategy in the header
+    }
+
+    // ─── Mode-3 deletion disposition (diskDeleteOnTrash) ─────────────────
+    // The set of dispositions the user may *persist* from the prefs pane.
+    // 'permanent' is deliberately OMITTED — it is destructive and must never
+    // become the standing every-batch policy from a single click (see
+    // watchFolder._promptDiskDelete). A 'permanent' value can still arrive via
+    // about:config or an old build; refreshDeletionUI() surfaces a revert row
+    // in that case.
+    const DELETION_DISPOSITIONS = ['ask', 'plugin_trash', 'os_trash', 'never'];
+
+    function getDiskDeleteOnTrashPref() {
+        return getPref('diskDeleteOnTrash') || 'plugin_trash';
+    }
+
+    function refreshDeletionUI() {
+        // diskDeleteOnTrash is only consumed in Mode 3 — hide the whole group
+        // otherwise so Mode 1 / Mode 2 users aren't shown an inert control.
+        const group = document.getElementById('watch-folder-deletion-group');
+        const mode = getPref('mode') || 'mode1';
+        const showGroup = mode === 'mode3';
+        if (group) group.hidden = !showGroup;
+        // Gating banner on the Deletions tab — shown when the controls are inert
+        // (any mode other than Mode 3).
+        const gate = document.getElementById('watch-folder-deletions-gate');
+        if (gate) gate.hidden = showGroup;
+        if (!showGroup) return;
+
+        const current = getDiskDeleteOnTrashPref();
+        const radio = document.getElementById('watch-folder-deletion-radio');
+        if (radio && DELETION_DISPOSITIONS.includes(current)) radio.value = current;
+        // When current === 'permanent', no card carries wf-sel (it isn't in the
+        // grid) and the warn/revert row is revealed instead.
+        _markSelectedCard('wf-deletion-opt-', DELETION_DISPOSITIONS, current);
+
+        const warn = document.getElementById('watch-folder-deletion-permanent-warn');
+        if (warn) warn.hidden = current !== 'permanent';
+    }
+
+    /**
+     * Persist a deletion disposition. Rejects any value not in
+     * DELETION_DISPOSITIONS — notably 'permanent', which the UI never offers.
+     */
+    function changeDiskDeleteOnTrash(value) {
+        if (!DELETION_DISPOSITIONS.includes(value)) return;
+        const current = getDiskDeleteOnTrashPref();
+        if (value === current) { refreshDeletionUI(); return; }
+        setPref('diskDeleteOnTrash', value);
+        Zotero.debug(`[Watch Folder] Deletion disposition changed: ${current} → ${value}`);
+        refreshDeletionUI();
+    }
+
+    // ─── External-deletion disposition (diskDeleteSync, disk → Zotero) ───
+    // What happens to the matching Zotero item(s) when a file is removed from
+    // the watch folder. 'ask' (default) prompts (Move to Trash / Keep / Delete
+    // Permanently); 'auto' silently moves item(s) to the Bin; 'never' leaves
+    // Zotero untouched. Only consumed in Mode 3. 'permanent' is never a
+    // persistable standing value here (the prompt downgrades it on save).
+    const EXTDEL_DISPOSITIONS = ['ask', 'auto', 'never'];
+
+    function getDiskDeleteSyncPref() {
+        return getPref('diskDeleteSync') || 'ask';
+    }
+
+    function refreshExtDelUI() {
+        const group = document.getElementById('watch-folder-extdel-group');
+        const mode = getPref('mode') || 'mode1';
+        const showGroup = mode === 'mode3';
+        if (group) group.hidden = !showGroup;
+        if (!showGroup) return;
+
+        const current = getDiskDeleteSyncPref();
+        const radio = document.getElementById('watch-folder-extdel-radio');
+        if (radio && EXTDEL_DISPOSITIONS.includes(current)) radio.value = current;
+        _markSelectedCard('wf-extdel-opt-', EXTDEL_DISPOSITIONS, current);
+    }
+
+    function changeDiskDeleteSync(value) {
+        if (!EXTDEL_DISPOSITIONS.includes(value)) return;
+        const current = getDiskDeleteSyncPref();
+        if (value === current) { refreshExtDelUI(); return; }
+        setPref('diskDeleteSync', value);
+        Zotero.debug(`[Watch Folder] External-deletion disposition changed: ${current} → ${value}`);
+        refreshExtDelUI();
+    }
+
+    async function reclaimStorage() {
+        const api = _storageStrategyAPI();
+        if (!api || typeof api.previewReclaim !== 'function') {
+            Services.prompt.alert(window, 'Watch Folder', 'Storage tools not available — plugin not fully loaded?');
+            return;
+        }
+        try {
+            const preview = await api.previewReclaim();
+            if (!preview.ok) {
+                Services.prompt.alert(window, 'Reclaim Zotero Storage', 'Set up a watch folder and sync root first.');
+                return;
+            }
+            const mb = (preview.totalBytes / (1024 * 1024)).toFixed(1);
+            const note = api.RECLAIM_CONFIRM_NOTE
+                || 'This moves PDF file storage out of Zotero. Zotero will still sync metadata, notes, and annotations.';
+            const msg =
+                `${preview.convertible.length} PDF(s) (~${mb} MB) can be converted to linked files in your watch folder.\n`
+                + `${preview.keptStored.length} PDF(s) with Zotero annotations, notes, or unknown annotation status will be KEPT stored to protect your data.\n\n`
+                + note + '\n\nConvert now?';
+            const ok = Services.prompt.confirm(window, 'Reclaim Zotero Storage Space', msg);
+            if (!ok) return;
+            const result = await api.runReclaim({ apply: true });
+            Services.prompt.alert(window, 'Reclaim complete',
+                `Converted ${result.converted} PDF(s) to linked files.\n`
+                + `Kept ${result.keptStored} stored (had highlights/notes).\n`
+                + (result.failed ? `${result.failed} could not be verified and were left stored.\n` : '')
+                + 'The old stored copies are in Zotero’s trash — empty it once you’ve confirmed everything looks right.');
+            refreshStorageStrategyUI();
+        } catch (e) {
+            Services.prompt.alert(window, 'Watch Folder', `Reclaim failed: ${e?.message ?? e}`);
+        }
+    }
+
+    async function buildRepairMirror() {
+        const api = _storageStrategyAPI();
+        if (!api || typeof api.previewMirror !== 'function') {
+            Services.prompt.alert(window, 'Watch Folder', 'Storage tools not available — plugin not fully loaded?');
+            return;
+        }
+        try {
+            const preview = await api.previewMirror();
+            if (!preview.ok) {
+                Services.prompt.alert(window, 'Build/Repair Mirror', 'Set up a watch folder and sync root first.');
+                return;
+            }
+            const ok = Services.prompt.confirm(window, 'Build/Repair Watch Folder Mirror',
+                `${preview.copies} PDF(s) would be copied to your watch folder. `
+                + 'Your Zotero stored attachments stay exactly as they are.\n\nContinue?');
+            if (!ok) return;
+            const result = await api.runMirror();
+            Services.prompt.alert(window, 'Mirror complete',
+                `Copied ${result.copies} PDF(s) to the watch folder`
+                + (result.errors ? `, ${result.errors} error(s).` : '.'));
+        } catch (e) {
+            Services.prompt.alert(window, 'Watch Folder', `Build/Repair failed: ${e?.message ?? e}`);
+        }
+    }
+
+    // ─── Storage report + Empty Zotero trash + Missing files ─────────────
+
+    /**
+     * Human-readable byte size. 0 → "0 B"; scales B/KB/MB/GB.
+     */
+    function formatBytes(n) {
+        const bytes = Number(n) || 0;
+        if (bytes <= 0) return '0 B';
+        const units = ['B', 'KB', 'MB', 'GB', 'TB'];
+        let i = 0;
+        let v = bytes;
+        while (v >= 1024 && i < units.length - 1) { v /= 1024; i++; }
+        return `${i === 0 ? v : v.toFixed(1)} ${units[i]}`;
+    }
+
+    /**
+     * Show the read-only storage accounting report. Computed on demand only
+     * (never on prefs open) by Zotero.WatchFolder.storageStrategy.accountingReport().
+     */
+    async function showStorageReport() {
+        const api = _storageStrategyAPI();
+        const out = document.getElementById('watch-folder-storage-report-output');
+        if (!api || typeof api.accountingReport !== 'function') {
+            Services.prompt.alert(window, 'Watch Folder', 'Storage tools not available — plugin not fully loaded?');
+            return;
+        }
+        try {
+            const r = await api.accountingReport();
+            if (!r || !r.ok) {
+                if (out) {
+                    out.value = 'Set up a watch folder and sync root first.';
+                    out.textContent = 'Set up a watch folder and sync root first.';
+                    out.hidden = false;
+                }
+                return;
+            }
+            const lines = [
+                `Zotero attachments under sync root: ${r.zoteroItemCount}`,
+                `  • Stored in Zotero: ${r.storedCount} (${formatBytes(r.storedBytes)})`,
+                `  • Linked to watch folder: ${r.linkedCount}`,
+                `Watch folder on disk: ${r.watchFolderFileCount} file(s) (${formatBytes(r.watchFolderBytes)})`,
+                `Trashed Zotero attachments with files: ${r.trashedAttachmentCount} (${formatBytes(r.trashedBytes)})`,
+            ];
+            // File-sync destination for the personal library (the "Stored in
+            // Zotero" files sync here). Group libraries always use Zotero
+            // storage regardless — WebDAV is personal-library only.
+            const fs = r.fileSync;
+            if (fs) {
+                let where;
+                if (!fs.enabled) where = 'off (files stay local only)';
+                else if (fs.protocol === 'webdav') where = `WebDAV${fs.webdavHost ? ' — ' + fs.webdavHost : ''}`;
+                else where = 'Zotero storage';
+                lines.push(`File sync (My Library): ${where}`);
+                if (fs.enabled && fs.protocol === 'webdav') {
+                    lines.push('  • Group-library files still use Zotero storage (WebDAV is personal-library only).');
+                }
+            }
+            const text = lines.join('\n');
+            if (out) {
+                out.value = text;
+                out.textContent = text;
+                out.hidden = false;
+            }
+        } catch (e) {
+            Services.prompt.alert(window, 'Watch Folder', `Storage report failed: ${e?.message ?? e}`);
+        }
+    }
+
+    /**
+     * Permanently empty Zotero's trash, library-wide. Requires an explicit
+     * confirmEx warning before acting, and surfaces the reclaimable trashed-
+     * bytes figure from the accounting report so the user sees what they free.
+     */
+    async function emptyZoteroTrash() {
+        const api = _storageStrategyAPI();
+        if (!api || typeof api.emptyZoteroTrash !== 'function') {
+            Services.prompt.alert(window, 'Watch Folder', 'Storage tools not available — plugin not fully loaded?');
+            return;
+        }
+        // Best-effort figure for the warning; never blocks the action if it fails.
+        let trashedNote = '';
+        try {
+            if (typeof api.accountingReport === 'function') {
+                const r = await api.accountingReport();
+                if (r && r.ok && r.trashedAttachmentCount > 0) {
+                    trashedNote = `\n\nThis frees about ${formatBytes(r.trashedBytes)} from `
+                        + `${r.trashedAttachmentCount} trashed attachment(s) under your sync root.`;
+                }
+            }
+        } catch (_e) { /* non-fatal */ }
+
+        // Cancel (button 1) is the DEFAULT-focused button — for an
+        // irreversible, library-wide permanent delete a stray Enter must not
+        // trigger it. The destructive "Empty trash permanently" is button 0.
+        const flags = Services.prompt.BUTTON_POS_0 * Services.prompt.BUTTON_TITLE_IS_STRING
+            + Services.prompt.BUTTON_POS_1 * Services.prompt.BUTTON_TITLE_CANCEL
+            + Services.prompt.BUTTON_POS_1_DEFAULT;
+        const pressed = Services.prompt.confirmEx(
+            window,
+            'Empty Zotero trash?',
+            'This PERMANENTLY empties your ENTIRE Zotero trash, library-wide — '
+            + 'every item you have moved to the bin, not just files from this plugin. '
+            + 'This cannot be undone.' + trashedNote,
+            flags,
+            'Empty trash permanently',
+            null, null, null, {}
+        );
+        if (pressed !== 0) return; // cancelled
+
+        try {
+            const result = await api.emptyZoteroTrash();
+            if (result && result.ok) {
+                Services.prompt.alert(window, 'Watch Folder', 'Zotero trash emptied.');
+            } else {
+                const reason = result && result.reason === 'empty-trash-api-unavailable'
+                    ? 'This Zotero build does not expose an empty-trash API. Empty the trash from Zotero’s own interface instead.'
+                    : `Could not empty trash${result && result.error ? ': ' + result.error : '.'}`;
+                Services.prompt.alert(window, 'Watch Folder', reason);
+            }
+            await refreshMissingFilesDisplay();
+        } catch (e) {
+            Services.prompt.alert(window, 'Watch Folder', `Empty trash failed: ${e?.message ?? e}`);
+        }
+    }
+
+    /**
+     * Open the Check & Repair dialog — a standalone window that scans for
+     * disk/Zotero/tracking inconsistencies and applies the selected fixes.
+     */
+    function openCheckAndRepair() {
+        try {
+            window.openDialog(
+                'chrome://zotero-watch-folder/content/reconcileDialog.xhtml',
+                'watchFolderReconcile',
+                'chrome,centerscreen,resizable,dependent,modal',
+                {},
+            );
+        } catch (e) {
+            Services.prompt.alert(window, 'Watch Folder', `Could not open Check & Repair: ${e?.message ?? e}`);
+        }
+    }
+
+    /**
+     * Purge orphaned files from the WebDAV file-sync server (e.g. pCloud).
+     * Delegates to Zotero's own purge routines via
+     * storageStrategy.purgeWebDAVOrphans — the plugin never deletes files
+     * itself, so a live attachment's file can't be mistaken for an orphan.
+     */
+    async function purgeWebDAVOrphans() {
+        const api = _storageStrategyAPI();
+        if (!api || typeof api.purgeWebDAVOrphans !== 'function') {
+            Services.prompt.alert(window, 'Watch Folder', 'Storage tools not available — plugin not fully loaded?');
+            return;
+        }
+        // Cancel is the DEFAULT-focused button (this writes deletions to your
+        // cloud server). "Purge orphaned files" is button 0.
+        const flags = Services.prompt.BUTTON_POS_0 * Services.prompt.BUTTON_TITLE_IS_STRING
+            + Services.prompt.BUTTON_POS_1 * Services.prompt.BUTTON_TITLE_CANCEL
+            + Services.prompt.BUTTON_POS_1_DEFAULT;
+        const pressed = Services.prompt.confirmEx(
+            window,
+            'Purge WebDAV orphans?',
+            'This removes orphaned files from your WebDAV file-sync server — the '
+            + '.zip/.prop files left behind for items no longer in your library. '
+            + 'Files for items still in your library are never touched (Zotero '
+            + 'decides what counts as an orphan). This frees space on your server '
+            + 'and cannot be undone.',
+            flags,
+            'Purge orphaned files',
+            null, null, null, {}
+        );
+        if (pressed !== 0) return; // cancelled
+
+        try {
+            const result = await api.purgeWebDAVOrphans();
+            if (result && result.ok) {
+                Services.prompt.alert(window, 'Watch Folder',
+                    'WebDAV orphan purge complete. Orphaned files for deleted items have been removed from your server.');
+            } else {
+                const reasonMap = {
+                    'not-webdav': 'WebDAV file sync is not configured (your file-sync protocol is not WebDAV), so there is nothing to purge here.',
+                    'webdav-api-unavailable': 'This Zotero build does not expose the WebDAV purge API.',
+                    'purge-api-unavailable': 'This Zotero build does not expose the WebDAV purge API.',
+                    'credentials-failed': 'Could not authenticate with your WebDAV server. Check Settings → Sync → File Syncing.',
+                };
+                const msg = (result && reasonMap[result.reason])
+                    || `Could not purge${result && result.error ? ': ' + result.error : '.'}`;
+                Services.prompt.alert(window, 'Watch Folder', msg);
+            }
+        } catch (e) {
+            Services.prompt.alert(window, 'Watch Folder', `WebDAV purge failed: ${e?.message ?? e}`);
+        }
+    }
+
+    /**
+     * Refresh the "Files removed from disk (kept in Zotero)" list. Calls
+     * suppressionResolver.listMissing() defensively (the API is provided by
+     * another module and may be absent on older builds). Each entry gets a
+     * "Stop tracking" button wired to stopTrackingMissing.
+     */
+    async function refreshMissingFilesDisplay() {
+        const group = document.getElementById('watch-folder-missing-files-group');
+        const list = document.getElementById('watch-folder-missing-files-list');
+        if (!group || !list) return;
+        const resolver = Zotero.WatchFolder && Zotero.WatchFolder.suppressionResolver;
+        let entries = [];
+        if (resolver && typeof resolver.listMissing === 'function') {
+            try {
+                const r = resolver.listMissing();
+                entries = (r && typeof r.then === 'function') ? await r : r;
+            } catch (_e) { entries = []; }
+        }
+        if (!Array.isArray(entries)) entries = [];
+
+        // Clear previous children.
+        while (list.firstChild) list.removeChild(list.firstChild);
+
+        if (entries.length === 0) {
+            group.hidden = true;
+            return;
+        }
+        group.hidden = false;
+
+        // Bulk "Stop tracking all" button — labelled with the live count.
+        const stopAllBtn = document.getElementById('watch-folder-missing-stop-all');
+        if (stopAllBtn && stopAllBtn.setAttribute) {
+            stopAllBtn.setAttribute('label', `Stop tracking all (${entries.length})`);
+        }
+
+        for (const entry of entries) {
+            const path = (entry && (entry.localPath || entry.path)) || String(entry);
+            const row = document.createXULElement
+                ? document.createXULElement('hbox')
+                : document.createElement('hbox');
+            if (row.setAttribute) row.setAttribute('align', 'center');
+
+            const lbl = document.createXULElement
+                ? document.createXULElement('label')
+                : document.createElement('label');
+            if (lbl.setAttribute) lbl.setAttribute('value', path);
+            lbl.value = path;
+            row.appendChild(lbl);
+
+            const btn = document.createXULElement
+                ? document.createXULElement('button')
+                : document.createElement('button');
+            if (btn.setAttribute) btn.setAttribute('label', 'Stop tracking');
+            // Pass the STRING localPath — the resolver requires a string and
+            // rejects a record object with {ok:false, reason:'invalid-path'}.
+            btn.addEventListener('command', () => { stopTrackingMissing(path); });
+            row.appendChild(btn);
+
+            list.appendChild(row);
+        }
+    }
+
+    /**
+     * Stop tracking a missing file via the tracking-only resolver
+     * stopTrackingMissing (provided by another module). Guarded by typeof.
+     */
+    async function stopTrackingMissing(pathOrEntry) {
+        const resolver = Zotero.WatchFolder && Zotero.WatchFolder.suppressionResolver;
+        if (!resolver || typeof resolver.stopTrackingMissing !== 'function') {
+            Services.prompt.alert(window, 'Watch Folder', 'Stop-tracking unavailable — plugin not fully loaded?');
+            return;
+        }
+        // Normalize to the string localPath the resolver requires (a record
+        // object would be rejected as invalid-path).
+        const path = (typeof pathOrEntry === 'string')
+            ? pathOrEntry
+            : (pathOrEntry && (pathOrEntry.localPath || pathOrEntry.path));
+        if (!path) {
+            Services.prompt.alert(window, 'Watch Folder', 'Could not stop tracking: no file path.');
+            return;
+        }
+        try {
+            const result = await resolver.stopTrackingMissing(path);
+            if (result && result.ok === false) {
+                Services.prompt.alert(window, 'Watch Folder',
+                    `Could not stop tracking: ${result.reason || ''}${result.error ? '\n' + result.error : ''}`);
+            }
+        } catch (e) {
+            Services.prompt.alert(window, 'Watch Folder', `Error: ${e.message}`);
+        }
+        await refreshMissingFilesDisplay();
+    }
+
+    /**
+     * Stop tracking ALL currently-missing files in one action (instead of
+     * clicking each row). Confirms once, then calls the tracking-only
+     * stopTrackingMissing for every listed path. Tracking-only: nothing is
+     * deleted or trashed in Zotero — the plugin just forgets these files.
+     */
+    async function stopTrackingAllMissing() {
+        const resolver = Zotero.WatchFolder && Zotero.WatchFolder.suppressionResolver;
+        if (!resolver || typeof resolver.listMissing !== 'function'
+            || typeof resolver.stopTrackingMissing !== 'function') {
+            Services.prompt.alert(window, 'Watch Folder', 'Stop-tracking unavailable — plugin not fully loaded?');
+            return;
+        }
+        let entries = [];
+        try {
+            const r = resolver.listMissing();
+            entries = (r && typeof r.then === 'function') ? await r : r;
+        } catch (_e) { entries = []; }
+        if (!Array.isArray(entries) || entries.length === 0) {
+            await refreshMissingFilesDisplay();
+            return;
+        }
+        const paths = entries
+            .map((e) => (typeof e === 'string') ? e : (e && (e.localPath || e.path)))
+            .filter((p) => typeof p === 'string' && p);
+        const proceed = Services.prompt.confirm(window, 'Watch Folder',
+            `Stop tracking all ${paths.length} file(s) removed from disk?\n\n`
+            + 'They stay in Zotero — this only makes the plugin forget them so they '
+            + 'stop appearing here. This cannot be undone (re-adding the files to the '
+            + 'watch folder would re-import them).');
+        if (!proceed) return;
+        let failed = 0;
+        for (const path of paths) {
+            try {
+                const result = await resolver.stopTrackingMissing(path);
+                if (result && result.ok === false) failed++;
+            } catch (_e) { failed++; }
+        }
+        if (failed > 0) {
+            Services.prompt.alert(window, 'Watch Folder',
+                `Stopped tracking ${paths.length - failed} of ${paths.length} file(s); ${failed} could not be cleared.`);
+        }
+        await refreshMissingFilesDisplay();
+    }
+
+    /**
+     * Switch the active tab: mark the clicked tab button .is-active and show
+     * only the matching .wf-tabpanel. Matching is by the data-tab attribute,
+     * so tab buttons and panels stay paired by name (general/storage/…).
+     */
+    function selectTab(name) {
+        const bar = document.getElementById('watch-folder-tabs');
+        if (bar) {
+            for (const t of bar.children) {
+                if (t.classList) t.classList.toggle('is-active', t.getAttribute('data-tab') === name);
+            }
+        }
+        const panels = document.getElementsByClassName('wf-tabpanel');
+        for (const p of panels) p.hidden = p.getAttribute('data-tab') !== name;
+    }
+
+    /**
+     * Basename of a path (last segment), normalizing Windows backslashes and
+     * trailing slashes. Used for the compact "<folder> → <target>" summary.
+     */
+    function _basename(p) {
+        if (typeof p !== 'string' || !p) return '';
+        const norm = p.replace(/\\/g, '/').replace(/\/+$/, '');
+        const idx = norm.lastIndexOf('/');
+        return idx >= 0 ? norm.slice(idx + 1) : norm;
+    }
+
+    const STATUS_MODE_LABELS = {
+        mode1: 'Import only', mode2: 'Mirror, no delete', mode3: 'Mirror, safe delete',
+    };
+    const STATUS_STORAGE_LABELS = {
+        stored: 'Store PDFs in Zotero',
+        linked_watch_folder: 'Link from watch folder',
+        stored_plus_mirror: 'Store + mirror',
+    };
+
+    /**
+     * Refresh the persistent status header: the state pill (Not set up /
+     * Paused / Watching), the "<folder> → <target>" summary, the
+     * "<mode> · <storage>" detail line, and the attention strip. All reads
+     * are synchronous off prefs + the live sinks, so this is cheap to call
+     * after any state change.
+     */
+    function refreshStatusHeader() {
+        const pill = document.getElementById('watch-folder-status-pill');
+        const summary = document.getElementById('watch-folder-status-summary');
+        const detail = document.getElementById('watch-folder-status-detail');
+        if (!pill || !summary || !detail) return;
+
+        const enabled = getPref('enabled') === true;
+        const setupCompleted = getPref('setupCompleted') === true;
+        const sourcePath = getPref('sourcePath') || '';
+        const scopeMode = getPref('scopeMode') || 'library';
+        const mode = getPref('mode') || 'mode1';
+        const strategy = getStorageStrategyPref();
+
+        // State pill — Not set up → Paused → Watching.
+        let state, label;
+        if (!setupCompleted || !sourcePath) { state = 'is-unset'; label = 'Not set up'; }
+        else if (!enabled) { state = 'is-paused'; label = 'Paused'; }
+        else { state = 'is-watching'; label = 'Watching'; }
+        pill.className = 'wf-pill ' + state;
+        pill.textContent = label;
+
+        // Summary — <folder> → <target>.
+        const folderName = sourcePath ? _basename(sourcePath) : 'no folder yet';
+        let target = 'My Library';
+        if (scopeMode !== 'library') {
+            const key = getPref('syncRootCollectionKey');
+            target = 'no destination yet';
+            if (key) {
+                try {
+                    const libraryID = getPref('syncRootLibraryID') || Zotero.Libraries.userLibraryID;
+                    const col = Zotero.Collections.getByLibraryAndKey(libraryID, key);
+                    if (col) target = collectionDisplayPath(col);
+                } catch (_e) { /* leave default */ }
+            }
+        }
+        summary.textContent = `${folderName} → ${target}`;
+
+        // Detail — <mode> · <storage>.
+        detail.textContent = `${STATUS_MODE_LABELS[mode] || mode} · ${STATUS_STORAGE_LABELS[strategy] || strategy}`;
+
+        refreshAttentionStrip();
+    }
+
+    /**
+     * Refresh the header's attention strip (warnings/suppressed/conflicts)
+     * and the Maintenance tab's "Nothing needs attention" placeholder. The
+     * strip is fast/sync; trashed-folder counts are async and stay surfaced
+     * in their own Maintenance row (folded into the placeholder via live row
+     * visibility, not recomputed here).
+     */
+    function refreshAttentionStrip() {
+        const strip = document.getElementById('watch-folder-attention-strip');
+        const text = document.getElementById('watch-folder-attention-text');
+        const empty = document.getElementById('watch-folder-attention-empty');
+
+        const sink = Zotero.WatchFolder && Zotero.WatchFolder.warningSink;
+        const resolver = Zotero.WatchFolder && Zotero.WatchFolder.suppressionResolver;
+        let warnings = 0, suppressed = 0, conflicted = 0;
+        if (sink) { try { warnings = sink.getTotalCount() || 0; } catch (_e) {} }
+        if (resolver) {
+            try {
+                suppressed = (resolver.listSuppressed() || []).length
+                    + (typeof resolver.listSuppressedCollections === 'function'
+                        ? (resolver.listSuppressedCollections() || []).length : 0);
+            } catch (_e) {}
+            try {
+                conflicted = typeof resolver.listConflicted === 'function'
+                    ? (resolver.listConflicted() || []).length : 0;
+            } catch (_e) {}
+        }
+
+        const parts = [];
+        if (warnings) parts.push(`${warnings} warning${warnings === 1 ? '' : 's'}`);
+        if (suppressed) parts.push(`${suppressed} suppressed`);
+        if (conflicted) parts.push(`${conflicted} conflict-blocked`);
+        const total = warnings + suppressed + conflicted;
+        if (strip) strip.hidden = total === 0;
+        if (text) text.textContent = total === 0 ? '' : `⚠ ${parts.join(' · ')} — review in Maintenance →`;
+
+        // Placeholder hides if ANY attention row is currently visible (covers
+        // trashed folders, whose count is set asynchronously elsewhere).
+        const rowIds = [
+            'watch-folder-warnings-row', 'watch-folder-suppressed-row',
+            'watch-folder-conflicted-row', 'watch-folder-trashed-folders-row',
+        ];
+        const anyVisible = rowIds.some((id) => {
+            const el = document.getElementById(id);
+            return el && !el.hidden;
+        });
+        if (empty) empty.hidden = anyVisible;
+    }
+
+    /**
+     * Open one of the bundled HTML user-docs in the user's default
+     * browser. Strategy:
+     *   1. Extract all three pages from the chrome:// resource (inside
+     *      the JAR'd XPI) to a real filesystem path under Zotero's
+     *      data dir on first use. Overwrites every session so plugin
+     *      updates bring fresh docs along.
+     *   2. Hand the resulting `file://` URL to Zotero.launchURL, which
+     *      routes through the OS external-protocol handler and opens
+     *      in the user's default browser (Firefox, Chrome, etc).
+     *
+     * Why not Zotero.openInViewer (which DID accept the chrome URL):
+     * the basicViewer intercepts every in-page link click and prompts
+     * "Open in external application?" before doing anything — and the
+     * follow-through is unreliable. Cross-page navigation between
+     * index.html / test-plan.html / test-cases.html breaks. The OS
+     * default browser handles all of this natively.
+     *
+     * Why not Zotero.launchURL on chrome:// directly: launchURL only
+     * accepts http/https/file/mailto for safety. chrome:// is rejected.
+     */
+    async function _ensureDocsExtracted() {
+        const destDir = PathUtils.join(Zotero.DataDirectory.dir, 'watch-folder-docs');
+        await IOUtils.makeDirectory(destDir, { ignoreExisting: true });
+        const pages = ['index.html', 'test-plan.html', 'test-cases.html'];
+        for (const page of pages) {
+            const src = `chrome://zotero-watch-folder/content/docs/${page}`;
+            const dest = PathUtils.join(destDir, page);
+            try {
+                const r = await fetch(src);
+                if (!r.ok) continue;
+                const text = await r.text();
+                await IOUtils.writeUTF8(dest, text);
+            } catch (e) {
+                Zotero.debug(`[Watch Folder] Could not extract ${page}: ${e?.message ?? e}`);
+            }
+        }
+        return destDir;
+    }
+
+    async function openDocs(which) {
+        const map = {
+            'index': 'index.html',
+            'test-plan': 'test-plan.html',
+            'test-cases': 'test-cases.html',
+        };
+        const fileName = map[which];
+        if (!fileName) return;
+        try {
+            const destDir = await _ensureDocsExtracted();
+            const localPath = PathUtils.join(destDir, fileName);
+            // nsIFile.launch() asks the OS to open the file with its
+            // default handler — for .html that's the user's default
+            // browser (Firefox, Chrome, etc), not Zotero's basicViewer.
+            // We tried Zotero.launchURL(file://...) but it refuses
+            // file scheme. We tried Zotero.openInViewer(chrome://...)
+            // but its basicViewer prompts on every link click and
+            // doesn't follow cross-page navigation. nsIFile.launch is
+            // the cross-platform Mozilla primitive that just works.
+            const nsIFile = Components.classes['@mozilla.org/file/local;1']
+                .createInstance(Components.interfaces.nsIFile);
+            nsIFile.initWithPath(localPath);
+            nsIFile.launch();
+        } catch (e) {
+            Services.prompt.alert(window, 'Watch Folder',
+                `Could not open documentation: ${e?.message ?? e}`);
+        }
+    }
+
+    /**
+     * Open the standalone Smart Rules editor window. Keeps the JSON
+     * textarea + Save/Insert-example/Reload controls out of the main
+     * prefs pane (those controls only matter to power users).
+     */
+    function openSmartRulesEditor() {
+        try {
+            const url = 'chrome://zotero-watch-folder/content/smartRulesEditor.xhtml';
+            // Reuse existing window if one is open.
+            const existing = Services.wm.getMostRecentWindow('watch-folder-smart-rules');
+            if (existing) { existing.focus(); return; }
+            window.openDialog(url, 'watch-folder-smart-rules',
+                'chrome,centerscreen,resizable=yes,dialog=no');
+        } catch (e) {
+            Services.prompt.alert(window, 'Watch Folder',
+                `Could not open Smart Rules editor: ${e.message}`);
+        }
+    }
+
+    /**
+     * Open a collection picker over the user library and store the chosen
+     * collection's key as `syncRootCollectionKey`. Skips Zotero virtual
+     * collections (Duplicates, Unfiled, Trash, etc.).
+     *
+     * Uses Services.prompt.select for the picker — not pretty, but it's
+     * the only UI primitive that doesn't require shipping a separate XUL
+     * dialog from this prefs pane. The full setup-wizard (Phase C1) will
+     * eventually replace this with a proper tree.
+     */
+    async function pickSyncRoot() {
+        const libraryID = Zotero.Libraries.userLibraryID;
+        let collections;
+        try {
+            collections = Zotero.Collections.getByLibrary(libraryID) || [];
+        } catch (e) {
+            Services.prompt.alert(window, 'Watch Folder',
+                `Could not enumerate collections: ${e.message}`);
+            return;
+        }
+        // Build sorted, path-labeled options. Skip virtual collections.
+        const usable = collections
+            .filter(c => !c.isVirtual)
+            .map(c => ({ key: c.key, label: collectionDisplayPath(c) }))
+            .sort((a, b) => a.label.localeCompare(b.label));
+        if (usable.length === 0) {
+            Services.prompt.alert(window, 'Watch Folder',
+                'No collections found in your library. Create one in Zotero first, then come back.');
+            return;
+        }
+        const labels = usable.map(u => u.label);
+        const out = {};
+        const ok = Services.prompt.select(
+            window,
+            'Pick sync root collection',
+            'Files added to your watch folder will be imported into the collection you pick here. Subfolders on disk become subcollections under this root.',
+            labels,
+            out
+        );
+        if (!ok) return;
+        const chosen = usable[out.value];
+        if (!chosen) return;
+        setPref('syncRootCollectionKey', chosen.key);
+        setPref('syncRootLibraryID', libraryID);
+        // Mark the C1 first-run nudge handled — the user has completed
+        // the minimum-viable setup. The full Phase C1 wizard will
+        // eventually own this too.
+        setPref('setupCompleted', true);
+        refreshSyncRootDisplay();
+        refreshStatusHeader();
+        Zotero.debug(`[Watch Folder] Sync root set to ${chosen.label} (key=${chosen.key})`);
+    }
+
+    /**
+     * Open folder picker and write the chosen path to the preference + UI.
+     * Exposed on window so the XHTML oncommand="WatchFolderPrefs.browseForFolder()"
+     * attribute can reach it (oncommand evals in window scope, not the sandbox).
+     */
+    async function browseForFolder() {
+        const fp = new FilePicker();
+        fp.init(window, Zotero.getString('dataDir.selectDir'), fp.modeGetFolder);
+
+        const currentPath = getPref('sourcePath');
+        if (currentPath) {
+            try { fp.displayDirectory = currentPath; } catch (_) {}
+        }
+
+        const result = await fp.show();
+        if (result === fp.returnOK) {
+            const selectedPath = fp.file;
+            if (selectedPath) {
+                // DATA-4: reject a watch root overlapping the Zotero data/storage dir.
+                // Fails open when the data dir is unresolvable. Leaves the existing
+                // sourcePath + input untouched on a reason.
+                const pathStr = (typeof selectedPath === 'object' && selectedPath.path)
+                    ? selectedPath.path : String(selectedPath);
+                const dataDir = Zotero?.DataDirectory?.dir;
+                const unsafeReason = isWatchRootUnsafe(pathStr, dataDir);
+                if (unsafeReason) {
+                    try { Zotero.logError(`[Watch Folder] Rejected unsafe watch root "${pathStr}" overlapping Zotero data dir "${dataDir}" — ${unsafeReason}`); } catch (_) {}
+                    Services.prompt.alert(window, 'Watch Folder — Unsafe folder', unsafeReason);
+                    return;
+                }
+                setPref('sourcePath', selectedPath);
+                const pathInput = document.getElementById('watch-folder-source-path');
+                if (pathInput) pathInput.value = selectedPath;
+                refreshStatusHeader();
+                Zotero.debug(`[Watch Folder] Source path set to: ${selectedPath}`);
+            }
+        }
+    }
+
+    async function validateSourcePath(path) {
+        if (!path) return false;
+        try {
+            const info = await IOUtils.stat(path);
+            return info.type === "directory";
+        } catch (e) {
+            Zotero.debug(`[Watch Folder] Path validation error: ${e.message}`);
+            return false;
+        }
+    }
+
+    /**
+     * Extra validation on the enable checkbox: reject enable if no valid path.
+     * Listens to 'command' (same event Zotero's pref binding uses), then
+     * reverts both the UI and the pref if the path is invalid.
+     */
+    async function handleEnableCommand(event) {
+        const checkbox = event.target;
+        // Defer the header refresh so the pref-binding's own 'command' handler
+        // has committed the new `enabled` value before we read it back.
+        if (!checkbox.checked) { window.setTimeout(refreshStatusHeader, 0); return; } // disabling is always OK
+
+        const sourcePath = getPref('sourcePath');
+        const isValid = await validateSourcePath(sourcePath);
+        if (!isValid) {
+            checkbox.checked = false;
+            setPref('enabled', false);
+            Services.prompt.alert(
+                window,
+                'Watch Folder',
+                'Please select a valid watch folder before enabling.'
+            );
+        }
+        window.setTimeout(refreshStatusHeader, 0);
+    }
+
+    /**
+     * Refresh the trashed-folders row count. Reads from
+     * `Zotero.WatchFolder.suppressionResolver.listTrashedFolders()` which
+     * lists top-level dirs inside `.zotero-watch-trash/` (folders that
+     * mirrorExecutor.deleteFolder moved out of the watch root in Mode 3).
+     */
+    async function refreshTrashedFoldersDisplay() {
+        const row = document.getElementById('watch-folder-trashed-folders-row');
+        const countEl = document.getElementById('watch-folder-trashed-folders-count');
+        if (!row || !countEl) return;
+        const resolver = Zotero.WatchFolder && Zotero.WatchFolder.suppressionResolver;
+        let entries = [];
+        if (resolver && typeof resolver.listTrashedFolders === 'function') {
+            try { entries = await resolver.listTrashedFolders(); }
+            catch (_e) { entries = []; }
+        }
+        countEl.value = String(entries.length);
+        row.hidden = entries.length === 0;
+        refreshAttentionStrip();
+    }
+
+    /**
+     * Iterate trashed folders and offer Restore / Skip per entry.
+     * Restore moves the dir back to its original sync-root-relative path
+     * (RST.6 collision suffix on the target side) and re-creates the
+     * Zotero collection chain via `relativePathToCollection({
+     * createIfMissing: true })`. The next scan cycle picks up the
+     * contained files and imports them.
+     */
+    async function restoreTrashedFolders() {
+        const resolver = Zotero.WatchFolder && Zotero.WatchFolder.suppressionResolver;
+        if (!resolver || typeof resolver.listTrashedFolders !== 'function') {
+            Services.prompt.alert(window, 'Watch Folder', 'Folder restore unavailable — plugin not fully loaded?');
+            return;
+        }
+        let entries = [];
+        try { entries = await resolver.listTrashedFolders(); }
+        catch (e) {
+            Services.prompt.alert(window, 'Watch Folder', `Could not list trashed folders: ${e.message}`);
+            return;
+        }
+        if (entries.length === 0) {
+            Services.prompt.alert(window, 'Watch Folder', 'No trashed folders.');
+            return;
+        }
+
+        const ACTIONS = [
+            { label: 'Restore to sync root', key: 'restore' },
+            { label: 'Skip for now',         key: null },
+        ];
+        const labels = ACTIONS.map(a => a.label);
+
+        let i = 0;
+        for (const entry of entries) {
+            i++;
+            const out = {};
+            const ok = Services.prompt.select(
+                window,
+                `Trashed folder ${i} of ${entries.length}`,
+                `"${entry.name}" is in the plugin trash.\n\nRestore it to "${entry.originalName}" under the sync root?`,
+                labels,
+                out,
+            );
+            if (!ok) break;
+            const choice = ACTIONS[out.value];
+            if (!choice || !choice.key) continue;
+            try {
+                const result = await resolver.restoreTrashedFolder(entry);
+                if (!result.ok) {
+                    Services.prompt.alert(
+                        window,
+                        'Watch Folder',
+                        `Failed to restore "${entry.name}": ${result.reason || ''}${result.error ? '\n' + result.error : ''}`,
+                    );
+                } else if (result.warning) {
+                    Services.prompt.alert(
+                        window,
+                        'Watch Folder',
+                        `Restored to "${result.restoredTo}". Warning: ${result.warning}`,
+                    );
+                }
+            } catch (e) {
+                Services.prompt.alert(window, 'Watch Folder', `Error: ${e.message}`);
+            }
+        }
+        await refreshTrashedFoldersDisplay();
+    }
+
+    /**
+     * Load the current `smartRules` pref into the editor textarea. Pretty-
+     * printed for human editing; saved back compacted by the engine.
+     */
+    function reloadSmartRules() {
+        const editor = document.getElementById('watch-folder-smart-rules-editor');
+        if (!editor) return;
+        const raw = getPref('smartRules') || '[]';
+        try {
+            editor.value = JSON.stringify(JSON.parse(raw), null, 2);
+        } catch (_e) {
+            // Pref holds invalid JSON — show as-is so the user can fix it.
+            editor.value = raw;
+        }
+    }
+
+    /**
+     * Validate the textarea contents (parse + per-rule shape check) and
+     * persist to the pref on success. Rejects with an alert on parse or
+     * structural errors.
+     */
+    function saveSmartRules() {
+        const editor = document.getElementById('watch-folder-smart-rules-editor');
+        if (!editor) return;
+        let parsed;
+        try {
+            parsed = JSON.parse(editor.value);
+        } catch (e) {
+            Services.prompt.alert(window, 'Watch Folder', `Invalid JSON: ${e.message}`);
+            return;
+        }
+        if (!Array.isArray(parsed)) {
+            Services.prompt.alert(window, 'Watch Folder', 'Top-level value must be an array of rule objects.');
+            return;
+        }
+        // Mirror the engine's `_validateRule` shape check so users hear about
+        // problems here rather than silently losing rules at engine load.
+        for (let i = 0; i < parsed.length; i++) {
+            const r = parsed[i];
+            if (!r || typeof r !== 'object') {
+                Services.prompt.alert(window, 'Watch Folder', `Rule ${i + 1}: not an object.`);
+                return;
+            }
+            if (!r.id || !r.name) {
+                Services.prompt.alert(window, 'Watch Folder', `Rule ${i + 1}: missing required field "id" or "name".`);
+                return;
+            }
+            if (!Array.isArray(r.conditions) || !Array.isArray(r.actions)) {
+                Services.prompt.alert(window, 'Watch Folder', `Rule ${i + 1} (${r.id}): conditions and actions must both be arrays.`);
+                return;
+            }
+            if (r.actions.length === 0) {
+                Services.prompt.alert(window, 'Watch Folder', `Rule ${i + 1} (${r.id}): at least one action is required.`);
+                return;
+            }
+        }
+        setPref('smartRules', JSON.stringify(parsed));
+        // Pretty-print on success so editing continues to be readable.
+        editor.value = JSON.stringify(parsed, null, 2);
+        Services.prompt.alert(window, 'Watch Folder', `Saved ${parsed.length} rule(s).`);
+    }
+
+    /**
+     * Append a starter rule template to the editor so the user has a
+     * concrete shape to edit. Doesn't save — the user reviews + presses
+     * Save themselves.
+     */
+    function insertSmartRuleExample() {
+        const editor = document.getElementById('watch-folder-smart-rules-editor');
+        if (!editor) return;
+        let existing;
+        try { existing = JSON.parse(editor.value || '[]'); }
+        catch (_e) { existing = []; }
+        if (!Array.isArray(existing)) existing = [];
+        existing.push({
+            id: 'example-' + Date.now(),
+            name: 'Example: tag PDFs with DOI as "_has-doi"',
+            enabled: true,
+            priority: 0,
+            stopOnMatch: false,
+            conditions: [{ field: 'DOI', operator: 'isNotEmpty', value: '' }],
+            actions: [{ type: 'addTag', tag: '_has-doi' }],
+        });
+        editor.value = JSON.stringify(existing, null, 2);
+    }
+
+    /**
+     * Called after Zotero inserts and translates the pane fragment.
+     * At this point all elements with id="watch-folder-*" exist in the DOM.
+     */
+    function init() {
+        try {
+            Zotero.debug('[Watch Folder] Initializing preferences panel');
+
+            // Enable checkbox — extra path-validation on top of the pref binding
+            const enableCheckbox = document.getElementById('watch-folder-enabled');
+            if (enableCheckbox) {
+                enableCheckbox.addEventListener('command', handleEnableCommand);
+            }
+
+            // Populate the read-only path display (the pref binding handles saving,
+            // but the <input readonly> won't show the saved value without this).
+            const pathInput = document.getElementById('watch-folder-source-path');
+            if (pathInput) {
+                const currentPath = getPref('sourcePath');
+                if (currentPath) pathInput.value = currentPath;
+            }
+
+            // Sync-root + mode displays — v2.
+            refreshSyncRootDisplay();
+            refreshModeRadio();
+            refreshStorageStrategyUI();
+            refreshDeletionUI();
+            refreshExtDelUI();
+            refreshWarningsDisplay();
+            refreshSuppressedDisplay();
+            refreshConflictedDisplay();
+            refreshTrashedFoldersDisplay();
+            // Missing-files list is computed on open; the storage REPORT is not
+            // (it walks disk + enumerates trash, so only on explicit request).
+            refreshMissingFilesDisplay();
+
+            // Status header (pill + summary + attention strip) + default tab.
+            refreshStatusHeader();
+            selectTab('general');
+
+            Zotero.debug('[Watch Folder] Preferences panel initialized successfully');
+        } catch (e) {
+            Zotero.logError(`[Watch Folder] Preferences init error: ${e.message}`);
+        }
+    }
+
+    /**
+     * Re-run the setup wizard from the prefs pane. Delegates to the
+     * bundle's runSetupWizard (re-exported via Zotero.WatchFolder), so
+     * the same multi-step flow used at first-run is reused here. After
+     * the wizard returns, refresh the sync-root + mode displays.
+     */
+    async function runSetupWizard() {
+        const fn = Zotero.WatchFolder && Zotero.WatchFolder.runSetupWizard;
+        if (typeof fn !== 'function') {
+            Services.prompt.alert(window, 'Watch Folder', 'Setup wizard not available — plugin not fully loaded?');
+            return;
+        }
+        try {
+            await fn(window);
+        } catch (e) {
+            Services.prompt.alert(window, 'Watch Folder', `Wizard error: ${e.message}`);
+        }
+        refreshSyncRootDisplay();
+        refreshModeRadio();
+        refreshStorageStrategyUI();
+        refreshDeletionUI();
+        refreshExtDelUI();
+        refreshStatusHeader();
+    }
+
+    // Expose to window so oncommand attributes in the XHTML can reach these.
+    window.WatchFolderPrefs = {
+        browseForFolder,
+        pickSyncRoot,
+        viewWarnings,
+        clearWarnings,
+        resolveSuppressed,
+        resolveSuppressedFolders,
+        resolveConflicts,
+        restoreTrashedFolders,
+        runSetupWizard,
+        // Live mode picker + tabbed pane navigation + bundled docs + smart rules window.
+        changeMode,
+        selectTab,
+        openDocs,
+        openSmartRulesEditor,
+        // PDF storage strategy + conversion tools.
+        changeStorageStrategy,
+        reclaimStorage,
+        buildRepairMirror,
+        // Mode-3 deletion disposition (diskDeleteOnTrash).
+        changeDiskDeleteOnTrash,
+        changeDiskDeleteSync,
+        // Storage report + Empty Zotero trash + Missing files.
+        showStorageReport,
+        emptyZoteroTrash,
+        purgeWebDAVOrphans,
+        openCheckAndRepair,
+        stopTrackingMissing,
+        stopTrackingAllMissing,
+        onLoad: init,
+    };
+
+    // The script runs before Zotero inserts our XHTML fragment, so we cannot call
+    // getElementById yet. Zotero dispatches a synthetic 'load' event on each top-level
+    // child of the pane container after insertion + translation. We listen in capture
+    // phase so we catch it on the way down to our <vbox id="watch-folder-preferences">.
+    document.addEventListener('load', function onPaneLoad(e) {
+        if (e.target && e.target.id === 'watch-folder-preferences') {
+            document.removeEventListener('load', onPaneLoad, true);
+            init();
+        }
+    }, true);
+
+})();

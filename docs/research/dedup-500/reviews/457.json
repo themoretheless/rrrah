@@ -1,0 +1,88 @@
+{
+  "index": 457,
+  "repository": "Fizzolas/duplicate-file-finder",
+  "commit": "18d1b587e7bc13b6fe610da5efd8f812887251e3",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Python SHA256 scanner and analyzer/deletion modules; exact/visual stages exist, no detected tests.",
+  "available_source_evidence": [
+    {
+      "path": "core/scanner.py",
+      "local": "02-scanner.py",
+      "url": "https://github.com/Fizzolas/duplicate-file-finder/blob/18d1b587e7bc13b6fe610da5efd8f812887251e3/core/scanner.py",
+      "sha256": "0fd6812d7c35357d7d774a82249e056646d91990a8c7d26b1974c5c49e92c880",
+      "truncated": false,
+      "lines": 281,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "build.py",
+      "local": "03-build.py",
+      "url": "https://github.com/Fizzolas/duplicate-file-finder/blob/18d1b587e7bc13b6fe610da5efd8f812887251e3/build.py",
+      "sha256": "72bfb92ea3df4a896178dda01f351110545a42c6a493c0bf4209895353bd6a4c",
+      "truncated": false,
+      "lines": 29,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "build.sh",
+      "local": "04-build.sh",
+      "url": "https://github.com/Fizzolas/duplicate-file-finder/blob/18d1b587e7bc13b6fe610da5efd8f812887251e3/build.sh",
+      "sha256": "dfde84eff714391c5cae0645c80923792ce50f9d6aeb05a6716dc507ccd7957e",
+      "truncated": false,
+      "lines": 62,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "core/analyzers.py",
+      "local": "05-analyzers.py",
+      "url": "https://github.com/Fizzolas/duplicate-file-finder/blob/18d1b587e7bc13b6fe610da5efd8f812887251e3/core/analyzers.py",
+      "sha256": "f53cc50c491348e03460309f9297c0a1baae680307768c40e0e46731159d1bc2",
+      "truncated": false,
+      "lines": 171,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "core/deletion.py",
+      "local": "06-deletion.py",
+      "url": "https://github.com/Fizzolas/duplicate-file-finder/blob/18d1b587e7bc13b6fe610da5efd8f812887251e3/core/deletion.py",
+      "sha256": "60ff2af79a8d38575eb025661230575c4c4cee37c8e79e7e2d12cd6370403b5d",
+      "truncated": false,
+      "lines": 94,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/Fizzolas/duplicate-file-finder/blob/18d1b587e7bc13b6fe610da5efd8f812887251e3/README.md",
+      "sha256": "2c23d039270ab633717533d80da226b6f18f9a0045e801c30b1b043a774910d5",
+      "truncated": false,
+      "lines": 319,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/Fizzolas/duplicate-file-finder/blob/18d1b587e7bc13b6fe610da5efd8f812887251e3/LICENSE",
+      "sha256": "924b1203b99cc2edbfc30dfe33afa15ef8a854f4b2c66bdf8c8d3e051e2db6ef",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

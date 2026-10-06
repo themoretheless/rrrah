@@ -1,0 +1,98 @@
+{
+  "index": 404,
+  "repository": "apaz-cli/Image-Hashing-Tools",
+  "commit": "b7d17d2d8bd27687c73db7b30996b26be6ebeb59",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Java Hamming hash types and image-hasher pipeline tests; GPL reference for algorithm consistency.",
+  "available_source_evidence": [
+    {
+      "path": "Image-Hashing-Tools/src/hash/HashUtils.java",
+      "local": "03-HashUtils.java",
+      "url": "https://github.com/apaz-cli/Image-Hashing-Tools/blob/b7d17d2d8bd27687c73db7b30996b26be6ebeb59/Image-Hashing-Tools/src/hash/HashUtils.java",
+      "sha256": "3868a2dc78894968e6dda4135ee9f451e45d02511e3d42a597a9435a48cf043c",
+      "truncated": false,
+      "lines": 40,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "Image-Hashing-Tools/src/hash/IHashAlgorithm.java",
+      "local": "04-IHashAlgorithm.java",
+      "url": "https://github.com/apaz-cli/Image-Hashing-Tools/blob/b7d17d2d8bd27687c73db7b30996b26be6ebeb59/Image-Hashing-Tools/src/hash/IHashAlgorithm.java",
+      "sha256": "6b131625c950f5d477bfeb8a50279c8ec5f7e2622727a70a1dfe393bbf938dd5",
+      "truncated": false,
+      "lines": 124,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "Image-Hashing-Tools/src/hash/ImageHash.java",
+      "local": "05-ImageHash.java",
+      "url": "https://github.com/apaz-cli/Image-Hashing-Tools/blob/b7d17d2d8bd27687c73db7b30996b26be6ebeb59/Image-Hashing-Tools/src/hash/ImageHash.java",
+      "sha256": "d4986937eb5177cf016cafde9c1a19f4bf0c7beab409ad9fa6746faf3c9246f9",
+      "truncated": false,
+      "lines": 306,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "Image-Hashing-Tools/test/hash/DHashTest.java",
+      "local": "06-DHashTest.java",
+      "url": "https://github.com/apaz-cli/Image-Hashing-Tools/blob/b7d17d2d8bd27687c73db7b30996b26be6ebeb59/Image-Hashing-Tools/test/hash/DHashTest.java",
+      "sha256": "39eaf7b6af18a636f5b1225eb919c2dc2a83fee177a64f7be0b6bc8280a9c6f9",
+      "truncated": false,
+      "lines": 41,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "Image-Hashing-Tools/src/pipeline/hasher/ImageHasher.java",
+      "local": "07-ImageHasher.java",
+      "url": "https://github.com/apaz-cli/Image-Hashing-Tools/blob/b7d17d2d8bd27687c73db7b30996b26be6ebeb59/Image-Hashing-Tools/src/pipeline/hasher/ImageHasher.java",
+      "sha256": "de53bb42c6cff9da0acf95a951e564aa2f7b83a6faad391f1920fea621586dad",
+      "truncated": false,
+      "lines": 309,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "GPL-2.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 11,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/apaz-cli/Image-Hashing-Tools/blob/b7d17d2d8bd27687c73db7b30996b26be6ebeb59/README.md",
+      "sha256": "ed79b320009ac072d35747297851d15fc9d6db8a182b484e307e7e2e9969e198",
+      "truncated": false,
+      "lines": 123,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/apaz-cli/Image-Hashing-Tools/blob/b7d17d2d8bd27687c73db7b30996b26be6ebeb59/LICENSE",
+      "sha256": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643",
+      "truncated": false,
+      "lines": 339,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "Image-Hashing-Tools/LICENSE",
+      "local": "02-LICENSE",
+      "url": "https://github.com/apaz-cli/Image-Hashing-Tools/blob/b7d17d2d8bd27687c73db7b30996b26be6ebeb59/Image-Hashing-Tools/LICENSE",
+      "sha256": "f9c375a1be4a41f7b70301dd83c91cb89e41567478859b77eef375a52d782505",
+      "truncated": false,
+      "lines": 339,
+      "source": false,
+      "test": false
+    }
+  ]
+}

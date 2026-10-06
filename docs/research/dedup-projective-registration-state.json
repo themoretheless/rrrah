@@ -1,0 +1,39 @@
+{
+  "status": "partial_registration_qualification",
+  "macos_unit_tests_passed": 12,
+  "unrelated_pairs_rejected": 14,
+  "positive_passed": 5,
+  "positive_total": 6,
+  "positive_rejected": [
+    5495
+  ],
+  "source_sha256": {
+    "crates/rrrah-dedup/src/warp.rs": "8248afadac4f1c2522db29e0d83d4645f37c68ceec7bd5b4cd70d338bbcc0d9a",
+    "crates/rrrah-dedup/src/local_scan.rs": "659c8bb79a4c1432ab2b70c3244691129b0ec8a859b17e3995582f873851a3f0",
+    "crates/rrrah-dedup/tests/projective_geometry.rs": "386f9990a4c6f9fecf61785eb7f6e7ec2806d02c0ddf269f410955e81f3322ae",
+    "crates/rrrah-dedup/tests/projective_files.rs": "900ebfc65be287782d9c473f4675f87c3f10bc624931471db25b191802c26627"
+  },
+  "scope": "Explicit sampled fixed-domain reverse-grid registration; full bidirectional filtered verification still mandatory; no captured perspective qualification",
+  "remaining": [
+    "Improve poorly conditioned initial snow-scene geometry",
+    "Linux and source mutation lifecycle coverage",
+    "Clippy and full regression checks",
+    "Collection/index integration",
+    "Linux file gate is running and the snow-scene positive remains unresolved"
+  ],
+  "linux_unit_tests_passed": 12,
+  "policy_validation_before_source_io_test_passed": true,
+  "minimal_library_clippy_passed": true,
+  "parameterization": "Four target-grid corner controls, deterministic coordinate descent",
+  "macos_corner_unit_tests_passed": 12,
+  "macos_corner_negative_pairs_rejected": 14,
+  "macos_corner_minimal_clippy_passed": true,
+  "snow_measurement": {
+    "forward_filtered_matched": 52883,
+    "forward_filtered_compared": 72011,
+    "reverse_filtered_matched": 55987,
+    "reverse_filtered_compared": 72326,
+    "candidate": false,
+    "scope": "Fixed six authored perspective derivatives, unchanged tolerance and acceptance fractions"
+  }
+}

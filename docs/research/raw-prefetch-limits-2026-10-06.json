@@ -1,0 +1,55 @@
+{
+  "date": "2026-10-06",
+  "package": "rrrah app binary tests",
+  "scope": "existing real-file opt-in worker tests for byte/count retention limits; not end-to-end UI navigation or physical frame latency",
+  "sources": [
+    {
+      "file": "IMG_9043.CR3",
+      "sha256": "d06cbb10e84882cf130430bdc88ed2652c2622b96dea8d6a854c09e3bee37e59"
+    },
+    {
+      "file": "IMG_9074.CR3",
+      "sha256": "9c0d47cc2dd550eb6dc26c4ba2b2874b67f5c89e79dff5c472abf0ac6b2f6178"
+    },
+    {
+      "file": "1351.srf",
+      "sha256": "07739f94bcab0c7e198d418ac65172d0dce04bb84a7683ecffd0bfe4b32f6d79"
+    }
+  ],
+  "cases": [
+    {
+      "test": "raw_prefetch_byte_limit_preserves_present_priority_neighbour",
+      "passed": true,
+      "assertions": [
+        "two attempted neighbours complete",
+        "existing priority cache entry retained under byte limit",
+        "failed larger admission does not replace priority entry",
+        "managed used bytes return to zero"
+      ]
+    },
+    {
+      "test": "raw_prefetch_count_limit_preserves_highest_priority_neighbour",
+      "passed": true,
+      "assertions": [
+        "nearest direction-priority source stored",
+        "max_entries=1 stops lower-priority neighbour work",
+        "no failures from missing lower-priority files",
+        "managed used bytes return to zero"
+      ]
+    },
+    {
+      "test": "raw_prefetch_count_limit_counts_retained_neighbours_after_missing_file",
+      "passed": true,
+      "assertions": [
+        "missing neighbour reports one failure",
+        "next available SRF stored within max_entries=1",
+        "restored RGBE sensor layout preserved",
+        "managed used bytes return to zero"
+      ]
+    }
+  ],
+  "logs": [
+    "/tmp/rrrah-prefetch-byte-live.log",
+    "/tmp/rrrah-prefetch-count-live.log"
+  ]
+}

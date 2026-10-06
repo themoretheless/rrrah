@@ -1,0 +1,1028 @@
+{
+  "format": "IIQ",
+  "status": "native format-3 entropy qualified; container/color integration pending",
+  "source": {
+    "asset": 4366,
+    "license": "CC0-1.0",
+    "sha256": "f53ce48536813b96d39cc1dbdf0f9ed9f8f4cf80bc1e5c667c3527057147e090",
+    "bytes": 21495886,
+    "url": "https://raw.pixls.us/getfile.php/4366/nice/Phase One - P20+ - IIQ L (1:1).IIQ"
+  },
+  "oracle": {
+    "libraw_version": "0.22.2-Release",
+    "make": "Phase One",
+    "model": "P20+",
+    "width": 4134,
+    "height": 4128,
+    "crop": [
+      26,
+      22,
+      4096,
+      4093
+    ],
+    "wb": [
+      2.314913273,
+      1,
+      1.031825066,
+      0
+    ],
+    "black": 0,
+    "cblack": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "white": 64508,
+    "cfa": [
+      "G",
+      "B",
+      "R",
+      "G"
+    ],
+    "xyz_to_camera": [
+      [
+        0.2904999852,
+        0.07320000231,
+        -0.02370000072
+      ],
+      [
+        -0.8133999705,
+        1.66260004,
+        0.1475999951
+      ],
+      [
+        -0.3037999868,
+        0.4253000021,
+        0.7516999841
+      ],
+      [
+        0,
+        0,
+        0
+      ]
+    ],
+    "camera_to_rgb": [
+      [
+        2.449301481,
+        -1.270811081,
+        -0.1784904301
+      ],
+      [
+        -0.06848108023,
+        1.24422729,
+        -0.1757462472
+      ],
+      [
+        0.1003994048,
+        -0.5513836741,
+        1.45098424
+      ]
+    ],
+    "file_color_matrices": [
+      {
+        "parsedfields": 0,
+        "illuminant": 65535,
+        "xyz_to_camera": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "parsedfields": 0,
+        "illuminant": 65535,
+        "xyz_to_camera": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ]
+      }
+    ]
+  },
+  "sensor_sha256": "42098f003bd293ecf1a92804d74a9925a6766bb34aac28f39d991713a31bca97",
+  "storage": {
+    "private_base": 8,
+    "byte_order": "little",
+    "private_directory": 21349132,
+    "entries": 44,
+    "format": 3,
+    "width": 4134,
+    "height": 4128,
+    "sensor_start": 20,
+    "sensor_bytes": 20583372,
+    "row_table_start": 20583476,
+    "row_table_bytes": 16512,
+    "output_samples": 17065152
+  },
+  "native_entropy": {
+    "full_sensor_equal": true,
+    "truncated_sensor_rejected": true,
+    "cancellation_rejected": true,
+    "regressions": [
+      "predictor reuse",
+      "signed parity predictor steps",
+      "row reset",
+      "absolute tail",
+      "invalid offsets and dimensions",
+      "uninitialized length",
+      "negative predictor"
+    ],
+    "evidence": [
+      "/tmp/rrrah-iiq-entropy.log",
+      "/tmp/rrrah-iiq-synthetic.log"
+    ]
+  },
+  "metadata_investigation": {
+    "file_crop": [
+      26,
+      21,
+      4096,
+      4094
+    ],
+    "libraw_crop": [
+      26,
+      22,
+      4096,
+      4093
+    ],
+    "native_wb_tag": 263,
+    "native_wb_offset": 20583392,
+    "native_wb": [
+      2.314913272857666,
+      1.0,
+      1.031825065612793
+    ],
+    "file_black_tag": 541,
+    "file_black_value": 1024,
+    "libraw_unpack_black": 0,
+    "note": "File black and crop differ from unpack oracle metadata; qualify processing-stage calibration before native display integration."
+  },
+  "remaining": [
+    "bounded private container parser",
+    "native color/WB and black calibration contract",
+    "orientation and CFA/crop qualification",
+    "managed allocations and mixed routing",
+    "RAM/disk/swap and Metal readback"
+  ],
+  "calibration_qualification": {
+    "black_subtraction": "all 17065152 samples match LibRaw phase_one_subtract_black after raw2image_start",
+    "flat_fields": "all 17065152 samples match LibRaw phase_one_correct with only defects length set to zero",
+    "original_corrected_changes_from_black": 16748675,
+    "no_defects_variant": {
+      "mutation_offset": 21349088,
+      "mutation": "set sensor-defect packet length to zero; all flat-field data retained",
+      "sha256": "dfc4b6d010ae952df0654c173dcae6d558244aa4cbd6bc1611982de26fd663e3"
+    },
+    "flat_oracle_sha256": "b4d6e492b83d9a1ad08b7d1eb4eee270fb35d84745825e23450022420bbdc662",
+    "stages": {
+      "samples": 17065152,
+      "black_mismatches": 0,
+      "flatfield_and_defect_changed_samples": 16748675,
+      "stages": {
+        "reference": {
+          "sha256": "42098f003bd293ecf1a92804d74a9925a6766bb34aac28f39d991713a31bca97",
+          "metadata": {
+            "libraw_version": "0.22.2-Release",
+            "make": "Phase One",
+            "model": "P20+",
+            "width": 4134,
+            "height": 4128,
+            "crop": [
+              26,
+              22,
+              4096,
+              4093
+            ],
+            "wb": [
+              2.314913273,
+              1,
+              1.031825066,
+              0
+            ],
+            "black": 0,
+            "cblack": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "white": 64508,
+            "cfa": [
+              "G",
+              "B",
+              "R",
+              "G"
+            ],
+            "xyz_to_camera": [
+              [
+                0.2904999852,
+                0.07320000231,
+                -0.02370000072
+              ],
+              [
+                -0.8133999705,
+                1.66260004,
+                0.1475999951
+              ],
+              [
+                -0.3037999868,
+                0.4253000021,
+                0.7516999841
+              ],
+              [
+                0,
+                0,
+                0
+              ]
+            ],
+            "camera_to_rgb": [
+              [
+                2.449301481,
+                -1.270811081,
+                -0.1784904301
+              ],
+              [
+                -0.06848108023,
+                1.24422729,
+                -0.1757462472
+              ],
+              [
+                0.1003994048,
+                -0.5513836741,
+                1.45098424
+              ]
+            ],
+            "file_color_matrices": [
+              {
+                "parsedfields": 0,
+                "illuminant": 65535,
+                "xyz_to_camera": [
+                  [
+                    0,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    0
+                  ]
+                ]
+              },
+              {
+                "parsedfields": 0,
+                "illuminant": 65535,
+                "xyz_to_camera": [
+                  [
+                    0,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    0
+                  ]
+                ]
+              }
+            ]
+          }
+        },
+        "black-reference": {
+          "sha256": "6f1ca9b580f439803b5247100a981720c6e3abda28f49185a610473035176181",
+          "metadata": {
+            "libraw_version": "0.22.2-Release",
+            "processing_stage": "--phaseone-black",
+            "make": "Phase One",
+            "model": "P20+",
+            "width": 4134,
+            "height": 4128,
+            "crop": [
+              26,
+              22,
+              4096,
+              4093
+            ],
+            "wb": [
+              2.314913273,
+              1,
+              1.031825066,
+              0
+            ],
+            "black": 0,
+            "cblack": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "white": 64508,
+            "cfa": [
+              "G",
+              "B",
+              "R",
+              "G"
+            ],
+            "xyz_to_camera": [
+              [
+                0.2904999852,
+                0.07320000231,
+                -0.02370000072
+              ],
+              [
+                -0.8133999705,
+                1.66260004,
+                0.1475999951
+              ],
+              [
+                -0.3037999868,
+                0.4253000021,
+                0.7516999841
+              ],
+              [
+                0,
+                0,
+                0
+              ]
+            ],
+            "camera_to_rgb": [
+              [
+                2.449301481,
+                -1.270811081,
+                -0.1784904301
+              ],
+              [
+                -0.06848108023,
+                1.24422729,
+                -0.1757462472
+              ],
+              [
+                0.1003994048,
+                -0.5513836741,
+                1.45098424
+              ]
+            ],
+            "file_color_matrices": [
+              {
+                "parsedfields": 0,
+                "illuminant": 65535,
+                "xyz_to_camera": [
+                  [
+                    0,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    0
+                  ]
+                ]
+              },
+              {
+                "parsedfields": 0,
+                "illuminant": 65535,
+                "xyz_to_camera": [
+                  [
+                    0,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    0
+                  ]
+                ]
+              }
+            ]
+          }
+        },
+        "corrected-reference": {
+          "sha256": "6e7d392253e23215a3405ca8a5412fc3f0174416c74c2ad8aff6b1d8986deb82",
+          "metadata": {
+            "libraw_version": "0.22.2-Release",
+            "processing_stage": "--phaseone-corrected",
+            "make": "Phase One",
+            "model": "P20+",
+            "width": 4134,
+            "height": 4128,
+            "crop": [
+              26,
+              22,
+              4096,
+              4093
+            ],
+            "wb": [
+              2.314913273,
+              1,
+              1.031825066,
+              0
+            ],
+            "black": 0,
+            "cblack": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "white": 64508,
+            "cfa": [
+              "G",
+              "B",
+              "R",
+              "G"
+            ],
+            "xyz_to_camera": [
+              [
+                0.2904999852,
+                0.07320000231,
+                -0.02370000072
+              ],
+              [
+                -0.8133999705,
+                1.66260004,
+                0.1475999951
+              ],
+              [
+                -0.3037999868,
+                0.4253000021,
+                0.7516999841
+              ],
+              [
+                0,
+                0,
+                0
+              ]
+            ],
+            "camera_to_rgb": [
+              [
+                2.449301481,
+                -1.270811081,
+                -0.1784904301
+              ],
+              [
+                -0.06848108023,
+                1.24422729,
+                -0.1757462472
+              ],
+              [
+                0.1003994048,
+                -0.5513836741,
+                1.45098424
+              ]
+            ],
+            "file_color_matrices": [
+              {
+                "parsedfields": 0,
+                "illuminant": 65535,
+                "xyz_to_camera": [
+                  [
+                    0,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    0
+                  ]
+                ]
+              },
+              {
+                "parsedfields": 0,
+                "illuminant": 65535,
+                "xyz_to_camera": [
+                  [
+                    0,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    0
+                  ]
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    "defect_counts": {
+      "pixels": 1862,
+      "columns": 3
+    },
+    "remaining": "native defect repair and original corrected-sensor equality; container/WB/crop/managed/cache/GPU integration",
+    "evidence": [
+      "/tmp/rrrah-iiq-calibration.log",
+      "/tmp/rrrah-iiq-processing-stages.json"
+    ]
+  },
+  "pixel_defect_qualification": {
+    "cfa_indices": [
+      3,
+      2,
+      0,
+      1
+    ],
+    "pixel_count": 1862,
+    "full_sensor_equal_without_column_defects": true,
+    "source_variant": {
+      "sha256": "38117d53d3f9b31e63eb0a573f842d0f3027739b8f1c32e6d401609485da4b2e",
+      "mutation": "set types of first 3 column records from 131 to 0; retain all pixel defects and flat-field metadata"
+    },
+    "oracle_sha256": "6bcb2f6be711ac26e03e64a46e4587d2e99d74bc259ddbfd75cb694248ae4d08",
+    "pixel_changed_samples": 1859,
+    "remaining_column_differences": 12347,
+    "scratch": "fixed 8-neighbour stack array; no allocation per defect",
+    "remaining": "backend container/color/cache/GPU integration",
+    "evidence": "/tmp/rrrah-iiq-pixel-final.log"
+  },
+  "column_defect_qualification": {
+    "columns": [
+      746,
+      2855,
+      3180
+    ],
+    "full_original_corrected_sensor_equal": true,
+    "samples_compared": 17065152,
+    "oracle_sha256": "6e7d392253e23215a3405ca8a5412fc3f0174416c74c2ad8aff6b1d8986deb82",
+    "algorithm": "seven directional estimates, gradient threshold 3/2, rounded mean bounded by horizontal same-color neighbours; zero outside sensor; sorted isolated columns after gain grids",
+    "unsupported": "other camera/storage and calibration operations still require separate qualification",
+    "evidence": "/tmp/rrrah-iiq-columns.log"
+  },
+  "container_qualification": {
+    "borrowed_payloads": true,
+    "directory_count_limit": 4096,
+    "checks": [
+      "checked offset arithmetic",
+      "truncated directory and payload extents",
+      "duplicate requested tags",
+      "explicit inline scalar type and length",
+      "calibration payload bounds restricted to calibration block"
+    ],
+    "real_source_payloads_verified": [
+      "sensor",
+      "row offsets",
+      "defect table",
+      "all three gain grids"
+    ],
+    "evidence": "/tmp/rrrah-iiq-container.log",
+    "remaining": "metadata/profile resolution and production backend registration"
+  },
+  "native_pipeline_qualification": {
+    "source": "original pinned P20+ IIQ",
+    "full_corrected_sensor_equal": true,
+    "samples_compared": 17065152,
+    "white_balance_equal": true,
+    "camera_to_rgb_absolute_tolerance": 1e-05,
+    "profile": "Phase One/P20+ exact coefficients -8134, rather than existing Phase One A/S row -8135",
+    "crop_contract": [
+      26,
+      22,
+      4096,
+      4093
+    ],
+    "crop_derivation": "advance stored top 21 to Bayer row 22 preserving stored bottom 4115",
+    "strict_storage": "P20+-H, format 3, 4134x4128, orientation code 1, black 1024",
+    "rejections": [
+      "zero white balance",
+      "NaN white balance",
+      "unknown camera model",
+      "truncated private container",
+      "unknown calibration operation"
+    ],
+    "evidence": "/tmp/rrrah-iiq-pipeline-final.log",
+    "remaining": "production registration, managed admission and cache/swap/GPU integration"
+  },
+  "public_backend_qualification": {
+    "backend_id": 20,
+    "backend_revision": 1,
+    "public_router_full_corrected_sensor_equal": true,
+    "managed_64_mib_succeeds": true,
+    "retained_pixel_bytes": 34130304,
+    "last_owner_release_returns_budget_to_zero": true,
+    "managed_32_mib_typed_refusal_releases_budget": true,
+    "source_route": "IIQ remains sensor in mixed image router; gallery uses shared raw extension candidates",
+    "evidence": "/tmp/rrrah-iiq-public.log",
+    "remaining": "other camera/storage variants, physical display and full photographic color qualification"
+  },
+  "cache_gpu_qualification": {
+    "adapter": "Metal Apple M4 Max",
+    "frame_size": [
+      128,
+      96
+    ],
+    "full_frame_equal_to_independent_corrected_sensor": true,
+    "routes": [
+      "native",
+      "RAM lease",
+      "persistent disk",
+      "swap restore"
+    ],
+    "ram_shared_pixel_owner": true,
+    "leased_limit_shrink_protected": true,
+    "swap_limits": {
+      "bytes": 67108864,
+      "count": 1,
+      "queue_bytes": 67108864,
+      "queue_count": 1
+    },
+    "managed_pressure_refusal_retains_swap_entry": true,
+    "retry_after_pressure_release_equal": true,
+    "final_budget_used": 0,
+    "evidence": "/tmp/rrrah-iiq-metal.log"
+  },
+  "malformed_integration_qualification": {
+    "uppercase_extension": "IIQ",
+    "mixed_router_sensor_equal": true,
+    "cases": [
+      "zero WB",
+      "NaN WB",
+      "unknown model",
+      "first row offset nonzero",
+      "truncated private tables",
+      "duplicate bad column",
+      "unknown calibration operation"
+    ],
+    "all_rejected_with_budget_zero": true,
+    "small_8_mib_refusal_budget_zero": true,
+    "evidence": "/tmp/rrrah-iiq-rejection.log"
+  },
+  "warm_performance_observation": {
+    "date": "2026-10-06",
+    "device": "Apple M4 Max",
+    "profile": "optimized dev",
+    "cache_cpu_limit_bytes": 268435456,
+    "warmup_rounds": 4,
+    "measured_rounds": 16,
+    "rotating_path_order": true,
+    "paths_ms_p50_p95": {
+      "decode": [
+        470.140667,
+        716.734542
+      ],
+      "disk": [
+        36.535167,
+        64.561417
+      ],
+      "swap": [
+        35.290959,
+        42.851
+      ],
+      "ram": [
+        0.000259,
+        0.000289
+      ]
+    },
+    "managed_root_peak_bytes": 89756494,
+    "restore_peak_bytes": 34130304,
+    "final_root_and_restore_bytes": 0,
+    "policy_inference": "cache-first supported for this pinned source and warm workload",
+    "cache_evidence": "target/bench/iiq-cache/current.csv",
+    "view_evidence": "target/bench/iiq-view/current.csv",
+    "view_ms_p50_p95": {
+      "decode_to_completed_offscreen_frame": [
+        521.451,
+        1110.616
+      ],
+      "resident_zoom_pan": [
+        3.282,
+        6.526
+      ]
+    },
+    "scope": "warm files; completed 1920x1080 offscreen Metal frames; no physical display/HDR/cold storage or total RSS claims"
+  },
+  "clustered_column_qualification": {
+    "full_sensor_samples_per_variant": 17065152,
+    "variants": [
+      {
+        "name": "nearby",
+        "columns": [
+          746,
+          748,
+          2855
+        ],
+        "mutation": "replace only first three calibration column coordinates, retaining original pixel defects, entropy and gain grids",
+        "source_sha256": "a669a2dbd6f360dde0641c3f29045fbd770bbd3cfc28b94e451b78a0d46f4ce9",
+        "corrected_oracle_sha256": "4bfe312fa981244b1db24baf4a56bb5c7a056bf6172b52ccf84ae3a280c26be3",
+        "all_samples_equal": true
+      },
+      {
+        "name": "adjacent",
+        "columns": [
+          746,
+          747,
+          2855
+        ],
+        "mutation": "replace only first three calibration column coordinates, retaining original pixel defects, entropy and gain grids",
+        "source_sha256": "71ef2f66e92691115fcd7fc4704d1fe3aa4e22d7d3d917b19d5812ffae197384",
+        "corrected_oracle_sha256": "1ef88a78fc4bcb0cd351930cc8d3b21113fe4f9d88eeda46d17f62638e82c684",
+        "all_samples_equal": true
+      },
+      {
+        "name": "edge",
+        "columns": [
+          0,
+          1,
+          2855
+        ],
+        "mutation": "replace only first three calibration column coordinates, retaining original pixel defects, entropy and gain grids",
+        "source_sha256": "2352515feeab874f1bd5c59e939fb0aaceab39e6c6fd69d1e1b49563d08331fa",
+        "corrected_oracle_sha256": "71f799e0506fca679aac52fbea39bd69efccb65380c3b1d3b75c4e536a8f1d94",
+        "all_samples_equal": true
+      }
+    ],
+    "oracle": "LibRaw 0.22.2 actual phase_one_correct after black stage",
+    "algorithm": "sorted sequential columns; isolated directional gradients, clustered rounded average of first nonempty same-color diagonal neighbourhood; skip out-of-bounds sites",
+    "synthetic": "edge recovery, no-valid-neighbours, duplicates and cancellation",
+    "evidence": "/tmp/rrrah-iiq-cluster-oracle.log"
+  },
+  "stage_performance_observation": {
+    "date": "2026-10-06",
+    "warmups": 3,
+    "measured_runs": 12,
+    "all_full_sensor_outputs_equal_to_independent_oracle": true,
+    "source_read_and_full_output_comparison_outside_timing": true,
+    "profile": "optimized test, sequential native CPU stages",
+    "stages": [
+      {
+        "stage": "parse",
+        "p50_ms": 0.096333,
+        "p95_ms": 0.10875
+      },
+      {
+        "stage": "entropy",
+        "p50_ms": 297.270292,
+        "p95_ms": 304.172208
+      },
+      {
+        "stage": "black",
+        "p50_ms": 9.19225,
+        "p95_ms": 10.412959
+      },
+      {
+        "stage": "pixels",
+        "p50_ms": 0.175084,
+        "p95_ms": 0.45175
+      },
+      {
+        "stage": "luma416",
+        "p50_ms": 65.298958,
+        "p95_ms": 67.345958
+      },
+      {
+        "stage": "luma410",
+        "p50_ms": 71.953916,
+        "p95_ms": 74.617791
+      },
+      {
+        "stage": "chroma40b",
+        "p50_ms": 101.564125,
+        "p95_ms": 109.43575
+      },
+      {
+        "stage": "columns",
+        "p50_ms": 5.799958,
+        "p95_ms": 6.425417
+      }
+    ],
+    "evidence": "/tmp/rrrah-iiq-stage-timing.log",
+    "next_optimization_target": "entropy and flat-field loops; parse/color lookup contributes less than 0.11 ms p95"
+  },
+  "flat_field_specialization_qualification": {
+    "change": "const channel-count specialization of existing arithmetic and bounds; no format or rounding change",
+    "warmup_pairs": 2,
+    "measured_pairs": [
+      {
+        "pair": 1,
+        "baseline_ms": 319.709083,
+        "specialized_ms": 85.2315,
+        "saved_ms": 234.477583
+      },
+      {
+        "pair": 2,
+        "baseline_ms": 283.851125,
+        "specialized_ms": 83.292333,
+        "saved_ms": 200.558792
+      },
+      {
+        "pair": 3,
+        "baseline_ms": 285.313708,
+        "specialized_ms": 76.590709,
+        "saved_ms": 208.722999
+      },
+      {
+        "pair": 4,
+        "baseline_ms": 279.957167,
+        "specialized_ms": 81.0665,
+        "saved_ms": 198.890667
+      },
+      {
+        "pair": 5,
+        "baseline_ms": 279.640791,
+        "specialized_ms": 85.596084,
+        "saved_ms": 194.044707
+      },
+      {
+        "pair": 6,
+        "baseline_ms": 293.473042,
+        "specialized_ms": 86.293333,
+        "saved_ms": 207.179709
+      },
+      {
+        "pair": 7,
+        "baseline_ms": 335.507458,
+        "specialized_ms": 91.159708,
+        "saved_ms": 244.34775
+      },
+      {
+        "pair": 8,
+        "baseline_ms": 291.127459,
+        "specialized_ms": 92.688,
+        "saved_ms": 198.439459
+      }
+    ],
+    "baseline_ms_p50_p95": [
+      291.127459,
+      335.507458
+    ],
+    "specialized_ms_p50_p95": [
+      85.596084,
+      92.688
+    ],
+    "all_full_corrected_sensor_outputs_equal": true,
+    "evidence": "/tmp/rrrah-iiq-flat-paired.log",
+    "scope": "three gain grids only; excludes base clone, entropy, black/pixel/column repair, disk/GPU and display"
+  },
+  "post_specialization_performance": {
+    "date": "2026-10-06",
+    "device": "Apple M4 Max",
+    "profile": "optimized dev",
+    "managed_cpu_cap_bytes": 268435456,
+    "managed_gpu_cap_bytes": 268435456,
+    "cache_paths_ms_p50_p95": {
+      "decode": [
+        218.991542,
+        269.342958
+      ],
+      "disk": [
+        27.164917,
+        33.911542
+      ],
+      "swap": [
+        26.261375,
+        33.373708
+      ],
+      "ram": [
+        0.000192,
+        0.000227
+      ]
+    },
+    "cache_warmups_and_samples": [
+      4,
+      16
+    ],
+    "offscreen_1920x1080_ms_p50_p95": {
+      "decode": [
+        235.951,
+        258.64
+      ],
+      "upload_enqueue": [
+        8.198,
+        8.602
+      ],
+      "frame_completion": [
+        6.535,
+        9.454
+      ],
+      "total": [
+        248.387,
+        271.292
+      ],
+      "resident_zoom_pan": [
+        1.127,
+        1.509
+      ]
+    },
+    "view_warmups_and_samples": [
+      3,
+      15
+    ],
+    "resident_frames": 60,
+    "cache_root_peak_bytes": 89756494,
+    "cache_restore_peak_bytes": 34130304,
+    "view_cpu_peak_bytes": 137414528,
+    "view_gpu_peak_bytes": 68425984,
+    "final_managed_usage_zero": true,
+    "cache_evidence": "target/bench/iiq-cache-specialized/current.csv",
+    "view_evidence": "target/bench/iiq-view-specialized/current.csv",
+    "independent_gpu_cache_recheck": "/tmp/rrrah-iiq-specialized-metal.log",
+    "scope": "warm files; completed offscreen Metal frames; old/new end-to-end runs are separate and not paired; no physical scanout/HDR/cold-storage or RSS claims"
+  }
+}

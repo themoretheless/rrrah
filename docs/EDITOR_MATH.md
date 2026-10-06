@@ -3,7 +3,7 @@
 The editor evaluates nodes in this order:
 
 ```text
-RAW decode -> linearization -> black/bad pixel -> CFA demosaic -> WB
+RAW decode -> linearization -> black/bad pixel -> per-photosite WB -> CFA demosaic
 -> camera/working matrix -> lens/vignette -> denoise/detail -> local masks
 -> exposure/tone -> gamut/ICC/transfer -> export
 ```
@@ -24,7 +24,8 @@ Exposure is scene-linear: `E = 2^stops`, `rgb' = E * rgb`.
 WB uses a diagonal matrix in camera space. Format backends provide resolved
 multiplicative correction gains `g` such that
 `diag(g) * AsShotNeutral = [k, k, k]`, conventionally with green gain equal to
-one. The renderer uploads those gains unchanged. Their common scale defines the
+one. G1 and G2 gains apply to their respective photosites before demosaic,
+so the second green gain is preserved during interpolation. The renderer uploads those gains unchanged. Their common scale defines the
 camera-neutral exposure convention; exposure adjustment remains a separate
 scene-linear operation.
 
@@ -35,7 +36,8 @@ illuminant-dependent exposure shift here.
 Color matrix:
 
 `M_rgb_to_cam = M_xyz_to_cam * M_sRGB_to_XYZ`,
-`M_cam_to_rgb = inverse(M_rgb_to_cam)`.
+`M_cam_to_rgb = inverse(row_normalize(M_rgb_to_cam))`, where row normalization
+divides each row by its sum to preserve the camera-neutral white.
 
 Bradford adaptation is `B^-1 * diag(BW_destination / BW_source) * B`.
 Build and invert profiles in f64, upload f32 uniforms, reject determinant below
@@ -82,3 +84,15 @@ first RAW frame, complete viewport, full decode, quality refinement, 60 Hz
 pan/zoom, export and peak RSS/GPU memory. Suggested desktop targets are
 metadata `<20 ms`, warm first frame `<100 ms`, cold first frame `<500 ms`,
 frame p95 `<16.7 ms`, and peak decoded RAM `<=1.5x` mosaic plus tile budget.
+
+Before camera conversion, a sensor-clipped Bayer neighborhood whose three
+WB-corrected camera channels all reach normalized white is rendered neutral
+at the lowest corrected level. This is the preview's conservative treatment
+of unrecoverable near-white highlights. It leaves unclipped HDR and chromatic
+clipped highlights unchanged; it does not globally clamp camera RGB to one.
+
+For minification with a sensor footprint of at least two photosites along either axis,
+integrate complete Bayer cells using their exact overlap with the cropped pixel
+footprint. Apply phase-specific black/white/WB and the clipped-highlight rule per
+cell, then average linear camera RGB before camera conversion and tone mapping.
+Do not average already tone-mapped samples or choose a single stride sample.

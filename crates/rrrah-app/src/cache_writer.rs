@@ -1,14 +1,14 @@
 //! Bounded write-back persistence for foreground RAW decodes.
 //!
 //! Decoded pixels are reference counted by `DecodedMosaic`, so enqueueing a
-//! write clones metadata and an `Arc<Vec<u16>>`, not the full sensor buffer.
+//! write clones metadata and a shared pixel buffer, not the full sensor buffer.
 //! The one-slot queue is latest-wins: rapid navigation retains at most one
 //! active write and one pending mosaic, and stale jobs are normally discarded
 //! during the quiet-period debounce before they touch disk.
 
 use crate::cache_telemetry::CacheTelemetry;
 use crossbeam_channel::{Receiver, Sender, bounded};
-use rrrah_cache::{CacheKey, DiskMosaicCache};
+use rrrah_cache::{CacheKey, DiskMosaicCache, MemoryBudget, Reservation};
 use rrrah_core::DecodedMosaic;
 use std::{
     sync::{
@@ -27,6 +27,7 @@ struct CacheWriteJob {
     generation: u64,
     key: CacheKey,
     mosaic: DecodedMosaic,
+    _reservation: Reservation,
 }
 
 /// A single asynchronous disk-cache writer with a one-job pending queue.
@@ -38,30 +39,46 @@ pub struct CacheWriter {
     pending: Receiver<CacheWriteJob>,
     generation: Arc<AtomicU64>,
     telemetry: Option<Arc<CacheTelemetry>>,
+    budget: MemoryBudget,
 }
 
 impl CacheWriter {
+    #[cfg(test)]
     pub fn spawn(
         cache: DiskMosaicCache,
         generation: Arc<AtomicU64>,
         telemetry: Arc<CacheTelemetry>,
+        bytes: u64,
+    ) -> std::io::Result<Self> {
+        Self::spawn_with_budget(cache, generation, telemetry, MemoryBudget::new(bytes))
+    }
+    pub fn spawn_with_budget(
+        cache: DiskMosaicCache,
+        generation: Arc<AtomicU64>,
+        telemetry: Arc<CacheTelemetry>,
+        budget: MemoryBudget,
     ) -> std::io::Result<Self> {
         let store_telemetry = Arc::clone(&telemetry);
+        let store_generation = Arc::clone(&generation);
         Self::spawn_with_store_and_telemetry(
             generation,
             WRITE_DEBOUNCE,
             Some(telemetry),
-            move |key, mosaic| match cache.store(key, mosaic) {
+            budget,
+            move |expected, key, mosaic| match cache.store_with_cancel(key, mosaic, || {
+                store_generation.load(Ordering::Acquire) != expected
+            }) {
                 Ok(_) => {
                     match cache.usage() {
                         Ok(usage) => store_telemetry.update_disk_usage(usage),
                         Err(_) => store_telemetry.record_disk_scan_error(),
                     }
-                    true
+                    Some(true)
                 }
+                Err(rrrah_cache::CacheError::Cancelled) => None,
                 Err(error) => {
                     log::warn!("decoded RAW is usable but async cache write {key} failed: {error}");
-                    false
+                    Some(false)
                 }
             },
         )
@@ -72,20 +89,27 @@ impl CacheWriter {
     where
         F: Fn(CacheKey, &DecodedMosaic) + Send + 'static,
     {
-        Self::spawn_with_store_and_telemetry(generation, debounce, None, move |key, mosaic| {
-            store(key, mosaic);
-            true
-        })
+        Self::spawn_with_store_and_telemetry(
+            generation,
+            debounce,
+            None,
+            MemoryBudget::new(128 * 1024 * 1024),
+            move |_, key, mosaic| {
+                store(key, mosaic);
+                Some(true)
+            },
+        )
     }
 
     fn spawn_with_store_and_telemetry<F>(
         generation: Arc<AtomicU64>,
         debounce: Duration,
         telemetry: Option<Arc<CacheTelemetry>>,
+        budget: MemoryBudget,
         store: F,
     ) -> std::io::Result<Self>
     where
-        F: Fn(CacheKey, &DecodedMosaic) -> bool + Send + 'static,
+        F: Fn(u64, CacheKey, &DecodedMosaic) -> Option<bool> + Send + 'static,
     {
         let (tx, jobs) = bounded::<CacheWriteJob>(1);
         let pending = jobs.clone();
@@ -109,9 +133,12 @@ impl CacheWriter {
                         telemetry.writer_started();
                     }
                     let started = Instant::now();
-                    let success = store(job.key, &job.mosaic);
+                    let success = store(job.generation, job.key, &job.mosaic);
                     if let Some(telemetry) = &worker_telemetry {
-                        telemetry.writer_finished(bytes, started.elapsed(), success);
+                        match success {
+                            Some(success) => telemetry.writer_finished(bytes, started.elapsed(), success),
+                            None => telemetry.writer_cancelled(),
+                        }
                     }
                 }
             })?;
@@ -120,11 +147,12 @@ impl CacheWriter {
             pending,
             generation,
             telemetry,
+            budget,
         })
     }
 
     /// Replace pending persistence with the newest visible frame. An already
-    /// active atomic store is allowed to finish, but it never holds the decode
+    /// active store checks generation cancellation; it never holds the decode
     /// permit and therefore cannot make foreground wait for `fsync`.
     pub fn submit(&self, generation: u64, key: CacheKey, mosaic: DecodedMosaic) -> bool {
         if self.generation.load(Ordering::Acquire) != generation {
@@ -135,6 +163,10 @@ impl CacheWriter {
                 telemetry.writer_superseded();
             }
         }
+        let capacity = mosaic.pixels.capacity_bytes();
+        let Ok(reservation) = self.budget.try_reserve(capacity) else {
+            return false;
+        };
         let bytes = u64::try_from(mosaic.byte_len()).unwrap_or(u64::MAX);
         if let Some(telemetry) = &self.telemetry {
             telemetry.writer_queued(bytes);
@@ -145,6 +177,7 @@ impl CacheWriter {
                 generation,
                 key,
                 mosaic,
+                _reservation: reservation,
             })
             .is_ok();
         if !submitted {
@@ -282,6 +315,87 @@ mod tests {
     fn enqueue_reuses_reference_counted_sensor_pixels() {
         let original = mosaic(7);
         let clone = original.clone();
-        assert!(Arc::ptr_eq(&original.pixels, &clone.pixels));
+        assert!(original.pixels.ptr_eq(&clone.pixels));
+    }
+    #[test]
+    fn writer_budget_covers_active_jobs_and_rejects_without_pixel_copy() {
+        let generation = Arc::new(AtomicU64::new(1));
+        let root = MemoryBudget::new(8);
+        let budget = root.child(16);
+        let (entered_tx, entered_rx) = std::sync::mpsc::channel();
+        let (release_tx, release_rx) = std::sync::mpsc::channel();
+        let release_rx = std::sync::Mutex::new(release_rx);
+        let writer = CacheWriter::spawn_with_store_and_telemetry(
+            generation,
+            Duration::ZERO,
+            None,
+            budget.clone(),
+            move |_, _, _| {
+                entered_tx.send(()).unwrap();
+                release_rx.lock().unwrap().recv().unwrap();
+                Some(true)
+            },
+        )
+        .unwrap();
+        assert!(writer.submit(1, key(1), mosaic(1)));
+        entered_rx.recv_timeout(Duration::from_secs(2)).unwrap();
+        assert_eq!(budget.used(), 8);
+        assert_eq!(root.used(), 8);
+        assert!(root.child(8).try_reserve(1).is_err());
+        assert!(!writer.submit(1, key(2), mosaic(2)));
+        assert_eq!(budget.used(), 8);
+        release_tx.send(()).unwrap();
+        drop(writer);
+        let deadline = Instant::now() + Duration::from_secs(2);
+        // Child and ancestor counters are released in sequence; await both.
+        while (budget.used() != 0 || root.used() != 0) && Instant::now() < deadline {
+            std::thread::yield_now();
+        }
+        assert_eq!(budget.used(), 0);
+        assert_eq!(root.used(), 0);
+    }
+    #[test]
+    fn generation_change_cancels_real_store_waiting_on_disk_lock() {
+        let root = tempfile::tempdir().unwrap();
+        let cache = DiskMosaicCache::new(root.path());
+        let lock = std::fs::OpenOptions::new()
+            .create(true)
+            .truncate(false)
+            .write(true)
+            .open(root.path().join(".rrrah-cache-write.lock"))
+            .unwrap();
+        lock.lock().unwrap();
+        let generation = Arc::new(AtomicU64::new(1));
+        let telemetry = Arc::new(CacheTelemetry::new(true, cache.max_bytes()));
+        let writer = CacheWriter::spawn(cache.clone(), generation.clone(), telemetry.clone(), 8).unwrap();
+        assert!(writer.submit(1, key(1), mosaic(1)));
+        let deadline = Instant::now() + Duration::from_secs(2);
+        while telemetry.snapshot().writer_phase != crate::cache_telemetry::WriterPhase::Writing
+            && Instant::now() < deadline
+        {
+            std::thread::sleep(Duration::from_millis(1));
+        }
+        assert_eq!(
+            telemetry.snapshot().writer_phase,
+            crate::cache_telemetry::WriterPhase::Writing
+        );
+        generation.store(2, Ordering::Release);
+        let deadline = Instant::now() + Duration::from_secs(2);
+        while writer.budget.used() != 0 && Instant::now() < deadline {
+            std::thread::sleep(Duration::from_millis(1));
+        }
+        assert_eq!(writer.budget.used(), 0);
+        assert!(!cache.contains(key(1)));
+        let snapshot = telemetry.snapshot();
+        assert_eq!(snapshot.writes_superseded, 1);
+        assert_eq!(snapshot.write_failures, 0);
+        drop(lock);
+        assert!(writer.submit(2, key(2), mosaic(2)));
+        let deadline = Instant::now() + Duration::from_secs(2);
+        while telemetry.snapshot().writes_committed == 0 && Instant::now() < deadline {
+            std::thread::sleep(Duration::from_millis(1));
+        }
+        assert_eq!(telemetry.snapshot().writes_committed, 1);
+        assert!(cache.contains(key(2)));
     }
 }

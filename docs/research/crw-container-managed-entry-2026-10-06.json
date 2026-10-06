@@ -1,0 +1,20 @@
+{
+  "scope": "Internal CIFF-to-managed-sensor entrypoint",
+  "default_passed": 719,
+  "ignored": 40,
+  "external_cases": 2,
+  "logs": {
+    "/tmp/rrrah-crw-container-entry.log": "c53a21a019a61454d5fd62daf09c0af41a8bd16d74defa7ed9e6396f0442a1e8",
+    "/tmp/rrrah-crw-container-entry-d30.log": "75b9fa213aaafb3c2712a11f32e3a33c8c8645dcf481ecd65a69fcd57a3188b1",
+    "/tmp/rrrah-crw-container-full.log": "96b3a312bb5f5883032431966fbd03a97be9c4cd788a9f67e9af8f61853d560a"
+  },
+  "contracts": [
+    "Header, table index and geometry layout validated before allocation",
+    "Wrong table index rejected with zero output admission",
+    "D30/10D full sensor equality and last-owner accounting"
+  ],
+  "limitations": [
+    "Trees and low-plane policy explicitly caller-supplied; no automatic or shipped table selection.",
+    "No public color/viewer route."
+  ]
+}

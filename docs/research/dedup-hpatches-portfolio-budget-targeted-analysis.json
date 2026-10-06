@@ -1,0 +1,272 @@
+{
+  "completed": 5,
+  "required": 580,
+  "complete": false,
+  "diagnoses": {
+    "candidate": 2,
+    "published_geometry_also_fails_pixels": 3
+  },
+  "by_sequence_type": {
+    "i": {
+      "candidate": 2,
+      "published_geometry_also_fails_pixels": 3
+    },
+    "v": {}
+  },
+  "model_grid_diagnostics": {
+    "median_at_most_2_pixels": 5
+  },
+  "rows": [
+    {
+      "sequence": "i_fruits",
+      "target_index": 2,
+      "status": "ok",
+      "candidate": true,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.03781052186459042,
+        "maximum_pixels": 0.11243907924923442
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.09330363464051172,
+        "maximum_pixels": 0.4903988735787889
+      },
+      "published_geometry_filtered_pass": true,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "candidate",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.09330363464051172,
+              "maximum_pixels": 0.4903988735787889
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": true
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.10428660542343525,
+              "maximum_pixels": 0.3177640912932173
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": true
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_fruits",
+      "target_index": 3,
+      "status": "ok",
+      "candidate": true,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.06987790131953393,
+        "maximum_pixels": 0.20662083934555137
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.18889795062373627,
+        "maximum_pixels": 0.3719409216368692
+      },
+      "published_geometry_filtered_pass": true,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "candidate",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.18889795062373627,
+              "maximum_pixels": 0.3719409216368692
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": true
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.15292804553242287,
+              "maximum_pixels": 0.37648812287254363
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": true
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_fruits",
+      "target_index": 4,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.05184747192258591,
+        "maximum_pixels": 0.12001143166512752
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.26168496691496174,
+        "maximum_pixels": 0.5080641880418002
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.26168496691496174,
+              "maximum_pixels": 0.5080641880418002
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.21881873062709759,
+              "maximum_pixels": 0.4384938208702575
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_fruits",
+      "target_index": 5,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.07817516421335312,
+        "maximum_pixels": 0.238723711408164
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.40102044111993107,
+        "maximum_pixels": 0.8525703809252699
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.40102044111993107,
+              "maximum_pixels": 0.8525703809252699
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.3259067860288749,
+              "maximum_pixels": 0.7120945903685043
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_fruits",
+      "target_index": 6,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.6045265952819376,
+        "maximum_pixels": 2.2123289356674616
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.5013779920090349,
+        "maximum_pixels": 1.380145195954087
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.5013779920090349,
+              "maximum_pixels": 1.380145195954087
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.3489950750439948,
+              "maximum_pixels": 1.1719321855750486
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    }
+  ],
+  "scope": "Incomplete reports remain incomplete. Publisher geometric labels are not duplicate truth; pixel criterion retains the frozen policy. Published-geometry pixel rejection is not proof of accurate estimated geometry or a photometric cause. Finite grid samples and their medians are diagnostics, not continuous transform certificates. Grid residuals assume the recorded pixel-center convention.",
+  "portfolio_grid_diagnostics": {
+    "anchored": {
+      "median_at_most_2_pixels": 5
+    },
+    "unanchored": {
+      "median_at_most_2_pixels": 5
+    }
+  },
+  "portfolio_accepted_lane_grid_diagnostics": {
+    "anchored": {
+      "median_at_most_2_pixels": 2
+    },
+    "unanchored": {
+      "median_at_most_2_pixels": 2
+    }
+  },
+  "portfolio_selection_counts": {
+    "anchored": 2,
+    "neither_accepted": 3
+  }
+}

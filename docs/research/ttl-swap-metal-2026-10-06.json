@@ -1,0 +1,25 @@
+{
+  "adapter": "Metal Apple M4 Max",
+  "command": "RRRAH_GPU_BACKEND=metal cargo test -p rrrah --test ttl_swap_metal --target-dir /tmp/rrrah-required-corpus-target -- --nocapture",
+  "result": {
+    "passed": 2,
+    "failed": 0,
+    "ignored": 0
+  },
+  "raw_source": {
+    "path": "tests/IMG_9043.CR3",
+    "sha256": "d06cbb10e84882cf130430bdc88ed2652c2622b96dea8d6a854c09e3bee37e59"
+  },
+  "ttl_seconds": 1,
+  "checks": [
+    "expired active lease stays readable and does not spill",
+    "Metal readback after expiry equals pre-expiry frame",
+    "after last lease release streamed swap completes and managed CPU budget becomes zero",
+    "restored CR3 sensor samples and all metadata exactly equal original",
+    "restored HDR float samples preserve exact bits including signed zero and values above one",
+    "restored Metal frame equals original",
+    "HDR restore under exhausted CPU budget refuses without corrupting swap and succeeds on retry",
+    "final managed CPU credits return to zero"
+  ],
+  "scope": "Real Metal offscreen Rgba8UnormSrgb readback. HDR input is linear float data, not proof of HDR surface or physical display. Each render uses the existing upload/readback helper; persistent GPU residency and native swapchain presentation are not tested. RAW sample reference Vec and driver allocations are outside managed CPU budget."
+}

@@ -1,0 +1,78 @@
+{
+  "index": 131,
+  "repository": "grosser/travis_dedup",
+  "commit": "56fa29a06d52bf617981b50543607798ea9ee26f",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Travis build cancellation by PR identity; no content hashing.",
+  "available_source_evidence": [
+    {
+      "path": "lib/travis_dedup.rb",
+      "local": "01-travis_dedup.rb",
+      "url": "https://github.com/grosser/travis_dedup/blob/56fa29a06d52bf617981b50543607798ea9ee26f/lib/travis_dedup.rb",
+      "sha256": "c8501dbb8c876f552e30fa037822973f4b87ec73b9db4cd43c00839391f93643",
+      "truncated": false,
+      "lines": 141,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "lib/travis_dedup/version.rb",
+      "local": "02-version.rb",
+      "url": "https://github.com/grosser/travis_dedup/blob/56fa29a06d52bf617981b50543607798ea9ee26f/lib/travis_dedup/version.rb",
+      "sha256": "3924434313159fcad8eed933670bfe79a9d73a26dc71e84c7f0d78c4e651d35d",
+      "truncated": false,
+      "lines": 3,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "server/app.rb",
+      "local": "03-app.rb",
+      "url": "https://github.com/grosser/travis_dedup/blob/56fa29a06d52bf617981b50543607798ea9ee26f/server/app.rb",
+      "sha256": "960c90f2dca41d294ecec6490b433896d80ab7779f71e4ba538cd50ed2743195",
+      "truncated": false,
+      "lines": 66,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "spec/travis_dedup_spec.rb",
+      "local": "04-travis_dedup_spec.rb",
+      "url": "https://github.com/grosser/travis_dedup/blob/56fa29a06d52bf617981b50543607798ea9ee26f/spec/travis_dedup_spec.rb",
+      "sha256": "0e65b351b113560651da4cdb8980cc69c48e34ea8cd2e3285f089d20ec7f5177",
+      "truncated": false,
+      "lines": 245,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "bin/travis-dedup",
+      "local": "05-travis-dedup",
+      "url": "https://github.com/grosser/travis_dedup/blob/56fa29a06d52bf617981b50543607798ea9ee26f/bin/travis-dedup",
+      "sha256": "92bf84337153078517eb2710d77429144f7e8ca8fb5bd24a8d98de3323e07be2",
+      "truncated": false,
+      "lines": 9,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 2,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "Readme.md",
+      "local": "00-Readme.md",
+      "url": "https://github.com/grosser/travis_dedup/blob/56fa29a06d52bf617981b50543607798ea9ee26f/Readme.md",
+      "sha256": "3c1defe09044223fa940640725d2414e64c7c69988a6aefaed0fd1ff7d8c8fc5",
+      "truncated": false,
+      "lines": 57,
+      "source": false,
+      "test": false
+    }
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "repository": "icodywu/minhash-dedup",
+  "metadata": {
+    "name": "icodywu/minhash-dedup",
+    "url": "https://github.com/icodywu/minhash-dedup",
+    "description": "Bucket-feasible MinHash/LSH deduplication for text corpora: keeps one document per duplicate bucket, not one per connected component",
+    "language": "Python",
+    "stars": 16,
+    "license": "Apache-2.0",
+    "archived": false,
+    "pushed_at": "2026-09-23T20:06:25Z",
+    "default_branch": "main",
+    "queries": [
+      "dedup in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/icodywu/minhash-dedup/blob/aa5825b2f3fa1f100e477370cd212f02f30bf755/README.md",
+      "sha256": "f13e3bd8632d99d0270b094fb73021708dab672c5aec70ff60e73f5608d753f1",
+      "truncated": false,
+      "lines": 319,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/icodywu/minhash-dedup/blob/aa5825b2f3fa1f100e477370cd212f02f30bf755/LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "truncated": false,
+      "lines": 201,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "src/minhash_dedup/minhash.py",
+      "local": "02-minhash.py",
+      "url": "https://github.com/icodywu/minhash-dedup/blob/aa5825b2f3fa1f100e477370cd212f02f30bf755/src/minhash_dedup/minhash.py",
+      "sha256": "baecce90fb346d1fb697ea81e7efc78f5c3fc7c2c3a73d6d81afc17b1f32b129",
+      "truncated": false,
+      "lines": 2224,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "scripts/dedup_params.py",
+      "local": "03-dedup_params.py",
+      "url": "https://github.com/icodywu/minhash-dedup/blob/aa5825b2f3fa1f100e477370cd212f02f30bf755/scripts/dedup_params.py",
+      "sha256": "f4fc1014ab8cee5b37b617aabb3cdeb5e7145ed4ff596b51ca969aecf5aa62a3",
+      "truncated": false,
+      "lines": 94,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "scripts/minhash_driver.sh",
+      "local": "04-minhash_driver.sh",
+      "url": "https://github.com/icodywu/minhash-dedup/blob/aa5825b2f3fa1f100e477370cd212f02f30bf755/scripts/minhash_driver.sh",
+      "sha256": "0f87aa168d3347286cf9004f0c1343a3d1c397484461a3873ac4445661be9c6d",
+      "truncated": false,
+      "lines": 108,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/test_minhash_analysis.py",
+      "local": "05-test_minhash_analysis.py",
+      "url": "https://github.com/icodywu/minhash-dedup/blob/aa5825b2f3fa1f100e477370cd212f02f30bf755/tests/test_minhash_analysis.py",
+      "sha256": "44504061dce9b39de0a35689144db4cdf5d7082060f5ff0baaafdfc4c0dc0458",
+      "truncated": false,
+      "lines": 179,
+      "source": true,
+      "test": true
+    }
+  ],
+  "errors": [],
+  "commit": "aa5825b2f3fa1f100e477370cd212f02f30bf755",
+  "tree_truncated": false,
+  "source_file_count": 30,
+  "test_file_count": 7,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "src/minhash_dedup/minhash.py",
+    "scripts/dedup_params.py",
+    "scripts/minhash_driver.sh",
+    "tests/test_minhash_analysis.py"
+  ]
+}

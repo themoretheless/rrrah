@@ -6,11 +6,29 @@ rust-version.workspace = true
 license.workspace = true
 
 [dependencies]
+hayro = "=0.7.1"
+basis-universal = "=0.3.1"
+jpegxr = "=0.3.1"
+charls = { version = "=0.4.2", features = ["static"] }
+texture2ddecoder = "=0.1.2"
+flate2 = { version = "=1.1.10", default-features = false, features = ["zlib-rs"] }
+jpeg2k = { version = "=0.10.1", default-features = false, features = ["openjpeg-sys", "strict-mode"] }
+jxl-oxide = { version = "=0.12.6", default-features = false, features = ["image"] }
+zip = { version = "=6.0.0", default-features = false, features = ["deflate-flate2-zlib-rs"] }
+data-url = "=0.3.2"
+resvg = { version = "=0.45.1", default-features = false, features = ["text", "system-fonts", "raster-images"] }
+moxcms = { version = "=0.8.1", default-features = false, features = ["extended_range"] }
+image = { version = "0.25.9", default-features = false, features = ["avif-native", "bmp", "exr", "ff", "gif", "hdr", "ico", "jpeg", "png", "pnm", "qoi", "tga", "tiff", "webp"] }
 blake3.workspace = true
 rrrah-core = { path = "../rrrah-core", version = "0.1.0" }
 thiserror.workspace = true
 
+libheif-rs = { version = "=3.0.0", default-features = false, features = ["v1_17"] }
+
+astcenc-sys = "=0.2.0"
+
 [dev-dependencies]
+serde_json.workspace = true
 criterion = "0.5"
 
 [[bench]]

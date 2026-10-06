@@ -1,0 +1,68 @@
+{
+  "index": 137,
+  "repository": "wellbehavedsoftware/btrfs-dedupe",
+  "commit": "bf8d1a82fee2ff8635d00865acc1033707957c9e",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Rust SHA256 content hasher and root-path scanner; Btrfs dedupe command is filesystem-specific.",
+  "available_source_evidence": [
+    {
+      "path": "src/commands/dedupe_command.rs",
+      "local": "02-dedupe_command.rs",
+      "url": "https://github.com/wellbehavedsoftware/btrfs-dedupe/blob/bf8d1a82fee2ff8635d00865acc1033707957c9e/src/commands/dedupe_command.rs",
+      "sha256": "5baf88daa0ebc7264c20d7c79e58198a30a7733c9459ba439f3d93bac5abcfe0",
+      "truncated": false,
+      "lines": 691,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/operations/content_hasher.rs",
+      "local": "03-content_hasher.rs",
+      "url": "https://github.com/wellbehavedsoftware/btrfs-dedupe/blob/bf8d1a82fee2ff8635d00865acc1033707957c9e/src/operations/content_hasher.rs",
+      "sha256": "067fdc0bd9cd106de5407e0a47b830c8e02b7d320337f75ff170ebff813c40d5",
+      "truncated": false,
+      "lines": 245,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/operations/directory_scanner.rs",
+      "local": "04-directory_scanner.rs",
+      "url": "https://github.com/wellbehavedsoftware/btrfs-dedupe/blob/bf8d1a82fee2ff8635d00865acc1033707957c9e/src/operations/directory_scanner.rs",
+      "sha256": "1f21b2176eab00ed3c08bc8a6dacb9553d85f13765d3b975ccca263d14f78d7b",
+      "truncated": false,
+      "lines": 471,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/wellbehavedsoftware/btrfs-dedupe/blob/bf8d1a82fee2ff8635d00865acc1033707957c9e/README.md",
+      "sha256": "8026f59b5a5d58d67cb27a0141d6af0930bf5961889fa4e6d77f69596adb2584",
+      "truncated": false,
+      "lines": 198,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/wellbehavedsoftware/btrfs-dedupe/blob/bf8d1a82fee2ff8635d00865acc1033707957c9e/LICENSE",
+      "sha256": "9533e568f65fe9ebb43191873b34077d4331c490e7235c9125d51539d66d7db7",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

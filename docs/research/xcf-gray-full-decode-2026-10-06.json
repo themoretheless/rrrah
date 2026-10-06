@@ -1,0 +1,17 @@
+{
+  "scope": "full decoder library after grayscale XCF qualification",
+  "passed": 704,
+  "failed": 0,
+  "ignored": 36,
+  "log": "/tmp/rrrah-xcf-gray-full-decode.log",
+  "generator_reproducibility": "four grayscale fixture/manifest files regenerate byte-identically",
+  "sources": {
+    "crates/rrrah-decode/src/xcf.rs": "3d4a83a8cc79284b75fd30c913e6e83ba498db928da292a92a788b52be3d7afc",
+    "scripts/make-xcf-gray-fixtures.py": "250aad1f6bf16468c620b37c5e443e544986cd7b47d7d5211f6c04f885745039",
+    "scripts/qualify-xcf-legacy-flatten.py": "b31a0806f8f4ec8b0074542b909ae1b7a0170d17c8fa2de2d043f15e70244eea"
+  },
+  "limitations": [
+    "Ignored external-corpus tests not executed in this run",
+    "Full test pass is not all-format or physical viewer qualification"
+  ]
+}

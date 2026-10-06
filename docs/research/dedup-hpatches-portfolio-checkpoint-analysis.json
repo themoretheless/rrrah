@@ -1,0 +1,5427 @@
+{
+  "completed": 148,
+  "required": 580,
+  "complete": false,
+  "diagnoses": {
+    "published_geometry_also_fails_pixels": 106,
+    "no_geometry": 36,
+    "execution_error": 5,
+    "candidate": 1
+  },
+  "by_sequence_type": {
+    "i": {
+      "published_geometry_also_fails_pixels": 106,
+      "no_geometry": 36,
+      "execution_error": 5,
+      "candidate": 1
+    },
+    "v": {}
+  },
+  "model_grid_diagnostics": {
+    "median_at_most_2_pixels": 106,
+    "no_model": 41,
+    "median_above_2_pixels": 1
+  },
+  "rows": [
+    {
+      "sequence": "i_ajuntament",
+      "target_index": 2,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.17503043802409637,
+        "maximum_pixels": 0.4685314421419504
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.2688576969631834,
+        "maximum_pixels": 0.5252114036141755
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.2688576969631834,
+              "maximum_pixels": 0.5252114036141755
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.30152655684306096,
+              "maximum_pixels": 0.5562181079795426
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_ajuntament",
+      "target_index": 3,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": null,
+      "registered_grid": null,
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "no_model",
+      "diagnosis": "no_geometry"
+    },
+    {
+      "sequence": "i_ajuntament",
+      "target_index": 4,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": null,
+      "registered_grid": null,
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "no_model",
+      "diagnosis": "no_geometry"
+    },
+    {
+      "sequence": "i_ajuntament",
+      "target_index": 5,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": null,
+      "registered_grid": null,
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "no_model",
+      "diagnosis": "no_geometry"
+    },
+    {
+      "sequence": "i_ajuntament",
+      "target_index": 6,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": null,
+      "registered_grid": null,
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "no_model",
+      "diagnosis": "no_geometry"
+    },
+    {
+      "sequence": "i_autannes",
+      "target_index": 2,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 20,
+        "invalid_predictions": 0,
+        "median_pixels": 0.05190924712691555,
+        "maximum_pixels": 0.1588739459175768
+      },
+      "registered_grid": {
+        "valid_points": 20,
+        "invalid_predictions": 0,
+        "median_pixels": 0.7601161153050647,
+        "maximum_pixels": 1.090745943942192
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 20,
+              "invalid_predictions": 0,
+              "median_pixels": 0.7601161153050647,
+              "maximum_pixels": 1.090745943942192
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 20,
+              "invalid_predictions": 0,
+              "median_pixels": 0.8562883396280637,
+              "maximum_pixels": 2.2997204113856338
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_autannes",
+      "target_index": 3,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 20,
+        "invalid_predictions": 0,
+        "median_pixels": 0.07329453166640511,
+        "maximum_pixels": 0.28538168988670526
+      },
+      "registered_grid": {
+        "valid_points": 20,
+        "invalid_predictions": 0,
+        "median_pixels": 0.7234336603241701,
+        "maximum_pixels": 1.110315403274374
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 20,
+              "invalid_predictions": 0,
+              "median_pixels": 0.7234336603241701,
+              "maximum_pixels": 1.110315403274374
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 20,
+              "invalid_predictions": 0,
+              "median_pixels": 1.447806085140964,
+              "maximum_pixels": 2.3802401517186076
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_autannes",
+      "target_index": 4,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": null,
+      "registered_grid": null,
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "no_model",
+      "diagnosis": "no_geometry"
+    },
+    {
+      "sequence": "i_autannes",
+      "target_index": 5,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": null,
+      "registered_grid": null,
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "no_model",
+      "diagnosis": "no_geometry"
+    },
+    {
+      "sequence": "i_autannes",
+      "target_index": 6,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 20,
+        "invalid_predictions": 0,
+        "median_pixels": 0.0,
+        "maximum_pixels": 2.842170943040401e-14
+      },
+      "registered_grid": {
+        "valid_points": 20,
+        "invalid_predictions": 0,
+        "median_pixels": 0.3791787075072609,
+        "maximum_pixels": 1.0092739475202135
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 20,
+              "invalid_predictions": 0,
+              "median_pixels": 0.3791787075072609,
+              "maximum_pixels": 1.0092739475202135
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 20,
+              "invalid_predictions": 0,
+              "median_pixels": 0.8148944978660702,
+              "maximum_pixels": 1.9475584574337832
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_bologna",
+      "target_index": 2,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.061409431888619984,
+        "maximum_pixels": 0.25372197137721353
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.6815390385473197,
+        "maximum_pixels": 1.0353399897867126
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.6815390385473197,
+              "maximum_pixels": 1.0353399897867126
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 5.553295196141251,
+              "maximum_pixels": 8.176120779408599
+            },
+            "model_grid_diagnostic": "median_above_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_bologna",
+      "target_index": 3,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 1.889153700375362,
+        "maximum_pixels": 9.598687686571571
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 1.6310840192249518,
+        "maximum_pixels": 9.094011149593687
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 1.6310840192249518,
+              "maximum_pixels": 9.094011149593687
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 7.519513225954422,
+              "maximum_pixels": 16.38254566031545
+            },
+            "model_grid_diagnostic": "median_above_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_bologna",
+      "target_index": 4,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.32106493525979013,
+        "maximum_pixels": 1.3400508866680856
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.6607933274797181,
+        "maximum_pixels": 0.996799017800565
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.6607933274797181,
+              "maximum_pixels": 0.996799017800565
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 12.922342633343012,
+              "maximum_pixels": 20.39580046459621
+            },
+            "model_grid_diagnostic": "median_above_10_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_bologna",
+      "target_index": 5,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.8087256531630836,
+        "maximum_pixels": 2.491075223407683
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.6304457929018316,
+        "maximum_pixels": 1.6249677389652835
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.6304457929018316,
+              "maximum_pixels": 1.6249677389652835
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 12.056751035217253,
+              "maximum_pixels": 13.517484408683075
+            },
+            "model_grid_diagnostic": "median_above_10_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_bologna",
+      "target_index": 6,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.8123517113612477,
+        "maximum_pixels": 2.2959691469604477
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.8031786503815296,
+        "maximum_pixels": 2.0516049555596396
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.8031786503815296,
+              "maximum_pixels": 2.0516049555596396
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 7.822758914547125,
+              "maximum_pixels": 10.493108982541731
+            },
+            "model_grid_diagnostic": "median_above_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_books",
+      "target_index": 2,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.20222128827006547,
+        "maximum_pixels": 0.7613629049868322
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.5149487770245064,
+        "maximum_pixels": 1.7802732376213402
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.5149487770245064,
+              "maximum_pixels": 1.7802732376213402
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 1.005622023206571,
+              "maximum_pixels": 4.100600520223523
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_books",
+      "target_index": 3,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.04972527429473396,
+        "maximum_pixels": 0.14996349860774397
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.4957844026881196,
+        "maximum_pixels": 1.0455147875833959
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.4957844026881196,
+              "maximum_pixels": 1.0455147875833959
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 2.1253325698981262,
+              "maximum_pixels": 8.982856720389613
+            },
+            "model_grid_diagnostic": "median_above_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_books",
+      "target_index": 4,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.10349704559607988,
+        "maximum_pixels": 0.3824281327577475
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.4273803357007335,
+        "maximum_pixels": 1.105978644971712
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.4273803357007335,
+              "maximum_pixels": 1.105978644971712
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.6790722100351472,
+              "maximum_pixels": 1.789959599174589
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_books",
+      "target_index": 5,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 1.4210854715202004e-14,
+        "maximum_pixels": 1.4266473864373182e-14
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.36535536844699634,
+        "maximum_pixels": 1.0080044995912927
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.36535536844699634,
+              "maximum_pixels": 1.0080044995912927
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.5025452225180931,
+              "maximum_pixels": 1.5377505731689853
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_books",
+      "target_index": 6,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.12356864849010224,
+        "maximum_pixels": 0.4641622475963502
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.4856813097860126,
+        "maximum_pixels": 1.0253150437481386
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.4856813097860126,
+              "maximum_pixels": 1.0253150437481386
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.9192202527748838,
+              "maximum_pixels": 2.1539049524909926
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_boutique",
+      "target_index": 2,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.11169069143346201,
+        "maximum_pixels": 0.26631115756892376
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.6328215973329959,
+        "maximum_pixels": 1.130076091976373
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.6328215973329959,
+              "maximum_pixels": 1.130076091976373
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.5878673660775537,
+              "maximum_pixels": 1.3970674548078377
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_boutique",
+      "target_index": 3,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.3385885513211169,
+        "maximum_pixels": 0.9311822808638571
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.5906669609152188,
+        "maximum_pixels": 1.8528035057522962
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.5906669609152188,
+              "maximum_pixels": 1.8528035057522962
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.8035382298997301,
+              "maximum_pixels": 2.606116343020168
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_boutique",
+      "target_index": 4,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.451264845811619,
+        "maximum_pixels": 1.5476851803002483
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.6119873699299887,
+        "maximum_pixels": 1.445879126658893
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.6119873699299887,
+              "maximum_pixels": 1.445879126658893
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.5138446341464171,
+              "maximum_pixels": 1.2124672974103106
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_boutique",
+      "target_index": 5,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 2.6114422065059846,
+        "maximum_pixels": 9.61371379339749
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 2.0014474928920514,
+        "maximum_pixels": 9.010822624545758
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_above_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 2.0014474928920514,
+              "maximum_pixels": 9.010822624545758
+            },
+            "model_grid_diagnostic": "median_above_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 1.5003322743646916,
+              "maximum_pixels": 4.124918965242065
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_boutique",
+      "target_index": 6,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": null,
+      "registered_grid": null,
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "no_model",
+      "diagnosis": "no_geometry"
+    },
+    {
+      "sequence": "i_bridger",
+      "target_index": 2,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.16633403362439117,
+        "maximum_pixels": 0.39202855034590706
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.5344202389081146,
+        "maximum_pixels": 1.2328755073480233
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.5344202389081146,
+              "maximum_pixels": 1.2328755073480233
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.5678481072653163,
+              "maximum_pixels": 1.1669284247940497
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_bridger",
+      "target_index": 3,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.20043855534133512,
+        "maximum_pixels": 0.6652607833324246
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.5444646327460715,
+        "maximum_pixels": 1.2226674549995722
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.5444646327460715,
+              "maximum_pixels": 1.2226674549995722
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 1.9349576792230603,
+              "maximum_pixels": 7.2172057407849035
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_bridger",
+      "target_index": 4,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.10918174629712908,
+        "maximum_pixels": 0.2488832925402707
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.3165479589915719,
+        "maximum_pixels": 1.0191935603180537
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.3165479589915719,
+              "maximum_pixels": 1.0191935603180537
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 1.4736644647764006,
+              "maximum_pixels": 4.006396646344602
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_bridger",
+      "target_index": 5,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.0591346018989934,
+        "maximum_pixels": 0.3417984416660251
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.43044734796659917,
+        "maximum_pixels": 1.1421326979731796
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.43044734796659917,
+              "maximum_pixels": 1.1421326979731796
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 2.70453372725863,
+              "maximum_pixels": 5.362382865247904
+            },
+            "model_grid_diagnostic": "median_above_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_bridger",
+      "target_index": 6,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": null,
+      "registered_grid": null,
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "no_model",
+      "diagnosis": "no_geometry"
+    },
+    {
+      "sequence": "i_brooklyn",
+      "target_index": 2,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.19852395193334182,
+        "maximum_pixels": 0.5244312940144242
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.26638727996101363,
+        "maximum_pixels": 0.9519674090081789
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.26638727996101363,
+              "maximum_pixels": 0.9519674090081789
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.24932330858680748,
+              "maximum_pixels": 1.0361047833262542
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_brooklyn",
+      "target_index": 3,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.9465086971491672,
+        "maximum_pixels": 1.0158036649301112
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.8228229385365393,
+        "maximum_pixels": 1.3985138843342642
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.8228229385365393,
+              "maximum_pixels": 1.3985138843342642
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.887470971665872,
+              "maximum_pixels": 2.287589023360875
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_brooklyn",
+      "target_index": 4,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": null,
+      "registered_grid": null,
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "no_model",
+      "diagnosis": "no_geometry"
+    },
+    {
+      "sequence": "i_brooklyn",
+      "target_index": 5,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.9876935866631029,
+        "maximum_pixels": 1.1131223546368516
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.9112799280558145,
+        "maximum_pixels": 0.9616234649862128
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.9112799280558145,
+              "maximum_pixels": 0.9616234649862128
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.8884143621672171,
+              "maximum_pixels": 1.2286948527809425
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_brooklyn",
+      "target_index": 6,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.9138874392138107,
+        "maximum_pixels": 1.0037444301320404
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.8596886938741466,
+        "maximum_pixels": 1.7832856440704492
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.8596886938741466,
+              "maximum_pixels": 1.7832856440704492
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.6542902032381503,
+              "maximum_pixels": 1.213909791690821
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_castle",
+      "target_index": 2,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": null,
+      "registered_grid": null,
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "no_model",
+      "diagnosis": "no_geometry"
+    },
+    {
+      "sequence": "i_castle",
+      "target_index": 3,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.5643238283001595,
+        "maximum_pixels": 2.281963676837393
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.8581272294382666,
+        "maximum_pixels": 2.7691056712724698
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.8581272294382666,
+              "maximum_pixels": 2.7691056712724698
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 2.106364544038323,
+              "maximum_pixels": 14.830747910538788
+            },
+            "model_grid_diagnostic": "median_above_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_castle",
+      "target_index": 4,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.5668447516198952,
+        "maximum_pixels": 2.7596490668340383
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.8386759590783992,
+        "maximum_pixels": 2.463293865229439
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.8386759590783992,
+              "maximum_pixels": 2.463293865229439
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 1.8921364291832483,
+              "maximum_pixels": 10.775816302019283
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_castle",
+      "target_index": 5,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": null,
+      "registered_grid": null,
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "no_model",
+      "diagnosis": "no_geometry"
+    },
+    {
+      "sequence": "i_castle",
+      "target_index": 6,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": null,
+      "registered_grid": null,
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "no_model",
+      "diagnosis": "no_geometry"
+    },
+    {
+      "sequence": "i_chestnuts",
+      "target_index": 2,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.06708633693576196,
+        "maximum_pixels": 0.1757120263131794
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.4525300570607166,
+        "maximum_pixels": 0.974137503673233
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.4525300570607166,
+              "maximum_pixels": 0.974137503673233
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.48668863177766253,
+              "maximum_pixels": 0.8810537237028626
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_chestnuts",
+      "target_index": 3,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.05587977060789579,
+        "maximum_pixels": 0.204053896166223
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.4719927473775465,
+        "maximum_pixels": 0.9748816022465057
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.4719927473775465,
+              "maximum_pixels": 0.9748816022465057
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.5927234830965861,
+              "maximum_pixels": 0.9840004343683176
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_chestnuts",
+      "target_index": 4,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.05003839493656527,
+        "maximum_pixels": 0.15660307215861516
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.4288490842515771,
+        "maximum_pixels": 1.002510545451021
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.4288490842515771,
+              "maximum_pixels": 1.002510545451021
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.5248671103489322,
+              "maximum_pixels": 1.2883799162616798
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_chestnuts",
+      "target_index": 5,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.1347440581467195,
+        "maximum_pixels": 0.6979341309211398
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.5619216164914742,
+        "maximum_pixels": 1.5378345930197221
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.5619216164914742,
+              "maximum_pixels": 1.5378345930197221
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 1.0749807623154606,
+              "maximum_pixels": 2.461578319981878
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_chestnuts",
+      "target_index": 6,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.5081203683756709,
+        "maximum_pixels": 2.243966540332365
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.7170940260893944,
+        "maximum_pixels": 1.4709665318558456
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.7170940260893944,
+              "maximum_pixels": 1.4709665318558456
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 1.0274711021512013,
+              "maximum_pixels": 4.160120093279257
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_contruction",
+      "target_index": 2,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.024411853835783086,
+        "maximum_pixels": 0.06640194292308936
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.10993965948417916,
+        "maximum_pixels": 0.3315303960267414
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.10993965948417916,
+              "maximum_pixels": 0.3315303960267414
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.18705143648500328,
+              "maximum_pixels": 0.5149819402246287
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_contruction",
+      "target_index": 3,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.02489269596559162,
+        "maximum_pixels": 0.0829953800237488
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.22686553706190268,
+        "maximum_pixels": 0.7505457230305032
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.22686553706190268,
+              "maximum_pixels": 0.7505457230305032
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.34824670260684737,
+              "maximum_pixels": 1.5070718306999693
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_contruction",
+      "target_index": 4,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 2.842170943040401e-14,
+        "maximum_pixels": 2.842170943040401e-14
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.5994504724208674,
+        "maximum_pixels": 1.0032974567560113
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.5994504724208674,
+              "maximum_pixels": 1.0032974567560113
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 2.6033629025262397,
+              "maximum_pixels": 12.312646372735653
+            },
+            "model_grid_diagnostic": "median_above_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_contruction",
+      "target_index": 5,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.13884051366992026,
+        "maximum_pixels": 0.24457432777160218
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.7825228248547428,
+        "maximum_pixels": 1.2598661856852238
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.7825228248547428,
+              "maximum_pixels": 1.2598661856852238
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 32.901897583867125,
+              "maximum_pixels": 78.66569943174265
+            },
+            "model_grid_diagnostic": "median_above_10_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_contruction",
+      "target_index": 6,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": null,
+      "registered_grid": null,
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "no_model",
+      "diagnosis": "no_geometry"
+    },
+    {
+      "sequence": "i_crownday",
+      "target_index": 2,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": null,
+      "registered_grid": null,
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "no_model",
+      "diagnosis": "no_geometry"
+    },
+    {
+      "sequence": "i_crownday",
+      "target_index": 3,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 20,
+        "invalid_predictions": 0,
+        "median_pixels": 0.9598602002982218,
+        "maximum_pixels": 3.398521554821831
+      },
+      "registered_grid": {
+        "valid_points": 20,
+        "invalid_predictions": 0,
+        "median_pixels": 0.9663095026238742,
+        "maximum_pixels": 3.5367052174916376
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 20,
+              "invalid_predictions": 0,
+              "median_pixels": 0.9663095026238742,
+              "maximum_pixels": 3.5367052174916376
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 20,
+              "invalid_predictions": 0,
+              "median_pixels": 1.1366297867497246,
+              "maximum_pixels": 2.956527140374559
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_crownday",
+      "target_index": 4,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 20,
+        "invalid_predictions": 0,
+        "median_pixels": 1.0256879011052247,
+        "maximum_pixels": 2.1392986720673464
+      },
+      "registered_grid": {
+        "valid_points": 20,
+        "invalid_predictions": 0,
+        "median_pixels": 0.6023870595278186,
+        "maximum_pixels": 1.3888296543404348
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 20,
+              "invalid_predictions": 0,
+              "median_pixels": 0.6023870595278186,
+              "maximum_pixels": 1.3888296543404348
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 20,
+              "invalid_predictions": 0,
+              "median_pixels": 0.6784730156218216,
+              "maximum_pixels": 2.146934678579573
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_crownday",
+      "target_index": 5,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 20,
+        "invalid_predictions": 0,
+        "median_pixels": 0.09985718407141744,
+        "maximum_pixels": 0.384647315821443
+      },
+      "registered_grid": {
+        "valid_points": 20,
+        "invalid_predictions": 0,
+        "median_pixels": 0.3359018806092978,
+        "maximum_pixels": 0.7068709653315742
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 20,
+              "invalid_predictions": 0,
+              "median_pixels": 0.3359018806092978,
+              "maximum_pixels": 0.7068709653315742
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 20,
+              "invalid_predictions": 0,
+              "median_pixels": 0.3841286308330501,
+              "maximum_pixels": 1.338660143003642
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_crownday",
+      "target_index": 6,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": null,
+      "registered_grid": null,
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "no_model",
+      "diagnosis": "no_geometry"
+    },
+    {
+      "sequence": "i_crownnight",
+      "target_index": 2,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.282682067162864,
+        "maximum_pixels": 1.01643040381837
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.38363958827113936,
+        "maximum_pixels": 1.9350550590064395
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.38363958827113936,
+              "maximum_pixels": 1.9350550590064395
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.5229758456893078,
+              "maximum_pixels": 1.7554496594777282
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_crownnight",
+      "target_index": 3,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.09851581899278057,
+        "maximum_pixels": 0.3434122489529686
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.4050112678250927,
+        "maximum_pixels": 0.9957869412373153
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.4050112678250927,
+              "maximum_pixels": 0.9957869412373153
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.7753440315352103,
+              "maximum_pixels": 4.619224001719488
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_crownnight",
+      "target_index": 4,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.14503385672161093,
+        "maximum_pixels": 0.3251077009697573
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.328955414819876,
+        "maximum_pixels": 0.978415602384291
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.328955414819876,
+              "maximum_pixels": 0.978415602384291
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.702292625368667,
+              "maximum_pixels": 3.684065828215264
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_crownnight",
+      "target_index": 5,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 1.775545868887617,
+        "maximum_pixels": 6.205767254726891
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 1.480687991111042,
+        "maximum_pixels": 5.676298856378406
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 1.480687991111042,
+              "maximum_pixels": 5.676298856378406
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 1.4069351937325258,
+              "maximum_pixels": 3.9663953787405246
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_crownnight",
+      "target_index": 6,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": null,
+      "registered_grid": null,
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "no_model",
+      "diagnosis": "no_geometry"
+    },
+    {
+      "sequence": "i_dc",
+      "target_index": 2,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.09514296736519388,
+        "maximum_pixels": 0.4082382581166265
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.5694507018131729,
+        "maximum_pixels": 1.039523512455974
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.5694507018131729,
+              "maximum_pixels": 1.039523512455974
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 1.2373730014199238,
+              "maximum_pixels": 5.166780056739346
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_dc",
+      "target_index": 3,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.347329434818023,
+        "maximum_pixels": 1.1391876735980098
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.6722132089284762,
+        "maximum_pixels": 2.0528475927982073
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.6722132089284762,
+              "maximum_pixels": 2.0528475927982073
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 1.7831440722164742,
+              "maximum_pixels": 6.061889669811251
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_dc",
+      "target_index": 4,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 2.842170943040401e-14,
+        "maximum_pixels": 5.684341886080802e-14
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.5634520231337768,
+        "maximum_pixels": 1.0067974981393846
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.5634520231337768,
+              "maximum_pixels": 1.0067974981393846
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.7347509512738611,
+              "maximum_pixels": 2.1132904738575937
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_dc",
+      "target_index": 5,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.39837694414483193,
+        "maximum_pixels": 1.3713670598152925
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.5635197613766626,
+        "maximum_pixels": 1.8031711081191777
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.5635197613766626,
+              "maximum_pixels": 1.8031711081191777
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.7931893355784916,
+              "maximum_pixels": 4.033095837833826
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_dc",
+      "target_index": 6,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.5168208025755697,
+        "maximum_pixels": 1.8678011858355685
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.7504151194521574,
+        "maximum_pixels": 2.7250728264926325
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.7504151194521574,
+              "maximum_pixels": 2.7250728264926325
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 3.1319438261336874,
+              "maximum_pixels": 24.01760454274904
+            },
+            "model_grid_diagnostic": "median_above_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_dome",
+      "target_index": 2,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.4633692234575505,
+        "maximum_pixels": 1.8578250538909638
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.45944335905334166,
+        "maximum_pixels": 1.1327127901904324
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.45944335905334166,
+              "maximum_pixels": 1.1327127901904324
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.7316771192238575,
+              "maximum_pixels": 2.943993102793084
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_dome",
+      "target_index": 3,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": null,
+      "registered_grid": null,
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "no_model",
+      "diagnosis": "no_geometry"
+    },
+    {
+      "sequence": "i_dome",
+      "target_index": 4,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": null,
+      "registered_grid": null,
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "no_model",
+      "diagnosis": "no_geometry"
+    },
+    {
+      "sequence": "i_dome",
+      "target_index": 5,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": null,
+      "registered_grid": null,
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "no_model",
+      "diagnosis": "no_geometry"
+    },
+    {
+      "sequence": "i_dome",
+      "target_index": 6,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.0,
+        "maximum_pixels": 0.0
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.8896896883418307,
+        "maximum_pixels": 1.000187087523953
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.8896896883418307,
+              "maximum_pixels": 1.000187087523953
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 2.9438082770736465,
+              "maximum_pixels": 7.325235497488139
+            },
+            "model_grid_diagnostic": "median_above_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_duda",
+      "target_index": 2,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 20,
+        "invalid_predictions": 0,
+        "median_pixels": 0.08339422503889021,
+        "maximum_pixels": 0.18374860109255722
+      },
+      "registered_grid": {
+        "valid_points": 20,
+        "invalid_predictions": 0,
+        "median_pixels": 0.2296799103575195,
+        "maximum_pixels": 0.8833434781052784
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 20,
+              "invalid_predictions": 0,
+              "median_pixels": 0.2296799103575195,
+              "maximum_pixels": 0.8833434781052784
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 20,
+              "invalid_predictions": 0,
+              "median_pixels": 0.8809630329164073,
+              "maximum_pixels": 2.11170166935881
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_duda",
+      "target_index": 3,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 20,
+        "invalid_predictions": 0,
+        "median_pixels": 5.684341886080802e-14,
+        "maximum_pixels": 1.1368683772161603e-13
+      },
+      "registered_grid": {
+        "valid_points": 20,
+        "invalid_predictions": 0,
+        "median_pixels": 0.2551141351304512,
+        "maximum_pixels": 0.9928748198312048
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 20,
+              "invalid_predictions": 0,
+              "median_pixels": 0.2551141351304512,
+              "maximum_pixels": 0.9928748198312048
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 20,
+              "invalid_predictions": 0,
+              "median_pixels": 2.0847424992331485,
+              "maximum_pixels": 6.12422420208651
+            },
+            "model_grid_diagnostic": "median_above_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_duda",
+      "target_index": 4,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 20,
+        "invalid_predictions": 0,
+        "median_pixels": 0.5903006436386165,
+        "maximum_pixels": 2.7621285973643355
+      },
+      "registered_grid": {
+        "valid_points": 20,
+        "invalid_predictions": 0,
+        "median_pixels": 0.8590042748606284,
+        "maximum_pixels": 2.8557292274060746
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 20,
+              "invalid_predictions": 0,
+              "median_pixels": 0.8590042748606284,
+              "maximum_pixels": 2.8557292274060746
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 20,
+              "invalid_predictions": 0,
+              "median_pixels": 2.426107342968127,
+              "maximum_pixels": 6.724543189744545
+            },
+            "model_grid_diagnostic": "median_above_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_duda",
+      "target_index": 5,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 20,
+        "invalid_predictions": 0,
+        "median_pixels": 0.18775964835678854,
+        "maximum_pixels": 0.5021464080137175
+      },
+      "registered_grid": {
+        "valid_points": 20,
+        "invalid_predictions": 0,
+        "median_pixels": 0.4142599265991683,
+        "maximum_pixels": 1.0671076342798096
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 20,
+              "invalid_predictions": 0,
+              "median_pixels": 0.4142599265991683,
+              "maximum_pixels": 1.0671076342798096
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 20,
+              "invalid_predictions": 0,
+              "median_pixels": 4.486512363985794,
+              "maximum_pixels": 9.479478286089222
+            },
+            "model_grid_diagnostic": "median_above_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_duda",
+      "target_index": 6,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 20,
+        "invalid_predictions": 0,
+        "median_pixels": 2.1316282072803006e-14,
+        "maximum_pixels": 2.842170943040401e-14
+      },
+      "registered_grid": {
+        "valid_points": 20,
+        "invalid_predictions": 0,
+        "median_pixels": 0.5868942005685212,
+        "maximum_pixels": 0.9941942299634136
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 20,
+              "invalid_predictions": 0,
+              "median_pixels": 0.5868942005685212,
+              "maximum_pixels": 0.9941942299634136
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 20,
+              "invalid_predictions": 0,
+              "median_pixels": 5.182339216708148,
+              "maximum_pixels": 10.780312788588537
+            },
+            "model_grid_diagnostic": "median_above_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_fenis",
+      "target_index": 2,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.056274114870532764,
+        "maximum_pixels": 0.24871463224553497
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.5351112120026384,
+        "maximum_pixels": 1.172840293692257
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.5351112120026384,
+              "maximum_pixels": 1.172840293692257
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.5870173205513457,
+              "maximum_pixels": 2.4436001977300212
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_fenis",
+      "target_index": 3,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.570986798989572,
+        "maximum_pixels": 1.7144207944685639
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.6768187294426646,
+        "maximum_pixels": 2.5320213581224555
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.6768187294426646,
+              "maximum_pixels": 2.5320213581224555
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.8191643205363413,
+              "maximum_pixels": 3.3091587821369686
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_fenis",
+      "target_index": 4,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": null,
+      "registered_grid": null,
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "no_model",
+      "diagnosis": "no_geometry"
+    },
+    {
+      "sequence": "i_fenis",
+      "target_index": 5,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": null,
+      "registered_grid": null,
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "no_model",
+      "diagnosis": "no_geometry"
+    },
+    {
+      "sequence": "i_fenis",
+      "target_index": 6,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": null,
+      "registered_grid": null,
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "no_model",
+      "diagnosis": "no_geometry"
+    },
+    {
+      "sequence": "i_fog",
+      "target_index": 2,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.0,
+        "maximum_pixels": 0.0
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.26518762541088947,
+        "maximum_pixels": 0.902097401546171
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.26518762541088947,
+              "maximum_pixels": 0.902097401546171
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.41801947375583,
+              "maximum_pixels": 1.2140989327822347
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_fog",
+      "target_index": 3,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.0,
+        "maximum_pixels": 0.0
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.32270876973501156,
+        "maximum_pixels": 1.0019133693962565
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.32270876973501156,
+              "maximum_pixels": 1.0019133693962565
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 1.2604825230682812,
+              "maximum_pixels": 3.819249324383876
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_fog",
+      "target_index": 4,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.0,
+        "maximum_pixels": 0.0
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.3171112091770118,
+        "maximum_pixels": 1.001986106864253
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.3171112091770118,
+              "maximum_pixels": 1.001986106864253
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 1.3574584367028246,
+              "maximum_pixels": 4.185073948698389
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_fog",
+      "target_index": 5,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.16709442233472807,
+        "maximum_pixels": 0.9477478923209933
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.5490550508089529,
+        "maximum_pixels": 1.1333580480887602
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.5490550508089529,
+              "maximum_pixels": 1.1333580480887602
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.9551083198877832,
+              "maximum_pixels": 3.3650790222637754
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_fog",
+      "target_index": 6,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.3617981928295395,
+        "maximum_pixels": 1.8267108134890986
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.6154175940511709,
+        "maximum_pixels": 1.0615507862600018
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.6154175940511709,
+              "maximum_pixels": 1.0615507862600018
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 2.145226662422022,
+              "maximum_pixels": 5.959879071594316
+            },
+            "model_grid_diagnostic": "median_above_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_fruits",
+      "target_index": 2,
+      "status": "error",
+      "candidate": false,
+      "geometry_grid": null,
+      "registered_grid": null,
+      "published_geometry_filtered_pass": true,
+      "model_grid_diagnostic": "no_model",
+      "diagnosis": "execution_error"
+    },
+    {
+      "sequence": "i_fruits",
+      "target_index": 3,
+      "status": "error",
+      "candidate": false,
+      "geometry_grid": null,
+      "registered_grid": null,
+      "published_geometry_filtered_pass": true,
+      "model_grid_diagnostic": "no_model",
+      "diagnosis": "execution_error"
+    },
+    {
+      "sequence": "i_fruits",
+      "target_index": 4,
+      "status": "error",
+      "candidate": false,
+      "geometry_grid": null,
+      "registered_grid": null,
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "no_model",
+      "diagnosis": "execution_error"
+    },
+    {
+      "sequence": "i_fruits",
+      "target_index": 5,
+      "status": "error",
+      "candidate": false,
+      "geometry_grid": null,
+      "registered_grid": null,
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "no_model",
+      "diagnosis": "execution_error"
+    },
+    {
+      "sequence": "i_fruits",
+      "target_index": 6,
+      "status": "error",
+      "candidate": false,
+      "geometry_grid": null,
+      "registered_grid": null,
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "no_model",
+      "diagnosis": "execution_error"
+    },
+    {
+      "sequence": "i_gonnenberg",
+      "target_index": 2,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.0782827159087005,
+        "maximum_pixels": 0.24268788510240416
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.4738439862969841,
+        "maximum_pixels": 1.0389386540347822
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.4738439862969841,
+              "maximum_pixels": 1.0389386540347822
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.5395658731272686,
+              "maximum_pixels": 2.995912037852248
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_gonnenberg",
+      "target_index": 3,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.054230985320238345,
+        "maximum_pixels": 0.12221908857527976
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.42594707251558767,
+        "maximum_pixels": 1.0978767254609223
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.42594707251558767,
+              "maximum_pixels": 1.0978767254609223
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.8195447021533873,
+              "maximum_pixels": 2.149581083509418
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_gonnenberg",
+      "target_index": 4,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.12281312940417122,
+        "maximum_pixels": 0.4640435523902983
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.5139792912513009,
+        "maximum_pixels": 1.1133249331485304
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.5139792912513009,
+              "maximum_pixels": 1.1133249331485304
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 1.696866302286477,
+              "maximum_pixels": 11.197097752329249
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_gonnenberg",
+      "target_index": 5,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.09058463399763274,
+        "maximum_pixels": 0.2829874138744283
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.3484982491307963,
+        "maximum_pixels": 1.030396158285853
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.3484982491307963,
+              "maximum_pixels": 1.030396158285853
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 1.4085252796508636,
+              "maximum_pixels": 5.0476108961668364
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_gonnenberg",
+      "target_index": 6,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 1.2483413950334354,
+        "maximum_pixels": 5.531608698131835
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 1.239195470210495,
+        "maximum_pixels": 4.964923463978114
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 1.239195470210495,
+              "maximum_pixels": 4.964923463978114
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.852026846228231,
+              "maximum_pixels": 3.4276589899146006
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_greenhouse",
+      "target_index": 2,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.22445005596903508,
+        "maximum_pixels": 1.1600136110067865
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.3525952801216795,
+        "maximum_pixels": 1.0638893460168792
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.3525952801216795,
+              "maximum_pixels": 1.0638893460168792
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.31335021255937406,
+              "maximum_pixels": 0.8380790958617512
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_greenhouse",
+      "target_index": 3,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.5278953755974876,
+        "maximum_pixels": 2.262062017475259
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.5499557646764472,
+        "maximum_pixels": 2.137284877994878
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.5499557646764472,
+              "maximum_pixels": 2.137284877994878
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.56134108348759,
+              "maximum_pixels": 1.1480473408426668
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_greenhouse",
+      "target_index": 4,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.18857814735219444,
+        "maximum_pixels": 1.4143894125355678
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.5081452825264855,
+        "maximum_pixels": 0.9290473183371357
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.5081452825264855,
+              "maximum_pixels": 0.9290473183371357
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.6044745662697691,
+              "maximum_pixels": 1.0043884441923492
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_greenhouse",
+      "target_index": 5,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.8019204075059595,
+        "maximum_pixels": 3.6556955953144823
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.9610212595043076,
+        "maximum_pixels": 2.7374430787180444
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.9610212595043076,
+              "maximum_pixels": 2.7374430787180444
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.7804647453359719,
+              "maximum_pixels": 1.1757241545600428
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_greenhouse",
+      "target_index": 6,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": null,
+      "registered_grid": null,
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "no_model",
+      "diagnosis": "no_geometry"
+    },
+    {
+      "sequence": "i_greentea",
+      "target_index": 2,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.05022123193359169,
+        "maximum_pixels": 0.14812941082602057
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.4687956561811182,
+        "maximum_pixels": 1.1002008840549753
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.4687956561811182,
+              "maximum_pixels": 1.1002008840549753
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 1.0228955069743044,
+              "maximum_pixels": 2.5099541387427022
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_greentea",
+      "target_index": 3,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.031245334273440666,
+        "maximum_pixels": 0.17994426477334224
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.31191790545347375,
+        "maximum_pixels": 0.8596877994842022
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.31191790545347375,
+              "maximum_pixels": 0.8596877994842022
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.3920994025053149,
+              "maximum_pixels": 1.815426639144524
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_greentea",
+      "target_index": 4,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.029661569491442875,
+        "maximum_pixels": 0.09208167333947476
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.22778871893131178,
+        "maximum_pixels": 0.5101102583575136
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.22778871893131178,
+              "maximum_pixels": 0.5101102583575136
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.28274958179749077,
+              "maximum_pixels": 0.9505636073132252
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_greentea",
+      "target_index": 5,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.04156509899695546,
+        "maximum_pixels": 0.19755927788372568
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.22075208870922,
+        "maximum_pixels": 0.6613526846312142
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.22075208870922,
+              "maximum_pixels": 0.6613526846312142
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.35426332855596554,
+              "maximum_pixels": 1.1036090318991798
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_greentea",
+      "target_index": 6,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.17541192578969228,
+        "maximum_pixels": 0.8378099326080999
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.308049549822224,
+        "maximum_pixels": 1.3704538537742077
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.308049549822224,
+              "maximum_pixels": 1.3704538537742077
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.7980040200708948,
+              "maximum_pixels": 2.5392191705733302
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_indiana",
+      "target_index": 2,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.0675521604908087,
+        "maximum_pixels": 0.13132553861943247
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.5088074289244385,
+        "maximum_pixels": 1.1258751056085234
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.5088074289244385,
+              "maximum_pixels": 1.1258751056085234
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 1.023504190073321,
+              "maximum_pixels": 2.105222845272686
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_indiana",
+      "target_index": 3,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.10399807685497871,
+        "maximum_pixels": 0.27521950694173525
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.3164027303519535,
+        "maximum_pixels": 1.1700387404571178
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.3164027303519535,
+              "maximum_pixels": 1.1700387404571178
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 1.0742213348913543,
+              "maximum_pixels": 2.5619524014659962
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_indiana",
+      "target_index": 4,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.4534367554704542,
+        "maximum_pixels": 2.570178661312096
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.4882921369904271,
+        "maximum_pixels": 1.5523040281502414
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.4882921369904271,
+              "maximum_pixels": 1.5523040281502414
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 1.2497274724278948,
+              "maximum_pixels": 2.4976956819544402
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_indiana",
+      "target_index": 5,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": null,
+      "registered_grid": null,
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "no_model",
+      "diagnosis": "no_geometry"
+    },
+    {
+      "sequence": "i_indiana",
+      "target_index": 6,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": null,
+      "registered_grid": null,
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "no_model",
+      "diagnosis": "no_geometry"
+    },
+    {
+      "sequence": "i_kions",
+      "target_index": 2,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": null,
+      "registered_grid": null,
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "no_model",
+      "diagnosis": "no_geometry"
+    },
+    {
+      "sequence": "i_kions",
+      "target_index": 3,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": null,
+      "registered_grid": null,
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "no_model",
+      "diagnosis": "no_geometry"
+    },
+    {
+      "sequence": "i_kions",
+      "target_index": 4,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": null,
+      "registered_grid": null,
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "no_model",
+      "diagnosis": "no_geometry"
+    },
+    {
+      "sequence": "i_kions",
+      "target_index": 5,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": null,
+      "registered_grid": null,
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "no_model",
+      "diagnosis": "no_geometry"
+    },
+    {
+      "sequence": "i_kions",
+      "target_index": 6,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": null,
+      "registered_grid": null,
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "no_model",
+      "diagnosis": "no_geometry"
+    },
+    {
+      "sequence": "i_ktirio",
+      "target_index": 2,
+      "status": "ok",
+      "candidate": true,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.0,
+        "maximum_pixels": 1.4210854715202004e-14
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.05195770935505452,
+        "maximum_pixels": 0.11971158939102934
+      },
+      "published_geometry_filtered_pass": true,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "candidate",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.05195770935505452,
+              "maximum_pixels": 0.11971158939102934
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": true
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.07156844711386122,
+              "maximum_pixels": 0.1566443145537394
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": true
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_ktirio",
+      "target_index": 3,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.22707125151907956,
+        "maximum_pixels": 0.7745269270557635
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.31536083446894203,
+        "maximum_pixels": 0.8580536593281192
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.31536083446894203,
+              "maximum_pixels": 0.8580536593281192
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.5861360227388077,
+              "maximum_pixels": 1.439211513219679
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_ktirio",
+      "target_index": 4,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.0,
+        "maximum_pixels": 0.0
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.7613453267489498,
+        "maximum_pixels": 1.0043945735571647
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.7613453267489498,
+              "maximum_pixels": 1.0043945735571647
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 1.1252840157053108,
+              "maximum_pixels": 7.345606116584388
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_ktirio",
+      "target_index": 5,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.17214601314284733,
+        "maximum_pixels": 0.6986287652483789
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.5420866992564358,
+        "maximum_pixels": 1.627052999401641
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.5420866992564358,
+              "maximum_pixels": 1.627052999401641
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.7624161592606076,
+              "maximum_pixels": 1.9282017823462687
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_ktirio",
+      "target_index": 6,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": null,
+      "registered_grid": null,
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "no_model",
+      "diagnosis": "no_geometry"
+    },
+    {
+      "sequence": "i_kurhaus",
+      "target_index": 2,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.048866063298789064,
+        "maximum_pixels": 0.09281041423405538
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.22717151332406277,
+        "maximum_pixels": 0.4893118378721158
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.22717151332406277,
+              "maximum_pixels": 0.4893118378721158
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.25014102812778727,
+              "maximum_pixels": 0.5055070512587942
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_kurhaus",
+      "target_index": 3,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.0951532088685817,
+        "maximum_pixels": 0.404556000325565
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.39255288900576835,
+        "maximum_pixels": 0.9779253919318938
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.39255288900576835,
+              "maximum_pixels": 0.9779253919318938
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.4680570165284906,
+              "maximum_pixels": 1.3106844163950377
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_kurhaus",
+      "target_index": 4,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.17326118932982326,
+        "maximum_pixels": 0.44729142886925943
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.41210550769420456,
+        "maximum_pixels": 1.0352360483728476
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.41210550769420456,
+              "maximum_pixels": 1.0352360483728476
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 1.0723031213140815,
+              "maximum_pixels": 2.09019105376057
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_kurhaus",
+      "target_index": 5,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.13492815920986137,
+        "maximum_pixels": 0.4793394284980529
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.4270723677527214,
+        "maximum_pixels": 1.040441365294343
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.4270723677527214,
+              "maximum_pixels": 1.040441365294343
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 1.3923192545672045,
+              "maximum_pixels": 3.0913282490809686
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_kurhaus",
+      "target_index": 6,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.21617019435501708,
+        "maximum_pixels": 0.7379338292968486
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.3397623491072955,
+        "maximum_pixels": 0.9785790282150064
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.3397623491072955,
+              "maximum_pixels": 0.9785790282150064
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 1.4694249314993248,
+              "maximum_pixels": 3.418038539783076
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_leuven",
+      "target_index": 2,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 16,
+        "invalid_predictions": 0,
+        "median_pixels": 0.7931016602053167,
+        "maximum_pixels": 2.7365298202450425
+      },
+      "registered_grid": {
+        "valid_points": 16,
+        "invalid_predictions": 0,
+        "median_pixels": 0.4980815400246448,
+        "maximum_pixels": 2.1477320995050393
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 16,
+              "invalid_predictions": 0,
+              "median_pixels": 0.4980815400246448,
+              "maximum_pixels": 2.1477320995050393
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 16,
+              "invalid_predictions": 0,
+              "median_pixels": 0.4005988797595431,
+              "maximum_pixels": 1.4228964171438778
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_leuven",
+      "target_index": 3,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 17,
+        "invalid_predictions": 0,
+        "median_pixels": 0.7227947226818096,
+        "maximum_pixels": 1.5353833934796546
+      },
+      "registered_grid": {
+        "valid_points": 17,
+        "invalid_predictions": 0,
+        "median_pixels": 0.3990097494733404,
+        "maximum_pixels": 1.4716090046877257
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 17,
+              "invalid_predictions": 0,
+              "median_pixels": 0.3990097494733404,
+              "maximum_pixels": 1.4716090046877257
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 17,
+              "invalid_predictions": 0,
+              "median_pixels": 0.6425585480453918,
+              "maximum_pixels": 1.8584405859933786
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_leuven",
+      "target_index": 4,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 16,
+        "invalid_predictions": 0,
+        "median_pixels": 0.5181167192612578,
+        "maximum_pixels": 1.4573626872839112
+      },
+      "registered_grid": {
+        "valid_points": 16,
+        "invalid_predictions": 0,
+        "median_pixels": 0.6455233927675272,
+        "maximum_pixels": 2.3779830659385195
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 16,
+              "invalid_predictions": 0,
+              "median_pixels": 0.6455233927675272,
+              "maximum_pixels": 2.3779830659385195
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 16,
+              "invalid_predictions": 0,
+              "median_pixels": 0.9728447500498426,
+              "maximum_pixels": 1.8784866590267653
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_leuven",
+      "target_index": 5,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 17,
+        "invalid_predictions": 0,
+        "median_pixels": 0.42122603101766143,
+        "maximum_pixels": 1.3300950452712912
+      },
+      "registered_grid": {
+        "valid_points": 17,
+        "invalid_predictions": 0,
+        "median_pixels": 0.6730095917879992,
+        "maximum_pixels": 2.0261904632320524
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 17,
+              "invalid_predictions": 0,
+              "median_pixels": 0.6730095917879992,
+              "maximum_pixels": 2.0261904632320524
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 17,
+              "invalid_predictions": 0,
+              "median_pixels": 2.488925853220497,
+              "maximum_pixels": 8.17016766259803
+            },
+            "model_grid_diagnostic": "median_above_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_leuven",
+      "target_index": 6,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 16,
+        "invalid_predictions": 0,
+        "median_pixels": 1.6456222756105254,
+        "maximum_pixels": 4.1794394577274065
+      },
+      "registered_grid": {
+        "valid_points": 16,
+        "invalid_predictions": 0,
+        "median_pixels": 1.2880646279001182,
+        "maximum_pixels": 3.7070503318982575
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 16,
+              "invalid_predictions": 0,
+              "median_pixels": 1.2880646279001182,
+              "maximum_pixels": 3.7070503318982575
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 16,
+              "invalid_predictions": 0,
+              "median_pixels": 3.890569088955128,
+              "maximum_pixels": 4.795336618399793
+            },
+            "model_grid_diagnostic": "median_above_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_lionday",
+      "target_index": 2,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": null,
+      "registered_grid": null,
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "no_model",
+      "diagnosis": "no_geometry"
+    },
+    {
+      "sequence": "i_lionday",
+      "target_index": 3,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.6698066141134897,
+        "maximum_pixels": 1.3822865330996998
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.4716124589149458,
+        "maximum_pixels": 1.1626105432157066
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.4716124589149458,
+              "maximum_pixels": 1.1626105432157066
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 1.2428437093768048,
+              "maximum_pixels": 4.07728423088955
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_lionday",
+      "target_index": 4,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": null,
+      "registered_grid": null,
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "no_model",
+      "diagnosis": "no_geometry"
+    },
+    {
+      "sequence": "i_lionday",
+      "target_index": 5,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": null,
+      "registered_grid": null,
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "no_model",
+      "diagnosis": "no_geometry"
+    },
+    {
+      "sequence": "i_lionday",
+      "target_index": 6,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.8466331355175569,
+        "maximum_pixels": 1.6868605486835622
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.8300655063074925,
+        "maximum_pixels": 2.413910759106934
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.8300655063074925,
+              "maximum_pixels": 2.413910759106934
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.9170823537806011,
+              "maximum_pixels": 4.330147243160766
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_lionnight",
+      "target_index": 2,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.6777148681087058,
+        "maximum_pixels": 1.7717275809148947
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.4435769690510044,
+        "maximum_pixels": 0.9801717764959889
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.4435769690510044,
+              "maximum_pixels": 0.9801717764959889
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.4743778433883937,
+              "maximum_pixels": 0.6710515136956604
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_lionnight",
+      "target_index": 3,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 1.1585287790171157,
+        "maximum_pixels": 7.460169712016626
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 1.5116586518403836,
+        "maximum_pixels": 6.701193876010454
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 1.5116586518403836,
+              "maximum_pixels": 6.701193876010454
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.9037771972741672,
+              "maximum_pixels": 6.243370513181438
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_lionnight",
+      "target_index": 4,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.7578624504372906,
+        "maximum_pixels": 1.6774890484756582
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.5809428987878159,
+        "maximum_pixels": 0.8043254728164557
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.5809428987878159,
+              "maximum_pixels": 0.8043254728164557
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.5433659028037389,
+              "maximum_pixels": 0.6558098272424902
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_lionnight",
+      "target_index": 5,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.6555107094723872,
+        "maximum_pixels": 2.047965831095282
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.6467841429779163,
+        "maximum_pixels": 1.087729436942292
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.6467841429779163,
+              "maximum_pixels": 1.087729436942292
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.6781102825288717,
+              "maximum_pixels": 0.8384629321475399
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_lionnight",
+      "target_index": 6,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.6852625375786981,
+        "maximum_pixels": 1.4469314202577526
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.6725134924658214,
+        "maximum_pixels": 0.9274741363462858
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.6725134924658214,
+              "maximum_pixels": 0.9274741363462858
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.5895839856924461,
+              "maximum_pixels": 0.7056044280305177
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_londonbridge",
+      "target_index": 2,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.8841676492649256,
+        "maximum_pixels": 0.9372665912432236
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.8073073435967337,
+        "maximum_pixels": 0.9122837454903441
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.8073073435967337,
+              "maximum_pixels": 0.9122837454903441
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.7964484553586247,
+              "maximum_pixels": 1.5879458256073127
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_londonbridge",
+      "target_index": 3,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.6348505303440946,
+        "maximum_pixels": 0.9553108500141436
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.6680630765065375,
+        "maximum_pixels": 1.1630721980617158
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.6680630765065375,
+              "maximum_pixels": 1.1630721980617158
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 1.3383797224512226,
+              "maximum_pixels": 3.448753413322608
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_londonbridge",
+      "target_index": 4,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.8739519257325191,
+        "maximum_pixels": 1.7674149895451772
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.8690734283605464,
+        "maximum_pixels": 2.4074569898638454
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.8690734283605464,
+              "maximum_pixels": 2.4074569898638454
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 1.0185116176034053,
+              "maximum_pixels": 2.7647980689961504
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_londonbridge",
+      "target_index": 5,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": null,
+      "registered_grid": null,
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "no_model",
+      "diagnosis": "no_geometry"
+    },
+    {
+      "sequence": "i_londonbridge",
+      "target_index": 6,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.41017380574421686,
+        "maximum_pixels": 0.8895288736622048
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.5777922220544638,
+        "maximum_pixels": 1.7440622272183048
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.5777922220544638,
+              "maximum_pixels": 1.7440622272183048
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 3.337086582277316,
+              "maximum_pixels": 8.71706515668664
+            },
+            "model_grid_diagnostic": "median_above_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_melon",
+      "target_index": 2,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 1.0941078969013311,
+        "maximum_pixels": 4.50910482364801
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.8180412001879918,
+        "maximum_pixels": 3.52295108059764
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.8180412001879918,
+              "maximum_pixels": 3.52295108059764
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.4494117399533322,
+              "maximum_pixels": 1.2584569161858266
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_melon",
+      "target_index": 3,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.13517013447921727,
+        "maximum_pixels": 0.5021529208883178
+      },
+      "registered_grid": {
+        "valid_points": 25,
+        "invalid_predictions": 0,
+        "median_pixels": 0.6675541940063789,
+        "maximum_pixels": 1.480780944546708
+      },
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "median_at_most_2_pixels",
+      "diagnosis": "published_geometry_also_fails_pixels",
+      "portfolio": {
+        "chosen_lane": 0,
+        "lanes": {
+          "anchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.6675541940063789,
+              "maximum_pixels": 1.480780944546708
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          },
+          "unanchored": {
+            "registered_grid": {
+              "valid_points": 25,
+              "invalid_predictions": 0,
+              "median_pixels": 0.7153645560636334,
+              "maximum_pixels": 1.6668431810305147
+            },
+            "model_grid_diagnostic": "median_at_most_2_pixels",
+            "filtered_pass": false
+          }
+        }
+      }
+    },
+    {
+      "sequence": "i_melon",
+      "target_index": 4,
+      "status": "ok",
+      "candidate": false,
+      "geometry_grid": null,
+      "registered_grid": null,
+      "published_geometry_filtered_pass": false,
+      "model_grid_diagnostic": "no_model",
+      "diagnosis": "no_geometry"
+    }
+  ],
+  "scope": "Incomplete reports remain incomplete. Publisher geometric labels are not duplicate truth; pixel criterion retains the frozen policy. Published-geometry pixel rejection is not proof of accurate estimated geometry or a photometric cause. Finite grid samples and their medians are diagnostics, not continuous transform certificates. Grid residuals assume the recorded pixel-center convention.",
+  "portfolio_grid_diagnostics": {
+    "anchored": {
+      "median_at_most_2_pixels": 106,
+      "no_model": 41,
+      "median_above_2_pixels": 1
+    },
+    "unanchored": {
+      "median_at_most_2_pixels": 87,
+      "no_model": 41,
+      "median_above_2_pixels": 17,
+      "median_above_10_pixels": 3
+    }
+  },
+  "portfolio_accepted_lane_grid_diagnostics": {
+    "anchored": {
+      "median_at_most_2_pixels": 1
+    },
+    "unanchored": {
+      "median_at_most_2_pixels": 1
+    }
+  },
+  "portfolio_selection_counts": {
+    "neither_accepted": 106,
+    "no_lane_evidence": 41,
+    "anchored": 1
+  }
+}

@@ -1,0 +1,98 @@
+{
+  "index": 300,
+  "repository": "JustinGrote/Super-Duper-Linter",
+  "commit": "30fe54ee2be6d3e707f26bd8d0022162f87d5502",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "PowerShell linter adapters/checkstyle conversion; no image algorithm.",
+  "available_source_evidence": [
+    {
+      "path": "linters/bash/tests/error.sh",
+      "local": "03-error.sh",
+      "url": "https://github.com/JustinGrote/Super-Duper-Linter/blob/30fe54ee2be6d3e707f26bd8d0022162f87d5502/linters/bash/tests/error.sh",
+      "sha256": "b1768f663fe36ad79068779a21a527369673ec4d7ee18547d4f71416f1fec175",
+      "truncated": false,
+      "lines": 17,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "SuperDuperLinter/Private/Convert-CheckStyleToLinterIssue.ps1",
+      "local": "04-Convert-CheckStyleToLinterIssue.ps1",
+      "url": "https://github.com/JustinGrote/Super-Duper-Linter/blob/30fe54ee2be6d3e707f26bd8d0022162f87d5502/SuperDuperLinter/Private/Convert-CheckStyleToLinterIssue.ps1",
+      "sha256": "8125376c20f806af1f4a1a3e4b1a7b23c08ad37b44d6078a8d86d4d2f6efd07a",
+      "truncated": false,
+      "lines": 51,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "SuperDuperLinter/Private/Copy-Object.ps1",
+      "local": "05-Copy-Object.ps1",
+      "url": "https://github.com/JustinGrote/Super-Duper-Linter/blob/30fe54ee2be6d3e707f26bd8d0022162f87d5502/SuperDuperLinter/Private/Copy-Object.ps1",
+      "sha256": "d9cd4ed95f7ae22858c30001638f0692a8afeda8e05c979d8a1436105f1cfd26",
+      "truncated": false,
+      "lines": 12,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "SuperDuperLinter/Private/LinterIssue.class.ps1",
+      "local": "06-LinterIssue.class.ps1",
+      "url": "https://github.com/JustinGrote/Super-Duper-Linter/blob/30fe54ee2be6d3e707f26bd8d0022162f87d5502/SuperDuperLinter/Private/LinterIssue.class.ps1",
+      "sha256": "cfea94facea250005e927f9bc542cfada162ac6d74c0c1cc956601f5728004e6",
+      "truncated": false,
+      "lines": 33,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "Tests/Add-LinterFiles.tests.ps1",
+      "local": "07-Add-LinterFiles.tests.ps1",
+      "url": "https://github.com/JustinGrote/Super-Duper-Linter/blob/30fe54ee2be6d3e707f26bd8d0022162f87d5502/Tests/Add-LinterFiles.tests.ps1",
+      "sha256": "68652d2a155ff69ccbcf36c6fa38a274f20f776e364d0866b70cd52b931cb458",
+      "truncated": false,
+      "lines": 22,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 26,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/JustinGrote/Super-Duper-Linter/blob/30fe54ee2be6d3e707f26bd8d0022162f87d5502/README.md",
+      "sha256": "e03fd99ad105179ee1b110eb801f4665b67f31d9467d289a7229db0a23af003a",
+      "truncated": false,
+      "lines": 27,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/JustinGrote/Super-Duper-Linter/blob/30fe54ee2be6d3e707f26bd8d0022162f87d5502/LICENSE",
+      "sha256": "22ef745d5ddaad8d81fc3fc31fde31bef30fe02398bd7e828b5d88ebd46acef6",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE-super-linter",
+      "local": "02-LICENSE-super-linter",
+      "url": "https://github.com/JustinGrote/Super-Duper-Linter/blob/30fe54ee2be6d3e707f26bd8d0022162f87d5502/LICENSE-super-linter",
+      "sha256": "6c95eb7328dbbff0ffb9cf5f08c96e0861615b5f683e397c60b7f7c8ec0257a4",
+      "truncated": false,
+      "lines": 22,
+      "source": false,
+      "test": false
+    }
+  ]
+}

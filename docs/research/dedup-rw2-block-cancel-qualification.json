@@ -1,0 +1,20 @@
+{
+  "scope": "Unpacked RW2 intra-strip cancellation every 4096 samples; known 8192-sample one-strip fixture, complete one-shot callback sweep and healthy retry. Not native total RSS or measured real-file latency.",
+  "source_sha256": "fedae3aaec0c556fa0a53a8ccb79c6dc876c662377e522e19a2e205aa41ec35c",
+  "platforms": {
+    "macos": {
+      "exit_code": 0,
+      "passed": 151,
+      "ignored": 22,
+      "rw2_checkpoints": 3,
+      "log": "dedup-rw2-block-cancel-macos.log"
+    },
+    "linux": {
+      "exit_code": 0,
+      "passed": 151,
+      "ignored": 22,
+      "rw2_checkpoints": 3,
+      "log": "dedup-rw2-block-cancel-linux.log"
+    }
+  }
+}

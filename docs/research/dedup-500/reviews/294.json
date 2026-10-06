@@ -1,0 +1,98 @@
+{
+  "index": 294,
+  "repository": "TGOlson/dupertest",
+  "commit": "e11722dfd193908cc6d6f9c6eec55c5adb0cd786",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Controller request-testing client; library name dupertest unrelated to content matching.",
+  "available_source_evidence": [
+    {
+      "path": "lib/request.js",
+      "local": "02-request.js",
+      "url": "https://github.com/TGOlson/dupertest/blob/e11722dfd193908cc6d6f9c6eec55c5adb0cd786/lib/request.js",
+      "sha256": "e1766b75b05caadde417be19f804fcb08be688d0dfcccef2276fef90df4824ba",
+      "truncated": false,
+      "lines": 103,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "lib/dupertest.js",
+      "local": "03-dupertest.js",
+      "url": "https://github.com/TGOlson/dupertest/blob/e11722dfd193908cc6d6f9c6eec55c5adb0cd786/lib/dupertest.js",
+      "sha256": "f767ba67be01a9482793074238907ce1e604c379fb358378552d9c2c11e6695f",
+      "truncated": false,
+      "lines": 5,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "spec/request_spec.js",
+      "local": "04-request_spec.js",
+      "url": "https://github.com/TGOlson/dupertest/blob/e11722dfd193908cc6d6f9c6eec55c5adb0cd786/spec/request_spec.js",
+      "sha256": "658af108e455b4eb11069b44e0f62a116d9fa00292ebfd1ffd2a2c5651ae06ff",
+      "truncated": false,
+      "lines": 274,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "examples/entities-controller.js",
+      "local": "05-entities-controller.js",
+      "url": "https://github.com/TGOlson/dupertest/blob/e11722dfd193908cc6d6f9c6eec55c5adb0cd786/examples/entities-controller.js",
+      "sha256": "eff35292d10e4c4c8ca6aec8d2fd7a4afd8ba5658f8cfeda7f7d924f4c6c97a9",
+      "truncated": false,
+      "lines": 33,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "examples/entity.js",
+      "local": "06-entity.js",
+      "url": "https://github.com/TGOlson/dupertest/blob/e11722dfd193908cc6d6f9c6eec55c5adb0cd786/examples/entity.js",
+      "sha256": "d769e0319948a9058d7609206585471c45ad183e0b5b0cd12e5f69ca5c0c2254",
+      "truncated": false,
+      "lines": 18,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "examples/entities-controller_spec.js",
+      "local": "07-entities-controller_spec.js",
+      "url": "https://github.com/TGOlson/dupertest/blob/e11722dfd193908cc6d6f9c6eec55c5adb0cd786/examples/entities-controller_spec.js",
+      "sha256": "d39f5eecca76a9d1ebd1b814fc58bca1f6e122ebf1e0a3b7611a80661594ec4a",
+      "truncated": false,
+      "lines": 96,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 2,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/TGOlson/dupertest/blob/e11722dfd193908cc6d6f9c6eec55c5adb0cd786/README.md",
+      "sha256": "69acecc55617588137e5cfb84651c960f7ef4e385011d576ced045ed5978d36f",
+      "truncated": false,
+      "lines": 147,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/TGOlson/dupertest/blob/e11722dfd193908cc6d6f9c6eec55c5adb0cd786/LICENSE",
+      "sha256": "21366ef752c0c7fbf91c46ff163212d3991c6f31cf5edd216467966c50783e7e",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

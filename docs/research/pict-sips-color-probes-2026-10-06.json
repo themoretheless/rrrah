@@ -1,0 +1,109 @@
+{
+  "color_opcode_offset": 564,
+  "cases": [
+    {
+      "name": "red",
+      "source_sha256": "eca313f4e31cdee5cb051153df25b61d221f03c577f0843c87acc8a498e7fa8b",
+      "expected_rectangle_rgba": [
+        255,
+        0,
+        0,
+        255
+      ],
+      "actual_rectangle_rgba": [
+        0,
+        0,
+        0,
+        255
+      ],
+      "matches": false
+    },
+    {
+      "name": "green",
+      "source_sha256": "8ed316dc3b79b6a7f076979b2d5389785f2780705e7c2d41f42b77df972ec1ff",
+      "expected_rectangle_rgba": [
+        0,
+        255,
+        0,
+        255
+      ],
+      "actual_rectangle_rgba": [
+        0,
+        0,
+        0,
+        255
+      ],
+      "matches": false
+    },
+    {
+      "name": "blue",
+      "source_sha256": "75b45de00a604dbf8b6b0074a5bc209ac0a05030c8d52d9d7b3d097259e99ecc",
+      "expected_rectangle_rgba": [
+        0,
+        0,
+        255,
+        255
+      ],
+      "actual_rectangle_rgba": [
+        0,
+        0,
+        0,
+        255
+      ],
+      "matches": false
+    },
+    {
+      "name": "white",
+      "source_sha256": "9f749d8d3b40ae3368dec18e10ad55cc539bc64daea7c3cff8dd9c40b42199f3",
+      "expected_rectangle_rgba": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "actual_rectangle_rgba": [
+        0,
+        0,
+        0,
+        255
+      ],
+      "matches": false
+    },
+    {
+      "name": "black",
+      "source_sha256": "9539c5b0078f75fed3d437c10b04882be04b7483e41f128657416617c12ca493",
+      "expected_rectangle_rgba": [
+        0,
+        0,
+        0,
+        255
+      ],
+      "actual_rectangle_rgba": [
+        0,
+        0,
+        0,
+        255
+      ],
+      "matches": true
+    },
+    {
+      "name": "legacy-red",
+      "source_sha256": "6244110b179d1414e38fad15783c9c1dcbee8f60174540226e961b33999fbc26",
+      "expected_rectangle_rgba": [
+        255,
+        0,
+        0,
+        255
+      ],
+      "actual_rectangle_rgba": [
+        0,
+        0,
+        0,
+        255
+      ],
+      "matches": false
+    }
+  ],
+  "scope": "sips RGBFgCol and legacy FgColor behavior, authored PICT v2",
+  "limitations": "not independent color qualification; output may reflect basic QuickDraw conversion"
+}

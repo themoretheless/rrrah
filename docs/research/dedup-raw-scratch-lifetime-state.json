@@ -1,0 +1,40 @@
+{
+  "status": "passed",
+  "source_sha256": "37865a9406ea4920db4fd1c2efa21cbfcedf77c7aca5a26ad32930b982f0b4b7",
+  "macos_core_develop_tests": 12,
+  "macos_rss_baseline": 2277277696,
+  "macos_rss_after": 2118713344,
+  "rss_reduction_bytes": 158564352,
+  "3fr_digest_matched": true,
+  "linux_29_session": 49641,
+  "scope": "Early release of corrected sensor samples and clipping mask; one measured 3FR RSS comparison, full 29-file native regression pending; not universal process RSS bound.",
+  "macos_29_session": 4912,
+  "core_regression": {
+    "macos": {
+      "exit_code": 0,
+      "passed": 82,
+      "ignored": 0,
+      "log": "dedup-raw-scratch-lifetime-core-full-macos.log"
+    },
+    "linux": {
+      "exit_code": 0,
+      "passed": 82,
+      "ignored": 0,
+      "log": "dedup-raw-scratch-lifetime-core-full-linux.log"
+    }
+  },
+  "raw_regression": {
+    "macos": {
+      "exit_code": 0,
+      "matched_baseline": 29,
+      "report": "dedup-raw-scratch-lifetime-macos-report.json",
+      "probe_sha256": "8876a90145bf5d8ef4af586739b1c1cc36b6c9002c9e298e7d6fac11ac5af10e"
+    },
+    "linux": {
+      "exit_code": 0,
+      "matched_baseline": 29,
+      "report": "dedup-raw-scratch-lifetime-linux-report.json",
+      "probe_sha256": "af08be3dfd101789034918c513935f2f4f77c22ae70eaf7649902fe8cb525b80"
+    }
+  }
+}

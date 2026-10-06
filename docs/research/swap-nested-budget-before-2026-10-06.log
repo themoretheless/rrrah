@@ -1,0 +1,37 @@
+   Compiling rrrah-cache v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-cache)
+warning: unused import: `Read`
+   --> crates/rrrah-cache/src/container_v1.rs:478:19
+    |
+478 |     use std::io::{Read as _, Write as _};
+    |                   ^^^^
+    |
+    = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `Write`
+   --> crates/rrrah-cache/src/container_v1.rs:478:30
+    |
+478 |     use std::io::{Read as _, Write as _};
+    |                              ^^^^^
+
+warning: `rrrah-cache` (lib test) generated 2 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 2.97s
+     Running unittests src/lib.rs (/tmp/rrrah-required-corpus-target/debug/deps/rrrah_cache-227ea06b48b7809f)
+
+running 1 test
+test swap::write_cancellation_tests::restore_rebinding_to_existing_budget_counts_nested_owners_once ... FAILED
+
+failures:
+
+---- swap::write_cancellation_tests::restore_rebinding_to_existing_budget_counts_nested_owners_once stdout ----
+
+thread 'swap::write_cancellation_tests::restore_rebinding_to_existing_budget_counts_nested_owners_once' (4026635) panicked at crates/rrrah-cache/src/swap.rs:788:48:
+called `Result::unwrap()` on an `Err` value: Capacity { requested: 1, used: 5, limit: 4 }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    swap::write_cancellation_tests::restore_rebinding_to_existing_budget_counts_nested_owners_once
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 115 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p rrrah-cache --lib`

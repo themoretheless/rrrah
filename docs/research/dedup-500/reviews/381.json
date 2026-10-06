@@ -1,0 +1,68 @@
+{
+  "index": 381,
+  "repository": "dsoprea/go-perceptualhash",
+  "commit": "5ef3a3d0c14bfeecb67021177b2a3d6f6d9ceca8",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Pure Go Blockhash API and test corpus; candidate independent oracle, resize/color semantics need checks.",
+  "available_source_evidence": [
+    {
+      "path": "blockhash.go",
+      "local": "02-blockhash.go",
+      "url": "https://github.com/dsoprea/go-perceptualhash/blob/5ef3a3d0c14bfeecb67021177b2a3d6f6d9ceca8/blockhash.go",
+      "sha256": "4ebd8c4a21e81af501c1458413edf88359fd51ffe257220b9dce1a443d32f674",
+      "truncated": false,
+      "lines": 292,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "command/go-perceptualhash/main.go",
+      "local": "03-main.go",
+      "url": "https://github.com/dsoprea/go-perceptualhash/blob/5ef3a3d0c14bfeecb67021177b2a3d6f6d9ceca8/command/go-perceptualhash/main.go",
+      "sha256": "42838bfee49474d935dcd201ef04a09dba73c0dc6946315d787b713e091b92da",
+      "truncated": false,
+      "lines": 65,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "blockhash_test.go",
+      "local": "04-blockhash_test.go",
+      "url": "https://github.com/dsoprea/go-perceptualhash/blob/5ef3a3d0c14bfeecb67021177b2a3d6f6d9ceca8/blockhash_test.go",
+      "sha256": "245a654e5c894fde8faef7b111b9fbfaa69da0a86cfe8877b59cf4bc0f2c550c",
+      "truncated": false,
+      "lines": 494,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "BSD-3-Clause",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 1,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/dsoprea/go-perceptualhash/blob/5ef3a3d0c14bfeecb67021177b2a3d6f6d9ceca8/README.md",
+      "sha256": "65a9414a041fcfe1e74df97d67b6f15dde900bc895411e9920cd12cdcdd31923",
+      "truncated": false,
+      "lines": 83,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/dsoprea/go-perceptualhash/blob/5ef3a3d0c14bfeecb67021177b2a3d6f6d9ceca8/LICENSE",
+      "sha256": "0e35f113aa6ff3cf74de427bc2fd82eee86c238b1172a0946bf02e2a29606546",
+      "truncated": false,
+      "lines": 26,
+      "source": false,
+      "test": false
+    }
+  ]
+}

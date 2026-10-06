@@ -12,15 +12,9 @@
 //!   totals. Sony packs LSB-first, so the shared MSB `decode_msb_packed`
 //!   helper is NOT applicable to the packed rows.
 //! - **Compression 32767 (Sony proprietary)** — two different encodings share
-//!   this tag value, distinguished by byte count exactly like rawspeed's
-//!   `ArwDecoder::decodeRawInternal`: when the strip holds exactly
-//!   `width * height * bits / 8` bytes the data is NOT entropy coded and is
-//!   either ARW 2.x "cRAW" (8 bits/pixel, block delta encoding) or, for
-//!   12 bits/pixel, plain LSB-packed uncompressed rows. Otherwise the file
-//!   uses the ARW 1.0 Huffman/curve encoding (`sony_arw_load_raw`), which is
-//!   explicitly rejected with a typed error. 14-bit data under 32767 is
-//!   rejected too (rawspeed parity; uncompressed 14-bit bodies tag
-//!   compression 1).
+//!   this tag value. A strip containing exactly one byte per sensor pixel
+//!   identifies ARW 2.x block delta encoding, including nominal 14-bit files.
+//!   Packed 12-bit rows are also supported; ARW 1.0 Huffman encoding is rejected.
 //! - **Compression 7 (lossless JPEG)** — Alpha 1 and later; decoded through
 //!   the shared TIFF/EP lossless-JPEG decoder, strips or tiles.
 //!
@@ -31,8 +25,8 @@
 //! indices of the max/min pixels, and fourteen 7-bit deltas shifted by a
 //! block-computed exponent, clamped to 11 bits. Blocks alternate between
 //! even and odd column parities, so two blocks (32 bytes) yield 32
-//! consecutive pixels. Output is `pixel << 1` (12-bit scale), matching the
-//! identity tone curve dcraw/LibRaw use for these files. References:
+//! consecutive pixels. The intermediate `pixel << 1` values pass through
+//! the file's `SonyCurve` linearization table to produce 14-bit sensor values. References:
 //! <https://github.com/LibRaw/LibRaw> (`decoders_dcraw.cpp`),
 //! <https://github.com/darktable-org/rawspeed> (`SonyArw2Decompressor.cpp`,
 //! `ArwDecoder.cpp`), <https://github.com/lclevy/sony_raw>.
@@ -40,11 +34,10 @@
 //! Levels: the Sony makernote black/white levels sit in an encrypted tag
 //! section on ARW 2.x bodies and are not read. When the DNG-style
 //! `BlackLevel` (50714) / `WhiteLevel` (50717) tags are absent, defaults
-//! follow the `LibRaw` `identify.cpp` rule: 512 for `cRAW` (12-bit output
-//! scale) and `128 << (bits - 12)` otherwise; white defaults to
+//! follow the `LibRaw` `identify.cpp` rule: 512 for linearized `cRAW` and `128 << (bits - 12)` otherwise; white defaults to
 //! `(1 << bits) - 1`.
-//! White balance and color matrices are not recoverable without the
-//! encrypted makernote; neutral unity values are used, as documented.
+//! The shared color resolver decrypts native Sony white balance metadata and
+//! selects an exact camera calibration profile; missing calibration is an error.
 //!
 //! The unit tests below build synthetic minimal TIFF byte layouts in memory.
 //! They validate the parser, the storage dispatch, and the ARW2 block math
@@ -100,8 +93,21 @@ impl CameraQuirks for ArwQuirks {
             None => Orientation::Normal,
         };
 
-        let output_bits = geometry.output_bits();
-        let black_level = read_black_level(raw, geometry)?;
+        let output_bits = if geometry.arw2 && sony_curve(raw)?.is_some() {
+            14
+        } else {
+            geometry.output_bits()
+        };
+        let r1 = model == "DSC-R1"
+            && geometry.width == 3984
+            && geometry.height == 2608
+            && geometry.bits_per_sample == 14
+            && geometry.compression == 1;
+        let black_level = if r1 {
+            super::color::sony_r1_black(container)?
+        } else {
+            read_black_level(raw, geometry)?
+        };
         let white_level = match optional_scalar(FORMAT, raw, TAG_WHITE_LEVEL)? {
             Some(value) => WhiteLevel(vec![value as f32]),
             None => WhiteLevel(vec![((1_u32 << output_bits) - 1) as f32]),
@@ -121,7 +127,16 @@ impl CameraQuirks for ArwQuirks {
             white_balance: [1.0; 4],
             xyz_to_camera: [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0], [0.0; 3]],
             active_area: None,
-            crop_area: None,
+            crop_area: if r1 {
+                Some(rrrah_core::Rect {
+                    x: 0,
+                    y: 0,
+                    width: 3925,
+                    height: 2608,
+                })
+            } else {
+                sony_crop(raw, geometry)?
+            },
             orientation,
         })
     }
@@ -180,6 +195,7 @@ struct Geometry {
     /// Stored bits per sample from the IFD (8 for ARW 2.x cRAW).
     bits_per_sample: u8,
     compression: u64,
+    arw2: bool,
 }
 
 impl Geometry {
@@ -194,11 +210,25 @@ impl Geometry {
         if width == 0 || height == 0 {
             return Err(error("raw IFD has zero image dimensions"));
         }
+        let arw2 = if compression == COMPRESSION_SONY {
+            let counts = raw
+                .entry(FORMAT, tags::STRIP_BYTE_COUNTS)?
+                .ok_or_else(|| error("missing Sony strip byte counts"))?
+                .unsigned_values()
+                .map_err(|e| error(e.to_string()))?;
+            counts
+                .iter()
+                .try_fold(0_u64, |sum, value| sum.checked_add(*value))
+                == Some(u64::from(width) * u64::from(height))
+        } else {
+            false
+        };
         Ok(Self {
             width,
             height,
             bits_per_sample,
             compression,
+            arw2,
         })
     }
 
@@ -333,7 +363,7 @@ fn read_black_level(raw: &CameraDirectory<'_>, geometry: Geometry) -> Result<Lev
             values: vec![values[0] as f32],
         });
     }
-    let default = if geometry.compression == COMPRESSION_SONY && geometry.bits_per_sample == 8 {
+    let default = if geometry.arw2 {
         512.0
     } else {
         let bits = geometry.bits_per_sample;
@@ -447,7 +477,19 @@ fn decode_uncompressed(
         .ok_or_else(|| error("packed image byte length overflows"))?;
 
     if total == word_total {
-        let byte_order = container.byte_order();
+        // DSC-R1 SR2 stores big-endian sensor words inside a little-endian TIFF.
+        // Match the camera, bit depth and sensor geometry, rather than changing
+        // the byte order of unrelated Sony TIFFs or their metadata directories.
+        let model = optional_ascii(FORMAT, raw, tags::MODEL)?.or(first_ascii(container, tags::MODEL)?);
+        let byte_order = if model.as_deref() == Some("DSC-R1")
+            && geometry.bits_per_sample == 14
+            && geometry.width == 3984
+            && geometry.height == 2608
+        {
+            crate::dng::tiff::ByteOrder::Big
+        } else {
+            container.byte_order()
+        };
         decode_strip_rows(
             &segments,
             rows_per_strip,
@@ -499,6 +541,17 @@ fn decode_sony(
         .checked_mul(height)
         .ok_or_else(|| error("Sony payload byte length overflows"))?;
 
+    if geometry.arw2 {
+        decode_arw2(&segments, rows_per_strip, geometry, output, cancelled)?;
+        if let Some(curve) = sony_curve(raw)? {
+            for sample in output {
+                *sample = curve[usize::from(*sample)];
+            }
+        } else if geometry.bits_per_sample != 8 {
+            return Err(error("Sony ARW2 requires its linearization curve"));
+        }
+        return Ok(());
+    }
     if total != packed_total {
         return Err(error(format!(
             "compression 32767 with {} payload bytes does not match the {}-bit uncompressed \
@@ -523,6 +576,60 @@ fn decode_sony(
              (ARW 2.x uncompressed 14-bit bodies tag compression 1 instead)"
         ))),
     }
+}
+
+fn sony_crop(raw: &CameraDirectory<'_>, geometry: Geometry) -> Result<Option<rrrah_core::Rect>, DecodeError> {
+    let origin = raw.entry(FORMAT, 0xc61f)?;
+    let size = raw.entry(FORMAT, 0xc620)?;
+    let (Some(origin), Some(size)) = (origin, size) else {
+        return Ok(None);
+    };
+    let o = origin.unsigned_values().map_err(|e| error(e.to_string()))?;
+    let z = size.unsigned_values().map_err(|e| error(e.to_string()))?;
+    if o.len() != 2 || z.len() != 2 {
+        return Err(error(
+            "Sony default crop must have two coordinates and two dimensions",
+        ));
+    }
+    let x = u32::try_from(o[0]).map_err(|_| error("Sony crop origin overflow"))?;
+    let y = u32::try_from(o[1]).map_err(|_| error("Sony crop origin overflow"))?;
+    let width = u32::try_from(z[0]).map_err(|_| error("Sony crop width overflow"))?;
+    let height = u32::try_from(z[1]).map_err(|_| error("Sony crop height overflow"))?;
+    if width == 0
+        || height == 0
+        || x.checked_add(width).is_none_or(|v| v > geometry.width)
+        || y.checked_add(height).is_none_or(|v| v > geometry.height)
+    {
+        return Err(error("Sony default crop outside stored mosaic"));
+    }
+    Ok(Some(rrrah_core::Rect::new(x, y, width, height)))
+}
+
+fn sony_curve(raw: &CameraDirectory<'_>) -> Result<Option<Vec<u16>>, DecodeError> {
+    let Some(entry) = raw.entry(FORMAT, 0x7010)? else {
+        return Ok(None);
+    };
+    let values = entry.unsigned_values().map_err(|e| error(e.to_string()))?;
+    if values.len() != 4 {
+        return Err(error("SonyCurve must contain four breakpoints"));
+    }
+    let mut breaks = [0_usize; 6];
+    breaks[5] = 4095;
+    for (dst, value) in breaks[1..5].iter_mut().zip(values) {
+        *dst = usize::try_from((value >> 2) & 4095).map_err(|_| error("Sony curve breakpoint overflow"))?;
+    }
+    if breaks.windows(2).any(|pair| pair[0] > pair[1]) {
+        return Err(error("Sony curve breakpoints are not monotonic"));
+    }
+    let mut curve = vec![0_u16; 4096];
+    for (segment, pair) in breaks.windows(2).enumerate() {
+        for index in pair[0] + 1..=pair[1] {
+            curve[index] = curve[index - 1]
+                .checked_add(1 << segment)
+                .ok_or_else(|| error("Sony curve output exceeds u16"))?;
+        }
+    }
+    Ok(Some(curve))
 }
 
 /// ARW 2.x "cRAW" block-delta decoding (dcraw `sony_arw2_load_raw` /
@@ -1008,6 +1115,42 @@ mod tests {
     }
 
     #[test]
+    fn dsc_r1_words_are_big_endian_inside_little_endian_tiff() {
+        let samples = [0x0001_u16, 0x1234, 0x3fff, 0x0203];
+        let count = 3984_usize * 2608;
+        let payload: Vec<_> = (0..count).flat_map(|i| samples[i % 4].to_be_bytes()).collect();
+        let mut file = synthetic_arw(3984, 2608, 14, 1, &payload);
+        let model_offset = u32::try_from(file.len()).unwrap();
+        // Replace inline model with an out-of-line camera identifier.
+        let model_entry = 8 + 2 + 12;
+        file[model_entry + 4..model_entry + 8].copy_from_slice(&7_u32.to_le_bytes());
+        file[model_entry + 8..model_entry + 12].copy_from_slice(&model_offset.to_le_bytes());
+        file.extend_from_slice(b"DSC-R1\0");
+        let container = ArwQuirks.parse_container(&file).unwrap();
+        let raw = ArwQuirks.select_raw_ifd(&container).unwrap();
+        let pixels = ArwQuirks.decode_pixels(&container, raw, &|| false).unwrap();
+        assert!(
+            ArwQuirks.read_metadata(&container, raw).is_err(),
+            "missing private black levels must fail"
+        );
+        assert_eq!(pixels.len(), count);
+        assert!(
+            pixels
+                .iter()
+                .enumerate()
+                .all(|(i, value)| *value == samples[i % 4])
+        );
+        // Same sensor geometry alone must not alter another camera's word order.
+        file[model_offset as usize..model_offset as usize + 6].copy_from_slice(b"OTHER1");
+        let (_, other) = decode(&file).unwrap();
+        assert!(
+            other
+                .iter()
+                .enumerate()
+                .all(|(i, value)| *value == samples[i % 4].swap_bytes())
+        );
+    }
+    #[test]
     fn decodes_uncompressed_sixteen_bit_words() {
         let values = [1_u16, 2, 3, 4, 400, 500, 600, 16_383];
         let mut pixel_bytes = Vec::new();
@@ -1265,5 +1408,6 @@ mod tests {
         let raw = quirks.select_raw_ifd(&container).unwrap();
         let error = quirks.decode_pixels(&container, raw, &|| true).unwrap_err();
         assert!(matches!(error, DecodeError::Cancelled));
+        super::super::assert_pixel_cancellation_checkpoints(&quirks, &container, raw);
     }
 }

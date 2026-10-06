@@ -1,0 +1,76 @@
+{
+  "scope": "Diagnostic full-frame exact metadata-aligned CR2/TIFF residual partition; no production mask or acceptance change",
+  "buckets": [
+    "both RGB samples within [0,1]",
+    "native RAW has RGB outside [0,1]",
+    "remaining: target RGB outside [0,1]"
+  ],
+  "counts": [
+    22756604,
+    1227903,
+    15493
+  ],
+  "rejected_at_003": [
+    1338571,
+    1213742,
+    13759
+  ],
+  "squared_rgb": [
+    [
+      13112.112789279425,
+      5780.087850230271,
+      9414.67082897534
+    ],
+    [
+      1172988.5184218073,
+      67951.03373689864,
+      967490.3077775405
+    ],
+    [
+      802.2897850613358,
+      214.72430805662168,
+      328.92402283938026
+    ]
+  ],
+  "unconstrained_diagnostic_fits": [
+    {
+      "gain": [
+        1.0379630519476237,
+        1.045454732901332,
+        1.022492020846128
+      ],
+      "offset": [
+        -0.010829869415887261,
+        -0.011773439466898059,
+        -0.01024767825837071
+      ]
+    },
+    {
+      "gain": [
+        0.1865760179221541,
+        0.3615688353100366,
+        0.22896111573917877
+      ],
+      "offset": [
+        0.5882449340261744,
+        0.5953025390767073,
+        0.546121721976003
+      ]
+    },
+    {
+      "gain": [
+        1.2111910829491337,
+        1.1094537125006758,
+        0.8092019210540309
+      ],
+      "offset": [
+        -0.04666389901174928,
+        -0.0009541965834216071,
+        0.09251961592415803
+      ]
+    }
+  ],
+  "raw_out_of_range_squared_error_fraction": 0.9867507979091795,
+  "interpretation": "Only about 5.1 percent of pixels have native RGB outside display range, but dominate squared error. Their affine fit differs substantially from unsaturated fit. This supports testing an explicitly bounded fit domain; does not prove such a policy passes or is safely calibrated.",
+  "validation": "Diagnostic example builds; selected Clippy passes"
+}

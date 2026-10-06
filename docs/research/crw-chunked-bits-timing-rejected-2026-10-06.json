@@ -1,0 +1,20 @@
+{
+  "reps": 20,
+  "warmups": 1,
+  "wall_ms": {
+    "p50": 132.488042,
+    "p95": 141.33433300000002
+  },
+  "source_ms": {
+    "p50": 0.562166,
+    "p95": 0.6017079999999999
+  },
+  "decode_ms": {
+    "p50": 131.837333,
+    "p95": 140.627667
+  },
+  "managed_peak_bytes": 20824002,
+  "pixel_blake3": "56c6b5fae934c31009dc1a33cfab0a113ae849abc7b10c05854968bbd50421fc",
+  "decision": "reverted: no demonstrated speed benefit; baseline p50 129.149ms vs candidate 132.488ms; unpaired sequential runs",
+  "oracle_report": "crw-chunked-bits-oracle-2026-10-06.json"
+}

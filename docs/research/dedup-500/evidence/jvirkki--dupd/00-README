@@ -1,0 +1,29 @@
+
+dupd is a duplicate file finder CLI utility.
+
+dupd enables an exploratory approach to finding duplicates in your
+filesystems instead of only showing a static list of duplicate
+files. See the docs directory for more information and examples.
+
+dupd also seeks to be fast. For most file sets it performs better than
+other popular tools.
+
+The build currently supports Linux, Solaris, OS X, OpenBSD and
+FreeBSD.  Other UNIX variants should work with minimal effort. See
+the BUILDING file for notes on building dupd.
+
+http://www.virkki.com/dupd
+
+Minimal usage:
+
+% dupd scan --path $HOME   (or whichever path you want to scan)
+% dupd report
+
+For more information:
+
+- dupd help    : Show an overview of available commands and options.
+- dupd man     : Show the man page with more detailed information.
+- dupd license : Display the license info.
+
+- docs/        : The docs directory contains additional documentation.
+

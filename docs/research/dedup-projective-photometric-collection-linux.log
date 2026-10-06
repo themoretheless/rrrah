@@ -1,0 +1,48 @@
+warning: function `error` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:4:4
+  |
+4 | fn error(message: &str) -> DecodeError {
+  |    ^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `packed_12` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:9:4
+  |
+9 | fn packed_12(
+  |    ^^^^^^^^^
+
+warning: function `decode_zd` is never used
+  --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:48:15
+   |
+48 | pub(super) fn decode_zd(
+   |               ^^^^^^^^^
+
+warning: `rrrah-decode` (lib) generated 3 warnings
+   Compiling rrrah-dedup v0.1.0 (/workspace/crates/rrrah-dedup)
+error[E0609]: no field `comparisons` on type `LocalCollectionReport<ProjectivePhotometricFileEvidence>`
+   --> crates/rrrah-dedup/tests/projective_files.rs:525:17
+    |
+525 |  assert!(report.comparisons.issues.is_empty(),"{:?}",report.comparisons.issues);
+    |                 ^^^^^^^^^^^ unknown field
+    |
+    = note: available fields are: `analysed`, `insufficient_features`, `file_issues`, `local`, `indexed_features` ... and 3 others
+
+error[E0609]: no field `comparisons` on type `LocalCollectionReport<ProjectivePhotometricFileEvidence>`
+   --> crates/rrrah-dedup/tests/projective_files.rs:525:61
+    |
+525 |  assert!(report.comparisons.issues.is_empty(),"{:?}",report.comparisons.issues);
+    |                                                             ^^^^^^^^^^^ unknown field
+    |
+    = note: available fields are: `analysed`, `insufficient_features`, `file_issues`, `local`, `indexed_features` ... and 3 others
+
+error[E0609]: no field `comparisons` on type `LocalCollectionReport<ProjectivePhotometricFileEvidence>`
+   --> crates/rrrah-dedup/tests/projective_files.rs:526:21
+    |
+526 |  let indexed=report.comparisons.pairs.iter().filter(|p|p.evidence.candidate).map(|p|(p.left,p.right)).collect::<std::collections::B...
+    |                     ^^^^^^^^^^^ unknown field
+    |
+    = note: available fields are: `analysed`, `insufficient_features`, `file_issues`, `local`, `indexed_features` ... and 3 others
+
+For more information about this error, try `rustc --explain E0609`.
+error: could not compile `rrrah-dedup` (test "projective_files") due to 3 previous errors

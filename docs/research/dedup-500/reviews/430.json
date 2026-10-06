@@ -1,0 +1,88 @@
+{
+  "index": 430,
+  "repository": "dungnotnull/dmca-takedown-assistant-agent-skill",
+  "commit": "4349599066763d852c7822130b532e0372bbef5b",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Copyright assistant sealed evidence/registry text hashes; selected sources do not implement an image duplicate engine.",
+  "available_source_evidence": [
+    {
+      "path": "architecture/production_hooks.py",
+      "local": "02-production_hooks.py",
+      "url": "https://github.com/dungnotnull/dmca-takedown-assistant-agent-skill/blob/4349599066763d852c7822130b532e0372bbef5b/architecture/production_hooks.py",
+      "sha256": "784d5b720af03690169be859b7a5a4967b7cbb6384f431b5e5648e5066957f68",
+      "truncated": false,
+      "lines": 597,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "architecture/skill_registry.py",
+      "local": "03-skill_registry.py",
+      "url": "https://github.com/dungnotnull/dmca-takedown-assistant-agent-skill/blob/4349599066763d852c7822130b532e0372bbef5b/architecture/skill_registry.py",
+      "sha256": "62e43e4627a1856d16aca6f59e7e4e2364d381e1d4395d4f9f7625003369612b",
+      "truncated": false,
+      "lines": 610,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "config/__init__.py",
+      "local": "04-__init__.py",
+      "url": "https://github.com/dungnotnull/dmca-takedown-assistant-agent-skill/blob/4349599066763d852c7822130b532e0372bbef5b/config/__init__.py",
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "truncated": false,
+      "lines": 1,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "scripts/run_all_tests.py",
+      "local": "05-run_all_tests.py",
+      "url": "https://github.com/dungnotnull/dmca-takedown-assistant-agent-skill/blob/4349599066763d852c7822130b532e0372bbef5b/scripts/run_all_tests.py",
+      "sha256": "341a766592f750d6a3a8b5b086bc5a61d80aca6480ff1215ae8acc2400197010",
+      "truncated": false,
+      "lines": 300,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "scripts/build_release.py",
+      "local": "06-build_release.py",
+      "url": "https://github.com/dungnotnull/dmca-takedown-assistant-agent-skill/blob/4349599066763d852c7822130b532e0372bbef5b/scripts/build_release.py",
+      "sha256": "7db549fd324481b818388dcac30ee506a3e77be70039b5cec4bef78332600e8a",
+      "truncated": false,
+      "lines": 394,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/dungnotnull/dmca-takedown-assistant-agent-skill/blob/4349599066763d852c7822130b532e0372bbef5b/README.md",
+      "sha256": "8f43f21a30e20946c6696c1311f875ec831c4b7e311e5dd058b4de08d3c5df5d",
+      "truncated": false,
+      "lines": 130,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/dungnotnull/dmca-takedown-assistant-agent-skill/blob/4349599066763d852c7822130b532e0372bbef5b/LICENSE",
+      "sha256": "728d502219b98e24c837e566a82ea83fd5c13439200cdba35a41b108a5072553",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

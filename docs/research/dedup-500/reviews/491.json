@@ -1,0 +1,78 @@
+{
+  "index": 491,
+  "repository": "kmulvey/imagedup",
+  "commit": "385bd25bc2a4536f6a7374783a61b0305237e066",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Go image finder extension regex and tests; narrow candidate extensions and matching semantics need review.",
+  "available_source_evidence": [
+    {
+      "path": "internal/app/imagedup/imagedup.go",
+      "local": "02-imagedup.go",
+      "url": "https://github.com/kmulvey/imagedup/blob/385bd25bc2a4536f6a7374783a61b0305237e066/internal/app/imagedup/imagedup.go",
+      "sha256": "c2683e4204724589c55dcbdc20b00f47aa83e0e42ed66fc0f3f456746508a053",
+      "truncated": false,
+      "lines": 74,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "internal/app/imagedup/files.go",
+      "local": "03-files.go",
+      "url": "https://github.com/kmulvey/imagedup/blob/385bd25bc2a4536f6a7374783a61b0305237e066/internal/app/imagedup/files.go",
+      "sha256": "f9ae8cae8920b3604cd68905be760d85b723f2483cd2f1a41ef55cb3619a39ce",
+      "truncated": false,
+      "lines": 52,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "internal/app/imagedup/stats.go",
+      "local": "04-stats.go",
+      "url": "https://github.com/kmulvey/imagedup/blob/385bd25bc2a4536f6a7374783a61b0305237e066/internal/app/imagedup/stats.go",
+      "sha256": "240817c577a4047f0e2171fc520cc3c2076d2dfc3211a33904c8ba67947b77ec",
+      "truncated": false,
+      "lines": 153,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "internal/app/imagedup/imagedup_test.go",
+      "local": "05-imagedup_test.go",
+      "url": "https://github.com/kmulvey/imagedup/blob/385bd25bc2a4536f6a7374783a61b0305237e066/internal/app/imagedup/imagedup_test.go",
+      "sha256": "11e9ff11fcc4f3dee8a9067ce90b3b48f83ad18dfe503168efc17e1e042a8bd4",
+      "truncated": false,
+      "lines": 58,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "GPL-3.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 5,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/kmulvey/imagedup/blob/385bd25bc2a4536f6a7374783a61b0305237e066/README.md",
+      "sha256": "3c0b31082685f4de6fe0f9b3af0e3a177a3266abfa93069ab534738126c0d8e4",
+      "truncated": false,
+      "lines": 49,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/kmulvey/imagedup/blob/385bd25bc2a4536f6a7374783a61b0305237e066/LICENSE",
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "truncated": false,
+      "lines": 674,
+      "source": false,
+      "test": false
+    }
+  ]
+}

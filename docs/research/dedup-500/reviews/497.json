@@ -1,0 +1,88 @@
+{
+  "index": 497,
+  "repository": "Mahoskian/sift",
+  "commit": "fc5235afe3a33e49c161b2d7d8ebd68801f1a69d",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "C++ dHash/pHash plus HDBSCAN/MST clustering; clusters are graph evidence, not pairwise byte/visual identity.",
+  "available_source_evidence": [
+    {
+      "path": "src/cluster/distance.cpp",
+      "local": "02-distance.cpp",
+      "url": "https://github.com/Mahoskian/sift/blob/fc5235afe3a33e49c161b2d7d8ebd68801f1a69d/src/cluster/distance.cpp",
+      "sha256": "2ce5ff515aeddd68bbce622fb74cc34a9efa173b785be2af79b0fa1e7a6d912d",
+      "truncated": false,
+      "lines": 95,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/cluster/hdbscan.cpp",
+      "local": "03-hdbscan.cpp",
+      "url": "https://github.com/Mahoskian/sift/blob/fc5235afe3a33e49c161b2d7d8ebd68801f1a69d/src/cluster/hdbscan.cpp",
+      "sha256": "836318a340e57ccc0999faa20e6cb7cfff8ec1e6c49bcd207f083939b1131764",
+      "truncated": false,
+      "lines": 479,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/hash/dHash.cpp",
+      "local": "04-dHash.cpp",
+      "url": "https://github.com/Mahoskian/sift/blob/fc5235afe3a33e49c161b2d7d8ebd68801f1a69d/src/hash/dHash.cpp",
+      "sha256": "74ad0560da8c112c294f3004eb1ae3c8dc7ad633926940d762c4cb54042ac700",
+      "truncated": false,
+      "lines": 38,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/hash/pHash.cpp",
+      "local": "05-pHash.cpp",
+      "url": "https://github.com/Mahoskian/sift/blob/fc5235afe3a33e49c161b2d7d8ebd68801f1a69d/src/hash/pHash.cpp",
+      "sha256": "c1f076d89836e2db19ca9df2f19e292b9b8a1eb21925017d22c8d60a07355cf8",
+      "truncated": false,
+      "lines": 102,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/io/scanner.cpp",
+      "local": "06-scanner.cpp",
+      "url": "https://github.com/Mahoskian/sift/blob/fc5235afe3a33e49c161b2d7d8ebd68801f1a69d/src/io/scanner.cpp",
+      "sha256": "b036b0e20f837e4131137f54749b03c88b161c57d38ebf944520d0d19996b686",
+      "truncated": false,
+      "lines": 49,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/Mahoskian/sift/blob/fc5235afe3a33e49c161b2d7d8ebd68801f1a69d/README.md",
+      "sha256": "ed1c4bea3da116023efd71a17a99529cc1ffed6ec3b9349c0aa4a1ec815c3d22",
+      "truncated": false,
+      "lines": 226,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/Mahoskian/sift/blob/fc5235afe3a33e49c161b2d7d8ebd68801f1a69d/LICENSE",
+      "sha256": "ab0fe91f844ef5b0b7b7acde97cd7be41c197a5fad7a6266c3548f8d1e02ae65",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

@@ -1,0 +1,513 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --radius: 0.5rem;
+  --background: #f7f8f6;
+  --foreground: #171717;
+  --card: #ffffff;
+  --card-foreground: #18181b;
+  --popover: #ffffff;
+  --popover-foreground: #18181b;
+  --primary: #145c53;
+  --primary-foreground: #ffffff;
+  --secondary: #edf1ef;
+  --secondary-foreground: #16211f;
+  --muted: #f4f4f5;
+  --muted-foreground: #71717a;
+  --accent: #edf1ef;
+  --accent-foreground: #101419;
+  --destructive: #b42318;
+  --destructive-foreground: #ffffff;
+  --border: #d4d4d8;
+  --input: #d8d8d8;
+  --ring: #145c53;
+  --success: #166534;
+  --success-background: #e7f6ed;
+  --warning: #92400e;
+  --warning-background: #fef3c7;
+  --careful: #991b1b;
+  --careful-background: #fee2e2;
+  --chart-1: #145c53;
+  --chart-2: #59626e;
+  --chart-3: #8a6f2a;
+  --chart-4: #3b82a0;
+  --chart-5: #b42318;
+  --sidebar: #f3f5f7;
+  --sidebar-foreground: #333b45;
+  --sidebar-primary: #145c53;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #ffffff;
+  --sidebar-accent-foreground: #101419;
+  --sidebar-border: rgb(0 0 0 / 5%);
+  --sidebar-ring: #145c53;
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  color: #171717;
+  background: transparent;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+.dark {
+  --background: #101419;
+  --foreground: #f5f7f6;
+  --card: #171d1b;
+  --card-foreground: #f5f7f6;
+  --popover: #171d1b;
+  --popover-foreground: #f5f7f6;
+  --primary: #7fd1c4;
+  --primary-foreground: #09211d;
+  --secondary: #24302d;
+  --secondary-foreground: #edf1ef;
+  --muted: #242a2d;
+  --muted-foreground: #a7afb7;
+  --accent: #22332f;
+  --accent-foreground: #edf1ef;
+  --destructive: #f97066;
+  --destructive-foreground: #ffffff;
+  --border: rgb(255 255 255 / 14%);
+  --input: rgb(255 255 255 / 16%);
+  --ring: #7fd1c4;
+  --success: #86efac;
+  --success-background: #123622;
+  --warning: #facc15;
+  --warning-background: #3a2f12;
+  --careful: #fca5a5;
+  --careful-background: #3a1515;
+  --chart-1: #7fd1c4;
+  --chart-2: #a7afb7;
+  --chart-3: #facc15;
+  --chart-4: #38bdf8;
+  --chart-5: #f97066;
+  --sidebar: #171d1b;
+  --sidebar-foreground: #edf1ef;
+  --sidebar-primary: #7fd1c4;
+  --sidebar-primary-foreground: #09211d;
+  --sidebar-accent: #22332f;
+  --sidebar-accent-foreground: #edf1ef;
+  --sidebar-border: rgb(255 255 255 / 12%);
+  --sidebar-ring: #7fd1c4;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-success: var(--success);
+  --color-success-background: var(--success-background);
+  --color-warning: var(--warning);
+  --color-warning-background: var(--warning-background);
+  --color-careful: var(--careful);
+  --color-careful-background: var(--careful-background);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: transparent;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  overflow: hidden;
+  background: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#root {
+  background: transparent;
+  border-radius: 1rem;
+}
+
+#root[data-system-titlebar="true"] {
+  border-radius: 0;
+}
+
+.skiff-main-layout {
+  grid-template-columns: 232px minmax(0, 1fr);
+}
+
+.skiff-main-layout[data-mode="space"] {
+  grid-template-columns: clamp(320px, 28vw, 560px) minmax(0, 1fr);
+}
+
+.skiff-system-titlebar {
+  --skiff-left-column: 232px;
+  background:
+    linear-gradient(
+      90deg,
+      #f3f5f7 0,
+      #f3f5f7 var(--skiff-left-column),
+      #f7f8f6 var(--skiff-left-column),
+      #f7f8f6 100%
+    );
+}
+
+.skiff-system-titlebar[data-mode="space"] {
+  --skiff-left-column: clamp(320px, 28vw, 560px);
+}
+
+.skiff-system-titlebar .skiff-sidebar,
+.skiff-system-titlebar .skiff-space-sidebar {
+  padding-top: 18px;
+}
+
+.skiff-system-titlebar .skiff-toolbar {
+  min-height: 82px;
+  border-bottom-color: rgb(0 0 0 / 4%);
+  background:
+    linear-gradient(180deg, rgb(243 245 247 / 74%) 0%, rgb(247 248 246 / 98%) 54%, #f7f8f6 100%);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 70%);
+}
+
+@media (max-width: 720px) {
+  .skiff-main-layout,
+  .skiff-main-layout[data-mode="space"] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .skiff-system-titlebar {
+    background: #f7f8f6;
+  }
+
+  .skiff-system-titlebar .skiff-sidebar,
+  .skiff-system-titlebar .skiff-space-sidebar {
+    padding-top: 0;
+  }
+
+  .skiff-system-titlebar .skiff-toolbar {
+    min-height: 76px;
+  }
+}
+
+button,
+input {
+  font: inherit;
+}
+
+input,
+textarea,
+[contenteditable="true"] {
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+p,
+h1,
+h2 {
+  margin: 0;
+}
+
+.skiff-markdown {
+  min-width: 0;
+  user-select: text;
+  -webkit-user-select: text;
+  overflow-wrap: anywhere;
+}
+
+.skiff-markdown :where(p, ul, ol, pre, table, blockquote, h1, h2, h3) {
+  margin-top: 0.65em;
+}
+
+.skiff-markdown > :first-child {
+  margin-top: 0;
+}
+
+.skiff-markdown :where(h1, h2, h3) {
+  color: #151b22;
+  font-weight: 760;
+  line-height: 1.25;
+}
+
+.skiff-markdown :where(h1) {
+  font-size: 1.1em;
+}
+
+.skiff-markdown :where(h2) {
+  font-size: 1.04em;
+}
+
+.skiff-markdown :where(h3) {
+  font-size: 1em;
+}
+
+.skiff-markdown :where(ul, ol) {
+  padding-left: 1.25rem;
+}
+
+.skiff-markdown :where(li) {
+  margin-top: 0.25em;
+}
+
+.skiff-markdown :where(strong) {
+  color: #151b22;
+  font-weight: 760;
+}
+
+.skiff-markdown :where(a) {
+  color: #145c53;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.skiff-markdown :where(code) {
+  border-radius: 4px;
+  background: #edf1ef;
+  color: #151b22;
+  font-family:
+    "SFMono-Regular", Consolas, "Liberation Mono", Menlo, ui-monospace,
+    monospace;
+  font-size: 0.92em;
+  padding: 0.1em 0.32em;
+}
+
+.skiff-markdown :where(pre) {
+  overflow: auto;
+  border-radius: 8px;
+  background: #111827;
+  color: #f8fafc;
+  padding: 0.75rem;
+}
+
+.skiff-markdown :where(pre code) {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+}
+
+.skiff-markdown :where(blockquote) {
+  border-left: 3px solid #cfd9d6;
+  color: #58616d;
+  padding-left: 0.75rem;
+}
+
+.skiff-markdown :where(table) {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92em;
+}
+
+.skiff-markdown :where(th, td) {
+  border: 1px solid #e1e5e3;
+  padding: 0.4rem 0.5rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.skiff-markdown :where(th) {
+  background: #f0f3f2;
+  color: #151b22;
+  font-weight: 720;
+}
+
+.skiff-markdown-inverted :where(h1, h2, h3, strong, a, code) {
+  color: #ffffff;
+}
+
+.skiff-markdown-inverted :where(code) {
+  background: rgb(255 255 255 / 18%);
+}
+
+.skiff-markdown-inverted :where(pre) {
+  background: rgb(0 0 0 / 24%);
+}
+
+.skiff-markdown-inverted :where(blockquote) {
+  border-left-color: rgb(255 255 255 / 40%);
+  color: rgb(255 255 255 / 82%);
+}
+
+@keyframes skiff-sweep {
+  0% {
+    transform: translateX(-110%);
+  }
+
+  50% {
+    transform: translateX(92%);
+  }
+
+  100% {
+    transform: translateX(250%);
+  }
+}
+
+.skiff-world-shell {
+  --skiff-world-glow: 127 209 196;
+  --skiff-world-flare: 56 189 248;
+  position: relative;
+  isolation: isolate;
+}
+
+.skiff-world-shell[data-mode="classic"] {
+  --skiff-world-glow: 20 92 83;
+  --skiff-world-flare: 250 204 21;
+}
+
+.skiff-world-shell::before,
+.skiff-world-shell::after {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  content: "";
+}
+
+.skiff-world-shell::before {
+  background:
+    radial-gradient(circle at 50% 50%, rgb(255 255 255 / 58%) 0 8%, rgb(var(--skiff-world-glow) / 18%) 18%, rgb(var(--skiff-world-glow) / 0%) 46%),
+    linear-gradient(90deg, rgb(var(--skiff-world-glow) / 0%) 0%, rgb(var(--skiff-world-glow) / 13%) 36%, rgb(255 255 255 / 74%) 50%, rgb(var(--skiff-world-flare) / 16%) 64%, rgb(var(--skiff-world-glow) / 0%) 100%);
+  mix-blend-mode: screen;
+  opacity: 0;
+  transform: scaleX(0.04);
+  transform-origin: center;
+  animation: skiff-world-light-open 640ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.skiff-world-shell::after {
+  background:
+    linear-gradient(90deg, transparent 0%, rgb(255 255 255 / 0%) 42%, rgb(255 255 255 / 62%) 50%, rgb(255 255 255 / 0%) 58%, transparent 100%),
+    repeating-linear-gradient(0deg, rgb(var(--skiff-world-glow) / 0%) 0 26px, rgb(var(--skiff-world-glow) / 8%) 27px 28px);
+  mix-blend-mode: screen;
+  opacity: 0;
+  transform: translateX(-38%);
+  animation: skiff-world-scan 640ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes skiff-world-light-open {
+  0% {
+    opacity: 0;
+    transform: scaleX(0.04);
+  }
+
+  18% {
+    opacity: 0.95;
+  }
+
+  52% {
+    opacity: 0.62;
+    transform: scaleX(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scaleX(1.08);
+  }
+}
+
+@keyframes skiff-world-scan {
+  0% {
+    opacity: 0;
+    transform: translateX(-38%);
+  }
+
+  26% {
+    opacity: 0.46;
+  }
+
+  78% {
+    opacity: 0;
+    transform: translateX(38%);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(38%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skiff-world-shell::before,
+  .skiff-world-shell::after {
+    display: none;
+  }
+
+  @keyframes skiff-page-enter {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+@keyframes skiff-page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 720px) {
+  body {
+    overflow: auto;
+  }
+
+  #root {
+    overflow: visible;
+    border-radius: 0;
+  }
+}

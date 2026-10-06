@@ -1,0 +1,78 @@
+{
+  "index": 143,
+  "repository": "portlygrid/slog-dedup",
+  "commit": "b719c4fc85329fdda137f7081b8d7f45c2ada4b0",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Structured-log key conflict resolution/sorting; fields rather than files.",
+  "available_source_evidence": [
+    {
+      "path": "append_handler.go",
+      "local": "02-append_handler.go",
+      "url": "https://github.com/portlygrid/slog-dedup/blob/b719c4fc85329fdda137f7081b8d7f45c2ada4b0/append_handler.go",
+      "sha256": "49bd2b6683d320fb50e99ce30b99b44bc946e0b2d12bc5a8af72567edd97eb10",
+      "truncated": false,
+      "lines": 244,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "doc.go",
+      "local": "03-doc.go",
+      "url": "https://github.com/portlygrid/slog-dedup/blob/b719c4fc85329fdda137f7081b8d7f45c2ada4b0/doc.go",
+      "sha256": "8da1317e05af6108d4682a7c3468f41d7fb6dc1bbe3be73c0f51350b5f0b17d1",
+      "truncated": false,
+      "lines": 106,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "helpers.go",
+      "local": "04-helpers.go",
+      "url": "https://github.com/portlygrid/slog-dedup/blob/b719c4fc85329fdda137f7081b8d7f45c2ada4b0/helpers.go",
+      "sha256": "1ba5c7394b90865f9cae34d10208447588e2d707252de0b7887d6219d86f1583",
+      "truncated": false,
+      "lines": 197,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "append_handler_test.go",
+      "local": "05-append_handler_test.go",
+      "url": "https://github.com/portlygrid/slog-dedup/blob/b719c4fc85329fdda137f7081b8d7f45c2ada4b0/append_handler_test.go",
+      "sha256": "7c14a2bdf5965aa8e5d3bb89a29e988a4bbfcc08a502e264e488085eed4a3c03",
+      "truncated": false,
+      "lines": 165,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 7,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/portlygrid/slog-dedup/blob/b719c4fc85329fdda137f7081b8d7f45c2ada4b0/README.md",
+      "sha256": "f4aeff44b8df7505570d6690a8f4672a7297b79a1c9a7201bbc1946a68dad96c",
+      "truncated": false,
+      "lines": 383,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/portlygrid/slog-dedup/blob/b719c4fc85329fdda137f7081b8d7f45c2ada4b0/LICENSE",
+      "sha256": "099902359ae88c7d9008309c277c1639f25330e6f3aa91fdf24395e079e9ac7a",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

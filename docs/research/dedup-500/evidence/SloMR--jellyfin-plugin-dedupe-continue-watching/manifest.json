@@ -1,0 +1,94 @@
+{
+  "repository": "SloMR/jellyfin-plugin-dedupe-continue-watching",
+  "metadata": {
+    "name": "SloMR/jellyfin-plugin-dedupe-continue-watching",
+    "url": "https://github.com/SloMR/jellyfin-plugin-dedupe-continue-watching",
+    "description": "Server-side Jellyfin plugin that deduplicates the Continue Watching row, showing only the most recently played episode per series. Works on all clients (Web, SwiftFin, Findroid, Wholphin, Android TV, etc).",
+    "language": "C#",
+    "stars": 18,
+    "license": "GPL-3.0",
+    "archived": false,
+    "pushed_at": "2026-04-29T20:19:23Z",
+    "default_branch": "main",
+    "queries": [
+      "dedup in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/SloMR/jellyfin-plugin-dedupe-continue-watching/blob/373cab0f7602e2d24047bed641114835e140abc5/README.md",
+      "sha256": "13bad48052643a16cd45c3cd796a33923f9b4c160d53cefc3e9db019003c6872",
+      "truncated": false,
+      "lines": 134,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/SloMR/jellyfin-plugin-dedupe-continue-watching/blob/373cab0f7602e2d24047bed641114835e140abc5/LICENSE",
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "truncated": false,
+      "lines": 674,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "Jellyfin.Plugin.ContinueWatchingDedup/Middleware/DedupMiddleware.cs",
+      "local": "02-DedupMiddleware.cs",
+      "url": "https://github.com/SloMR/jellyfin-plugin-dedupe-continue-watching/blob/373cab0f7602e2d24047bed641114835e140abc5/Jellyfin.Plugin.ContinueWatchingDedup/Middleware/DedupMiddleware.cs",
+      "sha256": "c63fc7d4a3fd8fa1dab5ca1b0bc1024fa8ef9c3f19cd3404d3bb41469de41cb7",
+      "truncated": false,
+      "lines": 316,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "Jellyfin.Plugin.ContinueWatchingDedup/Plugin.cs",
+      "local": "03-Plugin.cs",
+      "url": "https://github.com/SloMR/jellyfin-plugin-dedupe-continue-watching/blob/373cab0f7602e2d24047bed641114835e140abc5/Jellyfin.Plugin.ContinueWatchingDedup/Plugin.cs",
+      "sha256": "dc9bb9b7aff2141d92b38c7e77190e570a3b9b54ff23f313942019d7d57677d3",
+      "truncated": false,
+      "lines": 44,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "Jellyfin.Plugin.ContinueWatchingDedup/PluginServiceRegistrator.cs",
+      "local": "04-PluginServiceRegistrator.cs",
+      "url": "https://github.com/SloMR/jellyfin-plugin-dedupe-continue-watching/blob/373cab0f7602e2d24047bed641114835e140abc5/Jellyfin.Plugin.ContinueWatchingDedup/PluginServiceRegistrator.cs",
+      "sha256": "6cd6e7da088a2fb8682401748127defb1ece8d6f710d3b0944f0438760b358fb",
+      "truncated": false,
+      "lines": 44,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "build.ps1",
+      "local": "05-build.ps1",
+      "url": "https://github.com/SloMR/jellyfin-plugin-dedupe-continue-watching/blob/373cab0f7602e2d24047bed641114835e140abc5/build.ps1",
+      "sha256": "d232bc015ce88784c47e621ec1ccee5cbb51422c9ff571bd54d5a93f3765df7a",
+      "truncated": false,
+      "lines": 40,
+      "source": true,
+      "test": false
+    }
+  ],
+  "errors": [],
+  "commit": "373cab0f7602e2d24047bed641114835e140abc5",
+  "tree_truncated": false,
+  "source_file_count": 7,
+  "test_file_count": 0,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "Jellyfin.Plugin.ContinueWatchingDedup/Middleware/DedupMiddleware.cs",
+    "Jellyfin.Plugin.ContinueWatchingDedup/Plugin.cs",
+    "build.ps1"
+  ]
+}

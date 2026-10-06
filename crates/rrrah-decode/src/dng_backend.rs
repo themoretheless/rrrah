@@ -10,7 +10,7 @@ use rrrah_core::{
 
 use crate::{
     AdaptTimings, DecodeError, DecodeOutput, DecodeRequest, DecodeTimings, DngDecodeTimings, RawDecoder,
-    bounded_io::read_bounded,
+    bounded_io::read_managed,
     dng::{self, DngError, DngImage},
 };
 
@@ -29,7 +29,7 @@ const NATIVE_DECODE_FLAGS: u32 = DECODE_FULL_SENSOR_RAW
 /// from ever sharing cache entries.
 pub const NATIVE_DNG_MOSAIC_CONTRACT_1: MosaicRecipeManifest = MosaicRecipeManifest::new(
     NATIVE_DNG_BACKEND_ID,
-    1,
+    3,
     1,
     1,
     NATIVE_DECODE_FLAGS,
@@ -39,25 +39,22 @@ pub const NATIVE_DNG_MOSAIC_CONTRACT_1: MosaicRecipeManifest = MosaicRecipeManif
 #[derive(Debug, Clone, Copy, Default)]
 pub struct NativeDngDecoder;
 
-impl RawDecoder for NativeDngDecoder {
-    fn mosaic_recipe(&self, _request: &DecodeRequest) -> Result<MosaicRecipeManifest, DecodeError> {
-        Ok(NATIVE_DNG_MOSAIC_CONTRACT_1)
-    }
-
-    fn decode(&self, request: &DecodeRequest) -> Result<DecodeOutput, DecodeError> {
-        let total_started = Instant::now();
+impl NativeDngDecoder {
+    /// Decode an owned or borrowed source without opening a filesystem path.
+    /// Source ownership remains alive through borrowed DNG metadata adaptation.
+    pub(crate) fn decode_source<S: std::ops::Deref<Target = [u8]>>(
+        &self,
+        request: &DecodeRequest,
+        data: S,
+        source_open: std::time::Duration,
+        total_started: Instant,
+    ) -> Result<DecodeOutput, DecodeError> {
         request.check_cancelled()?;
         if request.image_index != 0 {
             return Err(DecodeError::UnsupportedImageIndex {
                 index: request.image_index,
             });
         }
-
-        let source_started = Instant::now();
-        let data = read_bounded(request)?;
-        let source_open = source_started.elapsed();
-        request.check_cancelled()?;
-
         let decoder_select_started = Instant::now();
         let image = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| dng::parse(&data)))
             .map_err(|_| DecodeError::DecoderPanicked)?
@@ -71,6 +68,15 @@ impl RawDecoder for NativeDngDecoder {
                 .as_ref()
                 .is_some_and(crate::GenerationToken::is_cancelled)
         };
+        let output_bytes = u64::try_from(image.sample_count)
+            .map_err(|_| DecodeError::DimensionOverflow)?
+            .checked_mul(2)
+            .ok_or(DecodeError::DimensionOverflow)?;
+        let reservation = request
+            .memory_budget
+            .as_ref()
+            .map(|budget| budget.try_reserve(output_bytes))
+            .transpose()?;
         let raw_image_started = Instant::now();
         let decoded = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| image.decode_u16(&cancelled)))
             .map_err(|_| DecodeError::DecoderPanicked)?
@@ -87,7 +93,7 @@ impl RawDecoder for NativeDngDecoder {
             pixel_unpack: decoded.timings.pixel_unpack,
             linearization: decoded.timings.linearization,
         };
-        let (mosaic, adapt) = adapt_dng(&image, decoded.pixels)?;
+        let (mosaic, adapt) = adapt_dng(&image, decoded.pixels, reservation)?;
         let adapt_metadata = adapt.total;
         let raw_decode = decoder_select.saturating_add(raw_image);
         request.check_cancelled()?;
@@ -109,6 +115,29 @@ impl RawDecoder for NativeDngDecoder {
     }
 }
 
+impl RawDecoder for NativeDngDecoder {
+    fn mosaic_recipe(&self, _request: &DecodeRequest) -> Result<MosaicRecipeManifest, DecodeError> {
+        Ok(NATIVE_DNG_MOSAIC_CONTRACT_1)
+    }
+
+    fn decode(&self, request: &DecodeRequest) -> Result<DecodeOutput, DecodeError> {
+        let total_started = Instant::now();
+        request.check_cancelled()?;
+        if request.image_index != 0 {
+            return Err(DecodeError::UnsupportedImageIndex {
+                index: request.image_index,
+            });
+        }
+
+        let source_started = Instant::now();
+        let data = read_managed(request)?;
+        let source_open = source_started.elapsed();
+        request.check_cancelled()?;
+
+        self.decode_source(request, data, source_open, total_started)
+    }
+}
+
 fn map_dng_error(error: &DngError) -> DecodeError {
     if matches!(error, DngError::Cancelled { .. }) {
         DecodeError::Cancelled
@@ -117,11 +146,15 @@ fn map_dng_error(error: &DngError) -> DecodeError {
     }
 }
 
-fn adapt_dng(image: &DngImage<'_>, pixels: Vec<u16>) -> Result<(DecodedMosaic, AdaptTimings), DecodeError> {
+fn adapt_dng(
+    image: &DngImage<'_>,
+    pixels: Vec<u16>,
+    reservation: Option<rrrah_core::Reservation>,
+) -> Result<(DecodedMosaic, AdaptTimings), DecodeError> {
     let total_started = Instant::now();
 
     let layout_started = Instant::now();
-    let cfa = CfaPattern {
+    let mut cfa = CfaPattern {
         width: u8::try_from(image.metadata.cfa.columns)
             .map_err(|_| dng_adapt_error("CFA width exceeds 255"))?,
         height: u8::try_from(image.metadata.cfa.rows)
@@ -135,13 +168,33 @@ fn adapt_dng(image: &DngImage<'_>, pixels: Vec<u16>) -> Result<(DecodedMosaic, A
             .map(map_cfa_color)
             .collect(),
     };
-    cfa.bayer_quad()
-        .map_err(|_| dng_adapt_error("the display pipeline currently requires a 2x2 RGB Bayer CFA"))?;
+    cfa.validate()?;
+    if cfa.bayer_quad().is_err()
+        && (cfa.width != 6
+            || cfa.height != 6
+            || cfa.cells.iter().any(|c| *c as u8 > 2)
+            || [CfaColor::Red, CfaColor::Green, CfaColor::Blue]
+                .into_iter()
+                .zip([8, 20, 8])
+                .any(|(c, n)| cfa.cells.iter().filter(|p| **p == c).count() != n))
+    {
+        return Err(dng_adapt_error(
+            "quality display requires RGB Bayer or 6x6 X-Trans",
+        ));
+    }
+    // DNG CFA and black grids are anchored at ActiveArea's top-left. Runtime
+    // metadata is anchored at the immutable full sensor's (0,0).
+    cfa.cells = sensor_grid(
+        &cfa.cells,
+        usize::from(cfa.width),
+        usize::from(cfa.height),
+        image.metadata.active_area,
+    );
     let rgb_plane_indices = rgb_plane_indices(&image.metadata.cfa.plane_colors)?;
     let layout_cfa = layout_started.elapsed();
 
     let levels_started = Instant::now();
-    let black_level = LevelGrid {
+    let mut black_level = LevelGrid {
         width: u8::try_from(image.metadata.black_level.repeat_columns)
             .map_err(|_| dng_adapt_error("black-level grid width exceeds 255"))?,
         height: u8::try_from(image.metadata.black_level.repeat_rows)
@@ -156,6 +209,12 @@ fn adapt_dng(image: &DngImage<'_>, pixels: Vec<u16>) -> Result<(DecodedMosaic, A
             .map(finite_f32)
             .collect::<Result<Vec<_>, _>>()?,
     };
+    black_level.values = sensor_grid(
+        &black_level.values,
+        usize::from(black_level.width),
+        usize::from(black_level.height),
+        image.metadata.active_area,
+    );
     let white_level = WhiteLevel(
         image
             .metadata
@@ -208,7 +267,10 @@ fn adapt_dng(image: &DngImage<'_>, pixels: Vec<u16>) -> Result<(DecodedMosaic, A
         crop_area,
         orientation,
     };
-    let mosaic = DecodedMosaic::new(metadata, Arc::new(pixels))?;
+    let mosaic = match reservation {
+        Some(reservation) => DecodedMosaic::new(metadata, reservation.try_adopt(pixels)?)?,
+        None => DecodedMosaic::new(metadata, Arc::new(pixels))?,
+    };
     let finalize = finalize_started.elapsed();
 
     Ok((
@@ -222,6 +284,16 @@ fn adapt_dng(image: &DngImage<'_>, pixels: Vec<u16>) -> Result<(DecodedMosaic, A
             total: total_started.elapsed(),
         },
     ))
+}
+
+fn sensor_grid<T: Copy>(values: &[T], w: usize, h: usize, active: dng::Rect) -> Vec<T> {
+    (0..w * h)
+        .map(|i| {
+            let x = (i % w + w - active.left as usize % w) % w;
+            let y = (i / w + h - active.top as usize % h) % h;
+            values[y * w + x]
+        })
+        .collect()
 }
 
 fn rgb_plane_indices(colors: &[dng::CfaColor]) -> Result<[usize; 3], DecodeError> {
@@ -251,7 +323,9 @@ fn rgb_plane_indices(colors: &[dng::CfaColor]) -> Result<[usize; 3], DecodeError
 
 fn white_balance(image: &DngImage<'_>, indices: [usize; 3]) -> Result<[f32; 4], DecodeError> {
     let Some(neutral) = image.metadata.as_shot_neutral.as_deref() else {
-        return Ok([1.0; 4]);
+        return Err(dng_adapt_error(
+            "missing AsShotNeutral; refusing neutral white-balance placeholder",
+        ));
     };
     let mut gains = [0.0_f32; 3];
     for (destination, source) in indices.into_iter().enumerate() {
@@ -277,13 +351,17 @@ fn xyz_to_camera(image: &DngImage<'_>, indices: [usize; 3]) -> Result<[[f32; 3];
         metadata.color_matrix_2.as_deref(),
         metadata.calibration_illuminant_2,
     ) else {
-        return Ok([[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0], [0.0; 3]]);
+        return crate::camtiff::color::profile(&metadata.make, &metadata.model)
+            .ok_or_else(|| dng_adapt_error("no DNG color matrix or calibrated camera profile"));
     };
     let mut result = [[0.0_f32; 3]; 4];
     for (destination, source) in indices.into_iter().enumerate() {
         for column in 0..3 {
             result[destination][column] = finite_f32(matrix[source][column])?;
         }
+    }
+    if rrrah_core::camera_to_linear_srgb(result).is_none() {
+        return Err(dng_adapt_error("invalid DNG camera color matrix"));
     }
     Ok(result)
 }
@@ -373,6 +451,127 @@ mod tests {
 
     use super::*;
     use crate::GenerationToken;
+
+    fn color_fixture(with_wb: bool, with_matrix: bool) -> Vec<u8> {
+        let mut bytes = vec![0; 520];
+        bytes[..8].copy_from_slice(b"II*\0\x08\0\0\0");
+        let mut entries = vec![
+            (256_u16, 4_u16, 1_u32, 2_u32),
+            (257, 4, 1, 2),
+            (258, 3, 1, 16),
+            (259, 3, 1, 1),
+            (262, 3, 1, 32803),
+            (273, 4, 1, 512),
+            (274, 3, 1, 1),
+            (277, 3, 1, 1),
+            (278, 4, 1, 2),
+            (279, 4, 1, 8),
+            (33421, 3, 2, 0x0002_0002),
+            (33422, 1, 4, 0x0201_0100),
+            (50706, 1, 4, 0x0000_0401),
+            (50708, 2, 5, 300),
+        ];
+        bytes[300..305].copy_from_slice(b"TEST\0");
+        if with_matrix {
+            entries.push((50721, 10, 9, 320));
+            for (i, value) in [6000_i32, -1000, -1000, -5000, 15000, 1000, -1000, 2000, 6000]
+                .iter()
+                .enumerate()
+            {
+                bytes[320 + i * 8..324 + i * 8].copy_from_slice(&value.to_le_bytes());
+                bytes[324 + i * 8..328 + i * 8].copy_from_slice(&10000_i32.to_le_bytes());
+            }
+        }
+        if with_wb {
+            entries.push((50728, 5, 3, 400));
+            for (i, (n, d)) in [(1_u32, 2_u32), (1, 1), (1, 4)].iter().enumerate() {
+                bytes[400 + i * 8..404 + i * 8].copy_from_slice(&n.to_le_bytes());
+                bytes[404 + i * 8..408 + i * 8].copy_from_slice(&d.to_le_bytes());
+            }
+        }
+        entries.sort_unstable_by_key(|e| e.0);
+        bytes[8..10].copy_from_slice(&u16::try_from(entries.len()).unwrap().to_le_bytes());
+        for (i, (tag, kind, count, value)) in entries.iter().enumerate() {
+            let at = 10 + i * 12;
+            bytes[at..at + 2].copy_from_slice(&tag.to_le_bytes());
+            bytes[at + 2..at + 4].copy_from_slice(&kind.to_le_bytes());
+            bytes[at + 4..at + 8].copy_from_slice(&count.to_le_bytes());
+            bytes[at + 8..at + 12].copy_from_slice(&value.to_le_bytes());
+        }
+        bytes
+    }
+    #[test]
+    fn dng_managed_source_and_output_share_budget_and_retain_owners() {
+        struct Fixture(std::path::PathBuf);
+        impl Drop for Fixture {
+            fn drop(&mut self) {
+                let _ = std::fs::remove_file(&self.0);
+            }
+        }
+        let fixture = Fixture(std::env::temp_dir().join(format!(
+                "rrrah-dng-budget-{}-{}.dng",
+                std::process::id(),
+                std::time::SystemTime::now()
+                    .duration_since(std::time::UNIX_EPOCH)
+                    .unwrap()
+                    .as_nanos()
+            )));
+        let mut bytes = color_fixture(true, true);
+        bytes[512..520].copy_from_slice(&[1, 0, 2, 0, 3, 0, 4, 0]);
+        std::fs::write(&fixture.0, &bytes).unwrap();
+        let mut request = DecodeRequest::new(&fixture.0);
+        let reference = NativeDngDecoder.decode(&request).unwrap();
+        let budget = rrrah_core::MemoryBudget::new(bytes.len() as u64 + 8);
+        request.memory_budget = Some(budget.clone());
+        let decoded = NativeDngDecoder.decode(&request).unwrap();
+        assert_eq!(decoded.mosaic.pixels, reference.mosaic.pixels);
+        assert_eq!(decoded.mosaic.metadata, reference.mosaic.metadata);
+        assert!(decoded.mosaic.pixels.is_managed());
+        assert_eq!(budget.peak(), bytes.len() as u64 + 8);
+        assert_eq!(budget.used(), 8);
+        let owner = decoded.mosaic.clone();
+        drop(decoded);
+        assert!(matches!(
+            NativeDngDecoder.decode(&request),
+            Err(DecodeError::Memory(_))
+        ));
+        assert_eq!(budget.used(), 8);
+        drop(owner);
+        assert_eq!(budget.used(), 0);
+        request.memory_budget = Some(rrrah_core::MemoryBudget::new(bytes.len() as u64));
+        assert!(matches!(
+            NativeDngDecoder.decode(&request),
+            Err(DecodeError::Memory(_))
+        ));
+        assert_eq!(request.memory_budget.as_ref().unwrap().used(), 0);
+    }
+
+    #[test]
+    fn dng_color_metadata_is_required_and_measured_wb_is_preserved() {
+        for (wb, matrix) in [(true, true), (false, true), (true, false)] {
+            let bytes = color_fixture(wb, matrix);
+            let image = dng::parse(&bytes).unwrap();
+            assert_eq!(white_balance(&image, [0, 1, 2]).is_ok(), wb);
+            assert_eq!(xyz_to_camera(&image, [0, 1, 2]).is_ok(), matrix);
+            if wb {
+                assert_eq!(
+                    white_balance(&image, [0, 1, 2]).unwrap().map(f32::to_bits),
+                    [2.0_f32, 1.0, 4.0, 1.0].map(f32::to_bits)
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn dng_cfa_and_black_grid_are_anchored_to_full_sensor() {
+        let active = dng::Rect {
+            top: 1,
+            left: 1,
+            bottom: 2,
+            right: 2,
+        };
+        assert_eq!(sensor_grid(&[0, 1, 2, 3], 2, 2, active), vec![3, 2, 1, 0]);
+    }
 
     #[test]
     fn recipe_is_distinct_and_complete() {

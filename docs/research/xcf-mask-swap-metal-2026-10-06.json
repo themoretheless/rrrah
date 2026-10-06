@@ -1,0 +1,15 @@
+{
+  "adapter": "Metal Apple M4 Max",
+  "command": "RRRAH_GPU_BACKEND=metal cargo test -p rrrah --test hdr_raster_swap --locked --target-dir /tmp/rrrah-required-corpus-target -- --nocapture",
+  "log": "/tmp/rrrah-xcf-mask-swap-metal.log",
+  "passed": 4,
+  "ignored": 0,
+  "new_xcf_cases": 3,
+  "source_sha256": {
+    "scripts/make-xcf-normal-mask-fixtures.py": "b02a5ee8e7e1ca709a00db19c1c8538a0db6635ba8f2be7472b1e4ec8fbfb60c",
+    "scripts/qualify-xcf-legacy-flatten.py": "90d5cc5ce816fb2265f227610ef980cca933f12d3bc55d776eb51471af4af082",
+    "crates/rrrah-app/tests/hdr_raster_swap.rs": "6fb16051ecc7398ac076675504762af9a8129311cf5422a10bbff23a62c2ec24",
+    "crates/rrrah-decode/src/xcf.rs": "f2431de2e8eb84d3389ec3af5b87cb01fddf74ff485812383300985e8cc46318"
+  },
+  "scope": "Binary mask application/disabled state/negative clipping, native encoded byte transport, explicit color assumption and SDR offscreen equal readback. Not physical HDR or complete XCF rendering."
+}

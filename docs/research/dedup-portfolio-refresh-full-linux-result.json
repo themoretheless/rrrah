@@ -1,0 +1,77 @@
+{
+  "status": "passed_with_source_and_dependency_drift",
+  "session": 77389,
+  "exit_code": 0,
+  "groups": 55,
+  "passed": 337,
+  "failed": 0,
+  "ignored": 0,
+  "audited_files": 536,
+  "source_drift": {
+    "Cargo.lock": {
+      "start_sha256": "1a803bb396c8916fdbb5bd4b1c41fbeefa1bde890c045a0d6c59844a17c61155",
+      "current_sha256": "d0999b2b9095148aed051790d4b6deb2820e45b22a479fffe832227dcbf891cb"
+    },
+    "crates/rrrah-core/src/raster.rs": {
+      "start_sha256": "e00b6e8ec24ef2ee40735d27b1c7ffbf9ec5ade333827de719bb2ae9bee4acb3",
+      "current_sha256": "5a2462dc52acf5701a1b869647838bbcc7cb5ee22629101949232abc0ee863b2"
+    },
+    "crates/rrrah-decode/examples/raster_fixture_dump.rs": {
+      "start_sha256": "96203ed2b894a1c65f9cb0e91446a576a631fdaf27505e40c85fe214d9b3facf",
+      "current_sha256": "e74de46eb03efa1260c245df39e4d445cbf87f64186601db51b25f4204e43654"
+    },
+    "crates/rrrah-decode/src/camtiff/mef_sensor.rs": {
+      "start_sha256": "f962db08fa5f882b830ef1413be0c7fc6dea69e06395b1db211b503fd30d72b2",
+      "current_sha256": "ea1f2488554c90ff45e76c9d57aaa54468e20dc5e943246446ac64cd4ea9cfee"
+    },
+    "crates/rrrah-decode/src/camtiff/mod.rs": {
+      "start_sha256": "d1bd570eb588dc8422b2f7d3302b7f26b2ea57266ffb4cb7c593b9b0c6befb83",
+      "current_sha256": "8e424dd26da69e5dd4f729391785bef15bd517c0d415dff07b2c46a9e6a559a8"
+    },
+    "crates/rrrah-decode/src/lib.rs": {
+      "start_sha256": "cc5d040812174fe945cf35700564540a4ebcd8207e858c4d3fb45c972242d8f8",
+      "current_sha256": "c844f77cdaae608c552b1fd1838b1cb640295542bafa36afce150762a1944080"
+    },
+    "crates/rrrah-decode/src/raster.rs": {
+      "start_sha256": "2a4e200ab8ed5299e94d093995100553050a9e2b89eb2ef89453e5c22de6cc9a",
+      "current_sha256": "52a95c6719b13f644d4e0524341de37cea05a15fce8bf0b6ac7ead9eb421b0ed"
+    },
+    "crates/rrrah-decode/src/rla.rs": {
+      "start_sha256": "cac2b4e566bebd0c2e20bcacc5355a50a330ae7da75c06d929dc5f01f26ae584",
+      "current_sha256": "a47d114f32b294e4cf71478f759ce4d21a5d66c84dec4fca2c85375847c7b2b3"
+    },
+    "crates/rrrah-dedup/examples/photo_probe.rs": {
+      "start_sha256": "2d09062102f2dc36006fbbe020aca7b8096121c6a1c57878f30e94ca94a2ef7b",
+      "current_sha256": "4dabaa81de900cdad7e40d565abb0fed2a5c2d4d4244c52c3f8715deff92f5a6"
+    },
+    "crates/rrrah-dedup/src/pyramid.rs": {
+      "start_sha256": "fe1be3e4ee9e656149962a5f6c7cf4a8ea475a825be8528d89830234b737c786",
+      "current_sha256": "8f669abe76eb691941773b375e024f497e007b3ae3a8b21919f7f77027912153"
+    },
+    "crates/rrrah-dedup/tests/decode.rs": {
+      "start_sha256": "d2e89907f0586db5c4c76312922c40feacd5f45e766c3b53a5f2048331529ccd",
+      "current_sha256": "ee65d744b955b5fa4227d5bc9ed45fc081c20ce0a800af12f33f90de24359f45"
+    },
+    "crates/rrrah-dedup/tests/exact_files.rs": {
+      "start_sha256": "6281f9320d21aae1e0ccdd70b564f55a4e00c6cdca5c69cac3295a933fc45382",
+      "current_sha256": "abc2273b0112700d953be5deaee1d6519cdd4a2f5f2376486dd646559500f4c9"
+    },
+    "crates/rrrah-dedup/tests/pyramid.rs": {
+      "start_sha256": "47a3672e54b8c13801e511dc061f9c7bc9be1a5852d9b3bf3bd0c4677da92df3",
+      "current_sha256": "232607789ec84e712255ac4ab5e50ea657273bd1a5fcef9b4e74ece2fa2203a8"
+    },
+    "crates/rrrah-dedup/tests/raster_equality.rs": {
+      "start_sha256": "e2af632a6a13ddbf146766f903cf41ef5e71e82d03ffbb95aabb1534e3f49a04",
+      "current_sha256": "0d8cc2eece125ffe9ce93e03d934463d7e3f47ee61a94774eb53a42c30b86966"
+    },
+    "crates/rrrah-dedup/tests/scan.rs": {
+      "start_sha256": "89ab2c9666d73b1f48a93acbc7998c42338fddd034e04cded0e75cb642eede21",
+      "current_sha256": "2215b70662ea9c460d4c10940023450932107d741db2869ad83a8b748b8bb2b7"
+    },
+    "scripts/run-dedup-linux-native.sh": {
+      "start_sha256": "733f342e2161e711dc0c5e70221a84b50fabe07fe7a7d250009c21c0a2dced43",
+      "current_sha256": "f1fbac4c68d73cc5b5beed13b3ca983d0f1badcfd57097994f088d6e26012bdd"
+    }
+  },
+  "scope": "Terminal full tests passed; source changes during execution prevent atomic current-tree proof."
+}

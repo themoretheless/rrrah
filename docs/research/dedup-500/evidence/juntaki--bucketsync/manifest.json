@@ -1,0 +1,84 @@
+{
+  "repository": "juntaki/bucketsync",
+  "metadata": {
+    "name": "juntaki/bucketsync",
+    "url": "https://github.com/juntaki/bucketsync",
+    "description": "S3 backed FUSE Filesystem written in Go with dedup and encryption.",
+    "language": "Go",
+    "stars": 13,
+    "license": "MIT",
+    "archived": false,
+    "pushed_at": "2018-01-17T09:33:32Z",
+    "default_branch": "master",
+    "queries": [
+      "dedup in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/juntaki/bucketsync/blob/6bb0f7c2d237bd6c3ec5a4e749cfbcbdaf8d2887/README.md",
+      "sha256": "64fa9ea6e3f6e3ca2d7ae1e3b62bf7cf3661feeeecc6c3470662232ffea0295d",
+      "truncated": false,
+      "lines": 38,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/juntaki/bucketsync/blob/6bb0f7c2d237bd6c3ec5a4e749cfbcbdaf8d2887/LICENSE",
+      "sha256": "4a88f43fd63ae6f7a6fbf4a20f5adfcae31fc04fc5fef099d447cf75227f2e33",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "main.go",
+      "local": "02-main.go",
+      "url": "https://github.com/juntaki/bucketsync/blob/6bb0f7c2d237bd6c3ec5a4e749cfbcbdaf8d2887/main.go",
+      "sha256": "5e1bccc060baf18fc33fc58cc3b02ad8316f829801dbbe6c0e417b184a575ece",
+      "truncated": false,
+      "lines": 253,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "lib/aes.go",
+      "local": "03-aes.go",
+      "url": "https://github.com/juntaki/bucketsync/blob/6bb0f7c2d237bd6c3ec5a4e749cfbcbdaf8d2887/lib/aes.go",
+      "sha256": "54d2101a67758fd1c9f55c59b3ffb0a437acebfb1aa5a41c670604e02b1e69f4",
+      "truncated": false,
+      "lines": 43,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "lib/cache.go",
+      "local": "04-cache.go",
+      "url": "https://github.com/juntaki/bucketsync/blob/6bb0f7c2d237bd6c3ec5a4e749cfbcbdaf8d2887/lib/cache.go",
+      "sha256": "fc052690686ec325306de95e338281ab29e01f1435bf2802db7a020562c1c582",
+      "truncated": false,
+      "lines": 109,
+      "source": true,
+      "test": false
+    }
+  ],
+  "errors": [],
+  "commit": "6bb0f7c2d237bd6c3ec5a4e749cfbcbdaf8d2887",
+  "tree_truncated": false,
+  "source_file_count": 11,
+  "test_file_count": 0,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "main.go",
+    "lib/aes.go",
+    "lib/cache.go"
+  ]
+}

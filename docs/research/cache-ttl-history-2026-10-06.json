@@ -1,0 +1,41 @@
+{
+  "scope": "Policy-only insertion with one eviction after the final zero-TTL entry was pruned and TTL disabled; excludes payload allocation, disk, decode, GPU and display. Single sequential before/after run, no system-noise controls.",
+  "platform": "macOS-26.7.1-arm64-arm-64bit-Mach-O",
+  "command": "cargo run -p rrrah-memory --example cache_policy_timing --target-dir /tmp/rrrah-required-corpus-target",
+  "profile": "dev configured optimization, same workspace and host",
+  "warmups": 3,
+  "results": [
+    {
+      "entries": 64,
+      "before_p50_us": 1.25,
+      "after_p50_us": 0.208,
+      "before_p95_us": 2.5,
+      "after_p95_us": 0.25,
+      "samples": 20
+    },
+    {
+      "entries": 1024,
+      "before_p50_us": 12.542,
+      "after_p50_us": 0.292,
+      "before_p95_us": 13.083,
+      "after_p95_us": 0.542,
+      "samples": 20
+    },
+    {
+      "entries": 4096,
+      "before_p50_us": 46.375,
+      "after_p50_us": 0.292,
+      "before_p95_us": 48.25,
+      "after_p95_us": 0.959,
+      "samples": 20
+    },
+    {
+      "entries": 16384,
+      "before_p50_us": 180.625,
+      "after_p50_us": 0.5,
+      "before_p95_us": 189.75,
+      "after_p95_us": 1.25,
+      "samples": 20
+    }
+  ]
+}

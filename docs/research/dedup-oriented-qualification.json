@@ -1,0 +1,48 @@
+{
+  "scope": "Native oriented local descriptors on three independently resampled seeded linear-intensity textures. Geometry and bidirectional pixel candidate evidence; not exact image identity, continuous scale or real-photo calibration.",
+  "manifest_sha256": "28f25792d2866b704bccdfb1ca40fcfa1db6dd907ca25fbcc9ab0fbd3ab39118",
+  "fixture_hashes_verified": 10,
+  "recipe": "OrientedBriefV1",
+  "max_features": 500,
+  "geometry_tolerance_pixels": 2,
+  "pixel_candidate_tolerance": 0.03,
+  "required_compared_pixels_per_direction": 18000,
+  "required_match_fraction_per_direction": 0.9,
+  "cases": [
+    {
+      "degrees": 17,
+      "matches": 214,
+      "inliers": 214,
+      "forward_compared": 22628,
+      "forward_matched": 22407,
+      "reverse_compared": 22608,
+      "reverse_matched": 22608
+    },
+    {
+      "degrees": -37,
+      "matches": 170,
+      "inliers": 170,
+      "forward_compared": 21214,
+      "forward_matched": 20968,
+      "reverse_compared": 21200,
+      "reverse_matched": 21200
+    },
+    {
+      "degrees": 63,
+      "matches": 173,
+      "inliers": 173,
+      "forward_compared": 21707,
+      "forward_matched": 21516,
+      "reverse_compared": 21684,
+      "reverse_matched": 21684
+    }
+  ],
+  "unrelated_texture_rejected_by_geometry": true,
+  "unrelated_identity_pixel_residual_rejected": true,
+  "mixed_recipes_rejected": true,
+  "mid_descriptor_cancellation_passed": true,
+  "pixel_corner_budgets_passed": true,
+  "full_feature_tests_passed": 94,
+  "targeted_after_recipe_admission_fix_tests_passed": 7,
+  "manifest_archive": "docs/research/dedup-oriented-fixture-manifest.json"
+}

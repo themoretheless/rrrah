@@ -1,0 +1,20 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+error[E0425]: cannot find type `DirectionEvidence` in module `rrrah_dedup::warp`
+   --> crates/rrrah-dedup/examples/photo_probe.rs:400:45
+    |
+400 | ...   let accepted=|e:&rrrah_dedup::warp::DirectionEvidence|e.compared_pixels>=1000 && e.compared_pixels as f64>=e.source_pixels as...
+    |                                           ^^^^^^^^^^^^^^^^^
+    |
+   ::: crates/rrrah-dedup/src/warp.rs:248:1
+    |
+248 | pub struct BidirectionalEvidence {
+    | -------------------------------- similarly named struct `BidirectionalEvidence` defined here
+    |
+help: a struct with a similar name exists
+    |
+400 -         let accepted=|e:&rrrah_dedup::warp::DirectionEvidence|e.compared_pixels>=1000 && e.compared_pixels as f64>=e.source_pixels as f64*0.3 && e.matched_pixels as f64>=e.compared_pixels as f64*0.9;
+400 +         let accepted=|e:&rrrah_dedup::warp::BidirectionalEvidence|e.compared_pixels>=1000 && e.compared_pixels as f64>=e.source_pixels as f64*0.3 && e.matched_pixels as f64>=e.compared_pixels as f64*0.9;
+    |
+
+For more information about this error, try `rustc --explain E0425`.
+error: could not compile `rrrah-dedup` (example "photo_probe") due to 1 previous error

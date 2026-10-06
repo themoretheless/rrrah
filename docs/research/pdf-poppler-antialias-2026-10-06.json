@@ -1,0 +1,93 @@
+{
+  "date": "2026-10-06",
+  "scope": "diagnostic comparison only, no qualification tolerance changes",
+  "rows": [
+    {
+      "component": "circle",
+      "poppler_antialias": "yes",
+      "different_pixels": 51,
+      "max_channel_error": 47
+    },
+    {
+      "component": "circle",
+      "poppler_antialias": "no",
+      "different_pixels": 51,
+      "max_channel_error": 255
+    },
+    {
+      "component": "triangle",
+      "poppler_antialias": "yes",
+      "different_pixels": 63,
+      "max_channel_error": 41
+    },
+    {
+      "component": "triangle",
+      "poppler_antialias": "no",
+      "different_pixels": 65,
+      "max_channel_error": 255
+    },
+    {
+      "component": "text",
+      "poppler_antialias": "yes",
+      "different_pixels": 59,
+      "max_channel_error": 128
+    },
+    {
+      "component": "text",
+      "poppler_antialias": "no",
+      "different_pixels": 64,
+      "max_channel_error": 251
+    }
+  ],
+  "coverage_diagnostics": [
+    {
+      "component": "circle",
+      "differences_without_partial_coverage_in_either_renderer": 0,
+      "native_nonwhite_bbox": [
+        25,
+        3,
+        37,
+        14
+      ],
+      "poppler_nonwhite_bbox": [
+        25,
+        3,
+        37,
+        15
+      ]
+    },
+    {
+      "component": "triangle",
+      "differences_without_partial_coverage_in_either_renderer": 0,
+      "native_nonwhite_bbox": [
+        3,
+        16,
+        22,
+        29
+      ],
+      "poppler_nonwhite_bbox": [
+        3,
+        16,
+        22,
+        30
+      ]
+    },
+    {
+      "component": "text",
+      "differences_without_partial_coverage_in_either_renderer": 0,
+      "native_nonwhite_bbox": [
+        26,
+        23,
+        38,
+        28
+      ],
+      "poppler_nonwhite_bbox": [
+        26,
+        23,
+        38,
+        27
+      ]
+    }
+  ],
+  "interpretation": "differences all involve partial coverage; this suggests raster coverage differences but does not prove equivalent geometry, correct font outlines or PDF semantics"
+}

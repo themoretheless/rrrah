@@ -1,0 +1,84 @@
+{
+  "date": "2026-10-06",
+  "scope": "warm source/process decode and display preparation, no decoded cache; excludes GPU/cold storage/UI/physical presentation",
+  "warmups": 3,
+  "iterations": 20,
+  "rows": [
+    {
+      "path": "tests/fixtures/pdf/red-green-pages.pdf",
+      "index": 0,
+      "iterations": 20,
+      "load_p50_ms": 0.026291,
+      "load_p95_ms": 0.034625,
+      "prepare_p50_ms": 0.0005,
+      "prepare_p95_ms": 0.0006670000000000001,
+      "cpu_ready_p50_ms": 0.02675,
+      "cpu_ready_p95_ms": 0.035207999999999996,
+      "display_blake3": "1c8976eda77444dbd8b7fc3ee16ac87240d1b2fce16692acc221a6527e1a3738",
+      "cache": "warm filesystem; process warm; no decoded image cache",
+      "source_sha256": "096a762595336e7509ad23e0ea462c353713706fb35d6ffab33db72052e33f3f"
+    },
+    {
+      "path": "tests/fixtures/pdf/red-green-pages.pdf",
+      "index": 1,
+      "iterations": 20,
+      "load_p50_ms": 0.025584000000000003,
+      "load_p95_ms": 0.033541,
+      "prepare_p50_ms": 0.0005,
+      "prepare_p95_ms": 0.0015,
+      "cpu_ready_p50_ms": 0.026084,
+      "cpu_ready_p95_ms": 0.034125,
+      "display_blake3": "7095cabc2d91727f014b0cb7ae7b8555dba2757e95127475fb4182e57808ade9",
+      "cache": "warm filesystem; process warm; no decoded image cache",
+      "source_sha256": "096a762595336e7509ad23e0ea462c353713706fb35d6ffab33db72052e33f3f"
+    },
+    {
+      "path": "tests/fixtures/pdf/red-alpha.pdf",
+      "index": 0,
+      "iterations": 20,
+      "load_p50_ms": 0.021458,
+      "load_p95_ms": 0.028208,
+      "prepare_p50_ms": 0.0005,
+      "prepare_p95_ms": 0.0014169999999999999,
+      "cpu_ready_p50_ms": 0.021958,
+      "cpu_ready_p95_ms": 0.029334,
+      "display_blake3": "70bc6310d93ea225c082742935ee8fbc997ff576aaac0f9312dff4369b1ef456",
+      "cache": "warm filesystem; process warm; no decoded image cache",
+      "source_sha256": "aaff7abe88d1051b553e531246d6e38ca6a3f78334045dc39cfda13fa40d25ee"
+    },
+    {
+      "path": "tests/fixtures/pdf/cairo-text-shapes.pdf",
+      "index": 0,
+      "iterations": 20,
+      "load_p50_ms": 0.084208,
+      "load_p95_ms": 0.090875,
+      "prepare_p50_ms": 0.006,
+      "prepare_p95_ms": 0.007042,
+      "cpu_ready_p50_ms": 0.09025,
+      "cpu_ready_p95_ms": 0.096791,
+      "display_blake3": "86bfeaed9bb5a623117f516156d6e9d24481baf6962be132361d9b8cd1e37e2b",
+      "cache": "warm filesystem; process warm; no decoded image cache",
+      "source_sha256": "a7347a12ff38720d62c9f4b0ebcd3428e54f3c378e98d0968dceccb1d695e24b"
+    },
+    {
+      "path": "tests/fixtures/pdf/cairo-text-shapes-large.pdf",
+      "index": 0,
+      "iterations": 20,
+      "load_p50_ms": 4.542041,
+      "load_p95_ms": 4.582625,
+      "prepare_p50_ms": 6.059916,
+      "prepare_p95_ms": 6.094958999999999,
+      "cpu_ready_p50_ms": 10.609666,
+      "cpu_ready_p95_ms": 10.652834,
+      "display_blake3": "4750c5c8597c87cc1c7171a0ffac8a299861c11a6351cafd4152b2519b956c75",
+      "cache": "warm filesystem; process warm; no decoded image cache",
+      "source_sha256": "72f642979033b0f65a7c0348d955c06b68725d6db70e5dc1d4031d8f24e7d40b",
+      "dimensions_verified": [
+        1536,
+        1152
+      ]
+    }
+  ],
+  "pixel_qualification": "small opaque and constant-alpha fixtures have independent evidence; complex text/shapes and large page are not fully qualified",
+  "command": "raster_load_bench FILE INDEX 20; three warmups then 20 samples, nearest-rank p50/p95; repeated display hashes checked outside timing"
+}

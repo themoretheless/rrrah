@@ -1,0 +1,32 @@
+{
+  "qualification": "Fallible metric-tree construction and traversal",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/lib.rs": "0e7fb646a56dd5db88de6740b970453419b4317214e09da40960ed6775b9db57",
+    "crates/rrrah-dedup/src/visual.rs": "dc41299881a614b00ec892835c508070771c2fa353569ba925117096085f9734",
+    "crates/rrrah-dedup/tests/visual.rs": "71c1fb5c25d956e981af5c1edad5d33d3de713a894c9aba84d7a4a921194df5d"
+  },
+  "validation": {
+    "all_features_library": 10,
+    "local_collection": 8,
+    "local_index": 6,
+    "visual": 6,
+    "failed": 0,
+    "no_default_features_library_and_visual": "passed",
+    "clippy_library_and_visual": "passed"
+  },
+  "evidence": [
+    "All metric-tree construction allocations use fallible Vec growth; child edges are sorted with at most 64 distinct nonzero distances.",
+    "Insertion caps total stored IDs, including collision buckets; repeat ID/hash is a no-op at the limit.",
+    "Cancellation before publishing a reserved child leaves searchable entries unchanged.",
+    "Traversal and result storage use fallible bounded Vec growth; excess results produce Budget, not a truncated success.",
+    "VisualIndex uses fallible tree construction and search.",
+    "Seeded exhaustive distance/visual recipe and descriptor matching/collection equivalence still pass."
+  ],
+  "limits": [
+    "Legacy insertion/search wrappers retain panic-on-allocation-failure compatibility; callers can use explicit fallible APIs.",
+    "VisualIndex and descriptor-level BTree maps/sets still allocate infallibly.",
+    "Storage capacity may grow on a failed insertion while searchable content remains unchanged.",
+    "Allocation-failure mapping inspected in source; actual operating-system OOM was not injected.",
+    "Shared memory admission, allocator indivisibility, RSS and scale latency remain unqualified."
+  ]
+}

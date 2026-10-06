@@ -1,0 +1,68 @@
+{
+  "index": 196,
+  "repository": "garypen/deduplicate",
+  "commit": "8f191f2dcf5e083f5b76f5de90cc60e1253f85b0",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Rust async deduplicator with bounded LRU cache; could avoid repeated fingerprint work, not define image equality.",
+  "available_source_evidence": [
+    {
+      "path": "src/deduplicate.rs",
+      "local": "02-deduplicate.rs",
+      "url": "https://github.com/garypen/deduplicate/blob/8f191f2dcf5e083f5b76f5de90cc60e1253f85b0/src/deduplicate.rs",
+      "sha256": "dd1e2e3e0f1f39238b4d3a74d36ab333bff2f3cbe791abfdd6c89ad8d75d9dd5",
+      "truncated": false,
+      "lines": 352,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "benches/deduplicate.rs",
+      "local": "03-deduplicate.rs",
+      "url": "https://github.com/garypen/deduplicate/blob/8f191f2dcf5e083f5b76f5de90cc60e1253f85b0/benches/deduplicate.rs",
+      "sha256": "88708c2837d620d9a268c6f7a267aae9d59074577d497647b3f917fea8b4c34e",
+      "truncated": false,
+      "lines": 220,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/cache.rs",
+      "local": "04-cache.rs",
+      "url": "https://github.com/garypen/deduplicate/blob/8f191f2dcf5e083f5b76f5de90cc60e1253f85b0/src/cache.rs",
+      "sha256": "3b3bddf229275889100b9664776c1fa5e4bdc3cceb1d396be00b5db28ecef0d5",
+      "truncated": false,
+      "lines": 50,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "Apache-2.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/garypen/deduplicate/blob/8f191f2dcf5e083f5b76f5de90cc60e1253f85b0/README.md",
+      "sha256": "3c6657794650f97f22ea931e34c967338fef98c9a51f9d18dada20a61b38d624",
+      "truncated": false,
+      "lines": 140,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/garypen/deduplicate/blob/8f191f2dcf5e083f5b76f5de90cc60e1253f85b0/LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "truncated": false,
+      "lines": 201,
+      "source": false,
+      "test": false
+    }
+  ]
+}

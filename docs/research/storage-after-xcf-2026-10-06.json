@@ -1,0 +1,15 @@
+{
+  "command": "cargo test -p rrrah-memory -p rrrah-cache -p rrrah-swap --locked --target-dir /tmp/rrrah-required-corpus-target",
+  "log": "/tmp/rrrah-storage-after-xcf.log",
+  "passed": 165,
+  "failed": 0,
+  "ignored": 0,
+  "source_sha256": {
+    "crates/rrrah-memory/src/lib.rs": "616057a0c0c899ee9564d91eee915b3c022933e7eb798258488b0b1389edaa76",
+    "crates/rrrah-memory/src/lease_cache.rs": "ad7c0d3d33b7daacc0b7e457b303619bc3d19904fda6bfcf204c02d4ee23bbae",
+    "crates/rrrah-cache/src/swap.rs": "eca74414069df4bcf64a5e54f1bdb1bcfec2f81ee6b09ae9c6b8e8f623164267",
+    "crates/rrrah-swap/src/lib.rs": "db3108d1a58ccf11226d3f039df5ddf414878e4114bc03d0665b1165d5489177",
+    "crates/rrrah-swap/tests/cancelled_restore.rs": "6c6984f75a6f22e4a170dc64168f6480d4e77fe117ffe8a8185a44a6e29eeb27"
+  },
+  "scope": "Current generic storage regression, including shared-budget ownership, lease cache policies, async spill, pressure/retry and cancelled partial restore; not universal format/device or navigation latency proof."
+}

@@ -1,0 +1,143 @@
+{
+  "status": "explicit-sensor-import-cache-Metal-qualified-viewer-and-Capture-One-settings-pending",
+  "fixture_manifest": "eip-package-corpus.json",
+  "sensor_import_qualification": {
+    "oracle": "Independent corrected LibRaw full sensor from required IIQ case4366",
+    "sensor_samples": 17065152,
+    "sensor_sha256": "6e7d392253e23215a3405ca8a5412fc3f0174416c74c2ad8aff6b1d8986deb82",
+    "packaging": [
+      "stored",
+      "deflated"
+    ],
+    "sensor_mismatches": 0,
+    "source_path_read": false,
+    "managed_output": true,
+    "shared_last_owner_release": true,
+    "source_only_capacity_refuses_output_without_leak": true,
+    "eip_checks_passed_per_packaging": 9,
+    "normal_raw_required_cases_passed": 29,
+    "capture_one_adjustments_qualified": false
+  },
+  "dng_sensor_import_qualification": {
+    "source_id": 830,
+    "oracle": "Independent LibRaw 0.22.2 full sensor; DNG DefaultCrop/levels source contract",
+    "sensor_samples": 12481536,
+    "sensor_sha256": "d759e7b57a563bbcbc2b591bb0ec6ea448d337f9386c18368b5b428339777bb1",
+    "packaging": [
+      "stored",
+      "deflated"
+    ],
+    "sensor_mismatches": 0,
+    "source_path_read": false,
+    "managed_output": true,
+    "shared_last_owner_release": true,
+    "source_only_capacity_refuses_output_without_leak": true,
+    "crop": [
+      10,
+      10,
+      4288,
+      2848
+    ],
+    "black_grid": [
+      1,
+      9,
+      9,
+      0
+    ],
+    "white": [
+      4094
+    ],
+    "eip_checks_passed_per_packaging": 10,
+    "capture_one_adjustments_qualified": false,
+    "normal_raw_required_cases_passed": 29,
+    "native_binary_sha256": "950e77ccc5867c62bdcf49e5c4704fb072ae35f89673b9338246b02f92d54270"
+  },
+  "cr3_sensor_import_qualification": {
+    "sources": [
+      "IMG_9043",
+      "IMG_9074"
+    ],
+    "source_license": "User-provided local fixtures; redistribution rights not asserted",
+    "packaging": [
+      "stored",
+      "deflated"
+    ],
+    "imports_checked": 4,
+    "sensor_mismatches": 0,
+    "geometry": [
+      6188,
+      4120
+    ],
+    "crop": [
+      168,
+      108,
+      6000,
+      4000
+    ],
+    "black_grid": [
+      512,
+      512,
+      512,
+      512
+    ],
+    "white": [
+      16383
+    ],
+    "per_image_wb_checked": true,
+    "source_path_read": false,
+    "source_only_capacity_refuses_output_without_leak": true,
+    "shared_last_owner_release": true,
+    "eip_checks_passed": 11,
+    "normal_decoder_tests_passed": 596,
+    "normal_raw_required_cases_passed": 29,
+    "native_binary_sha256": "fbe42ff4410097b977caab6700d684e3a6cef3e1ee876b10e9e3a41c491d3233",
+    "capture_one_adjustments_qualified": false
+  },
+  "storage_gpu_qualification": {
+    "adapter": "Metal Apple M4 Max",
+    "source_cases": [
+      "CC0 IIQ4366",
+      "CC0 DNG830",
+      "local IMG_9043.CR3",
+      "local IMG_9074.CR3",
+      "CC0 MRW1826",
+      "CC0 MRW4419"
+    ],
+    "packaging": [
+      "stored",
+      "deflated"
+    ],
+    "packages_checked": 12,
+    "viewport": [
+      128,
+      96
+    ],
+    "reference": "Ordinary original RAW decode independently qualified by required full-sensor/color corpus",
+    "pixels_metadata_cpu_thumbnail_equal": true,
+    "native_metal_frame_equal": true,
+    "ram_lease_identity": true,
+    "leased_limit_reduction_refused": true,
+    "disk_restore_pixels_metadata_frame_equal": true,
+    "swap_restore_pixels_metadata_frame_equal": true,
+    "pressure_refusal_preserves_entry_for_retry": true,
+    "last_owner_managed_memory_released": true,
+    "cache_fingerprint_uses_outer_package": true,
+    "physical_HDR_or_CUDA_qualified": false,
+    "capture_one_adjustments_qualified": false
+  },
+  "mrw_sensor_import_qualification": {
+    "source_ids": [
+      1826,
+      4419
+    ],
+    "packaging": [
+      "stored",
+      "deflated"
+    ],
+    "full_independent_sensor_equal": true,
+    "source_only_budget_refuses_output_without_leak": true,
+    "last_owner_memory_released": true,
+    "log": "/tmp/rrrah-eip-mrw-import.log",
+    "capture_one_adjustments_qualified": false
+  }
+}

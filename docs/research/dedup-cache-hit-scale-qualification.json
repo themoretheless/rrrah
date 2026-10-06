@@ -1,0 +1,138 @@
+{
+  "status": "passed",
+  "command": "cargo run -p rrrah-dedup --all-features --example cache_hit_scale_probe",
+  "profile": "dev optimized profile, not release",
+  "fixture": "one-pixel BMP plus legal trailing bytes; 1, 8, 64 MiB",
+  "warmups_per_size": 1,
+  "results": [
+    {
+      "bytes": 1048576,
+      "measured_runs": 5,
+      "median_single_read_ms": 0.541708,
+      "median_cache_hit_ms": 1.117625
+    },
+    {
+      "bytes": 8388608,
+      "measured_runs": 5,
+      "median_single_read_ms": 4.475708,
+      "median_cache_hit_ms": 8.670083
+    },
+    {
+      "bytes": 67108864,
+      "measured_runs": 5,
+      "median_single_read_ms": 34.367208,
+      "median_cache_hit_ms": 69.344458
+    }
+  ],
+  "raw_runs": [
+    {
+      "bytes": 1048576,
+      "run": 1,
+      "single_read_ns": 531792,
+      "cache_hit_ns": 1252583
+    },
+    {
+      "bytes": 1048576,
+      "run": 2,
+      "single_read_ns": 564334,
+      "cache_hit_ns": 1137667
+    },
+    {
+      "bytes": 1048576,
+      "run": 3,
+      "single_read_ns": 556583,
+      "cache_hit_ns": 1117625
+    },
+    {
+      "bytes": 1048576,
+      "run": 4,
+      "single_read_ns": 541708,
+      "cache_hit_ns": 1044292
+    },
+    {
+      "bytes": 1048576,
+      "run": 5,
+      "single_read_ns": 534125,
+      "cache_hit_ns": 1060167
+    },
+    {
+      "bytes": 8388608,
+      "run": 1,
+      "single_read_ns": 4267000,
+      "cache_hit_ns": 8670083
+    },
+    {
+      "bytes": 8388608,
+      "run": 2,
+      "single_read_ns": 4475708,
+      "cache_hit_ns": 8792916
+    },
+    {
+      "bytes": 8388608,
+      "run": 3,
+      "single_read_ns": 4189958,
+      "cache_hit_ns": 8566541
+    },
+    {
+      "bytes": 8388608,
+      "run": 4,
+      "single_read_ns": 4541167,
+      "cache_hit_ns": 8847042
+    },
+    {
+      "bytes": 8388608,
+      "run": 5,
+      "single_read_ns": 4570250,
+      "cache_hit_ns": 8542083
+    },
+    {
+      "bytes": 67108864,
+      "run": 1,
+      "single_read_ns": 34367208,
+      "cache_hit_ns": 68872000
+    },
+    {
+      "bytes": 67108864,
+      "run": 2,
+      "single_read_ns": 34094875,
+      "cache_hit_ns": 70636500
+    },
+    {
+      "bytes": 67108864,
+      "run": 3,
+      "single_read_ns": 36153375,
+      "cache_hit_ns": 69344458
+    },
+    {
+      "bytes": 67108864,
+      "run": 4,
+      "single_read_ns": 34756208,
+      "cache_hit_ns": 71969167
+    },
+    {
+      "bytes": 67108864,
+      "run": 5,
+      "single_read_ns": 34004833,
+      "cache_hit_ns": 68236750
+    }
+  ],
+  "correctness": "all hits match initial fingerprint and managed reservations return to zero",
+  "comparison": "single current source observation, not prior implementation or controlled before/after",
+  "logs": {
+    "run": {
+      "path": "docs/research/dedup-cache-hit-scale-run.log",
+      "sha256": "7c4497dbeb3e5498d79c7fc63c8d9d957c94a2cbb65d7a6fc5a72547fcfe57cf"
+    },
+    "clippy": {
+      "path": "docs/research/dedup-cache-hit-scale-clippy.log",
+      "sha256": "fcb0856f05980cbe9114e969036132c526beb6c6e08742485c5a640dc0f08eeb"
+    }
+  },
+  "example_sha256": "c50c71433a5a5fdeef547275188da8512b645f681fa3716fb7fe6de15c70a12f",
+  "hash_timing": "post-validation",
+  "limits": [
+    "warm local filesystem, fixed baseline-first order, concurrent host load",
+    "not cold/network I/O, peak RSS or large-pixel decoder benchmark",
+    "complete acceptance contract remains incomplete"
+  ]
+}

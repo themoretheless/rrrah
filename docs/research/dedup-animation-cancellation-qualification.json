@@ -1,0 +1,40 @@
+{
+  "status": "macOS and native Linux passed; scoped Clippy exited zero with decoder warnings",
+  "tests": {
+    "macos": 7,
+    "linux": 7
+  },
+  "scope": [
+    "Every cancellation callback observed during successful complete animation decode is replayed with latched cancellation",
+    "Each cancelled decode returns an error without admitted Animation",
+    "Managed reservations return to zero after each cancellation",
+    "Retry timeline digest equals baseline"
+  ],
+  "snapshot_timing": "post-test capture; not atomic prelaunch",
+  "source_snapshot": {
+    "crates/rrrah-dedup/tests/animated.rs": "a4b12430ff80db1d1020c5def0295b36aebfb8d364a20ead16c25bd30093032c",
+    "tests/fixtures/raster/gif-animation-disposal-3.gif": "4d8ed22a0e1b33ef6de1f293eeb92a6548666bf95975514987903cbc8d66d5bf",
+    "tests/fixtures/raster/apng-compose-0-0.apng": "8f185a65ac3fd113cfe20bbb202abed659b329ae4980d63b262d827b7065c2b2",
+    "tests/fixtures/raster/webp-animation-0.webp": "1a383b45be763d905e55b107b0057a1e685d84e5ce91bf3b1c5b167a151cf82e"
+  },
+  "logs": {
+    "macos": {
+      "path": "docs/research/dedup-animation-cancellation-macos.log",
+      "sha256": "d121d6453a40d50a644f5cfbbd2238f6092aef0ea094475a46eba6349da2c157"
+    },
+    "linux": {
+      "path": "docs/research/dedup-animation-cancellation-linux.log",
+      "sha256": "9026a5682860e46cef771117fe32416783d8fd3f395acbfce0d24ef29aef5f73"
+    },
+    "clippy": {
+      "path": "docs/research/dedup-animation-cancellation-clippy.log",
+      "sha256": "38bc38550e6deb872364a2122c4dfb8a370c641941a49f0ddb29f45f3fec12ca"
+    }
+  },
+  "limits": [
+    "Three small authored animation fixtures",
+    "Does not bound cancellation latency inside indivisible decoder operations",
+    "Does not establish total RSS or allocator completeness",
+    "Full acceptance incomplete"
+  ]
+}

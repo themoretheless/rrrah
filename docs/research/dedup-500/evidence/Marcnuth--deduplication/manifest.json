@@ -1,0 +1,105 @@
+{
+  "repository": "Marcnuth/deduplication",
+  "metadata": {
+    "name": "Marcnuth/deduplication",
+    "url": "https://github.com/Marcnuth/deduplication",
+    "description": "Remove duplicate documents/videos/images via popular algorithms such as SimHash, SpotSig, Shingling, etc.",
+    "language": "Python",
+    "stars": 19,
+    "license": "Apache-2.0",
+    "archived": false,
+    "pushed_at": "2023-08-28T09:43:09Z",
+    "default_branch": "master",
+    "queries": [
+      "dedup in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/Marcnuth/deduplication/blob/c407cb11e5dd7f13360639dbd55efb4ffc2bd80c/README.md",
+      "sha256": "d50b0ed220651e124288ba67ca494cc4fcb4dd758f4faf338fc748a5e2363b39",
+      "truncated": false,
+      "lines": 47,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/Marcnuth/deduplication/blob/c407cb11e5dd7f13360639dbd55efb4ffc2bd80c/LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "truncated": false,
+      "lines": 201,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "deduplication/lsimhash.py",
+      "local": "02-lsimhash.py",
+      "url": "https://github.com/Marcnuth/deduplication/blob/c407cb11e5dd7f13360639dbd55efb4ffc2bd80c/deduplication/lsimhash.py",
+      "sha256": "04856e54b8a6f7103dd06af5402200f826a69f2f63a796cab89bb0f354152bdc",
+      "truncated": false,
+      "lines": 12,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "deduplication/simhash.py",
+      "local": "03-simhash.py",
+      "url": "https://github.com/Marcnuth/deduplication/blob/c407cb11e5dd7f13360639dbd55efb4ffc2bd80c/deduplication/simhash.py",
+      "sha256": "ab8059c7b0f48fc243cb99df609f494ef36691c400a72188b434dff28e1f5ef5",
+      "truncated": false,
+      "lines": 32,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "deduplication/__init__.py",
+      "local": "04-__init__.py",
+      "url": "https://github.com/Marcnuth/deduplication/blob/c407cb11e5dd7f13360639dbd55efb4ffc2bd80c/deduplication/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "truncated": false,
+      "lines": 0,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/test_simhash.py",
+      "local": "05-test_simhash.py",
+      "url": "https://github.com/Marcnuth/deduplication/blob/c407cb11e5dd7f13360639dbd55efb4ffc2bd80c/tests/test_simhash.py",
+      "sha256": "61b4d70d164ffae6cb20f4d85d2710094450a47bbc926eefc026e10d718c1e7b",
+      "truncated": false,
+      "lines": 21,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "deduplication/nlp.py",
+      "local": "06-nlp.py",
+      "url": "https://github.com/Marcnuth/deduplication/blob/c407cb11e5dd7f13360639dbd55efb4ffc2bd80c/deduplication/nlp.py",
+      "sha256": "77a03ce535dec7845791836e63d949ce017fdda41e0021c1764e178a93da8017",
+      "truncated": false,
+      "lines": 23,
+      "source": true,
+      "test": false
+    }
+  ],
+  "errors": [],
+  "commit": "c407cb11e5dd7f13360639dbd55efb4ffc2bd80c",
+  "tree_truncated": false,
+  "source_file_count": 7,
+  "test_file_count": 2,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "deduplication/lsimhash.py",
+    "deduplication/simhash.py",
+    "deduplication/nlp.py",
+    "tests/test_simhash.py"
+  ]
+}

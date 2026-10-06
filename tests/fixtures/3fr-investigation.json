@@ -1,0 +1,613 @@
+{
+  "status": "native-X1D-full-sensor-and-file-origin-metadata-implemented",
+  "source": {
+    "id": 2058,
+    "license": "CC0-1.0",
+    "sha256": "395acb2c706dc10270c58ec261e42a5e36f6ac8c39d2a767e86e83648aa318a3",
+    "bytes": 110379008
+  },
+  "oracle": {
+    "libraw_version": "0.22.2-Release",
+    "make": "Hasselblad",
+    "model": "X1D-50c",
+    "width": 8384,
+    "height": 6304,
+    "crop": [
+      48,
+      96,
+      8278,
+      6208
+    ],
+    "wb": [
+      1.573760986,
+      1,
+      2.585540771,
+      0
+    ],
+    "black": 256,
+    "cblack": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "white": 65535,
+    "cfa": [
+      "R",
+      "G",
+      "G",
+      "B"
+    ],
+    "xyz_to_camera": [
+      [
+        0.4932000041,
+        -0.08349999785,
+        0.01410000026
+      ],
+      [
+        -0.4878000021,
+        1.186800003,
+        0.3436999917
+      ],
+      [
+        -0.1137999967,
+        0.1960999966,
+        0.706700027
+      ],
+      [
+        0,
+        0,
+        0
+      ]
+    ],
+    "camera_to_rgb": [
+      [
+        2.265450716,
+        -0.9094447494,
+        -0.3560060859
+      ],
+      [
+        -0.1945731193,
+        1.831981778,
+        -0.6374086738
+      ],
+      [
+        0.02504408173,
+        -0.494615674,
+        1.46957159
+      ]
+    ]
+  },
+  "directories": [
+    {
+      "offset": 8,
+      "tags": {
+        "256": {
+          "type": 3,
+          "count": 1,
+          "value": 1440
+        },
+        "257": {
+          "type": 3,
+          "count": 1,
+          "value": 1080
+        },
+        "258": {
+          "type": 3,
+          "count": 3,
+          "value": 338
+        },
+        "259": {
+          "type": 3,
+          "count": 1,
+          "value": 1
+        },
+        "273": {
+          "type": 4,
+          "count": 1,
+          "value": 7680
+        },
+        "277": {
+          "type": 3,
+          "count": 1,
+          "value": 3
+        },
+        "278": {
+          "type": 4,
+          "count": 1,
+          "value": 1080
+        },
+        "279": {
+          "type": 4,
+          "count": 1,
+          "value": 4665600
+        },
+        "330": {
+          "type": 4,
+          "count": 1,
+          "value": 664
+        },
+        "34665": {
+          "type": 4,
+          "count": 1,
+          "value": 896
+        },
+        "50728": {
+          "type": 5,
+          "count": 3,
+          "value": 567
+        }
+      }
+    },
+    {
+      "offset": 664,
+      "tags": {
+        "256": {
+          "type": 3,
+          "count": 1,
+          "value": 8384
+        },
+        "257": {
+          "type": 3,
+          "count": 1,
+          "value": 6304
+        },
+        "258": {
+          "type": 3,
+          "count": 1,
+          "value": 16
+        },
+        "259": {
+          "type": 3,
+          "count": 1,
+          "value": 1
+        },
+        "273": {
+          "type": 4,
+          "count": 1,
+          "value": 4673536
+        },
+        "277": {
+          "type": 3,
+          "count": 1,
+          "value": 1
+        },
+        "278": {
+          "type": 4,
+          "count": 1,
+          "value": 6304
+        },
+        "279": {
+          "type": 4,
+          "count": 1,
+          "value": 105705472
+        }
+      }
+    },
+    {
+      "offset": 896,
+      "tags": {}
+    }
+  ],
+  "sensor": {
+    "samples": 52852736,
+    "sha256": "ff7dc3a6a4081c974cbedcf035e2012e4004d130451f8b6d00c978410166d9e6",
+    "storage": "little-endian uncompressed u16",
+    "full_sensor_byte_exact_against_LibRaw": true
+  },
+  "native_metadata_fields": {
+    "as_shot_neutral": {
+      "tag": 50728,
+      "rationals": [
+        [
+          65536,
+          103138
+        ],
+        [
+          65536,
+          65536
+        ],
+        [
+          65536,
+          169446
+        ]
+      ],
+      "normalized_wb": [
+        1.573760986328125,
+        1,
+        2.585540771484375,
+        1
+      ]
+    },
+    "embedded_color_matrix": {
+      "tag": 50721,
+      "signed_rationals": [
+        [
+          493206,
+          1000000
+        ],
+        [
+          -83518,
+          1000000
+        ],
+        [
+          14067,
+          1000000
+        ],
+        [
+          -487784,
+          1000000
+        ],
+        [
+          1186830,
+          1000000
+        ],
+        [
+          343664,
+          1000000
+        ],
+        [
+          -113823,
+          1000000
+        ],
+        [
+          196107,
+          1000000
+        ],
+        [
+          706705,
+          1000000
+        ]
+      ]
+    },
+    "black_level": {
+      "tag": 50714,
+      "rational": [
+        256,
+        1
+      ]
+    },
+    "white_level": 65535,
+    "stored_default_crop_origin": [
+      50,
+      100
+    ],
+    "stored_default_crop_size": [
+      8272,
+      6200
+    ],
+    "oracle_crop": [
+      48,
+      96,
+      8278,
+      6208
+    ]
+  },
+  "remaining": "Photographic color accuracy and broader 3FR layouts pending",
+  "expanded_oracle": {
+    "libraw_version": "0.22.2-Release",
+    "make": "Hasselblad",
+    "model": "X1D-50c",
+    "width": 8384,
+    "height": 6304,
+    "crop": [
+      48,
+      96,
+      8278,
+      6208
+    ],
+    "wb": [
+      1.573760986,
+      1,
+      2.585540771,
+      0
+    ],
+    "black": 256,
+    "cblack": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "white": 65535,
+    "cfa": [
+      "R",
+      "G",
+      "G",
+      "B"
+    ],
+    "xyz_to_camera": [
+      [
+        0.4932000041,
+        -0.08349999785,
+        0.01410000026
+      ],
+      [
+        -0.4878000021,
+        1.186800003,
+        0.3436999917
+      ],
+      [
+        -0.1137999967,
+        0.1960999966,
+        0.706700027
+      ],
+      [
+        0,
+        0,
+        0
+      ]
+    ],
+    "camera_to_rgb": [
+      [
+        2.265450716,
+        -0.9094447494,
+        -0.3560060859
+      ],
+      [
+        -0.1945731193,
+        1.831981778,
+        -0.6374086738
+      ],
+      [
+        0.02504408173,
+        -0.494615674,
+        1.46957159
+      ]
+    ],
+    "file_color_matrices": [
+      {
+        "parsedfields": 0,
+        "illuminant": 65535,
+        "xyz_to_camera": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "parsedfields": 0,
+        "illuminant": 65535,
+        "xyz_to_camera": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ]
+      }
+    ]
+  },
+  "crop_policy_evidence": {
+    "source": "https://github.com/LibRaw/LibRaw/blob/0.22.0/src/metadata/identify.cpp",
+    "condition": "Hasselblad SensorCode 15, SensorSubCode 2, uncropped",
+    "adjustment": "top=96, left=48, height=raw_height-96, width=raw_width-106"
+  },
+  "native": {
+    "make": "Hasselblad",
+    "model": "Hasselblad X1D",
+    "width": 8384,
+    "height": 6304,
+    "wb": [
+      1.573761,
+      1.0,
+      2.5855408,
+      1.0
+    ],
+    "black_grid": [
+      256.0
+    ],
+    "white": [
+      65535.0
+    ],
+    "cfa": [
+      "R",
+      "G",
+      "G",
+      "B"
+    ],
+    "xyz_to_camera": [
+      [
+        0.493206,
+        -0.083518,
+        0.014067
+      ],
+      [
+        -0.487784,
+        1.18683,
+        0.343664
+      ],
+      [
+        -0.113823,
+        0.196107,
+        0.706705
+      ],
+      [
+        0.0,
+        0.0,
+        0.0
+      ]
+    ],
+    "camera_to_rgb": [
+      [
+        2.2652035,
+        -0.9093582,
+        -0.35584533
+      ],
+      [
+        -0.19460161,
+        1.8319132,
+        -0.6373116
+      ],
+      [
+        0.025081187,
+        -0.4946006,
+        1.4695194
+      ]
+    ],
+    "crop": [
+      50,
+      100,
+      8272,
+      6200
+    ],
+    "managed_memory": {
+      "limit": 268435456,
+      "used": 105705472,
+      "peak": 216084480,
+      "pixel_capacity": 105705472,
+      "managed": true
+    }
+  },
+  "integration": {
+    "adapter": "Metal Apple M4 Max",
+    "memory_mb": 256,
+    "frame": [
+      128,
+      96
+    ],
+    "checks": [
+      "full sensor exact against LibRaw",
+      "persistent pixels and metadata exact",
+      "swap RAM pressure refusal preserves entry for retry",
+      "GPU frames identical before and after disk/swap restore",
+      "five malformed source cases and insufficient memory reject without managed leaks"
+    ],
+    "scope": "GPU consistency with pinned file-origin calibration; independent photographic color qualification pending"
+  },
+  "file_metadata_qualification": {
+    "oracle": "tifffile",
+    "version": "2026.9.20",
+    "source_sha256": "395acb2c706dc10270c58ec261e42a5e36f6ac8c39d2a767e86e83648aa318a3",
+    "expected": {
+      "width": 8384,
+      "height": 6304,
+      "wb": [
+        1.573760986328125,
+        1.0,
+        2.585540771484375,
+        1.0
+      ],
+      "xyz_to_camera": [
+        [
+          0.493206,
+          -0.083518,
+          0.014067
+        ],
+        [
+          -0.487784,
+          1.18683,
+          0.343664
+        ],
+        [
+          -0.113823,
+          0.196107,
+          0.706705
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "black_grid": [
+        256.0
+      ],
+      "white": [
+        65535
+      ],
+      "crop": [
+        50,
+        100,
+        8272,
+        6200
+      ]
+    },
+    "passed": true,
+    "problems": [],
+    "scope": "Stored file calibration and crop; photographic color accuracy and CFA qualification separate"
+  },
+  "timing": {
+    "scope": "warm cache-tier comparison, no GPU/window; four warmups and sixteen measured rotating rounds",
+    "cpu_limit_bytes": 536870912,
+    "root_peak_bytes": 321789952,
+    "root_final_bytes": 0,
+    "p50_ms": {
+      "decode": 79.044,
+      "disk": 110.434959,
+      "swap": 103.687792,
+      "ram": 0.000163
+    },
+    "p95_ms": {
+      "decode": 96.940333,
+      "disk": 129.55725,
+      "swap": 122.224417,
+      "ram": 0.00017
+    }
+  },
+  "completed_frame_timing": {
+    "adapter": "Metal Apple M4 Max",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "warmups": 3,
+    "samples": 15,
+    "resident_samples": 60,
+    "p50_ms": {
+      "decode": 48.634,
+      "upload_enqueue": 29.436,
+      "frame_complete": 15.469,
+      "total": 94.227,
+      "resident_zoom_pan": 2.705
+    },
+    "p95_ms": {
+      "decode": 49.353,
+      "upload_enqueue": 30.431,
+      "frame_complete": 19.975,
+      "total": 98.576,
+      "resident_zoom_pan": 3.268
+    },
+    "cpu_peak_bytes": 321789952,
+    "gpu_peak_bytes": 264241152,
+    "cpu_final_bytes": 0,
+    "gpu_final_bytes": 0,
+    "scope": "offscreen completed submission; excludes physical display and driver staging"
+  }
+}

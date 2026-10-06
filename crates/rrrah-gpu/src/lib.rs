@@ -17,11 +17,30 @@ use rrrah_core::{DecodedMosaic, FrameError, Photometric, camera_to_linear_srgb};
 use thiserror::Error;
 use wgpu::util::DeviceExt;
 
+/// RGBE interpolation kernel with explicit normalized four-plane input contract.
+/// Dispatch/admission and source-color binding remain separate from this kernel.
+pub const RGBE_INTERPOLATION_SHADER: &str = include_str!("rgbe_interpolate.wgsl");
+
+mod rgbe_compute;
+pub use rgbe_compute::{RgbeCompute, RgbeComputeError};
+mod rgbe_plan;
+pub use rgbe_plan::{RgbePlan, RgbePlanError, RgbeRowDispatch};
+
+mod backend;
+pub use backend::{BackendError, GpuBackend, GpuVendor};
+mod compute;
+pub use compute::{ExposureError, LinearExposureCompute};
+mod model;
+pub use model::{ModelRenderer, ModelUploadError};
+
 mod filmstrip;
+mod raster;
 pub use filmstrip::{
-    FilmstripRenderer, FilmstripTile, FilmstripTileId, STRIP_HEIGHT, STRIP_PADDING, TILE_STRIDE, TILE_WIDTH,
-    max_scroll, point_in_strip, scroll_to_reveal, strip_band_y, tile_index_at, tile_x,
+    FilmstripRenderer, FilmstripTile, FilmstripTileId, FilmstripUploadError, STRIP_HEIGHT, STRIP_PADDING,
+    TILE_STRIDE, TILE_WIDTH, max_scroll, point_in_strip, scroll_to_reveal, strip_band_y, tile_index_at,
+    tile_x,
 };
+pub use raster::{RasterRenderer, RasterUploadError};
 
 /// Hard upper bound for the eager atlas path. A 512 MiB cap prevents a
 /// malformed/huge frame from causing an avoidable device-loss while keeping
@@ -1188,18 +1207,83 @@ const fn display_white_balance(gains: [f32; 4]) -> [f32; 4] {
     gains
 }
 
+/// Scene-linear output is intended for floating-point intermediates. Display
+/// transfer, primaries and luminance mapping remain the presentation owner's job.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum RawOutputMode {
+    DisplaySdr,
+    SceneLinear,
+}
+
+/// Snapshot of logical GPU resource credits used by an encoded submission.
+/// Capture before replacing resources, then retain after submitting that work.
+#[derive(Debug, Default)]
+pub struct GpuResourceLease(Vec<std::sync::Arc<rrrah_core::Reservation>>);
+impl GpuResourceLease {
+    pub(crate) fn new(values: impl IntoIterator<Item = std::sync::Arc<rrrah_core::Reservation>>) -> Self {
+        Self(values.into_iter().collect())
+    }
+    pub fn extend(&mut self, other: Self) {
+        self.0.extend(other.0);
+    }
+    pub fn is_empty(&self) -> bool {
+        self.0.is_empty()
+    }
+    /// Call only after the submission using this snapshot has been queued.
+    /// Device polling must progress completion callbacks.
+    pub fn retain_until_complete(self, queue: &wgpu::Queue) {
+        if !self.is_empty() {
+            queue.on_submitted_work_done(move || drop(self));
+        }
+    }
+}
+
+#[derive(Debug)]
+// Retain logical upload occupancy through GPU completion, including early returns.
+struct QueuedUploadReservation {
+    queue: wgpu::Queue,
+    reservation: Option<rrrah_core::Reservation>,
+    resources: GpuResourceLease,
+}
+impl Drop for QueuedUploadReservation {
+    fn drop(&mut self) {
+        let reservation = self.reservation.take();
+        let resources = std::mem::take(&mut self.resources);
+        if reservation.is_some() || !resources.is_empty() {
+            self.queue.submit([]);
+            self.queue
+                .on_submitted_work_done(move || drop((reservation, resources)));
+        }
+    }
+}
+
 #[derive(Debug)]
 pub struct RawRenderer {
+    target_format: wgpu::TextureFormat,
     pipeline: wgpu::RenderPipeline,
     bind_group_layout: wgpu::BindGroupLayout,
     uniform_buffer: wgpu::Buffer,
     bind_group: Option<wgpu::BindGroup>,
     raw_texture: Option<wgpu::Texture>,
+    memory_budget: Option<rrrah_core::MemoryBudget>,
+    atlas_reservation: Option<std::sync::Arc<rrrah_core::Reservation>>,
+    upload_memory_budget: Option<rrrah_core::MemoryBudget>,
+    upload_queue_budget: Option<rrrah_core::MemoryBudget>,
     parameters: GpuParameters,
     resident_bytes: u64,
 }
 
 impl RawRenderer {
+    pub fn resource_lease(&self) -> GpuResourceLease {
+        GpuResourceLease::new(self.atlas_reservation.iter().cloned())
+    }
+
+    pub fn clear_image(&mut self) {
+        self.bind_group = None;
+        self.raw_texture = None;
+        self.atlas_reservation = None;
+        self.resident_bytes = 0;
+    }
     pub fn new(device: &wgpu::Device, target_format: wgpu::TextureFormat) -> Self {
         let shader = device.create_shader_module(wgpu::ShaderModuleDescriptor {
             label: Some("Rrrah full-RAW viewport shader"),
@@ -1267,14 +1351,45 @@ impl RawRenderer {
             usage: wgpu::BufferUsages::UNIFORM | wgpu::BufferUsages::COPY_DST,
         });
         Self {
+            target_format,
             pipeline,
             bind_group_layout,
             uniform_buffer,
             bind_group: None,
             raw_texture: None,
+            memory_budget: None,
+            atlas_reservation: None,
+            upload_memory_budget: None,
+            upload_queue_budget: None,
             parameters,
             resident_bytes: 0,
         }
+    }
+
+    /// Admits owned R16Uint atlas footprint, including halos and replacement overlap.
+    /// CPU tile packing, staging, driver and in-flight retention are excluded.
+    pub fn new_with_budget(
+        device: &wgpu::Device,
+        target: wgpu::TextureFormat,
+        budget: rrrah_core::MemoryBudget,
+    ) -> Self {
+        let mut renderer = Self::new(device, target);
+        renderer.memory_budget = Some(budget);
+        renderer
+    }
+
+    /// Applies CPU admission to transient halo and aligned-row packing buffers.
+    pub fn with_upload_memory_budget(mut self, budget: rrrah_core::MemoryBudget) -> Self {
+        self.upload_memory_budget = Some(budget);
+        self
+    }
+
+    /// Admits aligned queued atlas uploads before texture creation. Occupancy is
+    /// retained until submitted GPU work completes, even if the renderer drops.
+    /// This is logical payload accounting, excluding driver allocation overhead.
+    pub fn with_upload_queue_budget(mut self, budget: rrrah_core::MemoryBudget) -> Self {
+        self.upload_queue_budget = Some(budget);
+        self
     }
 
     pub fn has_image(&self) -> bool {
@@ -1314,7 +1429,15 @@ impl RawRenderer {
             return Err(GpuError::UnsupportedPhotometric);
         }
         let cfa_pattern = metadata.cfa.as_ref().ok_or(GpuError::MissingCfa)?;
-        let cfa = cfa_pattern.bayer_quad()?;
+        metadata.validate()?;
+        let rgbe = cfa_pattern.rgbe_quad().ok();
+        let cfa = match rgbe {
+            Some(quad) => quad,
+            None => cfa_pattern.bayer_quad()?,
+        };
+        if rgbe.is_some() {
+            rrrah_core::rgbe::Calibration::new(metadata).map_err(|_| GpuError::InvalidColorProfile)?;
+        }
         let black = metadata.black_level.bayer_quad()?;
         let white = metadata.white_level.bayer_quad(cfa_pattern)?;
         for index in 0..4 {
@@ -1325,10 +1448,18 @@ impl RawRenderer {
                 });
             }
         }
-        let camera_to_rgb = camera_to_linear_srgb(metadata.xyz_to_camera).unwrap_or_else(|| {
-            log::warn!("camera calibration matrix is singular; displaying camera RGB as linear sRGB");
-            [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]
-        });
+        let camera_to_rgb = if rgbe.is_some() {
+            rrrah_core::camera4_to_linear_srgb_precise(metadata.xyz_to_camera.map(|r| r.map(f64::from)))
+                .map_err(|_| GpuError::InvalidColorProfile)?
+                .map(|r| r.map(|v| v as f32))
+        } else {
+            camera_to_linear_srgb(metadata.xyz_to_camera)
+                .ok_or(GpuError::InvalidColorProfile)?
+                .map(|r| [r[0], r[1], r[2], 0.])
+        };
+        if camera_to_rgb.iter().flatten().any(|v| !v.is_finite()) {
+            return Err(GpuError::InvalidColorProfile);
+        }
         let crop = metadata.effective_crop();
         let validate = validate_started.elapsed();
 
@@ -1347,24 +1478,54 @@ impl RawRenderer {
         let texture_width = plan.texture_extent;
         let texture_height = plan.texture_extent;
         let atlas_bytes = plan.atlas_bytes;
-        self.parameters.raw_size = [metadata.width, metadata.height];
-        self.parameters.texture_size = [texture_width, texture_height];
-        self.parameters.sample_stride = tile_size;
-        self.parameters.tile_halo = tile_halo;
-        self.parameters.tile_grid = tile_grid;
-        self.parameters.crop_origin = [crop.x, crop.y];
-        self.parameters.crop_size = [crop.width, crop.height];
-        self.parameters.cfa = cfa;
-        self.parameters.black = black;
-        self.parameters.white = white;
-        self.parameters.white_balance = display_white_balance(metadata.white_balance);
-        self.parameters.camera_to_rgb_0 =
-            [camera_to_rgb[0][0], camera_to_rgb[0][1], camera_to_rgb[0][2], 0.0];
-        self.parameters.camera_to_rgb_1 =
-            [camera_to_rgb[1][0], camera_to_rgb[1][1], camera_to_rgb[1][2], 0.0];
-        self.parameters.camera_to_rgb_2 =
-            [camera_to_rgb[2][0], camera_to_rgb[2][1], camera_to_rgb[2][2], 0.0];
-        self.parameters.orientation = metadata.orientation.shader_code();
+        let reservation = self
+            .memory_budget
+            .as_ref()
+            .map(|budget| budget.try_reserve(atlas_bytes))
+            .transpose()?
+            .map(std::sync::Arc::new);
+        let row_bytes = u64::from(texture_width) * 2;
+        let row_pitch = row_bytes.div_ceil(u64::from(wgpu::COPY_BYTES_PER_ROW_ALIGNMENT))
+            * u64::from(wgpu::COPY_BYTES_PER_ROW_ALIGNMENT);
+        let packed_bytes = if cfg!(target_endian = "big") || row_pitch != row_bytes {
+            row_pitch * u64::from(texture_height)
+        } else {
+            0
+        };
+        let tile_bytes = row_bytes * u64::from(texture_height);
+        let mut upload_reservation = self
+            .upload_memory_budget
+            .as_ref()
+            .map(|budget| budget.try_reserve(tile_bytes + packed_bytes))
+            .transpose()?;
+        let _queued_upload = QueuedUploadReservation {
+            queue: queue.clone(),
+            resources: GpuResourceLease::new(reservation.iter().cloned()),
+            reservation: self
+                .upload_queue_budget
+                .as_ref()
+                .map(|budget| {
+                    budget.try_reserve(row_pitch * u64::from(texture_height) * u64::from(layer_count))
+                })
+                .transpose()?,
+        };
+        let mut parameters = self.parameters;
+        parameters.raw_size = [metadata.width, metadata.height];
+        parameters.texture_size = [texture_width, texture_height];
+        parameters.sample_stride = tile_size;
+        parameters.tile_halo = tile_halo;
+        parameters.tile_grid = tile_grid;
+        parameters.crop_origin = [crop.x, crop.y];
+        parameters.crop_size = [crop.width, crop.height];
+        parameters.cfa = cfa;
+        parameters._padding[0] = u32::from(rgbe.is_some());
+        parameters.black = black;
+        parameters.white = white;
+        parameters.white_balance = display_white_balance(metadata.white_balance);
+        parameters.camera_to_rgb_0 = camera_to_rgb[0];
+        parameters.camera_to_rgb_1 = camera_to_rgb[1];
+        parameters.camera_to_rgb_2 = camera_to_rgb[2];
+        parameters.orientation = metadata.orientation.shader_code();
         let atlas_plan = atlas_plan_started.elapsed();
 
         let texture_allocate_started = Instant::now();
@@ -1402,6 +1563,13 @@ impl RawRenderer {
                 let row_pack_started = Instant::now();
                 let (bytes, row_pitch) = mosaic_bytes(&tile, texture_width);
                 row_pack += row_pack_started.elapsed();
+                if let Some(reservation) = &mut upload_reservation {
+                    let padding_capacity = match &bytes {
+                        Cow::Borrowed(_) => 0,
+                        Cow::Owned(values) => values.capacity() as u64,
+                    };
+                    reservation.ensure_bytes(tile.capacity() as u64 * 2 + padding_capacity)?;
+                }
                 let layer = tile_y * tile_grid[0] + tile_x;
                 let texture_write_started = Instant::now();
                 queue.write_texture(
@@ -1427,7 +1595,7 @@ impl RawRenderer {
             }
         }
         let uniform_write_started = Instant::now();
-        queue.write_buffer(&self.uniform_buffer, 0, bytemuck::bytes_of(&self.parameters));
+        queue.write_buffer(&self.uniform_buffer, 0, bytemuck::bytes_of(&parameters));
         let uniform_write = uniform_write_started.elapsed();
 
         // The shader indexes one independent sensor tile per array layer. The
@@ -1453,7 +1621,9 @@ impl RawRenderer {
                 },
             ],
         }));
+        self.parameters = parameters;
         self.raw_texture = Some(texture);
+        self.atlas_reservation = reservation;
         self.resident_bytes = atlas_bytes;
         let bind = bind_started.elapsed();
         Ok(GpuUploadTimings {
@@ -1467,6 +1637,22 @@ impl RawRenderer {
             bind,
             total: total_started.elapsed(),
         })
+    }
+
+    /// Select linear HDR output only on targets that retain signed HDR values.
+    /// Refusal leaves the current mode and uniforms unchanged.
+    pub fn set_output_mode(&mut self, queue: &wgpu::Queue, mode: RawOutputMode) -> Result<(), GpuError> {
+        if mode == RawOutputMode::SceneLinear
+            && !matches!(
+                self.target_format,
+                wgpu::TextureFormat::Rgba16Float | wgpu::TextureFormat::Rgba32Float
+            )
+        {
+            return Err(GpuError::InvalidLinearTarget(self.target_format));
+        }
+        self.parameters._padding[1] = u32::from(mode == RawOutputMode::SceneLinear);
+        queue.write_buffer(&self.uniform_buffer, 0, bytemuck::bytes_of(&self.parameters));
+        Ok(())
     }
 
     pub fn update_view(&mut self, queue: &wgpu::Queue, view: ViewParameters) {
@@ -1610,6 +1796,12 @@ fn mosaic_bytes(pixels: &[u16], width: u32) -> (Cow<'_, [u8]>, u32) {
 
 #[derive(Debug, Error)]
 pub enum GpuError {
+    #[error("scene-linear RAW output requires a signed float attachment, got {0:?}")]
+    InvalidLinearTarget(wgpu::TextureFormat),
+    #[error(transparent)]
+    Memory(#[from] rrrah_core::BufferError),
+    #[error("camera calibration cannot produce a valid color transform")]
+    InvalidColorProfile,
     #[error("GPU fast path currently supports single-plane CFA RAW only")]
     UnsupportedPhotometric,
     #[error("CFA metadata is missing")]

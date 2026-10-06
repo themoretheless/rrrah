@@ -1,0 +1,69 @@
+#!/usr/bin/env perl
+use strict ;
+use warnings ;
+
+use Getopt::Long qw(GetOptions) ;
+use Imager ;
+use SplatHash qw(encode_file decode) ;
+
+my ( $input, $output, $help ) ;
+
+GetOptions(
+  'input|i=s'  => \$input,
+  'output|o=s' => \$output,
+  'help|h'     => \$help,
+) or _usage(2) ;
+
+_usage(0) if $help ;
+_usage(2) if !defined $input || $input eq q{} || !defined $output || $output eq q{} ;
+
+eval {
+  my $hash = encode_file($input) ;
+  my $rgba = decode($hash) ;
+  _write_rgba_png( $rgba, 32, 32, $output ) ;
+  print unpack( 'H*', $hash ), "\n" ;
+  1 ;
+} or do {
+  my $error = $@ || 'Unknown error' ;
+  chomp $error ;
+  print STDERR "$error\n" ;
+  exit 1 ;
+} ;
+
+exit 0 ;
+
+sub _write_rgba_png {
+  my ( $rgba, $width, $height, $path ) = @_ ;
+  my @bytes = unpack 'C*', $rgba ;
+  my $image = Imager->new( xsize => $width, ysize => $height, channels => 4 ) ;
+
+  for my $y ( 0 .. $height - 1 ) {
+    for my $x ( 0 .. $width - 1 ) {
+      my $offset = ( $y * $width + $x ) * 4 ;
+      $image->setpixel(
+        x     => $x,
+        y     => $y,
+        color => Imager::Color->new( @bytes[ $offset .. $offset + 3 ] ),
+      ) ;
+    }
+  }
+
+  $image->write( file => $path )
+    or die "Cannot write output image '$path': " . $image->errstr ;
+
+  return ;
+}
+
+sub _usage {
+  my ($exit) = @_ ;
+  my $stream = $exit == 0 ? *STDOUT : *STDERR ;
+  print {$stream} <<'USAGE';
+Usage:
+  splathash --input image.jpg --output preview.png
+  splathash -i image.jpg -o preview.png
+
+Encodes the input image, writes a decoded 32x32 PNG preview, and prints the
+16-byte SplatHash as 32 lowercase hexadecimal characters.
+USAGE
+  exit $exit ;
+}

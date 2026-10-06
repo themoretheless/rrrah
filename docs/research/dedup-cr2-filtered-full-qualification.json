@@ -1,0 +1,37 @@
+{
+  "scope": "Prespecified explicit full-resolution filtered CR2/TIFF experiment; process running at record time",
+  "mode": "raw_raster_probe --verify-spatial-filtered",
+  "policy": {
+    "radius": 1,
+    "color_space": "EncodedSrgb",
+    "fit": "ConstrainedLeastSquares",
+    "maximum_sample_pairs": 900000000,
+    "residual_tolerance": 0.03,
+    "minimum_matched_fraction": 0.9,
+    "minimum_coverage_fraction": 0.3,
+    "gain_range": [
+      0.2,
+      5.0
+    ],
+    "maximum_offset": 0.1
+  },
+  "preserved": "Strict linear bidirectional evidence retained separately; no clipping or exact-pixel claim",
+  "validation": "Example build and selected Clippy passed",
+  "outcome": "rejected",
+  "compared_pixels": [
+    23980004,
+    23976132
+  ],
+  "matched_pixels": [
+    10726673,
+    10978880
+  ],
+  "matched_fraction": [
+    0.44731739827899947,
+    0.45790872355891266
+  ],
+  "managed_used_after": 0,
+  "managed_peak_bytes": 965485168,
+  "log_sha256": "6182d6ee88157d279d3d35d10b10f24df0ff407a6f18f033eeb86deef14882b5",
+  "interpretation": "A bounded global linear encoded-sRGB fit after 3x3 averaging fails on this independently developed pair. Thresholds unchanged. Saturation/nonlinear rendering effects need separate diagnosis; not established solely by this result."
+}

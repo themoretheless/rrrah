@@ -1,0 +1,29 @@
+{
+  "qualification": "retained feature storage admission",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/local.rs": "44d962733ab3a4323770844f9bbd1db92414f512e8408921629ce6a25c516bd9",
+    "crates/rrrah-dedup/src/local_scan.rs": "eeadf0dfca1fbfac4d70a90b331e624d10f0b12dafc601b4511ace1373d3e19b",
+    "crates/rrrah-dedup/src/local_collection.rs": "6cb2244c992e41398203be6e3674b70aa24e6458c1b307c231e77589623bc3a7",
+    "crates/rrrah-dedup/src/local_index.rs": "984c5b8671cdd86096d0be5a5c96ce61858550e23a3b29819b54fc945979df9e",
+    "crates/rrrah-dedup/tests/local_collection.rs": "a441a4e3b64ce8504abc4bbf617437231af7a8581e3615d2cf71eea9e2344607"
+  },
+  "tests": {
+    "library": 10,
+    "local_collection": 8,
+    "local_index": 6,
+    "local_scan": 11,
+    "failed": 0
+  },
+  "clippy_library": "passed",
+  "evidence": [
+    "Nonempty feature storage holds memory credit until its last shared owner drops.",
+    "Cancellation and extraction failure release temporary reservations.",
+    "Mutation fixture now triggers during the first decode after initial snapshots, without assuming retained memory reaches zero."
+  ],
+  "limits": [
+    "Feature admission is conservative.",
+    "Detector corner and suppression arrays remain outside MemoryBudget admission.",
+    "Index handoff copies and index storage remain outside this admission.",
+    "No RSS or complete memory bound qualification."
+  ]
+}

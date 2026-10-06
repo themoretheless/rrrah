@@ -1,0 +1,78 @@
+{
+  "index": 421,
+  "repository": "aikidos/Perceptash",
+  "commit": "4d18979f4d8ae6eee4b674bf5b71f19f307f613f",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "C# multi-algorithm computers and interface/benchmark tests; useful oracle only after algorithm/backend qualification.",
+  "available_source_evidence": [
+    {
+      "path": "src/Perceptash/IImageHasher.cs",
+      "local": "02-IImageHasher.cs",
+      "url": "https://github.com/aikidos/Perceptash/blob/4d18979f4d8ae6eee4b674bf5b71f19f307f613f/src/Perceptash/IImageHasher.cs",
+      "sha256": "6c3b8260a69f930ed8fc3c98b9a04f2bd8253df4fe4d911cd0255051a180b950",
+      "truncated": false,
+      "lines": 39,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/Perceptash/ImageHasher.cs",
+      "local": "03-ImageHasher.cs",
+      "url": "https://github.com/aikidos/Perceptash/blob/4d18979f4d8ae6eee4b674bf5b71f19f307f613f/src/Perceptash/ImageHasher.cs",
+      "sha256": "a89b00d2d02ab30e8af8f882231332b381e2e82e3c29cd4304a5a819fa9a13b4",
+      "truncated": false,
+      "lines": 39,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/Perceptash/Computers/HashComputers.cs",
+      "local": "04-HashComputers.cs",
+      "url": "https://github.com/aikidos/Perceptash/blob/4d18979f4d8ae6eee4b674bf5b71f19f307f613f/src/Perceptash/Computers/HashComputers.cs",
+      "sha256": "9b8cf38b2129ef7dd72087ac882e59321fcd65a411f38f6acf374d8f9c7d6e2d",
+      "truncated": false,
+      "lines": 26,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/Perceptash.Benchmarks/CalculateHash.cs",
+      "local": "05-CalculateHash.cs",
+      "url": "https://github.com/aikidos/Perceptash/blob/4d18979f4d8ae6eee4b674bf5b71f19f307f613f/tests/Perceptash.Benchmarks/CalculateHash.cs",
+      "sha256": "5dfaaaa69d7998d2ba667443751f4c84d1248a2746dbf6ec4c9ea577e2bc87ff",
+      "truncated": false,
+      "lines": 79,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 6,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/aikidos/Perceptash/blob/4d18979f4d8ae6eee4b674bf5b71f19f307f613f/README.md",
+      "sha256": "cd33bf19a92a5f6974dd3ff73e5e663e32ea94fcdca5d146a73a4935bcd601ae",
+      "truncated": false,
+      "lines": 52,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/aikidos/Perceptash/blob/4d18979f4d8ae6eee4b674bf5b71f19f307f613f/LICENSE",
+      "sha256": "8e24f2f83688e809cd386e04c6f4df4f84079ae661bd115e3ac1be088cbdfeca",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

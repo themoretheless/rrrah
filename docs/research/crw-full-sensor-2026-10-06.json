@@ -1,0 +1,34 @@
+{
+  "scope": "Complete native CRW sensor reconstruction with external format table data",
+  "cases": [
+    {
+      "id": 1307,
+      "source_sha256": "4ee482f2b6f9f1a8d370703ea04e9f2abaa49356973a7f56b229af93a78e8a2e",
+      "oracle_sha256": "8ac62f45a4ee04efebed7900eb46dd263dc4a03a96c4fe711dc41b6bec6078fe",
+      "samples": 3238144
+    },
+    {
+      "id": 2027,
+      "source_sha256": "b0730eb3a67cc2281a32e0b2ee104199246928d954a68b7e5b72366514c73d02",
+      "oracle_sha256": "3aecb01756492569734885710dafd6ffc26421ac0b5a7fa1c151973d48cd389a",
+      "samples": 6518336
+    }
+  ],
+  "table_data": {
+    "/tmp/rrrah-crw-table-0.bin": "1f96c603f8c2f9d47bd5c1b2c8fa25fc87507f8f6c66cbbccaadc6b5af4f6ac0",
+    "/tmp/rrrah-crw-table-1.bin": "94fb55465b45059889b7e5588d7c44311f1ec529ba3ce073bfda6b950d830683"
+  },
+  "table_reference": "External numerical table data extracted from /tmp/rrrah-libraw-decoders-dcraw.cpp; not embedded in the shipped library",
+  "logs": {
+    "/tmp/rrrah-crw-full-10d.log": "38ec0274c9742d4da7692e727462edcf6f75ecddedb7dd6a80e94760dba6fb92",
+    "/tmp/rrrah-crw-full-d30.log": "f34ab98da208bb467398391bd9a679729bb29ebfb2c4b034ef1f04f70e073d93",
+    "/tmp/rrrah-crw-reconstruct-full.log": "0c94d6b09dfad9682c5a8f8f0dfe31b58d72c96d202377eb177b15fa8446c293"
+  },
+  "default_passed": 715,
+  "default_ignored": 39,
+  "limitations": [
+    "External table data and test-owned Vec allocations; production managed admission and source-span validation remain pending.",
+    "No color/WB/viewer/cache/swap/GPU qualification; D30 WB remains inadmissible.",
+    "Only low-plane-present sources with tables 0/1 tested."
+  ]
+}

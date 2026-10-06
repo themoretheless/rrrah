@@ -1,0 +1,115 @@
+{
+  "repository": "wingu/failnozzle",
+  "metadata": {
+    "name": "wingu/failnozzle",
+    "url": "https://github.com/wingu/failnozzle",
+    "description": "A simple gevent-based server to collect, batch and de-dupe application errors before emailing",
+    "language": "Python",
+    "stars": 19,
+    "license": "BSD-3-Clause",
+    "archived": false,
+    "pushed_at": "2014-08-14T23:20:53Z",
+    "default_branch": "master",
+    "queries": [
+      "dupe in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/wingu/failnozzle/blob/5e38b30390f2b96f7d614fbb8b879e05b2fbe508/README.md",
+      "sha256": "dffe2d500ae3de25231936babe997030f3605bfdfc843719e29c529bd89f663d",
+      "truncated": false,
+      "lines": 256,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "license.txt",
+      "local": "01-license.txt",
+      "url": "https://github.com/wingu/failnozzle/blob/5e38b30390f2b96f7d614fbb8b879e05b2fbe508/license.txt",
+      "sha256": "26365aa4632bb12889d75bc591da06b0a1f4e78bc493b8a52ec847818c13347d",
+      "truncated": false,
+      "lines": 13,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "run-failnozzle.sh",
+      "local": "02-run-failnozzle.sh",
+      "url": "https://github.com/wingu/failnozzle/blob/5e38b30390f2b96f7d614fbb8b879e05b2fbe508/run-failnozzle.sh",
+      "sha256": "6668fc400ce1b84438eac40c2b55ad2b8d286e2d09b8cf592a3d35cd87ccbd14",
+      "truncated": false,
+      "lines": 5,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "setup.py",
+      "local": "03-setup.py",
+      "url": "https://github.com/wingu/failnozzle/blob/5e38b30390f2b96f7d614fbb8b879e05b2fbe508/setup.py",
+      "sha256": "a3a4af0c66a0978ddcd32c64e86f91b0215c9e4e3db7edce720e419e6bd3ef85",
+      "truncated": false,
+      "lines": 12,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "failnozzle/__init__.py",
+      "local": "04-__init__.py",
+      "url": "https://github.com/wingu/failnozzle/blob/5e38b30390f2b96f7d614fbb8b879e05b2fbe508/failnozzle/__init__.py",
+      "sha256": "65fe73fa77d2e4697e3c6ac59ef0e63d331aa529a540ee1a180f6d9aa2d5b9a4",
+      "truncated": false,
+      "lines": 3,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "failnozzle/tests/test_customization.py",
+      "local": "05-test_customization.py",
+      "url": "https://github.com/wingu/failnozzle/blob/5e38b30390f2b96f7d614fbb8b879e05b2fbe508/failnozzle/tests/test_customization.py",
+      "sha256": "65f7b25cc43ec2cedeead5e4929518499b121129243580c00879763527d6088e",
+      "truncated": false,
+      "lines": 103,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "failnozzle/loghandler.py",
+      "local": "06-loghandler.py",
+      "url": "https://github.com/wingu/failnozzle/blob/5e38b30390f2b96f7d614fbb8b879e05b2fbe508/failnozzle/loghandler.py",
+      "sha256": "86c895c54d6dcc506b49df053a07dc892adf092bda652f9a4d677a42ce3aba64",
+      "truncated": false,
+      "lines": 57,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "failnozzle/server.py",
+      "local": "07-server.py",
+      "url": "https://github.com/wingu/failnozzle/blob/5e38b30390f2b96f7d614fbb8b879e05b2fbe508/failnozzle/server.py",
+      "sha256": "12c1fdec0d1b6120f0b9b447b1ee56f51c1207c450b16ad5bfb681f9e432c371",
+      "truncated": false,
+      "lines": 659,
+      "source": true,
+      "test": false
+    }
+  ],
+  "errors": [],
+  "commit": "5e38b30390f2b96f7d614fbb8b879e05b2fbe508",
+  "tree_truncated": false,
+  "source_file_count": 8,
+  "test_file_count": 2,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "license.txt",
+    "run-failnozzle.sh",
+    "failnozzle/loghandler.py",
+    "failnozzle/server.py",
+    "failnozzle/tests/test_customization.py"
+  ]
+}

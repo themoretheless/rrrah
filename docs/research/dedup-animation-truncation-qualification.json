@@ -1,0 +1,43 @@
+{
+  "status": "macOS and native Linux passed; scoped Clippy exited zero with decoder warnings",
+  "tests": {
+    "macos": 6,
+    "linux": 6
+  },
+  "scope": [
+    "3463 truncated GIF/WebP prefixes each return typed Decode error",
+    "Trailing data rejected",
+    "Managed reservations return to zero after every failure",
+    "Same-path restored files decode successfully"
+  ],
+  "prefixes": {
+    "tests/fixtures/raster/gif-animation-disposal-3.gif": 3225,
+    "tests/fixtures/raster/webp-animation-0.webp": 238
+  },
+  "source_snapshot": {
+    "crates/rrrah-dedup/tests/animated.rs": "c39067d8a80bf2f7d76b2cf66ea0abe0fbf7b76804d662cfc0a296786bc5e6a4",
+    "tests/fixtures/raster/gif-animation-disposal-3.gif": "4d8ed22a0e1b33ef6de1f293eeb92a6548666bf95975514987903cbc8d66d5bf",
+    "tests/fixtures/raster/webp-animation-0.webp": "1a383b45be763d905e55b107b0057a1e685d84e5ce91bf3b1c5b167a151cf82e"
+  },
+  "snapshot_timing": "post-test capture; not atomic prelaunch",
+  "logs": {
+    "macos": {
+      "path": "docs/research/dedup-animation-truncation-macos.log",
+      "sha256": "67443ace31b07d5ffb8aae204133026efeb90fa80cd3f378bed40bd834e21445"
+    },
+    "linux": {
+      "path": "docs/research/dedup-animation-truncation-linux.log",
+      "sha256": "1f61d3924d8e1b59c16e5e5b0291d956e97daae42eb10a48317baad74ff39ebb"
+    },
+    "clippy": {
+      "path": "docs/research/dedup-animation-truncation-clippy.log",
+      "sha256": "be8bb2a78dffe0d7d66476ad7093435071ba877e76335a049d147c6f74bb229f"
+    }
+  },
+  "limits": [
+    "Two small authored GIF/WebP fixtures",
+    "No all-format malformed corpus claim",
+    "Managed counters do not establish total RSS",
+    "Full acceptance incomplete"
+  ]
+}

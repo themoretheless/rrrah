@@ -1,0 +1,78 @@
+{
+  "index": 382,
+  "repository": "burntcarrot/hashsearch",
+  "commit": "3713e5824f2cf31d3ea412f4696dfc17591d73b3",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Go average-hash image search and resize helper tests; global-hash collisions require verification.",
+  "available_source_evidence": [
+    {
+      "path": "pkg/hash/avg.go",
+      "local": "02-avg.go",
+      "url": "https://github.com/burntcarrot/hashsearch/blob/3713e5824f2cf31d3ea412f4696dfc17591d73b3/pkg/hash/avg.go",
+      "sha256": "7b315f23225dd8e173318e8dfc9382dec5d744d8ce1ee636297976ec71cacf7d",
+      "truncated": false,
+      "lines": 45,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "pkg/hash/utils.go",
+      "local": "03-utils.go",
+      "url": "https://github.com/burntcarrot/hashsearch/blob/3713e5824f2cf31d3ea412f4696dfc17591d73b3/pkg/hash/utils.go",
+      "sha256": "bbf9e960b5b096b8f9e68d29b00ae626ae55e875a087f760fdb1e46dea63b863",
+      "truncated": false,
+      "lines": 81,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "entity/error.go",
+      "local": "04-error.go",
+      "url": "https://github.com/burntcarrot/hashsearch/blob/3713e5824f2cf31d3ea412f4696dfc17591d73b3/entity/error.go",
+      "sha256": "ee8ca9e464050aaa9d82895537c760f76ccc677d86706b8bb7d14ecd54bb86d1",
+      "truncated": false,
+      "lines": 6,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "pkg/hash/avg_test.go",
+      "local": "05-avg_test.go",
+      "url": "https://github.com/burntcarrot/hashsearch/blob/3713e5824f2cf31d3ea412f4696dfc17591d73b3/pkg/hash/avg_test.go",
+      "sha256": "49e1d600c14a3d20d39453f77423537352b9bea6bcd853487fdc536a2060b9ec",
+      "truncated": false,
+      "lines": 86,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 2,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/burntcarrot/hashsearch/blob/3713e5824f2cf31d3ea412f4696dfc17591d73b3/README.md",
+      "sha256": "f711443c4e5aad6633552b86b06611517565ee8487c7e3de0131e1126ad26733",
+      "truncated": false,
+      "lines": 159,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/burntcarrot/hashsearch/blob/3713e5824f2cf31d3ea412f4696dfc17591d73b3/LICENSE",
+      "sha256": "2b2bf20bd0ddc6117a0e1ff4a33b8946eb4f624635df4cf5534d9047e088f61f",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

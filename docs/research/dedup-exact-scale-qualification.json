@@ -1,0 +1,71 @@
+{
+  "status": "macOS and native Linux probes passed",
+  "platform": "macOS ARM64",
+  "profile": "dev optimized plus debug info",
+  "fixture": "Three independent physical files per size: two copies, one equal-size equal-edge changed-middle negative",
+  "file_sizes_bytes": [
+    1048576,
+    8388608,
+    67108864,
+    268435456
+  ],
+  "warmups_per_size": 1,
+  "measured_runs_per_size": 3,
+  "medians_ms": {
+    "1048576": 3.071916,
+    "8388608": 22.968709,
+    "67108864": 180.629834,
+    "268435456": 706.08425
+  },
+  "whole_process_maximum_rss_bytes": 2572288,
+  "logs": {
+    "results": {
+      "path": "docs/research/dedup-exact-scale-results.log",
+      "sha256": "1d4ca0d1d523fd73cb2de91b95125286d7f83940f89b89702d3bfe258a22654b"
+    },
+    "time": {
+      "path": "docs/research/dedup-exact-scale-time.log",
+      "sha256": "71241622b6b6138d217dae2256fafed873c1e8a274157f364cbb8d17f783b67f"
+    },
+    "clippy": {
+      "path": "docs/research/dedup-exact-scale-clippy.log",
+      "sha256": "d91f4895c6f3f2e80b342ed829e3f75f776597bb3706a77089d67798ec51dbaf"
+    },
+    "linux-results": {
+      "path": "docs/research/dedup-exact-scale-linux-results.log",
+      "sha256": "16a41f4c3cfd4d1dc234b8088af1c4344183d4f0b4c3797a8eb65bd80092ef35"
+    },
+    "linux-stderr": {
+      "path": "docs/research/dedup-exact-scale-linux-stderr.log",
+      "sha256": "23a573e97203ef4e5c51d3a324d593b9943c9cd98f544f8d1f48ca38a6b26410"
+    },
+    "final-clippy": {
+      "path": "docs/research/dedup-exact-scale-final-clippy.log",
+      "sha256": "9a4003dc556d8d3669cd89c96f0139b2beeb3c5fec221c08c088b8a34ffa4241"
+    }
+  },
+  "source_sha256": "b1909790025066c8bf963be1012e04bb24b099b954c34e69c200f45057920409",
+  "snapshot_timing": "post-run source capture",
+  "limits": [
+    "Warm local filesystem, no cold/network filesystem qualification",
+    "RSS is whole process across fixture creation and all sizes, not per scan",
+    "No raster decoder memory claim",
+    "No comparative speed superiority claim",
+    "Full acceptance incomplete",
+    "Linux tmpfs and macOS local filesystem results are not a controlled platform comparison"
+  ],
+  "linux": {
+    "status": "native process exited zero",
+    "platform": "Linux ARM64 Ubuntu 24.04",
+    "storage": "isolated /tmp tmpfs, 2 GiB mount capacity",
+    "whole_process_peak_rss_bytes": 2244608,
+    "memory_source": "/proc/self/status VmHWM after all fixture creation, scans and retries",
+    "medians_ms": {
+      "1048576": 3.823145,
+      "8388608": 31.37747,
+      "67108864": 244.89145,
+      "268435456": 951.649431
+    }
+  },
+  "post_macos_changes": "Linux-only /proc process-memory reporting added; scan workload unchanged"
+}

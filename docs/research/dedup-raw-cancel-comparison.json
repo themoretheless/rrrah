@@ -1,0 +1,21 @@
+{
+  "required_per_platform": 29,
+  "platforms": {
+    "macos": {
+      "status": "passed",
+      "exit_code": 0,
+      "matched_after_retry": 29,
+      "report": "dedup-raw-cancel-macos-report.json",
+      "binary_sha256": "2c31bd4e76c7badb53cbb8ad23da8c973bfe764027a7eab039354e12816fcf6c"
+    },
+    "linux": {
+      "status": "passed",
+      "exit_code": 0,
+      "matched_after_retry": 29,
+      "report": "dedup-raw-cancel-linux-report.json",
+      "binary_sha256": "56426ea9ba282658f6f605360eaab9d12df3409f76bfa7ef90df4844fcc0c25b"
+    }
+  },
+  "scope": "Cancel callback when managed peak first becomes nonzero; require explicit cancellation, released reservations and same-process retry. Not decoder-internal cancellation latency or RSS proof.",
+  "source_sha256": "3c05c10a76e8ace1df3a7b6db2a0d96310af0e06dda04dbaf36b74430a223549"
+}

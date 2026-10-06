@@ -1,0 +1,78 @@
+{
+  "index": 17,
+  "repository": "VikasSukhija/Downloads",
+  "commit": "59b36dcb55ec25533c0278ea466d8bb278b5b43a",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "PowerShell compares mail policies, Intune devices and AD object identities; no file/image comparison engine.",
+  "license_metadata": "MIT",
+  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "available_source_evidence": [
+    {
+      "path": "LicenseAssignmentDates.ps1",
+      "local": "02-LicenseAssignmentDates.ps1",
+      "url": "https://github.com/VikasSukhija/Downloads/blob/59b36dcb55ec25533c0278ea466d8bb278b5b43a/LicenseAssignmentDates.ps1",
+      "sha256": "a4d299a3dc2ba6780e79d214aecf56304543bc85dabea17aeb2749e20d301bfb",
+      "truncated": false,
+      "lines": 175,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "CompareEmailPol.ps1",
+      "local": "03-CompareEmailPol.ps1",
+      "url": "https://github.com/VikasSukhija/Downloads/blob/59b36dcb55ec25533c0278ea466d8bb278b5b43a/CompareEmailPol.ps1",
+      "sha256": "80b45a82c4b0a048801d6aa1ab77678db933e648966d45b22ac3771941845403",
+      "truncated": false,
+      "lines": 76,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "IntuneDuplicateDeviceCleanup.ps1",
+      "local": "04-IntuneDuplicateDeviceCleanup.ps1",
+      "url": "https://github.com/VikasSukhija/Downloads/blob/59b36dcb55ec25533c0278ea466d8bb278b5b43a/IntuneDuplicateDeviceCleanup.ps1",
+      "sha256": "10c8b684430e97568357a26e89ae49a1b2fbd2f63aecbd13698c421fe6d33b94",
+      "truncated": false,
+      "lines": 265,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "findduplicateobjects.ps1",
+      "local": "05-findduplicateobjects.ps1",
+      "url": "https://github.com/VikasSukhija/Downloads/blob/59b36dcb55ec25533c0278ea466d8bb278b5b43a/findduplicateobjects.ps1",
+      "sha256": "13a4086dc0cb36d604fefbf8a68470267ee77fc237516c00136ba696ad7822f6",
+      "truncated": false,
+      "lines": 97,
+      "source": true,
+      "test": false
+    }
+  ],
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/VikasSukhija/Downloads/blob/59b36dcb55ec25533c0278ea466d8bb278b5b43a/README.md",
+      "sha256": "703d0c785ce34caf7581611b7288758725ce5ffe121d34120694ea3e66313879",
+      "truncated": false,
+      "lines": 194,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/VikasSukhija/Downloads/blob/59b36dcb55ec25533c0278ea466d8bb278b5b43a/LICENSE",
+      "sha256": "39bf0596b0c70b9834a39ad0840b872d9713a6ee4a4d9c81f0733b1d116548d7",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "index": 292,
+  "repository": "day8/de-dupe",
+  "commit": "381a89ff08d5dcad4d874433402e4bede53c8aaa",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "ClojureScript persistent-data-structure deduplication; runtime memory optimization, not image/file engine.",
+  "available_source_evidence": [
+    {
+      "path": "build.clj",
+      "local": "02-build.clj",
+      "url": "https://github.com/day8/de-dupe/blob/381a89ff08d5dcad4d874433402e4bede53c8aaa/build.clj",
+      "sha256": "b0ada21f13c061634bae28eb84dc9c5285838e964572ce5835386a145941eeb0",
+      "truncated": false,
+      "lines": 90,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "test/de_dupe/test_runner.clj",
+      "local": "03-test_runner.clj",
+      "url": "https://github.com/day8/de-dupe/blob/381a89ff08d5dcad4d874433402e4bede53c8aaa/test/de_dupe/test_runner.clj",
+      "sha256": "bbc4abd16919ada00940caaeb83e33f763127a6fa4df4175e7ee73028a80469d",
+      "truncated": false,
+      "lines": 93,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "bench/de_dupe/bench.cljs",
+      "local": "04-bench.cljs",
+      "url": "https://github.com/day8/de-dupe/blob/381a89ff08d5dcad4d874433402e4bede53c8aaa/bench/de_dupe/bench.cljs",
+      "sha256": "a3e4b1c19f618d06b8f05f670b0d3c85e14197d726f188ad2d5f52f93bd70381",
+      "truncated": false,
+      "lines": 45,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 1,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/day8/de-dupe/blob/381a89ff08d5dcad4d874433402e4bede53c8aaa/README.md",
+      "sha256": "0d3bf7d2d2ad5d5f35f031911c6d8bbfd95ac176963d2ca884cd61de32724387",
+      "truncated": false,
+      "lines": 151,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "licence.txt",
+      "local": "01-licence.txt",
+      "url": "https://github.com/day8/de-dupe/blob/381a89ff08d5dcad4d874433402e4bede53c8aaa/licence.txt",
+      "sha256": "1ceb739a18a66d1f07022cf80a2a4b5c8dec62a06a886f2d34a2bb571f9a4882",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

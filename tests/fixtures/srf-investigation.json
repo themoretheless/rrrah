@@ -1,0 +1,449 @@
+{
+  "schema": 1,
+  "source": {
+    "id": 1351,
+    "make": "Sony",
+    "model": "DSC-F828",
+    "license": "CC0-1.0",
+    "url": "https://raw.pixls.us/getfile.php/1351/nice/Sony - DSC-F828 - 4:3.SRF",
+    "bytes": 17393344,
+    "sha256": "07739f94bcab0c7e198d418ac65172d0dce04bb84a7683ecffd0bfe4b32f6d79"
+  },
+  "oracle": {
+    "libraw_version": "0.22.2-Release",
+    "processing_stage": "unpack",
+    "make": "Sony",
+    "model": "DSC-F828",
+    "width": 3360,
+    "height": 2460,
+    "crop": [
+      6,
+      0,
+      3287,
+      2460
+    ],
+    "wb": [
+      0,
+      1,
+      0,
+      0
+    ],
+    "black": 491,
+    "cblack": [
+      67,
+      130,
+      0,
+      1,
+      0,
+      0
+    ],
+    "white": 16368,
+    "cfa": [
+      "E",
+      "R",
+      "B",
+      "G"
+    ],
+    "cfa_indices": [
+      3,
+      0,
+      2,
+      1
+    ],
+    "xyz_to_camera": [
+      [
+        0.7924000025,
+        -0.1909999996,
+        -0.07769999653
+      ],
+      [
+        -0.8226000071,
+        1.545899987,
+        0.2998000085
+      ],
+      [
+        -0.1517000049,
+        0.2198999971,
+        0.6818000078
+      ],
+      [
+        -0.7242000103,
+        1.140100002,
+        0.3481000066
+      ]
+    ],
+    "camera_to_rgb": [
+      [
+        1.63739419,
+        -0.252761811,
+        -0.003541585058
+      ],
+      [
+        0.06718456,
+        0.8223665357,
+        -0.5305757523
+      ],
+      [
+        -0.0008971288335,
+        -0.3551472425,
+        1.415327907
+      ]
+    ],
+    "file_color_matrices": [
+      {
+        "parsedfields": 0,
+        "illuminant": 65535,
+        "xyz_to_camera": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "parsedfields": 0,
+        "illuminant": 65535,
+        "xyz_to_camera": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ]
+      }
+    ]
+  },
+  "sensor_qualification": {
+    "width": 3360,
+    "height": 2460,
+    "samples": 8265600,
+    "bytes": 16531200,
+    "sha256": "b3fc3d395950407a35d33392a97181fa51aac1afb0aa6b96d94a7eba00e95d42",
+    "full_sensor_equal": true,
+    "native_source": "crates/rrrah-decode/src/camtiff/srf_sensor.rs",
+    "evidence": "/tmp/rrrah-srf-sensor.log",
+    "algorithm": "bounded master-key selection and 40-byte key header; streaming 128-word rolling XOR state retained across rows; big-endian 14-bit samples",
+    "no_full_sensor_cipher_copy": true,
+    "bounds": [
+      "key selector/key/header/source extent",
+      "sample 14-bit maximum",
+      "pre-allocation and per-row cancellation",
+      "fallible output reservation"
+    ],
+    "scratch": "fixed 128-u32 cipher state and 40-byte key header; no per-row heap buffer"
+  },
+  "remaining": [
+    "four-plane color/GPU/viewer integration with explicit F828 shared green/E gain policy; photographic color qualification",
+    "explicit RGBE four-channel CFA and color/GPU processing contract",
+    "container/profile registration",
+    "managed admission and malformed release",
+    "RAM/disk/swap and independent GPU readback"
+  ],
+  "catalog_status": "Pending; standalone sensor extraction only",
+  "as_shot_rgb_qualification": {
+    "native_values": [
+      397,
+      256,
+      728
+    ],
+    "tags": [
+      "0xd0",
+      "0xd1",
+      "0xd2"
+    ],
+    "representation": "three inline SHORT entries, each count 1",
+    "metadata_cipher": "SRF1 master-key layer and SRF2-key layer; fixed 2048-byte directory window",
+    "independent_oracle": {
+      "tool": "ExifTool",
+      "version": "13.59",
+      "commit": "2200871d9cef988051d2a99d67df3bda6cbb30a8",
+      "output": "/tmp/rrrah-srf-exiftool-wb.json",
+      "values_equal_in_SRF2_through_SRF5": true
+    },
+    "evidence": "/tmp/rrrah-srf-wb.log",
+    "fourth_RGBE_coefficient": "not inferred or silently copied from green",
+    "tag_documentation": "https://exiftool.org/TagNames/Sony.html#SRF2"
+  },
+  "four_plane_color_qualification": {
+    "core_api": "camera4_to_linear_srgb_precise",
+    "xyz_to_camera": [
+      [
+        0.7924000025,
+        -0.1909999996,
+        -0.07769999653
+      ],
+      [
+        -0.8226000071,
+        1.545899987,
+        0.2998000085
+      ],
+      [
+        -0.1517000049,
+        0.2198999971,
+        0.6818000078
+      ],
+      [
+        -0.7242000103,
+        1.140100002,
+        0.3481000066
+      ]
+    ],
+    "camera_to_rgb4": [
+      [
+        1.63739419,
+        -0.252761811,
+        -0.003541585058,
+        -0.38109079
+      ],
+      [
+        0.06718456,
+        0.8223665357,
+        -0.5305757523,
+        0.6410246491
+      ],
+      [
+        -0.0008971288335,
+        -0.3551472425,
+        1.415327907,
+        -0.05928355828
+      ]
+    ],
+    "independent_oracles": [
+      "LibRaw 0.22.2 full rgb_cam 3x4",
+      "NumPy SVD pseudoinverse of row-normalized camera response"
+    ],
+    "numpy_vs_libraw_max_absolute_difference": 2.4739610471335993e-08,
+    "native_vs_libraw_absolute_tolerance": 1e-06,
+    "basis_and_HDR_reconstruction_absolute_tolerance": 1e-12,
+    "neutral_preserved": true,
+    "fourth_column_nonzero_in_all_outputs": true,
+    "invalid_profiles_rejected": [
+      "zero row",
+      "rank deficiency",
+      "NaN",
+      "infinity"
+    ],
+    "evidence": "/tmp/rrrah-rgbe-core.log",
+    "remaining": "RGBE CFA/WB binding, CPU/GPU demosaic, metadata/cache integration and independent frame readback"
+  },
+  "rgbe_cfa_cache_qualification": {
+    "new_plane": "CfaColor::Emerald",
+    "wire_code": 7,
+    "existing_numeric_codes_preserved": true,
+    "serde_enum_variant_appended_after_Unknown": true,
+    "rgbe_quad": [
+      3,
+      0,
+      2,
+      1
+    ],
+    "bayer_reduction_rejected": true,
+    "duplicate_or_wrong_color_rejected": true,
+    "binary_payload_roundtrip": [
+      "CFA",
+      "four-channel WB",
+      "four-row matrix",
+      "pixels"
+    ],
+    "WB_roundtrip_values": "authored test coefficients, not a qualified as-shot Emerald coefficient",
+    "wire_compatibility": "existing codes unchanged; old readers reject new code 7 rather than merge with green",
+    "evidence": "/tmp/rrrah-rgbe-cfa-cache.log",
+    "remaining": "fourth WB resolution, CPU/GPU demosaic and source/cache/viewer integration"
+  },
+  "cpu_rgbe_interpolation_qualification": {
+    "api": "rrrah_core::rgbe::interpolate_planes",
+    "algorithm": "four independent two-pixel lattices with bilinear interpolation; nearest same-plane extension at edges",
+    "no_heap_allocations": true,
+    "sample_contract": "explicitly normalized black/white and all four WB gains before interpolation",
+    "checks": [
+      "distinct constant channels including HDR",
+      "2x2, odd-size and larger sensor edges",
+      "independent analytic affine plane ramps",
+      "exact measured photosite preservation",
+      "duplicate/unknown channels and invalid geometry",
+      "nonfinite sample rejection",
+      "f64 maximum constant preservation"
+    ],
+    "evidence": "/tmp/rrrah-rgbe-interpolation.log",
+    "scope": "analytic CPU reconstruction reference, not real-camera rendered color qualification",
+    "remaining": "match GPU kernel to this reference, bind source levels/fourth WB, route/viewer/cache integration"
+  },
+  "gpu_rgbe_interpolation_qualification": {
+    "shader": "crates/rrrah-gpu/src/rgbe_interpolate.wgsl",
+    "adapter": "Metal Apple M4 Max",
+    "source_contract": "finite normalized per-site scalar input with all four WB gains explicitly resolved",
+    "output": "four separate float R/G/B/E planes; no tone mapping or HDR clipping",
+    "geometries": [
+      [
+        2,
+        2
+      ],
+      [
+        3,
+        5
+      ],
+      [
+        17,
+        13
+      ]
+    ],
+    "quad_layouts": [
+      [
+        3,
+        0,
+        2,
+        1
+      ],
+      [
+        0,
+        3,
+        1,
+        2
+      ],
+      [
+        1,
+        2,
+        0,
+        3
+      ]
+    ],
+    "cases": 9,
+    "pixels_compared": 720,
+    "channels_compared": 2880,
+    "CPU_reference": "rrrah_core::rgbe::interpolate_planes",
+    "absolute_tolerance": 1e-05,
+    "dispatch_tail_sentinel_unchanged": true,
+    "evidence": "/tmp/rrrah-rgbe-compute.log",
+    "remaining": "production host validation, managed admission, device-limit segmentation, source WB/levels/color binding and viewer/full-sensor integration"
+  },
+  "rgbe_dispatch_plan_qualification": {
+    "api": "RgbePlan::new",
+    "checks": [
+      "four-plane quad",
+      "u32 shader indexing overflow",
+      "source/output buffer limits",
+      "workgroup shape/count limits",
+      "aligned output row chunks",
+      "at most 4096 dispatches"
+    ],
+    "full_F828_buffer_plan": {
+      "source_bytes": 33062400,
+      "output_bytes": 132249600,
+      "source_output_readback_uniform_bytes": 297561632
+    },
+    "small_binding_case": {
+      "dimensions": [
+        16,
+        13
+      ],
+      "binding_bytes": 1024,
+      "rows_per_dispatch": [
+        4,
+        4,
+        4,
+        1
+      ],
+      "offset_alignment": 256,
+      "actual_Metal_CPU_reference_equal": true
+    },
+    "segmented_compute_cases": 12,
+    "channel_values_compared": 5376,
+    "plan_evidence": "/tmp/rrrah-rgbe-plan.log",
+    "GPU_evidence": "/tmp/rrrah-rgbe-segmented-metal.log",
+    "remaining": "managed reservations retained through completion, actual full-source execution and WB/color/viewer integration"
+  },
+  "managed_rgbe_compute_qualification": {
+    "api": "RgbeCompute::execute_managed",
+    "input_contract": "finite per-site f32 values with caller-owned input accounting and explicitly resolved normalization",
+    "validation": [
+      "device dispatch plan",
+      "exact source sample count",
+      "finite input before allocations"
+    ],
+    "admission": "GPU buffer reservation then CPU output buffer before GPU allocations",
+    "completion_ownership": "local and queue-completion Arc reservation retains GPU accounting even on failed poll",
+    "CPU_output_owner": "tracked PixelBuffer retained through last clone",
+    "small_limit_tests": [
+      "four aligned dispatches",
+      "GPU zero budget refusal",
+      "CPU zero budget refusal",
+      "invalid/NaN/Inf input no reservations"
+    ],
+    "full_sensor_GPU": {
+      "adapter": "Metal Apple M4 Max",
+      "dimensions": [
+        3360,
+        2460
+      ],
+      "channel_values_compared": 33062400,
+      "reference": "CPU four-plane lattice interpolation over independently unpacked source sensor",
+      "absolute_tolerance": 1e-05,
+      "CPU_peak_and_retained_input_output_bytes": 165312000,
+      "GPU_peak_bytes": 297561632,
+      "CPU_GPU_final_usage_bytes": 0,
+      "normalization": "authored gains [1.2,0.8,1.4,0.9] with raw/16368; not as-shot color or black calibration qualification"
+    },
+    "evidence": "/tmp/rrrah-rgbe-full-managed.log",
+    "remaining": "actual Emerald WB/color/source integration, cache-to-viewer and physical display qualification"
+  },
+  "f828_four_plane_WB_policy": {
+    "native_coefficients": [
+      397,
+      256,
+      728,
+      256
+    ],
+    "normalized_gains": [
+      1.55078125,
+      1,
+      2.84375,
+      1
+    ],
+    "source_rule": "SRF2 0xd1 green coefficient also assigned to fourth camera plane; shares a gain but preserves E samples and matrix row",
+    "rule_reference": "https://github.com/LibRaw/LibRaw/blob/0.22.0/src/metadata/sony.cpp#L2403-L2409",
+    "rule_scope": "explicit DSC-F828 SRF interpretation policy matching independent parser source, not an extra fourth file coefficient or physical photographic color certification",
+    "three_file_values_independently_verified_by": "ExifTool 13.59",
+    "negative_tests": [
+      "zero red coefficient",
+      "zero green coefficient",
+      "zero blue coefficient",
+      "duplicate WB tag",
+      "wrong WB type"
+    ],
+    "encrypted_source_mutation": "flip plaintext-equivalent bits through the two XOR cipher layers at ExifTool-verified addresses 0x28726/0x28732/0x2873e",
+    "all_errors_without_silent_default": true,
+    "evidence": "/tmp/rrrah-srf-rgbe-wb-policy-final.log",
+    "remaining": "bind normalized source metadata to four-plane color/GPU/viewer and independent rendered-frame qualification"
+  }
+}

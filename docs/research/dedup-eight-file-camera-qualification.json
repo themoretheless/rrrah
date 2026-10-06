@@ -1,0 +1,30 @@
+{
+  "scope": "Single eight-file full-resolution collection: four distinct scenes as RAW and independently developed embedded-ICC TIFF",
+  "indexed_features": 3187,
+  "descriptor_hits": 3311185,
+  "proposed_pairs": 28,
+  "fresh_pixel_pairs": 4,
+  "accepted_pairs": [
+    [
+      1,
+      2
+    ],
+    [
+      3,
+      4
+    ],
+    [
+      5,
+      6
+    ]
+  ],
+  "rejected_geometric_pair": [
+    7,
+    8
+  ],
+  "managed_used_after": 0,
+  "managed_peak_bytes": 973130992,
+  "log_sha256": "601ce913749cc372a2150f96f812b02994c03b401fe313b4756047e35271b3a7",
+  "output": "indexed_features=3187 descriptor_hits=3311185 proposed_pairs=28 pixel_verification_pairs=4 analysed=[1, 2, 3, 4, 5, 6, 7, 8] file_issues=[] pair_issues=[] source_issues=[]\npair=(1, 2) candidate=true geometry=true pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 12212224, compared_pixels: 12212224, matched_pixels: 12043261, maximum_channel_error: 0.08049603462780063, squared_error: 3677.169423983459 }, reverse: WarpEvidence { source_pixels: 12358212, compared_pixels: 12206993, matched_pixels: 12042307, maximum_channel_error: 0.08014853875896721, squared_error: 3673.950464654769 } })\npair=(1, 3) candidate=false geometry=false pixels=None\npair=(1, 4) candidate=false geometry=false pixels=None\npair=(1, 5) candidate=false geometry=false pixels=None\npair=(1, 6) candidate=false geometry=false pixels=None\npair=(1, 7) candidate=false geometry=false pixels=None\npair=(1, 8) candidate=false geometry=false pixels=None\npair=(2, 3) candidate=false geometry=false pixels=None\npair=(2, 4) candidate=false geometry=false pixels=None\npair=(2, 5) candidate=false geometry=false pixels=None\npair=(2, 6) candidate=false geometry=false pixels=None\npair=(2, 7) candidate=false geometry=false pixels=None\npair=(2, 8) candidate=false geometry=false pixels=None\npair=(3, 4) candidate=true geometry=true pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 24321024, compared_pixels: 24300900, matched_pixels: 24248274, maximum_channel_error: 3.060419434420172, squared_error: 20288.744392594603 }, reverse: WarpEvidence { source_pixels: 24321024, compared_pixels: 24321024, matched_pixels: 24268913, maximum_channel_error: 3.0091970185371526, squared_error: 20201.110711193276 } })\npair=(3, 5) candidate=false geometry=false pixels=None\npair=(3, 6) candidate=false geometry=false pixels=None\npair=(3, 7) candidate=false geometry=false pixels=None\npair=(3, 8) candidate=false geometry=false pixels=None\npair=(4, 5) candidate=false geometry=false pixels=None\npair=(4, 6) candidate=false geometry=false pixels=None\npair=(4, 7) candidate=false geometry=false pixels=None\npair=(4, 8) candidate=false geometry=false pixels=None\npair=(5, 6) candidate=true geometry=true pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 15925248, compared_pixels: 15925248, matched_pixels: 15318542, maximum_channel_error: 1.5138118833181524, squared_error: 18221.37531477039 }, reverse: WarpEvidence { source_pixels: 16110080, compared_pixels: 15909124, matched_pixels: 15292440, maximum_channel_error: 1.4747334184995986, squared_error: 18164.378793627526 } })\npair=(5, 7) candidate=false geometry=false pixels=None\npair=(5, 8) candidate=false geometry=false pixels=None\npair=(6, 7) candidate=false geometry=false pixels=None\npair=(6, 8) candidate=false geometry=false pixels=None\npair=(7, 8) candidate=false geometry=true pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 24000000, compared_pixels: 24000000, matched_pixels: 21474249, maximum_channel_error: 17.325895709371252, squared_error: 2235923.657102227 }, reverse: WarpEvidence { source_pixels: 24216480, compared_pixels: 23996128, matched_pixels: 21473013, maximum_channel_error: 16.049477730354404, squared_error: 2222431.190246164 } })\nmanaged_used=0 managed_peak=973130992\n",
+  "limitations": "Known camera corpus only; not large-scale or independently held-out calibration; managed peak excludes some physical allocations"
+}

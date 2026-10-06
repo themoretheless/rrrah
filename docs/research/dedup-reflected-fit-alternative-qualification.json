@@ -1,0 +1,103 @@
+{
+  "status": "qualified_scoped_reflected_fit_recovery_not_goal_complete",
+  "implementation": "Model-specific fit failures try the second retained geometric model; positive recovery must pass original bidirectional acceptance thresholds. When no model verifies, any fitting failure remains inconclusive; the first reason is returned.",
+  "recoverable_fit_reasons": [
+    "InsufficientSamples",
+    "LowVariance",
+    "OutsidePolicy"
+  ],
+  "terminal_errors": [
+    "Invalid",
+    "Budget",
+    "Cancelled",
+    "source/decode errors"
+  ],
+  "maximum_models": 2,
+  "independent_confirmation_fixtures": {
+    "dimensions": [
+      32,
+      32
+    ],
+    "known_transform": {
+      "reflection": true,
+      "a": 1,
+      "b": 0,
+      "translation": [
+        31,
+        0
+      ]
+    },
+    "gain": 0.5,
+    "offset": 0.02,
+    "first_model_opaque_overlap": 352,
+    "required_samples": 800,
+    "verified_second_model_forward_pixels": 1024,
+    "verified_second_model_reverse_pixels": 1024,
+    "scope": "Authored models supplied to private confirmation stage; qualifies failure recovery and pixel proof, not feature discovery."
+  },
+  "regression_scope": [
+    "All library unit tests",
+    "geometry",
+    "local_collection",
+    "local_scan",
+    "photo_files"
+  ],
+  "checks": {
+    "tests": {
+      "path": "docs/research/dedup-reflected-fit-alternative-tests.log",
+      "sha256": "67210dd29396c6fa2a9eaa2f74c9a8a2328d91043b63edf190f01bc4975c4b23",
+      "exit_code": 0,
+      "suites": 1,
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "filtered_out": 14
+    },
+    "regression": {
+      "path": "docs/research/dedup-reflected-fit-alternative-regression.log",
+      "sha256": "dcbf0a3cedef31d3eeac86efcb8e9ce5db4003abcb5adf3dc118341b7657442e",
+      "exit_code": 0,
+      "suites": 5,
+      "passed": 71,
+      "failed": 0,
+      "ignored": 0,
+      "filtered_out": 0
+    },
+    "clippy": {
+      "path": "docs/research/dedup-reflected-fit-alternative-clippy.log",
+      "sha256": "1b207a61d2a1e95a1fc4ab3d1bdc83392f187b60eadfbb0dd7f989990d8235bb",
+      "exit_code": 0,
+      "suites": 0,
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "filtered_out": 0
+    }
+  },
+  "source_stability": {
+    "snapshot_timing": "During execution, not pre-launch",
+    "snapshot_files": 234,
+    "changed_files": {
+      "crates/rrrah-decode/src/pict.rs": {
+        "during_run_sha256": "2911e4154b67518fb74f5fe34289ce82f30e220dd1a1fac429f35bbaf504a5fb",
+        "current_sha256": "46cfb89a55e748cee10dc3fd4e27acde0c199a64db0dbfe22bfe5c3327d39e35"
+      }
+    },
+    "scope_limit": "Concurrent decoder PICT edit occurred during the run. These image-routing regressions exercise PNG/JPEG/TIFF and RAW previews, not PICT; no stable-current all-format decoder qualification is claimed."
+  },
+  "source_sha256": {
+    "crates/rrrah-dedup/src/local_scan.rs": "9fc6b79a549db80153c473776696b6e518636848c23bc0261b38b3f203f925df",
+    "crates/rrrah-dedup/src/geometry.rs": "f21029b01e4f761382d8049c39b41078022359272f44a2dba1ba1fc3b9be660a",
+    "crates/rrrah-dedup/src/warp.rs": "f7013aa9d81bedd4b6165825c081a2dab205ee04f02fd7f460473382ced74568",
+    "crates/rrrah-dedup/src/local_collection.rs": "6f7324faa4ce1bf03a30684111811fa979d52ca8200a477ebbbaba0b096abf53"
+  },
+  "remaining": [
+    "Reflected filtered file/collection routing",
+    "Alternative geometry in ordinary file confirmation",
+    "Perspective geometry",
+    "Held-out/burst/look-alike image qualification",
+    "Shared-memory and process-RSS admission",
+    "Scalable complete-container indexing",
+    "Cross-platform and other remaining acceptance-contract requirements"
+  ]
+}

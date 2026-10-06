@@ -1,0 +1,17 @@
+{
+  "status": "all_14_macos_decode_tests_passed",
+  "session": 18646,
+  "source_sha256": {
+    "crates/rrrah-dedup/tests/decode.rs": "ee65d744b955b5fa4227d5bc9ed45fc081c20ce0a800af12f33f90de24359f45"
+  },
+  "policy_reference": "https://netpbm.sourceforge.net/doc/ppm.html",
+  "finding": "PPM standard specifies BT.709; untagged-color cache isolation test now uses untagged TGA with the same strict refusal and explicit interpretation/cache assertions.",
+  "scope": "Test fixture correction; no runtime color policy or admission thresholds changed. Full fixed-snapshot rerun remains required.",
+  "targeted_exit_code": 0,
+  "targeted_tests_passed": 1,
+  "full_decode_session": 16147,
+  "full_decode_exit_code": 0,
+  "full_decode_tests_passed": 14,
+  "full_decode_log": "docs/research/dedup-color-cache-policy-full-macos.log",
+  "post_source_drift": {}
+}

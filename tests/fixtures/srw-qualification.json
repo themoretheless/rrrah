@@ -1,0 +1,185 @@
+{
+  "schema": 1,
+  "status": "native-EX1-sensor-color-cache-swap-Metal-qualified-subset",
+  "source": {
+    "id": 1204,
+    "license": "CC0",
+    "sha256": "a084890fd9d7995ceb746c18ecf5be48c95baf14286d5c0c480cc3daa25f3e37"
+  },
+  "oracle": {
+    "libraw_version": "0.22.2-Release",
+    "make": "Samsung",
+    "model": "EX1",
+    "width": 3688,
+    "height": 2780,
+    "crop": [
+      0,
+      2,
+      3682,
+      2760
+    ],
+    "wb": [
+      7792,
+      4096,
+      8256,
+      4096
+    ],
+    "black": 0,
+    "cblack": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "white": 15872,
+    "cfa": [
+      "R",
+      "G",
+      "G",
+      "B"
+    ],
+    "xyz_to_camera": [
+      [
+        0.8898000121,
+        -0.2497999966,
+        -0.09939999878
+      ],
+      [
+        -0.3143999875,
+        1.132799983,
+        0.2065999955
+      ],
+      [
+        -0.07599999756,
+        0.1380999982,
+        0.4575999975
+      ],
+      [
+        0,
+        0,
+        0
+      ]
+    ],
+    "camera_to_rgb": [
+      [
+        1.670834422,
+        -0.6268317699,
+        -0.04400257021
+      ],
+      [
+        -0.2838390172,
+        1.716859579,
+        -0.4330206215
+      ],
+      [
+        0.05641356483,
+        -0.4923045933,
+        1.435891032
+      ]
+    ]
+  },
+  "native": {
+    "make": "SAMSUNG",
+    "model": "EX1",
+    "width": 3688,
+    "height": 2780,
+    "wb": [
+      1.9023438,
+      1.0,
+      2.015625,
+      1.0
+    ],
+    "black_grid": [
+      0.0
+    ],
+    "white": [
+      15872.0
+    ],
+    "cfa": [
+      "R",
+      "G",
+      "G",
+      "B"
+    ],
+    "xyz_to_camera": [
+      [
+        0.8898,
+        -0.2498,
+        -0.0994
+      ],
+      [
+        -0.3144,
+        1.1328,
+        0.2066
+      ],
+      [
+        -0.076,
+        0.1381,
+        0.4576
+      ],
+      [
+        0.0,
+        0.0,
+        0.0
+      ]
+    ],
+    "camera_to_rgb": [
+      [
+        1.6708344,
+        -0.62683177,
+        -0.04400257
+      ],
+      [
+        -0.28383902,
+        1.7168596,
+        -0.43302062
+      ],
+      [
+        0.056413565,
+        -0.4923046,
+        1.435891
+      ]
+    ],
+    "crop": [
+      0,
+      2,
+      3682,
+      2760
+    ],
+    "managed_memory": {
+      "limit": 134217728,
+      "used": 20505280,
+      "peak": 42204593,
+      "pixel_capacity": 20505280,
+      "managed": true
+    }
+  },
+  "sensor": {
+    "samples": 10252640,
+    "sha256": "35788e589a45036d733a6df4790b087bab6fee6e9d40285995c9a828a7e65b5c",
+    "comparison": "all samples byte-exact"
+  },
+  "integration": {
+    "adapter": "Metal Apple M4 Max",
+    "tests_passed": 2,
+    "frame": [
+      128,
+      96
+    ],
+    "checks": [
+      "full sensor exact",
+      "persistent cache pixels and metadata exact",
+      "swap restore under pressure retry",
+      "whole GPU frame exact against independent sensor and color metadata",
+      "invalid profile, zero WB, WB underflow, truncated sensor rejected without managed leaks"
+    ]
+  },
+  "required_corpus": {
+    "manifest": "tests/fixtures/raw-color-corpus.json",
+    "cases_passed": 22,
+    "memory_mb": 128,
+    "includes_local_cr3": true
+  }
+}

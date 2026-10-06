@@ -1,0 +1,270 @@
+{
+  "repository": "https://github.com/shivshank/xcf-rs",
+  "revision": "3e1ef2cfb10142c467013f678c152fdaeeba5b6d",
+  "sources": [
+    {
+      "name": "1024x1024-better-compression.xcf",
+      "source": "https://raw.githubusercontent.com/shivshank/xcf-rs/3e1ef2cfb10142c467013f678c152fdaeeba5b6d/tests/samples/1024x1024-better-compression.xcf",
+      "bytes": 238645,
+      "sha256": "118d39d59ef3031bf3bc733341980f0dcf8d24376d209b824fa54ee1e03dfbf4"
+    },
+    {
+      "name": "1x1-violet-legacy.xcf",
+      "source": "https://raw.githubusercontent.com/shivshank/xcf-rs/3e1ef2cfb10142c467013f678c152fdaeeba5b6d/tests/samples/1x1-violet-legacy.xcf",
+      "bytes": 642,
+      "sha256": "4be5c35b47e5e918d96067da20a94c78ba4c8b662bf010b92c41095737f9203a"
+    },
+    {
+      "name": "1x1-violet-with-comment.xcf",
+      "source": "https://raw.githubusercontent.com/shivshank/xcf-rs/3e1ef2cfb10142c467013f678c152fdaeeba5b6d/tests/samples/1x1-violet-with-comment.xcf",
+      "bytes": 682,
+      "sha256": "d5dc6c4baa37e833fb9b681bd0777351633f95ba3bd57b2841c1fe154f32085a"
+    },
+    {
+      "name": "246x6734-odd-size-odd-layer.xcf",
+      "source": "https://raw.githubusercontent.com/shivshank/xcf-rs/3e1ef2cfb10142c467013f678c152fdaeeba5b6d/tests/samples/246x6734-odd-size-odd-layer.xcf",
+      "bytes": 2763859,
+      "sha256": "5058167c5d45179030bafd89d55302b6faa93ebd7e58d8c504126d8ee54673df"
+    },
+    {
+      "name": "512x512-base-with-alpha.xcf",
+      "source": "https://raw.githubusercontent.com/shivshank/xcf-rs/3e1ef2cfb10142c467013f678c152fdaeeba5b6d/tests/samples/512x512-base-with-alpha.xcf",
+      "bytes": 445923,
+      "sha256": "0900c9f14df4f971a276e9466e205ebdf24532c572e8edf60eedbc6c15dcffa6"
+    },
+    {
+      "name": "512x512-yellow-base-cloud-layer-empty-layer.xcf",
+      "source": "https://raw.githubusercontent.com/shivshank/xcf-rs/3e1ef2cfb10142c467013f678c152fdaeeba5b6d/tests/samples/512x512-yellow-base-cloud-layer-empty-layer.xcf",
+      "bytes": 445664,
+      "sha256": "7367314d6a70cf0378996b0b1ff7920de1e569e89844b1e828708433438ee263"
+    }
+  ],
+  "results": [
+    {
+      "file": "1024x1024-better-compression.xcf",
+      "exit": 0,
+      "output": [
+        {
+          "version": 11,
+          "width": 512,
+          "height": 512,
+          "compression": 2,
+          "channels": 0
+        },
+        {
+          "layer": 0,
+          "width": 512,
+          "height": 512,
+          "kind": 1,
+          "mask": 0,
+          "effects": 0,
+          "pixel_blake3": "488de202f73bd976de4e7048f4e1f39a776d86d582b7348ff53bf432b987fca8"
+        },
+        {
+          "layer": 1,
+          "width": 512,
+          "height": 512,
+          "kind": 1,
+          "mask": 0,
+          "effects": 0,
+          "pixel_blake3": "7085974ac9f20e39d848dfb73c568a5e5e8814522ad7b6b0f1821683554cec72"
+        },
+        {
+          "layer": 2,
+          "width": 512,
+          "height": 512,
+          "kind": 0,
+          "mask": 0,
+          "effects": 0,
+          "pixel_blake3": "98488d84e20370145c4bd4115f36fed3f5d20075be0681dbed85c7b0006500b1"
+        },
+        {
+          "managed_peak": 1303605,
+          "managed_used": 0
+        }
+      ],
+      "error": ""
+    },
+    {
+      "file": "1x1-violet-legacy.xcf",
+      "exit": 0,
+      "output": [
+        {
+          "version": 0,
+          "width": 1,
+          "height": 1,
+          "compression": 1,
+          "channels": 0
+        },
+        {
+          "layer": 0,
+          "width": 1,
+          "height": 1,
+          "kind": 0,
+          "mask": 0,
+          "effects": 0,
+          "pixel_blake3": "98d3b0be9776e53417555ad9dafd24c2c39a56e6d56427a84d571768aa9d9906"
+        },
+        {
+          "managed_peak": 648,
+          "managed_used": 0
+        }
+      ],
+      "error": ""
+    },
+    {
+      "file": "1x1-violet-with-comment.xcf",
+      "exit": 0,
+      "output": [
+        {
+          "version": 11,
+          "width": 1,
+          "height": 1,
+          "compression": 1,
+          "channels": 0
+        },
+        {
+          "layer": 0,
+          "width": 1,
+          "height": 1,
+          "kind": 0,
+          "mask": 0,
+          "effects": 0,
+          "pixel_blake3": "98d3b0be9776e53417555ad9dafd24c2c39a56e6d56427a84d571768aa9d9906"
+        },
+        {
+          "managed_peak": 688,
+          "managed_used": 0
+        }
+      ],
+      "error": ""
+    },
+    {
+      "file": "246x6734-odd-size-odd-layer.xcf",
+      "exit": 0,
+      "output": [
+        {
+          "version": 11,
+          "width": 246,
+          "height": 6734,
+          "compression": 1,
+          "channels": 0
+        },
+        {
+          "layer": 0,
+          "width": 200,
+          "height": 200,
+          "kind": 1,
+          "mask": 0,
+          "effects": 0,
+          "pixel_blake3": "a026743365dc2ab0d1fbddc997f3bc473dc563aa6adf6ef74a635f79d60a3a50"
+        },
+        {
+          "layer": 1,
+          "width": 246,
+          "height": 6734,
+          "kind": 0,
+          "mask": 0,
+          "effects": 0,
+          "pixel_blake3": "9395ba2ca4e3bdd0c74c668271d868f3fbab95b7518add9d6221700ecbc6fd6a"
+        },
+        {
+          "managed_peak": 7745839,
+          "managed_used": 0
+        }
+      ],
+      "error": ""
+    },
+    {
+      "file": "512x512-base-with-alpha.xcf",
+      "exit": 0,
+      "output": [
+        {
+          "version": 11,
+          "width": 512,
+          "height": 512,
+          "compression": 1,
+          "channels": 0
+        },
+        {
+          "layer": 0,
+          "width": 512,
+          "height": 512,
+          "kind": 1,
+          "mask": 0,
+          "effects": 0,
+          "pixel_blake3": "488de202f73bd976de4e7048f4e1f39a776d86d582b7348ff53bf432b987fca8"
+        },
+        {
+          "layer": 1,
+          "width": 512,
+          "height": 512,
+          "kind": 1,
+          "mask": 0,
+          "effects": 0,
+          "pixel_blake3": "7085974ac9f20e39d848dfb73c568a5e5e8814522ad7b6b0f1821683554cec72"
+        },
+        {
+          "layer": 2,
+          "width": 512,
+          "height": 512,
+          "kind": 1,
+          "mask": 0,
+          "effects": 0,
+          "pixel_blake3": "9f720087d23520b3f0fd22cff9656f3ed92a806a5411d6b0c583cd3b40aded7a"
+        },
+        {
+          "managed_peak": 1510883,
+          "managed_used": 0
+        }
+      ],
+      "error": ""
+    },
+    {
+      "file": "512x512-yellow-base-cloud-layer-empty-layer.xcf",
+      "exit": 0,
+      "output": [
+        {
+          "version": 11,
+          "width": 512,
+          "height": 512,
+          "compression": 1,
+          "channels": 0
+        },
+        {
+          "layer": 0,
+          "width": 512,
+          "height": 512,
+          "kind": 1,
+          "mask": 0,
+          "effects": 0,
+          "pixel_blake3": "488de202f73bd976de4e7048f4e1f39a776d86d582b7348ff53bf432b987fca8"
+        },
+        {
+          "layer": 1,
+          "width": 512,
+          "height": 512,
+          "kind": 1,
+          "mask": 0,
+          "effects": 0,
+          "pixel_blake3": "7085974ac9f20e39d848dfb73c568a5e5e8814522ad7b6b0f1821683554cec72"
+        },
+        {
+          "layer": 2,
+          "width": 512,
+          "height": 512,
+          "kind": 0,
+          "mask": 0,
+          "effects": 0,
+          "pixel_blake3": "98488d84e20370145c4bd4115f36fed3f5d20075be0681dbed85c7b0006500b1"
+        },
+        {
+          "managed_peak": 1510624,
+          "managed_used": 0
+        }
+      ],
+      "error": ""
+    }
+  ],
+  "scope": "External source structural and main-level native decode only. No independent sample oracle, flattening, color, masks, groups, effects or viewer support qualification."
+}

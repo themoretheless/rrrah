@@ -1,0 +1,38 @@
+{
+  "passed_tests": 10,
+  "failed": 0,
+  "filtered": 0,
+  "cases": [
+    "angle-17",
+    "angle--37",
+    "angle-63",
+    "scale-216-angle-0",
+    "scale-117-angle-0",
+    "scale-216-angle-17"
+  ],
+  "labelled_positive_comparisons": 6,
+  "labelled_negative_comparisons": 12,
+  "expected_accepted_edges_per_case": [
+    [
+      1,
+      2
+    ]
+  ],
+  "verification": "Both exhaustive file search and indexed collection must exactly equal independently labelled base/derivative edge; unrelated image rejected. No thresholds changed.",
+  "source_sha256": {
+    "crates/rrrah-dedup/tests/fixtures/rotation/base.png": "9166225bcbd8c74aca7d1ce153b8e5bfbdbe39bd4c29a795cf25133d1e54a525",
+    "crates/rrrah-dedup/tests/fixtures/rotation/unrelated.png": "4711b6c997d7dbf9b106188c9524da7b638efa2e17b9d724a76169db526be5d0",
+    "crates/rrrah-dedup/tests/fixtures/rotation/angle-17.png": "3a1226f438d1d77aac72345eba3153000ebe659cb2979fe342ab4127303ee3b3",
+    "crates/rrrah-dedup/tests/fixtures/rotation/angle--37.png": "60dbdb0a6222352a58d733ad1b99dafb09107ca6afb2f00057ee82276ac075a2",
+    "crates/rrrah-dedup/tests/fixtures/rotation/angle-63.png": "025a866f67bfc2ab91fcc0b7e5525c3e603525b2a2635ff189474a532b629e25",
+    "crates/rrrah-dedup/tests/fixtures/rotation/scale-216-angle-0.png": "d216dea29a0e5ff02b97896abb93c252407409a5736e7e894d62d075be6dadd7",
+    "crates/rrrah-dedup/tests/fixtures/rotation/scale-117-angle-0.png": "7b9a6255c8fbb5800d2c4b280b237290469969489875f2de67c0fcf1c9c776d6",
+    "crates/rrrah-dedup/tests/fixtures/rotation/scale-216-angle-17.png": "a574429c567534ee7e59020af372e0411968d5467ec86eac7fa2bb7c1393d1ce",
+    "crates/rrrah-dedup/tests/local_collection.rs": "e8c778d000b888dc4494bba0287af2a9264b702e3d2377a5bfb60420a91d0efb"
+  },
+  "limits": [
+    "Authored textured fixture, not captured held-out images or false-positive calibration.",
+    "PNG decoder color policy exercised; raw RGBA primitive fixture interpretation is separate.",
+    "Does not qualify arbitrary continuous scales/angles exhaustively, perspective or reflections."
+  ]
+}

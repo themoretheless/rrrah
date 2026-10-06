@@ -1,0 +1,88 @@
+{
+  "index": 87,
+  "repository": "OpSafari/hypoarena",
+  "commit": "09b8dd0b93f8cef273bb412e288f942dad1de03e",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "MinHash candidate stage followed by metric confirmation and transitive-cluster tests; preserve distinction between graph and pairwise evidence.",
+  "license_metadata": "MIT",
+  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "tests_detected": 234,
+  "upstream_tests_run": false,
+  "available_source_evidence": [
+    {
+      "path": "src/hypoarena/dedup.py",
+      "local": "02-dedup.py",
+      "url": "https://github.com/OpSafari/hypoarena/blob/09b8dd0b93f8cef273bb412e288f942dad1de03e/src/hypoarena/dedup.py",
+      "sha256": "f0e2f4465264a8a579a3c414f2480066c398032bed6d298ff3ee5c27c10b91cc",
+      "truncated": false,
+      "lines": 972,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/hypoarena/__init__.py",
+      "local": "03-__init__.py",
+      "url": "https://github.com/OpSafari/hypoarena/blob/09b8dd0b93f8cef273bb412e288f942dad1de03e/src/hypoarena/__init__.py",
+      "sha256": "95a737c0bba55c74433f7996ae29c1fd6b5b1d56cc8dd6d9a22fa4281a2db642",
+      "truncated": false,
+      "lines": 16,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/hypoarena/__main__.py",
+      "local": "04-__main__.py",
+      "url": "https://github.com/OpSafari/hypoarena/blob/09b8dd0b93f8cef273bb412e288f942dad1de03e/src/hypoarena/__main__.py",
+      "sha256": "5eccb99a252e8c60f32ff50b8c5b2f02393ef4bbfa5dc1ceeda9b58679a79008",
+      "truncated": false,
+      "lines": 6,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/test_dedup_clustering.py",
+      "local": "05-test_dedup_clustering.py",
+      "url": "https://github.com/OpSafari/hypoarena/blob/09b8dd0b93f8cef273bb412e288f942dad1de03e/tests/test_dedup_clustering.py",
+      "sha256": "53312e2dfc71a261b2ffd74fedb559cd32857b72c1f17bb1bb8c6a64c0f8b7e2",
+      "truncated": false,
+      "lines": 101,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "src/hypoarena/agents.py",
+      "local": "06-agents.py",
+      "url": "https://github.com/OpSafari/hypoarena/blob/09b8dd0b93f8cef273bb412e288f942dad1de03e/src/hypoarena/agents.py",
+      "sha256": "bc87c26293e243b2f436c61401ef94efb9d6e4f0fd7094e0b2fbae958a2d8cec",
+      "truncated": false,
+      "lines": 625,
+      "source": true,
+      "test": false
+    }
+  ],
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/OpSafari/hypoarena/blob/09b8dd0b93f8cef273bb412e288f942dad1de03e/README.md",
+      "sha256": "10d2f290d4a01dd7eb2cb1a99b9ed9494e4db828652d96ee7a200221dfa85f3e",
+      "truncated": false,
+      "lines": 112,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/OpSafari/hypoarena/blob/09b8dd0b93f8cef273bb412e288f942dad1de03e/LICENSE",
+      "sha256": "c4b5ca3f91dc5d56035ba03d6c78d6d809010149c8bb378fd3fd376a8b5dc007",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

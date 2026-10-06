@@ -1,0 +1,21 @@
+{
+  "change": "Per-point cancellation in both geometric support-spread passes, during hypothesis and refined support checks.",
+  "validation": {
+    "geometry_tests": 5,
+    "collection_tests": 10,
+    "failed": 0,
+    "dedup_lib_no_deps_clippy": "passed"
+  },
+  "checks": [
+    "One-shot cancellation sweep exercises new callback positions and preserves retry geometry.",
+    "Existing degeneracy/refinement results preserved.",
+    "All ten collection tests retain acceptance and mutation/cancellation semantics."
+  ],
+  "source_sha256": {
+    "crates/rrrah-dedup/src/geometry.rs": "d388aa9dc8461cd7312158c38b4757bde215a224d7422a5318b73d624c2cc19a"
+  },
+  "limits": [
+    "No measured end-to-end decoder cancellation latency.",
+    "Underlying allocation/OS/native operations remain indivisible."
+  ]
+}

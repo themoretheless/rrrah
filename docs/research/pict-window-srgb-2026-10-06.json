@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-06",
+  "command": [
+    "/tmp/rrrah-required-corpus-target/debug/rrrah",
+    "--untagged-color",
+    "srgb",
+    "--no-cache",
+    "tests/fixtures/pict/red-rectangle-v2.pict"
+  ],
+  "adapter": "Metal Apple M4 Max",
+  "window_id": 68503,
+  "owner_pid": 98386,
+  "title": "Rrrah — image 3x2 ready in 13.19ms; assumed sRGB",
+  "source_sha256": "eca313f4e31cdee5cb051153df25b61d221f03c577f0843c87acc8a498e7fa8b",
+  "screenshot": "docs/research/pict-window-srgb-2026-10-06.png",
+  "screenshot_sha256": "cfd7a9aeb8e508ca17936514f640b3e3c33fa80fc95aaf4415eb26b6e105a5b3",
+  "log_sha256": "72809423533be426a8a714361982a4df5ce64d4306e1d7267d31341c0b86e90e",
+  "observed": "Actual window screenshot shows red painted region blended over dark background with transparent untouched pixels. Title confirms explicit sRGB assumption.",
+  "limitations": [
+    "single authored rectangle fixture",
+    "visual smoke only, no per-pixel screen oracle",
+    "13.19ms is title load duration, not measured first presentation",
+    "not physical HDR qualification"
+  ]
+}

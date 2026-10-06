@@ -206,6 +206,41 @@ const NEF: &str = "NEF";
 /// Registered NEF quirks.
 #[derive(Debug)]
 pub(crate) struct NefQuirks;
+pub(crate) struct NrwQuirks;
+impl CameraQuirks for NrwQuirks {
+    // Nikon metadata/color layouts reuse the strict NEF resolver.
+    fn format_name(&self) -> &'static str {
+        NEF
+    }
+    fn read_metadata(
+        &self,
+        container: &CameraFile<'_>,
+        raw: &CameraDirectory<'_>,
+    ) -> Result<CameraMetadata, DecodeError> {
+        let ifd0 = container
+            .directories()
+            .iter()
+            .find(|d| d.is_top_level())
+            .ok_or_else(|| camera_error("NRW", "missing IFD0"))?;
+        let model = optional_ascii("NRW", ifd0, tags::MODEL)?;
+        if !matches!(model.as_deref(), Some("COOLPIX P7700" | "COOLPIX P7800")) {
+            return Err(camera_error(
+                "NRW",
+                "unsupported NRW camera; qualified models are COOLPIX P7700/P7800",
+            ));
+        }
+        NefQuirks.read_metadata(container, raw)
+    }
+    fn decode_pixels(
+        &self,
+        container: &CameraFile<'_>,
+        raw: &CameraDirectory<'_>,
+        cancelled: &(dyn Fn() -> bool + Sync),
+    ) -> Result<Vec<u16>, DecodeError> {
+        self.read_metadata(container, raw)?;
+        decode_p7800_unpacked(container, raw, cancelled)
+    }
+}
 
 impl CameraQuirks for NefQuirks {
     fn format_name(&self) -> &'static str {
@@ -263,14 +298,29 @@ impl CameraQuirks for NefQuirks {
         // WhiteLevel tags. Black is 0 and white is the full-scale value of
         // the stored bit depth, uniform across the mosaic. Nikon's
         // model-specific makernote black level is future work.
+        let (black, white) = if matches!(model.as_str(), "COOLPIX P7700" | "COOLPIX P7800") {
+            let (mode, order) = nikon_makernote_blob(container, &[0x0093])?;
+            if width != 4032
+                || bits != 12
+                || mode.len() != 2
+                || order.u16(mode) != 7
+                || required_scalar(NEF, raw, tags::COMPRESSION)? != COMPRESSION_NIKON_LOSSLESS
+            {
+                return Err(camera_error(NEF, "unsupported P7800 level/storage profile"));
+            }
+            // LibRaw 0.22.2 camera profile: colordata.cpp and identify.cpp.
+            // These levels are expressed in the unpacked 16-bit sensor domain.
+            (3200.0, 65504.0)
+        } else {
+            (0.0, ((1_u32 << bits) - 1) as f32)
+        };
         let black_level = LevelGrid {
             width: 1,
             height: 1,
             components: 1,
-            values: vec![0.0],
+            values: vec![black],
         };
-        let white = (1_u32 << bits) - 1;
-        let white_level = WhiteLevel(vec![white as f32]);
+        let white_level = WhiteLevel(vec![white]);
 
         // Documented fallback: neutral gains when AsShotNeutral is absent
         // (the normal NEF case). Nikon makernote 0x0097 WB is future work.
@@ -330,12 +380,90 @@ impl CameraQuirks for NefQuirks {
         cancelled: &(dyn Fn() -> bool + Sync),
     ) -> Result<Vec<u16>, DecodeError> {
         let compression = required_scalar(NEF, raw, tags::COMPRESSION)?;
+        let ifd0 = container
+            .directories()
+            .iter()
+            .find(|d| d.is_top_level())
+            .ok_or_else(|| camera_error(NEF, "missing IFD0"))?;
+        if compression == COMPRESSION_NIKON_LOSSLESS
+            && matches!(
+                optional_ascii(NEF, ifd0, tags::MODEL)?.as_deref(),
+                Some("COOLPIX P7700" | "COOLPIX P7800")
+            )
+        {
+            return decode_p7800_unpacked(container, raw, cancelled);
+        }
         match compression {
             COMPRESSION_NIKON_LOSSLESS => decode_nikon_lossless(container, raw, cancelled),
             tags::COMPRESSION_UNCOMPRESSED => decode_uncompressed(container, raw, cancelled),
             other => Err(unsupported_compression(other)),
         }
     }
+}
+
+fn decode_p7800_unpacked(
+    container: &CameraFile<'_>,
+    raw: &CameraDirectory<'_>,
+    cancelled: &(dyn Fn() -> bool + Sync),
+) -> Result<Vec<u16>, DecodeError> {
+    if required_scalar(NEF, raw, tags::COMPRESSION)? != COMPRESSION_NIKON_LOSSLESS {
+        return Err(camera_error(NEF, "unsupported P7800 TIFF compression"));
+    }
+    let (mode, order) = nikon_makernote_blob(container, &[0x0093])?;
+    if mode.len() != 2 || order.u16(mode) != 7 {
+        return Err(camera_error(NEF, "unsupported P7800 Nikon compression mode"));
+    }
+    if required_scalar(NEF, raw, tags::BITS_PER_SAMPLE)? != 12
+        || optional_scalar(NEF, raw, tags::SAMPLES_PER_PIXEL)?.unwrap_or(1) != 1
+    {
+        return Err(camera_error(NEF, "unsupported P7800 sample layout"));
+    }
+    let width = usize::try_from(required_scalar(NEF, raw, tags::IMAGE_WIDTH)?)
+        .map_err(|_| camera_error(NEF, "P7800 width overflow"))?;
+    let height = usize::try_from(required_scalar(NEF, raw, tags::IMAGE_LENGTH)?)
+        .map_err(|_| camera_error(NEF, "P7800 height overflow"))?;
+    let count = width
+        .checked_mul(height)
+        .filter(|n| *n > 0)
+        .ok_or_else(|| camera_error(NEF, "P7800 sample count overflow"))?;
+    let bytes = count
+        .checked_mul(2)
+        .ok_or_else(|| camera_error(NEF, "P7800 byte count overflow"))?;
+    let offsets = raw
+        .entry(NEF, tags::STRIP_OFFSETS)?
+        .ok_or_else(|| camera_error(NEF, "missing P7800 strip"))?
+        .unsigned_values()
+        .map_err(|e| camera_error(NEF, e.to_string()))?;
+    let lengths = raw
+        .entry(NEF, tags::STRIP_BYTE_COUNTS)?
+        .ok_or_else(|| camera_error(NEF, "missing P7800 strip length"))?
+        .unsigned_values()
+        .map_err(|e| camera_error(NEF, e.to_string()))?;
+    if offsets.len() != 1
+        || lengths.as_slice() != [bytes as u64]
+        || optional_scalar(NEF, raw, tags::ROWS_PER_STRIP)?.unwrap_or(height as u64) < height as u64
+    {
+        return Err(camera_error(NEF, "unsupported P7800 strip layout"));
+    }
+    let offset = usize::try_from(offsets[0]).map_err(|_| camera_error(NEF, "P7800 strip offset overflow"))?;
+    let end = offset
+        .checked_add(bytes)
+        .ok_or_else(|| camera_error(NEF, "P7800 strip end overflow"))?;
+    let source = container
+        .data()
+        .get(offset..end)
+        .ok_or_else(|| camera_error(NEF, "truncated P7800 strip"))?;
+    let mut pixels = Vec::new();
+    pixels
+        .try_reserve_exact(count)
+        .map_err(|_| camera_error(NEF, "P7800 allocation failed"))?;
+    for row in source.chunks_exact(width * 2) {
+        if cancelled() {
+            return Err(DecodeError::Cancelled);
+        }
+        pixels.extend(row.chunks_exact(2).map(|v| u16::from_be_bytes([v[0], v[1]])));
+    }
+    Ok(pixels)
 }
 
 /// Decodes `Compression = 1` MSB-first packed 12/14-bit strip rows.
@@ -661,6 +789,12 @@ fn decode_nikon_lossless(
 /// `MakerNote` (0x927C) → mini-IFD → tag 0x8C/0x96 value. Returns the blob
 /// bytes and the byte order its multi-byte fields are stored in.
 fn nikon_curve_blob<'a>(container: &CameraFile<'a>) -> Result<(&'a [u8], ByteOrder), DecodeError> {
+    nikon_makernote_blob(container, &NIKON_CURVE_TAGS)
+}
+fn nikon_makernote_blob<'a>(
+    container: &CameraFile<'a>,
+    selected: &[u16],
+) -> Result<(&'a [u8], ByteOrder), DecodeError> {
     let ifd0 = container
         .directories()
         .iter()
@@ -681,7 +815,7 @@ fn nikon_curve_blob<'a>(container: &CameraFile<'a>) -> Result<(&'a [u8], ByteOrd
             )
         })?
         .raw_bytes();
-    makernote_curve_value(makernote, container.byte_order())
+    makernote_tag_value(makernote, container.byte_order(), selected)
 }
 
 /// Parses the makernote mini-IFD and extracts the curve tag value. Covers
@@ -689,10 +823,11 @@ fn nikon_curve_blob<'a>(container: &CameraFile<'a>) -> Result<(&'a [u8], ByteOrd
 /// embedded TIFF header with its own byte order), format 2 (signature +
 /// plain IFD at offset 8), and format 1 (plain IFD at offset 0). All reads
 /// are bounded to the makernote value slice.
-fn makernote_curve_value(
-    makernote: &[u8],
+fn makernote_tag_value<'a>(
+    makernote: &'a [u8],
     container_order: ByteOrder,
-) -> Result<(&[u8], ByteOrder), DecodeError> {
+    selected: &[u16],
+) -> Result<(&'a [u8], ByteOrder), DecodeError> {
     let (base, order, ifd_relative) = if makernote.len() >= 8 && &makernote[..5] == b"Nikon" {
         let embedded = makernote.len() >= 18
             && matches!(&makernote[10..12], b"II" | b"MM")
@@ -751,8 +886,11 @@ fn makernote_curve_value(
     for index in 0..entry_count {
         let at = ifd_at + 2 + index * 12;
         let tag = order.u16(&makernote[at..at + 2]);
-        if !NIKON_CURVE_TAGS.contains(&tag) {
+        if !selected.contains(&tag) {
             continue;
+        }
+        if selected.len() == 1 && found.is_some() {
+            return Err(makernote_error("duplicate Nikon storage mode tag"));
         }
         let type_code = order.u16(&makernote[at + 2..at + 4]);
         let type_width = makernote_type_width(type_code).ok_or_else(|| {
@@ -1149,9 +1287,17 @@ fn read_cfa(raw: &CameraDirectory<'_>) -> Result<CfaPattern, DecodeError> {
     let pattern_entry = raw
         .entry(NEF, tags::CFA_PATTERN)?
         .ok_or_else(|| camera_error(NEF, "raw IFD lacks CFAPattern (33422)"))?;
-    let pattern = pattern_entry
-        .unsigned_values()
-        .map_err(|error| camera_error(NEF, format!("CFAPattern: {error}")))?;
+    let pattern = if pattern_entry.field_type == crate::dng::tiff::FieldType::Undefined {
+        pattern_entry
+            .raw_bytes()
+            .iter()
+            .map(|value| u64::from(*value))
+            .collect()
+    } else {
+        pattern_entry
+            .unsigned_values()
+            .map_err(|error| camera_error(NEF, format!("CFAPattern: {error}")))?
+    };
     if pattern.len() != expected {
         return Err(camera_error(
             NEF,
@@ -1728,6 +1874,37 @@ mod tests {
         let raw = quirks.select_raw_ifd(&container).unwrap();
         let error = quirks.decode_pixels(&container, raw, &|| true).unwrap_err();
         assert!(matches!(error, DecodeError::Cancelled));
+        super::super::assert_pixel_cancellation_checkpoints(&quirks, &container, raw);
+    }
+    #[test]
+    fn nrw_guard_rejects_unqualified_nef_camera() {
+        let (bytes, _) = synthetic_nef(true);
+        let container = NrwQuirks.parse_container(&bytes).unwrap();
+        let raw = NrwQuirks.select_raw_ifd(&container).unwrap();
+        assert!(matches!(
+            NrwQuirks.read_metadata(&container, raw),
+            Err(DecodeError::NativeCamera { format: "NRW", .. })
+        ));
+        assert!(NrwQuirks.decode_pixels(&container, raw, &|| false).is_err());
+    }
+    #[test]
+    fn undefined_cfa_pattern_preserves_bayer_cells_and_rejects_invalid_colors() {
+        let (mut bytes, _) = synthetic_nef(true);
+        let signature = [0x8e, 0x82, 1, 0, 4, 0, 0, 0];
+        let at = bytes.windows(8).position(|part| part == signature).unwrap();
+        bytes[at + 2] = 7; // TIFF UNDEFINED, byte-sized CFA cells
+        let quirks = quirks();
+        let container = quirks.parse_container(&bytes).unwrap();
+        let raw = quirks.select_raw_ifd(&container).unwrap();
+        let cfa = read_cfa(raw).unwrap();
+        assert_eq!(
+            cfa.cells,
+            vec![CfaColor::Red, CfaColor::Green, CfaColor::Green, CfaColor::Blue]
+        );
+        bytes[at + 8] = 255;
+        let container = quirks.parse_container(&bytes).unwrap();
+        let raw = quirks.select_raw_ifd(&container).unwrap();
+        assert!(read_cfa(raw).is_err());
     }
 
     #[test]
@@ -2238,6 +2415,58 @@ mod tests {
     // ------------------------------------------------------------------
 
     #[test]
+    fn p7800_unpacked_checks_mode_layout_endianness_and_cancellation() {
+        let samples = [0_u16, 3200, 4095, 65504, 65535, 12345, 256, 1];
+        let pixels: Vec<u8> = samples.iter().flat_map(|v| v.to_be_bytes()).collect();
+        for little in [false, true] {
+            let duplicate = build_makernote(
+                true,
+                MakernoteVariant::SignatureV2Tiff(little),
+                &[(0x93, w16(little, 7).to_vec()), (0x93, w16(little, 7).to_vec())],
+            );
+            assert!(makernote_tag_value(&duplicate, ByteOrder::Little, &[0x93]).is_err());
+            let note = build_makernote(
+                true,
+                MakernoteVariant::SignatureV2Tiff(little),
+                &[(0x93, w16(little, 7).to_vec())],
+            );
+            let bytes = assemble_compressed_nef(true, 4, 2, 12, Some(&note), &[&pixels]);
+            let container = quirks().parse_container(&bytes).unwrap();
+            let raw = quirks().select_raw_ifd(&container).unwrap();
+            assert_eq!(
+                decode_p7800_unpacked(&container, raw, &|| false).unwrap(),
+                samples
+            );
+            assert!(matches!(
+                decode_p7800_unpacked(&container, raw, &|| true),
+                Err(DecodeError::Cancelled)
+            ));
+            for compression in [1, 8] {
+                let mut invalid = bytes.clone();
+                patch_compression(&mut invalid, true, compression);
+                let container = quirks().parse_container(&invalid).unwrap();
+                let raw = quirks().select_raw_ifd(&container).unwrap();
+                assert!(decode_p7800_unpacked(&container, raw, &|| false).is_err());
+            }
+            for (mode, bits, strip) in [
+                (6, 12, pixels.as_slice()),
+                (7, 14, pixels.as_slice()),
+                (7, 12, &pixels[..pixels.len() - 1]),
+            ] {
+                let note = build_makernote(
+                    true,
+                    MakernoteVariant::SignatureV2Tiff(little),
+                    &[(0x93, w16(little, mode).to_vec())],
+                );
+                let bytes = assemble_compressed_nef(true, 4, 2, bits, Some(&note), &[strip]);
+                let container = quirks().parse_container(&bytes).unwrap();
+                let raw = quirks().select_raw_ifd(&container).unwrap();
+                assert!(decode_p7800_unpacked(&container, raw, &|| false).is_err());
+            }
+        }
+    }
+
+    #[test]
     fn decodes_12bit_lossless_makernote_format3_mixed_byte_order() {
         let container_le = true;
         let makernote_le = false; // embedded TIFF in the opposite byte order
@@ -2511,5 +2740,6 @@ mod tests {
         let raw = quirks.select_raw_ifd(&container).unwrap();
         let error = quirks.decode_pixels(&container, raw, &|| true).unwrap_err();
         assert!(matches!(error, DecodeError::Cancelled));
+        super::super::assert_pixel_cancellation_checkpoints(&quirks, &container, raw);
     }
 }

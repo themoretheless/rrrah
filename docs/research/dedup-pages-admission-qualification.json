@@ -1,0 +1,16 @@
+{
+  "change": "Fallible page/directory/cycle-membership/metadata/ICC buffers; stack fixed ICO/CUR and TIFF pointer headers.",
+  "validation": {
+    "pages_container_raster_equality_tests": 22,
+    "failed": 0,
+    "dedup_lib_no_deps_clippy": "passed"
+  },
+  "source_sha256": {
+    "crates/rrrah-dedup/src/pages.rs": "ac84cb775413791927066ca6ed552ed0376eeb4effe09cf5705e4f0101b6e5af"
+  },
+  "limits": [
+    "Actual allocator exhaustion not injected.",
+    "Underlying native decoder allocation and metadata reservation/capacity completeness remain open.",
+    "No complete RSS or global memory ceiling claim."
+  ]
+}

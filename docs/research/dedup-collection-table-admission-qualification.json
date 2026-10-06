@@ -1,0 +1,23 @@
+{
+  "scope": "Fallible collection request/feature/source-observation/diagnostic admission for ordinary and reflected scan paths",
+  "tests_passed": 29,
+  "additional_order_test": "passed after adding reverse-input oracle",
+  "checks": [
+    "HashMap/HashSet reserve before growth; source snapshots use fallibly grown sorted Vec",
+    "sorted source read/verification and analysed IDs preserve deterministic behavior",
+    "ordinary and reflected roots use fallible request enumeration",
+    "mutation, cancellation, aliases and explicit resource refusal regressions pass",
+    "reversed reflected input retains same analysed IDs and accepted edges",
+    "library-only Clippy passes"
+  ],
+  "limits": [
+    "No actual allocator failure injection or OS OOM qualification",
+    "These containers are not fully charged to shared memory budget",
+    "Individual path/request/error-string clones and downstream decoder/index allocation gaps remain",
+    "Not current full-library suite proof"
+  ],
+  "source_sha256": {
+    "crates/rrrah-dedup/src/local_collection.rs": "1b1df266f865f10e02b2bd5fde4c0917de20dc7809577f371384047be88e050c",
+    "crates/rrrah-dedup/tests/local_collection.rs": "b093eadd115ecc28bd97c293a4268b6cea2c729a76fc69a636660ca0da4b39e7"
+  }
+}

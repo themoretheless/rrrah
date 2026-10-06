@@ -28,24 +28,19 @@ const EMPIRICAL_WB_B_COUNT: usize = 24;
 
 /// Empirical EOS R8 calibration profile.
 ///
-/// The calibration values are independent black-box observations for the two
-/// local EOS R8 fixtures, not values decoded from a CMT tag.  Keeping this
-/// distinction explicit prevents a constant camera profile from being
-/// mistaken for per-capture metadata.
+/// Static CFA, precision and matrix calibration for the exact supported model.
+/// Black levels and white-balance gains are read from each CTMD sample;
+/// normalization uses the declared CRX precision, not `NormalWhiteLevel`.
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub(crate) struct EosR8Profile {
     pub(crate) bits_per_sample: u8,
     pub(crate) cfa: [CfaColor; 4],
-    pub(crate) black_level: [f32; 4],
-    pub(crate) white_level: f32,
     pub(crate) xyz_to_camera: [[f32; 3]; 4],
 }
 
 pub(crate) const EOS_R8_PROFILE: EosR8Profile = EosR8Profile {
     bits_per_sample: 14,
     cfa: [CfaColor::Red, CfaColor::Green, CfaColor::Green, CfaColor::Blue],
-    black_level: [512.0; 4],
-    white_level: 12_735.0,
     xyz_to_camera: [
         [0.9539, -0.2795, -0.1224],
         [-0.4175, 1.1998, 0.2458],

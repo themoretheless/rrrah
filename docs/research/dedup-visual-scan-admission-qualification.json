@@ -1,0 +1,16 @@
+{
+  "change": "scan_visual uses fallible request hash storage, sorted requests, bounded fingerprint/issue/pair vectors and fallible analysed output. Final cancellation follows output preparation.",
+  "validation": {
+    "decode_pixel_search_scan_visual_tests": 36,
+    "scan_after_final_cancel_change": 6,
+    "failed": 0,
+    "dedup_lib_no_deps_clippy": "passed"
+  },
+  "source_sha256": {
+    "crates/rrrah-dedup/src/scan.rs": "52266f4a1753c892a9d328cf3920f8420aa0d41521c228e9825db093a701e552"
+  },
+  "limits": [
+    "Other directory/full-container scanner admission still requires review.",
+    "No actual allocator failure injection, complete shared byte-budget/RSS or large-sort cancellation measurement."
+  ]
+}

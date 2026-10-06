@@ -1,0 +1,41 @@
+{
+  "scope": "Recursive descriptor-indexed selected-frame transformed-copy search",
+  "apis": [
+    "scan_local_collection_roots",
+    "scan_local_collection_roots_with_requests"
+  ],
+  "source_sha256": {
+    "crates/rrrah-dedup/src/local_collection.rs": "b4917a01d3ec61d0028ea7852796c04f637320ffa50d20f3c90992a0b8494542",
+    "crates/rrrah-dedup/tests/local_collection.rs": "4977849783279e67d66a28b9849eb4dec5e5a3ef159aefb53d1d5442a18ded2a"
+  },
+  "qualified": [
+    "Overlapping roots return one entry per physical file",
+    "Unix hardlink aliases retained",
+    "Corrupt decode isolated per file",
+    "Low-feature files explicitly reported",
+    "Per-file selected page forwarded",
+    "Substituted request path rejected",
+    "Invalid policy precedes request factory",
+    "Stale generation cancels whole report"
+  ],
+  "validation": {
+    "clippy_exit_code": 0,
+    "collection_suite": {
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "exit_code": 0
+    },
+    "diff_check": "passed",
+    "full_suite_baseline": {
+      "passed": 158,
+      "scope": "Previous validated collection implementation before recursive wrapper addition; not rerun this turn"
+    }
+  },
+  "remaining": [
+    "Non-Unix alias identity",
+    "Held-out natural photo collection",
+    "Large corpus latency and memory",
+    "Whole animation local transformations"
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "index": 454,
+  "repository": "gudoshnikovn/libphash",
+  "commit": "5feda4574fe872f12dcaa27fe8bcf392457ec05d",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "shortlist",
+  "finding": "Portable C aHash/dHash/mHash/pHash with explicit invalid-input guards and many tests; useful independent hash/calibration oracle.",
+  "available_source_evidence": [
+    {
+      "path": "src/hashes/ahash.c",
+      "local": "02-ahash.c",
+      "url": "https://github.com/gudoshnikovn/libphash/blob/5feda4574fe872f12dcaa27fe8bcf392457ec05d/src/hashes/ahash.c",
+      "sha256": "afa96dfbb6f35c35bf79bf967c846bd1619fc009f985b314dce04f43b6396362",
+      "truncated": false,
+      "lines": 35,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/hashes/dhash.c",
+      "local": "03-dhash.c",
+      "url": "https://github.com/gudoshnikovn/libphash/blob/5feda4574fe872f12dcaa27fe8bcf392457ec05d/src/hashes/dhash.c",
+      "sha256": "879ee264aa886619bf023ea209239a4787314988f72710cdf0b1779aa97c93f1",
+      "truncated": false,
+      "lines": 31,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/hashes/mhash.c",
+      "local": "04-mhash.c",
+      "url": "https://github.com/gudoshnikovn/libphash/blob/5feda4574fe872f12dcaa27fe8bcf392457ec05d/src/hashes/mhash.c",
+      "sha256": "50310b93f857bd8a0adf2e94a2fb3001e005b07b4657e98d503e83b2d6bbfeff",
+      "truncated": false,
+      "lines": 45,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/src/test_color_hash.c",
+      "local": "05-test_color_hash.c",
+      "url": "https://github.com/gudoshnikovn/libphash/blob/5feda4574fe872f12dcaa27fe8bcf392457ec05d/tests/src/test_color_hash.c",
+      "sha256": "23ed11ec9fbf26a165cacd891877991c74c88eb0ddb7ef7f7550c6438fc304f7",
+      "truncated": false,
+      "lines": 89,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "src/hashes/phash.c",
+      "local": "06-phash.c",
+      "url": "https://github.com/gudoshnikovn/libphash/blob/5feda4574fe872f12dcaa27fe8bcf392457ec05d/src/hashes/phash.c",
+      "sha256": "c30fb9154f4bb61c6a9281e7126c0ab50fdef48899ec0611565c3d4e1def67bb",
+      "truncated": false,
+      "lines": 227,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 27,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/gudoshnikovn/libphash/blob/5feda4574fe872f12dcaa27fe8bcf392457ec05d/README.md",
+      "sha256": "313b0a2d5204e75fe70e11937f127cd3ef9e3fe8055f7920f02453ac69da9b57",
+      "truncated": false,
+      "lines": 119,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/gudoshnikovn/libphash/blob/5feda4574fe872f12dcaa27fe8bcf392457ec05d/LICENSE",
+      "sha256": "ad13de06720c3b9bd510900c5838bea40478fc00f789de96c031b4db35276334",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

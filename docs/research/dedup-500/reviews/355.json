@@ -1,0 +1,108 @@
+{
+  "index": 355,
+  "repository": "aetilius/pHash",
+  "commit": "e5bdad184f88c6d0e43f188c634b5e2e10ab7779",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Original pHash C++/audio implementation; GPL, keep algorithm reference separate from permissive wrapper licenses.",
+  "available_source_evidence": [
+    {
+      "path": "src/audiophash.cpp",
+      "local": "03-audiophash.cpp",
+      "url": "https://github.com/aetilius/pHash/blob/e5bdad184f88c6d0e43f188c634b5e2e10ab7779/src/audiophash.cpp",
+      "sha256": "94127ea7a18b9748c8bbc81ebb17d02c69310cabd8b311cab81ce7a4c0a6144e",
+      "truncated": false,
+      "lines": 580,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/audiophash.h",
+      "local": "04-audiophash.h",
+      "url": "https://github.com/aetilius/pHash/blob/e5bdad184f88c6d0e43f188c634b5e2e10ab7779/src/audiophash.h",
+      "sha256": "6dbd8f283b002cfee63d000b711df3f8dc5228500d467fbaef1ccdfe1efc7643",
+      "truncated": false,
+      "lines": 106,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/pHash.cpp",
+      "local": "05-pHash.cpp",
+      "url": "https://github.com/aetilius/pHash/blob/e5bdad184f88c6d0e43f188c634b5e2e10ab7779/src/pHash.cpp",
+      "sha256": "397905be47304694658e6f2e5cca495d33ebf9f2f9e88b7f55ddb95d8a78a834",
+      "truncated": false,
+      "lines": 1154,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/fft-test.c",
+      "local": "06-fft-test.c",
+      "url": "https://github.com/aetilius/pHash/blob/e5bdad184f88c6d0e43f188c634b5e2e10ab7779/tests/fft-test.c",
+      "sha256": "21d91a3ab82d3ca26eed827a0c9869f671ac4d47570152cd02ee29806a1a8471",
+      "truncated": false,
+      "lines": 49,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "phash-win32/src/pHash.cpp",
+      "local": "07-pHash.cpp",
+      "url": "https://github.com/aetilius/pHash/blob/e5bdad184f88c6d0e43f188c634b5e2e10ab7779/phash-win32/src/pHash.cpp",
+      "sha256": "d44c95a234aedc550f936bd0c909931a18f752208820fd9ebd1c1634b1947553",
+      "truncated": false,
+      "lines": 2657,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "bindings/c_sharp/pHash.cs",
+      "local": "08-pHash.cs",
+      "url": "https://github.com/aetilius/pHash/blob/e5bdad184f88c6d0e43f188c634b5e2e10ab7779/bindings/c_sharp/pHash.cs",
+      "sha256": "3884b10785148c1bc3484cf3a420de4ef3559243677fe1ee45fb7f99554b4911",
+      "truncated": false,
+      "lines": 40,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "GPL-3.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 1,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/aetilius/pHash/blob/e5bdad184f88c6d0e43f188c634b5e2e10ab7779/README.md",
+      "sha256": "6df7691a24e7e1d7c101a679584d9a014dbf85e725b6c03300852e3813b1d306",
+      "truncated": false,
+      "lines": 252,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "COPYING",
+      "local": "01-COPYING",
+      "url": "https://github.com/aetilius/pHash/blob/e5bdad184f88c6d0e43f188c634b5e2e10ab7779/COPYING",
+      "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "truncated": false,
+      "lines": 674,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "bindings/php/LICENSE",
+      "local": "02-LICENSE",
+      "url": "https://github.com/aetilius/pHash/blob/e5bdad184f88c6d0e43f188c634b5e2e10ab7779/bindings/php/LICENSE",
+      "sha256": "59682a677dd101fc043db99b3fa74858439f8e117e941c202edf08286449b0fe",
+      "truncated": false,
+      "lines": 68,
+      "source": false,
+      "test": false
+    }
+  ]
+}

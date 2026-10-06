@@ -1,0 +1,1949 @@
+{
+  "oracle_package": "gimpformats",
+  "version": "2025",
+  "scope": "Native layer and mask planes compared byte-for-byte against independent Python decoder for three version-13 group fixtures; no flattened composite or color qualification.",
+  "sources": [
+    {
+      "url": "https://raw.githubusercontent.com/FHPythonUtils/GimpFormats/d3181b81a1accab51f6e892ec019ac0664ec83fc/tests/group_masks/single-masked-group.xcf",
+      "sha256": "34504532329b9f24328d7e869e08d77b442b38f2279638407de9bcf9d2ef9c12",
+      "bytes": 3261
+    },
+    {
+      "url": "https://raw.githubusercontent.com/FHPythonUtils/GimpFormats/d3181b81a1accab51f6e892ec019ac0664ec83fc/tests/group_masks/multiple-masked-groups.xcf",
+      "sha256": "f5140297c593bb974a71e52667fd3821c787d0b8929042524aea6e0be36c7e38",
+      "bytes": 5467
+    },
+    {
+      "url": "https://raw.githubusercontent.com/FHPythonUtils/GimpFormats/d3181b81a1accab51f6e892ec019ac0664ec83fc/tests/group_masks/multiple-offset-masked-groups.xcf",
+      "sha256": "47691f2a17e3782b76d3caab2c4dfbeb4498a6723255e6470e93e7d5d8f6702b",
+      "bytes": 17315
+    }
+  ],
+  "oracle_dependencies": {
+    "gimpformats": "2025",
+    "pillow": "12.3.0",
+    "numpy": "2.5.3",
+    "aenum": "3.1.17",
+    "blendmodes": "2025",
+    "brackettree": "0.2.5",
+    "loguru": "0.7.3"
+  },
+  "oracle_source_hashes": {
+    "GimpChannel.py": "a9103871cff564f6b772dff08327fc9ca3f00a9230b786adb69efcd4a266789e",
+    "GimpGbrBrush.py": "deb301d14ab3d700a7688b2918f62220bbaa67d1d11d4154bad5eb47bb46e3d2",
+    "GimpGgrGradient.py": "5416cb8b897f2c38430522adc019a37c91b21688d273803c0bbdb319261591e1",
+    "GimpGihBrushSet.py": "0f7d79708ddacd310faa84b04d58c4d6441cb644c767b2c7f0b16ca1cd86cfaf",
+    "GimpGpbBrush.py": "ee74b938f0046c699d0932e7c996b4d8f22645d785dc851f1d22e05da8402d8d",
+    "GimpGplPalette.py": "62e5c123ca6fee7cca194c5afed31c6f12b2d30cb4239a115ffca6dd6a34a23b",
+    "GimpGtpToolPreset.py": "0cc02d5153540bb412161949ac8583ee6e1a4e0deb7e347615d86d5fc1198529",
+    "GimpIOBase.py": "3e468674d7709f584f8c30cd726ef5626eef5f04eeebf25662567c7396bdfd65",
+    "GimpImageHierarchy.py": "750b431234eb27495d13e8ae67963fb586e0e93f630d3bc326acb39324d4f66d",
+    "GimpImageLevel.py": "12073f875d59a9f56a1fecda3fb9150b9d5d298cda9e6eb760f748f68b89799d",
+    "GimpLayer.py": "caadd9b67f9e5403614bce4fa4e8fe467f17991ff60abb839b86e68b96f93c18",
+    "GimpParasites.py": "0a5ccf98bc0be368cd2cf2b08e177680c9b03c284ea75c76ba6979af48a39172",
+    "GimpPatPattern.py": "18e3fd117bd90928a114845c9a7f281ec1707f7ce850d94294aa226e06bac48e",
+    "GimpPrecision.py": "c2c6f55dece807f50de5fa7d8de76ba7a57b71ce602d7398f9fc55e554b537ec",
+    "GimpVbrBrush.py": "179c7b1023580c5e26f6df27db569e1c48fc23c536f546bd54544d03bdab7ed9",
+    "GimpVectors.py": "1df66bd20b64db9d878e85eb42566e30083fa93bee1ffb3189b8c651caf3b603",
+    "__init__.py": "5512cdfbdfcc67d21b3ebfec966789347d1f7bbd1f3876b91ecc7e11805b315c",
+    "binaryiotools.py": "e83c2bc1083b2d7b6ff1178ae0e7f8209906183cf80918abb301e061079934b9",
+    "gimpXcfDocument.py": "edb0977cd72f458a954fdef38523694d569c049f4d2adacdc35a9566c3c61f1d",
+    "native_convert.py": "9ca33558322a202986536912ed40ca701aad86dbe76317d0a38d6deca219d385",
+    "utils.py": "9604ccc8206bdcaae295897308adcc7c6ae81ef04892c2d5619969ce51b48c38"
+  },
+  "decoder_sha256": "8b412c70ad7ccf9dbf9caa2548524d9edb2768be7ca46997a900306cf188a072",
+  "rows": [
+    {
+      "file": "single-masked-group.xcf",
+      "object": "layer",
+      "index": 0,
+      "mode": "RGBA",
+      "bytes": 262144,
+      "oracle_bytes": 262144,
+      "exact": true,
+      "different_bytes": 0,
+      "actual_sha256": "da804c321c379a3528add6558c605faa72d8d146230c7b357f7c4fb4f7d899ad"
+    },
+    {
+      "file": "single-masked-group.xcf",
+      "object": "mask",
+      "index": 0,
+      "mode": "L",
+      "bytes": 65536,
+      "oracle_bytes": 65536,
+      "exact": true,
+      "different_bytes": 0,
+      "actual_sha256": "05b10a6e8b31efc7302bc05a47c0d439a14ae1a71852134faa57dc8ea8dd3b7b"
+    },
+    {
+      "file": "single-masked-group.xcf",
+      "object": "layer",
+      "index": 1,
+      "mode": "RGBA",
+      "bytes": 262144,
+      "oracle_bytes": 262144,
+      "exact": true,
+      "different_bytes": 0,
+      "actual_sha256": "da804c321c379a3528add6558c605faa72d8d146230c7b357f7c4fb4f7d899ad"
+    },
+    {
+      "file": "single-masked-group.xcf",
+      "object": "layer",
+      "index": 2,
+      "mode": "RGBA",
+      "bytes": 262144,
+      "oracle_bytes": 262144,
+      "exact": true,
+      "different_bytes": 0,
+      "actual_sha256": "e4ee4e17c160c812a9f7b374126529505a77712950f75ad2ec0cfcd58a609b3f"
+    },
+    {
+      "file": "multiple-masked-groups.xcf",
+      "object": "layer",
+      "index": 0,
+      "mode": "RGBA",
+      "bytes": 262144,
+      "oracle_bytes": 262144,
+      "exact": true,
+      "different_bytes": 0,
+      "actual_sha256": "da804c321c379a3528add6558c605faa72d8d146230c7b357f7c4fb4f7d899ad"
+    },
+    {
+      "file": "multiple-masked-groups.xcf",
+      "object": "mask",
+      "index": 0,
+      "mode": "L",
+      "bytes": 65536,
+      "oracle_bytes": 65536,
+      "exact": true,
+      "different_bytes": 0,
+      "actual_sha256": "05b10a6e8b31efc7302bc05a47c0d439a14ae1a71852134faa57dc8ea8dd3b7b"
+    },
+    {
+      "file": "multiple-masked-groups.xcf",
+      "object": "layer",
+      "index": 1,
+      "mode": "RGBA",
+      "bytes": 262144,
+      "oracle_bytes": 262144,
+      "exact": true,
+      "different_bytes": 0,
+      "actual_sha256": "da804c321c379a3528add6558c605faa72d8d146230c7b357f7c4fb4f7d899ad"
+    },
+    {
+      "file": "multiple-masked-groups.xcf",
+      "object": "layer",
+      "index": 2,
+      "mode": "RGBA",
+      "bytes": 262144,
+      "oracle_bytes": 262144,
+      "exact": true,
+      "different_bytes": 0,
+      "actual_sha256": "b8b9b478324141d9331328a2150e74ec5feb266a743a51cab73d903247247ea4"
+    },
+    {
+      "file": "multiple-masked-groups.xcf",
+      "object": "mask",
+      "index": 2,
+      "mode": "L",
+      "bytes": 65536,
+      "oracle_bytes": 65536,
+      "exact": true,
+      "different_bytes": 0,
+      "actual_sha256": "a107b75f6b7afc62dcbb11577c1bb891906ff748c4516d9db75056f8c5d319b6"
+    },
+    {
+      "file": "multiple-masked-groups.xcf",
+      "object": "layer",
+      "index": 3,
+      "mode": "RGBA",
+      "bytes": 262144,
+      "oracle_bytes": 262144,
+      "exact": true,
+      "different_bytes": 0,
+      "actual_sha256": "b8b9b478324141d9331328a2150e74ec5feb266a743a51cab73d903247247ea4"
+    },
+    {
+      "file": "multiple-masked-groups.xcf",
+      "object": "layer",
+      "index": 4,
+      "mode": "RGBA",
+      "bytes": 262144,
+      "oracle_bytes": 262144,
+      "exact": true,
+      "different_bytes": 0,
+      "actual_sha256": "e4ee4e17c160c812a9f7b374126529505a77712950f75ad2ec0cfcd58a609b3f"
+    },
+    {
+      "file": "multiple-offset-masked-groups.xcf",
+      "object": "layer",
+      "index": 0,
+      "mode": "RGBA",
+      "bytes": 230400,
+      "oracle_bytes": 230400,
+      "exact": true,
+      "different_bytes": 0,
+      "actual_sha256": "52eb680db641a64e33c51fdb4331968f5abe446c5a7ff987d5e5ed457c7672ae"
+    },
+    {
+      "file": "multiple-offset-masked-groups.xcf",
+      "object": "layer",
+      "index": 1,
+      "mode": "RGBA",
+      "bytes": 278784,
+      "oracle_bytes": 278784,
+      "exact": true,
+      "different_bytes": 0,
+      "actual_sha256": "dea1d4daf4e2c48cfc73ee815384e429021ca9641b4e02b1f0617e5122d9a294"
+    },
+    {
+      "file": "multiple-offset-masked-groups.xcf",
+      "object": "layer",
+      "index": 2,
+      "mode": "RGBA",
+      "bytes": 262144,
+      "oracle_bytes": 262144,
+      "exact": true,
+      "different_bytes": 0,
+      "actual_sha256": "da804c321c379a3528add6558c605faa72d8d146230c7b357f7c4fb4f7d899ad"
+    },
+    {
+      "file": "multiple-offset-masked-groups.xcf",
+      "object": "mask",
+      "index": 2,
+      "mode": "L",
+      "bytes": 65536,
+      "oracle_bytes": 65536,
+      "exact": true,
+      "different_bytes": 0,
+      "actual_sha256": "05b10a6e8b31efc7302bc05a47c0d439a14ae1a71852134faa57dc8ea8dd3b7b"
+    },
+    {
+      "file": "multiple-offset-masked-groups.xcf",
+      "object": "layer",
+      "index": 3,
+      "mode": "RGBA",
+      "bytes": 262144,
+      "oracle_bytes": 262144,
+      "exact": true,
+      "different_bytes": 0,
+      "actual_sha256": "da804c321c379a3528add6558c605faa72d8d146230c7b357f7c4fb4f7d899ad"
+    },
+    {
+      "file": "multiple-offset-masked-groups.xcf",
+      "object": "layer",
+      "index": 4,
+      "mode": "RGBA",
+      "bytes": 262144,
+      "oracle_bytes": 262144,
+      "exact": true,
+      "different_bytes": 0,
+      "actual_sha256": "bc4b252b56850ef8793504f7131628f496727c7de5eacc754ac318beef01c80c"
+    },
+    {
+      "file": "multiple-offset-masked-groups.xcf",
+      "object": "mask",
+      "index": 4,
+      "mode": "L",
+      "bytes": 65536,
+      "oracle_bytes": 65536,
+      "exact": true,
+      "different_bytes": 0,
+      "actual_sha256": "a107b75f6b7afc62dcbb11577c1bb891906ff748c4516d9db75056f8c5d319b6"
+    },
+    {
+      "file": "multiple-offset-masked-groups.xcf",
+      "object": "layer",
+      "index": 5,
+      "mode": "RGBA",
+      "bytes": 262144,
+      "oracle_bytes": 262144,
+      "exact": true,
+      "different_bytes": 0,
+      "actual_sha256": "a72fc3b70d8d09b016522fdc91fc6a8c29bdc2c07fbb5fe56ac7ecd6b967b0e3"
+    },
+    {
+      "file": "multiple-offset-masked-groups.xcf",
+      "object": "mask",
+      "index": 5,
+      "mode": "L",
+      "bytes": 65536,
+      "oracle_bytes": 65536,
+      "exact": true,
+      "different_bytes": 0,
+      "actual_sha256": "63b7e4812a4235b8dbd8395fd1730006839dffe1fed30f178001b7771283c827"
+    },
+    {
+      "file": "multiple-offset-masked-groups.xcf",
+      "object": "layer",
+      "index": 6,
+      "mode": "RGBA",
+      "bytes": 262144,
+      "oracle_bytes": 262144,
+      "exact": true,
+      "different_bytes": 0,
+      "actual_sha256": "b8b9b478324141d9331328a2150e74ec5feb266a743a51cab73d903247247ea4"
+    },
+    {
+      "file": "multiple-offset-masked-groups.xcf",
+      "object": "layer",
+      "index": 7,
+      "mode": "RGBA",
+      "bytes": 262144,
+      "oracle_bytes": 262144,
+      "exact": true,
+      "different_bytes": 0,
+      "actual_sha256": "e4ee4e17c160c812a9f7b374126529505a77712950f75ad2ec0cfcd58a609b3f"
+    }
+  ],
+  "metadata_comparisons": [
+    {
+      "file": "single-masked-group.xcf",
+      "index": 0,
+      "selector": "tree_node",
+      "expected": {
+        "parent": null,
+        "sibling": 0,
+        "is_group": true
+      },
+      "actual": {
+        "tree_node": 0,
+        "parent": null,
+        "sibling": 0,
+        "is_group": true
+      },
+      "exact": true
+    },
+    {
+      "file": "single-masked-group.xcf",
+      "index": 0,
+      "selector": "layer_group",
+      "expected": {
+        "is_group": true,
+        "item_path": []
+      },
+      "actual": {
+        "layer_group": 0,
+        "is_group": true,
+        "item_path": []
+      },
+      "exact": true
+    },
+    {
+      "file": "single-masked-group.xcf",
+      "index": 0,
+      "selector": "layer_attributes",
+      "expected": {
+        "visible": true,
+        "opacity": 1.0,
+        "offset_x": 0,
+        "offset_y": 0,
+        "apply_mask": true
+      },
+      "actual": {
+        "layer_attributes": 0,
+        "visible": true,
+        "opacity": 1,
+        "offset_x": 0,
+        "offset_y": 0,
+        "apply_mask": true
+      },
+      "exact": true
+    },
+    {
+      "file": "single-masked-group.xcf",
+      "index": 1,
+      "selector": "tree_node",
+      "expected": {
+        "parent": 0,
+        "sibling": 0,
+        "is_group": false
+      },
+      "actual": {
+        "tree_node": 1,
+        "parent": 0,
+        "sibling": 0,
+        "is_group": false
+      },
+      "exact": true
+    },
+    {
+      "file": "single-masked-group.xcf",
+      "index": 1,
+      "selector": "layer_group",
+      "expected": {
+        "is_group": false,
+        "item_path": [
+          0,
+          0
+        ]
+      },
+      "actual": {
+        "layer_group": 1,
+        "is_group": false,
+        "item_path": [
+          0,
+          0
+        ]
+      },
+      "exact": true
+    },
+    {
+      "file": "single-masked-group.xcf",
+      "index": 1,
+      "selector": "layer_attributes",
+      "expected": {
+        "visible": true,
+        "opacity": 1.0,
+        "offset_x": 0,
+        "offset_y": 0,
+        "apply_mask": false
+      },
+      "actual": {
+        "layer_attributes": 1,
+        "visible": true,
+        "opacity": 1,
+        "offset_x": 0,
+        "offset_y": 0,
+        "apply_mask": false
+      },
+      "exact": true
+    },
+    {
+      "file": "single-masked-group.xcf",
+      "index": 2,
+      "selector": "tree_node",
+      "expected": {
+        "parent": null,
+        "sibling": 1,
+        "is_group": false
+      },
+      "actual": {
+        "tree_node": 2,
+        "parent": null,
+        "sibling": 1,
+        "is_group": false
+      },
+      "exact": true
+    },
+    {
+      "file": "single-masked-group.xcf",
+      "index": 2,
+      "selector": "layer_group",
+      "expected": {
+        "is_group": false,
+        "item_path": []
+      },
+      "actual": {
+        "layer_group": 2,
+        "is_group": false,
+        "item_path": []
+      },
+      "exact": true
+    },
+    {
+      "file": "single-masked-group.xcf",
+      "index": 2,
+      "selector": "layer_attributes",
+      "expected": {
+        "visible": true,
+        "opacity": 1.0,
+        "offset_x": 0,
+        "offset_y": 0,
+        "apply_mask": false
+      },
+      "actual": {
+        "layer_attributes": 2,
+        "visible": true,
+        "opacity": 1,
+        "offset_x": 0,
+        "offset_y": 0,
+        "apply_mask": false
+      },
+      "exact": true
+    },
+    {
+      "file": "multiple-masked-groups.xcf",
+      "index": 0,
+      "selector": "tree_node",
+      "expected": {
+        "parent": null,
+        "sibling": 0,
+        "is_group": true
+      },
+      "actual": {
+        "tree_node": 0,
+        "parent": null,
+        "sibling": 0,
+        "is_group": true
+      },
+      "exact": true
+    },
+    {
+      "file": "multiple-masked-groups.xcf",
+      "index": 0,
+      "selector": "layer_group",
+      "expected": {
+        "is_group": true,
+        "item_path": []
+      },
+      "actual": {
+        "layer_group": 0,
+        "is_group": true,
+        "item_path": []
+      },
+      "exact": true
+    },
+    {
+      "file": "multiple-masked-groups.xcf",
+      "index": 0,
+      "selector": "layer_attributes",
+      "expected": {
+        "visible": true,
+        "opacity": 1.0,
+        "offset_x": 0,
+        "offset_y": 0,
+        "apply_mask": true
+      },
+      "actual": {
+        "layer_attributes": 0,
+        "visible": true,
+        "opacity": 1,
+        "offset_x": 0,
+        "offset_y": 0,
+        "apply_mask": true
+      },
+      "exact": true
+    },
+    {
+      "file": "multiple-masked-groups.xcf",
+      "index": 1,
+      "selector": "tree_node",
+      "expected": {
+        "parent": 0,
+        "sibling": 0,
+        "is_group": false
+      },
+      "actual": {
+        "tree_node": 1,
+        "parent": 0,
+        "sibling": 0,
+        "is_group": false
+      },
+      "exact": true
+    },
+    {
+      "file": "multiple-masked-groups.xcf",
+      "index": 1,
+      "selector": "layer_group",
+      "expected": {
+        "is_group": false,
+        "item_path": [
+          0,
+          0
+        ]
+      },
+      "actual": {
+        "layer_group": 1,
+        "is_group": false,
+        "item_path": [
+          0,
+          0
+        ]
+      },
+      "exact": true
+    },
+    {
+      "file": "multiple-masked-groups.xcf",
+      "index": 1,
+      "selector": "layer_attributes",
+      "expected": {
+        "visible": true,
+        "opacity": 1.0,
+        "offset_x": 0,
+        "offset_y": 0,
+        "apply_mask": false
+      },
+      "actual": {
+        "layer_attributes": 1,
+        "visible": true,
+        "opacity": 1,
+        "offset_x": 0,
+        "offset_y": 0,
+        "apply_mask": false
+      },
+      "exact": true
+    },
+    {
+      "file": "multiple-masked-groups.xcf",
+      "index": 2,
+      "selector": "tree_node",
+      "expected": {
+        "parent": null,
+        "sibling": 1,
+        "is_group": true
+      },
+      "actual": {
+        "tree_node": 2,
+        "parent": null,
+        "sibling": 1,
+        "is_group": true
+      },
+      "exact": true
+    },
+    {
+      "file": "multiple-masked-groups.xcf",
+      "index": 2,
+      "selector": "layer_group",
+      "expected": {
+        "is_group": true,
+        "item_path": []
+      },
+      "actual": {
+        "layer_group": 2,
+        "is_group": true,
+        "item_path": []
+      },
+      "exact": true
+    },
+    {
+      "file": "multiple-masked-groups.xcf",
+      "index": 2,
+      "selector": "layer_attributes",
+      "expected": {
+        "visible": true,
+        "opacity": 1.0,
+        "offset_x": 0,
+        "offset_y": 0,
+        "apply_mask": true
+      },
+      "actual": {
+        "layer_attributes": 2,
+        "visible": true,
+        "opacity": 1,
+        "offset_x": 0,
+        "offset_y": 0,
+        "apply_mask": true
+      },
+      "exact": true
+    },
+    {
+      "file": "multiple-masked-groups.xcf",
+      "index": 3,
+      "selector": "tree_node",
+      "expected": {
+        "parent": 2,
+        "sibling": 0,
+        "is_group": false
+      },
+      "actual": {
+        "tree_node": 3,
+        "parent": 2,
+        "sibling": 0,
+        "is_group": false
+      },
+      "exact": true
+    },
+    {
+      "file": "multiple-masked-groups.xcf",
+      "index": 3,
+      "selector": "layer_group",
+      "expected": {
+        "is_group": false,
+        "item_path": [
+          1,
+          0
+        ]
+      },
+      "actual": {
+        "layer_group": 3,
+        "is_group": false,
+        "item_path": [
+          1,
+          0
+        ]
+      },
+      "exact": true
+    },
+    {
+      "file": "multiple-masked-groups.xcf",
+      "index": 3,
+      "selector": "layer_attributes",
+      "expected": {
+        "visible": true,
+        "opacity": 1.0,
+        "offset_x": 0,
+        "offset_y": 0,
+        "apply_mask": false
+      },
+      "actual": {
+        "layer_attributes": 3,
+        "visible": true,
+        "opacity": 1,
+        "offset_x": 0,
+        "offset_y": 0,
+        "apply_mask": false
+      },
+      "exact": true
+    },
+    {
+      "file": "multiple-masked-groups.xcf",
+      "index": 4,
+      "selector": "tree_node",
+      "expected": {
+        "parent": null,
+        "sibling": 2,
+        "is_group": false
+      },
+      "actual": {
+        "tree_node": 4,
+        "parent": null,
+        "sibling": 2,
+        "is_group": false
+      },
+      "exact": true
+    },
+    {
+      "file": "multiple-masked-groups.xcf",
+      "index": 4,
+      "selector": "layer_group",
+      "expected": {
+        "is_group": false,
+        "item_path": []
+      },
+      "actual": {
+        "layer_group": 4,
+        "is_group": false,
+        "item_path": []
+      },
+      "exact": true
+    },
+    {
+      "file": "multiple-masked-groups.xcf",
+      "index": 4,
+      "selector": "layer_attributes",
+      "expected": {
+        "visible": true,
+        "opacity": 1.0,
+        "offset_x": 0,
+        "offset_y": 0,
+        "apply_mask": false
+      },
+      "actual": {
+        "layer_attributes": 4,
+        "visible": true,
+        "opacity": 1,
+        "offset_x": 0,
+        "offset_y": 0,
+        "apply_mask": false
+      },
+      "exact": true
+    },
+    {
+      "file": "multiple-offset-masked-groups.xcf",
+      "index": 0,
+      "selector": "tree_node",
+      "expected": {
+        "parent": null,
+        "sibling": 0,
+        "is_group": false
+      },
+      "actual": {
+        "tree_node": 0,
+        "parent": null,
+        "sibling": 0,
+        "is_group": false
+      },
+      "exact": true
+    },
+    {
+      "file": "multiple-offset-masked-groups.xcf",
+      "index": 0,
+      "selector": "layer_group",
+      "expected": {
+        "is_group": false,
+        "item_path": []
+      },
+      "actual": {
+        "layer_group": 0,
+        "is_group": false,
+        "item_path": []
+      },
+      "exact": true
+    },
+    {
+      "file": "multiple-offset-masked-groups.xcf",
+      "index": 0,
+      "selector": "layer_attributes",
+      "expected": {
+        "visible": true,
+        "opacity": 1.0,
+        "offset_x": 0,
+        "offset_y": 0,
+        "apply_mask": false
+      },
+      "actual": {
+        "layer_attributes": 0,
+        "visible": true,
+        "opacity": 1,
+        "offset_x": 0,
+        "offset_y": 0,
+        "apply_mask": false
+      },
+      "exact": true
+    },
+    {
+      "file": "multiple-offset-masked-groups.xcf",
+      "index": 1,
+      "selector": "tree_node",
+      "expected": {
+        "parent": null,
+        "sibling": 1,
+        "is_group": true
+      },
+      "actual": {
+        "tree_node": 1,
+        "parent": null,
+        "sibling": 1,
+        "is_group": true
+      },
+      "exact": true
+    },
+    {
+      "file": "multiple-offset-masked-groups.xcf",
+      "index": 1,
+      "selector": "layer_group",
+      "expected": {
+        "is_group": true,
+        "item_path": []
+      },
+      "actual": {
+        "layer_group": 1,
+        "is_group": true,
+        "item_path": []
+      },
+      "exact": true
+    },
+    {
+      "file": "multiple-offset-masked-groups.xcf",
+      "index": 1,
+      "selector": "layer_attributes",
+      "expected": {
+        "visible": true,
+        "opacity": 1.0,
+        "offset_x": -8,
+        "offset_y": -8,
+        "apply_mask": false
+      },
+      "actual": {
+        "layer_attributes": 1,
+        "visible": true,
+        "opacity": 1,
+        "offset_x": -8,
+        "offset_y": -8,
+        "apply_mask": false
+      },
+      "exact": true
+    },
+    {
+      "file": "multiple-offset-masked-groups.xcf",
+      "index": 2,
+      "selector": "tree_node",
+      "expected": {
+        "parent": 1,
+        "sibling": 0,
+        "is_group": true
+      },
+      "actual": {
+        "tree_node": 2,
+        "parent": 1,
+        "sibling": 0,
+        "is_group": true
+      },
+      "exact": true
+    },
+    {
+      "file": "multiple-offset-masked-groups.xcf",
+      "index": 2,
+      "selector": "layer_group",
+      "expected": {
+        "is_group": true,
+        "item_path": [
+          1,
+          0
+        ]
+      },
+      "actual": {
+        "layer_group": 2,
+        "is_group": true,
+        "item_path": [
+          1,
+          0
+        ]
+      },
+      "exact": true
+    },
+    {
+      "file": "multiple-offset-masked-groups.xcf",
+      "index": 2,
+      "selector": "layer_attributes",
+      "expected": {
+        "visible": true,
+        "opacity": 1.0,
+        "offset_x": -8,
+        "offset_y": -8,
+        "apply_mask": true
+      },
+      "actual": {
+        "layer_attributes": 2,
+        "visible": true,
+        "opacity": 1,
+        "offset_x": -8,
+        "offset_y": -8,
+        "apply_mask": true
+      },
+      "exact": true
+    },
+    {
+      "file": "multiple-offset-masked-groups.xcf",
+      "index": 3,
+      "selector": "tree_node",
+      "expected": {
+        "parent": 2,
+        "sibling": 0,
+        "is_group": false
+      },
+      "actual": {
+        "tree_node": 3,
+        "parent": 2,
+        "sibling": 0,
+        "is_group": false
+      },
+      "exact": true
+    },
+    {
+      "file": "multiple-offset-masked-groups.xcf",
+      "index": 3,
+      "selector": "layer_group",
+      "expected": {
+        "is_group": false,
+        "item_path": [
+          1,
+          0,
+          0
+        ]
+      },
+      "actual": {
+        "layer_group": 3,
+        "is_group": false,
+        "item_path": [
+          1,
+          0,
+          0
+        ]
+      },
+      "exact": true
+    },
+    {
+      "file": "multiple-offset-masked-groups.xcf",
+      "index": 3,
+      "selector": "layer_attributes",
+      "expected": {
+        "visible": true,
+        "opacity": 1.0,
+        "offset_x": -8,
+        "offset_y": -8,
+        "apply_mask": false
+      },
+      "actual": {
+        "layer_attributes": 3,
+        "visible": true,
+        "opacity": 1,
+        "offset_x": -8,
+        "offset_y": -8,
+        "apply_mask": false
+      },
+      "exact": true
+    },
+    {
+      "file": "multiple-offset-masked-groups.xcf",
+      "index": 4,
+      "selector": "tree_node",
+      "expected": {
+        "parent": 1,
+        "sibling": 1,
+        "is_group": true
+      },
+      "actual": {
+        "tree_node": 4,
+        "parent": 1,
+        "sibling": 1,
+        "is_group": true
+      },
+      "exact": true
+    },
+    {
+      "file": "multiple-offset-masked-groups.xcf",
+      "index": 4,
+      "selector": "layer_group",
+      "expected": {
+        "is_group": true,
+        "item_path": [
+          1,
+          1
+        ]
+      },
+      "actual": {
+        "layer_group": 4,
+        "is_group": true,
+        "item_path": [
+          1,
+          1
+        ]
+      },
+      "exact": true
+    },
+    {
+      "file": "multiple-offset-masked-groups.xcf",
+      "index": 4,
+      "selector": "layer_attributes",
+      "expected": {
+        "visible": true,
+        "opacity": 1.0,
+        "offset_x": 0,
+        "offset_y": 0,
+        "apply_mask": true
+      },
+      "actual": {
+        "layer_attributes": 4,
+        "visible": true,
+        "opacity": 1,
+        "offset_x": 0,
+        "offset_y": 0,
+        "apply_mask": true
+      },
+      "exact": true
+    },
+    {
+      "file": "multiple-offset-masked-groups.xcf",
+      "index": 5,
+      "selector": "tree_node",
+      "expected": {
+        "parent": 4,
+        "sibling": 0,
+        "is_group": false
+      },
+      "actual": {
+        "tree_node": 5,
+        "parent": 4,
+        "sibling": 0,
+        "is_group": false
+      },
+      "exact": true
+    },
+    {
+      "file": "multiple-offset-masked-groups.xcf",
+      "index": 5,
+      "selector": "layer_group",
+      "expected": {
+        "is_group": false,
+        "item_path": [
+          1,
+          1,
+          0
+        ]
+      },
+      "actual": {
+        "layer_group": 5,
+        "is_group": false,
+        "item_path": [
+          1,
+          1,
+          0
+        ]
+      },
+      "exact": true
+    },
+    {
+      "file": "multiple-offset-masked-groups.xcf",
+      "index": 5,
+      "selector": "layer_attributes",
+      "expected": {
+        "visible": true,
+        "opacity": 1.0,
+        "offset_x": 0,
+        "offset_y": 0,
+        "apply_mask": true
+      },
+      "actual": {
+        "layer_attributes": 5,
+        "visible": true,
+        "opacity": 1,
+        "offset_x": 0,
+        "offset_y": 0,
+        "apply_mask": true
+      },
+      "exact": true
+    },
+    {
+      "file": "multiple-offset-masked-groups.xcf",
+      "index": 6,
+      "selector": "tree_node",
+      "expected": {
+        "parent": 4,
+        "sibling": 1,
+        "is_group": false
+      },
+      "actual": {
+        "tree_node": 6,
+        "parent": 4,
+        "sibling": 1,
+        "is_group": false
+      },
+      "exact": true
+    },
+    {
+      "file": "multiple-offset-masked-groups.xcf",
+      "index": 6,
+      "selector": "layer_group",
+      "expected": {
+        "is_group": false,
+        "item_path": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actual": {
+        "layer_group": 6,
+        "is_group": false,
+        "item_path": [
+          1,
+          1,
+          1
+        ]
+      },
+      "exact": true
+    },
+    {
+      "file": "multiple-offset-masked-groups.xcf",
+      "index": 6,
+      "selector": "layer_attributes",
+      "expected": {
+        "visible": true,
+        "opacity": 1.0,
+        "offset_x": 0,
+        "offset_y": 0,
+        "apply_mask": false
+      },
+      "actual": {
+        "layer_attributes": 6,
+        "visible": true,
+        "opacity": 1,
+        "offset_x": 0,
+        "offset_y": 0,
+        "apply_mask": false
+      },
+      "exact": true
+    },
+    {
+      "file": "multiple-offset-masked-groups.xcf",
+      "index": 7,
+      "selector": "tree_node",
+      "expected": {
+        "parent": null,
+        "sibling": 2,
+        "is_group": false
+      },
+      "actual": {
+        "tree_node": 7,
+        "parent": null,
+        "sibling": 2,
+        "is_group": false
+      },
+      "exact": true
+    },
+    {
+      "file": "multiple-offset-masked-groups.xcf",
+      "index": 7,
+      "selector": "layer_group",
+      "expected": {
+        "is_group": false,
+        "item_path": []
+      },
+      "actual": {
+        "layer_group": 7,
+        "is_group": false,
+        "item_path": []
+      },
+      "exact": true
+    },
+    {
+      "file": "multiple-offset-masked-groups.xcf",
+      "index": 7,
+      "selector": "layer_attributes",
+      "expected": {
+        "visible": true,
+        "opacity": 1.0,
+        "offset_x": -8,
+        "offset_y": -8,
+        "apply_mask": false
+      },
+      "actual": {
+        "layer_attributes": 7,
+        "visible": true,
+        "opacity": 1,
+        "offset_x": -8,
+        "offset_y": -8,
+        "apply_mask": false
+      },
+      "exact": true
+    }
+  ],
+  "runs": [
+    {
+      "file": "single-masked-group.xcf",
+      "records": [
+        {
+          "icc_profile_bytes": 0
+        },
+        {
+          "tree_node": 0,
+          "parent": null,
+          "sibling": 0,
+          "is_group": true
+        },
+        {
+          "tree_node": 1,
+          "parent": 0,
+          "sibling": 0,
+          "is_group": false
+        },
+        {
+          "tree_node": 2,
+          "parent": null,
+          "sibling": 1,
+          "is_group": false
+        },
+        {
+          "version": 13,
+          "width": 256,
+          "height": 256,
+          "compression": 1,
+          "channels": 0
+        },
+        {
+          "layer_property_count": 0,
+          "count": 20
+        },
+        {
+          "layer_group": 0,
+          "is_group": true,
+          "item_path": []
+        },
+        {
+          "layer_composition": 0,
+          "blend_mode": 28,
+          "composite_mode": -1,
+          "composite_space": -1,
+          "blend_space": 0
+        },
+        {
+          "layer_attributes": 0,
+          "visible": true,
+          "opacity": 1,
+          "offset_x": 0,
+          "offset_y": 0,
+          "apply_mask": true
+        },
+        {
+          "layer": 0,
+          "width": 256,
+          "height": 256,
+          "kind": 1,
+          "mask": 1086,
+          "effects": 0,
+          "pixel_blake3": "d6908c310d84affd344d1dc2c9fde33a4b557abee64498c81f42eb577f8dfd60"
+        },
+        {
+          "mask": 0,
+          "width": 256,
+          "height": 256,
+          "pixel_blake3": "383c5f0f57f7cbf1778a1dfa27f39635589d4ea5b9cc38ce5253ac83015f31d1"
+        },
+        {
+          "layer_property_count": 1,
+          "count": 18
+        },
+        {
+          "layer_group": 1,
+          "is_group": false,
+          "item_path": [
+            0,
+            0
+          ]
+        },
+        {
+          "layer_composition": 1,
+          "blend_mode": 28,
+          "composite_mode": -1,
+          "composite_space": -1,
+          "blend_space": 0
+        },
+        {
+          "layer_attributes": 1,
+          "visible": true,
+          "opacity": 1,
+          "offset_x": 0,
+          "offset_y": 0,
+          "apply_mask": false
+        },
+        {
+          "layer": 1,
+          "width": 256,
+          "height": 256,
+          "kind": 1,
+          "mask": 0,
+          "effects": 0,
+          "pixel_blake3": "d6908c310d84affd344d1dc2c9fde33a4b557abee64498c81f42eb577f8dfd60"
+        },
+        {
+          "layer_property_count": 2,
+          "count": 17
+        },
+        {
+          "layer_group": 2,
+          "is_group": false,
+          "item_path": []
+        },
+        {
+          "layer_composition": 2,
+          "blend_mode": 28,
+          "composite_mode": -1,
+          "composite_space": -1,
+          "blend_space": 0
+        },
+        {
+          "layer_attributes": 2,
+          "visible": true,
+          "opacity": 1,
+          "offset_x": 0,
+          "offset_y": 0,
+          "apply_mask": false
+        },
+        {
+          "layer": 2,
+          "width": 256,
+          "height": 256,
+          "kind": 1,
+          "mask": 0,
+          "effects": 0,
+          "pixel_blake3": "d69046af197d04dacaa3dd064e694898d8f4ca218df7f1ed98d814e0c34d1434"
+        },
+        {
+          "managed_peak": 281789,
+          "managed_used": 0
+        }
+      ]
+    },
+    {
+      "file": "multiple-masked-groups.xcf",
+      "records": [
+        {
+          "icc_profile_bytes": 0
+        },
+        {
+          "tree_node": 0,
+          "parent": null,
+          "sibling": 0,
+          "is_group": true
+        },
+        {
+          "tree_node": 1,
+          "parent": 0,
+          "sibling": 0,
+          "is_group": false
+        },
+        {
+          "tree_node": 2,
+          "parent": null,
+          "sibling": 1,
+          "is_group": true
+        },
+        {
+          "tree_node": 3,
+          "parent": 2,
+          "sibling": 0,
+          "is_group": false
+        },
+        {
+          "tree_node": 4,
+          "parent": null,
+          "sibling": 2,
+          "is_group": false
+        },
+        {
+          "version": 13,
+          "width": 256,
+          "height": 256,
+          "compression": 1,
+          "channels": 0
+        },
+        {
+          "layer_property_count": 0,
+          "count": 19
+        },
+        {
+          "layer_group": 0,
+          "is_group": true,
+          "item_path": []
+        },
+        {
+          "layer_composition": 0,
+          "blend_mode": 28,
+          "composite_mode": -1,
+          "composite_space": -1,
+          "blend_space": 0
+        },
+        {
+          "layer_attributes": 0,
+          "visible": true,
+          "opacity": 1,
+          "offset_x": 0,
+          "offset_y": 0,
+          "apply_mask": true
+        },
+        {
+          "layer": 0,
+          "width": 256,
+          "height": 256,
+          "kind": 1,
+          "mask": 1094,
+          "effects": 0,
+          "pixel_blake3": "d6908c310d84affd344d1dc2c9fde33a4b557abee64498c81f42eb577f8dfd60"
+        },
+        {
+          "mask": 0,
+          "width": 256,
+          "height": 256,
+          "pixel_blake3": "383c5f0f57f7cbf1778a1dfa27f39635589d4ea5b9cc38ce5253ac83015f31d1"
+        },
+        {
+          "layer_property_count": 1,
+          "count": 18
+        },
+        {
+          "layer_group": 1,
+          "is_group": false,
+          "item_path": [
+            0,
+            0
+          ]
+        },
+        {
+          "layer_composition": 1,
+          "blend_mode": 28,
+          "composite_mode": -1,
+          "composite_space": -1,
+          "blend_space": 0
+        },
+        {
+          "layer_attributes": 1,
+          "visible": true,
+          "opacity": 1,
+          "offset_x": 0,
+          "offset_y": 0,
+          "apply_mask": false
+        },
+        {
+          "layer": 1,
+          "width": 256,
+          "height": 256,
+          "kind": 1,
+          "mask": 0,
+          "effects": 0,
+          "pixel_blake3": "d6908c310d84affd344d1dc2c9fde33a4b557abee64498c81f42eb577f8dfd60"
+        },
+        {
+          "layer_property_count": 2,
+          "count": 19
+        },
+        {
+          "layer_group": 2,
+          "is_group": true,
+          "item_path": []
+        },
+        {
+          "layer_composition": 2,
+          "blend_mode": 28,
+          "composite_mode": -1,
+          "composite_space": -1,
+          "blend_space": 0
+        },
+        {
+          "layer_attributes": 2,
+          "visible": true,
+          "opacity": 1,
+          "offset_x": 0,
+          "offset_y": 0,
+          "apply_mask": true
+        },
+        {
+          "layer": 2,
+          "width": 256,
+          "height": 256,
+          "kind": 1,
+          "mask": 3285,
+          "effects": 0,
+          "pixel_blake3": "3e15059c5aa3080694965f4912f151de181d612c37d835c5a052456f4480b622"
+        },
+        {
+          "mask": 2,
+          "width": 256,
+          "height": 256,
+          "pixel_blake3": "1e67f19a94f8652cd26f79525f8d29966633a03fded26c988a156e4e67f34575"
+        },
+        {
+          "layer_property_count": 3,
+          "count": 19
+        },
+        {
+          "layer_group": 3,
+          "is_group": false,
+          "item_path": [
+            1,
+            0
+          ]
+        },
+        {
+          "layer_composition": 3,
+          "blend_mode": 28,
+          "composite_mode": -1,
+          "composite_space": -1,
+          "blend_space": 0
+        },
+        {
+          "layer_attributes": 3,
+          "visible": true,
+          "opacity": 1,
+          "offset_x": 0,
+          "offset_y": 0,
+          "apply_mask": false
+        },
+        {
+          "layer": 3,
+          "width": 256,
+          "height": 256,
+          "kind": 1,
+          "mask": 0,
+          "effects": 0,
+          "pixel_blake3": "3e15059c5aa3080694965f4912f151de181d612c37d835c5a052456f4480b622"
+        },
+        {
+          "layer_property_count": 4,
+          "count": 17
+        },
+        {
+          "layer_group": 4,
+          "is_group": false,
+          "item_path": []
+        },
+        {
+          "layer_composition": 4,
+          "blend_mode": 28,
+          "composite_mode": -1,
+          "composite_space": -1,
+          "blend_space": 0
+        },
+        {
+          "layer_attributes": 4,
+          "visible": true,
+          "opacity": 1,
+          "offset_x": 0,
+          "offset_y": 0,
+          "apply_mask": false
+        },
+        {
+          "layer": 4,
+          "width": 256,
+          "height": 256,
+          "kind": 1,
+          "mask": 0,
+          "effects": 0,
+          "pixel_blake3": "d69046af197d04dacaa3dd064e694898d8f4ca218df7f1ed98d814e0c34d1434"
+        },
+        {
+          "managed_peak": 283995,
+          "managed_used": 0
+        }
+      ]
+    },
+    {
+      "file": "multiple-offset-masked-groups.xcf",
+      "records": [
+        {
+          "icc_profile_bytes": 0
+        },
+        {
+          "tree_node": 0,
+          "parent": null,
+          "sibling": 0,
+          "is_group": false
+        },
+        {
+          "tree_node": 1,
+          "parent": null,
+          "sibling": 1,
+          "is_group": true
+        },
+        {
+          "tree_node": 2,
+          "parent": 1,
+          "sibling": 0,
+          "is_group": true
+        },
+        {
+          "tree_node": 3,
+          "parent": 2,
+          "sibling": 0,
+          "is_group": false
+        },
+        {
+          "tree_node": 4,
+          "parent": 1,
+          "sibling": 1,
+          "is_group": true
+        },
+        {
+          "tree_node": 5,
+          "parent": 4,
+          "sibling": 0,
+          "is_group": false
+        },
+        {
+          "tree_node": 6,
+          "parent": 4,
+          "sibling": 1,
+          "is_group": false
+        },
+        {
+          "tree_node": 7,
+          "parent": null,
+          "sibling": 2,
+          "is_group": false
+        },
+        {
+          "version": 13,
+          "width": 240,
+          "height": 240,
+          "compression": 1,
+          "channels": 0
+        },
+        {
+          "layer_property_count": 0,
+          "count": 18
+        },
+        {
+          "layer_group": 0,
+          "is_group": false,
+          "item_path": []
+        },
+        {
+          "layer_composition": 0,
+          "blend_mode": 28,
+          "composite_mode": -1,
+          "composite_space": -1,
+          "blend_space": 0
+        },
+        {
+          "layer_attributes": 0,
+          "visible": true,
+          "opacity": 1,
+          "offset_x": 0,
+          "offset_y": 0,
+          "apply_mask": false
+        },
+        {
+          "layer": 0,
+          "width": 240,
+          "height": 240,
+          "kind": 1,
+          "mask": 0,
+          "effects": 0,
+          "pixel_blake3": "7446339aeff4a04b67d59ea107459dd41438625f793b5ded495399a8aa3d15f5"
+        },
+        {
+          "layer_property_count": 1,
+          "count": 19
+        },
+        {
+          "layer_group": 1,
+          "is_group": true,
+          "item_path": []
+        },
+        {
+          "layer_composition": 1,
+          "blend_mode": 28,
+          "composite_mode": -1,
+          "composite_space": -1,
+          "blend_space": 0
+        },
+        {
+          "layer_attributes": 1,
+          "visible": true,
+          "opacity": 1,
+          "offset_x": -8,
+          "offset_y": -8,
+          "apply_mask": false
+        },
+        {
+          "layer": 1,
+          "width": 264,
+          "height": 264,
+          "kind": 1,
+          "mask": 0,
+          "effects": 0,
+          "pixel_blake3": "b951385b3b6af1637049d6cc2a3044b3c19c530080de07678a292923c1ef2a5a"
+        },
+        {
+          "layer_property_count": 2,
+          "count": 20
+        },
+        {
+          "layer_group": 2,
+          "is_group": true,
+          "item_path": [
+            1,
+            0
+          ]
+        },
+        {
+          "layer_composition": 2,
+          "blend_mode": 28,
+          "composite_mode": -1,
+          "composite_space": -1,
+          "blend_space": 0
+        },
+        {
+          "layer_attributes": 2,
+          "visible": true,
+          "opacity": 1,
+          "offset_x": -8,
+          "offset_y": -8,
+          "apply_mask": true
+        },
+        {
+          "layer": 2,
+          "width": 256,
+          "height": 256,
+          "kind": 1,
+          "mask": 10706,
+          "effects": 0,
+          "pixel_blake3": "d6908c310d84affd344d1dc2c9fde33a4b557abee64498c81f42eb577f8dfd60"
+        },
+        {
+          "mask": 2,
+          "width": 256,
+          "height": 256,
+          "pixel_blake3": "383c5f0f57f7cbf1778a1dfa27f39635589d4ea5b9cc38ce5253ac83015f31d1"
+        },
+        {
+          "layer_property_count": 3,
+          "count": 18
+        },
+        {
+          "layer_group": 3,
+          "is_group": false,
+          "item_path": [
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "layer_composition": 3,
+          "blend_mode": 28,
+          "composite_mode": -1,
+          "composite_space": -1,
+          "blend_space": 0
+        },
+        {
+          "layer_attributes": 3,
+          "visible": true,
+          "opacity": 1,
+          "offset_x": -8,
+          "offset_y": -8,
+          "apply_mask": false
+        },
+        {
+          "layer": 3,
+          "width": 256,
+          "height": 256,
+          "kind": 1,
+          "mask": 0,
+          "effects": 0,
+          "pixel_blake3": "d6908c310d84affd344d1dc2c9fde33a4b557abee64498c81f42eb577f8dfd60"
+        },
+        {
+          "layer_property_count": 4,
+          "count": 20
+        },
+        {
+          "layer_group": 4,
+          "is_group": true,
+          "item_path": [
+            1,
+            1
+          ]
+        },
+        {
+          "layer_composition": 4,
+          "blend_mode": 28,
+          "composite_mode": -1,
+          "composite_space": -1,
+          "blend_space": 0
+        },
+        {
+          "layer_attributes": 4,
+          "visible": true,
+          "opacity": 1,
+          "offset_x": 0,
+          "offset_y": 0,
+          "apply_mask": true
+        },
+        {
+          "layer": 4,
+          "width": 256,
+          "height": 256,
+          "kind": 1,
+          "mask": 13685,
+          "effects": 0,
+          "pixel_blake3": "984e97e58a1c4006ff545174124dddbae58dc8c6c514fae0e0be2ea3eff1dca5"
+        },
+        {
+          "mask": 4,
+          "width": 256,
+          "height": 256,
+          "pixel_blake3": "1e67f19a94f8652cd26f79525f8d29966633a03fded26c988a156e4e67f34575"
+        },
+        {
+          "layer_property_count": 5,
+          "count": 18
+        },
+        {
+          "layer_group": 5,
+          "is_group": false,
+          "item_path": [
+            1,
+            1,
+            0
+          ]
+        },
+        {
+          "layer_composition": 5,
+          "blend_mode": 28,
+          "composite_mode": -1,
+          "composite_space": -1,
+          "blend_space": 0
+        },
+        {
+          "layer_attributes": 5,
+          "visible": true,
+          "opacity": 1,
+          "offset_x": 0,
+          "offset_y": 0,
+          "apply_mask": true
+        },
+        {
+          "layer": 5,
+          "width": 256,
+          "height": 256,
+          "kind": 1,
+          "mask": 15138,
+          "effects": 0,
+          "pixel_blake3": "28e9f46dde9bd7b60a2e4840487c64046d9315147d1afb415159a910d0fb765e"
+        },
+        {
+          "mask": 5,
+          "width": 256,
+          "height": 256,
+          "pixel_blake3": "14af0ab104c79a15f206ccda514e5f7a64b7dbdd9e87995f09a3748d86ee62dd"
+        },
+        {
+          "layer_property_count": 6,
+          "count": 18
+        },
+        {
+          "layer_group": 6,
+          "is_group": false,
+          "item_path": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "layer_composition": 6,
+          "blend_mode": 28,
+          "composite_mode": -1,
+          "composite_space": -1,
+          "blend_space": 0
+        },
+        {
+          "layer_attributes": 6,
+          "visible": true,
+          "opacity": 1,
+          "offset_x": 0,
+          "offset_y": 0,
+          "apply_mask": false
+        },
+        {
+          "layer": 6,
+          "width": 256,
+          "height": 256,
+          "kind": 1,
+          "mask": 0,
+          "effects": 0,
+          "pixel_blake3": "3e15059c5aa3080694965f4912f151de181d612c37d835c5a052456f4480b622"
+        },
+        {
+          "layer_property_count": 7,
+          "count": 17
+        },
+        {
+          "layer_group": 7,
+          "is_group": false,
+          "item_path": []
+        },
+        {
+          "layer_composition": 7,
+          "blend_mode": 28,
+          "composite_mode": -1,
+          "composite_space": -1,
+          "blend_space": 0
+        },
+        {
+          "layer_attributes": 7,
+          "visible": true,
+          "opacity": 1,
+          "offset_x": -8,
+          "offset_y": -8,
+          "apply_mask": false
+        },
+        {
+          "layer": 7,
+          "width": 256,
+          "height": 256,
+          "kind": 1,
+          "mask": 0,
+          "effects": 0,
+          "pixel_blake3": "d69046af197d04dacaa3dd064e694898d8f4ca218df7f1ed98d814e0c34d1434"
+        },
+        {
+          "managed_peak": 312483,
+          "managed_used": 0
+        }
+      ]
+    }
+  ]
+}

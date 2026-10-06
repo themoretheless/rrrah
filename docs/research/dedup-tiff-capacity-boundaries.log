@@ -1,0 +1,40 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: function `error` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:4:4
+  |
+4 | fn error(message: &str) -> DecodeError {
+  |    ^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `packed_12` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:9:4
+  |
+9 | fn packed_12(
+  |    ^^^^^^^^^
+
+warning: function `decode_zd` is never used
+  --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:48:15
+   |
+48 | pub(super) fn decode_zd(
+   |               ^^^^^^^^^
+
+warning: `rrrah-decode` (lib) generated 3 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 8.75s
+     Running tests/pages.rs (/tmp/rrrah-dedup-target/debug/deps/pages-d48a1e9593483bae)
+
+running 11 tests
+test untagged_tiff_requires_explicit_color_transform ... ok
+test all_dcx_pages_and_changed_second_page_are_compared ... ok
+test cursor_hotspot_and_invalid_resource_offsets_are_not_ignored ... ok
+test every_icon_resource_is_compared_including_the_last ... ok
+test selected_tiff_pages_use_their_own_profile_and_keep_complete_count ... ok
+test complete_tiff_pages_with_icc_detect_last_page_changes_and_cycles ... ok
+test identical_tiff_samples_with_different_page_profiles_produce_distinct_colors ... ok
+test selected_tiff_budget_refusals_release_metadata_and_allow_retry ... ok
+test independent_tiff_precision_and_orientation_are_preserved ... ok
+test public_selected_frame_honors_tiff_page_profiles_metadata_and_explicit_limits ... ok
+test independently_encoded_tiff_endian_bigtiff_and_compression_matrix ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+

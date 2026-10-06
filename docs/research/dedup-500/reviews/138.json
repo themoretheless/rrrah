@@ -1,0 +1,68 @@
+{
+  "index": 138,
+  "repository": "Intsights/PyDeduplines",
+  "commit": "6cf0b51826c9e838f043f2c652fa6faa0d9b4d09",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Rust/Python duplicate-line removal with a 10MiB output buffer; no whole-file/image identity.",
+  "available_source_evidence": [
+    {
+      "path": "pydeduplines/__init__.py",
+      "local": "02-__init__.py",
+      "url": "https://github.com/Intsights/PyDeduplines/blob/6cf0b51826c9e838f043f2c652fa6faa0d9b4d09/pydeduplines/__init__.py",
+      "sha256": "4440ae26898667e85badc8757c964293c4ff282ceb39b382dea1e1c470b59561",
+      "truncated": false,
+      "lines": 96,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/lib.rs",
+      "local": "03-lib.rs",
+      "url": "https://github.com/Intsights/PyDeduplines/blob/6cf0b51826c9e838f043f2c652fa6faa0d9b4d09/src/lib.rs",
+      "sha256": "18498619524116dc5a811b4bc965dafc6151228d32b62908bff4ebf71685cf99",
+      "truncated": false,
+      "lines": 479,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/test_pydeduplines.py",
+      "local": "04-test_pydeduplines.py",
+      "url": "https://github.com/Intsights/PyDeduplines/blob/6cf0b51826c9e838f043f2c652fa6faa0d9b4d09/tests/test_pydeduplines.py",
+      "sha256": "0ef2d59f399e95b1d67545f8dce21e67d39f530cc62f2af9b01c15d97096a400",
+      "truncated": false,
+      "lines": 170,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 2,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/Intsights/PyDeduplines/blob/6cf0b51826c9e838f043f2c652fa6faa0d9b4d09/README.md",
+      "sha256": "03c67915251bf3cf03c369b022b6e6cdcef24add40b467da2bcd6171902f9c40",
+      "truncated": false,
+      "lines": 141,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/Intsights/PyDeduplines/blob/6cf0b51826c9e838f043f2c652fa6faa0d9b4d09/LICENSE",
+      "sha256": "09f9109b4cf450999dcd5e508180db04180642af85f2e45123308f59ccf1e76b",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

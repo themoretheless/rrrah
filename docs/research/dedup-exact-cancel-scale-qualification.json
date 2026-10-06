@@ -1,0 +1,69 @@
+{
+  "status": "macOS and native Linux probes passed",
+  "profile": "dev optimized plus debug info",
+  "platform": "macOS ARM64",
+  "sizes_bytes": [
+    1048576,
+    8388608,
+    67108864,
+    268435456
+  ],
+  "runs_per_size": 5,
+  "max_callback_observation_to_return_ns": 3583,
+  "median_callback_observation_to_return_ns": 1292.0,
+  "bytes_read_per_cancelled_scan": 671744,
+  "cancel_observed_callback": 25,
+  "whole_process_maximum_rss_bytes": 2506752,
+  "verified_behavior": [
+    "Cancellation flag set and no complete report",
+    "No duplicate group admitted",
+    "Read stops before both full files consumed",
+    "Uncancelled retry confirms the two copies at every size"
+  ],
+  "source_sha256": "28f1d775450a20c742a708f30ef78080d2fe63fa317841ded63495cae5377fb5",
+  "logs": {
+    "results": {
+      "path": "docs/research/dedup-exact-cancel-scale-results.log",
+      "sha256": "72cfda97b760259749135c2697c05d796b44914af394f9c0b464e730cd6577f0"
+    },
+    "time": {
+      "path": "docs/research/dedup-exact-cancel-scale-time.log",
+      "sha256": "090db6cc27bcc66765e9ba313bd30e81e645f89ad9a4c6df2f31ae977db03eb3"
+    },
+    "clippy": {
+      "path": "docs/research/dedup-exact-cancel-scale-clippy.log",
+      "sha256": "060360a7b3fd52470009ce02b6d9186078a59497d9de7032346268787a3e8c9e"
+    },
+    "linux-results": {
+      "path": "docs/research/dedup-exact-cancel-scale-linux-results.log",
+      "sha256": "2f0394904e8b1446a5f29c1784fe143b36326cd2c5f2c9faaaec89c6875c9dbb"
+    },
+    "linux-stderr": {
+      "path": "docs/research/dedup-exact-cancel-scale-linux-stderr.log",
+      "sha256": "f9b8a3ae604224f6072209b4a044c2ca871380ab32c5a925558a47dc26f6e997"
+    },
+    "final-clippy": {
+      "path": "docs/research/dedup-exact-cancel-scale-final-clippy.log",
+      "sha256": "9a4003dc556d8d3669cd89c96f0139b2beeb3c5fec221c08c088b8a34ffa4241"
+    }
+  },
+  "snapshot_timing": "post-run source capture",
+  "limits": [
+    "Cancellation request generated synchronously at a callback",
+    "Does not include externally requested cancellation while OS read is in flight",
+    "Warm local filesystem, no cold/network latency qualification",
+    "RSS is whole process including fixture creation and retry",
+    "No decoder cancellation claim",
+    "Full acceptance incomplete",
+    "Linux tmpfs and macOS local filesystem results are not a controlled platform comparison"
+  ],
+  "linux": {
+    "status": "native process exited zero",
+    "platform": "Linux ARM64 Ubuntu 24.04",
+    "storage": "isolated /tmp tmpfs, 2 GiB mount capacity",
+    "whole_process_peak_rss_bytes": 2281472,
+    "memory_source": "/proc/self/status VmHWM after all fixture creation, scans and retries",
+    "max_callback_observation_to_return_ns": 9128
+  },
+  "post_macos_changes": "Linux-only /proc process-memory reporting added; scan workload unchanged"
+}

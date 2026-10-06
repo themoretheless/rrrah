@@ -1,0 +1,301 @@
+{
+  "status": "six_cases_completed_one_recovery",
+  "session": 17656,
+  "scope": "One known copy-origin case accepted under explicit pyramid + bounded photometric verification, with unchanged residual/overlap criteria. Diagnostic primitive path only; public file/index/roots integration and independent negative precision qualification remain.",
+  "build_exit_code": 0,
+  "probe_sha256": "073b471d8e07ff7ed3488861ceb0e7a48e967ed76b79ec13ba5bf1b932a90e9b",
+  "run_session": 24436,
+  "completed_cases": 6,
+  "rows": [
+    {
+      "query_id": "200001.jpg",
+      "status": "ok",
+      "levels": [
+        {
+          "levels": 1,
+          "photometric": null
+        },
+        {
+          "levels": 2,
+          "photometric": [
+            {
+              "mode": "RejectOutsidePolicy",
+              "status": "ok",
+              "fitted_counts": [
+                [
+                  23827,
+                  25586,
+                  66560
+                ],
+                [
+                  83960,
+                  92220,
+                  93440
+                ]
+              ],
+              "candidate": true
+            },
+            {
+              "mode": "ConstrainedLeastSquares",
+              "status": "ok",
+              "fitted_counts": [
+                [
+                  23827,
+                  25586,
+                  66560
+                ],
+                [
+                  83960,
+                  92220,
+                  93440
+                ]
+              ],
+              "candidate": true
+            }
+          ]
+        },
+        {
+          "levels": 3,
+          "photometric": [
+            {
+              "mode": "RejectOutsidePolicy",
+              "status": "ok",
+              "fitted_counts": [
+                [
+                  24037,
+                  25546,
+                  66560
+                ],
+                [
+                  84801,
+                  92220,
+                  93440
+                ]
+              ],
+              "candidate": true
+            },
+            {
+              "mode": "ConstrainedLeastSquares",
+              "status": "ok",
+              "fitted_counts": [
+                [
+                  24037,
+                  25546,
+                  66560
+                ],
+                [
+                  84801,
+                  92220,
+                  93440
+                ]
+              ],
+              "candidate": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "query_id": "200101.jpg",
+      "status": "ok",
+      "levels": [
+        {
+          "levels": 1,
+          "photometric": null
+        },
+        {
+          "levels": 2,
+          "photometric": null
+        },
+        {
+          "levels": 3,
+          "photometric": null
+        }
+      ]
+    },
+    {
+      "query_id": "200102.jpg",
+      "status": "ok",
+      "levels": [
+        {
+          "levels": 1,
+          "photometric": [
+            {
+              "mode": "RejectOutsidePolicy",
+              "status": "error",
+              "error": "Fit(OutsidePolicy { channel: 0 })"
+            },
+            {
+              "mode": "ConstrainedLeastSquares",
+              "status": "ok",
+              "fitted_counts": [
+                [
+                  856,
+                  46009,
+                  76800
+                ],
+                [
+                  674,
+                  64554,
+                  65600
+                ]
+              ],
+              "candidate": false
+            }
+          ]
+        },
+        {
+          "levels": 2,
+          "photometric": [
+            {
+              "mode": "RejectOutsidePolicy",
+              "status": "error",
+              "error": "Fit(OutsidePolicy { channel: 0 })"
+            },
+            {
+              "mode": "ConstrainedLeastSquares",
+              "status": "ok",
+              "fitted_counts": [
+                [
+                  872,
+                  45731,
+                  76800
+                ],
+                [
+                  683,
+                  64554,
+                  65600
+                ]
+              ],
+              "candidate": false
+            }
+          ]
+        },
+        {
+          "levels": 3,
+          "photometric": [
+            {
+              "mode": "RejectOutsidePolicy",
+              "status": "error",
+              "error": "Fit(OutsidePolicy { channel: 0 })"
+            },
+            {
+              "mode": "ConstrainedLeastSquares",
+              "status": "ok",
+              "fitted_counts": [
+                [
+                  905,
+                  45883,
+                  76800
+                ],
+                [
+                  693,
+                  64554,
+                  65600
+                ]
+              ],
+              "candidate": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "query_id": "200201.jpg",
+      "status": "ok",
+      "levels": [
+        {
+          "levels": 1,
+          "photometric": null
+        },
+        {
+          "levels": 2,
+          "photometric": null
+        },
+        {
+          "levels": 3,
+          "photometric": null
+        }
+      ]
+    },
+    {
+      "query_id": "200301.jpg",
+      "status": "ok",
+      "levels": [
+        {
+          "levels": 1,
+          "photometric": null
+        },
+        {
+          "levels": 2,
+          "photometric": null
+        },
+        {
+          "levels": 3,
+          "photometric": null
+        }
+      ]
+    },
+    {
+      "query_id": "200302.jpg",
+      "status": "ok",
+      "levels": [
+        {
+          "levels": 1,
+          "photometric": null
+        },
+        {
+          "levels": 2,
+          "photometric": null
+        },
+        {
+          "levels": 3,
+          "photometric": null
+        }
+      ]
+    }
+  ],
+  "run_exit_code": 0,
+  "accepted": [
+    {
+      "query_id": "200001.jpg",
+      "levels": 2,
+      "mode": "RejectOutsidePolicy",
+      "matched_fractions": [
+        0.9312514656452747,
+        0.9104315766644979
+      ]
+    },
+    {
+      "query_id": "200001.jpg",
+      "levels": 2,
+      "mode": "ConstrainedLeastSquares",
+      "matched_fractions": [
+        0.9312514656452747,
+        0.9104315766644979
+      ]
+    },
+    {
+      "query_id": "200001.jpg",
+      "levels": 3,
+      "mode": "RejectOutsidePolicy",
+      "matched_fractions": [
+        0.940930086902059,
+        0.9195510735198439
+      ]
+    },
+    {
+      "query_id": "200001.jpg",
+      "levels": 3,
+      "mode": "ConstrainedLeastSquares",
+      "matched_fractions": [
+        0.940930086902059,
+        0.9195510735198439
+      ]
+    }
+  ],
+  "recovered_queries": [
+    "200001.jpg"
+  ],
+  "remaining_queries": 5
+}

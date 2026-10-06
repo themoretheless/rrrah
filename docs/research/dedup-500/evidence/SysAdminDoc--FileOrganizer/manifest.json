@@ -1,0 +1,95 @@
+{
+  "repository": "SysAdminDoc/FileOrganizer",
+  "metadata": {
+    "name": "SysAdminDoc/FileOrganizer",
+    "url": "https://github.com/SysAdminDoc/FileOrganizer",
+    "description": "Hybrid file organizer for Windows: C#/.NET 8/WinUI 3 shell + Python core. Multi-provider AI classification (DeepSeek, GitHub Models, Ollama), six cleanup scanners, progressive hash + perceptual dedup, EXIF photo workflows.",
+    "language": "Python",
+    "stars": 3,
+    "license": "MIT",
+    "archived": false,
+    "pushed_at": "2026-09-14T00:57:57Z",
+    "default_branch": "main",
+    "queries": [
+      "perceptual hash in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/SysAdminDoc/FileOrganizer/blob/eafb9d98665567f427b9f7033ebec482674b6297/README.md",
+      "sha256": "c807d70231015044464783effc7395a5974ab71d5753c1af2cec5dbada607b2b",
+      "truncated": false,
+      "lines": 686,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/SysAdminDoc/FileOrganizer/blob/eafb9d98665567f427b9f7033ebec482674b6297/LICENSE",
+      "sha256": "faa32f8d91b7c2d000eab5f4d8b3af0039b26dd083b2e39a747efe45577d799c",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "dedup_run.py",
+      "local": "02-dedup_run.py",
+      "url": "https://github.com/SysAdminDoc/FileOrganizer/blob/eafb9d98665567f427b9f7033ebec482674b6297/dedup_run.py",
+      "sha256": "b3483d81a2ea384295856b046d209abc683b5b907698af84da31b59d15676c50",
+      "truncated": false,
+      "lines": 458,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "fix_duplicates.py",
+      "local": "03-fix_duplicates.py",
+      "url": "https://github.com/SysAdminDoc/FileOrganizer/blob/eafb9d98665567f427b9f7033ebec482674b6297/fix_duplicates.py",
+      "sha256": "6b5fb32bac3e13e7d9b237f4dee1d58f1d2e7b606eaf668823f9afdf232a64da",
+      "truncated": false,
+      "lines": 389,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "fileorganizer/cross_library_dedup.py",
+      "local": "04-cross_library_dedup.py",
+      "url": "https://github.com/SysAdminDoc/FileOrganizer/blob/eafb9d98665567f427b9f7033ebec482674b6297/fileorganizer/cross_library_dedup.py",
+      "sha256": "7792a8a8fba87dd4b2a643296ca956cba539426b666b416e4a5610dec395d21e",
+      "truncated": false,
+      "lines": 421,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/test_cross_library_dedup.py",
+      "local": "05-test_cross_library_dedup.py",
+      "url": "https://github.com/SysAdminDoc/FileOrganizer/blob/eafb9d98665567f427b9f7033ebec482674b6297/tests/test_cross_library_dedup.py",
+      "sha256": "e039fb3cac512a9a4378a3e7e456ec1a7b2e003d71afd629b1789e16cc1e16e9",
+      "truncated": false,
+      "lines": 124,
+      "source": true,
+      "test": true
+    }
+  ],
+  "errors": [],
+  "commit": "eafb9d98665567f427b9f7033ebec482674b6297",
+  "tree_truncated": false,
+  "source_file_count": 336,
+  "test_file_count": 117,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "dedup_run.py",
+    "fix_duplicates.py",
+    "fileorganizer/cross_library_dedup.py",
+    "tests/test_cross_library_dedup.py"
+  ]
+}

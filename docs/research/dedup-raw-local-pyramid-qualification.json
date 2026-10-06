@@ -1,0 +1,65 @@
+{
+  "scope": "Full-resolution CR2 independent render local descriptor/geometry diagnostics and bounded oriented image pyramid primitive",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/pyramid.rs": "21355b46e2171f56cf1c2eb9a0b8451e4c6970b69086cee55e67db1b56f556b0",
+    "crates/rrrah-dedup/tests/pyramid.rs": "809e51ebd22db8bcd0cce47076ad3d08c2978c00054ef06f74e1a4448dba77e6",
+    "crates/rrrah-dedup/examples/raw_raster_probe.rs": "2af2f24a23adfacffa8bb9a900941b7a5e2dc56edecbec28f4f78a5887c6d047"
+  },
+  "full_resolution": {
+    "ppm": {
+      "feature_counts": [
+        497,
+        493
+      ],
+      "correspondences": 45,
+      "geometric_inliers": 40,
+      "translation": [
+        11.933286796500257,
+        9.772576358022604
+      ],
+      "expected_crop_translation": [
+        12,
+        10
+      ]
+    },
+    "icc_tiff": {
+      "feature_counts": [
+        497,
+        484
+      ],
+      "correspondences": 0,
+      "geometry": null
+    }
+  },
+  "five_level_oriented_pyramid": {
+    "icc_tiff": {
+      "feature_counts": [
+        2296,
+        2234
+      ],
+      "correspondences": 0,
+      "geometry": null
+    },
+    "max_levels": 5,
+    "max_total_pixels": 40000000,
+    "max_total_features": 2500,
+    "descriptor_radius": 64
+  },
+  "new_api": "extract_oriented_pyramid: premultiplied area-reduction, source-coordinate feature mapping, homogeneous oriented-scale recipe, bounded pixels/levels/features, explicit cancellation",
+  "validation": {
+    "pyramid_tests_passed": 3,
+    "clippy_selected_example_and_tests_exit_code": 0,
+    "native_diagnostic_exit_codes": [
+      0,
+      0,
+      0
+    ]
+  },
+  "interpretation": "Full-resolution PPM known same-source positive supplies strong local geometry. ICC TIFF missed positive persists even with five oriented image levels; mere scale expansion is insufficient. No thresholds widened and no pixel equality or final local candidate acceptance inferred.",
+  "remaining": [
+    "Robust local descriptor/orientation under transfer changes",
+    "Full bidirectional filtered pixel verification and source snapshot pipeline",
+    "Captured independent RAW/raster positives and negatives",
+    "Memory accounting of physical feature/index allocation"
+  ]
+}

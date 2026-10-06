@@ -1,0 +1,14 @@
+{
+  "date": "2026-10-06",
+  "scope": "real two-page PDF application raster cache/preload adapters, not physical navigation",
+  "assertions": [
+    "page0 foreground and page1 preload have distinct cache keys",
+    "subsequent page hits share original prepared pixel allocations and do not invoke decode",
+    "page metadata and primary colors remain distinct",
+    "shrinking count from two to one evicts prefetched page and retains visible page0",
+    "last owner release returns managed budget to zero"
+  ],
+  "test": "foreground_loader_tests::pdf_selected_page_preload_keeps_distinct_cache_keys_and_visible_page",
+  "passed": 1,
+  "log": "/tmp/rrrah-pdf-preload-keys.log"
+}

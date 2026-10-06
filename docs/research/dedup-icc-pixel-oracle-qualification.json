@@ -1,0 +1,27 @@
+{
+  "scope": "Independent pixel-wise ICC conversion oracle for 1024 sampled camera-render pixels; stronger than prior means-only comparison",
+  "source_sha256": {
+    "scripts/dedup-icc-grid-oracle.cpp": "eea02187f3010875cc542fb56851ee68b473316bb9f783586b66863b4c3dfa35",
+    "crates/rrrah-dedup/examples/raw_raster_probe.rs": "6a21243b4338d0ef34671a85c352296546a9ce7f3e071f04009470f49fbfa9ab",
+    "crates/rrrah-dedup/tests/icc_oracle.rs": "9728e1efeeff1f120dd3802f4ee3ed8ec1d92415b7f90da41a69a305b21f0c14",
+    "crates/rrrah-dedup/tests/fixtures/icc-render/manifest.json": "49ba0142a4b0b7c20651b096efe28a55fda9536c00927eb4ae65c10267b17045"
+  },
+  "oracle": "Little CMS 2.19 linear sRGB D65 target, relative colorimetric, no optimization/cache",
+  "sampled_pixels": 1024,
+  "rgb_channels": 3072,
+  "maximum_absolute_channel_error": 0.00040608644485473633,
+  "mean_absolute_channel_error": 2.128019806039531e-05,
+  "channels_above_0_001": 0,
+  "regression_bound": 0.0005,
+  "validation": {
+    "test_passed": 1,
+    "clippy_example_and_test_exit_code": 0,
+    "native_and_independent_runs_exit_code": 0
+  },
+  "remaining": [
+    "Other ICC profiles and full-resolution pixel oracle",
+    "Local feature robustness to transfer changes; CR2 TIFF remains missed",
+    "No threshold widening or ICC bypass",
+    "Final RAW/raster pixel acceptance and held-out calibration"
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "scope": "Explicit CRW import through bounded swap and actual Metal readback",
+  "adapter": "Metal Apple M4 Max",
+  "passed": 1,
+  "source_sha256": "b0730eb3a67cc2281a32e0b2ee104199246928d954a68b7e5b72366514c73d02",
+  "table_sha256": "1f96c603f8c2f9d47bd5c1b2c8fa25fc87507f8f6c66cbbccaadc6b5af4f6ac0",
+  "log": "/tmp/rrrah-crw-swap-metal.log",
+  "log_sha256": "10347101c0026dbdfb339e07ca3bcbb482f4d73a56ee5b6b73237cdf17b56051",
+  "contracts": [
+    "Full sensor and metadata preserved by swap",
+    "Managed RAM releases after spill and final restored owner drop",
+    "Memory pressure refuses restore without consuming stored object; retry succeeds",
+    "128x96 Metal frame byte-identical before/after swap"
+  ],
+  "limitations": [
+    "Explicit external-table import; no automatic CRW viewer routing.",
+    "Native output preservation, not independent color/rendering oracle or physical display proof.",
+    "Comparison Vec and GPU helper allocations outside managed CPU root."
+  ]
+}

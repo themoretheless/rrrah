@@ -80,14 +80,37 @@
 //!   and flag it in your report — the orchestrator owns shared files.
 
 mod arw;
+pub(crate) mod color;
 mod cr2;
+mod dcr;
+mod dcs_sensor;
+pub(crate) mod erf;
+mod fff;
 #[cfg(test)]
 mod fixture_regression;
+mod hasselblad;
+mod hasselblad_entropy;
+pub(crate) mod kdc;
+mod kodak_65000;
+mod kodak_dcr_color;
+mod leaf_packets;
+mod makernote_color;
+mod mef_sensor;
+pub use mef_sensor::decode_mef_zd_sensor;
+mod mos;
 mod nef;
+mod olympus_entropy;
 mod orf;
 mod pef;
+mod phaseone;
+mod phaseone_calibration;
+mod phaseone_container;
+mod phaseone_entropy;
 mod raf;
 mod rw2;
+mod srf_sensor;
+pub(crate) mod srw;
+mod three_fr;
 
 use std::{
     collections::{HashSet, VecDeque},
@@ -104,7 +127,7 @@ use rrrah_core::{
 
 use crate::{
     AdaptTimings, DecodeError, DecodeOutput, DecodeRequest, DecodeTimings, RawDecoder,
-    bounded_io::read_bounded,
+    bounded_io::read_managed,
     dng::tiff::{ByteOrder, Entry, Ifd, Limits as TiffLimits, Tiff},
 };
 
@@ -194,6 +217,9 @@ impl<'a> CameraDirectory<'a> {
 /// directories (top-level chain and one `SubIFDs` level).
 #[derive(Debug)]
 pub(crate) struct CameraFile<'a> {
+    pub(super) source_model: Option<String>,
+    pub(super) source_crop: Option<Rect>,
+    pub(super) source_cfa: Option<CfaPattern>,
     data: &'a [u8],
     tiff: Tiff<'a>,
     directories: Vec<CameraDirectory<'a>>,
@@ -248,6 +274,9 @@ impl<'a> CameraFile<'a> {
             return Err(camera_error(format, "file contains no image directories"));
         }
         Ok(Self {
+            source_model: None,
+            source_crop: None,
+            source_cfa: None,
             data,
             tiff,
             directories,
@@ -416,6 +445,7 @@ pub(crate) fn adapt_camera(
     format: &'static str,
     metadata: CameraMetadata,
     pixels: Vec<u16>,
+    reservation: Option<rrrah_core::Reservation>,
 ) -> Result<(DecodedMosaic, AdaptTimings), DecodeError> {
     let total_started = Instant::now();
     let expected = usize::try_from(metadata.width)
@@ -474,7 +504,10 @@ pub(crate) fn adapt_camera(
         crop_area,
         orientation,
     };
-    let mosaic = DecodedMosaic::new(raw_metadata, Arc::new(pixels))?;
+    let mosaic = match reservation {
+        Some(reservation) => DecodedMosaic::new(raw_metadata, reservation.try_adopt(pixels)?)?,
+        None => DecodedMosaic::new(raw_metadata, Arc::new(pixels))?,
+    };
     let finalize = finalize_started.elapsed();
     let total = total_started.elapsed();
 
@@ -535,12 +568,49 @@ pub(crate) trait CameraQuirks: Send + Sync {
     }
 }
 
+#[cfg(test)]
+fn assert_pixel_cancellation_checkpoints(
+    quirks: &dyn CameraQuirks,
+    container: &CameraFile<'_>,
+    raw: &CameraDirectory<'_>,
+) {
+    use std::sync::atomic::{AtomicUsize, Ordering};
+    let calls = AtomicUsize::new(0);
+    let expected = quirks.decode_pixels(container, raw, &|| {
+        calls.fetch_add(1, Ordering::Relaxed);
+        false
+    }).expect("cancellation fixture must decode successfully");
+    let checkpoints = calls.load(Ordering::Relaxed);
+    assert!(checkpoints > 0, "decoder must observe cancellation");
+    for target in 1..=checkpoints {
+        calls.store(0, Ordering::Relaxed);
+        let result = quirks.decode_pixels(container, raw, &|| {
+            calls.fetch_add(1, Ordering::Relaxed) + 1 == target
+        });
+        assert!(matches!(result, Err(DecodeError::Cancelled)),
+            "{} checkpoint {target}: {result:?}", quirks.format_name());
+        assert_eq!(quirks.decode_pixels(container, raw, &|| false).unwrap(), expected);
+    }
+    println!("{} cancellation checkpoints: {checkpoints}", quirks.format_name());
+}
+
 /// Camera formats registered with the shared backend. Backend IDs 2 (CR3)
 /// and 3 (DNG) are taken by the existing backends; camera formats use 4..=10.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub(crate) enum CameraFormat {
+    Erf,
+    Kdc,
+    Srw,
+    ThreeFr,
+    Fff,
+    Dcr,
+    Dcs,
+    Mos,
+    Iiq,
+    Srf,
     Cr2,
     Nef,
+    Nrw,
     Arw,
     Orf,
     Pef,
@@ -552,8 +622,19 @@ impl CameraFormat {
     /// Unique cache-facing backend ID for this format's mosaic recipe.
     pub(crate) const fn backend_id(self) -> u32 {
         match self {
+            Self::Erf => 13,
+            Self::Kdc => 14,
+            Self::Srw => 15,
+            Self::ThreeFr => 16,
+            Self::Fff => 17,
+            Self::Dcr => 18,
+            Self::Dcs => 22,
+            Self::Mos => 19,
+            Self::Iiq => 20,
+            Self::Srf => 21,
             Self::Cr2 => 4,
             Self::Nef => 5,
+            Self::Nrw => 11,
             Self::Arw => 6,
             Self::Orf => 7,
             Self::Pef => 8,
@@ -565,8 +646,19 @@ impl CameraFormat {
     /// The registered quirks implementation for this format.
     pub(crate) fn quirks(self) -> &'static dyn CameraQuirks {
         match self {
+            Self::Erf => &erf::ErfQuirks,
+            Self::Kdc => &kdc::KdcQuirks,
+            Self::Srw => &srw::SrwQuirks,
+            Self::ThreeFr => &three_fr::ThreeFrQuirks,
+            Self::Fff => &fff::FffQuirks,
+            Self::Dcr => &dcr::DcrQuirks,
+            Self::Dcs => &dcs_sensor::DcsQuirks,
+            Self::Mos => &mos::MosQuirks,
+            Self::Iiq => &phaseone::IiqQuirks,
+            Self::Srf => &srf_sensor::SrfQuirks,
             Self::Cr2 => &cr2::Cr2Quirks,
             Self::Nef => &nef::NefQuirks,
+            Self::Nrw => &nef::NrwQuirks,
             Self::Arw => &arw::ArwQuirks,
             Self::Orf => &orf::OrfQuirks,
             Self::Pef => &pef::PefQuirks,
@@ -575,13 +667,8 @@ impl CameraFormat {
         }
     }
 
-    /// Semantic cache contract for this format. Revisions are 2/1/1 for most
-    /// formats, 3/1/1 for NEF and PEF: the backend contract revision was
-    /// bumped from 1 to 2 when Stage 2 replaced the typed placeholder
-    /// decoders with real per-format decoding, and from 2 to 3 for NEF and
-    /// PEF when they gained native decoding of compressions 34713 (Nikon
-    /// lossless) and 65535 (Pentax lossless), so mosaics cached under the
-    /// older contracts cannot be reused.
+    /// Semantic cache contract. Color calibration and vendor WB resolution bump
+    /// every backend revision, preventing reuse of mosaics with placeholder color.
     pub(crate) fn recipe(self) -> MosaicRecipeManifest {
         const NATIVE_CAMERA_DECODE_FLAGS: u32 = DECODE_FULL_SENSOR_RAW
             | DECODE_INTEGER_U16
@@ -589,8 +676,23 @@ impl CameraFormat {
             | DECODE_CROP_AS_METADATA
             | DECODE_IMAGE_INDEX_IN_KEY;
         let backend_revision = match self {
-            Self::Nef | Self::Pef => 3,
-            Self::Cr2 | Self::Arw | Self::Orf | Self::Rw2 | Self::Raf => 2,
+            Self::Nef => 6,
+            Self::Nrw
+            | Self::Erf
+            | Self::Kdc
+            | Self::Srw
+            | Self::ThreeFr
+            | Self::Fff
+            | Self::Dcr
+            | Self::Dcs
+            | Self::Mos
+            | Self::Iiq
+            | Self::Srf => 1,
+            Self::Pef => 5,
+            Self::Rw2 => 8,
+            Self::Raf => 5,
+            Self::Arw => 6,
+            Self::Orf | Self::Cr2 => 4,
         };
         MosaicRecipeManifest::new(
             self.backend_id(),
@@ -610,6 +712,78 @@ pub(crate) struct NativeCameraDecoder {
 }
 
 impl NativeCameraDecoder {
+    /// Shared pipeline for owned managed sources and borrowed in-memory sources.
+    /// Drops the source owner before metadata adaptation, preserving reservation lifetime.
+    pub(crate) fn decode_source<S: std::ops::Deref<Target = [u8]>>(
+        &self,
+        request: &DecodeRequest,
+        data: S,
+        source_open: std::time::Duration,
+        total_started: Instant,
+    ) -> Result<DecodeOutput, DecodeError> {
+        request.check_cancelled()?;
+        if request.image_index != 0 {
+            return Err(DecodeError::UnsupportedImageIndex {
+                index: request.image_index,
+            });
+        }
+        let quirks = self.format.quirks();
+        let decoder_select_started = Instant::now();
+        let container = catch_unwind(AssertUnwindSafe(|| quirks.parse_container(&data)))
+            .map_err(|_| DecodeError::DecoderPanicked)??;
+        let raw = catch_unwind(AssertUnwindSafe(|| quirks.select_raw_ifd(&container)))
+            .map_err(|_| DecodeError::DecoderPanicked)??;
+        let decoder_select = decoder_select_started.elapsed();
+        request.check_cancelled()?;
+
+        let cancelled = || {
+            request
+                .cancellation
+                .as_ref()
+                .is_some_and(crate::GenerationToken::is_cancelled)
+        };
+        let raw_image_started = Instant::now();
+        let mut metadata = catch_unwind(AssertUnwindSafe(|| quirks.read_metadata(&container, raw)))
+            .map_err(|_| DecodeError::DecoderPanicked)??;
+        color::resolve(quirks.format_name(), &container, raw, &mut metadata)?;
+        let output_bytes = u64::from(metadata.width)
+            .checked_mul(u64::from(metadata.height))
+            .and_then(|n| n.checked_mul(2))
+            .ok_or(DecodeError::DimensionOverflow)?;
+        let reservation = request
+            .memory_budget
+            .as_ref()
+            .map(|budget| budget.try_reserve(output_bytes))
+            .transpose()?;
+        let pixels = catch_unwind(AssertUnwindSafe(|| {
+            quirks.decode_pixels(&container, raw, &cancelled)
+        }))
+        .map_err(|_| DecodeError::DecoderPanicked)??;
+        drop(data);
+        let raw_image = raw_image_started.elapsed();
+        request.check_cancelled()?;
+
+        let (mosaic, adapt) = adapt_camera(quirks.format_name(), metadata, pixels, reservation)?;
+        let adapt_metadata = adapt.total;
+        let raw_decode = decoder_select.saturating_add(raw_image);
+        request.check_cancelled()?;
+
+        Ok(DecodeOutput {
+            mosaic,
+            timings: DecodeTimings {
+                source_open,
+                decoder_select,
+                raw_image,
+                raw_decode,
+                native: None,
+                dng: None,
+                adapt,
+                adapt_metadata,
+                total: total_started.elapsed(),
+            },
+        })
+    }
+
     pub(crate) const fn new(format: CameraFormat) -> Self {
         Self { format }
     }
@@ -630,55 +804,11 @@ impl RawDecoder for NativeCameraDecoder {
         }
 
         let source_started = Instant::now();
-        let data = read_bounded(request)?;
+        let data = read_managed(request)?;
         let source_open = source_started.elapsed();
         request.check_cancelled()?;
 
-        let quirks = self.format.quirks();
-        let decoder_select_started = Instant::now();
-        let container = catch_unwind(AssertUnwindSafe(|| quirks.parse_container(&data)))
-            .map_err(|_| DecodeError::DecoderPanicked)??;
-        let raw = catch_unwind(AssertUnwindSafe(|| quirks.select_raw_ifd(&container)))
-            .map_err(|_| DecodeError::DecoderPanicked)??;
-        let decoder_select = decoder_select_started.elapsed();
-        request.check_cancelled()?;
-
-        let cancelled = || {
-            request
-                .cancellation
-                .as_ref()
-                .is_some_and(crate::GenerationToken::is_cancelled)
-        };
-        let raw_image_started = Instant::now();
-        let metadata = catch_unwind(AssertUnwindSafe(|| quirks.read_metadata(&container, raw)))
-            .map_err(|_| DecodeError::DecoderPanicked)??;
-        let pixels = catch_unwind(AssertUnwindSafe(|| {
-            quirks.decode_pixels(&container, raw, &cancelled)
-        }))
-        .map_err(|_| DecodeError::DecoderPanicked)??;
-        drop(data);
-        let raw_image = raw_image_started.elapsed();
-        request.check_cancelled()?;
-
-        let (mosaic, adapt) = adapt_camera(quirks.format_name(), metadata, pixels)?;
-        let adapt_metadata = adapt.total;
-        let raw_decode = decoder_select.saturating_add(raw_image);
-        request.check_cancelled()?;
-
-        Ok(DecodeOutput {
-            mosaic,
-            timings: DecodeTimings {
-                source_open,
-                decoder_select,
-                raw_image,
-                raw_decode,
-                native: None,
-                dng: None,
-                adapt,
-                adapt_metadata,
-                total: total_started.elapsed(),
-            },
-        })
+        self.decode_source(request, data, source_open, total_started)
     }
 }
 
@@ -804,6 +934,17 @@ mod tests {
         for format in [
             CameraFormat::Cr2,
             CameraFormat::Nef,
+            CameraFormat::Nrw,
+            CameraFormat::Erf,
+            CameraFormat::Kdc,
+            CameraFormat::Srw,
+            CameraFormat::ThreeFr,
+            CameraFormat::Fff,
+            CameraFormat::Dcr,
+            CameraFormat::Dcs,
+            CameraFormat::Mos,
+            CameraFormat::Iiq,
+            CameraFormat::Srf,
             CameraFormat::Arw,
             CameraFormat::Orf,
             CameraFormat::Pef,
@@ -817,10 +958,23 @@ mod tests {
                 "{format:?} backend id"
             );
             let expected_backend_revision: u32 = match format {
-                // NEF 34713 and PEF 65535 native decoding bumped the backend
-                // contract revision from 2 to 3.
-                CameraFormat::Nef | CameraFormat::Pef => 3,
-                _ => 2,
+                // Native compression and strict color metadata each revise the cache contract.
+                CameraFormat::Nef => 6,
+                CameraFormat::Nrw
+                | CameraFormat::Erf
+                | CameraFormat::Kdc
+                | CameraFormat::Srw
+                | CameraFormat::ThreeFr
+                | CameraFormat::Fff
+                | CameraFormat::Dcr
+                | CameraFormat::Dcs
+                | CameraFormat::Mos
+                | CameraFormat::Iiq
+                | CameraFormat::Srf => 1,
+                CameraFormat::Pef | CameraFormat::Raf => 5,
+                CameraFormat::Arw => 6,
+                CameraFormat::Rw2 => 8,
+                _ => 4,
             };
             assert_eq!(
                 &bytes[12..16],
@@ -847,6 +1001,17 @@ mod tests {
         for format in [
             CameraFormat::Cr2,
             CameraFormat::Nef,
+            CameraFormat::Nrw,
+            CameraFormat::Erf,
+            CameraFormat::Kdc,
+            CameraFormat::Srw,
+            CameraFormat::ThreeFr,
+            CameraFormat::Fff,
+            CameraFormat::Dcr,
+            CameraFormat::Dcs,
+            CameraFormat::Mos,
+            CameraFormat::Iiq,
+            CameraFormat::Srf,
             CameraFormat::Arw,
             CameraFormat::Orf,
             CameraFormat::Pef,

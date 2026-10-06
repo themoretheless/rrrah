@@ -1,0 +1,110 @@
+{
+  "status": "macOS and native Linux probes passed",
+  "linux_session": 27350,
+  "linux_stdout": "/tmp/dedup-raster-memory-linux.jsonl",
+  "linux_stderr": "/tmp/dedup-raster-memory-linux-stderr.log",
+  "macos": {
+    "measurements": [
+      {
+        "side": 1024,
+        "pixels": 1048576,
+        "file_bytes": 3145782,
+        "decode_ns": 24656833,
+        "managed_used_after": 0
+      },
+      {
+        "side": 2048,
+        "pixels": 4194304,
+        "file_bytes": 12582966,
+        "decode_ns": 87458542,
+        "managed_used_after": 0
+      },
+      {
+        "side": 4096,
+        "pixels": 16777216,
+        "file_bytes": 50331702,
+        "decode_ns": 357621875,
+        "managed_used_after": 0
+      }
+    ],
+    "whole_process_peak_rss_bytes": 516227072
+  },
+  "scope": [
+    "Authored 24-bit BMP, 1024/2048/4096 square dimensions",
+    "Zero/one-byte budgets refuse",
+    "Refusals leave no reusable cache entry",
+    "Sufficient-budget retry admits fingerprint and releases managed reservations",
+    "Zero-output-budget cache hit preserves fingerprint"
+  ],
+  "logs": {
+    "macos-results": {
+      "path": "docs/research/dedup-raster-memory-macos-results.log",
+      "sha256": "77cf6d674cf12c46abc97c1ecccdf72f968796a08bebaab8285faa122100ba30"
+    },
+    "macos-time": {
+      "path": "docs/research/dedup-raster-memory-macos-time.log",
+      "sha256": "c4fa040a0c368f1f2677322be00fdfd862908c7b92e557ec3049416e02b634b3"
+    },
+    "clippy": {
+      "path": "docs/research/dedup-raster-memory-clippy.log",
+      "sha256": "15e136b20e75f7cf5cf14ab04188152b67e884b5ab259cb030fbf1e6abf838ac"
+    },
+    "linux-results": {
+      "path": "docs/research/dedup-raster-memory-linux-results.log",
+      "sha256": "e3af67488b5b8422ed4e7da83bd1eebb0f648e25784e1207a1be700f8067a72f"
+    },
+    "linux-stderr": {
+      "path": "docs/research/dedup-raster-memory-linux-stderr.log",
+      "sha256": "e7391e4904949116e0f94633ee0ce3f948854af5a69a1503740bbb78e40b8d3d"
+    },
+    "identity-final-clippy": {
+      "path": "docs/research/dedup-raster-memory-identity-final-clippy.log",
+      "sha256": "17b9cdef698bd10de017bf2bec3a0a1b590c47a8e08b7a64f9dbb466d965e0bb"
+    }
+  },
+  "limits": [
+    "Single BMP codec and authored gradient",
+    "Single timed decode per dimension, not statistical benchmark",
+    "Whole-process RSS includes generation, all sizes and hits",
+    "Managed reservation zero is not total allocator completeness",
+    "Full acceptance incomplete",
+    "Different platforms/builds/allocators/storage, not controlled platform comparison"
+  ],
+  "linux_exit_code": 0,
+  "linux": {
+    "measurements": [
+      {
+        "side": 1024,
+        "pixels": 1048576,
+        "file_bytes": 3145782,
+        "decode_ns": 38530870,
+        "managed_used_after": 0
+      },
+      {
+        "side": 2048,
+        "pixels": 4194304,
+        "file_bytes": 12582966,
+        "decode_ns": 131105028,
+        "managed_used_after": 0
+      },
+      {
+        "side": 4096,
+        "pixels": 16777216,
+        "file_bytes": 50331702,
+        "decode_ns": 586699407,
+        "managed_used_after": 0
+      }
+    ],
+    "platform": "Linux ARM64, Ubuntu 24.04",
+    "storage": "isolated 2 GiB tmpfs",
+    "whole_process_peak_rss_bytes": 345366528,
+    "process_rss_after_bytes": 9834496,
+    "memory_source": "/proc/self/status after all workload"
+  },
+  "source_snapshot": {
+    "crates/rrrah-dedup/examples/raster_memory_scale_probe.rs": "0e3ee31137490640a40bbb80bccecf6cb708fee0259e7ef4709f626fc33a9078",
+    "crates/rrrah-dedup/src/exact.rs": "a2923a8a8687ba04b81b4b2fc4d9698fd170186f0c506d280dea71b188a9988d",
+    "crates/rrrah-dedup/src/decode.rs": "ff768129d2f0603c21eba765ee7535a37439c263723de82dbd419978e54956d2"
+  },
+  "snapshot_timing": "post-run capture, not atomic prelaunch"
+}

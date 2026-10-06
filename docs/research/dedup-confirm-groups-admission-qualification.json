@@ -1,0 +1,20 @@
+{
+  "change": "Fallible group-confirmation admission vectors and membership; sorted source snapshots preserve final-validation order.",
+  "validation": {
+    "passed": 24,
+    "failed": 0,
+    "dedup_lib_no_deps_clippy": "passed"
+  },
+  "checks": [
+    "Changed source invalidates every stale grouping edge while healthy pairs remain.",
+    "Final generation cancellation returns no group report.",
+    "Complete-link small-graph, pixel-index permutation and diagnosis tests preserved."
+  ],
+  "source_sha256": {
+    "crates/rrrah-dedup/src/scan.rs": "1e5f8260ffa47f45d165dacd4ac49a85c9671e8f8742dab70bcd2936e383bae2"
+  },
+  "limits": [
+    "No injected allocator exhaustion or full shared-budget/RSS proof.",
+    "Other visual and full-container scanners still require allocation review."
+  ]
+}

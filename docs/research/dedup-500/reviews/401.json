@@ -1,0 +1,68 @@
+{
+  "index": 401,
+  "repository": "seven1m/image_hash_ruby",
+  "commit": "61357589926df45c7a23844e533a31893f357aba",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Ruby perceptual hash wrapper with specs; backend preprocessing/crop limits remain unverified.",
+  "available_source_evidence": [
+    {
+      "path": "lib/image_hash.rb",
+      "local": "02-image_hash.rb",
+      "url": "https://github.com/seven1m/image_hash_ruby/blob/61357589926df45c7a23844e533a31893f357aba/lib/image_hash.rb",
+      "sha256": "95f79899d484ba6e99e03f35dd04923dafac9bf6c13a82ad73c54a634ce5ff46",
+      "truncated": false,
+      "lines": 80,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "lib/image_hash/version.rb",
+      "local": "03-version.rb",
+      "url": "https://github.com/seven1m/image_hash_ruby/blob/61357589926df45c7a23844e533a31893f357aba/lib/image_hash/version.rb",
+      "sha256": "f6c6ceec14df48d5118fa60085253582a1383a64ef660f0b16ce5a909b72b7b5",
+      "truncated": false,
+      "lines": 3,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "spec/image_hash_spec.rb",
+      "local": "04-image_hash_spec.rb",
+      "url": "https://github.com/seven1m/image_hash_ruby/blob/61357589926df45c7a23844e533a31893f357aba/spec/image_hash_spec.rb",
+      "sha256": "62f88e6530c0f13caa1d2c0ac5a928e7bd25eedce639b33cf4ecf3748923e9f0",
+      "truncated": false,
+      "lines": 98,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 2,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/seven1m/image_hash_ruby/blob/61357589926df45c7a23844e533a31893f357aba/README.md",
+      "sha256": "c762da6db4ef44de61ddfaf30a397351423defad4262029f03ec1cdf0e993401",
+      "truncated": false,
+      "lines": 49,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE.txt",
+      "local": "01-LICENSE.txt",
+      "url": "https://github.com/seven1m/image_hash_ruby/blob/61357589926df45c7a23844e533a31893f357aba/LICENSE.txt",
+      "sha256": "3f86d87f4fa6a8d113683e9491462b7334f8fba4ee41ab8d232e6e2ac59a6378",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

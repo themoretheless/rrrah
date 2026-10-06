@@ -1,0 +1,96 @@
+{
+  "repository": "aim42/htmlSanityCheck",
+  "metadata": {
+    "name": "aim42/htmlSanityCheck",
+    "url": "https://github.com/aim42/htmlSanityCheck",
+    "description": "HTML sanity checker - detects missing images, dead links and cross-references, duplicate link targets (anchors) and the like. Works standalone (command-line), and as Maven- or Gradle-plugin.",
+    "language": "Groovy",
+    "stars": 85,
+    "license": "Apache-2.0",
+    "archived": false,
+    "pushed_at": "2026-07-03T21:17:18Z",
+    "default_branch": "develop",
+    "queries": [
+      "duplicate in:name,description",
+      "duplicates in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.adoc",
+      "local": "00-README.adoc",
+      "url": "https://github.com/aim42/htmlSanityCheck/blob/c92932fc3bae0a9c4e03b5d7ec718dd6335df847/README.adoc",
+      "sha256": "e6e720f94c275147c9ba92bf50d0d636ab248e5e4db0d775b30208959e4919a3",
+      "truncated": false,
+      "lines": 183,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE.txt",
+      "local": "01-LICENSE.txt",
+      "url": "https://github.com/aim42/htmlSanityCheck/blob/c92932fc3bae0a9c4e03b5d7ec718dd6335df847/LICENSE.txt",
+      "sha256": "58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd",
+      "truncated": false,
+      "lines": 202,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "htmlSanityCheck-core/src/main/java/org/aim42/htmlsanitycheck/check/DuplicateIdChecker.java",
+      "local": "02-DuplicateIdChecker.java",
+      "url": "https://github.com/aim42/htmlSanityCheck/blob/c92932fc3bae0a9c4e03b5d7ec718dd6335df847/htmlSanityCheck-core/src/main/java/org/aim42/htmlsanitycheck/check/DuplicateIdChecker.java",
+      "sha256": "63e50c4228763d056bc0a18227a6ff94314d723158d0e3041338601bd9a2be70",
+      "truncated": false,
+      "lines": 58,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "htmlSanityCheck-core/src/main/java/org/aim42/htmlsanitycheck/comparator/SimilarityScoreComparator.java",
+      "local": "03-SimilarityScoreComparator.java",
+      "url": "https://github.com/aim42/htmlSanityCheck/blob/c92932fc3bae0a9c4e03b5d7ec718dd6335df847/htmlSanityCheck-core/src/main/java/org/aim42/htmlsanitycheck/comparator/SimilarityScoreComparator.java",
+      "sha256": "0acadc13ffe5db7d2e6f09f2f4a46d29b1c61e0136658896a4a1452ff1ced16e",
+      "truncated": false,
+      "lines": 15,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/sandbox-urlcheck.groovy",
+      "local": "04-sandbox-urlcheck.groovy",
+      "url": "https://github.com/aim42/htmlSanityCheck/blob/c92932fc3bae0a9c4e03b5d7ec718dd6335df847/src/sandbox-urlcheck.groovy",
+      "sha256": "15720fc3067552cf71b404a59f936f982265b39e1dd2bda28c8323c996298083",
+      "truncated": false,
+      "lines": 30,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "htmlSanityCheck-core/src/test/groovy/org/aim42/htmlsanitycheck/check/DuplicateIdCheckerTest.groovy",
+      "local": "05-DuplicateIdCheckerTest.groovy",
+      "url": "https://github.com/aim42/htmlSanityCheck/blob/c92932fc3bae0a9c4e03b5d7ec718dd6335df847/htmlSanityCheck-core/src/test/groovy/org/aim42/htmlsanitycheck/check/DuplicateIdCheckerTest.groovy",
+      "sha256": "e517cb7336d120307f3c4784e147f8251bc22b78f86ba5c06bb2318be82d180f",
+      "truncated": false,
+      "lines": 96,
+      "source": true,
+      "test": true
+    }
+  ],
+  "errors": [],
+  "commit": "c92932fc3bae0a9c4e03b5d7ec718dd6335df847",
+  "tree_truncated": false,
+  "source_file_count": 99,
+  "test_file_count": 48,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.adoc",
+    "LICENSE.txt",
+    "htmlSanityCheck-core/src/main/java/org/aim42/htmlsanitycheck/check/DuplicateIdChecker.java",
+    "htmlSanityCheck-core/src/main/java/org/aim42/htmlsanitycheck/comparator/SimilarityScoreComparator.java",
+    "src/sandbox-urlcheck.groovy",
+    "htmlSanityCheck-core/src/test/groovy/org/aim42/htmlsanitycheck/check/DuplicateIdCheckerTest.groovy"
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "index": 107,
+  "repository": "hydrusvideodeduplicator/hydrus-video-deduplicator",
+  "commit": "f3a13eee2dd9698c0805a859e46c95a2b6554efd",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "wrapper",
+  "finding": "Hydrus integration delegates perceptual video hashing to VPDQ; investigate backend/frame behavior separately.",
+  "available_source_evidence": [
+    {
+      "path": "src/hydrusvideodeduplicator/dedup.py",
+      "local": "03-dedup.py",
+      "url": "https://github.com/hydrusvideodeduplicator/hydrus-video-deduplicator/blob/f3a13eee2dd9698c0805a859e46c95a2b6554efd/src/hydrusvideodeduplicator/dedup.py",
+      "sha256": "a3c708a92f84f7d334a90a45818b09798eda5827e6665a42d901cd18b59a0416",
+      "truncated": false,
+      "lines": 493,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/hydrusvideodeduplicator/dedup_util.py",
+      "local": "04-dedup_util.py",
+      "url": "https://github.com/hydrusvideodeduplicator/hydrus-video-deduplicator/blob/f3a13eee2dd9698c0805a859e46c95a2b6554efd/src/hydrusvideodeduplicator/dedup_util.py",
+      "sha256": "f025ed74eebc6decfabe479ea92822b3162cf37c37fcb93d4ead6473e7119c18",
+      "truncated": false,
+      "lines": 33,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/hydrusvideodeduplicator/hashing.py",
+      "local": "05-hashing.py",
+      "url": "https://github.com/hydrusvideodeduplicator/hydrus-video-deduplicator/blob/f3a13eee2dd9698c0805a859e46c95a2b6554efd/src/hydrusvideodeduplicator/hashing.py",
+      "sha256": "208e0c0b956560a2f20bdea868ff8f836799cc1d6d74d3352a0f7def82f58d6a",
+      "truncated": false,
+      "lines": 53,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/acceptance_tests/test_dedupe.py",
+      "local": "06-test_dedupe.py",
+      "url": "https://github.com/hydrusvideodeduplicator/hydrus-video-deduplicator/blob/f3a13eee2dd9698c0805a859e46c95a2b6554efd/tests/acceptance_tests/test_dedupe.py",
+      "sha256": "6cee6a895427b80ab7da43d3f2f034c9ea9f71e26cb0ea71662827038e9a6813",
+      "truncated": false,
+      "lines": 74,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 11,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/hydrusvideodeduplicator/hydrus-video-deduplicator/blob/f3a13eee2dd9698c0805a859e46c95a2b6554efd/README.md",
+      "sha256": "0cbb0052d1aa2b552e9d70aedd9e48a37fbaf12634fcd2797ce1360ff0cde5c1",
+      "truncated": false,
+      "lines": 58,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/hydrusvideodeduplicator/hydrus-video-deduplicator/blob/f3a13eee2dd9698c0805a859e46c95a2b6554efd/LICENSE",
+      "sha256": "47f3f9abc63461cdab5e590bb7e25815eb4e06df1941b56d44d0d6c190899e4d",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "src/hydrusvideodeduplicator/hydrus_api/LICENSE",
+      "local": "02-LICENSE",
+      "url": "https://github.com/hydrusvideodeduplicator/hydrus-video-deduplicator/blob/f3a13eee2dd9698c0805a859e46c95a2b6554efd/src/hydrusvideodeduplicator/hydrus_api/LICENSE",
+      "sha256": "91b65277959ec273763d28ef002e83a6b3fba57c7a35436c9e5b66536333d720",
+      "truncated": false,
+      "lines": 661,
+      "source": false,
+      "test": false
+    }
+  ]
+}

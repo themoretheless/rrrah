@@ -1,0 +1,44 @@
+{
+  "sequence": "i_tools",
+  "target_index": 3,
+  "probe_sha256": "ede327735e7c23f220e702a116766a9c7dd81c4e8b3d34c1868a3aba44817cf7",
+  "returncode": 0,
+  "stderr": "",
+  "evidence": {
+    "correspondences": 13,
+    "inliers": 11,
+    "geometry": [
+      [
+        1.3836304568032742,
+        -0.8869426240773852,
+        -62.79915405631053
+      ],
+      [
+        0.06464038717236333,
+        0.815109597994315,
+        -10.26636130311556
+      ],
+      [
+        0.001486915414664252,
+        -0.003682894790517562,
+        0.7668400663218093
+      ]
+    ],
+    "initial_pixels": "Err(Invalid)",
+    "raw": "registered=[[0.00037961450994914933, -0.00026037433921838256, -0.014988641890084621], [2.3317496697107313e-5, 0.00023119660209349946, -0.00419504494322346], [4.352575213828926e-7, -1.0765841575832036e-6, 0.00021448105424507274]]; pixels=Err(Invalid)",
+    "photometric": "registered=[[0.00034842754185608236, -0.00024245793998645642, -0.013351189001050071], [2.40908920019711e-5, 0.00021330154019096723, -0.0046324851546547625], [4.201040405370871e-7, -9.849632862861746e-7, 0.00019178499147544408]]; pixels=Err(Invalid)",
+    "anchored": "registered=[[0.0003814799122589834, -0.0002445384118653389, -0.01693283667746744], [1.8235486379885356e-5, 0.00022405185283960857, -0.002827500531873141], [4.120803298656514e-7, -1.019686589677143e-6, 0.00021187828610428648]]; pixels=Err(Invalid)"
+  },
+  "scope": "Native stage-level diagnosis using identical 500-feature/2048-trial settings; no duplicate-label claim",
+  "source_size": [
+    320,
+    212
+  ],
+  "corner_denominators": [
+    0.7668400663218093,
+    1.2411660835997058,
+    -0.010250734477396217,
+    0.4640752828005002
+  ],
+  "diagnosis": "Estimated initial homography crosses horizon within source rectangle. Original and all registered variants are refused by pixel mapping validation; native sources decode successfully."
+}

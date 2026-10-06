@@ -1,0 +1,184 @@
+{
+  "status": "native-R-D1-sensor-color-router-cache-swap-Metal-qualified-subset",
+  "id": 2680,
+  "license": "CC0-1.0",
+  "url": "https://raw.pixls.us/getfile.php/2680/nice/Epson - R-D1 - 12bit (3:2).ERF",
+  "source_sha256": "09d8e533d93116294a9f3e161ed868e929454c7b946e083b644bd6bb75bcb5e4",
+  "sensor_offset": 59108,
+  "sensor_bytes": 9844736,
+  "storage": "compression 32769; 10 MSB-first packed 12-bit samples per 16 bytes, final byte skipped",
+  "samples_exact": true,
+  "samples": 6152960,
+  "reference_pixels_sha256": "aa1a582b1797db3f6295ddb8d5d65c8301a95de240aa9c88bfb330eb9e78fd45",
+  "oracle": {
+    "libraw_version": "0.22.2-Release",
+    "make": "Epson",
+    "model": "R-D1",
+    "width": 3040,
+    "height": 2024,
+    "crop": [
+      0,
+      0,
+      3040,
+      2024
+    ],
+    "wb": [
+      1.75630188,
+      1,
+      2.124221802,
+      0
+    ],
+    "black": 60,
+    "cblack": [
+      1,
+      4,
+      0,
+      3,
+      0,
+      0
+    ],
+    "white": 4095,
+    "cfa": [
+      "R",
+      "G",
+      "G",
+      "B"
+    ],
+    "xyz_to_camera": [
+      [
+        0.6826999784,
+        -0.1878000051,
+        -0.07320000231
+      ],
+      [
+        -0.8428999782,
+        1.601199985,
+        0.2563999891
+      ],
+      [
+        -0.07039999962,
+        0.05920000002,
+        0.71450001
+      ],
+      [
+        0,
+        0,
+        0
+      ]
+    ],
+    "camera_to_rgb": [
+      [
+        1.585536718,
+        -0.5056793094,
+        -0.0798573941
+      ],
+      [
+        0.002553761238,
+        1.279931426,
+        -0.2824852169
+      ],
+      [
+        0.005835107993,
+        -0.1973000467,
+        1.191464901
+      ]
+    ]
+  },
+  "native_metadata": {
+    "make": "SEIKO EPSON CORP.",
+    "model": "R-D1",
+    "width": 3040,
+    "height": 2024,
+    "wb": [
+      1.7563019,
+      1.0,
+      2.1242218,
+      1.0
+    ],
+    "black_grid": [
+      61.0,
+      64.0,
+      63.0,
+      60.0
+    ],
+    "white": [
+      4095.0
+    ],
+    "cfa": [
+      "R",
+      "G",
+      "G",
+      "B"
+    ],
+    "xyz_to_camera": [
+      [
+        0.6827,
+        -0.1878,
+        -0.0732
+      ],
+      [
+        -0.8429,
+        1.6012,
+        0.2564
+      ],
+      [
+        -0.0704,
+        0.0592,
+        0.7145
+      ],
+      [
+        0.0,
+        0.0,
+        0.0
+      ]
+    ],
+    "camera_to_rgb": [
+      [
+        1.5855367,
+        -0.5056793,
+        -0.079857394
+      ],
+      [
+        0.0025537612,
+        1.2799314,
+        -0.28248522
+      ],
+      [
+        0.005835108,
+        -0.19730005,
+        1.1914649
+      ]
+    ],
+    "crop": [
+      0,
+      0,
+      3040,
+      2024
+    ],
+    "managed_memory": {
+      "limit": 134217728,
+      "used": 12305920,
+      "peak": 22264914,
+      "pixel_capacity": 12305920,
+      "managed": true
+    }
+  },
+  "metadata_sources": {
+    "black": "Epson MakerNote 0x0401, four native RGGB values",
+    "white_balance": "Epson MakerNote 0x0e80 offset 48, red factor 567/65536 and blue factor 431/65536"
+  },
+  "integration_qualification": {
+    "test": "crates/rrrah-app/tests/epson_erf_readback.rs",
+    "adapter": "Metal Apple M4 Max",
+    "full_sensor_samples_exact": 6152960,
+    "render_size": [
+      128,
+      96
+    ],
+    "independent_render_pixels_exact": true,
+    "persistent_and_swap_roundtrip_exact": true,
+    "restore_pressure_retry_without_corruption": true,
+    "malformed_cases_rejected_without_preview_or_retained_memory": 5,
+    "scope": "Epson R-D1 only; other ERF camera profiles, full photographic color accuracy and physical HDR display remain unqualified"
+  }
+}

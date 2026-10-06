@@ -1,0 +1,28 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+    Finished `test` profile [optimized + debuginfo] target(s) in 2.96s
+     Running tests/projective_geometry.rs (target/debug/deps/projective_geometry-d0822d8b1e5e6358)
+
+running 5 tests
+test invalid_horizon_and_cancel_checkpoints ... ok
+test perspective_pixels_hdr_edits_horizon_and_cancel ... ok
+test perspective_mapping_and_permutations ... ok
+test perspective_inverse_grid_catches_unsampled_edit ... FAILED
+test robust_perspective_outliers_budget_and_cancellation ... ok
+
+failures:
+
+---- perspective_inverse_grid_catches_unsampled_edit stdout ----
+
+thread 'perspective_inverse_grid_catches_unsampled_edit' (2984543) panicked at crates/rrrah-dedup/tests/projective_geometry.rs:87:51:
+assertion `left == right` failed
+  left: 4
+ right: 5
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    perspective_inverse_grid_catches_unsampled_edit
+
+test result: FAILED. 4 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p rrrah-dedup --test projective_geometry`

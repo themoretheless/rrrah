@@ -1,0 +1,48 @@
+{
+  "index": 470,
+  "repository": "slon1024/haskell_phash",
+  "commit": "b1b8e40721d9c7cf2b1ff6ec071f0aec6b29a1b6",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "wrapper",
+  "finding": "Haskell compares Maybe PHash values; backend rather than independent algorithm must be reviewed.",
+  "available_source_evidence": [
+    {
+      "path": "Main.hs",
+      "local": "02-Main.hs",
+      "url": "https://github.com/slon1024/haskell_phash/blob/b1b8e40721d9c7cf2b1ff6ec071f0aec6b29a1b6/Main.hs",
+      "sha256": "44e4506b6a614145666ca6b3bbd5a117199fbeac125bfcc9314562d0788d5cd7",
+      "truncated": false,
+      "lines": 31,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/slon1024/haskell_phash/blob/b1b8e40721d9c7cf2b1ff6ec071f0aec6b29a1b6/README.md",
+      "sha256": "79298d8ed7ebbd4ae58239e19ea0e74ca23fc3ad61da6bb587106fe83411ad53",
+      "truncated": false,
+      "lines": 14,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/slon1024/haskell_phash/blob/b1b8e40721d9c7cf2b1ff6ec071f0aec6b29a1b6/LICENSE",
+      "sha256": "5113f546e5e50691b54b5e22e074400027013cbc156c052a541e5e5a9a50e3c8",
+      "truncated": false,
+      "lines": 22,
+      "source": false,
+      "test": false
+    }
+  ]
+}

@@ -185,6 +185,8 @@ pub struct DiskCacheUsage {
 pub struct DiskMosaicCache {
     root: PathBuf,
     max_bytes: u64,
+    max_entries: Option<usize>,
+    ttl: Option<Duration>,
 }
 
 impl DiskMosaicCache {
@@ -196,7 +198,31 @@ impl DiskMosaicCache {
         Self {
             root: root.into(),
             max_bytes,
+            max_entries: None,
+            ttl: None,
         }
+    }
+
+    /// Sets an independent object-count limit. Zero rejects every store.
+    pub fn with_max_entries(mut self, max_entries: Option<usize>) -> Self {
+        self.max_entries = max_entries;
+        self
+    }
+
+    /// Lifetime since the cache file's last write; reads do not renew it.
+    pub fn with_ttl(mut self, ttl: Option<Duration>) -> Self {
+        self.ttl = ttl;
+        self
+    }
+
+    fn expired(&self, metadata: &fs::Metadata, now: SystemTime) -> bool {
+        self.ttl.is_some_and(|ttl| {
+            metadata
+                .modified()
+                .ok()
+                .and_then(|written| now.duration_since(written).ok())
+                .is_none_or(|age| age >= ttl)
+        })
     }
 
     pub fn root(&self) -> &Path {
@@ -211,7 +237,8 @@ impl DiskMosaicCache {
     /// still performed by `load`; a corrupt entry therefore only postpones
     /// the fallback decode until the image becomes foreground work.
     pub fn contains(&self, key: CacheKey) -> bool {
-        fs::metadata(self.path_for(key)).is_ok_and(|metadata| metadata.is_file())
+        fs::metadata(self.path_for(key))
+            .is_ok_and(|metadata| metadata.is_file() && !self.expired(&metadata, SystemTime::now()))
     }
 
     /// Measure complete cache entries. This walks the two-level cache tree and
@@ -277,6 +304,37 @@ impl DiskMosaicCache {
     }
 
     pub fn load(&self, key: CacheKey) -> Result<Option<CacheLoad>, CacheError> {
+        self.load_impl(key, None, || false)
+    }
+
+    /// Loads pixels under a shared budget, reserving before allocation.
+    pub fn load_with_budget(
+        &self,
+        key: CacheKey,
+        budget: &rrrah_memory::MemoryBudget,
+    ) -> Result<Option<CacheLoad>, CacheError> {
+        self.load_impl(key, Some(budget), || false)
+    }
+
+    /// Loads with block-boundary cancellation and optional shared pixel accounting.
+    pub fn load_with_cancel(
+        &self,
+        key: CacheKey,
+        budget: Option<&rrrah_memory::MemoryBudget>,
+        cancelled: impl FnMut() -> bool,
+    ) -> Result<Option<CacheLoad>, CacheError> {
+        self.load_impl(key, budget, cancelled)
+    }
+
+    fn load_impl(
+        &self,
+        key: CacheKey,
+        budget: Option<&rrrah_memory::MemoryBudget>,
+        mut cancelled: impl FnMut() -> bool,
+    ) -> Result<Option<CacheLoad>, CacheError> {
+        if cancelled() {
+            return Err(CacheError::Cancelled);
+        }
         let started = Instant::now();
         let path = self.path_for(key);
         let file = match File::open(&path) {
@@ -284,13 +342,14 @@ impl DiskMosaicCache {
             Err(error) if error.kind() == std::io::ErrorKind::NotFound => return Ok(None),
             Err(source) => return Err(CacheError::Io { path, source }),
         };
-        let file_bytes = file
-            .metadata()
-            .map_err(|source| CacheError::Io {
-                path: path.clone(),
-                source,
-            })?
-            .len();
+        let metadata = file.metadata().map_err(|source| CacheError::Io {
+            path: path.clone(),
+            source,
+        })?;
+        if self.expired(&metadata, SystemTime::now()) {
+            return Ok(None);
+        }
+        let file_bytes = metadata.len();
         let mut reader = BufReader::new(file);
         let mut magic = [0_u8; 8];
         reader.read_exact(&mut magic).map_err(|source| CacheError::Io {
@@ -333,31 +392,58 @@ impl DiskMosaicCache {
         if file_bytes != expected_file_bytes {
             return Err(CacheError::Corrupt("file length does not match header"));
         }
-        let pixel_count = usize::try_from(header.pixel_count).map_err(|_| CacheError::SizeOverflow)?;
-        let mut pixels = Vec::new();
-        pixels
-            .try_reserve_exact(pixel_count)
-            .map_err(|_| CacheError::AllocationFailed {
-                bytes: u64::try_from(payload_bytes).unwrap_or(u64::MAX),
-            })?;
-        let mut payload_hasher = blake3::Hasher::new();
-        let mut buffer = [0_u8; PAYLOAD_BUFFER_BYTES];
-        let mut remaining = payload_bytes;
-        while remaining != 0 {
-            let chunk_len = remaining.min(buffer.len());
-            let chunk = &mut buffer[..chunk_len];
-            reader.read_exact(chunk).map_err(|source| CacheError::Io {
-                path: path.clone(),
-                source,
-            })?;
-            payload_hasher.update(chunk);
-            pixels.extend(
-                chunk
-                    .chunks_exact(2)
-                    .map(|bytes| u16::from_le_bytes([bytes[0], bytes[1]])),
-            );
-            remaining -= chunk_len;
+        if cancelled() {
+            return Err(CacheError::Cancelled);
         }
+        let pixel_count = usize::try_from(header.pixel_count).map_err(|_| CacheError::SizeOverflow)?;
+        let mut payload_hasher = blake3::Hasher::new();
+        let pixels: rrrah_memory::PixelBuffer<u16> = if let Some(budget) = budget {
+            let mut pixels = budget.try_buffer(pixel_count, 0_u16)?;
+            for samples in pixels.chunks_mut(PAYLOAD_BUFFER_BYTES / 2) {
+                if cancelled() {
+                    return Err(CacheError::Cancelled);
+                }
+                let bytes = bytemuck::cast_slice_mut(samples);
+                reader.read_exact(bytes).map_err(|source| CacheError::Io {
+                    path: path.clone(),
+                    source,
+                })?;
+                payload_hasher.update(bytes);
+                #[cfg(target_endian = "big")]
+                for sample in samples {
+                    *sample = u16::from_le(*sample);
+                }
+            }
+            pixels.freeze().into()
+        } else {
+            let mut pixels = Vec::new();
+            pixels
+                .try_reserve_exact(pixel_count)
+                .map_err(|_| CacheError::AllocationFailed {
+                    bytes: u64::try_from(payload_bytes).unwrap_or(u64::MAX),
+                })?;
+            let mut buffer = [0_u8; PAYLOAD_BUFFER_BYTES];
+            let mut remaining = payload_bytes;
+            while remaining != 0 {
+                if cancelled() {
+                    return Err(CacheError::Cancelled);
+                }
+                let chunk_len = remaining.min(buffer.len());
+                let chunk = &mut buffer[..chunk_len];
+                reader.read_exact(chunk).map_err(|source| CacheError::Io {
+                    path: path.clone(),
+                    source,
+                })?;
+                payload_hasher.update(chunk);
+                pixels.extend(
+                    chunk
+                        .chunks_exact(2)
+                        .map(|bytes| u16::from_le_bytes([bytes[0], bytes[1]])),
+                );
+                remaining -= chunk_len;
+            }
+            Arc::new(pixels).into()
+        };
         if payload_hasher.finalize().as_bytes() != &header.payload_blake3 {
             return Err(CacheError::Corrupt("payload checksum mismatch"));
         }
@@ -369,7 +455,10 @@ impl DiskMosaicCache {
         {
             return Err(CacheError::Corrupt("trailing bytes"));
         }
-        let mosaic = DecodedMosaic::new(header.metadata, Arc::new(pixels))?;
+        if cancelled() {
+            return Err(CacheError::Cancelled);
+        }
+        let mosaic = DecodedMosaic::new(header.metadata, pixels)?;
         Ok(Some(CacheLoad {
             mosaic,
             elapsed: started.elapsed(),
@@ -377,6 +466,31 @@ impl DiskMosaicCache {
     }
 
     pub fn store(&self, key: CacheKey, mosaic: &DecodedMosaic) -> Result<PathBuf, CacheError> {
+        self.store_with_cancel(key, mosaic, || false)
+    }
+
+    pub fn store_with_cancel(
+        &self,
+        key: CacheKey,
+        mosaic: &DecodedMosaic,
+        cancelled: impl FnMut() -> bool,
+    ) -> Result<PathBuf, CacheError> {
+        self.store_with_cancel_preserving(key, mosaic, &[], cancelled)
+    }
+
+    /// Protect higher-priority residents from eviction by this write.
+    /// Admission and pruning share the publication lock. This protection is
+    /// scoped to this operation; unrelated writers may still evict the keys.
+    pub fn store_with_cancel_preserving(
+        &self,
+        key: CacheKey,
+        mosaic: &DecodedMosaic,
+        protected: &[CacheKey],
+        mut cancelled: impl FnMut() -> bool,
+    ) -> Result<PathBuf, CacheError> {
+        if cancelled() {
+            return Err(CacheError::Cancelled);
+        }
         // Never let an untrusted/accidentally oversized decoded frame turn a
         // cache write into an unbounded allocation. `load` enforces the same
         // limit before allocating its payload, so this keeps both sides of
@@ -396,7 +510,7 @@ impl DiskMosaicCache {
             schema: LEGACY_V2_CACHE_ABI,
             key,
             pixel_count,
-            payload_blake3: hash_pixels(&mosaic.pixels),
+            payload_blake3: hash_pixels_with_cancel(&mosaic.pixels, &mut cancelled)?,
             metadata: mosaic.metadata.clone(),
         };
         let header_bytes = serde_json::to_vec(&header)?;
@@ -414,8 +528,14 @@ impl DiskMosaicCache {
         // instances/processes. Readers need no lock because publication is an
         // atomic same-directory rename and can only expose an old or new
         // complete entry.
-        let write_lock = self.lock_writes()?;
-        self.prune_for_write(&path, entry_bytes)?;
+        if cancelled() {
+            return Err(CacheError::Cancelled);
+        }
+        let write_lock = self.lock_writes(&mut cancelled)?;
+        if cancelled() {
+            return Err(CacheError::Cancelled);
+        }
+        self.prune_for_write(&path, entry_bytes, protected)?;
 
         let mut temporary = NamedTempFile::new_in(parent).map_err(|source| CacheError::Io {
             path: parent.to_owned(),
@@ -426,10 +546,21 @@ impl DiskMosaicCache {
             writer.write_all(MAGIC)?;
             writer.write_all(&(header_bytes.len() as u32).to_le_bytes())?;
             writer.write_all(&header_bytes)?;
-            write_pixels(&mut writer, &mosaic.pixels)?;
+            for samples in mosaic.pixels.chunks(PAYLOAD_BUFFER_BYTES / 2) {
+                if cancelled() {
+                    return Err(CacheError::Cancelled);
+                }
+                write_pixels(&mut writer, samples)?;
+            }
             writer.flush()?;
         }
+        if cancelled() {
+            return Err(CacheError::Cancelled);
+        }
         temporary.as_file().sync_data()?;
+        if cancelled() {
+            return Err(CacheError::Cancelled);
+        }
         temporary.persist(&path).map_err(|error| CacheError::Io {
             path: path.clone(),
             source: error.error,
@@ -441,7 +572,7 @@ impl DiskMosaicCache {
         Ok(path)
     }
 
-    fn lock_writes(&self) -> Result<File, CacheError> {
+    fn lock_writes(&self, mut cancelled: impl FnMut() -> bool) -> Result<File, CacheError> {
         fs::create_dir_all(&self.root).map_err(|source| CacheError::Io {
             path: self.root.clone(),
             source,
@@ -457,14 +588,35 @@ impl DiskMosaicCache {
                 path: lock_path.clone(),
                 source,
             })?;
-        lock.lock().map_err(|source| CacheError::Io {
-            path: lock_path,
-            source,
-        })?;
+        loop {
+            if cancelled() {
+                return Err(CacheError::Cancelled);
+            }
+            match lock.try_lock() {
+                Ok(()) => break,
+                Err(std::fs::TryLockError::WouldBlock) => {
+                    std::thread::sleep(std::time::Duration::from_millis(2));
+                }
+                Err(std::fs::TryLockError::Error(source)) => {
+                    return Err(CacheError::Io {
+                        path: lock_path,
+                        source,
+                    });
+                }
+            }
+        }
         Ok(lock)
     }
 
-    fn prune_for_write(&self, destination: &Path, incoming_bytes: u64) -> Result<(), CacheError> {
+    fn prune_for_write(
+        &self,
+        destination: &Path,
+        incoming_bytes: u64,
+        protected: &[CacheKey],
+    ) -> Result<(), CacheError> {
+        if self.max_entries == Some(0) {
+            return Err(CacheError::DiskCountExceeded { limit: 0 });
+        }
         if incoming_bytes > self.max_bytes {
             return Err(CacheError::DiskBudgetExceeded {
                 incoming: incoming_bytes,
@@ -472,7 +624,12 @@ impl DiskMosaicCache {
             });
         }
 
+        let now = SystemTime::now();
         let mut resident = 0_u64;
+        let protected_paths: std::collections::HashSet<_> =
+            protected.iter().map(|key| self.path_for(*key)).collect();
+        let mut protected_bytes = 0_u64;
+        let mut protected_count = 0_usize;
         let mut candidates = Vec::new();
         for shard in fs::read_dir(&self.root).map_err(|source| CacheError::Io {
             path: self.root.clone(),
@@ -511,9 +668,29 @@ impl DiskMosaicCache {
                 if !metadata.is_file() {
                     continue;
                 }
+                if self.expired(&metadata, now) {
+                    match fs::remove_file(&entry_path) {
+                        Ok(()) => {}
+                        Err(error) if error.kind() == std::io::ErrorKind::NotFound => {}
+                        Err(source) => {
+                            return Err(CacheError::Io {
+                                path: entry_path,
+                                source,
+                            });
+                        }
+                    }
+                    continue;
+                }
                 resident = resident
                     .checked_add(metadata.len())
                     .ok_or(CacheError::SizeOverflow)?;
+                if protected_paths.contains(&entry_path) {
+                    protected_bytes = protected_bytes
+                        .checked_add(metadata.len())
+                        .ok_or(CacheError::SizeOverflow)?;
+                    protected_count += 1;
+                    continue;
+                }
                 let age = metadata
                     .modified()
                     .ok()
@@ -523,15 +700,37 @@ impl DiskMosaicCache {
             }
         }
 
+        // Reject an impossible admission before deleting any live candidate.
+        let required = protected_bytes
+            .checked_add(incoming_bytes)
+            .ok_or(CacheError::SizeOverflow)?;
+        if required > self.max_bytes {
+            return Err(CacheError::DiskBudgetExceeded {
+                incoming: required,
+                limit: self.max_bytes,
+            });
+        }
+        if let Some(limit) = self.max_entries {
+            if protected_count >= limit {
+                return Err(CacheError::DiskCountExceeded { limit });
+            }
+        }
+        let mut remaining_entries = candidates.len() + protected_count;
         candidates.sort_unstable_by_key(|(age, _, _)| *age);
         for (_, candidate, bytes) in candidates {
-            if resident.saturating_add(incoming_bytes) <= self.max_bytes {
+            if resident.saturating_add(incoming_bytes) <= self.max_bytes
+                && self.max_entries.is_none_or(|limit| remaining_entries < limit)
+            {
                 break;
             }
             match fs::remove_file(&candidate) {
-                Ok(()) => resident = resident.saturating_sub(bytes),
+                Ok(()) => {
+                    resident = resident.saturating_sub(bytes);
+                    remaining_entries = remaining_entries.saturating_sub(1);
+                }
                 Err(error) if error.kind() == std::io::ErrorKind::NotFound => {
                     resident = resident.saturating_sub(bytes);
+                    remaining_entries = remaining_entries.saturating_sub(1);
                 }
                 Err(source) => {
                     return Err(CacheError::Io {
@@ -547,6 +746,11 @@ impl DiskMosaicCache {
                 limit: self.max_bytes,
             });
         }
+        if let Some(limit) = self.max_entries {
+            if remaining_entries >= limit {
+                return Err(CacheError::DiskCountExceeded { limit });
+            }
+        }
         Ok(())
     }
 
@@ -556,17 +760,28 @@ impl DiskMosaicCache {
     }
 }
 
+#[cfg(test)]
 fn hash_pixels(pixels: &[u16]) -> [u8; 32] {
+    hash_pixels_with_cancel(pixels, &mut || false).unwrap()
+}
+
+fn hash_pixels_with_cancel(
+    pixels: &[u16],
+    cancelled: &mut impl FnMut() -> bool,
+) -> Result<[u8; 32], CacheError> {
     let mut hasher = blake3::Hasher::new();
     let mut buffer = [0_u8; PAYLOAD_BUFFER_BYTES];
     for samples in pixels.chunks(PAYLOAD_BUFFER_BYTES / size_of::<u16>()) {
+        if cancelled() {
+            return Err(CacheError::Cancelled);
+        }
         let bytes = &mut buffer[..size_of_val(samples)];
         for (sample, output) in samples.iter().zip(bytes.chunks_exact_mut(2)) {
             output.copy_from_slice(&sample.to_le_bytes());
         }
         hasher.update(bytes);
     }
-    *hasher.finalize().as_bytes()
+    Ok(*hasher.finalize().as_bytes())
 }
 
 fn write_pixels(writer: &mut impl Write, pixels: &[u16]) -> Result<(), std::io::Error> {
@@ -623,6 +838,12 @@ struct CacheHeader {
 
 #[derive(Debug, Error)]
 pub enum CacheError {
+    #[error("disk cache entry count exceeds limit {limit}")]
+    DiskCountExceeded { limit: usize },
+    #[error("cache read cancelled")]
+    Cancelled,
+    #[error(transparent)]
+    Memory(#[from] rrrah_memory::BufferError),
     #[error("cache I/O error at {path}: {source}")]
     Io {
         path: PathBuf,
@@ -822,6 +1043,111 @@ mod tests {
     }
 
     #[test]
+    fn protected_keys_do_not_override_ttl_expiration() {
+        let directory = tempdir().unwrap();
+        let protected = test_key(51);
+        let incoming = test_key(52);
+        let cache = DiskMosaicCache::new(directory.path())
+            .with_max_entries(Some(1))
+            .with_ttl(Some(std::time::Duration::from_secs(10)));
+        let path = cache.store(protected, &test_mosaic()).unwrap();
+        std::fs::OpenOptions::new()
+            .write(true)
+            .open(&path)
+            .unwrap()
+            .set_times(std::fs::FileTimes::new().set_modified(std::time::SystemTime::UNIX_EPOCH))
+            .unwrap();
+        cache
+            .store_with_cancel_preserving(incoming, &test_mosaic(), &[protected], || false)
+            .unwrap();
+        assert!(!path.exists());
+        assert!(cache.load(incoming).unwrap().is_some());
+        assert_eq!(cache.usage().unwrap().entries, 1);
+    }
+
+    #[test]
+    fn cancelled_protected_write_keeps_residents_and_releases_write_lock() {
+        let directory = tempdir().unwrap();
+        let protected = test_key(61);
+        let incoming = test_key(62);
+        let cache = DiskMosaicCache::new(directory.path()).with_max_entries(Some(1));
+        cache.store(protected, &test_mosaic()).unwrap();
+        // Cover cancellation before hashing and at the pre-publication lock
+        // boundaries without relying on worker timing.
+        for cancel_at in 1..=4 {
+            let mut calls = 0;
+            assert!(matches!(
+                cache.store_with_cancel_preserving(incoming, &test_mosaic(), &[protected], || {
+                    calls += 1;
+                    calls >= cancel_at
+                }),
+                Err(CacheError::Cancelled)
+            ));
+            assert!(cache.load(protected).unwrap().is_some());
+            assert!(!cache.contains(incoming));
+            assert_eq!(cache.usage().unwrap().entries, 1);
+            drop(cache.lock_writes(|| false).unwrap());
+        }
+    }
+
+    #[test]
+    fn protected_admission_rejects_without_evicting_any_live_entry() {
+        for count_limited in [false, true] {
+            let directory = tempdir().unwrap();
+            let setup = DiskMosaicCache::with_max_bytes(directory.path(), u64::MAX);
+            let protected = test_key(31);
+            let other = test_key(32);
+            let incoming = test_key(33);
+            let path = setup.store(protected, &test_mosaic()).unwrap();
+            let bytes = std::fs::metadata(path).unwrap().len();
+            setup.store(other, &test_mosaic()).unwrap();
+            let bounded = if count_limited {
+                setup.with_max_entries(Some(1))
+            } else {
+                DiskMosaicCache::with_max_bytes(directory.path(), bytes)
+            };
+            let error = bounded
+                .store_with_cancel_preserving(
+                    incoming,
+                    &test_mosaic(),
+                    &[protected, protected, test_key(99)],
+                    || false,
+                )
+                .unwrap_err();
+            if count_limited {
+                assert!(matches!(error, CacheError::DiskCountExceeded { .. }));
+            } else {
+                assert!(matches!(error, CacheError::DiskBudgetExceeded { .. }));
+            }
+            assert!(bounded.load(protected).unwrap().is_some());
+            assert!(bounded.load(other).unwrap().is_some());
+            assert!(!bounded.contains(incoming));
+        }
+    }
+
+    #[test]
+    fn protected_admission_evicts_only_unprotected_residents_and_allows_replacement() {
+        let directory = tempdir().unwrap();
+        let setup = DiskMosaicCache::with_max_bytes(directory.path(), u64::MAX);
+        let protected = test_key(41);
+        let other = test_key(42);
+        let incoming = test_key(43);
+        setup.store(protected, &test_mosaic()).unwrap();
+        setup.store(other, &test_mosaic()).unwrap();
+        let bounded = setup.with_max_entries(Some(2));
+        bounded
+            .store_with_cancel_preserving(incoming, &test_mosaic(), &[protected], || false)
+            .unwrap();
+        assert!(bounded.load(protected).unwrap().is_some());
+        assert!(bounded.load(incoming).unwrap().is_some());
+        assert!(!bounded.contains(other));
+        bounded
+            .store_with_cancel_preserving(protected, &test_mosaic(), &[protected, incoming], || false)
+            .unwrap();
+        assert_eq!(bounded.usage().unwrap().entries, 2);
+    }
+
+    #[test]
     fn disk_budget_prunes_an_old_complete_entry_before_publish() {
         let directory = tempdir().unwrap();
         let first_key = test_key(1);
@@ -884,7 +1210,7 @@ mod tests {
         let key = test_key(5);
         let first = test_mosaic();
         let mut second = first.clone();
-        second.pixels = Arc::new(vec![513_u16, 1025, 2049, 4097]);
+        second.pixels = Arc::new(vec![513_u16, 1025, 2049, 4097]).into();
         cache.store(key, &first).unwrap();
 
         let writers_alive = Arc::new(AtomicUsize::new(2));
@@ -1210,5 +1536,182 @@ mod tests {
             CacheKey::for_mosaic(&fingerprint, 0).to_hex(),
             "73bc0c7f827b24f32dca2194ca5b186f7eba42a435bd5da33d8dc894e3ae7d88"
         );
+    }
+    #[test]
+    fn budgeted_disk_reads_preserve_owners_and_release_corrupt_allocations() {
+        let parent = tempdir().unwrap();
+        let cache = DiskMosaicCache::new(parent.path());
+        let key = test_key(91);
+        let source = test_mosaic();
+        let path = cache.store(key, &source).unwrap();
+        let bytes = source.byte_len() as u64;
+        let shared = rrrah_memory::MemoryBudget::new(bytes);
+        let budget = shared.child(bytes * 2);
+        let hit = cache.load_with_budget(key, &budget).unwrap().unwrap();
+        assert!(hit.mosaic.pixels.is_managed());
+        assert_eq!(hit.mosaic.pixels, source.pixels);
+        assert_eq!(hit.mosaic.metadata, source.metadata);
+        let owner = hit.mosaic.clone();
+        drop(hit);
+        assert_eq!(budget.used(), bytes);
+        assert_eq!(shared.used(), bytes);
+        assert!(shared.child(bytes).try_reserve(1).is_err());
+        assert!(matches!(
+            cache.load_with_budget(key, &budget),
+            Err(CacheError::Memory(_))
+        ));
+        drop(owner);
+        assert_eq!(budget.used(), 0);
+        assert_eq!(shared.used(), 0);
+        drop(cache.load_with_budget(key, &budget).unwrap().unwrap());
+        assert_eq!(budget.used(), 0);
+        assert_eq!(shared.used(), 0);
+        let mut encoded = std::fs::read(&path).unwrap();
+        *encoded.last_mut().unwrap() ^= 1;
+        std::fs::write(&path, encoded).unwrap();
+        assert!(matches!(
+            cache.load_with_budget(key, &budget),
+            Err(CacheError::Corrupt(_))
+        ));
+        assert_eq!(budget.used(), 0);
+        assert_eq!(shared.used(), 0);
+    }
+    #[test]
+    fn cancelled_disk_reads_do_not_allocate_or_publish_and_allow_retry() {
+        let parent = tempdir().unwrap();
+        let cache = DiskMosaicCache::new(parent.path());
+        let key = test_key(92);
+        let original = test_mosaic();
+        cache.store(key, &original).unwrap();
+        let bytes = original.byte_len() as u64;
+        let budget = rrrah_memory::MemoryBudget::new(bytes);
+        assert!(matches!(
+            cache.load_with_cancel(key, Some(&budget), || true),
+            Err(CacheError::Cancelled)
+        ));
+        assert_eq!(budget.peak(), 0);
+        for cancel_at in [3, 4] {
+            let mut checks = 0;
+            assert!(matches!(
+                cache.load_with_cancel(key, Some(&budget), || {
+                    checks += 1;
+                    checks >= cancel_at
+                }),
+                Err(CacheError::Cancelled)
+            ));
+            assert_eq!(budget.used(), 0);
+        }
+        assert_eq!(budget.peak(), bytes);
+        let hit = cache
+            .load_with_cancel(key, Some(&budget), || false)
+            .unwrap()
+            .unwrap();
+        assert_eq!(hit.mosaic.pixels, original.pixels);
+        drop(hit);
+        assert_eq!(budget.used(), 0);
+        assert!(matches!(
+            cache.load_with_cancel(key, None, || true),
+            Err(CacheError::Cancelled)
+        ));
+    }
+    #[test]
+    fn cancelled_stores_preserve_existing_entry_and_remove_partial_files() {
+        let parent = tempdir().unwrap();
+        let cache = DiskMosaicCache::new(parent.path());
+        let key = test_key(93);
+        let original = test_mosaic();
+        let path = cache.store(key, &original).unwrap();
+        let before = std::fs::read(&path).unwrap();
+        for cancel_at in 1..=7 {
+            let mut checks = 0;
+            assert!(matches!(
+                cache.store_with_cancel(key, &original, || {
+                    checks += 1;
+                    checks >= cancel_at
+                }),
+                Err(CacheError::Cancelled)
+            ));
+            assert_eq!(std::fs::read(&path).unwrap(), before);
+            assert_eq!(std::fs::read_dir(path.parent().unwrap()).unwrap().count(), 1);
+        }
+        cache.store_with_cancel(key, &original, || false).unwrap();
+        assert_eq!(cache.load(key).unwrap().unwrap().mosaic.pixels, original.pixels);
+    }
+    #[test]
+    fn waiting_write_lock_can_cancel_without_releasing_current_writer() {
+        let parent = tempdir().unwrap();
+        let cache = DiskMosaicCache::new(parent.path());
+        let held = cache.lock_writes(|| false).unwrap();
+        let mut checks = 0;
+        assert!(matches!(
+            cache.lock_writes(|| {
+                checks += 1;
+                checks >= 2
+            }),
+            Err(CacheError::Cancelled)
+        ));
+        assert_eq!(checks, 2);
+        drop(held);
+        let next = cache.lock_writes(|| false).unwrap();
+        drop(next);
+    }
+    #[test]
+    fn disk_count_is_independent_and_replacement_does_not_count_twice() {
+        let parent = tempdir().unwrap();
+        let cache = DiskMosaicCache::with_max_bytes(parent.path(), u64::MAX).with_max_entries(Some(1));
+        let original = test_mosaic();
+        cache.store(test_key(94), &original).unwrap();
+        cache.store(test_key(94), &original).unwrap();
+        assert_eq!(cache.usage().unwrap().entries, 1);
+        cache.store(test_key(95), &original).unwrap();
+        assert!(cache.load(test_key(94)).unwrap().is_none());
+        assert!(cache.load(test_key(95)).unwrap().is_some());
+        assert_eq!(cache.usage().unwrap().entries, 1);
+        let disabled = cache.clone().with_max_entries(Some(0));
+        assert!(matches!(
+            disabled.store(test_key(96), &original),
+            Err(CacheError::DiskCountExceeded { limit: 0 })
+        ));
+        assert!(cache.load(test_key(95)).unwrap().is_some());
+    }
+    #[test]
+    fn disk_ttl_uses_write_age_and_prunes_expired_entries_under_lock() {
+        let parent = tempdir().unwrap();
+        let cache = DiskMosaicCache::new(parent.path()).with_ttl(Some(std::time::Duration::from_secs(10)));
+        let original = test_mosaic();
+        let old = cache.store(test_key(97), &original).unwrap();
+        let file = std::fs::OpenOptions::new().write(true).open(&old).unwrap();
+        file.set_times(std::fs::FileTimes::new().set_modified(std::time::SystemTime::UNIX_EPOCH))
+            .unwrap();
+        assert!(!cache.contains(test_key(97)));
+        assert!(cache.load(test_key(97)).unwrap().is_none());
+        assert!(old.exists());
+        cache.store(test_key(98), &original).unwrap();
+        assert!(!old.exists());
+        assert!(cache.contains(test_key(98)));
+        let metadata = std::fs::metadata(cache.path_for(test_key(98))).unwrap();
+        let written = metadata.modified().unwrap();
+        assert!(!cache.expired(&metadata, written + std::time::Duration::from_secs(9)));
+        assert!(cache.expired(&metadata, written + std::time::Duration::from_secs(10)));
+        cache.load(test_key(98)).unwrap().unwrap();
+        assert_eq!(
+            std::fs::metadata(cache.path_for(test_key(98)))
+                .unwrap()
+                .modified()
+                .unwrap(),
+            written
+        );
+        let zero = cache.clone().with_ttl(Some(std::time::Duration::ZERO));
+        assert!(!zero.contains(test_key(98)));
+        assert!(zero.load(test_key(98)).unwrap().is_none());
+        let future = std::time::SystemTime::now() + std::time::Duration::from_secs(3600);
+        let path = cache.path_for(test_key(98));
+        std::fs::OpenOptions::new()
+            .write(true)
+            .open(path)
+            .unwrap()
+            .set_times(std::fs::FileTimes::new().set_modified(future))
+            .unwrap();
+        assert!(cache.load(test_key(98)).unwrap().is_none());
     }
 }

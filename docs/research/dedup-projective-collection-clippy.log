@@ -1,0 +1,105 @@
+    Checking rrrah-memory v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-memory)
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+error: docs for function which may panic missing `# Panics` section
+   --> crates/rrrah-memory/src/lease_cache.rs:107:5
+    |
+107 |     pub fn remove(&mut self, key: &K) -> Option<V> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+note: first possible panic found here
+   --> crates/rrrah-memory/src/lease_cache.rs:115:26
+    |
+115 |             .map(|value| Arc::try_unwrap(value).ok().expect("removed value has no lease"))
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_panics_doc
+    = note: `-D clippy::missing-panics-doc` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::missing_panics_doc)]`
+
+error: docs for function which may panic missing `# Panics` section
+   --> crates/rrrah-memory/src/lease_cache.rs:117:5
+    |
+117 |     pub fn take_lru(&mut self) -> Option<(K, V)> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+note: first possible panic found here
+   --> crates/rrrah-memory/src/lease_cache.rs:122:17
+    |
+122 |                 Arc::try_unwrap(value).ok().expect("unpinned victim has no lease"),
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_panics_doc
+
+error: docs for function which may panic missing `# Panics` section
+   --> crates/rrrah-memory/src/lease_cache.rs:140:5
+    |
+140 |     pub fn insert(&mut self, key: K, value: V, weight: u64) -> Result<Vec<(K, V)>, V> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+note: first possible panic found here
+   --> crates/rrrah-memory/src/lease_cache.rs:150:24
+    |
+150 |               return Err(Arc::try_unwrap(value)
+    |  ________________________^
+151 | |                 .ok()
+152 | |                 .expect("rejected value has no cache owner"));
+    | |____________________________________________________________^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_panics_doc
+
+error: docs for function returning `Result` missing `# Errors` section
+   --> crates/rrrah-memory/src/lease_cache.rs:140:5
+    |
+140 |     pub fn insert(&mut self, key: K, value: V, weight: u64) -> Result<Vec<(K, V)>, V> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_errors_doc
+    = note: `-D clippy::missing-errors-doc` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::missing_errors_doc)]`
+
+error: docs for function which may panic missing `# Panics` section
+   --> crates/rrrah-memory/src/lease_cache.rs:165:5
+    |
+165 |     pub fn set_limits(&mut self, limits: CacheLimits) -> Option<Vec<(K, V)>> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+note: first possible panic found here
+   --> crates/rrrah-memory/src/lease_cache.rs:173:25
+    |
+173 |                         Arc::try_unwrap(value).ok().expect("unpinned victim has no lease"),
+    |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_panics_doc
+
+error: docs for function which may panic missing `# Panics` section
+   --> crates/rrrah-memory/src/lease_cache.rs:182:5
+    |
+182 |     pub fn drain_expired(&mut self) -> Vec<(K, V)> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+note: first possible panic found here
+   --> crates/rrrah-memory/src/lease_cache.rs:190:21
+    |
+190 |                     Arc::try_unwrap(value).ok().expect("expired victim has no lease"),
+    |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_panics_doc
+
+error: docs for function which may panic missing `# Panics` section
+   --> crates/rrrah-memory/src/policy.rs:76:5
+    |
+ 76 |     pub fn set_limits(&mut self, limits: CacheLimits) -> Option<Vec<(K, V)>> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+note: first possible panic found here
+   --> crates/rrrah-memory/src/policy.rs:100:40
+    |
+100 |             victims.push((key.clone(), self.remove(&key).expect("planned victim exists")));
+    |                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_panics_doc
+
+error: docs for function returning `Result` missing `# Errors` section
+   --> crates/rrrah-memory/src/lib.rs:220:5
+    |
+220 |     pub fn try_buffer<T: Copy>(mut self, length: usize, value: T) -> Result<MutableBuffer<T>, BufferError> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_errors_doc
+
+error: could not compile `rrrah-memory` (lib) due to 8 previous errors
+warning: build failed, waiting for other jobs to finish...

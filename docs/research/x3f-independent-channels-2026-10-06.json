@@ -1,0 +1,34 @@
+{
+  "status": "Independent exact legacy sensor equality; X3F remains Pending",
+  "source_sha256": "ea436ba459a7478d7b338428656fae905469de269f928749f3388db2b7b0d53f",
+  "dimensions": [
+    2304,
+    1531,
+    3
+  ],
+  "samples_compared": 10582272,
+  "mismatches": 0,
+  "legacy_offset": 202,
+  "native_blake3_u16le": "f9bf415ffe3f10bb837abc69f0e755ead1ede72a1cbd9ae9a02abd63a67d64bc",
+  "oracle": {
+    "version": "LibRaw 0.22.2-Release",
+    "X3FTOOLS": true,
+    "operation": "open_file/unpack; no image processing",
+    "dump_sha256": "44a331ab98772b5c41c5670963d73975cbedf962ac752feeaaacaaede86c7b35",
+    "source_archive_sha256": "de86b035655accff8d4010f1a221fdf50d353cb7b1422ba26f14a0db92612cfa",
+    "helper_sha256": "dd04883cce86249af16050d4afcf836cd691b591119fd7503ec64f4dce48b3e1",
+    "role": "External test oracle only; no production dependency"
+  },
+  "command": "RRRAH_X3F_SOURCE=/tmp/rrrah-sigma-sd10.x3f RRRAH_X3F_ORACLE=/tmp/rrrah-sd10-libraw-channels.u16le cargo test -p rrrah-decode --lib x3f:: --locked --target-dir /tmp/rrrah-required-corpus-target -- --include-ignored --nocapture",
+  "tests": {
+    "passed": 5,
+    "failed": 0
+  },
+  "log": "docs/research/x3f-independent-channels-2026-10-06.log",
+  "log_sha256": "3093cb1bf55ea79b5752185e4ae598a9cfd5c7b5bd6d56cdde4631653bf5ea86",
+  "remaining": [
+    "CAMF, white balance and camera color transform",
+    "Public viewer integration",
+    "Independent qualification of other X3F variants"
+  ]
+}

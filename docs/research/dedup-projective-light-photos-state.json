@@ -1,0 +1,70 @@
+{
+  "status": "six_combined_positives_fourteen_negatives_passed_both_platforms",
+  "macos_session": 87152,
+  "required_positive_cases": 6,
+  "required_unrelated_cases": 14,
+  "scope": "Independent Pillow-authored perspective plus encoded light development positives, fixed existing thresholds, no captured-burst or full accuracy claim",
+  "manifest": "crates/rrrah-dedup/tests/fixtures/photos-projective-light/manifest.json",
+  "remaining": [
+    "Terminal inflight gate observations",
+    "All-case reporting gate on current test source",
+    "Captured perspective/light independent qualification",
+    "Complete library contract"
+  ],
+  "linux_session": 92367,
+  "fixture_drift_during_first_run": true,
+  "fixture_integrity": "docs/research/dedup-projective-light-fixture-integrity.json",
+  "manifest_sha256": "85a550fa0569499df0d8dd9c2b33775c921b56c5aa18251a4208e7d8de52f0dc",
+  "first_macos": {
+    "session": 87152,
+    "exit": 101,
+    "first_refusal": "2414 OutsidePolicy channel0",
+    "scope": "Initial unconstrained-fit rejection, fixture rounding changed during run; not current corpus qualification"
+  },
+  "analytic_reverse_offset": -0.12307692307692307,
+  "maximum_offset": 0.1,
+  "next_gate": "Explicit constrained least squares, unchanged gains/offset bounds and residual admission",
+  "unintended_run_session": 84315,
+  "unintended_run_reason": "Test edit script assertion failed before mutation; shell proceeded with old mode",
+  "current_sources": {
+    "crates/rrrah-dedup/src/warp.rs": "06c4e24d7291d311f78b41e9edc7571f8cc541209591a473476894de788c9f09",
+    "crates/rrrah-dedup/src/local_scan.rs": "d2e898d062b322a49af786a5a2107211d2f9496c1d731edb178060aefac49265",
+    "crates/rrrah-dedup/src/local_collection.rs": "d4224d0210827d451372e771c657807ce988fb7e46121b7687ff5abfa804c110",
+    "crates/rrrah-dedup/tests/projective_files.rs": "c8596a0116c6b6468c52e5e25c2d49e21ba9fb06948ce24bd896d6f149eba887",
+    "crates/rrrah-dedup/tests/fixtures/photos-projective-light/manifest.json": "85a550fa0569499df0d8dd9c2b33775c921b56c5aa18251a4208e7d8de52f0dc"
+  },
+  "corrected_macos_session": 85952,
+  "unintended_run_exit": 101,
+  "unintended_run_log": "docs/research/dedup-projective-light-constrained-macos.log",
+  "next_gate_collects_all_cases": true,
+  "inflight_test_source_changed": true,
+  "test_source_sha256": "ce81fa21de87966781dda89b22c435e804844b2c96f2b666cb152a0855faf69b",
+  "macos": {
+    "session": 85952,
+    "exit": 0,
+    "passed": 1,
+    "ignored": 0,
+    "required_positive_cases": 6,
+    "required_unrelated_cases": 14,
+    "fit_mode": "ConstrainedLeastSquares",
+    "residual_tolerance": 0.03,
+    "minimum_match_fraction": 0.9,
+    "maximum_offset": 0.1,
+    "unconstrained_first_case_refusal_required": true,
+    "log": "docs/research/dedup-projective-light-constrained-corrected-macos.log",
+    "log_sha256": "c411f7bbf701c04a81a104c0672f573f7e9d484a70b670f022919537a3f1c1c2",
+    "scope": "Terminal six positives/fourteen negatives on exact-rational fixtures; test reporting code expanded after compilation, not latest-test-source atomic proof"
+  },
+  "linux": {
+    "session": 92367,
+    "exit": 0,
+    "passed": 1,
+    "ignored": 0,
+    "required_positive_cases": 6,
+    "required_unrelated_cases": 14,
+    "fit_mode": "ConstrainedLeastSquares",
+    "log": "docs/research/dedup-projective-light-photos-linux.log",
+    "log_sha256": "cac7ad1e681dcf17c30a5704d3c9bc5d8ff1762f2322e4ca46dc3b848448fbb9",
+    "scope": "Development gate compiled while source changes were ongoing; six positive and fourteen unrelated acceptance assertions preserved, not atomic full-current-source proof"
+  }
+}

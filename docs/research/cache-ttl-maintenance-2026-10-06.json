@@ -1,0 +1,39 @@
+{
+  "scope": "Policy-only drain_expired + resident hit while deadlines remain future. Excludes lease reconciliation, decode, pixels, disk, GPU and UI. Sequential before/after runs, no system-noise controls.",
+  "platform": "macOS-26.7.1-arm64-arm-64bit-Mach-O",
+  "command": "cargo run -p rrrah-memory --example cache_policy_timing --target-dir /tmp/rrrah-required-corpus-target",
+  "samples": 20,
+  "warmups": 3,
+  "operations_per_sample": 100,
+  "ttl_seconds": 3600,
+  "results": [
+    {
+      "entries": 64,
+      "before_p50_us": 0.168,
+      "after_p50_us": 0.042,
+      "before_p95_us": 0.171,
+      "after_p95_us": 0.043
+    },
+    {
+      "entries": 1024,
+      "before_p50_us": 2.173,
+      "after_p50_us": 0.042,
+      "before_p95_us": 2.267,
+      "after_p95_us": 0.043
+    },
+    {
+      "entries": 4096,
+      "before_p50_us": 9.644,
+      "after_p50_us": 0.042,
+      "before_p95_us": 9.843,
+      "after_p95_us": 0.043
+    },
+    {
+      "entries": 16384,
+      "before_p50_us": 42.641,
+      "after_p50_us": 0.042,
+      "before_p95_us": 44.04,
+      "after_p95_us": 0.047
+    }
+  ]
+}

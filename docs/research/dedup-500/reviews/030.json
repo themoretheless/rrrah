@@ -1,0 +1,98 @@
+{
+  "index": 30,
+  "repository": "google-research/3d-moments",
+  "commit": "e6903f29736a1369daf75642eacb7a8836539e77",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Depth-layered 3D synthesis from near-duplicate input photos; consumes pairs rather than discovers duplicates.",
+  "license_metadata": "Apache-2.0",
+  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "available_source_evidence": [
+    {
+      "path": "config.py",
+      "local": "03-config.py",
+      "url": "https://github.com/google-research/3d-moments/blob/e6903f29736a1369daf75642eacb7a8836539e77/config.py",
+      "sha256": "63c1d34d6611750a0223a704551d74042c9783ea108d7952eeecfc6c7254e9c7",
+      "truncated": false,
+      "lines": 91,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "core/__init__.py",
+      "local": "04-__init__.py",
+      "url": "https://github.com/google-research/3d-moments/blob/e6903f29736a1369daf75642eacb7a8836539e77/core/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "truncated": false,
+      "lines": 0,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "core/depth_layering.py",
+      "local": "05-depth_layering.py",
+      "url": "https://github.com/google-research/3d-moments/blob/e6903f29736a1369daf75642eacb7a8836539e77/core/depth_layering.py",
+      "sha256": "40d42ef8bf8682a9b266e0f685b64511734d4798f72d0b0f81c5f1566dea4b02",
+      "truncated": false,
+      "lines": 59,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "core/inpainter.py",
+      "local": "06-inpainter.py",
+      "url": "https://github.com/google-research/3d-moments/blob/e6903f29736a1369daf75642eacb7a8836539e77/core/inpainter.py",
+      "sha256": "35f0691f55edb40aee2b182fc4b0415640ae1bfea51b926b495f714c0ff97353",
+      "truncated": false,
+      "lines": 194,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "core/pcd.py",
+      "local": "07-pcd.py",
+      "url": "https://github.com/google-research/3d-moments/blob/e6903f29736a1369daf75642eacb7a8836539e77/core/pcd.py",
+      "sha256": "0f427ed2643b76f64f13c24f3ee391c2e51e97ee970e1c9ec659cbb39ec3c6f9",
+      "truncated": false,
+      "lines": 124,
+      "source": true,
+      "test": false
+    }
+  ],
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/google-research/3d-moments/blob/e6903f29736a1369daf75642eacb7a8836539e77/README.md",
+      "sha256": "d39328c090c58fa418e47d7c066a709684fac3cb17d1c27a7363f2c26af18a9b",
+      "truncated": false,
+      "lines": 87,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/google-research/3d-moments/blob/e6903f29736a1369daf75642eacb7a8836539e77/LICENSE",
+      "sha256": "58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd",
+      "truncated": false,
+      "lines": 202,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "third_party/DPT/LICENSE",
+      "local": "02-LICENSE",
+      "url": "https://github.com/google-research/3d-moments/blob/e6903f29736a1369daf75642eacb7a8836539e77/third_party/DPT/LICENSE",
+      "sha256": "248e59d88b238917f1167dd118fbace3e8136e37e9c91ee952fef80c191e3e32",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

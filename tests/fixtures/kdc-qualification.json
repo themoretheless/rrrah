@@ -1,0 +1,288 @@
+{
+  "status": "native-P880-sensor-color-router-cache-swap-Metal-qualified-subset",
+  "id": 2339,
+  "make": "Kodak",
+  "model": "P880",
+  "mode": "12bit packed",
+  "license": "CC0-1.0",
+  "url": "https://raw.pixls.us/getfile.php/2339/nice/Kodak - P880 - NAN.KDC",
+  "sha256": "8138d068d14e9ce90c6877b175759fc92358024303b8cd5e9b9eb5ae11e8c4b1",
+  "filename": "2339.kdc",
+  "oracle": {
+    "libraw_version": "0.22.2-Release",
+    "make": "Kodak",
+    "model": "P880 ZOOM",
+    "width": 3280,
+    "height": 2454,
+    "crop": [
+      0,
+      0,
+      3280,
+      2454
+    ],
+    "wb": [
+      102656,
+      65536,
+      92672,
+      65536
+    ],
+    "black": 0,
+    "cblack": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "white": 3963,
+    "cfa": [
+      "B",
+      "G",
+      "G",
+      "R"
+    ],
+    "xyz_to_camera": [
+      [
+        1.280500054,
+        -0.4661999941,
+        -0.1376000047
+      ],
+      [
+        -0.7480000257,
+        1.52670002,
+        0.2360000014
+      ],
+      [
+        -0.1625999957,
+        0.2194000036,
+        0.7904000282
+      ],
+      [
+        0,
+        0,
+        0
+      ]
+    ],
+    "camera_to_rgb": [
+      [
+        1.416578174,
+        -0.2863304615,
+        -0.1302476823
+      ],
+      [
+        -0.03915185109,
+        1.348310828,
+        -0.3091589808
+      ],
+      [
+        0.02008223347,
+        -0.3547278345,
+        1.334645629
+      ]
+    ],
+    "pixels_sha256": "dfab9d395ccaea4bbdeba11c5c4b750fb78c8d6ecfb1952d2ef664a3f26bae30",
+    "pixels_bytes": 16098240
+  },
+  "metadata_contract": {
+    "crop": [
+      0,
+      0,
+      3280,
+      2454
+    ],
+    "black_grid": [
+      0.0
+    ],
+    "white": [
+      3963.0
+    ],
+    "source": "P880 calibrated black=0 and white=3963 profile, Kodak private dimensions"
+  },
+  "sensor_offset": 77152,
+  "sensor_bytes": 12073680,
+  "storage": "MSB-first packed12 pairs in3 bytes, sensor ends at JPEG preview offset",
+  "native_metadata": {
+    "make": "EASTMAN KODAK COMPANY",
+    "model": "KODAK P880 ZOOM DIGITAL CAMERA",
+    "width": 3280,
+    "height": 2454,
+    "wb": [
+      1.5664063,
+      1.0,
+      1.4140625,
+      1.0
+    ],
+    "black_grid": [
+      0.0
+    ],
+    "white": [
+      3963.0
+    ],
+    "cfa": [
+      "B",
+      "G",
+      "G",
+      "R"
+    ],
+    "xyz_to_camera": [
+      [
+        1.2805,
+        -0.4662,
+        -0.1376
+      ],
+      [
+        -0.748,
+        1.5267,
+        0.236
+      ],
+      [
+        -0.1626,
+        0.2194,
+        0.7904
+      ],
+      [
+        0.0,
+        0.0,
+        0.0
+      ]
+    ],
+    "camera_to_rgb": [
+      [
+        1.4165782,
+        -0.28633046,
+        -0.13024768
+      ],
+      [
+        -0.03915185,
+        1.3483108,
+        -0.30915898
+      ],
+      [
+        0.020082233,
+        -0.35472783,
+        1.3346456
+      ]
+    ],
+    "crop": [
+      0,
+      0,
+      3280,
+      2454
+    ],
+    "managed_memory": {
+      "limit": 134217728,
+      "used": 16098240,
+      "peak": 29927042,
+      "pixel_capacity": 16098240,
+      "managed": true
+    }
+  },
+  "metadata_sources": {
+    "geometry": "Kodak IFD at root0xfe00, tags0xfa13/0xfa14",
+    "wb": "selected by0xfa0d; auto0xfa25 RGB u32 coefficients normalized by green",
+    "cfa": "rawIFD0xfd09 BGGR",
+    "sensor_offset": "rawIFD0xfd04 u32 wordsat16+48",
+    "white": "LibRaw P880 calibrated profile white3963 (src/tables/colordata.cpp)"
+  },
+  "primary_source_urls": [
+    "https://github.com/LibRaw/LibRaw/blob/0.22.0/src/metadata/kodak.cpp",
+    "https://github.com/LibRaw/LibRaw/blob/0.22.0/src/metadata/tiff.cpp",
+    "https://github.com/LibRaw/LibRaw/blob/0.22.0/src/tables/colordata.cpp"
+  ],
+  "integration_qualification": {
+    "test": "crates/rrrah-app/tests/kodak_kdc_readback.rs",
+    "adapter": "Metal Apple M4 Max",
+    "full_sensor_samples_exact": 8049120,
+    "render_size": [
+      128,
+      96
+    ],
+    "independent_render_pixels_exact": true,
+    "persistent_and_swap_roundtrip_exact": true,
+    "malformed_cases_rejected_without_preview_or_retained_memory": 8,
+    "scope": "Kodak P880 qualified packed layout only; other KDC cameras, photographic color and physical display remain unqualified"
+  },
+  "white_balance_modes": [
+    {
+      "mode": 0,
+      "native_wb": [
+        1.5664063,
+        1.0,
+        1.4140625,
+        1.0
+      ],
+      "oracle_wb": [
+        102656,
+        65536,
+        92672,
+        65536
+      ],
+      "all_sensor_samples_exact": true
+    },
+    {
+      "mode": 1,
+      "native_wb": [
+        1.5507813,
+        1.0,
+        1.953125,
+        1.0
+      ],
+      "oracle_wb": [
+        101632,
+        65536,
+        128000,
+        65536
+      ],
+      "all_sensor_samples_exact": true
+    },
+    {
+      "mode": 2,
+      "native_wb": [
+        0.96875,
+        1.0,
+        2.328125,
+        1.0
+      ],
+      "oracle_wb": [
+        63488,
+        65536,
+        152576,
+        65536
+      ],
+      "all_sensor_samples_exact": true
+    },
+    {
+      "mode": 3,
+      "native_wb": [
+        1.640625,
+        1.0,
+        1.359375,
+        1.0
+      ],
+      "oracle_wb": [
+        107520,
+        65536,
+        89088,
+        65536
+      ],
+      "all_sensor_samples_exact": true
+    },
+    {
+      "mode": 6,
+      "native_wb": [
+        2.0,
+        1.0,
+        1.1445313,
+        1.0
+      ],
+      "oracle_wb": [
+        131072,
+        65536,
+        75008,
+        65536
+      ],
+      "all_sensor_samples_exact": true
+    }
+  ]
+}

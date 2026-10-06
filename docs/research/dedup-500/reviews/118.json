@@ -1,0 +1,78 @@
+{
+  "index": 118,
+  "repository": "maxkhim/laravel-storage-dedupler",
+  "commit": "7720046f9b1c9056a47de0d84a1384e667d3f367",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "wrapper",
+  "finding": "Laravel storage dedup command/facade and legacy migration tests; storage integration rather than native visual algorithm.",
+  "available_source_evidence": [
+    {
+      "path": "src/Commands/CheckDeduplerStorageCommand.php",
+      "local": "02-CheckDeduplerStorageCommand.php",
+      "url": "https://github.com/maxkhim/laravel-storage-dedupler/blob/7720046f9b1c9056a47de0d84a1384e667d3f367/src/Commands/CheckDeduplerStorageCommand.php",
+      "sha256": "e31e3b4c8ee5ada9d23fe6571bd37f4a5ba2a98faec39b00850dd416eba952b8",
+      "truncated": false,
+      "lines": 90,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/Commands/DeduplerInstallCommand.php",
+      "local": "03-DeduplerInstallCommand.php",
+      "url": "https://github.com/maxkhim/laravel-storage-dedupler/blob/7720046f9b1c9056a47de0d84a1384e667d3f367/src/Commands/DeduplerInstallCommand.php",
+      "sha256": "828f3ea965b52ca5d4118cc7689df7d9b90abafe63736cf753ce350539228984",
+      "truncated": false,
+      "lines": 55,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/Facades/Dedupler.php",
+      "local": "04-Dedupler.php",
+      "url": "https://github.com/maxkhim/laravel-storage-dedupler/blob/7720046f9b1c9056a47de0d84a1384e667d3f367/src/Facades/Dedupler.php",
+      "sha256": "0c4dc86b1489af5f6ce3ecb0168671b04af4af07e622d24a211cd018f1d37c04",
+      "truncated": false,
+      "lines": 45,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/Feature/DeduplerLegacyMigrationTest.php",
+      "local": "05-DeduplerLegacyMigrationTest.php",
+      "url": "https://github.com/maxkhim/laravel-storage-dedupler/blob/7720046f9b1c9056a47de0d84a1384e667d3f367/tests/Feature/DeduplerLegacyMigrationTest.php",
+      "sha256": "e7ca591697787416224148b41d42d48b661d1dd1a19ab60fb820dee9e6e9fc32",
+      "truncated": false,
+      "lines": 187,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 3,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/maxkhim/laravel-storage-dedupler/blob/7720046f9b1c9056a47de0d84a1384e667d3f367/README.md",
+      "sha256": "712e997bb07df1112dee52f91e645076400f932287910fef1d0feaefe06ca0d5",
+      "truncated": false,
+      "lines": 159,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/maxkhim/laravel-storage-dedupler/blob/7720046f9b1c9056a47de0d84a1384e667d3f367/LICENSE",
+      "sha256": "4b301bd902806c24160b28d61e21b9eab4868f26c71d5cdf94a6370b63f02cda",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

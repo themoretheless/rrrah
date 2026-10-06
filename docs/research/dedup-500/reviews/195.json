@@ -1,0 +1,98 @@
+{
+  "index": 195,
+  "repository": "ufbmi/onefl-deduper",
+  "commit": "1636eee73ff1b904a0434ce318678b2e065d1a73",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "EHR patient rule hashes; selected-field medical record equivalence.",
+  "available_source_evidence": [
+    {
+      "path": "onefl/hash_generator.py",
+      "local": "02-hash_generator.py",
+      "url": "https://github.com/ufbmi/onefl-deduper/blob/1636eee73ff1b904a0434ce318678b2e065d1a73/onefl/hash_generator.py",
+      "sha256": "9944632329711ca50a9096c4432e67005370ee407b4bce60ab094c21e8ae71ed",
+      "truncated": false,
+      "lines": 294,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "run/hasher.py",
+      "local": "03-hasher.py",
+      "url": "https://github.com/ufbmi/onefl-deduper/blob/1636eee73ff1b904a0434ce318678b2e065d1a73/run/hasher.py",
+      "sha256": "3988693343cb46f348e879e52614b72df852173175d7cd9a837887183027a06f",
+      "truncated": false,
+      "lines": 91,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "exe_releases/hasher_md5sum_44e42ba2a056dec3b826c3ebb4d8cb46/config/settings_hasher.py",
+      "local": "04-settings_hasher.py",
+      "url": "https://github.com/ufbmi/onefl-deduper/blob/1636eee73ff1b904a0434ce318678b2e065d1a73/exe_releases/hasher_md5sum_44e42ba2a056dec3b826c3ebb4d8cb46/config/settings_hasher.py",
+      "sha256": "fd76c8ab873e4e34d0a1ae77edf1252bd19d1aabc5c19c3c7d5d3af397db8d9d",
+      "truncated": false,
+      "lines": 32,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "config/test_settings_hasher.py",
+      "local": "05-test_settings_hasher.py",
+      "url": "https://github.com/ufbmi/onefl-deduper/blob/1636eee73ff1b904a0434ce318678b2e065d1a73/config/test_settings_hasher.py",
+      "sha256": "2d7fc247f339f3c376a6c9a5020ae92b213da8c8a6c1c3b5ff0acc749c1b1547",
+      "truncated": false,
+      "lines": 32,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tasks.py",
+      "local": "06-tasks.py",
+      "url": "https://github.com/ufbmi/onefl-deduper/blob/1636eee73ff1b904a0434ce318678b2e065d1a73/tasks.py",
+      "sha256": "2303c0dad08b58b420f66a09aeff8c41ec4fe8440ef00c7fc1c439891e759605",
+      "truncated": false,
+      "lines": 220,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/test_hash_generator.py",
+      "local": "07-test_hash_generator.py",
+      "url": "https://github.com/ufbmi/onefl-deduper/blob/1636eee73ff1b904a0434ce318678b2e065d1a73/tests/test_hash_generator.py",
+      "sha256": "4ba71eb02d57c09aed8a9262a3b631e12090aa251e1038b1c9fea1c2f98be125",
+      "truncated": false,
+      "lines": 95,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 5,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/ufbmi/onefl-deduper/blob/1636eee73ff1b904a0434ce318678b2e065d1a73/README.md",
+      "sha256": "3a9dfab57bf033e92114d05355a259789d858464d858dbc52847b7bf3dd91c70",
+      "truncated": false,
+      "lines": 96,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/ufbmi/onefl-deduper/blob/1636eee73ff1b904a0434ce318678b2e065d1a73/LICENSE",
+      "sha256": "ffc494c4be79f8fcb69e4449435ff4e0441092068e7096b22dd7888c01b829a3",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

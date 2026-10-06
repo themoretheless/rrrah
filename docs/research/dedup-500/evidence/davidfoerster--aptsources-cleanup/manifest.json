@@ -1,0 +1,95 @@
+{
+  "repository": "davidfoerster/aptsources-cleanup",
+  "metadata": {
+    "name": "davidfoerster/aptsources-cleanup",
+    "url": "https://github.com/davidfoerster/aptsources-cleanup",
+    "description": "Detects and interactively deactivates duplicate Apt source entries and deletes sources list files without valid enabled source entries (as requested in https://askubuntu.com/a/762815/175814).",
+    "language": "Python",
+    "stars": 680,
+    "license": "MIT",
+    "archived": false,
+    "pushed_at": "2024-08-16T01:40:50Z",
+    "default_branch": "master",
+    "queries": [
+      "duplicate in:name,description",
+      "duplicates in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/davidfoerster/aptsources-cleanup/blob/cf291129b351f4e126d53ed7382a61734052db99/README.md",
+      "sha256": "e27c8c299d92f037b25d1f33bcdb493893c3efee514b1184abe83152bbcdce80",
+      "truncated": false,
+      "lines": 69,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/davidfoerster/aptsources-cleanup/blob/cf291129b351f4e126d53ed7382a61734052db99/LICENSE",
+      "sha256": "a0c48786200590b6eda6a2464b9ce7bc291de5730b7ffcdd7d617d8874bb8c3d",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "src/__main__.py",
+      "local": "02-__main__.py",
+      "url": "https://github.com/davidfoerster/aptsources-cleanup/blob/cf291129b351f4e126d53ed7382a61734052db99/src/__main__.py",
+      "sha256": "4fd88626148b64a888379f2785bb52439ba9dafd70c8e91fb2ca35131bcce6cb",
+      "truncated": false,
+      "lines": 9,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/aptsources_cleanup/__init__.py",
+      "local": "03-__init__.py",
+      "url": "https://github.com/davidfoerster/aptsources-cleanup/blob/cf291129b351f4e126d53ed7382a61734052db99/src/aptsources_cleanup/__init__.py",
+      "sha256": "fe16bc931ffb81cf94c18b983ca0365237c39a4f3a445398bcae98020968fdf4",
+      "truncated": false,
+      "lines": 66,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/aptsources_cleanup/__main__.py",
+      "local": "04-__main__.py",
+      "url": "https://github.com/davidfoerster/aptsources-cleanup/blob/cf291129b351f4e126d53ed7382a61734052db99/src/aptsources_cleanup/__main__.py",
+      "sha256": "2d441490c50293b800ea0d14f457dfcaec8283d9164de0dcce97e485574a15bb",
+      "truncated": false,
+      "lines": 391,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/aptsources_cleanup/util/filesystem.py",
+      "local": "05-filesystem.py",
+      "url": "https://github.com/davidfoerster/aptsources-cleanup/blob/cf291129b351f4e126d53ed7382a61734052db99/src/aptsources_cleanup/util/filesystem.py",
+      "sha256": "887f5407659349637ec40be4fcb1ede8e70d18d28d54aca5808d25f1ab5d4dce",
+      "truncated": false,
+      "lines": 18,
+      "source": true,
+      "test": false
+    }
+  ],
+  "errors": [],
+  "commit": "cf291129b351f4e126d53ed7382a61734052db99",
+  "tree_truncated": false,
+  "source_file_count": 25,
+  "test_file_count": 0,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "src/__main__.py",
+    "src/aptsources_cleanup/__main__.py",
+    "src/aptsources_cleanup/util/filesystem.py"
+  ]
+}

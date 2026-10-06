@@ -1,0 +1,32 @@
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `test` profile [optimized + debuginfo] target(s) in 40.15s
+     Running unittests src/lib.rs (/tmp/rrrah-required-corpus-target/debug/deps/rrrah_decode-fef1cf096a77eef0)
+
+running 1 test
+SD14 all 14450688 sensor channels exact; offset=70
+SD14 CAMF bytes=39220 AutoRGBNeutral enabled=Ok(false)
+SD14 calibrated neutral Auto exact: [6.27459, 6.8960614, 6.2682114]
+SD14 calibrated neutral Custom exact: [6.27459, 6.8960614, 6.2682114]
+SD14 calibrated neutral Sunlight exact: [5.700431, 6.3712473, 5.9369802]
+SD14 calibrated neutral Shade exact: [3.849417, 4.714543, 4.928401]
+SD14 calibrated neutral Overcast exact: [4.624633, 5.4206505, 5.3607445]
+SD14 calibrated neutral Incandescent exact: [14.767445, 13.655546, 10.226551]
+SD14 calibrated neutral Fluorescent exact: [9.143547, 9.744907, 8.142823]
+SD14 calibrated neutral Flash exact: [4.3083076, 5.1345444, 5.1859035]
+SD14 full linear channels mismatches=13473224 max difference=415
+
+thread 'x3f::tests::sigma_sd14_native_sensor_matches_full_independent_unpack' (47448678) panicked at crates/rrrah-decode/src/x3f.rs:2712:13:
+assertion `left == right` failed
+  left: 13473224
+ right: 0
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test x3f::tests::sigma_sd14_native_sensor_matches_full_independent_unpack ... FAILED
+
+failures:
+
+failures:
+    x3f::tests::sigma_sd14_native_sensor_matches_full_independent_unpack
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 818 filtered out; finished in 1.60s
+
+error: test failed, to rerun pass `-p rrrah-decode --lib`

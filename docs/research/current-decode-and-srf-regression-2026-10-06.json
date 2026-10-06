@@ -1,0 +1,29 @@
+{
+  "runs": [
+    {
+      "log": "/tmp/rrrah-current-decode-full.log",
+      "sha256": "edc9f7b6d5eef77e30cd845db55758710686f9e45eb0edee1fe5c96ec46e951e",
+      "passed": 705,
+      "failed": 0,
+      "ignored": 36
+    },
+    {
+      "log": "/tmp/rrrah-current-srf-sensor.log",
+      "sha256": "f12fbc1e6747c87bb464642505174e474d2d634016e68b394299a3bc03c1ec82",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    }
+  ],
+  "srf_sources": {
+    "/tmp/rrrah-sony-f828.srf": {
+      "bytes": 17393344,
+      "sha256": "07739f94bcab0c7e198d418ac65172d0dce04bb84a7683ecffd0bfe4b32f6d79"
+    },
+    "/tmp/rrrah-srf-four-channel-reference.u16le": {
+      "bytes": 16531200,
+      "sha256": "b3fc3d395950407a35d33392a97181fa51aac1afb0aa6b96d94a7eba00e95d42"
+    }
+  },
+  "scope": "Default decoder regression plus explicit external full-encrypted SRF sensor/calibration oracle test; not all-format qualification."
+}

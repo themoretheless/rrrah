@@ -1,0 +1,61 @@
+{
+  "status": "reproduced",
+  "session": 49282,
+  "exit": 0,
+  "phase_report_sha256": "c27760666f5ea8fe6e63e63e9941bd3c54f7cc48da550c3cf460eb7c0a9d756b",
+  "rows": [
+    {
+      "mode": "raw",
+      "maximum_inverse_corner_shift": 3.344076408069966,
+      "corner_shifts": [
+        3.344076408069966,
+        0.4628970632629038,
+        3.2097761369644573,
+        1.7390947474311698
+      ],
+      "filtered_match_fractions": [
+        0.9022573730905934,
+        0.9286096883264705
+      ],
+      "passes_unchanged_final_admission": true
+    },
+    {
+      "mode": "photometric",
+      "maximum_inverse_corner_shift": 3.7398151490356284,
+      "corner_shifts": [
+        3.7398151490356284,
+        0.26981550507471636,
+        3.620029022918125,
+        2.159446274385673
+      ],
+      "filtered_match_fractions": [
+        0.9031680590213735,
+        0.9292643762753822
+      ],
+      "passes_unchanged_final_admission": true
+    },
+    {
+      "mode": "anchored",
+      "maximum_inverse_corner_shift": 0.9999999999999699,
+      "corner_shifts": [
+        0.9999999999998956,
+        0.8944525816200211,
+        0.9999999999999699,
+        0.5886815332984852
+      ],
+      "filtered_match_fractions": [
+        0.8797860207462119,
+        0.912424684893342
+      ],
+      "passes_unchanged_final_admission": false
+    }
+  ],
+  "scope": "One candidate regression explained by limited correction of initial model; wider corner movement permits this case but may reintroduce known illumination drift, so no default or threshold change",
+  "next_implementation_requirements": [
+    "Preserve separate evidence for anchored and unconstrained hypotheses",
+    "Use unchanged full bidirectional pixel admission on each hypothesis",
+    "Make cumulative work budget and cancellation explicit before accepting portfolio results",
+    "Require existing illumination-drift cases and v_bees/4 together",
+    "Evaluate every held-out negative and complete independent 580-pair corpus before promoting a default"
+  ]
+}

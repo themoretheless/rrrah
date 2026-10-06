@@ -92,7 +92,6 @@ const TAG_ACTIVE_AREA: u16 = 50_829;
 const COMPRESSION_PENTAX_JPEG: u64 = 65_535;
 
 /// Exif tag in IFD0 carrying the Pentax makernote.
-const TAG_MAKERNOTE: u16 = 0x927C;
 /// Pentax makernote tag holding the proprietary Huffman table (`ExifTool`
 /// `Pentax.pm` tag 0x0220 `HuffmanTable?`, found in K10D/K20D/K2000 PEFs).
 const MAKERNOTE_TAG_HUFFMAN_TABLE: u16 = 0x0220;
@@ -164,7 +163,7 @@ impl CameraQuirks for PefQuirks {
             width,
             height,
             bits_per_sample,
-            cfa: read_cfa(format, raw)?,
+            cfa: read_cfa(format, container, raw)?,
             black_level: read_black_level(format, raw)?,
             white_level: read_white_level(format, raw, bits_per_sample)?,
             white_balance: read_white_balance(format, raw)?,
@@ -769,18 +768,12 @@ fn read_makernote_huffman_bytes<'a>(
     format: &'static str,
     container: &CameraFile<'a>,
 ) -> Result<std::borrow::Cow<'a, [u8]>, DecodeError> {
-    let ifd0 = container
-        .directories()
-        .iter()
-        .find(|directory| directory.is_top_level())
-        .ok_or_else(|| camera_error(format, "PEF has no top-level directory to hold the makernote"))?;
-    let makernote = ifd0.entry(format, TAG_MAKERNOTE)?.ok_or_else(|| {
+    let payload = super::makernote_color::maker_note(container, format).map_err(|_| {
         camera_error(
             format,
-            "compression 65535 requires the Pentax makernote (IFD0 tag 37500) carrying the Huffman table",
+            "compression 65535 requires the Pentax makernote (tag 37500) carrying the Huffman table",
         )
     })?;
-    let payload = makernote.raw_bytes();
     let container_order = container.byte_order();
     let other_order = match container_order {
         ByteOrder::Little => ByteOrder::Big,
@@ -943,7 +936,47 @@ fn decode_pentax_jpeg(
 }
 
 /// Reads the TIFF/EP CFA tags and validates a 2x2 RGB Bayer mosaic.
-fn read_cfa(format: &'static str, raw: &CameraDirectory<'_>) -> Result<CfaPattern, DecodeError> {
+pub(super) fn read_cfa(
+    format: &'static str,
+    container: &CameraFile<'_>,
+    raw: &CameraDirectory<'_>,
+) -> Result<CfaPattern, DecodeError> {
+    if raw.entry(format, tags::CFA_REPEAT_PATTERN_DIM)?.is_none() {
+        for directory in container.directories() {
+            if let Some(offset) = optional_scalar(format, directory, 0x8769)? {
+                let exif = container.parse_ifd_at(format, offset)?;
+                if let Some(entry) = exif
+                    .entry(0xa302)
+                    .map_err(|e| camera_error(format, e.to_string()))?
+                {
+                    let bytes = entry.raw_bytes();
+                    if bytes.len() != 8
+                        || container.byte_order().u16(&bytes[..2]) != 2
+                        || container.byte_order().u16(&bytes[2..4]) != 2
+                    {
+                        return Err(camera_error(format, "PEF EXIF CFA must be 2x2"));
+                    }
+                    let cells = bytes[4..]
+                        .iter()
+                        .map(|v| match v {
+                            0 => Ok(CfaColor::Red),
+                            1 => Ok(CfaColor::Green),
+                            2 => Ok(CfaColor::Blue),
+                            _ => Err(camera_error(format, "PEF EXIF CFA has non-RGB cell")),
+                        })
+                        .collect::<Result<Vec<_>, DecodeError>>()?;
+                    let cfa = CfaPattern {
+                        width: 2,
+                        height: 2,
+                        cells,
+                    };
+                    cfa.bayer_quad()
+                        .map_err(|_| camera_error(format, "PEF EXIF CFA is not Bayer"))?;
+                    return Ok(cfa);
+                }
+            }
+        }
+    }
     let dims = required_values(format, raw, tags::CFA_REPEAT_PATTERN_DIM)?;
     if dims.len() != 2 {
         return Err(camera_error(
@@ -2130,6 +2163,7 @@ mod tests {
         let raw = quirks.select_raw_ifd(&container).unwrap();
         let error = quirks.decode_pixels(&container, raw, &|| true).unwrap_err();
         assert!(matches!(error, DecodeError::Cancelled));
+        super::super::assert_pixel_cancellation_checkpoints(&quirks, &container, raw);
     }
 
     #[test]

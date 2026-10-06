@@ -1,0 +1,78 @@
+{
+  "index": 399,
+  "repository": "starkdg/libpHashAudio",
+  "commit": "e95604aad537be51d30041a095fe9f76029b78f0",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Audio FFT/perceptual hash; HammingWindow is DSP windowing rather than image Hamming matching.",
+  "available_source_evidence": [
+    {
+      "path": "AudioHash.c",
+      "local": "02-AudioHash.c",
+      "url": "https://github.com/starkdg/libpHashAudio/blob/e95604aad537be51d30041a095fe9f76029b78f0/AudioHash.c",
+      "sha256": "223c98adc06c1fffdb42f6f738b70e109c0f728da2b3c9dfa95613c9ec0490b0",
+      "truncated": false,
+      "lines": 369,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "AudioHash.h",
+      "local": "03-AudioHash.h",
+      "url": "https://github.com/starkdg/libpHashAudio/blob/e95604aad537be51d30041a095fe9f76029b78f0/AudioHash.h",
+      "sha256": "720f92d009dbfd1d4570189edbac71e8514580af69f42f44711095a9a637404a",
+      "truncated": false,
+      "lines": 101,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "_kiss_fft_guts.h",
+      "local": "04-_kiss_fft_guts.h",
+      "url": "https://github.com/starkdg/libpHashAudio/blob/e95604aad537be51d30041a095fe9f76029b78f0/_kiss_fft_guts.h",
+      "sha256": "6cb852500622172409927f3c1f7e83166aa94a842953a50c5be5af793913fd6c",
+      "truncated": false,
+      "lines": 164,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "TestAudioHash.c",
+      "local": "05-TestAudioHash.c",
+      "url": "https://github.com/starkdg/libpHashAudio/blob/e95604aad537be51d30041a095fe9f76029b78f0/TestAudioHash.c",
+      "sha256": "f6eda14c7a02263948729c01883b3f624da5876311291d549ec81a12c409e153",
+      "truncated": false,
+      "lines": 71,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "GPL-3.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/starkdg/libpHashAudio/blob/e95604aad537be51d30041a095fe9f76029b78f0/README.md",
+      "sha256": "ea6ae1412e2f7de94cbd57d41b5c42b56cf18e95724f7d8f7e829824c4ca12be",
+      "truncated": false,
+      "lines": 35,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/starkdg/libpHashAudio/blob/e95604aad537be51d30041a095fe9f76029b78f0/LICENSE",
+      "sha256": "1f6a97050fc82e0bbe9a6de1b9e4f1ade738f282c5c6d5671a5139f837cc971d",
+      "truncated": false,
+      "lines": 675,
+      "source": false,
+      "test": false
+    }
+  ]
+}

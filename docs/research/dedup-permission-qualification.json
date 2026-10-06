@@ -1,0 +1,52 @@
+{
+  "scope": "Actual Unix mode-based read denial and recovery for exact-file and recursive indexed pixel discovery",
+  "platform": "macOS uid 501",
+  "permission_precondition": "Mode 000; independent read raises PermissionDenied",
+  "source_sha256": {
+    "crates/rrrah-dedup/tests/exact_files.rs": "a38b81e92074b706694f482984c76cc21a2405bce5c9564904157a44914db06a",
+    "crates/rrrah-dedup/tests/pixel_search.rs": "0860291106d7426ee6f58a6c3670a50d7f445fe11c1b7e55ff5c1b7efe416e66"
+  },
+  "exact": {
+    "healthy_duplicate_group_members": 2,
+    "issues": 1,
+    "recovered_group_members": 3
+  },
+  "pixels": {
+    "healthy_pairs": [
+      [
+        0,
+        1
+      ]
+    ],
+    "source_issues": 1,
+    "analysed": [
+      0,
+      1
+    ],
+    "recovered_pairs": [
+      [
+        0,
+        1
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        1,
+        2
+      ]
+    ],
+    "memory_reservations_released": true
+  },
+  "validation": {
+    "exact_suite_passed": 11,
+    "pixel_focused_passed": 1,
+    "clippy_exit_code": 0
+  },
+  "limitations": [
+    "Privileged test runners bypass mode bits and return without qualifying denial",
+    "Linux and Windows permission/ACL behaviors require execution",
+    "Permission changes during underlying decoder reads remain separately unqualified"
+  ]
+}

@@ -171,6 +171,30 @@ pub fn decode_mosaic_payload_v1_with_limits(
     payload_bytes: u64,
     limits: MosaicDecodeLimits,
 ) -> Result<DecodedMosaic, MosaicPayloadError> {
+    decode_mosaic_payload_impl(reader, payload_bytes, limits, None)
+}
+
+/// Reserves pixel capacity before allocating. Metadata and I/O scratch remain
+/// bounded by the existing codec limits, outside the supplied pixel budget.
+pub fn decode_mosaic_payload_v1_with_budget(
+    reader: &mut impl Read,
+    payload_bytes: u64,
+    budget: &rrrah_memory::MemoryBudget,
+) -> Result<DecodedMosaic, MosaicPayloadError> {
+    decode_mosaic_payload_impl(
+        reader,
+        payload_bytes,
+        MosaicDecodeLimits::PRODUCTION,
+        Some(budget),
+    )
+}
+
+fn decode_mosaic_payload_impl(
+    reader: &mut impl Read,
+    payload_bytes: u64,
+    limits: MosaicDecodeLimits,
+    budget: Option<&rrrah_memory::MemoryBudget>,
+) -> Result<DecodedMosaic, MosaicPayloadError> {
     if payload_bytes < MOSAIC_PAYLOAD_HEADER_V1_BYTES_U64 {
         return Err(MosaicPayloadError::Invalid(
             "payload is shorter than the fixed mosaic header",
@@ -218,8 +242,24 @@ pub fn decode_mosaic_payload_v1_with_limits(
         orientation: descriptor.orientation,
     };
     metadata.validate()?;
-    let pixels = read_pixels(reader, descriptor.sample_count)?;
-    DecodedMosaic::new(metadata, Arc::new(pixels)).map_err(MosaicPayloadError::InvalidFrame)
+    let pixels: rrrah_memory::PixelBuffer<u16> = if let Some(budget) = budget {
+        let count =
+            usize::try_from(descriptor.sample_count).map_err(|_| MosaicPayloadError::LengthOverflow)?;
+        let mut pixels = budget.try_buffer(count, 0_u16)?;
+        // u16 has no invalid bit patterns. The managed allocation is initialized
+        // and exclusive; cast_slice_mut provides a safe byte view without copies.
+        for samples in pixels.chunks_mut(PIXEL_BUFFER_BYTES / 2) {
+            reader.read_exact(bytemuck::cast_slice_mut(samples))?;
+            #[cfg(target_endian = "big")]
+            for sample in samples {
+                *sample = u16::from_le(*sample);
+            }
+        }
+        pixels.freeze().into()
+    } else {
+        Arc::new(read_pixels(reader, descriptor.sample_count)?).into()
+    };
+    DecodedMosaic::new(metadata, pixels).map_err(MosaicPayloadError::InvalidFrame)
 }
 
 fn validate_mosaic(mosaic: &DecodedMosaic) -> Result<(), MosaicPayloadError> {
@@ -774,6 +814,7 @@ fn encode_cfa_color(value: CfaColor) -> u8 {
         CfaColor::Yellow => 5,
         CfaColor::White => 6,
         CfaColor::Unknown => 255,
+        CfaColor::Emerald => 7,
     }
 }
 
@@ -786,6 +827,7 @@ fn decode_cfa_color(value: u8) -> Result<CfaColor, MosaicPayloadError> {
         4 => Ok(CfaColor::Magenta),
         5 => Ok(CfaColor::Yellow),
         6 => Ok(CfaColor::White),
+        7 => Ok(CfaColor::Emerald),
         255 => Ok(CfaColor::Unknown),
         _ => Err(MosaicPayloadError::Invalid("unknown CFA color code")),
     }
@@ -864,6 +906,8 @@ fn len_u32(value: usize) -> Result<u32, MosaicPayloadError> {
 
 #[derive(Debug, Error)]
 pub enum MosaicPayloadError {
+    #[error(transparent)]
+    Memory(#[from] rrrah_memory::BufferError),
     #[error("mosaic payload I/O failed: {0}")]
     Io(#[from] std::io::Error),
     #[error("invalid mosaic payload: {0}")]
@@ -1038,6 +1082,23 @@ mod tests {
         );
     }
 
+    #[test]
+    fn rgbe_binary_payload_preserves_fourth_plane_and_matrix() {
+        let mut expected = mosaic();
+        expected.metadata.cfa = Some(rrrah_core::CfaPattern {
+            width: 2,
+            height: 2,
+            cells: vec![CfaColor::Emerald, CfaColor::Red, CfaColor::Blue, CfaColor::Green],
+        });
+        expected.metadata.xyz_to_camera[3] = [-0.7242, 1.1401, 0.3481];
+        expected.metadata.white_balance = [1.55078125, 1., 2.84375, 0.9];
+        let mut encoded = Vec::new();
+        encode_mosaic_payload_v1(&mut encoded, &expected).unwrap();
+        let decoded = decode_mosaic_payload_v1(&mut encoded.as_slice(), encoded.len() as u64).unwrap();
+        assert_eq!(decoded.metadata, expected.metadata);
+        assert_eq!(decoded.pixels, expected.pixels);
+        assert_eq!(decoded.metadata.cfa.unwrap().rgbe_quad().unwrap(), [3, 0, 2, 1]);
+    }
     #[test]
     fn binary_payload_round_trip_is_canonical_and_streaming() {
         let expected = mosaic();
@@ -1228,11 +1289,12 @@ mod tests {
             CfaColor::Yellow,
             CfaColor::White,
             CfaColor::Unknown,
+            CfaColor::Emerald,
         ];
         for color in colors {
             assert_eq!(decode_cfa_color(encode_cfa_color(color)).unwrap(), color);
         }
-        for code in 7..u8::MAX {
+        for code in 8..u8::MAX {
             assert!(decode_cfa_color(code).is_err(), "CFA code {code}");
         }
 
@@ -1268,10 +1330,36 @@ mod tests {
 
         let mut invalid_cfa = encoded;
         let cfa_offset = MOSAIC_PAYLOAD_HEADER_V1_BYTES + mosaic().metadata.make.len();
-        invalid_cfa[cfa_offset] = 7;
+        invalid_cfa[cfa_offset] = 8;
         assert!(matches!(
             decode_mosaic_payload_v1(&mut invalid_cfa.as_slice(), plan.payload_bytes),
             Err(MosaicPayloadError::Invalid("unknown CFA color code"))
         ));
+    }
+    #[test]
+    fn budgeted_decode_reserves_pixels_and_releases_failed_reads() {
+        let mut encoded = Vec::new();
+        encode_mosaic_payload_v1(&mut encoded, &mosaic()).unwrap();
+        let budget = rrrah_memory::MemoryBudget::new(8);
+        let decoded =
+            decode_mosaic_payload_v1_with_budget(&mut encoded.as_slice(), encoded.len() as u64, &budget)
+                .unwrap();
+        assert!(decoded.pixels.is_managed());
+        assert_eq!(&*decoded.pixels, &*mosaic().pixels);
+        assert_eq!(budget.used(), 8);
+        assert!(matches!(
+            decode_mosaic_payload_v1_with_budget(&mut encoded.as_slice(), encoded.len() as u64, &budget),
+            Err(MosaicPayloadError::Memory(_))
+        ));
+        let consumer = decoded.clone();
+        drop(decoded);
+        assert_eq!(budget.used(), 8);
+        drop(consumer);
+        assert_eq!(budget.used(), 0);
+        let truncated = &encoded[..encoded.len() - 1];
+        assert!(
+            decode_mosaic_payload_v1_with_budget(&mut &truncated[..], encoded.len() as u64, &budget).is_err()
+        );
+        assert_eq!(budget.used(), 0);
     }
 }

@@ -1,0 +1,59 @@
+{
+  "status": "terminal passed",
+  "platform": "Linux ARM64 Docker",
+  "rust": "1.98.0",
+  "image": "rust:1-bookworm",
+  "uid": 65534,
+  "gid": 65534,
+  "source_mount": "read-only",
+  "build_storage": "ephemeral executable tmpfs, 2 GiB limit",
+  "command": "cargo test -p rrrah-dedup --no-default-features --all-targets",
+  "counts": {
+    "passed": 110,
+    "failed": 0,
+    "ignored": 0,
+    "filtered": 0
+  },
+  "log": "docs/research/dedup-linux-all-targets.log",
+  "log_sha256": "00bfd590fed4f2a142d11ddb07f88e4634b9dcd8c2b693c70d5819d9d79b601d",
+  "source_hashes": {
+    "crates/rrrah-dedup/src/cache.rs": "e439c6f3a89f01a3100bbf7254028458ac060526e02166ba5e682884bb8417d0",
+    "crates/rrrah-dedup/src/groups.rs": "c5c5e0c1ba00a7ee1864caa8c484ff497bb9fa1236589c6ff38a1b8d05b6af03",
+    "crates/rrrah-dedup/src/sequence.rs": "8b85890daa8a44c3921b0273f58574076180c7b35cfc740c302771c6885ddf73",
+    "crates/rrrah-dedup/src/linear.rs": "9ba055f4a73063eed2d757e47cbd6d0b1b53b9f1fed6c1cbd777d3106141e059",
+    "crates/rrrah-dedup/src/local.rs": "22a293472ee97403b1e89361c6d610ab3d1732559560f06326315872966e2cf3",
+    "crates/rrrah-dedup/src/local_index.rs": "b35290716a8ec36aea39756e616ae61242c4b81520380feff3f2680e23b43244",
+    "crates/rrrah-dedup/src/pixel_index.rs": "a54c13d2a23c047d6095520a2d6cbc3bad0ff704646c3f745ae4169cd2caeace",
+    "crates/rrrah-dedup/src/animated.rs": "d17b212a656933c0d989fc52c5df4b5d4df049f9343f0561c3ab3d6e2f8cf6e8",
+    "crates/rrrah-dedup/src/ordinal.rs": "e1c1d1b0e41b1c5adb26d1085a9d131d3888f03af20a33b60140ed86e35e45fe",
+    "crates/rrrah-dedup/src/lib.rs": "c86bb3792362f504faedf37e0960ceeef5a15f7ca7401eb738f715069881a639",
+    "crates/rrrah-dedup/src/pixels.rs": "3e92d2f598988430b86364d297cdad809c22ac77454bfccec88089980bc6d548",
+    "crates/rrrah-dedup/src/pyramid.rs": "fe1be3e4ee9e656149962a5f6c7cf4a8ea475a825be8528d89830234b737c786",
+    "crates/rrrah-dedup/src/presentation_kind.rs": "81dfc393bce7403647cd410df9114f6997d5929a7eab82f2c77f159f1c9e3671",
+    "crates/rrrah-dedup/src/decode.rs": "ff768129d2f0603c21eba765ee7535a37439c263723de82dbd419978e54956d2",
+    "crates/rrrah-dedup/src/raster.rs": "f1225873a1c642bbf9bc36c4c0a4e418f2afe5a176cdb775a2f18815461b9b20",
+    "crates/rrrah-dedup/src/local_scan.rs": "566033e2896be037805c043c7e6eb369ed1bbafc420da574f56cb0a58402d56a",
+    "crates/rrrah-dedup/src/geometry.rs": "f21029b01e4f761382d8049c39b41078022359272f44a2dba1ba1fc3b9be660a",
+    "crates/rrrah-dedup/src/warp.rs": "8167cdba5cbdbe3d53bdba14650b2ac968ba8771566ceefa0ae1f99508257aa6",
+    "crates/rrrah-dedup/src/scan.rs": "9e833b7c4ba6135de0dd9e27c818d8c9b1afbcc1425b87925f8f3069e5f7677a",
+    "crates/rrrah-dedup/src/visual.rs": "755c8718ed19c9388d9f6f8078b0823208b24d8dd46f5feca53029e3d0794715",
+    "crates/rrrah-dedup/src/local_collection.rs": "dffa00b90b7c016682052d89a509a9f45d398b5b4fd7053436a18527d6ace801",
+    "crates/rrrah-dedup/src/crop.rs": "98ac2f42ea6deb584f879bfa58f5e10c40ae6ff7548b6f618cae7706309130f3",
+    "crates/rrrah-dedup/src/container.rs": "4eb6fb8dbfce0fb266a966579b6e65d37ba80b827815188358851f2f21eca56b",
+    "crates/rrrah-dedup/src/exact.rs": "398df029bf7b98e2b066e6a9716521c13406b2241244def7bcc3d56431126341",
+    "crates/rrrah-dedup/src/pages.rs": "4bd77478771d1de1249d84d5c42bf0bd13aab20ee4dcbf175a342ff25c468f7b"
+  },
+  "hash_timing": "post-validation, not atomic pre-launch",
+  "environment_repairs": [
+    "damaged rust:1.97 image bypassed using installed rust:1 image",
+    "avoid stable update using installed 1.98.0 toolchain",
+    "Docker storage full: use disposable tmpfs, no unrelated cleanup",
+    "tmpfs explicitly executable for Cargo build scripts"
+  ],
+  "limitations": [
+    "decode gated tests do not execute; not Linux native decoder qualification",
+    "tests on tmpfs do not prove persistent filesystem crash durability",
+    "examples compile, their mains not executed",
+    "non-Unix identity and real capture requirements remain open"
+  ]
+}

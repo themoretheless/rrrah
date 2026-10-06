@@ -1,0 +1,568 @@
+{
+  "scope": "Explicit box-filtered visual candidates on four independent camera-preview scenes. Development fixtures, not statistical calibration or full RAW/raster equivalence. Strict and unfiltered fitted residuals remain exposed.",
+  "commands": [
+    "cargo run -p rrrah-dedup --features decode --example photo_probe -- --filtered",
+    "cargo test -p rrrah-dedup --all-features",
+    "cargo test -p rrrah-dedup --test filtered",
+    "cargo clippy -p rrrah-dedup --all-features --tests --examples --no-deps -- -D warnings"
+  ],
+  "source_sha256": {
+    "crates/rrrah-dedup/src/warp.rs": "963220fbf834e4752d9e141089c8d3ec2d2562cbae11a6c5b2d83297e343c02d",
+    "crates/rrrah-dedup/src/local_scan.rs": "35c762cf4a4410fa94f249c62c42409e48acbc5ee1cb0b1204efd8677856336b",
+    "crates/rrrah-dedup/tests/filtered.rs": "99f84365e0d702981a55cbd8ced072c839dda4e0a58e13a55b1be0fe83112618",
+    "crates/rrrah-dedup/tests/photometric.rs": "84eb3cc1bdf262d323d21c80bc615ed2e30d1850284564f9c677f71bf02df7a9",
+    "crates/rrrah-dedup/tests/photo_files.rs": "538ae536f597b1a4958a5ac7a28d49ce9a56c3d595c20542c2889a5adf45791e",
+    "crates/rrrah-dedup/examples/photo_probe.rs": "74ac7936f78e016c3db44523f6f759abc0e55db9fa5a48ca1140fd6c099133df",
+    "crates/rrrah-dedup/tests/fixtures/photos/manifest.json": "0842a3f329c469d2aa95521ae73f8e188de480dd47c149d5c281dd775321c9ad"
+  },
+  "policy": {
+    "filter_radius": 2,
+    "window": 5,
+    "max_sample_pairs": 20000000,
+    "minimum_samples": 1000,
+    "minimum_variance": 1e-05,
+    "minimum_gain": 0.2,
+    "maximum_gain": 5,
+    "maximum_offset": 0.1,
+    "residual_tolerance": 0.03,
+    "minimum_matched_fraction": 0.9,
+    "minimum_coverage_fraction": 0.3,
+    "max_grid_pixels": 200000
+  },
+  "baselines": {
+    "strict": 10,
+    "unfiltered_photometric": 14,
+    "filtered": 19,
+    "total_positives": 20
+  },
+  "distinct_scene_negative_count": 6,
+  "accepted_distinct_scene_negatives": 0,
+  "results": [
+    {
+      "scene": 830,
+      "variant": "resize",
+      "candidate": true,
+      "matches": 91,
+      "inliers": 91,
+      "directional_windows": [
+        {
+          "source_pixels": 68160,
+          "compared_windows": 65328,
+          "matched_windows": 65328,
+          "matched_fraction": 1.0,
+          "coverage_fraction": 0.9584507042253522
+        },
+        {
+          "source_pixels": 38400,
+          "compared_windows": 36561,
+          "matched_windows": 36561,
+          "matched_fraction": 1.0,
+          "coverage_fraction": 0.952109375
+        }
+      ],
+      "sample_pairs_upper_bound": 5328000,
+      "detail": "830 resize: candidate=true matches=91 inliers=91 pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 68160, compared_pixels: 67436, matched_pixels: 66817, maximum_channel_error: 0.07841525016144546, squared_error: 12.671383025519923 }, reverse: WarpEvidence { source_pixels: 38400, compared_pixels: 38145, matched_pixels: 38132, maximum_channel_error: 0.04243295719671111, squared_error: 2.168735039718302 } }) photometric=Some(BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.9141721208595237, 0.9188653084537518, 0.9107101332710542], offset: [0.023424403390028548, 0.013260954088120919, 0.008557553507721055], fitted_samples: 67436, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 67436, matched_pixels: 67071, maximum_channel_error: 0.07166834766127433, squared_error: 10.464850224991686 } }, reverse: PhotometricEvidence { gain: [0.960120298897574, 0.9596901122974568, 0.9555773479751365], offset: [0.010886770041423965, 0.0066068762125776614, 0.004284889395080219], fitted_samples: 38145, pixels: WarpEvidence { source_pixels: 38400, compared_pixels: 38145, matched_pixels: 38142, maximum_channel_error: 0.03662836437540021, squared_error: 1.8841101624694383 } } }) filtered=Some(FilteredPhotometricEvidence { filter: FilterPolicy { radius: 2, max_sample_pairs: 20000000 }, evidence: BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.9903879533910291, 0.9908285711542075, 0.9906830946721025], offset: [0.0026094258311396556, 0.0014814099566777261, 0.0008727870345665578], fitted_samples: 65328, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 65328, matched_pixels: 65328, maximum_channel_error: 0.010452222675235823, squared_error: 0.3276770766175989 } }, reverse: PhotometricEvidence { gain: [0.9957083380610309, 0.9952762314841666, 0.9951040357400315], offset: [0.0011616494603341465, 0.0007806791990201678, 0.0004862957880068103], fitted_samples: 36561, pixels: WarpEvidence { source_pixels: 38400, compared_pixels: 36561, matched_pixels: 36561, maximum_channel_error: 0.00722386350215895, squared_error: 0.1255829582582848 } } } })"
+    },
+    {
+      "scene": 830,
+      "variant": "crop",
+      "candidate": true,
+      "matches": 237,
+      "inliers": 237,
+      "directional_windows": [
+        {
+          "source_pixels": 68160,
+          "compared_windows": 37052,
+          "matched_windows": 37052,
+          "matched_fraction": 1.0,
+          "coverage_fraction": 0.5436032863849766
+        },
+        {
+          "source_pixels": 38640,
+          "compared_windows": 37052,
+          "matched_windows": 37052,
+          "matched_fraction": 1.0,
+          "coverage_fraction": 0.9589026915113872
+        }
+      ],
+      "sample_pairs_upper_bound": 5340000,
+      "detail": "830 crop: candidate=true matches=237 inliers=237 pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 68160, compared_pixels: 38640, matched_pixels: 38640, maximum_channel_error: 0.0, squared_error: 0.0 }, reverse: WarpEvidence { source_pixels: 38640, compared_pixels: 38640, matched_pixels: 38640, maximum_channel_error: 0.0, squared_error: 0.0 } }) photometric=Some(BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [1.0, 1.0, 1.0], offset: [0.0, 0.0, 0.0], fitted_samples: 38640, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 38640, matched_pixels: 38640, maximum_channel_error: 0.0, squared_error: 0.0 } }, reverse: PhotometricEvidence { gain: [1.0, 1.0, 1.0], offset: [0.0, 0.0, 0.0], fitted_samples: 38640, pixels: WarpEvidence { source_pixels: 38640, compared_pixels: 38640, matched_pixels: 38640, maximum_channel_error: 0.0, squared_error: 0.0 } } }) filtered=Some(FilteredPhotometricEvidence { filter: FilterPolicy { radius: 2, max_sample_pairs: 20000000 }, evidence: BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [1.0, 1.0, 1.0], offset: [0.0, 0.0, 0.0], fitted_samples: 37052, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 37052, matched_pixels: 37052, maximum_channel_error: 0.0, squared_error: 0.0 } }, reverse: PhotometricEvidence { gain: [1.0, 1.0, 1.0], offset: [0.0, 0.0, 0.0], fitted_samples: 37052, pixels: WarpEvidence { source_pixels: 38640, compared_pixels: 37052, matched_pixels: 37052, maximum_channel_error: 0.0, squared_error: 0.0 } } } })"
+    },
+    {
+      "scene": 830,
+      "variant": "rotate",
+      "candidate": true,
+      "matches": 129,
+      "inliers": 129,
+      "directional_windows": [
+        {
+          "source_pixels": 68160,
+          "compared_windows": 66044,
+          "matched_windows": 66044,
+          "matched_fraction": 1.0,
+          "coverage_fraction": 0.9689553990610329
+        },
+        {
+          "source_pixels": 110630,
+          "compared_windows": 64986,
+          "matched_windows": 64986,
+          "matched_fraction": 1.0,
+          "coverage_fraction": 0.5874175178523005
+        }
+      ],
+      "sample_pairs_upper_bound": 8939500,
+      "detail": "830 rotate: candidate=true matches=129 inliers=129 pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 68160, compared_pixels: 68160, matched_pixels: 67675, maximum_channel_error: 0.1482514543467674, squared_error: 7.7638137787792045 }, reverse: WarpEvidence { source_pixels: 110630, compared_pixels: 67615, matched_pixels: 67494, maximum_channel_error: 0.06067125830100967, squared_error: 5.832016950003004 } }) photometric=Some(BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.9608899377612204, 0.9606471119466207, 0.9549232002203464], offset: [0.008244962133358624, 0.004748747533923597, 0.0031469133293701573], fitted_samples: 68160, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 68160, matched_pixels: 67704, maximum_channel_error: 0.1438582641034708, squared_error: 6.568771344099034 } }, reverse: PhotometricEvidence { gain: [0.9416151601227439, 0.9444615878373605, 0.9389361251724003], offset: [0.017829102616830905, 0.010454549642519045, 0.006844184330659683], fitted_samples: 67615, pixels: WarpEvidence { source_pixels: 110630, compared_pixels: 67615, matched_pixels: 67561, maximum_channel_error: 0.05963369437176341, squared_error: 4.304008686346188 } } }) filtered=Some(FilteredPhotometricEvidence { filter: FilterPolicy { radius: 2, max_sample_pairs: 20000000 }, evidence: BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.9931593326393089, 0.9915290798828768, 0.9898539100325013], offset: [-0.00021018452266874377, -9.929353943502472e-5, -8.871633951021418e-5], fitted_samples: 66044, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 66044, matched_pixels: 66044, maximum_channel_error: 0.014977256565938568, squared_error: 0.14427861982895074 } }, reverse: PhotometricEvidence { gain: [0.9969370651460073, 0.9985242946666685, 0.9994279738756917], offset: [0.0028313752279697235, 0.0016831920852510285, 0.001093872545227359], fitted_samples: 64986, pixels: WarpEvidence { source_pixels: 110630, compared_pixels: 64986, matched_pixels: 64986, maximum_channel_error: 0.008878142208403772, squared_error: 0.15011221655888907 } } } })"
+    },
+    {
+      "scene": 830,
+      "variant": "brightness",
+      "candidate": true,
+      "matches": 404,
+      "inliers": 404,
+      "directional_windows": [
+        {
+          "source_pixels": 68160,
+          "compared_windows": 66044,
+          "matched_windows": 66044,
+          "matched_fraction": 1.0,
+          "coverage_fraction": 0.9689553990610329
+        },
+        {
+          "source_pixels": 68160,
+          "compared_windows": 64998,
+          "matched_windows": 64998,
+          "matched_fraction": 1.0,
+          "coverage_fraction": 0.9536091549295774
+        }
+      ],
+      "sample_pairs_upper_bound": 6816000,
+      "detail": "830 brightness: candidate=true matches=404 inliers=404 pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 68160, compared_pixels: 68160, matched_pixels: 141, maximum_channel_error: 0.22486268365964715, squared_error: 2256.4028314393704 }, reverse: WarpEvidence { source_pixels: 68160, compared_pixels: 67098, matched_pixels: 129, maximum_channel_error: 0.22466742532893552, squared_error: 2229.3450400082907 } }) photometric=Some(BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.4460591645269101, 0.4513423643043909, 0.4577241531580796], offset: [0.0039433276410940354, 0.002901804344636605, 0.002162852296115847], fitted_samples: 68160, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 68160, matched_pixels: 68160, maximum_channel_error: 0.0022322751497513282, squared_error: 0.07699978026972566 } }, reverse: PhotometricEvidence { gain: [2.2339970031006975, 2.208409199279714, 2.1768653092166095], offset: [-0.007852425537385022, -0.005874974798424609, -0.004361890428646334], fitted_samples: 67098, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 67098, matched_pixels: 67098, maximum_channel_error: 0.004718540213031534, squared_error: 0.3805289152941406 } } }) filtered=Some(FilteredPhotometricEvidence { filter: FilterPolicy { radius: 2, max_sample_pairs: 20000000 }, evidence: BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.4462785539816633, 0.4515590842220719, 0.45809793181838815], offset: [0.0038834638899255397, 0.0028658452919209793, 0.0021265007415047846], fitted_samples: 66044, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 66044, matched_pixels: 66044, maximum_channel_error: 0.0015100126949339522, squared_error: 0.003907936407740197 } }, reverse: PhotometricEvidence { gain: [2.2399780015662563, 2.213801076345397, 2.1821643026754125], offset: [-0.008603572563949446, -0.006288215065399949, -0.0046056524852514935], fitted_samples: 64998, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 64998, matched_pixels: 64998, maximum_channel_error: 0.003445174138698333, squared_error: 0.0192890727033021 } } } })"
+    },
+    {
+      "scene": 830,
+      "variant": "jpeg",
+      "candidate": true,
+      "matches": 89,
+      "inliers": 88,
+      "directional_windows": [
+        {
+          "source_pixels": 68160,
+          "compared_windows": 66044,
+          "matched_windows": 66044,
+          "matched_fraction": 1.0,
+          "coverage_fraction": 0.9689553990610329
+        },
+        {
+          "source_pixels": 68160,
+          "compared_windows": 64998,
+          "matched_windows": 64998,
+          "matched_fraction": 1.0,
+          "coverage_fraction": 0.9536091549295774
+        }
+      ],
+      "sample_pairs_upper_bound": 6816000,
+      "detail": "830 jpeg: candidate=true matches=89 inliers=88 pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 68160, compared_pixels: 68160, matched_pixels: 64247, maximum_channel_error: 0.1387784806902031, squared_error: 30.906856872966227 }, reverse: WarpEvidence { source_pixels: 68160, compared_pixels: 67098, matched_pixels: 63119, maximum_channel_error: 0.14170106414757866, squared_error: 30.385334764053848 } }) photometric=Some(BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.9976914016625349, 0.9223867144747095, 0.9490726603849408], offset: [0.003707871581676958, 0.010964855089942382, 0.00650762157721281], fitted_samples: 68160, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 68160, matched_pixels: 64648, maximum_channel_error: 0.13589339413635387, squared_error: 29.12854808171603 } }, reverse: PhotometricEvidence { gain: [0.8902017626387639, 0.9785319650269025, 0.9187411588979681], offset: [0.027277650953083876, 0.005226106738272007, 0.006335000536669744], fitted_samples: 67098, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 67098, matched_pixels: 64372, maximum_channel_error: 0.1144163428923688, squared_error: 26.899769060200494 } } }) filtered=Some(FilteredPhotometricEvidence { filter: FilterPolicy { radius: 2, max_sample_pairs: 20000000 }, evidence: BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [1.0404912445319263, 0.9676594380610252, 1.0298026754195087], offset: [-0.007991246459930157, 0.003568024156853783, -0.0012478015145570703], fitted_samples: 66044, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 66044, matched_pixels: 66044, maximum_channel_error: 0.025730336938263598, squared_error: 2.9738579456691765 } }, reverse: PhotometricEvidence { gain: [0.9434689941705509, 1.0235542335492829, 0.9430261558348986], offset: [0.012577615906387285, -0.0020838894395743823, 0.003971455709109367], fitted_samples: 64998, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 64998, matched_pixels: 64998, maximum_channel_error: 0.02342168441935666, squared_error: 2.7404838604065187 } } } })"
+    },
+    {
+      "scene": 898,
+      "variant": "resize",
+      "candidate": true,
+      "matches": 82,
+      "inliers": 82,
+      "directional_windows": [
+        {
+          "source_pixels": 68480,
+          "compared_windows": 65367,
+          "matched_windows": 65123,
+          "matched_fraction": 0.9962672296418682,
+          "coverage_fraction": 0.9545414719626168
+        },
+        {
+          "source_pixels": 38400,
+          "compared_windows": 36771,
+          "matched_windows": 36672,
+          "matched_fraction": 0.997307660928449,
+          "coverage_fraction": 0.957578125
+        }
+      ],
+      "sample_pairs_upper_bound": 5344000,
+      "detail": "898 resize: candidate=true matches=82 inliers=82 pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 68480, compared_pixels: 67475, matched_pixels: 63533, maximum_channel_error: 0.6885044970383564, squared_error: 118.46947128371117 }, reverse: WarpEvidence { source_pixels: 38400, compared_pixels: 38355, matched_pixels: 36897, maximum_channel_error: 0.2294792806105027, squared_error: 19.907219811553905 } }) photometric=Some(BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.8662158228985612, 0.8666181665828296, 0.8545323847748548], offset: [0.008418739057414332, 0.002967997437684791, 0.0032776499984795877], fitted_samples: 67475, pixels: WarpEvidence { source_pixels: 68480, compared_pixels: 67475, matched_pixels: 63726, maximum_channel_error: 0.5604581124075312, squared_error: 83.03157722591764 } }, reverse: PhotometricEvidence { gain: [0.9602782289181414, 0.9635844220429016, 0.9615875981665696], offset: [0.003192124037504046, 0.0013676533901036333, 0.001403372649242153], fitted_samples: 38355, pixels: WarpEvidence { source_pixels: 38400, compared_pixels: 38355, matched_pixels: 36951, maximum_channel_error: 0.23675036205433708, squared_error: 18.415982151628683 } } }) filtered=Some(FilteredPhotometricEvidence { filter: FilterPolicy { radius: 2, max_sample_pairs: 20000000 }, evidence: BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.9707385060208471, 0.967302081014094, 0.9621344591460984], offset: [0.001407410800682421, 0.00038982427583290555, 0.0005296833755258148], fitted_samples: 65367, pixels: WarpEvidence { source_pixels: 68480, compared_pixels: 65367, matched_pixels: 65123, maximum_channel_error: 0.060999074616896826, squared_error: 2.4881518536873957 } }, reverse: PhotometricEvidence { gain: [1.0189599478674067, 1.0228823383537218, 1.0266873157807443], offset: [-0.0006984195851839348, -0.00011341781779889912, -0.0002204149680684886], fitted_samples: 36771, pixels: WarpEvidence { source_pixels: 38400, compared_pixels: 36771, matched_pixels: 36672, maximum_channel_error: 0.06262369435321147, squared_error: 1.2061804785072945 } } } })"
+    },
+    {
+      "scene": 898,
+      "variant": "crop",
+      "candidate": true,
+      "matches": 428,
+      "inliers": 428,
+      "directional_windows": [
+        {
+          "source_pixels": 68480,
+          "compared_windows": 37288,
+          "matched_windows": 37288,
+          "matched_fraction": 1.0,
+          "coverage_fraction": 0.5445093457943925
+        },
+        {
+          "source_pixels": 38880,
+          "compared_windows": 37288,
+          "matched_windows": 37288,
+          "matched_fraction": 1.0,
+          "coverage_fraction": 0.9590534979423868
+        }
+      ],
+      "sample_pairs_upper_bound": 5368000,
+      "detail": "898 crop: candidate=true matches=428 inliers=428 pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 68480, compared_pixels: 38880, matched_pixels: 38880, maximum_channel_error: 0.0, squared_error: 0.0 }, reverse: WarpEvidence { source_pixels: 38880, compared_pixels: 38880, matched_pixels: 38880, maximum_channel_error: 0.0, squared_error: 0.0 } }) photometric=Some(BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [1.0, 1.0, 1.0], offset: [0.0, 0.0, 0.0], fitted_samples: 38880, pixels: WarpEvidence { source_pixels: 68480, compared_pixels: 38880, matched_pixels: 38880, maximum_channel_error: 0.0, squared_error: 0.0 } }, reverse: PhotometricEvidence { gain: [1.0, 1.0, 1.0], offset: [0.0, 0.0, 0.0], fitted_samples: 38880, pixels: WarpEvidence { source_pixels: 38880, compared_pixels: 38880, matched_pixels: 38880, maximum_channel_error: 0.0, squared_error: 0.0 } } }) filtered=Some(FilteredPhotometricEvidence { filter: FilterPolicy { radius: 2, max_sample_pairs: 20000000 }, evidence: BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [1.0, 1.0, 1.0], offset: [0.0, 0.0, 0.0], fitted_samples: 37288, pixels: WarpEvidence { source_pixels: 68480, compared_pixels: 37288, matched_pixels: 37288, maximum_channel_error: 0.0, squared_error: 0.0 } }, reverse: PhotometricEvidence { gain: [1.0, 1.0, 1.0], offset: [0.0, 0.0, 0.0], fitted_samples: 37288, pixels: WarpEvidence { source_pixels: 38880, compared_pixels: 37288, matched_pixels: 37288, maximum_channel_error: 0.0, squared_error: 0.0 } } } })"
+    },
+    {
+      "scene": 898,
+      "variant": "rotate",
+      "candidate": true,
+      "matches": 189,
+      "inliers": 189,
+      "directional_windows": [
+        {
+          "source_pixels": 68480,
+          "compared_windows": 66360,
+          "matched_windows": 66300,
+          "matched_fraction": 0.9990958408679927,
+          "coverage_fraction": 0.9690420560747663
+        },
+        {
+          "source_pixels": 111000,
+          "compared_windows": 65491,
+          "matched_windows": 65397,
+          "matched_fraction": 0.9985646882777787,
+          "coverage_fraction": 0.590009009009009
+        }
+      ],
+      "sample_pairs_upper_bound": 8974000,
+      "detail": "898 rotate: candidate=true matches=189 inliers=189 pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 68480, compared_pixels: 68480, matched_pixels: 65554, maximum_channel_error: 0.4250507315817338, squared_error: 51.370610647035676 }, reverse: WarpEvidence { source_pixels: 111000, compared_pixels: 68124, matched_pixels: 65041, maximum_channel_error: 0.415366829378109, squared_error: 60.05158704108698 } }) photometric=Some(BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.9347113603494922, 0.9361974720615804, 0.9305679725639834], offset: [0.003647136981049369, 0.0014115458768204601, 0.001522388348055858], fitted_samples: 68480, pixels: WarpEvidence { source_pixels: 68480, compared_pixels: 68480, matched_pixels: 65629, maximum_channel_error: 0.36340922891227534, squared_error: 43.097998172396196 } }, reverse: PhotometricEvidence { gain: [0.9225588399052134, 0.9237431598265426, 0.9175995754381092], offset: [0.0056927375881535985, 0.002120309734404094, 0.0022842826296226443], fitted_samples: 68124, pixels: WarpEvidence { source_pixels: 111000, compared_pixels: 68124, matched_pixels: 65160, maximum_channel_error: 0.3561019901047532, squared_error: 48.2058828281358 } } }) filtered=Some(FilteredPhotometricEvidence { filter: FilterPolicy { radius: 2, max_sample_pairs: 20000000 }, evidence: BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.9917422247058033, 0.9927352782884088, 0.9928694919160507], offset: [-1.998074964536245e-5, -2.4877993178365476e-7, -2.051974086547323e-5], fitted_samples: 66360, pixels: WarpEvidence { source_pixels: 68480, compared_pixels: 66360, matched_pixels: 66300, maximum_channel_error: 0.043897493948230726, squared_error: 1.4304498871902056 } }, reverse: PhotometricEvidence { gain: [0.998292835281062, 0.9975204829464083, 0.9951694530829835], offset: [0.0006586997382999338, 0.0002513357369728353, 0.0003237014931927705], fitted_samples: 65491, pixels: WarpEvidence { source_pixels: 111000, compared_pixels: 65491, matched_pixels: 65397, maximum_channel_error: 0.05213875740772772, squared_error: 1.756389295394204 } } } })"
+    },
+    {
+      "scene": 898,
+      "variant": "brightness",
+      "candidate": true,
+      "matches": 332,
+      "inliers": 332,
+      "directional_windows": [
+        {
+          "source_pixels": 68480,
+          "compared_windows": 65312,
+          "matched_windows": 65312,
+          "matched_fraction": 1.0,
+          "coverage_fraction": 0.9537383177570093
+        },
+        {
+          "source_pixels": 68480,
+          "compared_windows": 66360,
+          "matched_windows": 66360,
+          "matched_fraction": 1.0,
+          "coverage_fraction": 0.9690420560747663
+        }
+      ],
+      "sample_pairs_upper_bound": 6848000,
+      "detail": "898 brightness: candidate=true matches=332 inliers=332 pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 68480, compared_pixels: 67416, matched_pixels: 44193, maximum_channel_error: 0.5569379993811949, squared_error: 678.1647329745809 }, reverse: WarpEvidence { source_pixels: 68480, compared_pixels: 68480, matched_pixels: 44831, maximum_channel_error: 0.5547987520694733, squared_error: 677.5794939462468 } }) photometric=Some(BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.4488011123855525, 0.4493984596476816, 0.44933652064647583], offset: [0.0021130910424657715, 0.0009595718943350984, 0.001087605422317747], fitted_samples: 67416, pixels: WarpEvidence { source_pixels: 68480, compared_pixels: 67416, matched_pixels: 67416, maximum_channel_error: 0.008878655970015803, squared_error: 0.15922708138327643 } }, reverse: PhotometricEvidence { gain: [2.2242619591428237, 2.2218873780876476, 2.221923085462961], offset: [-0.004583729139786982, -0.0020886402703602473, -0.0023745227817005346], fitted_samples: 68480, pixels: WarpEvidence { source_pixels: 68480, compared_pixels: 68480, matched_pixels: 68480, maximum_channel_error: 0.017801049305092076, squared_error: 0.7628186302749016 } } }) filtered=Some(FilteredPhotometricEvidence { filter: FilterPolicy { radius: 2, max_sample_pairs: 20000000 }, evidence: BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.45103242992591275, 0.45173346144841026, 0.4516136792101125], offset: [0.00196166585728837, 0.0009035374771447849, 0.001029799315171654], fitted_samples: 65312, pixels: WarpEvidence { source_pixels: 68480, compared_pixels: 65312, matched_pixels: 65312, maximum_channel_error: 0.005098371872808538, squared_error: 0.09072276292171917 } }, reverse: PhotometricEvidence { gain: [2.2158401463357436, 2.2126334628039706, 2.2128836354491717], offset: [-0.00430900785514754, -0.001982309218533849, -0.0022620118177359254], fitted_samples: 66360, pixels: WarpEvidence { source_pixels: 68480, compared_pixels: 66360, matched_pixels: 66360, maximum_channel_error: 0.011563197204318088, squared_error: 0.4506012827575367 } } } })"
+    },
+    {
+      "scene": 898,
+      "variant": "jpeg",
+      "candidate": true,
+      "matches": 181,
+      "inliers": 179,
+      "directional_windows": [
+        {
+          "source_pixels": 68480,
+          "compared_windows": 66360,
+          "matched_windows": 65272,
+          "matched_fraction": 0.9836045810729355,
+          "coverage_fraction": 0.9690420560747663
+        },
+        {
+          "source_pixels": 68480,
+          "compared_windows": 66360,
+          "matched_windows": 65205,
+          "matched_fraction": 0.9825949367088608,
+          "coverage_fraction": 0.9690420560747663
+        }
+      ],
+      "sample_pairs_upper_bound": 6848000,
+      "detail": "898 jpeg: candidate=true matches=181 inliers=179 pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 68480, compared_pixels: 68480, matched_pixels: 64562, maximum_channel_error: 0.4176262319087982, squared_error: 58.87045798218026 }, reverse: WarpEvidence { source_pixels: 68480, compared_pixels: 68480, matched_pixels: 64562, maximum_channel_error: 0.4176262319087982, squared_error: 58.87045798218026 } }) photometric=Some(BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.9646192100011326, 0.9778374866846933, 0.9334619898401663], offset: [0.0018087772251368234, 0.000404969186497791, 0.0019566388833499038], fitted_samples: 68480, pixels: WarpEvidence { source_pixels: 68480, compared_pixels: 68480, matched_pixels: 64612, maximum_channel_error: 0.39772626171194525, squared_error: 55.29740743399695 } }, reverse: PhotometricEvidence { gain: [1.0032693520944844, 1.002669432563604, 1.0262160482643305], offset: [0.00033914222893725865, 9.036078408240084e-5, -0.0009403600605997764], fitted_samples: 68480, pixels: WarpEvidence { source_pixels: 68480, compared_pixels: 68480, matched_pixels: 64560, maximum_channel_error: 0.41621546756150274, squared_error: 58.51039611738382 } } }) filtered=Some(FilteredPhotometricEvidence { filter: FilterPolicy { radius: 2, max_sample_pairs: 20000000 }, evidence: BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.9891090331797604, 0.9846454053910874, 0.9586065572465139], offset: [0.00015338449028369505, 0.00023688863848717046, 0.0013387280022642278], fitted_samples: 66360, pixels: WarpEvidence { source_pixels: 68480, compared_pixels: 66360, matched_pixels: 65272, maximum_channel_error: 0.08870879744706966, squared_error: 5.381262052653318 } }, reverse: PhotometricEvidence { gain: [1.0055723595317025, 1.014503461942527, 1.0340057221460317], offset: [0.00020898298495349021, -0.0002124130980792685, -0.0011572292506912864], fitted_samples: 66360, pixels: WarpEvidence { source_pixels: 68480, compared_pixels: 66360, matched_pixels: 65205, maximum_channel_error: 0.09626570010302526, squared_error: 5.626982417673591 } } } })"
+    },
+    {
+      "scene": 1084,
+      "variant": "resize",
+      "candidate": true,
+      "matches": 142,
+      "inliers": 140,
+      "directional_windows": [
+        {
+          "source_pixels": 76800,
+          "compared_windows": 73476,
+          "matched_windows": 73386,
+          "matched_fraction": 0.9987751102400784,
+          "coverage_fraction": 0.95671875
+        },
+        {
+          "source_pixels": 43200,
+          "compared_windows": 41534,
+          "matched_windows": 41531,
+          "matched_fraction": 0.9999277700197429,
+          "coverage_fraction": 0.9614351851851852
+        }
+      ],
+      "sample_pairs_upper_bound": 6000000,
+      "detail": "1084 resize: candidate=true matches=142 inliers=140 pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 76800, compared_pixels: 75685, matched_pixels: 56883, maximum_channel_error: 0.4403289224032969, squared_error: 311.37765698961465 }, reverse: WarpEvidence { source_pixels: 43200, compared_pixels: 43198, matched_pixels: 37500, maximum_channel_error: 0.2591293441426933, squared_error: 52.30574883383877 } }) photometric=Some(BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.9471016420187109, 0.938752875480416, 0.9421716471108256], offset: [0.01566740451341664, 0.013711338568192899, 0.010869062988900863], fitted_samples: 75685, pixels: WarpEvidence { source_pixels: 76800, compared_pixels: 75685, matched_pixels: 55619, maximum_channel_error: 0.406333457251978, squared_error: 276.0144951647377 } }, reverse: PhotometricEvidence { gain: [0.9754678447327068, 0.9733355366554339, 0.9740161804545452], offset: [0.008413829152455532, 0.007101404604174688, 0.00617503195804503], fitted_samples: 43198, pixels: WarpEvidence { source_pixels: 43200, compared_pixels: 43198, matched_pixels: 37867, maximum_channel_error: 0.263673747276186, squared_error: 48.25831751310766 } } }) filtered=Some(FilteredPhotometricEvidence { filter: FilterPolicy { radius: 2, max_sample_pairs: 20000000 }, evidence: BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.9931468549253762, 0.9887684067057093, 0.9880522757209135], offset: [0.001309384463093144, 0.001827389008077801, 0.0015262383749352348], fitted_samples: 73476, pixels: WarpEvidence { source_pixels: 76800, compared_pixels: 73476, matched_pixels: 73386, maximum_channel_error: 0.057124724813293504, squared_error: 6.9107387364700354 } }, reverse: PhotometricEvidence { gain: [0.995722181802199, 0.997276511376065, 0.9982992137202675], offset: [0.0021321958930749507, 0.001465288120530872, 0.001296038755804696], fitted_samples: 41534, pixels: WarpEvidence { source_pixels: 43200, compared_pixels: 41534, matched_pixels: 41531, maximum_channel_error: 0.041231304645103606, squared_error: 1.8940555371270393 } } } })"
+    },
+    {
+      "scene": 1084,
+      "variant": "crop",
+      "candidate": true,
+      "matches": 323,
+      "inliers": 322,
+      "directional_windows": [
+        {
+          "source_pixels": 76800,
+          "compared_windows": 41536,
+          "matched_windows": 41536,
+          "matched_fraction": 1.0,
+          "coverage_fraction": 0.5408333333333334
+        },
+        {
+          "source_pixels": 43200,
+          "compared_windows": 41536,
+          "matched_windows": 41536,
+          "matched_fraction": 1.0,
+          "coverage_fraction": 0.9614814814814815
+        }
+      ],
+      "sample_pairs_upper_bound": 6000000,
+      "detail": "1084 crop: candidate=true matches=323 inliers=322 pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 76800, compared_pixels: 43200, matched_pixels: 43200, maximum_channel_error: 0.0, squared_error: 0.0 }, reverse: WarpEvidence { source_pixels: 43200, compared_pixels: 43200, matched_pixels: 43200, maximum_channel_error: 0.0, squared_error: 0.0 } }) photometric=Some(BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [1.0, 1.0, 1.0], offset: [0.0, 0.0, 0.0], fitted_samples: 43200, pixels: WarpEvidence { source_pixels: 76800, compared_pixels: 43200, matched_pixels: 43200, maximum_channel_error: 0.0, squared_error: 0.0 } }, reverse: PhotometricEvidence { gain: [1.0, 1.0, 1.0], offset: [0.0, 0.0, 0.0], fitted_samples: 43200, pixels: WarpEvidence { source_pixels: 43200, compared_pixels: 43200, matched_pixels: 43200, maximum_channel_error: 0.0, squared_error: 0.0 } } }) filtered=Some(FilteredPhotometricEvidence { filter: FilterPolicy { radius: 2, max_sample_pairs: 20000000 }, evidence: BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [1.0, 1.0, 1.0], offset: [0.0, 0.0, 0.0], fitted_samples: 41536, pixels: WarpEvidence { source_pixels: 76800, compared_pixels: 41536, matched_pixels: 41536, maximum_channel_error: 0.0, squared_error: 0.0 } }, reverse: PhotometricEvidence { gain: [1.0, 1.0, 1.0], offset: [0.0, 0.0, 0.0], fitted_samples: 41536, pixels: WarpEvidence { source_pixels: 43200, compared_pixels: 41536, matched_pixels: 41536, maximum_channel_error: 0.0, squared_error: 0.0 } } } })"
+    },
+    {
+      "scene": 1084,
+      "variant": "rotate",
+      "candidate": true,
+      "matches": 189,
+      "inliers": 185,
+      "directional_windows": [
+        {
+          "source_pixels": 76800,
+          "compared_windows": 74576,
+          "matched_windows": 72345,
+          "matched_fraction": 0.970084209397125,
+          "coverage_fraction": 0.9710416666666667
+        },
+        {
+          "source_pixels": 122472,
+          "compared_windows": 73711,
+          "matched_windows": 71155,
+          "matched_fraction": 0.9653240357612839,
+          "coverage_fraction": 0.6018600169834738
+        }
+      ],
+      "sample_pairs_upper_bound": 9963600,
+      "detail": "1084 rotate: candidate=true matches=189 inliers=185 pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 76800, compared_pixels: 76800, matched_pixels: 62211, maximum_channel_error: 0.46877148510348826, squared_error: 248.54713272891905 }, reverse: WarpEvidence { source_pixels: 122472, compared_pixels: 76480, matched_pixels: 62094, maximum_channel_error: 0.49028158008938916, squared_error: 239.70136825902082 } }) photometric=Some(BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.9641329997419129, 0.9651490806823232, 0.9690895497302715], offset: [0.008647754159104348, 0.006432396111333477, 0.005261975744784847], fitted_samples: 76800, pixels: WarpEvidence { source_pixels: 76800, compared_pixels: 76800, matched_pixels: 62157, maximum_channel_error: 0.44735288090668807, squared_error: 235.62265712456767 } }, reverse: PhotometricEvidence { gain: [0.9603946389327813, 0.9525549506279991, 0.9536581073983348], offset: [0.013709509926461527, 0.012478879209827931, 0.010092672589761598], fitted_samples: 76480, pixels: WarpEvidence { source_pixels: 122472, compared_pixels: 76480, matched_pixels: 62294, maximum_channel_error: 0.4553154099272162, squared_error: 217.54379678187686 } } }) filtered=Some(FilteredPhotometricEvidence { filter: FilterPolicy { radius: 2, max_sample_pairs: 20000000 }, evidence: BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.9906570289222147, 0.9934958862168741, 0.9946925267169664], offset: [0.0012964394273032864, 0.00018840724944671483, 0.0003544457914595456], fitted_samples: 74576, pixels: WarpEvidence { source_pixels: 76800, compared_pixels: 74576, matched_pixels: 72345, maximum_channel_error: 0.07676862597253559, squared_error: 17.33124145790264 } }, reverse: PhotometricEvidence { gain: [0.9980213161568074, 0.9927538985768672, 0.9917595458502992], offset: [0.001985042247766078, 0.002958033520137321, 0.00233395550021806], fitted_samples: 73711, pixels: WarpEvidence { source_pixels: 122472, compared_pixels: 73711, matched_pixels: 71155, maximum_channel_error: 0.06991185160122365, squared_error: 19.390425233705123 } } } })"
+    },
+    {
+      "scene": 1084,
+      "variant": "brightness",
+      "candidate": true,
+      "matches": 470,
+      "inliers": 470,
+      "directional_windows": [
+        {
+          "source_pixels": 76800,
+          "compared_windows": 73841,
+          "matched_windows": 73841,
+          "matched_fraction": 1.0,
+          "coverage_fraction": 0.9614713541666666
+        },
+        {
+          "source_pixels": 76800,
+          "compared_windows": 74196,
+          "matched_windows": 74196,
+          "matched_fraction": 1.0,
+          "coverage_fraction": 0.96609375
+        }
+      ],
+      "sample_pairs_upper_bound": 7680000,
+      "detail": "1084 brightness: candidate=true matches=470 inliers=470 pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 76800, compared_pixels: 76061, matched_pixels: 4698, maximum_channel_error: 0.5570645619487193, squared_error: 7637.429255611816 }, reverse: WarpEvidence { source_pixels: 76800, compared_pixels: 76420, matched_pixels: 4686, maximum_channel_error: 0.5547984528192135, squared_error: 7657.640193633775 } }) photometric=Some(BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.4459386833162435, 0.44561390227772485, 0.446032332596983], offset: [0.003234212266251091, 0.003285251924270663, 0.0025818154513597563], fitted_samples: 76061, pixels: WarpEvidence { source_pixels: 76800, compared_pixels: 76061, matched_pixels: 76061, maximum_channel_error: 0.00791680707539838, squared_error: 0.31296261569425365 } }, reverse: PhotometricEvidence { gain: [2.2389702182760898, 2.240451223088976, 2.2384460424860544], offset: [-0.006753679321278516, -0.006973817972557, -0.005457548329951184], fitted_samples: 76420, pixels: WarpEvidence { source_pixels: 76800, compared_pixels: 76420, matched_pixels: 76420, maximum_channel_error: 0.013457554662439142, squared_error: 1.495401735958339 } } }) filtered=Some(FilteredPhotometricEvidence { filter: FilterPolicy { radius: 2, max_sample_pairs: 20000000 }, evidence: BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.44623590715158806, 0.4461230398344775, 0.4467764613536805], offset: [0.003128561442225092, 0.003159901312124777, 0.002429763585011499], fitted_samples: 73841, pixels: WarpEvidence { source_pixels: 76800, compared_pixels: 73841, matched_pixels: 73841, maximum_channel_error: 0.0039325102418837354, squared_error: 0.11622318623700566 } }, reverse: PhotometricEvidence { gain: [2.240328939854531, 2.240839836708054, 2.237559369149161], offset: [-0.006921978763942738, -0.007007405737360833, -0.005372749124017834], fitted_samples: 74196, pixels: WarpEvidence { source_pixels: 76800, compared_pixels: 74196, matched_pixels: 74196, maximum_channel_error: 0.008356361702819837, squared_error: 0.5853621200025625 } } } })"
+    },
+    {
+      "scene": 1084,
+      "variant": "jpeg",
+      "candidate": false,
+      "matches": 222,
+      "inliers": 217,
+      "directional_windows": [
+        {
+          "source_pixels": 76800,
+          "compared_windows": 73476,
+          "matched_windows": 61075,
+          "matched_fraction": 0.8312238009690239,
+          "coverage_fraction": 0.95671875
+        },
+        {
+          "source_pixels": 76800,
+          "compared_windows": 74576,
+          "matched_windows": 62314,
+          "matched_fraction": 0.8355771293713795,
+          "coverage_fraction": 0.9710416666666667
+        }
+      ],
+      "sample_pairs_upper_bound": 7680000,
+      "detail": "1084 jpeg: candidate=false matches=222 inliers=217 pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 76800, compared_pixels: 75684, matched_pixels: 43741, maximum_channel_error: 0.6458954661153499, squared_error: 466.04777320136947 }, reverse: WarpEvidence { source_pixels: 76800, compared_pixels: 76800, matched_pixels: 44759, maximum_channel_error: 0.6310064470828056, squared_error: 462.2900018456944 } }) photometric=Some(BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.9832845317453409, 0.9813055632256786, 0.9483430784293158], offset: [0.00540362816899137, 0.0034799795848579895, 0.007563292245216041], fitted_samples: 75684, pixels: WarpEvidence { source_pixels: 76800, compared_pixels: 75684, matched_pixels: 43113, maximum_channel_error: 0.6375458434557452, squared_error: 451.41196179151956 } }, reverse: PhotometricEvidence { gain: [0.9502115795323034, 0.9842761362658222, 0.9993864999874823], offset: [0.015386966616697084, 0.004647541969737934, 0.003008256810449278], fitted_samples: 76800, pixels: WarpEvidence { source_pixels: 76800, compared_pixels: 76800, matched_pixels: 43978, maximum_channel_error: 0.624314898194958, squared_error: 452.8179703832227 } } }) filtered=Some(FilteredPhotometricEvidence { filter: FilterPolicy { radius: 2, max_sample_pairs: 20000000 }, evidence: BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [1.0060445116351606, 0.9965809978477597, 0.9827473458455092], offset: [-0.0016872753226874204, -0.00015507959839675123, 0.0005368903766056476], fitted_samples: 73476, pixels: WarpEvidence { source_pixels: 76800, compared_pixels: 73476, matched_pixels: 61075, maximum_channel_error: 0.22355736758109657, squared_error: 62.95122449791713 } }, reverse: PhotometricEvidence { gain: [0.9820283268752661, 0.9995570666490879, 1.0060545344079312], offset: [0.0054028109698062154, 0.001073476719681693, 0.001775063164820151], fitted_samples: 74576, pixels: WarpEvidence { source_pixels: 76800, compared_pixels: 74576, matched_pixels: 62314, maximum_channel_error: 0.2256945681181154, squared_error: 62.97277753456241 } } } })"
+    },
+    {
+      "scene": 1294,
+      "variant": "resize",
+      "candidate": true,
+      "matches": 67,
+      "inliers": 67,
+      "directional_windows": [
+        {
+          "source_pixels": 68160,
+          "compared_windows": 65371,
+          "matched_windows": 64261,
+          "matched_fraction": 0.9830199935751327,
+          "coverage_fraction": 0.9590815727699531
+        },
+        {
+          "source_pixels": 38400,
+          "compared_windows": 36528,
+          "matched_windows": 36351,
+          "matched_fraction": 0.9951544021024967,
+          "coverage_fraction": 0.95125
+        }
+      ],
+      "sample_pairs_upper_bound": 5328000,
+      "detail": "1294 resize: candidate=true matches=67 inliers=67 pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 68160, compared_pixels: 67479, matched_pixels: 40191, maximum_channel_error: 0.5824538407682229, squared_error: 634.5547212688363 }, reverse: WarpEvidence { source_pixels: 38400, compared_pixels: 38112, matched_pixels: 30589, maximum_channel_error: 0.30031262846575735, squared_error: 85.29911178315562 } }) photometric=Some(BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.9056308174675579, 0.9064799318171871, 0.9021900279575248], offset: [0.0179429316120977, 0.01711289887709941, 0.015012562543611024], fitted_samples: 67479, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 67479, matched_pixels: 41416, maximum_channel_error: 0.5117807708350333, squared_error: 524.7732697846313 } }, reverse: PhotometricEvidence { gain: [0.9803862914102447, 0.9796205426071934, 0.9824510351694375], offset: [0.006468933614107691, 0.006636009766055967, 0.005891170743232754], fitted_samples: 38112, pixels: WarpEvidence { source_pixels: 38400, compared_pixels: 38112, matched_pixels: 30908, maximum_channel_error: 0.30399835902181105, squared_error: 82.28117996566041 } } }) filtered=Some(FilteredPhotometricEvidence { filter: FilterPolicy { radius: 2, max_sample_pairs: 20000000 }, evidence: BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.9828962955918775, 0.9834528922746198, 0.9790086427893079], offset: [0.0012386070338773203, 0.0008983357100061096, 0.0009111570004174396], fitted_samples: 65371, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 65371, matched_pixels: 64261, maximum_channel_error: 0.08361167616191942, squared_error: 13.404513042757156 } }, reverse: PhotometricEvidence { gain: [1.0073454931427155, 1.006363132092497, 1.0102775830820587], offset: [0.0006619313979479291, 0.0010313710402552467, 0.0008227103346261089], fitted_samples: 36528, pixels: WarpEvidence { source_pixels: 38400, compared_pixels: 36528, matched_pixels: 36351, maximum_channel_error: 0.05728235484493149, squared_error: 4.509954662426822 } } } })"
+    },
+    {
+      "scene": 1294,
+      "variant": "crop",
+      "candidate": true,
+      "matches": 119,
+      "inliers": 118,
+      "directional_windows": [
+        {
+          "source_pixels": 68160,
+          "compared_windows": 37052,
+          "matched_windows": 37052,
+          "matched_fraction": 1.0,
+          "coverage_fraction": 0.5436032863849766
+        },
+        {
+          "source_pixels": 38640,
+          "compared_windows": 37052,
+          "matched_windows": 37052,
+          "matched_fraction": 1.0,
+          "coverage_fraction": 0.9589026915113872
+        }
+      ],
+      "sample_pairs_upper_bound": 5340000,
+      "detail": "1294 crop: candidate=true matches=119 inliers=118 pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 68160, compared_pixels: 38640, matched_pixels: 38640, maximum_channel_error: 0.0, squared_error: 0.0 }, reverse: WarpEvidence { source_pixels: 38640, compared_pixels: 38640, matched_pixels: 38640, maximum_channel_error: 0.0, squared_error: 0.0 } }) photometric=Some(BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [1.0, 1.0, 1.0], offset: [0.0, 0.0, 0.0], fitted_samples: 38640, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 38640, matched_pixels: 38640, maximum_channel_error: 0.0, squared_error: 0.0 } }, reverse: PhotometricEvidence { gain: [1.0, 1.0, 1.0], offset: [0.0, 0.0, 0.0], fitted_samples: 38640, pixels: WarpEvidence { source_pixels: 38640, compared_pixels: 38640, matched_pixels: 38640, maximum_channel_error: 0.0, squared_error: 0.0 } } }) filtered=Some(FilteredPhotometricEvidence { filter: FilterPolicy { radius: 2, max_sample_pairs: 20000000 }, evidence: BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [1.0, 1.0, 1.0], offset: [0.0, 0.0, 0.0], fitted_samples: 37052, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 37052, matched_pixels: 37052, maximum_channel_error: 0.0, squared_error: 0.0 } }, reverse: PhotometricEvidence { gain: [1.0, 1.0, 1.0], offset: [0.0, 0.0, 0.0], fitted_samples: 37052, pixels: WarpEvidence { source_pixels: 38640, compared_pixels: 37052, matched_pixels: 37052, maximum_channel_error: 0.0, squared_error: 0.0 } } } })"
+    },
+    {
+      "scene": 1294,
+      "variant": "rotate",
+      "candidate": true,
+      "matches": 143,
+      "inliers": 143,
+      "directional_windows": [
+        {
+          "source_pixels": 68160,
+          "compared_windows": 66044,
+          "matched_windows": 65998,
+          "matched_fraction": 0.9993034946399371,
+          "coverage_fraction": 0.9689553990610329
+        },
+        {
+          "source_pixels": 110630,
+          "compared_windows": 64958,
+          "matched_windows": 64901,
+          "matched_fraction": 0.9991225099294929,
+          "coverage_fraction": 0.5871644219470307
+        }
+      ],
+      "sample_pairs_upper_bound": 8939500,
+      "detail": "1294 rotate: candidate=true matches=143 inliers=143 pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 68160, compared_pixels: 68160, matched_pixels: 50734, maximum_channel_error: 0.5810678504505684, squared_error: 262.0179862141284 }, reverse: WarpEvidence { source_pixels: 110630, compared_pixels: 67585, matched_pixels: 52617, maximum_channel_error: 0.3734367225579921, squared_error: 185.3399457571955 } }) photometric=Some(BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.9476809448889175, 0.9484685067029143, 0.9460839965963547], offset: [0.009505289764131536, 0.009160228388434, 0.008149257397183612], fitted_samples: 68160, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 68160, matched_pixels: 51155, maximum_channel_error: 0.5386965855419167, squared_error: 227.9541819784124 } }, reverse: PhotometricEvidence { gain: [0.9553219441453145, 0.9550255924727742, 0.9560667154841656], offset: [0.01094938219077457, 0.010658744481180177, 0.009342547352285263], fitted_samples: 67585, pixels: WarpEvidence { source_pixels: 110630, compared_pixels: 67585, matched_pixels: 53158, maximum_channel_error: 0.3422911438029649, squared_error: 161.55410945230528 } } }) filtered=Some(FilteredPhotometricEvidence { filter: FilterPolicy { radius: 2, max_sample_pairs: 20000000 }, evidence: BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.9900801123234269, 0.9905464462223187, 0.9891784754485057], offset: [0.0007044612677909456, 0.0006528761456878196, 0.0005613664683670749], fitted_samples: 66044, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 66044, matched_pixels: 65998, maximum_channel_error: 0.05355526994950999, squared_error: 3.8440343831680566 } }, reverse: PhotometricEvidence { gain: [0.9998230872195494, 0.9993980678577573, 1.0003044603037836], offset: [0.0013732584092247813, 0.0013531036002254193, 0.0012549774814927528], fitted_samples: 64958, pixels: WarpEvidence { source_pixels: 110630, compared_pixels: 64958, matched_pixels: 64901, maximum_channel_error: 0.04184861765970105, squared_error: 5.074052551354442 } } } })"
+    },
+    {
+      "scene": 1294,
+      "variant": "brightness",
+      "candidate": true,
+      "matches": 364,
+      "inliers": 364,
+      "directional_windows": [
+        {
+          "source_pixels": 68160,
+          "compared_windows": 65606,
+          "matched_windows": 65606,
+          "matched_fraction": 1.0,
+          "coverage_fraction": 0.9625293427230047
+        },
+        {
+          "source_pixels": 68160,
+          "compared_windows": 65431,
+          "matched_windows": 65431,
+          "matched_fraction": 1.0,
+          "coverage_fraction": 0.9599618544600939
+        }
+      ],
+      "sample_pairs_upper_bound": 6816000,
+      "detail": "1294 brightness: candidate=true matches=364 inliers=364 pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 68160, compared_pixels: 67718, matched_pixels: 15187, maximum_channel_error: 0.5569267454407494, squared_error: 6159.99302620954 }, reverse: WarpEvidence { source_pixels: 68160, compared_pixels: 67539, matched_pixels: 14986, maximum_channel_error: 0.5547987520694733, squared_error: 6105.159842276386 } }) photometric=Some(BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.443898527049193, 0.444048403852599, 0.44400369549135693], offset: [0.0034685578151746055, 0.0033261069825333, 0.0029891132943068027], fitted_samples: 67718, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 67718, matched_pixels: 67718, maximum_channel_error: 0.0056946779665498215, squared_error: 0.2979354347052104 } }, reverse: PhotometricEvidence { gain: [2.2492585574099166, 2.2486065146090346, 2.248797342930584], offset: [-0.007464974468755103, -0.007158296114894908, -0.006442586362771507], fitted_samples: 67539, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 67539, matched_pixels: 67539, maximum_channel_error: 0.010169867928695897, squared_error: 1.389890148212128 } } }) filtered=Some(FilteredPhotometricEvidence { filter: FilterPolicy { radius: 2, max_sample_pairs: 20000000 }, evidence: BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.44428484601967205, 0.4444236347875489, 0.4446476168707738], offset: [0.003384169078391522, 0.0032460545626658427, 0.0028688018078883576], fitted_samples: 65606, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 65606, matched_pixels: 65606, maximum_channel_error: 0.0026931972328164133, squared_error: 0.10419380318814277 } }, reverse: PhotometricEvidence { gain: [2.250249417881736, 2.2495736107822295, 2.2484909917488887], offset: [-0.007561231739125707, -0.007248564712346833, -0.006411003472733351], fitted_samples: 65431, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 65431, matched_pixels: 65431, maximum_channel_error: 0.006298367769246305, squared_error: 0.5243866816236749 } } } })"
+    },
+    {
+      "scene": 1294,
+      "variant": "jpeg",
+      "candidate": true,
+      "matches": 202,
+      "inliers": 202,
+      "directional_windows": [
+        {
+          "source_pixels": 68160,
+          "compared_windows": 66044,
+          "matched_windows": 61536,
+          "matched_fraction": 0.9317424747138271,
+          "coverage_fraction": 0.9689553990610329
+        },
+        {
+          "source_pixels": 68160,
+          "compared_windows": 66044,
+          "matched_windows": 61233,
+          "matched_fraction": 0.927154624189934,
+          "coverage_fraction": 0.9689553990610329
+        }
+      ],
+      "sample_pairs_upper_bound": 6816000,
+      "detail": "1294 jpeg: candidate=true matches=202 inliers=202 pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 68160, compared_pixels: 68160, matched_pixels: 34749, maximum_channel_error: 0.6685326099395752, squared_error: 428.29016921985874 }, reverse: WarpEvidence { source_pixels: 68160, compared_pixels: 68160, matched_pixels: 34749, maximum_channel_error: 0.6685326099395752, squared_error: 428.29016921985874 } }) photometric=Some(BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.9745689076212667, 0.9758093648175583, 0.9281298221773493], offset: [0.005390509642392544, 0.0029708823563300013, 0.010954373699001374], fitted_samples: 68160, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 68160, matched_pixels: 34567, maximum_channel_error: 0.6496116690399261, squared_error: 400.1329073960797 } }, reverse: PhotometricEvidence { gain: [0.9906020408362419, 0.9964054708962321, 1.0320309488504835], offset: [0.002148918897050156, 0.0028870093430438393, -0.00353324652823081], fitted_samples: 68160, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 68160, matched_pixels: 34584, maximum_channel_error: 0.6690850488454488, squared_error: 423.174584803632 } } }) filtered=Some(FilteredPhotometricEvidence { filter: FilterPolicy { radius: 2, max_sample_pairs: 20000000 }, evidence: BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.9892320792868958, 0.9921848819574652, 0.9652238915345794], offset: [0.0021754709971069375, -0.0005015679565544828, 0.004122106232246153], fitted_samples: 66044, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 66044, matched_pixels: 61536, maximum_channel_error: 0.12331198846907476, squared_error: 23.794804605050896 } }, reverse: PhotometricEvidence { gain: [1.0080779339157975, 1.006685593964513, 1.0309835495187893], offset: [-0.001597922637558341, 0.0007514798582155813, -0.003367685067698495], fitted_samples: 66044, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 66044, matched_pixels: 61233, maximum_channel_error: 0.12985115806129077, squared_error: 24.904277446692316 } } } })"
+    }
+  ],
+  "negatives": [
+    "negative 830 898: candidate=false matches=0 inliers=0",
+    "negative 830 1084: candidate=false matches=0 inliers=0",
+    "negative 830 1294: candidate=false matches=0 inliers=0",
+    "negative 898 1084: candidate=false matches=0 inliers=0",
+    "negative 898 1294: candidate=false matches=0 inliers=0",
+    "negative 1084 1294: candidate=false matches=0 inliers=0"
+  ],
+  "full_feature_tests_passed": 113,
+  "additional_filtered_tests_passed": 3,
+  "remaining": [
+    "Scene 1084 JPEG quality60/subsampling2 remains rejected at radius2.",
+    "Broad independently labelled real edits, near-duplicate bursts, repeated patterns and uniform/alpha/HDR corpus remain unqualified.",
+    "Filtered photometric mode is an explicit file-pair API; batch/directory integration remains.",
+    "Other open acceptance-contract requirements remain."
+  ],
+  "primitive_qualification": [
+    "Authored linear gradients plus checker noise have analytically known box means and affine coefficients; strict noise remains exposed while averaged residuals pass.",
+    "Broad central color edit and alpha mask edits retain failing windows.",
+    "Opaque flat content is rejected by variance gating.",
+    "Exact sample-pair budget and larger target pixel quota are rejected before sampling; invalid radii and one-shot cancellation return no partial evidence."
+  ],
+  "file_qualification": [
+    "All sixteen resize/crop/rotation/brightness pairs and three natural-photo JPEG pairs pass at radius2. The color-swatch JPEG is measured as a miss, not asserted as a successful negative.",
+    "Late one-shot cancellation, final generation change and source mutation discard file-pair evidence and release memory reservations."
+  ]
+}

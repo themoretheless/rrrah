@@ -1,0 +1,115 @@
+{
+  "source": "tests/IMG_9074.CR3",
+  "camera": "Canon EOS R8",
+  "source_sha256": "9c0d47cc2dd550eb6dc26c4ba2b2874b67f5c89e79dff5c472abf0ac6b2f6178",
+  "adapter": "Metal Apple M4 Max",
+  "profile": "dev optimized + debuginfo",
+  "environment": {
+    "RRRAH_VIEW_CPU_MB": 256,
+    "RRRAH_VIEW_GPU_MB": 256,
+    "RRRAH_GPU_BACKEND": "metal"
+  },
+  "benchmark": "raw_view_timing with --swap-view versus default mode",
+  "samples_per_run": 15,
+  "warmups": 3,
+  "percentile": "nearest rank",
+  "runs": [
+    {
+      "mode": "swap",
+      "sensor_dimensions": [
+        6188,
+        4120
+      ],
+      "timings": {
+        "swap_restore_ms": {
+          "p50": 40.749,
+          "p95": 61.363
+        },
+        "upload_enqueue_ms": {
+          "p50": 17.136,
+          "p95": 34.291
+        },
+        "frame_complete_ms": {
+          "p50": 10.699,
+          "p95": 12.621
+        },
+        "total_ms": {
+          "p50": 67.596,
+          "p95": 94.556
+        },
+        "resident_pan_zoom_ms": {
+          "p50": 1.895,
+          "p95": 2.438
+        }
+      },
+      "budgets": {
+        "cpu": {
+          "final": 0,
+          "peak": 104075392,
+          "limit": 268435456
+        },
+        "gpu": {
+          "final": 0,
+          "peak": 146800640,
+          "limit": 268435456
+        }
+      },
+      "evidence": {
+        "docs/research/rrrah-current-cr3-swap-metal-2026-10-06.csv": "86a04824173f036e0b8d16acb891725b1894aa6b2a3dfb01bcfa3039f35bc616",
+        "docs/research/rrrah-current-cr3-swap-metal-2026-10-06.log": "657da58bf01fce4a308249c110a50d837d148255eced7ccfe3eee29365f89574"
+      }
+    },
+    {
+      "mode": "decode",
+      "sensor_dimensions": [
+        6188,
+        4120
+      ],
+      "timings": {
+        "decode_ms": {
+          "p50": 47.76,
+          "p95": 81.16
+        },
+        "upload_enqueue_ms": {
+          "p50": 15.601,
+          "p95": 17.948
+        },
+        "frame_complete_ms": {
+          "p50": 10.839,
+          "p95": 19.119
+        },
+        "total_ms": {
+          "p50": 74.335,
+          "p95": 110.735
+        },
+        "resident_pan_zoom_ms": {
+          "p50": 1.368,
+          "p95": 1.872
+        }
+      },
+      "budgets": {
+        "cpu": {
+          "final": 0,
+          "peak": 123346706,
+          "limit": 268435456
+        },
+        "gpu": {
+          "final": 0,
+          "peak": 146800640,
+          "limit": 268435456
+        }
+      },
+      "evidence": {
+        "docs/research/rrrah-current-cr3-decode-metal-2026-10-06.csv": "1f9a6a241cf2c2aaaeaea4eb88430e162142c487fd94bd6e17cb10ea149956ae",
+        "docs/research/rrrah-current-cr3-decode-metal-2026-10-06.log": "e22956f57710c29ae4c69beae0ec095fbeed0bb7fb9098aaec5a31d7d752490d"
+      }
+    }
+  ],
+  "limitations": [
+    "Warm OS cache, offscreen GPU completion, no startup or physical presentation.",
+    "Sequential separate runs, not paired randomized performance comparison.",
+    "Swap source native pixels and metadata checked each iteration; timing run does not independently validate rendered color.",
+    "CPU peak includes retained sensor oracle. GPU budget accounts renderer atlas, not all device memory.",
+    "No universal RAW, CUDA/NVIDIA, cold swap or live navigation claims."
+  ]
+}

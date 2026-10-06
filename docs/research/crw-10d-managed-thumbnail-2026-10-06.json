@@ -1,0 +1,17 @@
+{
+  "scope": "Native CRW 10D domain mosaic through existing managed RAW thumbnail API",
+  "passed": 1,
+  "edge": 128,
+  "contracts": [
+    "Output geometry follows calibrated crop",
+    "Opaque RGBA with non-gray samples",
+    "Exact preview-budget ownership; second allocation refused while output lives",
+    "Cancellation before preview admission retains no preview budget"
+  ],
+  "log": "/tmp/rrrah-crw-thumbnail.log",
+  "log_sha256": "a0bdd60a27cb978c712c6b68825d00e852f7f7248a11514e5f5ae99bf1aedc23",
+  "limitations": [
+    "No independent thumbnail color oracle or GPU/window proof.",
+    "Native entropy uses external table data; public CRW route remains pending."
+  ]
+}

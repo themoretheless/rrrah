@@ -1,0 +1,98 @@
+{
+  "index": 261,
+  "repository": "SebastianBecker2/VideoDedup",
+  "commit": "32c17793ea3a996501306355bc28d7c7cfbccba4",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "C# video dedup engine and duplicate manager with packaging tests; inspect frame comparison before use.",
+  "available_source_evidence": [
+    {
+      "path": "DedupEngine/DedupEngine.cs",
+      "local": "02-DedupEngine.cs",
+      "url": "https://github.com/SebastianBecker2/VideoDedup/blob/32c17793ea3a996501306355bc28d7c7cfbccba4/DedupEngine/DedupEngine.cs",
+      "sha256": "40a68cc0d25ac5bdf374a78becf8b9a6cb735f55c241b006b33ba21b6988fbab",
+      "truncated": false,
+      "lines": 827,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "DuplicateManager/DuplicateManager.cs",
+      "local": "03-DuplicateManager.cs",
+      "url": "https://github.com/SebastianBecker2/VideoDedup/blob/32c17793ea3a996501306355bc28d7c7cfbccba4/DuplicateManager/DuplicateManager.cs",
+      "sha256": "4fdb39ada98a1281289b3c5711206be5c7d433b953c58e0beeb7ad8ef6272a32",
+      "truncated": false,
+      "lines": 383,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "DuplicateManager/DuplicateWrapper.cs",
+      "local": "04-DuplicateWrapper.cs",
+      "url": "https://github.com/SebastianBecker2/VideoDedup/blob/32c17793ea3a996501306355bc28d7c7cfbccba4/DuplicateManager/DuplicateWrapper.cs",
+      "sha256": "31a57d2d94c182f89ccb5d7c5b49fe5a179e4dc15168e15d6d727a3eed1dbba0",
+      "truncated": false,
+      "lines": 48,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "SetupBootstrapperUI/TestUiScenario.cs",
+      "local": "05-TestUiScenario.cs",
+      "url": "https://github.com/SebastianBecker2/VideoDedup/blob/32c17793ea3a996501306355bc28d7c7cfbccba4/SetupBootstrapperUI/TestUiScenario.cs",
+      "sha256": "884c8db63a20e68b670adc24c64483bd9c2495e5864e19305fe804d2cd92eaae",
+      "truncated": false,
+      "lines": 9,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "cleanup-videodedup-arp.ps1",
+      "local": "06-cleanup-videodedup-arp.ps1",
+      "url": "https://github.com/SebastianBecker2/VideoDedup/blob/32c17793ea3a996501306355bc28d7c7cfbccba4/cleanup-videodedup-arp.ps1",
+      "sha256": "e2e9395fa45d7233af0a5c48c253ee04852412418ce06b5a980ae9d6e45f9c3c",
+      "truncated": false,
+      "lines": 129,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "packaging/ci/linux_build_and_test.py",
+      "local": "07-linux_build_and_test.py",
+      "url": "https://github.com/SebastianBecker2/VideoDedup/blob/32c17793ea3a996501306355bc28d7c7cfbccba4/packaging/ci/linux_build_and_test.py",
+      "sha256": "f27867095929c60ae4fa176ffd35260fc953da833b082e100d85fb9c9e007cea",
+      "truncated": false,
+      "lines": 155,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 22,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/SebastianBecker2/VideoDedup/blob/32c17793ea3a996501306355bc28d7c7cfbccba4/README.md",
+      "sha256": "dcd5be9e81ab23aa51a8c65c752225a3ed35752dbed6b6b7c2427994a7fb3bbf",
+      "truncated": false,
+      "lines": 49,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/SebastianBecker2/VideoDedup/blob/32c17793ea3a996501306355bc28d7c7cfbccba4/LICENSE",
+      "sha256": "6332dc0cf5b41b53e7daabfb659a7c54604000b43984fcc9860275dbf3a5cb56",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

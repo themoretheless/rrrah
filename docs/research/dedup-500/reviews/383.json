@@ -1,0 +1,78 @@
+{
+  "index": 383,
+  "repository": "vmchale/phash",
+  "commit": "cefa17a6ee70518c102bdcf0f31230f5d1b887f1",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "wrapper",
+  "finding": "Haskell foreign-hash endpoint plus median helper; nested native backend must be audited separately.",
+  "available_source_evidence": [
+    {
+      "path": "src/ForeignHash.hs",
+      "local": "03-ForeignHash.hs",
+      "url": "https://github.com/vmchale/phash/blob/cefa17a6ee70518c102bdcf0f31230f5d1b887f1/src/ForeignHash.hs",
+      "sha256": "2aa462e61ffc7576b32c41c7a34e0793af7498669811ca6f1e6e81cf1aaf8d68",
+      "truncated": false,
+      "lines": 26,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "include/hs_phash.h",
+      "local": "04-hs_phash.h",
+      "url": "https://github.com/vmchale/phash/blob/cefa17a6ee70518c102bdcf0f31230f5d1b887f1/include/hs_phash.h",
+      "sha256": "a5ba85f75e97a74b73fdadca2662cab9c4f5e202bef28e2432bae79036659060",
+      "truncated": false,
+      "lines": 1,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/Median.hs",
+      "local": "05-Median.hs",
+      "url": "https://github.com/vmchale/phash/blob/cefa17a6ee70518c102bdcf0f31230f5d1b887f1/src/Median.hs",
+      "sha256": "f92d4037a97f0e4a5719d2f2021c371b49c207327ebd2249b1a848e2b7995f0a",
+      "truncated": false,
+      "lines": 18,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "BSD-3-Clause",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/vmchale/phash/blob/cefa17a6ee70518c102bdcf0f31230f5d1b887f1/README.md",
+      "sha256": "0a2cb34f2c7fa5a2e049f4ef82ca5bdd62ef286644ad673374676890dbd75e0d",
+      "truncated": false,
+      "lines": 147,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/vmchale/phash/blob/cefa17a6ee70518c102bdcf0f31230f5d1b887f1/LICENSE",
+      "sha256": "0d5702422c2591e568903a6960091750ba22db26b7e462a0e499ca3e54acb99a",
+      "truncated": false,
+      "lines": 11,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "par-traverse/LICENSE",
+      "local": "02-LICENSE",
+      "url": "https://github.com/vmchale/phash/blob/cefa17a6ee70518c102bdcf0f31230f5d1b887f1/par-traverse/LICENSE",
+      "sha256": "a31396e87b51bcf029b9ebe96a2acacf41471de0725e3b040eedc7d675c5579f",
+      "truncated": false,
+      "lines": 11,
+      "source": false,
+      "test": false
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "index": 253,
+  "repository": "rushairer/go-pipeline",
+  "commit": "dee7994f4bd5fab96bf3ab514a3b9c83d472b30e",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Bounded concurrent pipeline batching and unique-key callbacks; reusable orchestration concepts, not image features.",
+  "available_source_evidence": [
+    {
+      "path": "pipeline_deduplication.go",
+      "local": "02-pipeline_deduplication.go",
+      "url": "https://github.com/rushairer/go-pipeline/blob/dee7994f4bd5fab96bf3ab514a3b9c83d472b30e/pipeline_deduplication.go",
+      "sha256": "322479d9f19f637d12cd72bc99e95dbdb11ad159c3bb4713c7922281fbcf86c7",
+      "truncated": false,
+      "lines": 125,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "config.go",
+      "local": "03-config.go",
+      "url": "https://github.com/rushairer/go-pipeline/blob/dee7994f4bd5fab96bf3ab514a3b9c83d472b30e/config.go",
+      "sha256": "2f008e6512fd502f3b1424cf919023d044caca82275398aa32441462735e9a98",
+      "truncated": false,
+      "lines": 101,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "doc.go",
+      "local": "04-doc.go",
+      "url": "https://github.com/rushairer/go-pipeline/blob/dee7994f4bd5fab96bf3ab514a3b9c83d472b30e/doc.go",
+      "sha256": "033f54a8892492071e3f39c700ad62488b3990c02cc7c110f25070a1970227e0",
+      "truncated": false,
+      "lines": 26,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "pipeline_deduplication_benchmark_test.go",
+      "local": "05-pipeline_deduplication_benchmark_test.go",
+      "url": "https://github.com/rushairer/go-pipeline/blob/dee7994f4bd5fab96bf3ab514a3b9c83d472b30e/pipeline_deduplication_benchmark_test.go",
+      "sha256": "128acab79ec4118d9dcfeeb13b133cca06f0fe7df22b6d2040f440c60bb73658",
+      "truncated": false,
+      "lines": 329,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "errors.go",
+      "local": "06-errors.go",
+      "url": "https://github.com/rushairer/go-pipeline/blob/dee7994f4bd5fab96bf3ab514a3b9c83d472b30e/errors.go",
+      "sha256": "997cde9661c7e15ee4cd1e37e26790fbedec125bd873f6b33f3ed83bc2e78c39",
+      "truncated": false,
+      "lines": 13,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 17,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/rushairer/go-pipeline/blob/dee7994f4bd5fab96bf3ab514a3b9c83d472b30e/README.md",
+      "sha256": "2d1a035dd90dd3859f0a2082440db86c127d44a70231bb549cece24ca9557be2",
+      "truncated": false,
+      "lines": 1774,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/rushairer/go-pipeline/blob/dee7994f4bd5fab96bf3ab514a3b9c83d472b30e/LICENSE",
+      "sha256": "ef78a49509a03a4f9a799dc565338c1c737ca1c98bd14ba3b56f8f3169793f0e",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

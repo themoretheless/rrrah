@@ -1,0 +1,84 @@
+{
+  "repository": "alexjp/env-dedup",
+  "metadata": {
+    "name": "alexjp/env-dedup",
+    "url": "https://github.com/alexjp/env-dedup",
+    "description": "Deduplicate the environment variables values",
+    "language": "C",
+    "stars": 9,
+    "license": "GPL-3.0",
+    "archived": false,
+    "pushed_at": "2025-09-06T13:40:42Z",
+    "default_branch": "main",
+    "queries": [
+      "dedup in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/alexjp/env-dedup/blob/9df9f75c47bef6957245b0bf6f32720a67dad3a0/README.md",
+      "sha256": "ffeed2e211865f34d1e2727ee622aa7776233a309a5e5568c064f771b26323c2",
+      "truncated": false,
+      "lines": 42,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/alexjp/env-dedup/blob/9df9f75c47bef6957245b0bf6f32720a67dad3a0/LICENSE",
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "truncated": false,
+      "lines": 674,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "env_dedup.c",
+      "local": "02-env_dedup.c",
+      "url": "https://github.com/alexjp/env-dedup/blob/9df9f75c47bef6957245b0bf6f32720a67dad3a0/env_dedup.c",
+      "sha256": "2d28b1c0c117bda07b12a1911c5a2e3412e8a6bd15c931b16486d64e2be3b435",
+      "truncated": false,
+      "lines": 122,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "env_dedup_dynamic.c",
+      "local": "03-env_dedup_dynamic.c",
+      "url": "https://github.com/alexjp/env-dedup/blob/9df9f75c47bef6957245b0bf6f32720a67dad3a0/env_dedup_dynamic.c",
+      "sha256": "44e255eb9621cc4eaeb691c031c9c9276d83e4227b44a49de286fe9fba67bdba",
+      "truncated": false,
+      "lines": 141,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "env_dedup_dynamic_optimised.c",
+      "local": "04-env_dedup_dynamic_optimised.c",
+      "url": "https://github.com/alexjp/env-dedup/blob/9df9f75c47bef6957245b0bf6f32720a67dad3a0/env_dedup_dynamic_optimised.c",
+      "sha256": "fd754de1e11c7d025bb58ab2be7ef05a44f43f55b280e0f697c08dabea95310d",
+      "truncated": false,
+      "lines": 151,
+      "source": true,
+      "test": false
+    }
+  ],
+  "errors": [],
+  "commit": "9df9f75c47bef6957245b0bf6f32720a67dad3a0",
+  "tree_truncated": false,
+  "source_file_count": 3,
+  "test_file_count": 0,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "env_dedup.c",
+    "env_dedup_dynamic.c",
+    "env_dedup_dynamic_optimised.c"
+  ]
+}

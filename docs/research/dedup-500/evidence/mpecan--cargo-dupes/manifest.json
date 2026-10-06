@@ -1,0 +1,95 @@
+{
+  "repository": "mpecan/cargo-dupes",
+  "metadata": {
+    "name": "mpecan/cargo-dupes",
+    "url": "https://github.com/mpecan/cargo-dupes",
+    "description": "A cargo subcommand that detects duplicate and near-duplicate code blocks in Rust codebases using AST normalization",
+    "language": "Rust",
+    "stars": 7,
+    "license": "MIT",
+    "archived": false,
+    "pushed_at": "2026-03-06T10:40:33Z",
+    "default_branch": "main",
+    "queries": [
+      "dupe in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/mpecan/cargo-dupes/blob/6f5a8c89364c3f70aea0bd2aabbb4c266151cf53/README.md",
+      "sha256": "ade63e12d914bda575bf8956b3ca0e27fae962d193414297bcd5465988943199",
+      "truncated": false,
+      "lines": 265,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/mpecan/cargo-dupes/blob/6f5a8c89364c3f70aea0bd2aabbb4c266151cf53/LICENSE",
+      "sha256": "71d9f0b1896c19d78764c14feb51a2445c830dcab8dca5fdb5c3aa7f283d7e9a",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "dupes-core/src/fingerprint.rs",
+      "local": "02-fingerprint.rs",
+      "url": "https://github.com/mpecan/cargo-dupes/blob/6f5a8c89364c3f70aea0bd2aabbb4c266151cf53/dupes-core/src/fingerprint.rs",
+      "sha256": "c9f920acc293f38b02220c4ce6f399b9e1ed601f27112d5e3a91f1e19402983b",
+      "truncated": false,
+      "lines": 120,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "dupes-core/src/scanner.rs",
+      "local": "03-scanner.rs",
+      "url": "https://github.com/mpecan/cargo-dupes/blob/6f5a8c89364c3f70aea0bd2aabbb4c266151cf53/dupes-core/src/scanner.rs",
+      "sha256": "1fa4c190cd20e0e14dfb0d0b45c064f015561ec6eb5e62a424048710d281e39a",
+      "truncated": false,
+      "lines": 168,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "dupes-core/src/similarity.rs",
+      "local": "04-similarity.rs",
+      "url": "https://github.com/mpecan/cargo-dupes/blob/6f5a8c89364c3f70aea0bd2aabbb4c266151cf53/dupes-core/src/similarity.rs",
+      "sha256": "ae1814c5589a67ca2ae91f87ee600e19bae2e35010fdcaba044c240a4504ffa2",
+      "truncated": false,
+      "lines": 204,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "code-dupes/tests/fixtures/python_dupes/class_dupes.py",
+      "local": "05-class_dupes.py",
+      "url": "https://github.com/mpecan/cargo-dupes/blob/6f5a8c89364c3f70aea0bd2aabbb4c266151cf53/code-dupes/tests/fixtures/python_dupes/class_dupes.py",
+      "sha256": "d1dc363a658b644cf798318aacd9a984a2c0e177fe8f7e856cd3388162e7a052",
+      "truncated": false,
+      "lines": 16,
+      "source": true,
+      "test": true
+    }
+  ],
+  "errors": [],
+  "commit": "6f5a8c89364c3f70aea0bd2aabbb4c266151cf53",
+  "tree_truncated": false,
+  "source_file_count": 60,
+  "test_file_count": 29,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "dupes-core/src/scanner.rs",
+    "dupes-core/src/fingerprint.rs",
+    "dupes-core/src/similarity.rs",
+    "code-dupes/tests/fixtures/python_dupes/class_dupes.py"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "feature": "LocalComparisonMode::DisplayProjection",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/local_scan.rs": "35428f35fc9abf10ad900e00e72027a1d8a73a8d79508f6e0505d6dfc7ac5c23",
+    "crates/rrrah-dedup/src/local_collection.rs": "b2f3def2574dddd2027323ffa8a89ec21ef4f5da27ab38c99ff9db21fa6744f4",
+    "crates/rrrah-dedup/tests/local_collection.rs": "bb4132738b159361b2a0d4e4edcbe9bfe6ddcdd61abc40c8964d04e23bef0332"
+  },
+  "validation": {
+    "local_collection": 9,
+    "local_scan": 11,
+    "photometric": 5,
+    "failed": 0,
+    "library_and_collection_clippy": "passed"
+  },
+  "evidence": [
+    "Display-range policy uses the existing file snapshot/decode/features/geometry pipeline and selected projected residuals for candidate admission.",
+    "Existing strict original pixels remain independently present; selected range and display_projection flag are explicit metadata, including no-geometry rejections.",
+    "Full pair enumeration and indexed collection accepted edges agree on authored crop/scale/rotation/unrelated file fixtures.",
+    "Invalid projection range rejects before consuming collection input.",
+    "Existing mutation, cancellation, spatial/ranged/default policy regression tests pass."
+  ],
+  "limits": [
+    "Authored collection fixtures do not independently qualify clipped HDR files or CR2 development.",
+    "Projection loses distinctions outside the range and establishes candidate agreement only.",
+    "No current held-out RAW/raster or real burst/look-alike calibration.",
+    "Projected primitive currently computes additional strict evidence internally, in addition to file pipeline strict verification; performance not measured."
+  ]
+}

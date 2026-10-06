@@ -1,0 +1,68 @@
+{
+  "index": 479,
+  "repository": "KevinGliewe/imghash",
+  "commit": "920106d6e4cb31bc2d075cd85823457823fc6181",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Rust image hash CLI with algorithm choices; no detected tests, likely backend wrapper needing qualified oracle.",
+  "available_source_evidence": [
+    {
+      "path": "src/main.rs",
+      "local": "02-main.rs",
+      "url": "https://github.com/KevinGliewe/imghash/blob/920106d6e4cb31bc2d075cd85823457823fc6181/src/main.rs",
+      "sha256": "faf93d5f3988145fef30faf87e0583de0d71501867288d28844d9a9b70ccfcf7",
+      "truncated": false,
+      "lines": 215,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "build.rs",
+      "local": "03-build.rs",
+      "url": "https://github.com/KevinGliewe/imghash/blob/920106d6e4cb31bc2d075cd85823457823fc6181/build.rs",
+      "sha256": "38b0c1a3b00a3966bd1cd27aba4aa3ee56cc212c8676c1e66c4edb3da9832f4a",
+      "truncated": false,
+      "lines": 3,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "scripts/update_version.py",
+      "local": "04-update_version.py",
+      "url": "https://github.com/KevinGliewe/imghash/blob/920106d6e4cb31bc2d075cd85823457823fc6181/scripts/update_version.py",
+      "sha256": "797ca5f44429dd521aaf1e45d6cba2e6b13ded92e71b0a5e4d10aca4eef40b60",
+      "truncated": false,
+      "lines": 25,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "readme.md",
+      "local": "00-readme.md",
+      "url": "https://github.com/KevinGliewe/imghash/blob/920106d6e4cb31bc2d075cd85823457823fc6181/readme.md",
+      "sha256": "d09f24085665f149a10ba5e08f54f4591eae6b2d62775592515d13d0dc67b42c",
+      "truncated": false,
+      "lines": 111,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "license.txt",
+      "local": "01-license.txt",
+      "url": "https://github.com/KevinGliewe/imghash/blob/920106d6e4cb31bc2d075cd85823457823fc6181/license.txt",
+      "sha256": "1a45857c7bb55b7948c5cdc13cf04314562db5aa2650348ff63dccc7da95bd69",
+      "truncated": false,
+      "lines": 25,
+      "source": false,
+      "test": false
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "index": 267,
+  "repository": "autobrr/upbrr",
+  "commit": "9566623c314b3b17caa9fa3668a6496f0574720d",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Private-tracker upload metadata duplicate/reuse checks; application-domain workflow.",
+  "available_source_evidence": [
+    {
+      "path": "internal/core/workflow_dupe_reuse.go",
+      "local": "02-workflow_dupe_reuse.go",
+      "url": "https://github.com/autobrr/upbrr/blob/9566623c314b3b17caa9fa3668a6496f0574720d/internal/core/workflow_dupe_reuse.go",
+      "sha256": "6ed6c0af921ed455b3981dadf902b165cee5a7d8c6a45c060df461fcce1c329a",
+      "truncated": false,
+      "lines": 102,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "internal/core/workflow_dupes.go",
+      "local": "03-workflow_dupes.go",
+      "url": "https://github.com/autobrr/upbrr/blob/9566623c314b3b17caa9fa3668a6496f0574720d/internal/core/workflow_dupes.go",
+      "sha256": "0372b5a83dcd29a9623afc5f9977c91ef160f3c959f34dd34d3427f6080f1c59",
+      "truncated": false,
+      "lines": 476,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "internal/config/effective_fingerprint.go",
+      "local": "04-effective_fingerprint.go",
+      "url": "https://github.com/autobrr/upbrr/blob/9566623c314b3b17caa9fa3668a6496f0574720d/internal/config/effective_fingerprint.go",
+      "sha256": "49eb8e51a7fe1253bb9a7d482cbf32dad212be1b3bc7308110c41c2efdf87a52",
+      "truncated": false,
+      "lines": 21,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "internal/core/workflow_dupe_recovery_test.go",
+      "local": "05-workflow_dupe_recovery_test.go",
+      "url": "https://github.com/autobrr/upbrr/blob/9566623c314b3b17caa9fa3668a6496f0574720d/internal/core/workflow_dupe_recovery_test.go",
+      "sha256": "cf416a4a3a35e938f21d4299aef307c3568b27d8ae04f3c2f6fe672e654ee6f6",
+      "truncated": false,
+      "lines": 215,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "scripts/live-testing/compare.ps1",
+      "local": "06-compare.ps1",
+      "url": "https://github.com/autobrr/upbrr/blob/9566623c314b3b17caa9fa3668a6496f0574720d/scripts/live-testing/compare.ps1",
+      "sha256": "7afc4c2c6bf2e30dee8becfa60014f882076c458da21133c682c25fc35bd8b86",
+      "truncated": false,
+      "lines": 84,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "GPL-2.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 682,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/autobrr/upbrr/blob/9566623c314b3b17caa9fa3668a6496f0574720d/README.md",
+      "sha256": "e9978ae95b88aa2c86ebda0ab8a6a225655929dee133aa708b13a2d3f33e34b0",
+      "truncated": false,
+      "lines": 42,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/autobrr/upbrr/blob/9566623c314b3b17caa9fa3668a6496f0574720d/LICENSE",
+      "sha256": "b90ed8150a6d371c84b7dbaa680cd0e9893ef7c2558765e1e00930513efcfe3b",
+      "truncated": false,
+      "lines": 339,
+      "source": false,
+      "test": false
+    }
+  ]
+}

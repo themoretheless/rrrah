@@ -1,0 +1,68 @@
+{
+  "index": 429,
+  "repository": "ZovcIfzm/DeepHashing",
+  "commit": "f7e07feb6b26a55ae2ca8dc4d131a6613a768410",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Learned image hashing evaluation scripts; dataset-level similarity, not byte or normalized-pixel identity.",
+  "available_source_evidence": [
+    {
+      "path": "EvaluateCIFAR.py",
+      "local": "02-EvaluateCIFAR.py",
+      "url": "https://github.com/ZovcIfzm/DeepHashing/blob/f7e07feb6b26a55ae2ca8dc4d131a6613a768410/EvaluateCIFAR.py",
+      "sha256": "a6449c8672f078da7f57609174439edbfce9619f57ea839c571ef1cfbb6534f9",
+      "truncated": false,
+      "lines": 51,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "EvaluateMNIST.py",
+      "local": "03-EvaluateMNIST.py",
+      "url": "https://github.com/ZovcIfzm/DeepHashing/blob/f7e07feb6b26a55ae2ca8dc4d131a6613a768410/EvaluateMNIST.py",
+      "sha256": "de8fd3e029d3401253d5ce9bb93657b2082d0afc9f59117735bfbcf9257d36ea",
+      "truncated": false,
+      "lines": 32,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "EvaluateMalaria.py",
+      "local": "04-EvaluateMalaria.py",
+      "url": "https://github.com/ZovcIfzm/DeepHashing/blob/f7e07feb6b26a55ae2ca8dc4d131a6613a768410/EvaluateMalaria.py",
+      "sha256": "67fc89bc949a8efe538140958fa368567a2d9dfd25784345bd7518390e1718f2",
+      "truncated": false,
+      "lines": 43,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/ZovcIfzm/DeepHashing/blob/f7e07feb6b26a55ae2ca8dc4d131a6613a768410/README.md",
+      "sha256": "bc8e8f0587c1fc1bd5cfeec81ae6a17938aa90f2113b051d9bd10c55b75a2141",
+      "truncated": false,
+      "lines": 9,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/ZovcIfzm/DeepHashing/blob/f7e07feb6b26a55ae2ca8dc4d131a6613a768410/LICENSE",
+      "sha256": "fed5de918d916a2019e9cc7c988ee105c4b9e432eef67c31f418effeb6457571",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

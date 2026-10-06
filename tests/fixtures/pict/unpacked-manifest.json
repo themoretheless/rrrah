@@ -1,0 +1,266 @@
+{
+  "license": "CC0-1.0",
+  "cases": [
+    {
+      "file": "short-rgb555.pict",
+      "license": "CC0-1.0",
+      "producer": "authored binary fixture",
+      "source_sha256": "1340359d94b2263a20ecfad56b05f42528c47a427f722f944235566d5a52a043",
+      "width": 1,
+      "height": 1,
+      "expected_rgba8": [
+        255,
+        0,
+        0,
+        255
+      ],
+      "oracle": "TwelveMonkeys 3.13.0",
+      "oracle_exit": 1,
+      "oracle_stdout": "",
+      "oracle_stderr": "Exception in thread \"main\" javax.imageio.IIOException: Error in PICT format: Unexpected end of File at position 626\n\tat com.twelvemonkeys.imageio.plugins.pict.PICTImageReader.readPICTopcodes(PICTImageReader.java:1553)\n\tat com.twelvemonkeys.imageio.plugins.pict.PICTImageReader.drawOnto(PICTImageReader.java:356)\n\tat com.twelvemonkeys.imageio.plugins.pict.PICTImageReader.read(PICTImageReader.java:2648)\n\tat java.desktop/javax.imageio.ImageIO.read(Unknown Source)\n\tat java.desktop/javax.imageio.ImageIO.read(Unknown Source)\n\tat PictOracle.main(PictOracle.java:6)\nCaused by: java.io.EOFException\n\tat java.desktop/javax.imageio.stream.ImageInputStreamImpl.readFully(Unknown Source)\n\tat com.twelvemonkeys.imageio.stream.BufferedChannelImageInputStream.readShort(BufferedChannelImageInputStream.java:292)\n\tat java.desktop/javax.imageio.stream.ImageInputStreamImpl.readUnsignedShort(Unknown Source)\n\tat com.twelvemonkeys.imageio.plugins.pict.PICTImageReader.readPICTopcodes(PICTImageReader.java:404)\n\t... 5 more\n",
+      "oracle_rgba8": null,
+      "oracle_matches": false,
+      "sips_exit": 0,
+      "sips_stdout": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/pict/short-rgb555.pict\n  /private/tmp/short-rgb555-sips.png\n",
+      "sips_stderr": "",
+      "sips_rgba8": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "sips_dimensions": [
+        1,
+        1
+      ],
+      "sips_matches": false
+    },
+    {
+      "file": "short-xrgb.pict",
+      "license": "CC0-1.0",
+      "producer": "authored binary fixture",
+      "source_sha256": "22dcf3ac4302115feb2378ef876039720b1d5ed216b05223286b7ca19d6874fa",
+      "width": 1,
+      "height": 1,
+      "expected_rgba8": [
+        255,
+        0,
+        0,
+        255
+      ],
+      "oracle": "TwelveMonkeys 3.13.0",
+      "oracle_exit": 1,
+      "oracle_stdout": "",
+      "oracle_stderr": "Exception in thread \"main\" javax.imageio.IIOException: Error in PICT format: Unexpected end of File at position 628\n\tat com.twelvemonkeys.imageio.plugins.pict.PICTImageReader.readPICTopcodes(PICTImageReader.java:1553)\n\tat com.twelvemonkeys.imageio.plugins.pict.PICTImageReader.drawOnto(PICTImageReader.java:356)\n\tat com.twelvemonkeys.imageio.plugins.pict.PICTImageReader.read(PICTImageReader.java:2648)\n\tat java.desktop/javax.imageio.ImageIO.read(Unknown Source)\n\tat java.desktop/javax.imageio.ImageIO.read(Unknown Source)\n\tat PictOracle.main(PictOracle.java:6)\nCaused by: java.io.EOFException\n\tat java.desktop/javax.imageio.stream.ImageInputStreamImpl.readFully(Unknown Source)\n\tat com.twelvemonkeys.imageio.stream.BufferedChannelImageInputStream.readShort(BufferedChannelImageInputStream.java:292)\n\tat java.desktop/javax.imageio.stream.ImageInputStreamImpl.readUnsignedShort(Unknown Source)\n\tat com.twelvemonkeys.imageio.plugins.pict.PICTImageReader.readPICTopcodes(PICTImageReader.java:404)\n\t... 5 more\n",
+      "oracle_rgba8": null,
+      "oracle_matches": false,
+      "sips_exit": 0,
+      "sips_stdout": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/pict/short-xrgb.pict\n  /private/tmp/short-xrgb-sips.png\n",
+      "sips_stderr": "",
+      "sips_rgba8": [
+        255,
+        0,
+        0,
+        255
+      ],
+      "sips_dimensions": [
+        1,
+        1
+      ],
+      "sips_matches": true
+    },
+    {
+      "file": "unpacked-rgb555.pict",
+      "license": "CC0-1.0",
+      "producer": "authored binary fixture",
+      "source_sha256": "e0b54c57713acc3577e8ca67d5111e1c97ca6ad379198a766f7ffc71c3469f54",
+      "width": 4,
+      "height": 1,
+      "expected_rgba8": [
+        255,
+        0,
+        0,
+        255,
+        0,
+        255,
+        0,
+        255,
+        0,
+        0,
+        255,
+        255,
+        198,
+        198,
+        198,
+        255
+      ],
+      "oracle": "TwelveMonkeys 3.13.0",
+      "oracle_exit": 1,
+      "oracle_stdout": "",
+      "oracle_stderr": "Exception in thread \"main\" javax.imageio.IIOException: java.lang.ArrayIndexOutOfBoundsException: Index 8 out of bounds for length 8\n\tat java.desktop/javax.imageio.ImageIO.read(Unknown Source)\n\tat java.desktop/javax.imageio.ImageIO.read(Unknown Source)\n\tat PictOracle.main(PictOracle.java:6)\nCaused by: java.lang.ArrayIndexOutOfBoundsException: Index 8 out of bounds for length 8\n\tat com.twelvemonkeys.imageio.plugins.pict.PICTImageReader.readOpDirectBits(PICTImageReader.java:2153)\n\tat com.twelvemonkeys.imageio.plugins.pict.PICTImageReader.readPICTopcodes(PICTImageReader.java:1439)\n\tat com.twelvemonkeys.imageio.plugins.pict.PICTImageReader.drawOnto(PICTImageReader.java:356)\n\tat com.twelvemonkeys.imageio.plugins.pict.PICTImageReader.read(PICTImageReader.java:2648)\n\t... 3 more\n",
+      "oracle_rgba8": null,
+      "oracle_matches": false,
+      "sips_exit": 0,
+      "sips_stdout": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/pict/unpacked-rgb555.pict\n  /private/tmp/unpacked-rgb555-sips.png\n",
+      "sips_stderr": "",
+      "sips_rgba8": [
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255
+      ],
+      "sips_dimensions": [
+        4,
+        1
+      ],
+      "sips_matches": false
+    },
+    {
+      "file": "unpacked-xrgb.pict",
+      "license": "CC0-1.0",
+      "producer": "authored binary fixture",
+      "source_sha256": "16ef5aff97cc98cf27e99f26af9bcfe6b27397a594f7cce8470c7973d87ca73f",
+      "width": 2,
+      "height": 1,
+      "expected_rgba8": [
+        255,
+        0,
+        0,
+        255,
+        17,
+        95,
+        203,
+        255
+      ],
+      "oracle": "TwelveMonkeys 3.13.0",
+      "oracle_exit": 0,
+      "oracle_stdout": "2x1\n",
+      "oracle_stderr": "",
+      "oracle_rgba8": [
+        91,
+        0,
+        91,
+        255,
+        255,
+        0,
+        17,
+        255
+      ],
+      "oracle_matches": false,
+      "sips_exit": 0,
+      "sips_stdout": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/pict/unpacked-xrgb.pict\n  /private/tmp/unpacked-xrgb-sips.png\n",
+      "sips_stderr": "",
+      "sips_rgba8": [
+        255,
+        0,
+        0,
+        255,
+        17,
+        95,
+        203,
+        255
+      ],
+      "sips_dimensions": [
+        2,
+        1
+      ],
+      "sips_matches": true
+    },
+    {
+      "file": "drop-pad-rgb.pict",
+      "license": "CC0-1.0",
+      "producer": "authored binary fixture",
+      "source_sha256": "d3b7cbc86c5a2305dffea85a1e11564716b4c39117445eb84e87048825bbda78",
+      "width": 2,
+      "height": 1,
+      "expected_rgba8": [
+        255,
+        0,
+        0,
+        255,
+        17,
+        95,
+        203,
+        255
+      ],
+      "sips_exit": 0,
+      "sips_rgba8": [
+        255,
+        0,
+        0,
+        255,
+        17,
+        95,
+        203,
+        255
+      ],
+      "sips_dimensions": [
+        2,
+        1
+      ],
+      "sips_matches": true
+    },
+    {
+      "file": "drop-pad-cropped-odd.pict",
+      "license": "CC0-1.0",
+      "producer": "authored binary fixture",
+      "source_sha256": "ee8c390356bfea7c397334cf837098b2bc171042d5e67a2dc2f3c52eee4bfd9e",
+      "width": 2,
+      "height": 2,
+      "expected_rgba8": [
+        255,
+        0,
+        0,
+        255,
+        0,
+        255,
+        0,
+        255,
+        0,
+        0,
+        255,
+        255,
+        17,
+        95,
+        203,
+        255
+      ],
+      "sips_exit": 0,
+      "sips_rgba8": [
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255
+      ],
+      "sips_dimensions": [
+        2,
+        2
+      ],
+      "sips_matches": false
+    }
+  ]
+}

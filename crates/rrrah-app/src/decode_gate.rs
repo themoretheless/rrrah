@@ -106,6 +106,10 @@ impl DecodeGate {
                     state.busy = true;
                     return Some(DecodePermit {
                         gate: Arc::clone(self),
+                        cancellation: Some(rrrah_decode::GenerationToken::new(
+                            Arc::clone(&self.speculative_generation),
+                            self.speculative_generation.load(Ordering::Acquire),
+                        )),
                     });
                 }
             }
@@ -132,6 +136,7 @@ impl DecodeGate {
                 state.busy = true;
                 return Some(DecodePermit {
                     gate: Arc::clone(self),
+                    cancellation: None,
                 });
             }
             state = self.wait_timeout(state, CANCELLATION_POLL);
@@ -198,6 +203,15 @@ impl Drop for ForegroundTicket {
 #[derive(Debug)]
 pub struct DecodePermit {
     gate: Arc<DecodeGate>,
+    cancellation: Option<rrrah_decode::GenerationToken>,
+}
+
+impl DecodePermit {
+    /// Snapshot made under the same gate lock as foreground admission; a new
+    /// foreground intent cannot slip between grant and cancellation registration.
+    pub fn cancellation_token(&self) -> Option<rrrah_decode::GenerationToken> {
+        self.cancellation.clone()
+    }
 }
 
 impl Drop for DecodePermit {
@@ -216,6 +230,51 @@ mod tests {
     use crossbeam_channel::bounded;
 
     use super::*;
+
+    #[test]
+    fn viewport_token_cancels_prefetch_waiter_while_foreground_permit_is_live() {
+        let gate = Arc::new(DecodeGate::new());
+        let ticket = gate.request_foreground();
+        let foreground = ticket.acquire_decode(|| false).unwrap();
+        let generation = Arc::new(AtomicU64::new(1));
+        let token = rrrah_decode::GenerationToken::new(Arc::clone(&generation), 1);
+        let (waiting_tx, waiting_rx) = bounded(1);
+        let (finished_tx, finished_rx) = bounded(1);
+        let worker_gate = Arc::clone(&gate);
+        let worker = thread::spawn(move || {
+            let mut first = true;
+            let permit = worker_gate.acquire_prefetch(|| {
+                let cancelled = token.is_cancelled();
+                if first {
+                    first = false;
+                    waiting_tx.send(cancelled).unwrap();
+                }
+                cancelled
+            });
+            finished_tx.send(permit.is_none()).unwrap();
+        });
+        assert!(!waiting_rx.recv_timeout(Duration::from_secs(5)).unwrap());
+        generation.fetch_add(1, Ordering::AcqRel);
+        assert!(finished_rx.recv_timeout(Duration::from_secs(5)).unwrap());
+        worker.join().unwrap();
+        // Cancellation must not release the unrelated foreground owner.
+        assert!(gate.lock_state().busy);
+        drop(foreground);
+        drop(ticket);
+    }
+
+    #[test]
+    fn granted_prefetch_token_is_invalidated_before_foreground_waits() {
+        let gate = Arc::new(DecodeGate::with_idle_debounce(Duration::ZERO));
+        let speculative = gate.acquire_prefetch(|| false).unwrap();
+        let token = speculative.cancellation_token().unwrap();
+        assert!(!token.is_cancelled());
+        let ticket = gate.request_foreground();
+        assert!(token.is_cancelled());
+        drop(speculative);
+        let foreground = ticket.acquire_decode(|| false).unwrap();
+        assert!(foreground.cancellation_token().is_none());
+    }
 
     #[test]
     fn production_prefetch_debounce_is_two_hundred_milliseconds() {
@@ -315,6 +374,38 @@ mod tests {
 
         drop(current);
         assert!(!gate.lock_state().foreground_pending);
+    }
+
+    #[test]
+    fn newer_foreground_releases_obsolete_waiter_before_active_decode_finishes() {
+        let gate = Arc::new(DecodeGate::with_idle_debounce(Duration::ZERO));
+        let active = gate.acquire_prefetch(|| false).unwrap();
+        let old = gate.request_foreground();
+        let (polled_tx, polled_rx) = bounded(1);
+        let (result_tx, result_rx) = bounded(1);
+        let waiter = thread::spawn(move || {
+            let result = old.acquire_decode(|| {
+                let _ = polled_tx.try_send(());
+                false
+            });
+            result_tx.send(result.is_some()).unwrap();
+        });
+        polled_rx.recv_timeout(Duration::from_secs(1)).unwrap();
+        let current = gate.request_foreground();
+        assert!(!result_rx.recv_timeout(Duration::from_secs(1)).unwrap());
+        waiter.join().unwrap();
+        {
+            let state = gate.lock_state();
+            assert!(state.busy);
+            assert!(state.foreground_pending);
+            assert_eq!(state.foreground_epoch, current.epoch);
+        }
+        drop(active);
+        let foreground = current.acquire_decode(|| false).unwrap();
+        drop(current);
+        assert!(gate.lock_state().busy);
+        drop(foreground);
+        assert!(gate.acquire_prefetch(|| false).is_some());
     }
 
     #[test]

@@ -1,0 +1,16 @@
+{
+  "command": "cargo test -p rrrah-gpu --test compute_readback linear_exposure_compute_preserves_hdr_alpha_and_dispatch_tail --locked --target-dir /tmp/rrrah-required-corpus-target",
+  "log": "/tmp/rrrah-compute-competing-owner.log",
+  "passed": 1,
+  "scope": [
+    "GPU refusal preserves a competing owner reservation",
+    "CPU credit rolls back on GPU refusal",
+    "same budgets succeed after competing owner releases",
+    "managed output clones retain CPU credit until last drop"
+  ],
+  "test_sha256": "fc47c900875ad0a3c2f4e3f2d0976d0967d823dbd39f0ffb8fb8b2422755308e",
+  "limitations": [
+    "Offscreen compute only; no physical HDR presentation",
+    "No CUDA or NVIDIA hardware tested"
+  ]
+}

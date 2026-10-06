@@ -1,0 +1,54 @@
+[
+  {
+    "source": "https://raw.githubusercontent.com/haraldk/TwelveMonkeys/master/imageio/imageio-pict/src/test/resources/pict/6.pict",
+    "name": "6.pict",
+    "sha256": "33862ae9635066caa369871166ad12a7182a88cd18d12704233c6f398525ef40",
+    "header_hex": "007c00000000012c014f001102ff0c00ffffffff0000000000000000014f0000012c000000000000001e001adddd333344440001000a0000000001b802800003",
+    "native_exit": 1,
+    "native_stdout": "",
+    "native_stderr": "Error: invalid or unsupported PICT: Unsupported(30)\n",
+    "oracle_exit": 0,
+    "oracle_stdout": "335x300\n",
+    "oracle_stderr": "",
+    "oracle_sha256": "27d5250da2e16f72e51491e02daaa4f1fbab2e09790b4c084ab60becb2ebcc3b"
+  },
+  {
+    "source": "https://raw.githubusercontent.com/haraldk/TwelveMonkeys/master/imageio/imageio-pict/src/test/resources/pict/8.pict",
+    "name": "8.pict",
+    "sha256": "7bffad4cc677ae552f9df14e364cb4f7549aecc07670f0f226b89afdd9b57ae6",
+    "header_hex": "01bc00000000012c012c001102ff0c00ffffffff0000000000000000012c0000012c000000000000001e0001000a00000000012c012c001a0000000000000030",
+    "native_exit": 1,
+    "native_stdout": "",
+    "native_stderr": "Error: invalid or unsupported PICT: Unsupported(30)\n",
+    "oracle_exit": 1,
+    "oracle_stdout": "",
+    "oracle_stderr": "Exception in thread \"main\" javax.imageio.IIOException: Found unknown opcode: 0x9876\n\tat com.twelvemonkeys.imageio.plugins.pict.PICTImageReader.readPICTopcodes(PICTImageReader.java:1522)\n\tat com.twelvemonkeys.imageio.plugins.pict.PICTImageReader.drawOnto(PICTImageReader.java:356)\n\tat com.twelvemonkeys.imageio.plugins.pict.PICTImageReader.read(PICTImageReader.java:2648)\n\tat java.desktop/javax.imageio.ImageIO.read(Unknown Source)\n\tat java.desktop/javax.imageio.ImageIO.read(Unknown Source)\n\tat PictOracle.main(PictOracle.java:6)\n",
+    "oracle_sha256": null
+  },
+  {
+    "source": "https://raw.githubusercontent.com/haraldk/TwelveMonkeys/master/imageio/imageio-pict/src/test/resources/pict/mire16.pict",
+    "name": "mire16.pict",
+    "sha256": "594731aa7c525849f03e297323b52fe9e80e9ec94f3db162a2e6c26bad6cd9c1",
+    "header_hex": "02240000000000400040001102ff0c00fffe00000048000000480000000000000040004000007fff001e0001000a0000000000400040009a000000ff80800000",
+    "native_exit": 1,
+    "native_stdout": "",
+    "native_stderr": "Error: invalid or unsupported PICT: unsupported picture resolution or bounding-box mapping\n",
+    "oracle_exit": 0,
+    "oracle_stdout": "64x64\n",
+    "oracle_stderr": "",
+    "oracle_sha256": "66610304cd082232b13aa741598001ec8dd654a25c6048622945910fed014774"
+  },
+  {
+    "source": "https://raw.githubusercontent.com/haraldk/TwelveMonkeys/master/imageio/imageio-pict/src/test/resources/pict/mire32.pict",
+    "name": "mire32.pict",
+    "sha256": "81dab4233f21733c67901d1956fd92cc2ef1f9c8ad7b4c5dc4ab22bf057bb1e0",
+    "header_hex": "03520000000000400040001102ff0c00fffe00000048000000480000000000000040004000007fff001e0001000a0000000000400040009a000000ff81000000",
+    "native_exit": 1,
+    "native_stdout": "",
+    "native_stderr": "Error: invalid or unsupported PICT: unsupported picture resolution or bounding-box mapping\n",
+    "oracle_exit": 0,
+    "oracle_stdout": "64x64\n",
+    "oracle_stderr": "",
+    "oracle_sha256": "46bd52c2155f80f76b0d47d76d41b76b9335411c3194b6eb4f3322f479748d75"
+  }
+]

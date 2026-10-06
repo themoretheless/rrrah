@@ -1,0 +1,88 @@
+{
+  "index": 113,
+  "repository": "deric/es-dedupe",
+  "commit": "7abed1353a32cf72b763067b33e46fc62b85ddc2",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Elasticsearch selected-field digest keys; document field equality not image comparison.",
+  "available_source_evidence": [
+    {
+      "path": "esdedupe/esdedupe.py",
+      "local": "02-esdedupe.py",
+      "url": "https://github.com/deric/es-dedupe/blob/7abed1353a32cf72b763067b33e46fc62b85ddc2/esdedupe/esdedupe.py",
+      "sha256": "3743eedcfe2f7cde6ef59b3ab53ef7365b691449cd5ee4c62e752600cc340179",
+      "truncated": false,
+      "lines": 392,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "esdedupe/__init__.py",
+      "local": "03-__init__.py",
+      "url": "https://github.com/deric/es-dedupe/blob/7abed1353a32cf72b763067b33e46fc62b85ddc2/esdedupe/__init__.py",
+      "sha256": "29947f5e18bfe69223393e452797b7bed52662d3fc22f42502a099e9e11d261d",
+      "truncated": false,
+      "lines": 11,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "esdedupe/__main__.py",
+      "local": "04-__main__.py",
+      "url": "https://github.com/deric/es-dedupe/blob/7abed1353a32cf72b763067b33e46fc62b85ddc2/esdedupe/__main__.py",
+      "sha256": "d69ddb02d8f8b586b86dd5a341393872091a266cbc7ddac315685dd3e80bc912",
+      "truncated": false,
+      "lines": 7,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/test_esdedupe_noop.py",
+      "local": "05-test_esdedupe_noop.py",
+      "url": "https://github.com/deric/es-dedupe/blob/7abed1353a32cf72b763067b33e46fc62b85ddc2/tests/test_esdedupe_noop.py",
+      "sha256": "d53de036611b434cd6b404a37c872e02656716b26fa42c5a5005d33baeddc1e6",
+      "truncated": false,
+      "lines": 67,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "esdedupe/cli.py",
+      "local": "06-cli.py",
+      "url": "https://github.com/deric/es-dedupe/blob/7abed1353a32cf72b763067b33e46fc62b85ddc2/esdedupe/cli.py",
+      "sha256": "96a51dd478be96ad58354423259ae255254101a8020797e8fcd943b6a00e25a6",
+      "truncated": false,
+      "lines": 278,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "Apache-2.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 4,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/deric/es-dedupe/blob/7abed1353a32cf72b763067b33e46fc62b85ddc2/README.md",
+      "sha256": "adeedeab32863f1d1af27b3d3c0cef0d2887edc56f4c627d94510d98310aa339",
+      "truncated": false,
+      "lines": 124,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/deric/es-dedupe/blob/7abed1353a32cf72b763067b33e46fc62b85ddc2/LICENSE",
+      "sha256": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1",
+      "truncated": false,
+      "lines": 201,
+      "source": false,
+      "test": false
+    }
+  ]
+}

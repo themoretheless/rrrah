@@ -1,0 +1,22 @@
+{
+  "status": "both_corruptions_rejected",
+  "cases": [
+    {
+      "kind": "false_lane_flag",
+      "exit": 1,
+      "errors": [
+        "portfolio admission/selection mismatch ('v_bees', 4)",
+        "portfolio lane flag disagrees with fixed admission ('v_bees', 4)/anchored"
+      ]
+    },
+    {
+      "kind": "selected_lane_substitution",
+      "exit": 1,
+      "errors": [
+        "portfolio admission/selection mismatch ('v_bees', 4)",
+        "primary evidence differs from selected portfolio lane ('v_bees', 4)"
+      ]
+    }
+  ],
+  "scope": "Two explicit falsified portfolio reports; not exhaustive malformed-input qualification"
+}

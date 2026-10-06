@@ -1,0 +1,28 @@
+
+running 21 tests
+test pict::packed_row_tests::byte_and_word_runs_preserve_units_and_exact_row_size ... ok
+test pict::command_tests::cancellation_and_visitor_failure_stop_before_next_command ... ok
+test pict::packed_row_tests::malformed_runs_cannot_overwrite_canaries_and_cancel_before_mutation ... ok
+test pict::command_tests::borrowed_colors_rectangles_and_end_are_exact_and_bounded ... ok
+test pict::tests::inverted_empty_and_full_signed_range_admission ... ok
+test pict::tests::record_and_arbitrary_file_header_preserve_signed_origin_and_size ... ok
+test pict::render_tests::cancellation_during_allocated_fill_releases_output_and_allows_retry ... ok
+test pict::render_tests::authored_file_fixture_renders_full_rgba_and_releases_budget ... ok
+test pict::render_tests::rectangular_clip_changes_apply_to_later_paints ... ok
+test pict::render_tests::exact_fill_budget_ownership_and_unsupported_preflight ... ok
+test pict::render_tests::extended_72dpi_matches_v2_and_other_resolution_refuses_before_allocation ... ok
+test pict::render_tests::direct_bits_crop_excludes_padded_columns_and_preserves_row_pitch ... ok
+test pict::packed_row_tests::external_packed_rows_match_independent_rgba_oracles ... ok
+test pict::version_tests::version_headers_are_bounded_and_word_prefix_is_exact ... ok
+test pict::render_tests::default_highlight_reset_preserves_paint_but_highlight_mode_refuses ... ok
+test pict::public_tests::public_file_route_preserves_rgba_and_unspecified_color ... ok
+test pict::public_tests::public_output_pressure_is_typed_and_retry_keeps_budget_clean ... ok
+test pict::public_tests::common_image_route_requires_explicit_color_assumption_for_display ... ok
+test pict::public_tests::content_signature_routes_misleading_raw_and_unknown_suffixes ... ok
+test pict::public_tests::external_mire_public_render_matches_independent_oracle_and_releases_scratch ... ok
+test pict::public_tests::external_96dpi_cropped_public_pixels_match_oracle ... ok
+
+test result: ok. 21 passed; 0 failed; 0 ignored; 0 measured; 765 filtered out; finished in 0.01s
+
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.43s
+     Running unittests src/lib.rs (/private/tmp/rrrah-required-corpus-target/debug/deps/rrrah_decode-fef1cf096a77eef0)

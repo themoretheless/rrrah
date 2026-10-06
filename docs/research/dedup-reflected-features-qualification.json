@@ -1,0 +1,21 @@
+{
+  "scope": "Reflected oriented BRIEF extraction and primitive end-to-end reflection path",
+  "checks": [
+    "22 local/oriented/pyramid/collection tests pass",
+    "reflected descriptors equal ordinary descriptors of the unreflected seeded image",
+    "positions remap to original image coordinates",
+    "reflected geometry and bidirectional pixel proof match all 25600 pixels each way",
+    "selected early/intermediate/final one-shot cancellation returns no features; retry succeeds",
+    "library-only Clippy passes"
+  ],
+  "limits": [
+    "Not yet integrated into file or indexed collection scan",
+    "No reflected spatial or multiscale extraction entrypoint yet",
+    "Synthetic single texture; natural reflections and unrelated reflected negatives remain to qualify",
+    "Not a shared byte-budget or bounded callback-latency proof"
+  ],
+  "source_sha256": {
+    "crates/rrrah-dedup/src/local.rs": "000f725f7858c79d1d78031b1e45f967751052bb445fac2f3c58b87253e3501b",
+    "crates/rrrah-dedup/tests/oriented.rs": "53fff41998c27052bc848930afb60ddf161de0ef2553a0c32b7e8e170e08d47c"
+  }
+}

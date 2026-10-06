@@ -1,0 +1,88 @@
+{
+  "index": 227,
+  "repository": "EhsanShahbazii/Pinterest-Scraper",
+  "commit": "f4f81ea605a8d8d4cf999837bcbe51b066839f36",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Pinterest image downloader dedup state; selected excerpts do not establish perceptual comparison or mutation handling.",
+  "available_source_evidence": [
+    {
+      "path": "src/pinterest_scraper/dedupe.py",
+      "local": "02-dedupe.py",
+      "url": "https://github.com/EhsanShahbazii/Pinterest-Scraper/blob/f4f81ea605a8d8d4cf999837bcbe51b066839f36/src/pinterest_scraper/dedupe.py",
+      "sha256": "66d488ae4df0b7d9d2785b7b7788aac86c742594f8f1377e14635b41c60f814e",
+      "truncated": false,
+      "lines": 83,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/pinterest_scraper/__init__.py",
+      "local": "03-__init__.py",
+      "url": "https://github.com/EhsanShahbazii/Pinterest-Scraper/blob/f4f81ea605a8d8d4cf999837bcbe51b066839f36/src/pinterest_scraper/__init__.py",
+      "sha256": "ebc367513d3931d81d723793cfd5b668f6d6f4f6be1835929ff7b4f5d87dc2e7",
+      "truncated": false,
+      "lines": 5,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/pinterest_scraper/__main__.py",
+      "local": "04-__main__.py",
+      "url": "https://github.com/EhsanShahbazii/Pinterest-Scraper/blob/f4f81ea605a8d8d4cf999837bcbe51b066839f36/src/pinterest_scraper/__main__.py",
+      "sha256": "2cbdd4036f261d3a8c2099897ccb397db5ea20c1eeff55f4c5847be33bf1950b",
+      "truncated": false,
+      "lines": 5,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/test_scraper.py",
+      "local": "05-test_scraper.py",
+      "url": "https://github.com/EhsanShahbazii/Pinterest-Scraper/blob/f4f81ea605a8d8d4cf999837bcbe51b066839f36/tests/test_scraper.py",
+      "sha256": "1f16a4638c2d2eb096327e31c47b54cafa486215dd00348fe0ba8f393892e2af",
+      "truncated": false,
+      "lines": 178,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "src/pinterest_scraper/cli.py",
+      "local": "06-cli.py",
+      "url": "https://github.com/EhsanShahbazii/Pinterest-Scraper/blob/f4f81ea605a8d8d4cf999837bcbe51b066839f36/src/pinterest_scraper/cli.py",
+      "sha256": "7970d9921d22a764ca21f43ab2473ff8a8a7f724c3465e87bda3deda276205d9",
+      "truncated": false,
+      "lines": 232,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 1,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/EhsanShahbazii/Pinterest-Scraper/blob/f4f81ea605a8d8d4cf999837bcbe51b066839f36/README.md",
+      "sha256": "f64e1bb91007b3faf75e470a5b53b2d3501350ba3110d334b1f7f0fe28542064",
+      "truncated": false,
+      "lines": 276,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/EhsanShahbazii/Pinterest-Scraper/blob/f4f81ea605a8d8d4cf999837bcbe51b066839f36/LICENSE",
+      "sha256": "4a8dd38a56af14455508dc40aa4c9701650dc08c17739458a40141cad593c99e",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

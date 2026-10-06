@@ -1,0 +1,55 @@
+{
+  "status": "primitive_gates_passed_both_platforms",
+  "scope": "Explicit fixed projective mapping plus bounded per-channel affine color fit, retaining strict and unfitted window evidence; no file/index/root integration or independent captured-pair accuracy proof",
+  "macos_single_test": {
+    "exit": 0,
+    "passed": 1,
+    "ignored": 0
+  },
+  "macos_session": 22414,
+  "clippy_session": 49286,
+  "linux_session": 81963,
+  "source_sha256": {
+    "crates/rrrah-dedup/src/warp.rs": "06c4e24d7291d311f78b41e9edc7571f8cc541209591a473476894de788c9f09",
+    "crates/rrrah-dedup/tests/projective_geometry.rs": "c4623b78e0333a6c7f26b98361a8175e6ce54c89a803772d5045e51cb795ad09"
+  },
+  "remaining": [
+    "Linux terminal suite and expanded negative source verification",
+    "File/index/root explicit mode integration",
+    "Independent captured perspective plus illumination positives and unrelated negatives",
+    "Complete library contract"
+  ],
+  "macos": {
+    "exit": 0,
+    "passed": 16,
+    "failed": 0,
+    "ignored": 0,
+    "clippy_exit": 0
+  },
+  "macos_expanded": {
+    "exit": 0,
+    "passed": 23,
+    "failed": 0,
+    "ignored": 0,
+    "log": "docs/research/dedup-projective-photometric-expanded-macos.log",
+    "log_sha256": "3a97a96ba05e6b08d501e655d3cb8a1354566d2c9218fe117827292957c67dbb"
+  },
+  "negative_cases": [
+    "Low RGB variance",
+    "Insufficient opaque samples",
+    "Out-of-policy unconstrained fit",
+    "Constrained fit cannot invent acceptance",
+    "Horizon inside source rectangle",
+    "Alpha edit visible in both directions",
+    "Shared work exhaustion",
+    "Early/middle/final cancellation and deterministic retry"
+  ],
+  "linux": {
+    "exit": 0,
+    "passed": 16,
+    "failed": 0,
+    "ignored": 0,
+    "log": "docs/research/dedup-projective-photometric-primitive-linux.log",
+    "log_sha256": "ee0955409055833def09a4c5e924e850a565dc25b720e6b8599993a97d470a87"
+  }
+}

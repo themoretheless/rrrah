@@ -1,0 +1,18 @@
+{
+  "change": "Fallible matching neighbor tables and bounded fallible correspondence-list growth.",
+  "validation": {
+    "existing_local_oriented_pyramid_collection_tests": 19,
+    "local_tests_with_new_checkpoint_test": 4,
+    "dedup_lib_no_deps_clippy": "passed"
+  },
+  "checkpoint_fixture": "Four independently distinct descriptors; one-shot cancellation replayed at every callback position, then healthy retry recovers all four correspondences.",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/local.rs": "e2447d944d3a120d09efc8833339e0b675c7ad97c7c5a9f619e1c6c66b5879c2",
+    "crates/rrrah-dedup/tests/local.rs": "e501ff85d74fdf0e73a87af1c51e3866fba8acad56a72f249eabdb4033a99a1a"
+  },
+  "limits": [
+    "Actual OS allocation failure not injected.",
+    "MatchPolicy work limit bounds pair count; tables not yet fully admitted under shared byte budget.",
+    "No broad memory/RSS or latency guarantee."
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "fixture": "tests/IMG_9043.CR3",
+  "fixture_sha256": "d06cbb10e84882cf130430bdc88ed2652c2622b96dea8d6a854c09e3bee37e59",
+  "adapter": "Metal Apple M4 Max",
+  "profile": "dev optimized + debuginfo",
+  "view_samples": 15,
+  "resident_samples": 60,
+  "cache_samples": 16,
+  "view_ms": {
+    "decode_p50": 46.593,
+    "decode_p95": 46.787,
+    "upload_enqueue_p50": 17.001,
+    "upload_enqueue_p95": 17.44,
+    "completed_frame_p50": 12.085,
+    "completed_frame_p95": 13.413,
+    "total_p50": 75.449,
+    "total_p95": 77.006,
+    "resident_zoom_pan_p50": 1.511,
+    "resident_zoom_pan_p95": 1.948
+  },
+  "cache_ms": {
+    "decode_p50": 44.105708,
+    "decode_p95": 45.539,
+    "disk_p50": 33.483542,
+    "disk_p95": 35.177083,
+    "swap_p50": 32.5165,
+    "swap_p95": 32.997958,
+    "ram_lookup_p50": 0.000175,
+    "ram_lookup_p95": 0.000188
+  },
+  "managed_cpu_peak": 124360466,
+  "managed_gpu_peak": 146800640,
+  "final_managed_used": 0,
+  "method": [
+    "Warm filesystem and in-process repeated samples",
+    "Cache tiers rotate order; four warmups and sixteen measured rounds",
+    "RAM metric averages 1000 shared-owner lookups per sample",
+    "Disk/swap metadata and every sample equal native decode",
+    "Resident frames include GPU completion"
+  ],
+  "limitations": [
+    "Single camera/file and current machine",
+    "Offscreen 1920x1080 output, not physical presentation",
+    "RAM lookup excludes upload/render",
+    "Disk and swap warm filesystem, not cold disk latency",
+    "No before/after causal speedup claim",
+    "Managed budget excludes total RSS and driver memory"
+  ],
+  "source_hashes": {
+    "crates/rrrah-app/examples/raw_view_timing.rs": "723727fa32e2255aeab0cf39b8fc4f307a34815b2387f836a280daa19f2a2c6e",
+    "crates/rrrah-decode/examples/cr3_end_to_end_timing.rs": "84650b6ff20a8d11ae2efa92318bcf931fa7616d99bc3f3994457ebc03b69128"
+  }
+}

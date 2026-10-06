@@ -1,0 +1,223 @@
+{
+  "platform": "macOS",
+  "command": "cargo test -p rrrah-decode --lib",
+  "exit_code": 0,
+  "passed": 773,
+  "ignored": 47,
+  "log": "dedup-decoder-full-unit-macos.log",
+  "ignored_tests": [
+    {
+      "test": "camtiff::dcs_sensor::tests::native_response_curve_matches_first_oracle_sample",
+      "reason": "requires CC0 DCS520C source and independent sensor oracle"
+    },
+    {
+      "test": "camtiff::dcs_sensor::tests::original_tiff_public_route_is_managed_and_matches_oracle",
+      "reason": "requires original CC0 DCS520C TIFF and independent sensor oracle"
+    },
+    {
+      "test": "camtiff::dcs_sensor::tests::real_sensor_and_wb_match_independent_oracle",
+      "reason": "requires CC0 DCS520C source and independent sensor oracle"
+    },
+    {
+      "test": "camtiff::erf::tests::rd1_color_parameters_match_independent_oracle_and_reject_bad_wb",
+      "reason": "requires pinned CC0 Epson R-D1 ERF object 2680"
+    },
+    {
+      "test": "camtiff::hasselblad::tests::real_3fr_retains_embedded_precision_and_rejects_zero_neutral",
+      "reason": "requires external pinned CC0 Hasselblad X1D object 2058"
+    },
+    {
+      "test": "camtiff::hasselblad_entropy::tests::complete_real_sensor_matches_oracle_and_truncation_cancels",
+      "reason": "requires pinned CC0 Hasselblad CFV-50 FFF source and LibRaw dump"
+    },
+    {
+      "test": "camtiff::hasselblad_entropy::tests::paired_prefix_vs_bitwise_full_sensor_timing",
+      "reason": "requires pinned CC0 FFF source; paired full-sensor performance run"
+    },
+    {
+      "test": "camtiff::kodak_65000::tests::real_full_sensor_matches_libraw",
+      "reason": "requires pinned Kodak DCS760C DCR object 1347 and LibRaw sensor dump"
+    },
+    {
+      "test": "camtiff::kodak_dcr_color::tests::all_native_wb_selectors_match_independent_oracle",
+      "reason": "requires CC0 Kodak DCS760C source; six independently pinned WB modes"
+    },
+    {
+      "test": "camtiff::kodak_dcr_color::tests::native_daylight_wb_matches_libraw",
+      "reason": "requires CC0 Kodak DCS760C source"
+    },
+    {
+      "test": "camtiff::leaf_packets::tests::real_native_packets_match_independent_wb",
+      "reason": "requires pinned Leaf Aptus 22 MOS"
+    },
+    {
+      "test": "camtiff::mef_sensor::tests::real_zd_full_sensor_matches_oracle",
+      "reason": "requires external Mamiya ZD source and independent sensor oracle"
+    },
+    {
+      "test": "camtiff::phaseone::tests::public_iiq_router_managed_memory_and_full_sensor",
+      "reason": "requires pinned P20+ IIQ and corrected oracle"
+    },
+    {
+      "test": "camtiff::phaseone::tests::real_clustered_columns_match_full_independent_sensors",
+      "reason": "requires controlled P20+ clustered-column variants and LibRaw corrected oracles"
+    },
+    {
+      "test": "camtiff::phaseone::tests::real_native_pipeline_matches_independent_full_sensor_and_color",
+      "reason": "requires pinned P20+ source and original full corrected oracle"
+    },
+    {
+      "test": "camtiff::phaseone::tests::real_pipeline_stage_timing_preserves_oracle",
+      "reason": "external P20+ source/oracle; informational per-stage timing, no wall-clock gate"
+    },
+    {
+      "test": "camtiff::phaseone_calibration::tests::real_flat_field_specialization_paired",
+      "reason": "P20+ external source and stage oracles; paired informational benchmark"
+    },
+    {
+      "test": "camtiff::phaseone_calibration::tests::real_native_black_and_flat_fields_match_stage_oracles",
+      "reason": "requires P20+ native sensor and independent black/flat-field stage oracles"
+    },
+    {
+      "test": "camtiff::phaseone_calibration::tests::real_pixel_repair_and_flat_fields_match_independent_sensor",
+      "reason": "requires P20+ sensor and independent corrected oracle with column entries disabled"
+    },
+    {
+      "test": "camtiff::phaseone_container::tests::real_private_sensor_and_calibration_payloads",
+      "reason": "requires pinned P20+ IIQ source"
+    },
+    {
+      "test": "camtiff::phaseone_entropy::tests::real_format3_matches_full_independent_sensor",
+      "reason": "requires pinned Phase One P20+ IIQ object 4366 and independent sensor oracle"
+    },
+    {
+      "test": "camtiff::srf_sensor::tests::real_full_encrypted_sensor_matches_independent_oracle",
+      "reason": "requires pinned DSC-F828 SRF and independent LibRaw unpack oracle"
+    },
+    {
+      "test": "ciff::tests::real_10d_auto_white_balance_matches_independent_oracle",
+      "reason": "requires pinned CC0 EOS 10D CRW object 2027"
+    },
+    {
+      "test": "ciff::tests::real_d30_directory_tree_and_sensor_metadata",
+      "reason": "requires pinned CC0 EOS D30 CRW object 1307"
+    },
+    {
+      "test": "cr3::fixture_regression::eos_r8_full_native_decode_matches_pixel_oracles",
+      "reason": "requires owner-supplied private EOS R8 fixtures"
+    },
+    {
+      "test": "crw::router_tests::real_crw_public_route_matches_explicit_import",
+      "reason": "requires pinned EOS 10D source via RRRAH_CRW_SOURCE"
+    },
+    {
+      "test": "crw::router_tests::real_crw_routed_budget_pressure_is_retryable_and_last_owner_charged",
+      "reason": "requires pinned EOS 10D source via RRRAH_CRW_SOURCE"
+    },
+    {
+      "test": "crw_entropy::tests::real_10d_low_plane_matches_every_independent_sensor_sample",
+      "reason": "requires pinned EOS 10D CRW and independent full sensor oracle"
+    },
+    {
+      "test": "crw_entropy::tests::real_full_sensor_entropy_matches_independent_oracle",
+      "reason": "requires CRW source, independent sensor and external camera table data"
+    },
+    {
+      "test": "dng::fixture_regression::lossy_jpeg_dng_is_rejected_instead_of_misdecoded",
+      "reason": "requires separately downloaded non-lossless DNG fixture"
+    },
+    {
+      "test": "dng::fixture_regression::real_dng_pixels_match_exact_oracles",
+      "reason": "requires separately downloaded CC0 DNG fixtures"
+    },
+    {
+      "test": "dng::lossless_jpeg::tests::leaf_mos_compatibility_matches_independent_sensor",
+      "reason": "requires pinned Leaf Aptus 22 MOS and full-sensor oracle"
+    },
+    {
+      "test": "dng::lossless_jpeg::tests::leaf_mos_nonstandard_quantization_selector_is_rejected",
+      "reason": "requires pinned Leaf Aptus 22 MOS source"
+    },
+    {
+      "test": "eip::tests::independent_zip_raw_matches_original_source",
+      "reason": "requires independently authored ZIP containing pinned IIQ source"
+    },
+    {
+      "test": "eip::tests::memory_cr3_import_matches_both_independent_local_sensor_oracles",
+      "reason": "requires authored local EOS R8 packages and independent sensor oracles"
+    },
+    {
+      "test": "eip::tests::memory_dng_import_matches_full_independent_sensor",
+      "reason": "requires authored DNG ZIP and independent LibRaw full sensor oracle"
+    },
+    {
+      "test": "eip::tests::memory_mrw_import_matches_both_independent_sensor_oracles",
+      "reason": "requires authored MRW packages and independent LibRaw full sensor oracles"
+    },
+    {
+      "test": "eip::tests::memory_sensor_import_matches_full_independent_sensor",
+      "reason": "requires authored IIQ ZIP and independent corrected LibRaw sensor oracle"
+    },
+    {
+      "test": "image_router::tests::unqualified_mef_refuses_public_view_without_preview_fallback_or_leak",
+      "reason": "requires pinned Mamiya ZD source; set RRRAH_MEF_SOURCE"
+    },
+    {
+      "test": "mrw::tests::dynax_7d_matches_every_independent_sensor_sample",
+      "reason": "requires CC0 MRW object 1826 and independent LibRaw sensor dump"
+    },
+    {
+      "test": "native_backend::tests::cr3_output_budget_reserves_before_decode_and_retains_owners",
+      "reason": "requires local EOS R8 tests/IMG_9043.CR3 fixture"
+    },
+    {
+      "test": "pict::packed_row_tests::external_packed_rows_match_independent_rgba_oracles",
+      "reason": "requires external PICT files and TwelveMonkeys RGBA oracle outputs"
+    },
+    {
+      "test": "pict::public_tests::external_96dpi_cropped_public_pixels_match_oracle",
+      "reason": "requires external 96dpi PICT/TwelveMonkeys corpus"
+    },
+    {
+      "test": "pict::public_tests::external_mire_public_render_matches_independent_oracle_and_releases_scratch",
+      "reason": "requires downloaded TwelveMonkeys PICT corpus"
+    },
+    {
+      "test": "x3f::tests::sigma_sd10_inventory_distinguishes_sensor_from_previews",
+      "reason": "requires pinned Sigma SD10 X3F and independent LibRaw channel dump"
+    },
+    {
+      "test": "x3f::tests::sigma_sd14_native_sensor_matches_full_independent_unpack",
+      "reason": "requires pinned CC0 Sigma SD14 source and independent enabled LibRaw unpack"
+    },
+    {
+      "test": "xcf::selected_layer_tests::selected_gimp_layers_preserve_mask_and_rollback_partial_cancellation",
+      "reason": "requires pinned external GIMP gimp-2-6-file.xcf fixture"
+    }
+  ],
+  "separately_run_ignored": [
+    {
+      "test": "native_backend::tests::cr3_output_budget_reserves_before_decode_and_retains_owners",
+      "exit_code": 0,
+      "passed": 1,
+      "log": "dedup-cr3-owner-budget-macos.log",
+      "scope": "Existing owner EOS R8 fixture; allocation admission, retry, shared owner release, not independent camera/color qualification"
+    },
+    {
+      "test": "camtiff::erf::tests::rd1_color_parameters_match_independent_oracle_and_reject_bad_wb",
+      "session_id": 4806,
+      "exit_code": 0,
+      "passed": 1,
+      "log": "dedup-current-erf-negative.log",
+      "scope": "Pinned Epson R-D1 metadata, malformed WB and seven truncation boundaries"
+    },
+    {
+      "test": "camtiff::hasselblad::tests::real_3fr_retains_embedded_precision_and_rejects_zero_neutral",
+      "session_id": 54656,
+      "exit_code": 0,
+      "passed": 1,
+      "log": "dedup-current-3fr-negative.log",
+      "scope": "Pinned Hasselblad X1D embedded matrix precision and zero-neutral refusal"
+    }
+  ]
+}

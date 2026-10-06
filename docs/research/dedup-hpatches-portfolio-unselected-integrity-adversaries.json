@@ -1,0 +1,41 @@
+{
+  "status": "all_five_unselected_corruptions_rejected",
+  "cases": [
+    {
+      "kind": "unselected_zero_matrix",
+      "exit": 1,
+      "errors": [
+        "zero portfolio matrix ('v_bees', 4)/anchored"
+      ]
+    },
+    {
+      "kind": "unselected_singular_matrix",
+      "exit": 1,
+      "errors": [
+        "singular portfolio matrix ('v_bees', 4)/anchored"
+      ]
+    },
+    {
+      "kind": "unselected_impossible_counts",
+      "exit": 1,
+      "errors": [
+        "impossible portfolio counts ('v_bees', 4)/anchored/filtered_counts"
+      ]
+    },
+    {
+      "kind": "unselected_boolean_counts",
+      "exit": 1,
+      "errors": [
+        "invalid portfolio counts ('v_bees', 4)/anchored/strict_counts"
+      ]
+    },
+    {
+      "kind": "missing_unselected_lane",
+      "exit": 1,
+      "errors": [
+        "missing portfolio lane ('v_bees', 4)/anchored"
+      ]
+    }
+  ],
+  "scope": "Selected raw lane remains untouched; five specific unselected anchored-lane corruptions must fail integrity. Not exhaustive malformed-input qualification"
+}

@@ -1,0 +1,20 @@
+{
+  "scope": "Managed CRW reconstruction; external table data",
+  "default_passed": 716,
+  "default_ignored": 39,
+  "external_10d_passed": 1,
+  "output_bytes": 13036672,
+  "contracts": [
+    "Memory refusal before output allocation",
+    "Cancellation and malformed entropy release output reservation",
+    "Full 10D sensor equality; clones retain credit until last owner drops"
+  ],
+  "logs": {
+    "/tmp/rrrah-crw-managed-full.log": "a95cd3d270f03f2e1117dba60b463f19b1e980d5d4e626c87ee05dd0a7bf90db",
+    "/tmp/rrrah-crw-managed-10d.log": "8886c7e95ede59ff0aaf2bbe04be8243f6a287a07cbe7f49b30a5298813deab7"
+  },
+  "limitations": [
+    "Input and table buffers supplied externally and outside output budget.",
+    "Source container selection, table shipping, metadata/color/viewer integration remain pending."
+  ]
+}

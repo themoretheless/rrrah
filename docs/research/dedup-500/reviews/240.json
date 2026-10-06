@@ -1,0 +1,78 @@
+{
+  "index": 240,
+  "repository": "YASSERRMD/AiMesh",
+  "commit": "a8210dc192ed584ba69959052c6bcccb55d6130f",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "AI message-queue TTL deduplication; repeated queue messages.",
+  "available_source_evidence": [
+    {
+      "path": "src/dedup/mod.rs",
+      "local": "02-mod.rs",
+      "url": "https://github.com/YASSERRMD/AiMesh/blob/a8210dc192ed584ba69959052c6bcccb55d6130f/src/dedup/mod.rs",
+      "sha256": "3a5aa284df26ae72e414deb467beec085fe3be4520ce1e98ed4684d4f3e0dcc5",
+      "truncated": false,
+      "lines": 146,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/lib.rs",
+      "local": "03-lib.rs",
+      "url": "https://github.com/YASSERRMD/AiMesh/blob/a8210dc192ed584ba69959052c6bcccb55d6130f/src/lib.rs",
+      "sha256": "0b40f06e73686bae8a5f79afacd4e82810c5c340fdcb2b88e57412bb50348212",
+      "truncated": false,
+      "lines": 196,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/main.rs",
+      "local": "04-main.rs",
+      "url": "https://github.com/YASSERRMD/AiMesh/blob/a8210dc192ed584ba69959052c6bcccb55d6130f/src/main.rs",
+      "sha256": "01074f6a3a236cf03fd282c3e49aa5abd101fce03d2e27fda781707e35fd887e",
+      "truncated": false,
+      "lines": 128,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/integration_test.rs",
+      "local": "05-integration_test.rs",
+      "url": "https://github.com/YASSERRMD/AiMesh/blob/a8210dc192ed584ba69959052c6bcccb55d6130f/tests/integration_test.rs",
+      "sha256": "c2ec0e25a9d4481014df6c0061954bee683cf23ab5387194c2c7a5ba9bcd5888",
+      "truncated": false,
+      "lines": 198,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 1,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/YASSERRMD/AiMesh/blob/a8210dc192ed584ba69959052c6bcccb55d6130f/README.md",
+      "sha256": "92a8a442f7892070f72d97ac0aa9eff47cb82d809f14037a48613439286c5226",
+      "truncated": false,
+      "lines": 262,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/YASSERRMD/AiMesh/blob/a8210dc192ed584ba69959052c6bcccb55d6130f/LICENSE",
+      "sha256": "9fbe3bf86d60975fbd4e2693cbafd3a0ff5c7cc2157c2ec3d305a559655eab83",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

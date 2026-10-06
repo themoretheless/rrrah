@@ -101,6 +101,67 @@ fn assert_camera_fixture(path: &Path, format: CameraFormat) {
     );
     let output = crate::decode_file(path)
         .unwrap_or_else(|error| panic!("decode {} through {format:?}: {error}", path.display()));
+    let source_bytes = std::fs::metadata(path).unwrap().len();
+    let output_bytes = output.mosaic.pixels.capacity_bytes();
+    let budget = rrrah_core::MemoryBudget::new(source_bytes + output_bytes);
+    let mut managed_request = request.clone();
+    managed_request.memory_budget = Some(budget.clone());
+    let managed = NativeRawDecoder.decode(&managed_request).unwrap();
+    assert!(managed.mosaic.pixels.is_managed());
+    assert_eq!(managed.mosaic.pixels, output.mosaic.pixels);
+    assert_eq!(managed.mosaic.metadata, output.mosaic.metadata);
+    assert_eq!(budget.used(), output_bytes);
+    assert_eq!(budget.peak(), source_bytes + output_bytes);
+    let owner = managed.mosaic.clone();
+    drop(managed);
+    assert_eq!(budget.used(), output_bytes);
+    drop(owner);
+    assert_eq!(budget.used(), 0);
+    managed_request.memory_budget = Some(rrrah_core::MemoryBudget::new(source_bytes));
+    assert!(matches!(
+        NativeRawDecoder.decode(&managed_request),
+        Err(crate::DecodeError::Memory(_))
+    ));
+    assert_eq!(managed_request.memory_budget.as_ref().unwrap().used(), 0);
+    // Deterministic generation changes at native pixel checkpoints avoid timers.
+    use std::sync::{Arc, atomic::{AtomicU64, AtomicUsize, Ordering}};
+    let generation = Arc::new(AtomicU64::new(1));
+    managed_request.memory_budget = Some(budget.clone());
+    managed_request.cancellation = Some(crate::GenerationToken::new(Arc::clone(&generation), 0));
+    assert!(matches!(NativeRawDecoder.decode(&managed_request), Err(crate::DecodeError::Cancelled)));
+    assert_eq!(budget.used(), 0);
+    managed_request.cancellation = None;
+    let bytes = std::fs::read(path).unwrap();
+    let quirks = format.quirks();
+    let container = quirks.parse_container(&bytes).unwrap();
+    let raw = quirks.select_raw_ifd(&container).unwrap();
+    let calls = AtomicUsize::new(0);
+    let baseline = quirks.decode_pixels(&container, raw, &|| {
+        calls.fetch_add(1, Ordering::Relaxed);
+        false
+    }).unwrap();
+    assert_eq!(baseline.as_slice(), &output.mosaic.pixels[..]);
+    let checkpoints = calls.load(Ordering::Relaxed);
+    assert!(checkpoints > 1, "real camera must reach multiple cancellation checkpoints");
+    let targets = [1, checkpoints.div_ceil(2), checkpoints];
+    for target in targets {
+        calls.store(0, Ordering::Relaxed);
+        generation.store(1, Ordering::Release);
+        let token = crate::GenerationToken::new(Arc::clone(&generation), 1);
+        let cancelled = quirks.decode_pixels(&container, raw, &|| {
+            if calls.fetch_add(1, Ordering::Relaxed) + 1 == target {
+                generation.store(2, Ordering::Release);
+            }
+            token.is_cancelled()
+        });
+        assert!(matches!(cancelled, Err(crate::DecodeError::Cancelled)),
+            "{format:?} generation checkpoint {target}: {cancelled:?}");
+    }
+    let retry = NativeRawDecoder.decode(&managed_request).unwrap();
+    assert_eq!(retry.mosaic.pixels, output.mosaic.pixels);
+    drop(retry);
+    assert_eq!(budget.used(), 0);
+    eprintln!("{format:?}: real pixel cancellation checkpoints {checkpoints}, targets {targets:?}");
     let metadata = &output.mosaic.metadata;
     let pixels = &output.mosaic.pixels;
 

@@ -1,0 +1,108 @@
+{
+  "index": 198,
+  "repository": "botnick/telegram-media-downloader",
+  "commit": "5162cff1474ac2f3d0fb109bc1b6156d214cd33b",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Telegram file SHA256 and DBSCAN scan contracts; distinguish byte hashes from cluster neighborhoods.",
+  "available_source_evidence": [
+    {
+      "path": "src/core/dedup.js",
+      "local": "02-dedup.js",
+      "url": "https://github.com/botnick/telegram-media-downloader/blob/5162cff1474ac2f3d0fb109bc1b6156d214cd33b/src/core/dedup.js",
+      "sha256": "3d9cc9c8a340e224a3c457e4f60d314bac9eee9bf51c3f3e7e750434f1c97ae9",
+      "truncated": false,
+      "lines": 466,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/core/ai/dbscan.js",
+      "local": "03-dbscan.js",
+      "url": "https://github.com/botnick/telegram-media-downloader/blob/5162cff1474ac2f3d0fb109bc1b6156d214cd33b/src/core/ai/dbscan.js",
+      "sha256": "dcdfec7f6c995cdedae28c501cacb5a2884a93968f0b889af4ce833b739ff168",
+      "truncated": false,
+      "lines": 262,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/core/ai/scan-runner.js",
+      "local": "04-scan-runner.js",
+      "url": "https://github.com/botnick/telegram-media-downloader/blob/5162cff1474ac2f3d0fb109bc1b6156d214cd33b/src/core/ai/scan-runner.js",
+      "sha256": "cb641a8010cccc40852a77f6940d5f79243bf45ba23024e966df87a9fd8ff89a",
+      "truncated": false,
+      "lines": 879,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "faces-service/test_real_scan.py",
+      "local": "05-test_real_scan.py",
+      "url": "https://github.com/botnick/telegram-media-downloader/blob/5162cff1474ac2f3d0fb109bc1b6156d214cd33b/faces-service/test_real_scan.py",
+      "sha256": "e525abc56021539f3353dc01dba736991e52804d33e87f4c846ad908e8b7db1c",
+      "truncated": false,
+      "lines": 192,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/core/cluster/dedup.js",
+      "local": "06-dedup.js",
+      "url": "https://github.com/botnick/telegram-media-downloader/blob/5162cff1474ac2f3d0fb109bc1b6156d214cd33b/src/core/cluster/dedup.js",
+      "sha256": "987243b8c20a0495661816c8b0a9afbf0ef1f627dfff4cf8f821c9c9169954a9",
+      "truncated": false,
+      "lines": 84,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/core/gocore/hash.js",
+      "local": "07-hash.js",
+      "url": "https://github.com/botnick/telegram-media-downloader/blob/5162cff1474ac2f3d0fb109bc1b6156d214cd33b/src/core/gocore/hash.js",
+      "sha256": "999ee048aab1e8a7515f50401aea6d45382f0495d698aaa541af6e9a42c7f2cf",
+      "truncated": false,
+      "lines": 82,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/contract/dedup.contract.test.js",
+      "local": "08-dedup.contract.test.js",
+      "url": "https://github.com/botnick/telegram-media-downloader/blob/5162cff1474ac2f3d0fb109bc1b6156d214cd33b/tests/contract/dedup.contract.test.js",
+      "sha256": "62d640edf159823fd59a5196ced7055d4b82de27ced60009cd1ad2be03e0d125",
+      "truncated": false,
+      "lines": 160,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 192,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/botnick/telegram-media-downloader/blob/5162cff1474ac2f3d0fb109bc1b6156d214cd33b/README.md",
+      "sha256": "33af868365a92e5f7dfce2749dfef03e9140c0d2027b62ed2011c1dd7f71a57a",
+      "truncated": false,
+      "lines": 447,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/botnick/telegram-media-downloader/blob/5162cff1474ac2f3d0fb109bc1b6156d214cd33b/LICENSE",
+      "sha256": "a65032105e213dfbf500240c968a1eb2fe1b84faa82465c962e7772dab334d1d",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

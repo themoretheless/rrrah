@@ -1,0 +1,78 @@
+{
+  "index": 258,
+  "repository": "brenthargrave/dedupe",
+  "commit": "5a2af8ede754759867e03dff883813881528483d",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "ActiveModel record uniqueness validation; database constraints.",
+  "available_source_evidence": [
+    {
+      "path": "lib/dedupe.rb",
+      "local": "02-dedupe.rb",
+      "url": "https://github.com/brenthargrave/dedupe/blob/5a2af8ede754759867e03dff883813881528483d/lib/dedupe.rb",
+      "sha256": "130f31bc9142e4440060627bdd9c8c0179480546d86111727326ccfa2920b21c",
+      "truncated": false,
+      "lines": 30,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "lib/dedupe/errors.rb",
+      "local": "03-errors.rb",
+      "url": "https://github.com/brenthargrave/dedupe/blob/5a2af8ede754759867e03dff883813881528483d/lib/dedupe/errors.rb",
+      "sha256": "0351480252b7b490d10529928f94ac751bae3dec0bc8fe6cd22f9665e428b5b4",
+      "truncated": false,
+      "lines": 6,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "lib/dedupe/validations.rb",
+      "local": "04-validations.rb",
+      "url": "https://github.com/brenthargrave/dedupe/blob/5a2af8ede754759867e03dff883813881528483d/lib/dedupe/validations.rb",
+      "sha256": "73bff3ad2e62ae3e94675c9e2b4e7a6f59819212b9c51b648cc70d45d981fde9",
+      "truncated": false,
+      "lines": 18,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "spec/dedupe_spec.rb",
+      "local": "05-dedupe_spec.rb",
+      "url": "https://github.com/brenthargrave/dedupe/blob/5a2af8ede754759867e03dff883813881528483d/spec/dedupe_spec.rb",
+      "sha256": "10f166a01431f33bcd4d1cc34251eb1f8f5d7c50922c5ab2354126ae7e4719ec",
+      "truncated": false,
+      "lines": 148,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 4,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.rdoc",
+      "local": "00-README.rdoc",
+      "url": "https://github.com/brenthargrave/dedupe/blob/5a2af8ede754759867e03dff883813881528483d/README.rdoc",
+      "sha256": "b48a78b6e9ec089675a7ce19426a28c3c22262d98a496765637e1e37a654dc80",
+      "truncated": false,
+      "lines": 93,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/brenthargrave/dedupe/blob/5a2af8ede754759867e03dff883813881528483d/LICENSE",
+      "sha256": "04006e0754d076de29b38f2b31abc14f4fef87b402cadb566c1b02659066a0bb",
+      "truncated": false,
+      "lines": 20,
+      "source": false,
+      "test": false
+    }
+  ]
+}

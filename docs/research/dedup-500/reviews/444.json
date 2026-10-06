@@ -1,0 +1,68 @@
+{
+  "index": 444,
+  "repository": "parcival42/MediaDedupe",
+  "commit": "06f2fd2278a3aff915d93ff5b07dcaae589fba45",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Media pHash CLI/app with demo fixture generator; sampling/threshold semantics and byte identity unverified.",
+  "available_source_evidence": [
+    {
+      "path": "app.py",
+      "local": "02-app.py",
+      "url": "https://github.com/parcival42/MediaDedupe/blob/06f2fd2278a3aff915d93ff5b07dcaae589fba45/app.py",
+      "sha256": "99e5ecc4bcfc5f3ee38700412d2a1b7713dc573cee633953ad499386749fd0be",
+      "truncated": false,
+      "lines": 1335,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "cli.py",
+      "local": "03-cli.py",
+      "url": "https://github.com/parcival42/MediaDedupe/blob/06f2fd2278a3aff915d93ff5b07dcaae589fba45/cli.py",
+      "sha256": "5b8b1bdf1565e227a978132fb8604f4e657f8e86d61e361effc949a4093c4e1f",
+      "truncated": false,
+      "lines": 171,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "create_demo_library.py",
+      "local": "04-create_demo_library.py",
+      "url": "https://github.com/parcival42/MediaDedupe/blob/06f2fd2278a3aff915d93ff5b07dcaae589fba45/create_demo_library.py",
+      "sha256": "05693be46e9f97aa2d2725d944f98d1da94732996cdb2550631383080919008e",
+      "truncated": false,
+      "lines": 265,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/parcival42/MediaDedupe/blob/06f2fd2278a3aff915d93ff5b07dcaae589fba45/README.md",
+      "sha256": "2b365ee79cf73938036d2a39052c56415a9347a28324ed3cc5b5dae4968de78c",
+      "truncated": false,
+      "lines": 200,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/parcival42/MediaDedupe/blob/06f2fd2278a3aff915d93ff5b07dcaae589fba45/LICENSE",
+      "sha256": "556ea1e83b8d2eaefbddfed3b21f80b17ecb3b8be86b1fb858ec5817205476ec",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

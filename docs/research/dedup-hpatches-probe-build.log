@@ -1,0 +1,145 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: function `error` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:4:4
+  |
+4 | fn error(message: &str) -> DecodeError {
+  |    ^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `packed_12` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:9:4
+  |
+9 | fn packed_12(
+  |    ^^^^^^^^^
+
+warning: function `decode_zd` is never used
+  --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:48:15
+   |
+48 | pub(super) fn decode_zd(
+   |               ^^^^^^^^^
+
+warning: `rrrah-decode` (lib) generated 3 warnings
+error[E0277]: expected an `Fn()` closure, found `MemoryBudget`
+   --> crates/rrrah-dedup/examples/photo_probe.rs:317:92
+    |
+317 |     let a=decode_selected_frame_bounded(&left,p.decode.max_file_bytes,p.decode.max_pixels,&budget,||false).unwrap();
+    |           ----------------------------- required by a bound introduced by this call        ^^^^^^ expected an `Fn()` closure, found `MemoryBudget`
+    |
+    = help: the trait `Fn()` is not implemented for `MemoryBudget`
+    = note: wrap the `MemoryBudget` in a closure with no arguments: `|| { /* code */ }`
+    = note: required for `&MemoryBudget` to implement `Fn()`
+note: required by a bound in `decode_selected_frame_bounded`
+   --> crates/rrrah-dedup/src/decode.rs:104:18
+    |
+100 | pub fn decode_selected_frame_bounded(
+    |        ----------------------------- required by a bound in this function
+...
+104 |     cancel: impl Fn() -> bool,
+    |                  ^^^^^^^^^^^^ required by this bound in `decode_selected_frame_bounded`
+
+error[E0277]: expected an `FnOnce()` closure, found `MemoryBudget`
+   --> crates/rrrah-dedup/examples/photo_probe.rs:317:91
+    |
+317 |     let a=decode_selected_frame_bounded(&left,p.decode.max_file_bytes,p.decode.max_pixels,&budget,||false).unwrap();
+    |           ----------------------------- required by a bound introduced by this call       ^^^^^^^ expected an `FnOnce()` closure, found `MemoryBudget`
+    |
+    = help: the trait `FnOnce()` is not implemented for `MemoryBudget`
+    = note: wrap the `MemoryBudget` in a closure with no arguments: `|| { /* code */ }`
+note: required by a bound in `decode_selected_frame_bounded`
+   --> crates/rrrah-dedup/src/decode.rs:104:26
+    |
+100 | pub fn decode_selected_frame_bounded(
+    |        ----------------------------- required by a bound in this function
+...
+104 |     cancel: impl Fn() -> bool,
+    |                          ^^^^ required by this bound in `decode_selected_frame_bounded`
+
+error[E0061]: this function takes 4 arguments but 5 arguments were supplied
+   --> crates/rrrah-dedup/examples/photo_probe.rs:317:11
+    |
+317 |     let a=decode_selected_frame_bounded(&left,p.decode.max_file_bytes,p.decode.max_pixels,&budget,||false).unwrap();
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ----------------------- -------------------         ------- unexpected argument #5 of type `{closure@crates/rrrah-dedup/examples/photo_probe.rs:317:99: 317:101}`
+    |                                               |                       |
+    |                                               |                       expected `&MemoryBudget`, found `u64`
+    |                                               expected `AnimationBudget`, found `u64`
+    |
+note: function defined here
+   --> crates/rrrah-dedup/src/decode.rs:100:8
+    |
+100 | pub fn decode_selected_frame_bounded(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+help: consider removing the tuple struct field `max_file_bytes`
+    |
+317 -     let a=decode_selected_frame_bounded(&left,p.decode.max_file_bytes,p.decode.max_pixels,&budget,||false).unwrap();
+317 +     let a=decode_selected_frame_bounded(&left,p.decode,p.decode.max_pixels,&budget,||false).unwrap();
+    |
+help: remove the extra argument
+    |
+317 -     let a=decode_selected_frame_bounded(&left,p.decode.max_file_bytes,p.decode.max_pixels,&budget,||false).unwrap();
+317 +     let a=decode_selected_frame_bounded(&left,/* AnimationBudget */,/* &MemoryBudget */,&budget).unwrap();
+    |
+
+error[E0277]: expected an `Fn()` closure, found `MemoryBudget`
+   --> crates/rrrah-dedup/examples/photo_probe.rs:318:93
+    |
+318 |     let b=decode_selected_frame_bounded(&right,p.decode.max_file_bytes,p.decode.max_pixels,&budget,||false).unwrap();
+    |           ----------------------------- required by a bound introduced by this call         ^^^^^^ expected an `Fn()` closure, found `MemoryBudget`
+    |
+    = help: the trait `Fn()` is not implemented for `MemoryBudget`
+    = note: wrap the `MemoryBudget` in a closure with no arguments: `|| { /* code */ }`
+    = note: required for `&MemoryBudget` to implement `Fn()`
+note: required by a bound in `decode_selected_frame_bounded`
+   --> crates/rrrah-dedup/src/decode.rs:104:18
+    |
+100 | pub fn decode_selected_frame_bounded(
+    |        ----------------------------- required by a bound in this function
+...
+104 |     cancel: impl Fn() -> bool,
+    |                  ^^^^^^^^^^^^ required by this bound in `decode_selected_frame_bounded`
+
+error[E0277]: expected an `FnOnce()` closure, found `MemoryBudget`
+   --> crates/rrrah-dedup/examples/photo_probe.rs:318:92
+    |
+318 |     let b=decode_selected_frame_bounded(&right,p.decode.max_file_bytes,p.decode.max_pixels,&budget,||false).unwrap();
+    |           ----------------------------- required by a bound introduced by this call        ^^^^^^^ expected an `FnOnce()` closure, found `MemoryBudget`
+    |
+    = help: the trait `FnOnce()` is not implemented for `MemoryBudget`
+    = note: wrap the `MemoryBudget` in a closure with no arguments: `|| { /* code */ }`
+note: required by a bound in `decode_selected_frame_bounded`
+   --> crates/rrrah-dedup/src/decode.rs:104:26
+    |
+100 | pub fn decode_selected_frame_bounded(
+    |        ----------------------------- required by a bound in this function
+...
+104 |     cancel: impl Fn() -> bool,
+    |                          ^^^^ required by this bound in `decode_selected_frame_bounded`
+
+error[E0061]: this function takes 4 arguments but 5 arguments were supplied
+   --> crates/rrrah-dedup/examples/photo_probe.rs:318:11
+    |
+318 |     let b=decode_selected_frame_bounded(&right,p.decode.max_file_bytes,p.decode.max_pixels,&budget,||false).unwrap();
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ----------------------- -------------------         ------- unexpected argument #5 of type `{closure@crates/rrrah-dedup/examples/photo_probe.rs:318:100: 318:102}`
+    |                                                |                       |
+    |                                                |                       expected `&MemoryBudget`, found `u64`
+    |                                                expected `AnimationBudget`, found `u64`
+    |
+note: function defined here
+   --> crates/rrrah-dedup/src/decode.rs:100:8
+    |
+100 | pub fn decode_selected_frame_bounded(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+help: consider removing the tuple struct field `max_file_bytes`
+    |
+318 -     let b=decode_selected_frame_bounded(&right,p.decode.max_file_bytes,p.decode.max_pixels,&budget,||false).unwrap();
+318 +     let b=decode_selected_frame_bounded(&right,p.decode,p.decode.max_pixels,&budget,||false).unwrap();
+    |
+help: remove the extra argument
+    |
+318 -     let b=decode_selected_frame_bounded(&right,p.decode.max_file_bytes,p.decode.max_pixels,&budget,||false).unwrap();
+318 +     let b=decode_selected_frame_bounded(&right,/* AnimationBudget */,/* &MemoryBudget */,&budget).unwrap();
+    |
+
+Some errors have detailed explanations: E0061, E0277.
+For more information about an error, try `rustc --explain E0061`.
+error: could not compile `rrrah-dedup` (example "photo_probe") due to 6 previous errors

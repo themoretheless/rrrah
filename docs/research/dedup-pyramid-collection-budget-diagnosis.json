@@ -1,0 +1,16 @@
+{
+  "status": "targeted_budget_recovery_passed_all229_rerun_required",
+  "query_id": "207502.jpg",
+  "original_probe_hit_cap": 2000000,
+  "corrected_probe_hit_cap": 9000000,
+  "derivation": "Two files, each at most1500 retained features. Retrieval includes self hits; each of at most3000 queries returns at most3000 distinct IDs, hence9m maximum accumulated hits. Native library budget refusal is correct.",
+  "scope": "Probe resource configuration only; descriptor distance, feature policy, geometry, pixel and color acceptance unchanged. Original all229 run retained; corrected frozen probe and independent rerun pending.",
+  "recovery_session": 83608,
+  "recovery_exit_code": 0,
+  "recovery_evidence": "docs/research/dedup-copydays-pyramid-collection-budget-recovery.json",
+  "original_all229_status": {
+    "ok": 228,
+    "error": 1
+  },
+  "original_candidates": 19
+}

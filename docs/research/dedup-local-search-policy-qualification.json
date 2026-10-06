@@ -1,0 +1,54 @@
+{
+  "scope": "Explicit selected-frame comparison mode integration into bounded batches and recursive roots",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/local_scan.rs": "6359f9e6a7f6c55dabf7ebdcd100d5766ac9777f42aa980177bc4c530423e52b",
+    "crates/rrrah-dedup/tests/local_scan.rs": "63ac6382b704a173f924688bbf9c5ff2bc824751e010bf9c531fce8cb51a6733"
+  },
+  "apis": [
+    "compare_local_files_with_policy",
+    "scan_local_files_with_policy",
+    "scan_local_roots_with_policy"
+  ],
+  "modes": [
+    "Strict",
+    "Photometric",
+    "Filtered: LinearSrgb or EncodedSrgb, RejectOutsidePolicy or ConstrainedLeastSquares"
+  ],
+  "qualified": [
+    "Photometric brightness comparison retains failing strict residual evidence",
+    "Both filtered fit modes recognize brightness pair and record selection",
+    "Recursive overlapping roots, deterministic pairs and corrupt-file issues retained",
+    "Invalid filter rejected before consuming input iterator",
+    "Constrained batch source mutation invalidates stale pairs and preserves healthy pair",
+    "Constrained batch late generation/user cancellation returns no partial report",
+    "Memory reservations released"
+  ],
+  "validation": {
+    "targeted_local_scan": {
+      "passed": 10,
+      "failed": 0,
+      "ignored": 0
+    },
+    "clippy": "passed --all-features --tests --examples --no-deps -D warnings; existing three decoder warnings remain",
+    "diff_check": "passed",
+    "full_feature_suite": {
+      "passed": 127,
+      "failed": 0,
+      "ignored": 0,
+      "exit_code": 0,
+      "note": "Suite before adding the final unfiltered-photometric batch regression; all ten local_scan tests, including that additional test, pass in the subsequent targeted run."
+    },
+    "distinct_tests_passed": 128
+  },
+  "limitations": [
+    "Only bounded exhaustive pair search; quadratic repeated extraction",
+    "Selected frame only, no whole-animation transformations",
+    "No held-out burst/look-alike calibration",
+    "No proof of physical memory bounds for every dependency allocation"
+  ],
+  "commands": [
+    "cargo test -p rrrah-dedup --all-features",
+    "cargo test -p rrrah-dedup --all-features --test local_scan",
+    "cargo clippy -p rrrah-dedup --all-features --tests --examples --no-deps -- -D warnings"
+  ]
+}

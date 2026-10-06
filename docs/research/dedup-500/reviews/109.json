@@ -1,0 +1,68 @@
+{
+  "index": 109,
+  "repository": "teran/deduplicator",
+  "commit": "ef24465a4982c33d5d992ab28eb7dc076f5f8928",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Lightroom image index/import plugin; perceptual hashing backend and GPL licensing need independent qualification.",
+  "available_source_evidence": [
+    {
+      "path": "deduplicator.lrdevplugin/FindDuplicates.lua",
+      "local": "02-FindDuplicates.lua",
+      "url": "https://github.com/teran/deduplicator/blob/ef24465a4982c33d5d992ab28eb7dc076f5f8928/deduplicator.lrdevplugin/FindDuplicates.lua",
+      "sha256": "21f191fe5772867eb50fadd4a8973b325448cbcc762cd8d9d8265f5fc0f61c33",
+      "truncated": false,
+      "lines": 172,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "deduplicator.lrdevplugin/GithubCheckUpdates.lua",
+      "local": "03-GithubCheckUpdates.lua",
+      "url": "https://github.com/teran/deduplicator/blob/ef24465a4982c33d5d992ab28eb7dc076f5f8928/deduplicator.lrdevplugin/GithubCheckUpdates.lua",
+      "sha256": "9b2147252069427fc611d046cb6528cca7bb4a34e5f9c4dd63c830ef6731f41c",
+      "truncated": false,
+      "lines": 52,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "deduplicator.lrdevplugin/ImportImgsumDatabase.lua",
+      "local": "04-ImportImgsumDatabase.lua",
+      "url": "https://github.com/teran/deduplicator/blob/ef24465a4982c33d5d992ab28eb7dc076f5f8928/deduplicator.lrdevplugin/ImportImgsumDatabase.lua",
+      "sha256": "9b4f2975e1f15e4ef73154898a3fde3cb503e460d3dff00102b63597b438a7e6",
+      "truncated": false,
+      "lines": 112,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "GPL-2.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/teran/deduplicator/blob/ef24465a4982c33d5d992ab28eb7dc076f5f8928/README.md",
+      "sha256": "0301b34bd375fdc8a171c2bf4ac29157e4a19014d81111eca38a1a110279d014",
+      "truncated": false,
+      "lines": 65,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/teran/deduplicator/blob/ef24465a4982c33d5d992ab28eb7dc076f5f8928/LICENSE",
+      "sha256": "db296f2f7f35bca3a174efb0eb392b3b17bd94b341851429a3dff411b1c2fc73",
+      "truncated": false,
+      "lines": 339,
+      "source": false,
+      "test": false
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "macos_exit_code": 0,
+  "macos_passed": 315,
+  "macos_ignored": 0,
+  "macos_result_groups": 55,
+  "source_drift": [
+    "crates/rrrah-dedup/src/local_collection.rs",
+    "crates/rrrah-dedup/tests/projective_files.rs"
+  ],
+  "scope": "dedup all-feature all-target runtime regression, mixed snapshot noted; not full goal qualification",
+  "linux_status": "running",
+  "linux": {
+    "exit": 0,
+    "result_groups": 55,
+    "passed": 319,
+    "failed": 0,
+    "ignored": 0,
+    "source_drift_from_start": [
+      "crates/rrrah-dedup/examples/photo_probe.rs",
+      "crates/rrrah-dedup/src/geometry.rs",
+      "crates/rrrah-dedup/src/local_collection.rs",
+      "crates/rrrah-dedup/src/local_scan.rs",
+      "crates/rrrah-dedup/tests/projective_files.rs",
+      "crates/rrrah-dedup/tests/projective_geometry.rs"
+    ],
+    "scope": "Broad Linux all-features/all-targets run, source changed during compilation; not atomic current-source qualification",
+    "log_sha256": "040c4ca17ae6e22b2668ad1f2f56e3379143a005d4b6c2a08bb5e64213fe86e4"
+  }
+}

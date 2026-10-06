@@ -1,0 +1,118 @@
+{
+  "index": 119,
+  "repository": "d4ncboz/threads-affiliate",
+  "commit": "93eb8664c9fd36be1595a5f1c2593399b4192603",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Threads posting history/link reuse deduplication; not file content.",
+  "available_source_evidence": [
+    {
+      "path": "threads_poster/dedup.py",
+      "local": "02-dedup.py",
+      "url": "https://github.com/d4ncboz/threads-affiliate/blob/93eb8664c9fd36be1595a5f1c2593399b4192603/threads_poster/dedup.py",
+      "sha256": "a82902b736854127c5a8f8fce05922d2b12d3056a0346801ef8393a32584e2fc",
+      "truncated": false,
+      "lines": 104,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "threads_poster/__init__.py",
+      "local": "03-__init__.py",
+      "url": "https://github.com/d4ncboz/threads-affiliate/blob/93eb8664c9fd36be1595a5f1c2593399b4192603/threads_poster/__init__.py",
+      "sha256": "691066b9b4c0a688aed7e1a31a57986a9c8deaf71e1a4051a31a8904418ab4ca",
+      "truncated": false,
+      "lines": 15,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "threads_poster/cli.py",
+      "local": "04-cli.py",
+      "url": "https://github.com/d4ncboz/threads-affiliate/blob/93eb8664c9fd36be1595a5f1c2593399b4192603/threads_poster/cli.py",
+      "sha256": "699ac9a3f3eb13f18b9fbe2c836959155978bd948584254110c87229d608a631",
+      "truncated": false,
+      "lines": 295,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/__init__.py",
+      "local": "05-__init__.py",
+      "url": "https://github.com/d4ncboz/threads-affiliate/blob/93eb8664c9fd36be1595a5f1c2593399b4192603/tests/__init__.py",
+      "sha256": "8a67a2808885908370666e7db087061c8f496aa7375e53ec8206c4b2893fa890",
+      "truncated": false,
+      "lines": 1,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "threads_poster/content_generator.py",
+      "local": "06-content_generator.py",
+      "url": "https://github.com/d4ncboz/threads-affiliate/blob/93eb8664c9fd36be1595a5f1c2593399b4192603/threads_poster/content_generator.py",
+      "sha256": "7397b6ea56a280279047a6c3433e14a9d0c5f39db492670431b8c5da084599b2",
+      "truncated": false,
+      "lines": 149,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/test_core.py",
+      "local": "07-test_core.py",
+      "url": "https://github.com/d4ncboz/threads-affiliate/blob/93eb8664c9fd36be1595a5f1c2593399b4192603/tests/test_core.py",
+      "sha256": "50e3adfc09807e8ad2416c2d4a9b321c72e378365b179859fd40f08ed6a9d9b6",
+      "truncated": false,
+      "lines": 132,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "examples/batch_schedule.py",
+      "local": "08-batch_schedule.py",
+      "url": "https://github.com/d4ncboz/threads-affiliate/blob/93eb8664c9fd36be1595a5f1c2593399b4192603/examples/batch_schedule.py",
+      "sha256": "b2a2b650b8cd3823a27dfba611818d36bf5bf1f87df7fdbd8023acf5a5fab440",
+      "truncated": false,
+      "lines": 110,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "examples/cron_integration.sh",
+      "local": "09-cron_integration.sh",
+      "url": "https://github.com/d4ncboz/threads-affiliate/blob/93eb8664c9fd36be1595a5f1c2593399b4192603/examples/cron_integration.sh",
+      "sha256": "f91090d27e5dc8b93bbf1c2be20ee4921b14219f3a47c15953a78664bdedaae5",
+      "truncated": false,
+      "lines": 49,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 2,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/d4ncboz/threads-affiliate/blob/93eb8664c9fd36be1595a5f1c2593399b4192603/README.md",
+      "sha256": "bc5b7c3211cbb4af7ff4e245007d50d40e1f0e8e807aa3bca57b0458d8d0f592",
+      "truncated": false,
+      "lines": 283,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/d4ncboz/threads-affiliate/blob/93eb8664c9fd36be1595a5f1c2593399b4192603/LICENSE",
+      "sha256": "80342b619cc07793b4e7f81059158fa78e329e006c3b7421f67059ee2c1aa598",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

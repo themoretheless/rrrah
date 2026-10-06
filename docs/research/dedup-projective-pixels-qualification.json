@@ -1,0 +1,19 @@
+{
+  "scope": "Supplied planar projective geometry pixel residuals, linear premultiplied sampling, explicit overlap/HDR/edited negatives, source horizon rejection, bounded work and per-checkpoint cancellation. Robust fit and old similarity/reflected warp regressions. No local-feature file search integration or real perspective cohort yet.",
+  "sources": {
+    "crates/rrrah-dedup/src/warp.rs": "3aa6b1ce5eea5ab5d7d1632777f02fb465467d018e4e58910c9bbed748da3e64",
+    "crates/rrrah-dedup/src/geometry.rs": "19a0f947c9dc56bdf3f9315ea4910c143f78545a5a6447cc37df4b7cc670753f"
+  },
+  "platforms": {
+    "macos": {
+      "exit_code": 0,
+      "passed": 8,
+      "log": "dedup-projective-pixels-macos.log"
+    },
+    "linux": {
+      "exit_code": 0,
+      "passed": 8,
+      "log": "dedup-projective-pixels-linux.log"
+    }
+  }
+}

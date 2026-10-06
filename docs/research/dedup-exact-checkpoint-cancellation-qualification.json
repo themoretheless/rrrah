@@ -1,0 +1,28 @@
+{
+  "qualification": "Verified exact scan one-shot cancellation across every observed checkpoint of a stable two-group fixture",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/exact.rs": "63d2c3a1a26918d0f693810c7583a9430185f6b674e3ffd33b5f88fc47204f17",
+    "crates/rrrah-dedup/tests/exact_files.rs": "f41ecd83074e7fec8e3a5b7cc5bcef7334b89056b6d2ee4b6e367f1287578eb7",
+    "crates/rrrah-dedup/tests/content_snapshot.rs": "84ae6d3c3d3231f25ac6afc8b41937394136731fb4210aa4fb2242319aa4b38a"
+  },
+  "validation": {
+    "macos_exact_tests": 13,
+    "linux_source_unit_tests": 3,
+    "linux_content_snapshot_tests": 1,
+    "linux_exact_tests": 14,
+    "failed": 0,
+    "macos_exact_test_clippy": "passed"
+  },
+  "method": [
+    "Run a successful verified scan and count every cancellation callback invocation.",
+    "Replay the scan once per observed callback position, returning true only at that position.",
+    "Every replay must be cancelled, incomplete and publish zero groups.",
+    "An uncancelled retry must preserve both baseline groups."
+  ],
+  "platform": "Linux 6.8 aarch64 / Rust 1.98 / UID 1000 / private tmpfs; native exact source standalone wrapper",
+  "limits": [
+    "This qualifies the observed healthy fixture trace, not every filesystem error branch or decoder cancellation latency.",
+    "Full-library suite was not repeated for this test-only addition.",
+    "No atomic snapshot or allocator/RSS bound claim."
+  ]
+}

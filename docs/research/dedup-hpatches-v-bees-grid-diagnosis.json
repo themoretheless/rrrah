@@ -1,0 +1,53 @@
+{
+  "scope": "Published-homography sampled grid and strict fixed acceptance fractions, not duplicate truth",
+  "rows": [
+    {
+      "report": "dedup-hpatches-baseline-model-quality.json",
+      "row": {
+        "sequence": "v_bees",
+        "target_index": 4,
+        "status": "ok",
+        "candidate": true,
+        "geometry_grid": {
+          "valid_points": 22,
+          "invalid_predictions": 0,
+          "median_pixels": 0.3621614293181047,
+          "maximum_pixels": 0.788186142583637
+        },
+        "registered_grid": {
+          "valid_points": 22,
+          "invalid_predictions": 0,
+          "median_pixels": 0.14104052380260168,
+          "maximum_pixels": 0.6672818683360009
+        },
+        "published_geometry_filtered_pass": true,
+        "model_grid_diagnostic": "median_at_most_2_pixels",
+        "diagnosis": "candidate"
+      }
+    },
+    {
+      "report": "dedup-hpatches-anchored-checkpoint-analysis.json",
+      "row": {
+        "sequence": "v_bees",
+        "target_index": 4,
+        "status": "ok",
+        "candidate": false,
+        "geometry_grid": {
+          "valid_points": 22,
+          "invalid_predictions": 0,
+          "median_pixels": 0.6882983023204067,
+          "maximum_pixels": 2.375704646970934
+        },
+        "registered_grid": {
+          "valid_points": 22,
+          "invalid_predictions": 0,
+          "median_pixels": 0.37874881053397713,
+          "maximum_pixels": 1.9067716763832157
+        },
+        "published_geometry_filtered_pass": true,
+        "model_grid_diagnostic": "median_at_most_2_pixels",
+        "diagnosis": "estimated_model_pixel_rejection"
+      }
+    }
+  ]
+}

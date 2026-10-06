@@ -1,0 +1,24 @@
+{
+  "status": "primitive_macos_passed_linux_running",
+  "macos": {
+    "test_exit": 0,
+    "passed": 10,
+    "ignored": 0,
+    "clippy_exit": 0
+  },
+  "policy": "Explicit nonzero seed and trials; fixed trials include singular/repeated samples, full-input scoring, support refinement and no partial evidence on cancellation",
+  "scope": "Synthetic 200-correspondence/80-outlier recovery and every observed cancellation callback; no statistical confidence or captured-image recall claim",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/geometry.rs": "33c820f858bf8a58e1354d2bbb5bcb4b6ea762e43e31c2019a9e6b779d89df9e",
+    "crates/rrrah-dedup/tests/projective_geometry.rs": "f3d7f4e0f548d987f8257314a3a89d4dfcb34bf2c264d4ed82669f5d8c220c9d"
+  },
+  "remaining": [
+    "Sampled file/collection/root integration with shared selection policy",
+    "Independent all-pair evaluation and negative calibration"
+  ],
+  "linux": {
+    "exit": 0,
+    "passed": 14,
+    "ignored": 0
+  }
+}

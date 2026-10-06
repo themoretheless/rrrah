@@ -1,0 +1,108 @@
+{
+  "index": 37,
+  "repository": "markusressel/py-image-dedup",
+  "commit": "7ca5386d16171c2403e8e23c51cc3744d84bb705",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Image-match CLI and deduplication actions; AGPL and selected excerpts leave normalization and threshold behavior unqualified.",
+  "license_metadata": "AGPL-3.0",
+  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "tests_detected": 3,
+  "upstream_tests_run": false,
+  "available_source_evidence": [
+    {
+      "path": "py_image_dedup/library/deduplication_result.py",
+      "local": "02-deduplication_result.py",
+      "url": "https://github.com/markusressel/py-image-dedup/blob/7ca5386d16171c2403e8e23c51cc3744d84bb705/py_image_dedup/library/deduplication_result.py",
+      "sha256": "6f85ffe7c08baf0622440418be3c184f52eb182eaef793197544151258c89c4b",
+      "truncated": false,
+      "lines": 129,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "py_image_dedup/library/deduplicator.py",
+      "local": "03-deduplicator.py",
+      "url": "https://github.com/markusressel/py-image-dedup/blob/7ca5386d16171c2403e8e23c51cc3744d84bb705/py_image_dedup/library/deduplicator.py",
+      "sha256": "a303c1578a0e0dcca93bc7d8f1891c4f5f5dc0db0584cf3eaeaa86298d499e42",
+      "truncated": false,
+      "lines": 686,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "py_image_dedup/__init__.py",
+      "local": "04-__init__.py",
+      "url": "https://github.com/markusressel/py-image-dedup/blob/7ca5386d16171c2403e8e23c51cc3744d84bb705/py_image_dedup/__init__.py",
+      "sha256": "ac01b7048ddaa5807eba7536745088f8bb3eeb0768f80afc7afe6d4c81f3dda0",
+      "truncated": false,
+      "lines": 3,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/__init__.py",
+      "local": "05-__init__.py",
+      "url": "https://github.com/markusressel/py-image-dedup/blob/7ca5386d16171c2403e8e23c51cc3744d84bb705/tests/__init__.py",
+      "sha256": "20b5a67e38bff304f8f2273bd1ca4764cbe8602aae0c3e52563e95e3ef01e418",
+      "truncated": false,
+      "lines": 17,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "py_image_dedup/cli.py",
+      "local": "06-cli.py",
+      "url": "https://github.com/markusressel/py-image-dedup/blob/7ca5386d16171c2403e8e23c51cc3744d84bb705/py_image_dedup/cli.py",
+      "sha256": "d20b3ba71515b79240d9d3c6d7a79b939cac2f90a9ca87111b39f8f2f047d9bf",
+      "truncated": false,
+      "lines": 94,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "py_image_dedup/stats.py",
+      "local": "07-stats.py",
+      "url": "https://github.com/markusressel/py-image-dedup/blob/7ca5386d16171c2403e8e23c51cc3744d84bb705/py_image_dedup/stats.py",
+      "sha256": "0cc93818f71ab37e01151205475898b0d8ce44aab6b0937ce21fec01282ec756",
+      "truncated": false,
+      "lines": 20,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/test_file_extension.py",
+      "local": "08-test_file_extension.py",
+      "url": "https://github.com/markusressel/py-image-dedup/blob/7ca5386d16171c2403e8e23c51cc3744d84bb705/tests/test_file_extension.py",
+      "sha256": "1a4163b8c4cb39f974a646cbf1c00fb8d86f4740fa05cec430610b38d6889620",
+      "truncated": false,
+      "lines": 16,
+      "source": true,
+      "test": true
+    }
+  ],
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/markusressel/py-image-dedup/blob/7ca5386d16171c2403e8e23c51cc3744d84bb705/README.md",
+      "sha256": "8bf0ddfccab901c78089b097935863dfe711d1436f3f5ad141f10bc35dea1b1f",
+      "truncated": false,
+      "lines": 262,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/markusressel/py-image-dedup/blob/7ca5386d16171c2403e8e23c51cc3744d84bb705/LICENSE",
+      "sha256": "8486a10c4393cee1c25392769ddd3b2d6c242d6ec7928e1414efff7dfb2f07ef",
+      "truncated": false,
+      "lines": 661,
+      "source": false,
+      "test": false
+    }
+  ]
+}

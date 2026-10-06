@@ -1,0 +1,27 @@
+{
+  "status": "complete_measurement_not_duplicate_qualification",
+  "required_pairs": 580,
+  "settings": {
+    "feature_limits": [
+      32,
+      128,
+      500
+    ],
+    "selections": [
+      "global",
+      "4x4_spatial"
+    ],
+    "max_descriptor_distance": 64,
+    "published_geometry_tolerance_pixels": 2
+  },
+  "scope": "Descriptor matching agrees with known normalized homography; no candidate acceptance or duplicate-label claim. Public feature scratch is outside managed decode accounting.",
+  "source_sha256": {
+    "crates/rrrah-dedup/examples/photo_probe.rs": "898fb574180e70df71e41664f9912c6ed94f5a0380bfb2f66d1a11e928047966",
+    "scripts/qualify-dedup-hpatches.py": "63355d2b5ed508a6788827968370e15ff2892d4ccbd1688308e1dee6c2f6889b"
+  },
+  "build_exit": 0,
+  "probe": "/Users/themoretheless/.codex/tmp/rrrah-dedup-hpatches/photo-probe-correspondences",
+  "completed_pairs": 580,
+  "execution_errors": 0,
+  "analysis": "docs/research/dedup-hpatches-correspondences-analysis.json"
+}

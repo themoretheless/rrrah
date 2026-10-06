@@ -1,0 +1,311 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: function `error` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:4:4
+  |
+4 | fn error(message: &str) -> DecodeError {
+  |    ^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `packed_12` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:9:4
+  |
+9 | fn packed_12(
+  |    ^^^^^^^^^
+
+warning: function `decode_zd` is never used
+  --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:48:15
+   |
+48 | pub(super) fn decode_zd(
+   |               ^^^^^^^^^
+
+warning: `rrrah-decode` (lib) generated 3 warnings
+warning: used `assert!` with an equality comparison
+   --> crates/rrrah-dedup/src/exact.rs:812:9
+    |
+812 |         assert!(samples[0] != samples[1]);
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#manual_assert_eq
+    = note: `-W clippy::manual-assert-eq` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::manual_assert_eq)]`
+help: replace it with `assert_ne!(..)`
+    |
+812 -         assert!(samples[0] != samples[1]);
+812 +         assert_ne!(samples[0], samples[1]);
+    |
+
+warning: manual implementation of `midpoint` which can overflow
+    --> crates/rrrah-dedup/src/local_scan.rs:1343:21
+     |
+1343 |                     0.5 * (0.1 + 0.7 * v) + 0.02,
+     |                     ^^^^^^^^^^^^^^^^^^^^^ help: use `f32::midpoint` instead: `f32::midpoint(0.1, 0.7 * v)`
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#manual_midpoint
+     = note: `-W clippy::manual-midpoint` implied by `-W clippy::pedantic`
+     = help: to override `-W clippy::pedantic` add `#[allow(clippy::manual_midpoint)]`
+
+warning: manual implementation of `midpoint` which can overflow
+    --> crates/rrrah-dedup/src/local_scan.rs:1344:21
+     |
+1344 |                     0.5 * (0.2 + 0.4 * v) + 0.02,
+     |                     ^^^^^^^^^^^^^^^^^^^^^ help: use `f32::midpoint` instead: `f32::midpoint(0.2, 0.4 * v)`
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#manual_midpoint
+
+warning: using `chunks_exact_mut` with a constant chunk size
+    --> crates/rrrah-dedup/src/local_scan.rs:1510:36
+     |
+1510 |         for pixel in target_pixels.chunks_exact_mut(4).step_by(7) {
+     |                                    ^^^^^^^^^^^^^^^^^^^ help: consider using `as_chunks` instead: `as_chunks_mut::<4>().0.iter()`
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#chunks_exact_to_as_chunks
+     = note: `-W clippy::chunks-exact-to-as-chunks` implied by `-W clippy::all`
+     = help: to override `-W clippy::all` add `#[allow(clippy::chunks_exact_to_as_chunks)]`
+
+warning: casting `u64` to `usize` may truncate the value on targets with 32-bit wide pointers
+   --> crates/rrrah-dedup/src/lib.rs:357:48
+    |
+357 |                 .try_insert_with_cancel(id, 0, count as usize, || false)
+    |                                                ^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+    = note: `-W clippy::cast-possible-truncation` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::cast_possible_truncation)]`
+help: ... or use `try_from` and handle the error accordingly
+    |
+357 -                 .try_insert_with_cancel(id, 0, count as usize, || false)
+357 +                 .try_insert_with_cancel(id, 0, usize::try_from(count), || false)
+    |
+
+warning: casting `u64` to `usize` may truncate the value on targets with 32-bit wide pointers
+   --> crates/rrrah-dedup/src/lib.rs:367:48
+    |
+367 |                 .try_insert_with_cancel(id, 0, count as usize, || false)
+    |                                                ^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+    |
+367 -                 .try_insert_with_cancel(id, 0, count as usize, || false)
+367 +                 .try_insert_with_cancel(id, 0, usize::try_from(count), || false)
+    |
+
+warning: casting `u64` to `usize` may truncate the value on targets with 32-bit wide pointers
+   --> crates/rrrah-dedup/src/lib.rs:371:52
+    |
+371 |             index.try_insert_with_cancel(count, 0, count as usize, || false),
+    |                                                    ^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+    |
+371 -             index.try_insert_with_cancel(count, 0, count as usize, || false),
+371 +             index.try_insert_with_cancel(count, 0, usize::try_from(count), || false),
+    |
+
+warning: casting `u64` to `usize` may truncate the value on targets with 32-bit wide pointers
+   --> crates/rrrah-dedup/src/lib.rs:377:50
+    |
+377 |             .try_insert_with_cancel(0, u64::MAX, count as usize + 1, || false)
+    |                                                  ^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+    |
+377 -             .try_insert_with_cancel(0, u64::MAX, count as usize + 1, || false)
+377 +             .try_insert_with_cancel(0, u64::MAX, usize::try_from(count) + 1, || false)
+    |
+
+warning: `rrrah-dedup` (lib test) generated 8 warnings (run `cargo clippy --fix --lib -p rrrah-dedup --tests -- --no-deps` to apply 4 suggestions)
+warning: this function has too many lines (117/100)
+   --> crates/rrrah-dedup/tests/pyramid.rs:146:1
+    |
+146 | fn oriented_pyramid_keeps_recipe_source_coordinates_and_admission() {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_lines
+    = note: `-W clippy::too-many-lines` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::too_many_lines)]`
+
+warning: strict comparison of `f32` or `f64` arrays
+   --> crates/rrrah-dedup/tests/pyramid.rs:216:9
+    |
+216 |         assert_eq!(actual.position, expected.position);
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#float_cmp
+    = note: `-W clippy::float-cmp` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::float_cmp)]`
+
+warning: strict comparison of `f32` or `f64`
+   --> crates/rrrah-dedup/tests/oriented.rs:280:9
+    |
+280 |         assert_eq!(a.position[0], 159. - b.position[0]);
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#float_cmp
+    = note: `-W clippy::float-cmp` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::float_cmp)]`
+
+warning: strict comparison of `f32` or `f64`
+   --> crates/rrrah-dedup/tests/oriented.rs:281:9
+    |
+281 |         assert_eq!(a.position[1], b.position[1]);
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#float_cmp
+
+warning: `rrrah-dedup` (test "pyramid") generated 2 warnings
+warning: `rrrah-dedup` (test "oriented") generated 2 warnings
+warning: this function has too many lines (119/100)
+   --> crates/rrrah-dedup/tests/local_collection.rs:773:1
+    |
+773 | fn reflected_recursive_collection_keeps_aliases_paths_and_request_policy() {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_lines
+    = note: `-W clippy::too-many-lines` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::too_many_lines)]`
+
+warning: this function has too many lines (133/100)
+   --> crates/rrrah-dedup/tests/local_collection.rs:897:1
+    |
+897 | fn reflected_spatial_collection_matches_spatial_file_oracle() {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_lines
+
+warning: `rrrah-dedup` (test "local_collection") generated 2 warnings
+warning: using `clone` on type `Feature` which implements the `Copy` trait
+   --> crates/rrrah-dedup/tests/local.rs:114:52
+    |
+114 |         match_features(std::slice::from_ref(&a), &[a.clone(), b], MATCH, || false)
+    |                                                    ^^^^^^^^^ help: try removing the `clone` call: `a`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#clone_on_copy
+    = note: `-W clippy::clone-on-copy` implied by `-W clippy::all`
+    = help: to override `-W clippy::all` add `#[allow(clippy::clone_on_copy)]`
+
+warning: casting `usize` to `f64` may cause a loss of precision (`usize` can be up to 64 bits wide depending on the target architecture, but `f64`'s mantissa is only 52 bits wide)
+   --> crates/rrrah-dedup/tests/local.rs:194:24
+    |
+194 |             position: [i as f64, 1.0],
+    |                        ^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_precision_loss
+    = note: `-W clippy::cast-precision-loss` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::cast_precision_loss)]`
+
+warning: strict comparison of `f32` or `f64` arrays
+   --> crates/rrrah-dedup/tests/local.rs:224:9
+    |
+224 |         assert_eq!(actual.source, expected.source);
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#float_cmp
+    = note: `-W clippy::float-cmp` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::float_cmp)]`
+
+warning: strict comparison of `f32` or `f64` arrays
+   --> crates/rrrah-dedup/tests/local.rs:225:9
+    |
+225 |         assert_eq!(actual.target, expected.target);
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#float_cmp
+
+warning: `rrrah-dedup` (test "local") generated 4 warnings (run `cargo clippy --fix --test "local" -p rrrah-dedup -- --no-deps` to apply 1 suggestion)
+warning: this function has too many lines (101/100)
+   --> crates/rrrah-dedup/tests/photo_files.rs:698:1
+    |
+698 | fn spatial_reflected_brightness_collection_matches_complete_spatial_oracle() {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_lines
+    = note: `-W clippy::too-many-lines` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::too_many_lines)]`
+
+warning: this function has too many lines (102/100)
+   --> crates/rrrah-dedup/tests/photo_files.rs:900:1
+    |
+900 | fn recursive_spatial_reflected_brightness_shares_pair_and_frame_policy() {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_lines
+
+warning: casting `u64` to `f64` may cause a loss of precision (`u64` is 64 bits wide, but `f64`'s mantissa is only 52 bits wide)
+    --> crates/rrrah-dedup/tests/photo_files.rs:1041:17
+     |
+1041 |                 direction.pixels.matched_pixels as f64 / direction.pixels.compared_pixels as f64
+     |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_precision_loss
+     = note: `-W clippy::cast-precision-loss` implied by `-W clippy::pedantic`
+     = help: to override `-W clippy::pedantic` add `#[allow(clippy::cast_precision_loss)]`
+
+warning: casting `u64` to `f64` may cause a loss of precision (`u64` is 64 bits wide, but `f64`'s mantissa is only 52 bits wide)
+    --> crates/rrrah-dedup/tests/photo_files.rs:1041:58
+     |
+1041 |                 direction.pixels.matched_pixels as f64 / direction.pixels.compared_pixels as f64
+     |                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_precision_loss
+
+warning: casting `u64` to `f64` may cause a loss of precision (`u64` is 64 bits wide, but `f64`'s mantissa is only 52 bits wide)
+    --> crates/rrrah-dedup/tests/photo_files.rs:1099:25
+     |
+1099 |                         direction.pixels.matched_pixels as f64 / direction.pixels.compared_pixels as f64
+     |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_precision_loss
+
+warning: casting `u64` to `f64` may cause a loss of precision (`u64` is 64 bits wide, but `f64`'s mantissa is only 52 bits wide)
+    --> crates/rrrah-dedup/tests/photo_files.rs:1099:66
+     |
+1099 |                         direction.pixels.matched_pixels as f64 / direction.pixels.compared_pixels as f64
+     |                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_precision_loss
+
+warning: this function has too many lines (135/100)
+    --> crates/rrrah-dedup/tests/photo_files.rs:1207:1
+     |
+1207 | fn reflected_filtered_file_guards_discard_late_results() {
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_lines
+
+warning: this function has too many lines (180/100)
+    --> crates/rrrah-dedup/tests/photo_files.rs:1434:1
+     |
+1434 | fn recursive_filtered_reflections_preserve_oracle_aliases_errors_and_modes() {
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_lines
+
+warning: this function has too many lines (147/100)
+    --> crates/rrrah-dedup/tests/photo_files.rs:1618:1
+     |
+1618 | fn recursive_filtered_reflection_keeps_frame_selection_and_factory_guards() {
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_lines
+
+warning: `rrrah-dedup` (test "photo_files") generated 9 warnings
+warning: strict comparison of `f32` or `f64`
+   --> crates/rrrah-dedup/tests/warp.rs:157:13
+    |
+157 |             assert_eq!(result.squared_error, 0.0);
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#float_cmp
+    = note: `-W clippy::float-cmp` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::float_cmp)]`
+
+warning: `rrrah-dedup` (test "warp") generated 1 warning
+    Finished `dev` profile [optimized + debuginfo] target(s) in 4.19s

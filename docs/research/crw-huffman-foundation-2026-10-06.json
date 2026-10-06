@@ -1,0 +1,17 @@
+{
+  "scope": "CRW entropy canonical prefix decoder",
+  "passed": 711,
+  "ignored": 37,
+  "failed": 0,
+  "log": "/tmp/rrrah-crw-huffman-full.log",
+  "log_sha256": "066b58e7e9e6dcb1f788eb02c9f9394fbd0cecf92acd3ffb92884cbd47e87feb",
+  "contracts": [
+    "Borrowed symbols and fixed 16-length indexing; no dynamic Huffman allocation",
+    "Reject empty or oversubscribed trees and mismatched symbol counts",
+    "Authored prefix mapping and maximum 16-bit code; explicit truncated/invalid-code errors"
+  ],
+  "limitations": [
+    "Camera-specific tables and full CRW sensor reconstruction remain pending.",
+    "No native sensor equality, WB or viewer qualification claimed."
+  ]
+}

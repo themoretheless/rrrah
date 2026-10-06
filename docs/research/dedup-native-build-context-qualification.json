@@ -1,0 +1,44 @@
+{
+  "status": "passed",
+  "minimal_tests": 2,
+  "integrated_tests": 20,
+  "breakdown": {
+    "build_context": 2,
+    "decode": 12,
+    "cache": 6
+  },
+  "change": "built fingerprint recipe includes native compiler/flags, SDK/deployment and pkg-config context; absent target-specific settings are watched",
+  "checks": [
+    "selected native variables change canonical context",
+    "target dash/underscore variable forms watched while absent",
+    "environment order has no effect",
+    "unrelated environment excluded",
+    "cached decode and persisted cache regression passes"
+  ],
+  "logs": {
+    "minimal": {
+      "path": "docs/research/dedup-native-build-context-minimal.log",
+      "sha256": "280410b0dd7692d146b0d725c67ae7b5f00a104921a061c81862512a171d7c7a"
+    },
+    "integration": {
+      "path": "docs/research/dedup-native-build-context-integration.log",
+      "sha256": "69856681721966375144bbf13420f983eb8f89bee7a259eb5bdf2b0c8c9f0d44"
+    },
+    "clippy": {
+      "path": "docs/research/dedup-native-build-context-clippy.log",
+      "sha256": "25554d2347d2f618794f02736ec8f33f2e0f7ae0b1f139b3f6c43c75bb3c80f8"
+    }
+  },
+  "source_hashes": {
+    "crates/rrrah-dedup/build.rs": "ea12b6297f3282d6c98b5ed186708ccc5d7ac441f1f370e700f088e334d22b48",
+    "crates/rrrah-dedup/build_context.rs": "453700cfedf1e5945aeb6de99c62571b28dd1819f761dfdc1bb6b3b084eb85b0",
+    "crates/rrrah-dedup/tests/build_context.rs": "8d6d7176a24cfa52bc5453eece023cb49810cdb08432a09d42e90eaacd79dba6"
+  },
+  "hash_timing": "post-validation",
+  "clippy": "passed with existing decoder warnings",
+  "limitations": [
+    "context tests do not rebuild external native dependencies under every toolchain setting",
+    "dynamic library binary replacement at unchanged path and system font/runtime resource identity remain unqualified",
+    "full acceptance contract remains incomplete"
+  ]
+}

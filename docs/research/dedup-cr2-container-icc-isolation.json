@@ -1,0 +1,45 @@
+{
+  "scope": "CR2 render container/ICC isolation and independent Little CMS 2.19 sampled color-conversion oracle",
+  "source_sha256": {
+    "scripts/dedup-icc-grid-oracle.cpp": "81394e91172035c596574a13becde188b7508ea74c4266f27587ebaa1e7d5b1f",
+    "crates/rrrah-dedup/examples/raw_raster_probe.rs": "70cd934f68c4d874dcf97797c421d9c2f14d78e2e833b4f73bdad00c11961406"
+  },
+  "rendered_pixels": {
+    "tiff_and_ppm_dimensions": [
+      6024,
+      4020
+    ],
+    "integer_rgb_bytes": 145298880,
+    "identical_after_endian_normalization": true
+  },
+  "global_evidence": {
+    "raw_vs_profiled_tiff_distance": 106,
+    "raw_vs_explicit_untagged_srgb_ppm_distance": 0
+  },
+  "icc": {
+    "bytes": 496,
+    "sha256": "5a7cf8121af089606037d7ee0f14fd6ca0719e341bd163e114e6512c35a8647d",
+    "single_gamma_trc": 1.93359375,
+    "description": "sRGB gamma 2.222 toe slope 4.5; approximated stored single gamma curve"
+  },
+  "grid_means": {
+    "native_icc": [
+      0.11181879959359264,
+      0.11448447286631591,
+      0.11239191424635919
+    ],
+    "lcms": [
+      0.111808165703209,
+      0.114484344846523,
+      0.112437781179665
+    ],
+    "maximum_absolute_mean_delta": 4.586693330581e-05
+  },
+  "interpretation": "Embedded ICC declares a different transfer than the untagged-sRGB assumption. Native sampled ICC conversion agrees closely with independent LCMS; this does not support bypassing ICC or diagnosing a gross ICC conversion defect. The global fingerprint is sensitive to this same-source rendering difference.",
+  "limitations": [
+    "Grid-mean comparison does not prove every pixel ICC correctness",
+    "Different declared transfer legitimately changes normalized pixels; no exact equality claim",
+    "Known same-source candidate with approximate profile transfer remains missed at radius64",
+    "Local geometric/pixel candidate qualification still needed"
+  ]
+}

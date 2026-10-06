@@ -1,0 +1,78 @@
+{
+  "index": 453,
+  "repository": "sambux1/arph",
+  "commit": "32ebc32c3572252573071b158f0bd81255b03d41",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Thresholded perceptographic/crypto wrapper and pHash experiments; cryptographic claim does not replace duplicate verification.",
+  "available_source_evidence": [
+    {
+      "path": "arph/underlying/phash.py",
+      "local": "02-phash.py",
+      "url": "https://github.com/sambux1/arph/blob/32ebc32c3572252573071b158f0bd81255b03d41/arph/underlying/phash.py",
+      "sha256": "aaa62db76ca1c330ac862e086d2651f9088c2380a94a3eb441f707e7b803bd88",
+      "truncated": false,
+      "lines": 43,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "example.py",
+      "local": "03-example.py",
+      "url": "https://github.com/sambux1/arph/blob/32ebc32c3572252573071b158f0bd81255b03d41/example.py",
+      "sha256": "6337073f4f09728431d159f0195094a1b0f3dd2e1c82473668a72c6543adef53",
+      "truncated": false,
+      "lines": 18,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "main.py",
+      "local": "04-main.py",
+      "url": "https://github.com/sambux1/arph/blob/32ebc32c3572252573071b158f0bd81255b03d41/main.py",
+      "sha256": "c19f5c735aaa01ff64ea1547f7aad50f27f70308a56015c5250523f35976f9a8",
+      "truncated": false,
+      "lines": 8,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "experiments/sample_test.py",
+      "local": "05-sample_test.py",
+      "url": "https://github.com/sambux1/arph/blob/32ebc32c3572252573071b158f0bd81255b03d41/experiments/sample_test.py",
+      "sha256": "b2facc217c747d0d5bf55d79938966551371cb8c16d7ee76e965472909c3fc63",
+      "truncated": false,
+      "lines": 19,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 4,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/sambux1/arph/blob/32ebc32c3572252573071b158f0bd81255b03d41/README.md",
+      "sha256": "d3399afad1e35b7ab15345e762b164c4ea7630daf516aa373c94d9a61e071a1c",
+      "truncated": false,
+      "lines": 2,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/sambux1/arph/blob/32ebc32c3572252573071b158f0bd81255b03d41/LICENSE",
+      "sha256": "d39cb4476572a68cffd32717e6965336f7b04e8c20d07b9a426899e6acb11265",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "scope": "macOS OS-reported peak process RSS of full native RAW probe, sequential processes. Includes sensor decode plus library development/digest/fingerprint; no failure/cancel mode. Not an enforced native RSS budget or cross-platform bound.",
+  "binary_sha256": "6d98d10fb0c8862a565e3fa3e20db25305fd54a26c0d2705df88cbf6b7a690e5",
+  "budget_bytes": 2147483648,
+  "cases": [
+    {
+      "filename": "5025.rw2",
+      "exit_code": 0,
+      "source_sha256": "87516d28f8594dcfd20b0577883ad0d35662efc503674b1e3688aa894d32a2c0",
+      "sensor_width": 4760,
+      "sensor_height": 3472,
+      "width": 4608,
+      "height": 3456,
+      "digest": "ef9467b6c4a8262e803188ad2b7f122f35108dcd0ce964c88b8a5e11bd05628a",
+      "informative": true,
+      "milliseconds": 7251,
+      "managed_peak": 619877248,
+      "budget_refusal_verified": false,
+      "os_peak_rss_bytes": 687472640,
+      "rss_minus_managed_peak_bytes": 67595392,
+      "os_peak_exceeds_managed_limit": false
+    },
+    {
+      "filename": "2058.3fr",
+      "exit_code": 0,
+      "source_sha256": "395acb2c706dc10270c58ec261e42a5e36f6ac8c39d2a767e86e83648aa318a3",
+      "sensor_width": 8384,
+      "sensor_height": 6304,
+      "width": 8272,
+      "height": 6200,
+      "digest": "7033cfbe69f0a9502751ccd23a38e4fd9f24c6b06148de2e6ce9af6767126c3e",
+      "informative": true,
+      "milliseconds": 23167,
+      "managed_peak": 1963939840,
+      "budget_refusal_verified": false,
+      "os_peak_rss_bytes": 2277277696,
+      "rss_minus_managed_peak_bytes": 313337856,
+      "os_peak_exceeds_managed_limit": true
+    },
+    {
+      "filename": "tests/IMG_9043.CR3",
+      "exit_code": 0,
+      "source_sha256": "d06cbb10e84882cf130430bdc88ed2652c2622b96dea8d6a854c09e3bee37e59",
+      "sensor_width": 6188,
+      "sensor_height": 4120,
+      "width": 6000,
+      "height": 4000,
+      "digest": "d65636371f3e86dd05b7ac33005c38281ed40095a8abb244e4864e53dc2a7dee",
+      "informative": true,
+      "milliseconds": 11039,
+      "managed_peak": 951687328,
+      "budget_refusal_verified": false,
+      "os_peak_rss_bytes": 1040646144,
+      "rss_minus_managed_peak_bytes": 88958816,
+      "os_peak_exceeds_managed_limit": false
+    }
+  ],
+  "status": "finished",
+  "passed": true,
+  "baseline_matches": 3
+}

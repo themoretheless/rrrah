@@ -1,0 +1,83 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+warning: function `error` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:4:4
+  |
+4 | fn error(message: &str) -> DecodeError {
+  |    ^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `packed_12` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:9:4
+  |
+9 | fn packed_12(
+  |    ^^^^^^^^^
+
+warning: function `decode_zd` is never used
+  --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:48:15
+   |
+48 | pub(super) fn decode_zd(
+   |               ^^^^^^^^^
+
+warning: `rrrah-decode` (lib) generated 3 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 37.57s
+     Running unittests src/lib.rs (/tmp/rrrah-dedup-target/debug/deps/rrrah_dedup-454c8ffc9a750145)
+
+running 30 tests
+test exact::collision_tests::read_buffer_capacity_failure_is_explicit_and_retry_succeeds ... ok
+test local_scan::feature_memory_tests::grayscale_admission_accounts_for_other_owners_and_releases_on_cancel ... ok
+test local_scan::reflected_model_confirmation_tests::exhausted_model_fits_preserve_first_inconclusive_reason ... ok
+test local_scan::reflected_model_confirmation_tests::a_rejected_second_model_does_not_convert_first_fit_failure_to_a_negative ... ok
+test local_scan::feature_memory_tests::retained_feature_storage_keeps_credit_until_last_owner ... ok
+test local_scan::reflected_model_confirmation_tests::coefficient_bounds_and_low_variance_failures_are_also_model_specific ... ok
+test local_scan::reflected_model_confirmation_tests::insufficient_fit_support_in_first_model_does_not_hide_second_verified_model ... ok
+test animated::timeline_key_tests::rational_sum_overflow_is_inconclusive_despite_direct_timeline_equality ... ok
+test local_scan::reflected_model_confirmation_tests::alternative_confirmation_cancel_and_work_limits_remain_terminal ... ok
+test animated::timeline_key_tests::zero_duration_timelines_ignore_pixels_but_retain_repetition ... ok
+test exact::collision_tests::final_content_validation_rejects_change_even_when_metadata_matches ... ok
+test tests::collision_membership_keeps_arbitrary_order_and_pair_identity ... ok
+test tests::empty_and_duplicate_fingerprints ... ok
+test tests::traversal_work_exhaustion_is_distinct_from_failure ... ok
+test warp::encoded_signal_tests::extended_srgb_landmarks_match_independent_decimal_oracle_without_clipping ... ok
+test local_scan::reflected_model_confirmation_tests::reflected_ranged_models_recover_fit_and_preserve_selected_domain ... ok
+test warp::encoded_signal_tests::transfer_precedes_premultiplication_and_bilinear_sampling ... ok
+test warp::bounded_fit_tests::boundary_fit_matches_exhaustive_rectangle_and_beats_independent_clipping ... ok
+test local_scan::reflected_model_confirmation_tests::ordinary_alternative_models_recover_photometric_range_and_display_fits ... ok
+test container::reuse_tests::stale_different_signatures_are_errors_and_equal_signatures_require_confirmation ... ok
+test exact::collision_tests::verified_observations_detect_metadata_invisible_pruned_mutations ... ok
+test container::reuse_tests::retained_left_reuses_pixels_and_rejects_changed_source_and_cancellation ... ok
+test container::reuse_tests::retained_left_survives_memory_refusal_and_releases_before_row_change ... ok
+test tests::indexed_search_matches_independent_exhaustive_scan ... ok
+test local_scan::reflected_model_confirmation_tests::selected_encoded_filter_retains_auxiliary_linear_failure ... ok
+test pages::page_key_tests::key_retains_page_order_and_count_independently_of_first_page ... ok
+test exact::collision_tests::colliding_samples_and_full_hashes_still_partition_by_bytes ... ok
+test pixel_index::tests::injected_constant_keys_still_require_direct_pixel_confirmation ... ok
+test container::reuse_tests::candidate_collisions_and_signature_failures_cannot_replace_direct_evidence ... ok
+test container::reuse_tests::reused_pair_latches_every_cancellation_checkpoint_and_generation_token ... ok
+
+test result: ok. 30 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+     Running tests/container.rs (/tmp/rrrah-dedup-target/debug/deps/container-9cc69093f9b2b030)
+
+running 9 tests
+test selected_frame_does_not_establish_whole_animation_identity ... ok
+test exhaustive_scan_does_not_filter_on_zero_duration_first_frame ... ok
+test dcx_icon_and_cursor_page_modes_use_existing_full_decoders ... ok
+test recursive_complete_animation_groups_preserve_paths_aliases_and_errors ... ok
+test generation_change_at_final_group_admission_returns_no_result ... ok
+test batch_full_presentations_preserve_negative_and_error_evidence ... ok
+test automatic_directory_search_groups_renamed_containers_and_retains_detection_failures ... ok
+test complete_animation_groups_remove_stale_edges_and_keep_healthy_group ... ok
+test complete_page_comparison_rejects_last_page_changes_and_limits ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/presentation_digest.rs (/tmp/rrrah-dedup-target/debug/deps/presentation_digest-54a1b4b71dbf62dd)
+
+running 2 tests
+test timeline_keys_preserve_cross_encoding_splits_zero_prefix_and_labelled_negatives ... ok
+test page_keys_cover_every_page_across_compression_and_byte_order ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+

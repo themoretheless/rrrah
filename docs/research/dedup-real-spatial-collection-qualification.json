@@ -1,0 +1,30 @@
+{
+  "scope": "Three two-file real collection runs; not an eight-file corpus or performance benchmark",
+  "probe": "RRRAH_VERIFY_COLLECTION=1 raw_raster_probe RAW TIFF --verify-spatial",
+  "results": [
+    {
+      "left": "830.dng",
+      "right": "830.tiff",
+      "exit_code": 0,
+      "output": "indexed_features=988 descriptor_hits=311418 proposed_pairs=1 pixel_verification_pairs=1 analysed=[1, 2] file_issues=[] pair_issues=[] source_issues=[]\npair=(1, 2) candidate=true geometry=true pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 12212224, compared_pixels: 12212224, matched_pixels: 12043261, maximum_channel_error: 0.08049603462780063, squared_error: 3677.169423983459 }, reverse: WarpEvidence { source_pixels: 12358212, compared_pixels: 12206993, matched_pixels: 12042307, maximum_channel_error: 0.08014853875896721, squared_error: 3673.950464654769 } })\nmanaged_used=0 managed_peak=492200000\n",
+      "errors": ""
+    },
+    {
+      "left": "830.dng",
+      "right": "898.tiff",
+      "exit_code": 0,
+      "output": "indexed_features=599 descriptor_hits=97787 proposed_pairs=1 pixel_verification_pairs=0 analysed=[1, 2] file_issues=[] pair_issues=[] source_issues=[]\npair=(1, 2) candidate=false geometry=false pixels=None\nmanaged_used=0 managed_peak=583994608\n",
+      "errors": ""
+    },
+    {
+      "left": "1294.cr2",
+      "right": "1294.tiff",
+      "exit_code": 0,
+      "output": "indexed_features=986 descriptor_hits=494040 proposed_pairs=1 pixel_verification_pairs=1 analysed=[1, 2] file_issues=[] pair_issues=[] source_issues=[]\npair=(1, 2) candidate=false geometry=true pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 24000000, compared_pixels: 24000000, matched_pixels: 21474249, maximum_channel_error: 17.325895709371252, squared_error: 2235923.657102227 }, reverse: WarpEvidence { source_pixels: 24216480, compared_pixels: 23996128, matched_pixels: 21473013, maximum_channel_error: 16.049477730354404, squared_error: 2222431.190246164 } })\nmanaged_used=0 managed_peak=965485168\n",
+      "errors": ""
+    }
+  ],
+  "reference": "Same accepted/rejected decisions and positive/rejected geometric pixel counts as independently run strict pair comparisons",
+  "validation": "Selected example Clippy passed",
+  "limitations": "Complete physical memory accounting and large-scale timing remain unqualified"
+}

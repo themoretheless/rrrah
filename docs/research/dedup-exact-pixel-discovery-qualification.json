@@ -1,0 +1,44 @@
+{
+  "scope": "Bounded exact selected-frame pixel discovery independent of visual candidate/information gates",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/scan.rs": "10cf0420d3e3251332edf7ee30feb2474519f47f8a4dae4c6553d70b10c99b08",
+    "crates/rrrah-dedup/tests/pixel_search.rs": "5e257b3e7612511916c378be6d1a6602b0f3f30267e73eb94084f7a13ff27291",
+    "crates/rrrah-dedup/tests/information.rs": "709431986e37efdcf62ac5fe43408f10ade208f9d131f5de1c90f32a5995e6f0"
+  },
+  "apis": [
+    "scan_equal_pixels",
+    "scan_equal_pixel_roots"
+  ],
+  "qualification": [
+    "Six authored files: transparent equal pair recovered among 15 exhaustive pairs; other 14 pairs different",
+    "Opaque uniform white PNG and independently authored BMP equal without perceptual candidate list",
+    "Changed batch source invalidates all its prior decisions; healthy equal pair preserved",
+    "Final generation and one-shot user cancellation return no partial report",
+    "Nested/overlapping roots, missing file attribution and corrupt per-pair diagnostics",
+    "Pair budgets reject before any source reads; invalid limits reject before input consumption"
+  ],
+  "validation": {
+    "information_tests": 4,
+    "pixel_search_tests": 4,
+    "clippy": "passed all features tests/examples no-deps -D warnings",
+    "full_feature_suite": {
+      "passed": 136,
+      "failed": 0,
+      "ignored": 0,
+      "exit_code": 0
+    },
+    "diff_check": "passed"
+  },
+  "limitations": [
+    "Quadratic repeated decode rather than scalable digest index",
+    "Only selected frames; no whole-animation semantics",
+    "Synthetic uniform/collision controls, not held-out burst calibration",
+    "Native pixel equality, not independent RAW/raster development-color qualification"
+  ],
+  "commands": [
+    "cargo test -p rrrah-dedup --all-features",
+    "cargo test -p rrrah-dedup --all-features --test information",
+    "cargo test -p rrrah-dedup --all-features --test pixel_search",
+    "cargo clippy -p rrrah-dedup --all-features --tests --examples --no-deps -- -D warnings"
+  ]
+}

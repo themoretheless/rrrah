@@ -1,0 +1,68 @@
+{
+  "index": 39,
+  "repository": "ByungKwanLee/Full-Segment-Anything",
+  "commit": "1f31e00e833ca8b3603e42d07bd7c52768905125",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "SAM mask generator could inform region proposals; model-heavy segmentation is not duplicate verification.",
+  "license_metadata": "MIT",
+  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "available_source_evidence": [
+    {
+      "path": "build_sam.py",
+      "local": "02-build_sam.py",
+      "url": "https://github.com/ByungKwanLee/Full-Segment-Anything/blob/1f31e00e833ca8b3603e42d07bd7c52768905125/build_sam.py",
+      "sha256": "dd64d87e723ab5849c2548db81efed36a846e27bc79f8af807be369f9bb9e031",
+      "truncated": false,
+      "lines": 163,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "example.py",
+      "local": "03-example.py",
+      "url": "https://github.com/ByungKwanLee/Full-Segment-Anything/blob/1f31e00e833ca8b3603e42d07bd7c52768905125/example.py",
+      "sha256": "3fb97f8fed1a28c2b072899a635a0e4cabc35be67d15ad2c48760629be381931",
+      "truncated": false,
+      "lines": 388,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "mask_generator.py",
+      "local": "04-mask_generator.py",
+      "url": "https://github.com/ByungKwanLee/Full-Segment-Anything/blob/1f31e00e833ca8b3603e42d07bd7c52768905125/mask_generator.py",
+      "sha256": "8fb45241fd4be8be2d6cb91748af7593c30171d159d89938e87ef5863a7624c2",
+      "truncated": false,
+      "lines": 458,
+      "source": true,
+      "test": false
+    }
+  ],
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/ByungKwanLee/Full-Segment-Anything/blob/1f31e00e833ca8b3603e42d07bd7c52768905125/README.md",
+      "sha256": "077cc8b37fe28e5bced734b152e63913caf6ceff515ef4fae000d7f558ccc067",
+      "truncated": false,
+      "lines": 185,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/ByungKwanLee/Full-Segment-Anything/blob/1f31e00e833ca8b3603e42d07bd7c52768905125/LICENSE",
+      "sha256": "be8fda017db88ee9f813bd92094444486667e4380f52a6c1fe474b95535a93e0",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

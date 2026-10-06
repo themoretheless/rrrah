@@ -1,0 +1,44 @@
+    Blocking waiting for file lock on build directory
+warning: function `error` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:4:4
+  |
+4 | fn error(message: &str) -> DecodeError {
+  |    ^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `packed_12` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:9:4
+  |
+9 | fn packed_12(
+  |    ^^^^^^^^^
+
+warning: function `decode_zd` is never used
+  --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:48:15
+   |
+48 | pub(super) fn decode_zd(
+   |               ^^^^^^^^^
+
+warning: `rrrah-decode` (lib) generated 3 warnings
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+    Finished `test` profile [optimized + debuginfo] target(s) in 38.15s
+     Running tests/local_collection.rs (/tmp/rrrah-dedup-target/debug/deps/local_collection-836142ca90df3a74)
+
+running 14 tests
+test recursive_collection_preserves_aliases_errors_and_request_settings ... ok
+test indexed_collection_changed_before_decode_is_invalidated_without_losing_healthy_pair ... ok
+test reflected_collection_discards_changed_sources_batch_wide ... ok
+test recursive_spatial_collection_preserves_requests_and_rejects_substitution ... ok
+test indexed_collection_reports_bad_and_insufficient_sources_and_admission_errors ... ok
+test reflected_file_pair_confirms_pixels_and_releases_managed_features ... ok
+test spatial_collection_matches_exhaustive_spatial_pair_acceptance ... ok
+test display_projection_collection_matches_pairs_and_preserves_strict_evidence ... ok
+test ranged_fit_collection_matches_pair_results_and_exposes_selected_domain ... ok
+test indexed_collection_retains_every_exhaustively_verified_crop_scale_rotation_pair ... ok
+test indexed_watermark_and_large_edit_preserve_pixel_policy ... ok
+test indexed_arbitrary_angles_and_intermediate_scales_keep_labelled_pairs ... ok
+test indexed_collection_final_generation_and_one_shot_cancel_discard_report ... ok
+test reflected_collection_retrieves_labelled_pairs_and_cancels_without_report ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 7.83s
+

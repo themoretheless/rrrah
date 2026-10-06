@@ -1,0 +1,78 @@
+{
+  "index": 396,
+  "repository": "ail-project/photo-dna",
+  "commit": "142833af45281c39206a3c2fab73b4075cf43627",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Rust PhotoDNA-style hash, benches and Python bridge; GPL and algorithm restrictions require separate decision.",
+  "available_source_evidence": [
+    {
+      "path": "photo-dna/benches/hash_bench.rs",
+      "local": "02-hash_bench.rs",
+      "url": "https://github.com/ail-project/photo-dna/blob/142833af45281c39206a3c2fab73b4075cf43627/photo-dna/benches/hash_bench.rs",
+      "sha256": "7b2b19174bc0b00d33bf51b8cbe3ab0c69ae304951ebc23a1497c3675704244f",
+      "truncated": false,
+      "lines": 47,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "photo-dna/src/lib.rs",
+      "local": "03-lib.rs",
+      "url": "https://github.com/ail-project/photo-dna/blob/142833af45281c39206a3c2fab73b4075cf43627/photo-dna/src/lib.rs",
+      "sha256": "6017c36443e26c7bbad11ee3635a8af1d81201ee7ce8b23d3223d33b40cadd1e",
+      "truncated": false,
+      "lines": 1129,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "python/src/lib.rs",
+      "local": "04-lib.rs",
+      "url": "https://github.com/ail-project/photo-dna/blob/142833af45281c39206a3c2fab73b4075cf43627/python/src/lib.rs",
+      "sha256": "23eddeb415e1f04ffe8c1e747b5ad245be1e76d5d7aad8de95e1989f5a05c0ff",
+      "truncated": false,
+      "lines": 311,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "python/tests/oaphotodna.py",
+      "local": "05-oaphotodna.py",
+      "url": "https://github.com/ail-project/photo-dna/blob/142833af45281c39206a3c2fab73b4075cf43627/python/tests/oaphotodna.py",
+      "sha256": "103c2639bc0c6ac9d68945758222d1e8872ad7d0928b0dfb55a6cf00da07de45",
+      "truncated": false,
+      "lines": 557,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "GPL-3.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 2,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/ail-project/photo-dna/blob/142833af45281c39206a3c2fab73b4075cf43627/README.md",
+      "sha256": "282e1112b5f1245ffcc2349601f2bf72052f6c49bcb42369bb2f102a2aab4dad",
+      "truncated": false,
+      "lines": 117,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/ail-project/photo-dna/blob/142833af45281c39206a3c2fab73b4075cf43627/LICENSE",
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "truncated": false,
+      "lines": 674,
+      "source": false,
+      "test": false
+    }
+  ]
+}

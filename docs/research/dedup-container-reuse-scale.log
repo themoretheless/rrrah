@@ -1,0 +1,43 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+warning: function `error` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:4:4
+  |
+4 | fn error(message: &str) -> DecodeError {
+  |    ^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `packed_12` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:9:4
+  |
+9 | fn packed_12(
+  |    ^^^^^^^^^
+
+warning: function `decode_zd` is never used
+  --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:48:15
+   |
+48 | pub(super) fn decode_zd(
+   |               ^^^^^^^^^
+
+warning: `rrrah-decode` (lib) generated 3 warnings
+    Finished `release` profile [optimized] target(s) in 42.34s
+     Running `/tmp/rrrah-dedup-target/release/examples/presentation_scale_probe`
+{"pages":false,"files":8,"pairs":28,"encoded_bytes":2141,"repetition":1,"seconds":0.007592792,"equal":16,"different":12,"peak_managed_bytes":768,"retained_managed_bytes":0}
+{"pages":false,"files":8,"pairs":28,"encoded_bytes":2141,"repetition":2,"seconds":0.007626042,"equal":16,"different":12,"peak_managed_bytes":768,"retained_managed_bytes":0}
+{"pages":false,"files":8,"pairs":28,"encoded_bytes":2141,"repetition":3,"seconds":0.007532959,"equal":16,"different":12,"peak_managed_bytes":768,"retained_managed_bytes":0}
+{"pages":false,"files":32,"pairs":496,"encoded_bytes":8805,"repetition":1,"seconds":0.120059792,"equal":276,"different":220,"peak_managed_bytes":768,"retained_managed_bytes":0}
+{"pages":false,"files":32,"pairs":496,"encoded_bytes":8805,"repetition":2,"seconds":0.118954625,"equal":276,"different":220,"peak_managed_bytes":768,"retained_managed_bytes":0}
+{"pages":false,"files":32,"pairs":496,"encoded_bytes":8805,"repetition":3,"seconds":0.120048041,"equal":276,"different":220,"peak_managed_bytes":768,"retained_managed_bytes":0}
+{"pages":false,"files":128,"pairs":8128,"encoded_bytes":35461,"repetition":1,"seconds":1.906796417,"equal":4516,"different":3612,"peak_managed_bytes":768,"retained_managed_bytes":0}
+{"pages":false,"files":128,"pairs":8128,"encoded_bytes":35461,"repetition":2,"seconds":1.954099125,"equal":4516,"different":3612,"peak_managed_bytes":768,"retained_managed_bytes":0}
+{"pages":false,"files":128,"pairs":8128,"encoded_bytes":35461,"repetition":3,"seconds":1.9288814159999998,"equal":4516,"different":3612,"peak_managed_bytes":768,"retained_managed_bytes":0}
+{"pages":true,"files":8,"pairs":28,"encoded_bytes":22898,"repetition":1,"seconds":0.040073542,"equal":16,"different":12,"peak_managed_bytes":4678,"retained_managed_bytes":0}
+{"pages":true,"files":8,"pairs":28,"encoded_bytes":22898,"repetition":2,"seconds":0.039792041,"equal":16,"different":12,"peak_managed_bytes":4678,"retained_managed_bytes":0}
+{"pages":true,"files":8,"pairs":28,"encoded_bytes":22898,"repetition":3,"seconds":0.039053959,"equal":16,"different":12,"peak_managed_bytes":4678,"retained_managed_bytes":0}
+{"pages":true,"files":32,"pairs":496,"encoded_bytes":91954,"repetition":1,"seconds":0.596120625,"equal":276,"different":220,"peak_managed_bytes":4678,"retained_managed_bytes":0}
+{"pages":true,"files":32,"pairs":496,"encoded_bytes":91954,"repetition":2,"seconds":0.608587625,"equal":276,"different":220,"peak_managed_bytes":4678,"retained_managed_bytes":0}
+{"pages":true,"files":32,"pairs":496,"encoded_bytes":91954,"repetition":3,"seconds":0.601292792,"equal":276,"different":220,"peak_managed_bytes":4678,"retained_managed_bytes":0}
+{"pages":true,"files":128,"pairs":8128,"encoded_bytes":368178,"repetition":1,"seconds":9.914532042,"equal":4516,"different":3612,"peak_managed_bytes":4678,"retained_managed_bytes":0}
+{"pages":true,"files":128,"pairs":8128,"encoded_bytes":368178,"repetition":2,"seconds":9.558084792,"equal":4516,"different":3612,"peak_managed_bytes":4678,"retained_managed_bytes":0}
+{"pages":true,"files":128,"pairs":8128,"encoded_bytes":368178,"repetition":3,"seconds":10.657743709,"equal":4516,"different":3612,"peak_managed_bytes":4678,"retained_managed_bytes":0}

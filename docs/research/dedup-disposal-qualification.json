@@ -1,0 +1,37 @@
+{
+  "status": "macOS and Linux passed",
+  "session_id": 78155,
+  "log": "/tmp/dedup-disposal-macos.log",
+  "scope": "Three GIF disposal modes versus APNG encoded from independent Pillow frame oracles; pairwise timeline negatives; reservations released",
+  "source_snapshot": {
+    "crates/rrrah-dedup/tests/animated.rs": "ca4333866a88fc2c38496d0567fff54573466a2ded1e312b44f9bfe8921b530b",
+    "scripts/generate-dedup-disposal-oracles.py": "d39852a934ea2b2b207a037b766211585ac1f3ace0e149baeed54c986575b601",
+    "crates/rrrah-dedup/tests/fixtures/disposal/disposal-3.apng": "f3231f6e6e53c829b486f9f28342cb2dce5eb6816541da5d448ebe5ec707b5ca",
+    "crates/rrrah-dedup/tests/fixtures/disposal/disposal-2.apng": "a92df6bbc60e813f6ae90ae03b99877562625b6dac7c339de2d119a056ff7808",
+    "crates/rrrah-dedup/tests/fixtures/disposal/disposal-1.apng": "7b21bad916583f6e6819c05692dbed712b30d9410646085f27cca7d39f460f9c",
+    "crates/rrrah-dedup/tests/fixtures/disposal/manifest.json": "6bb1d4beab95b067d61f02024cf679d8056a90c4fed3529c9625a37eba506987"
+  },
+  "snapshot_timing": "during build, not atomic prelaunch",
+  "limits": [
+    "small authored CC0 5x3 fixture",
+    "not broader container corpus proof",
+    "full acceptance incomplete"
+  ],
+  "linux_session_id": 48000,
+  "linux_log": "/tmp/dedup-disposal-linux.log",
+  "tests": {
+    "macos": 4,
+    "linux": 4
+  },
+  "logs": {
+    "macos": {
+      "path": "docs/research/dedup-disposal-macos.log",
+      "sha256": "9b5b7038b84b869e603ac3a1fa40aa154da9207a9e5c5f5d5fa41d65feb2bb51"
+    },
+    "linux": {
+      "path": "docs/research/dedup-disposal-linux.log",
+      "sha256": "2f65deda2d06f9d484e873dcff3726aee2d52ee8aa8701d46fd484a7041d7fd7"
+    }
+  },
+  "post_test_changes": "Generator adds source-manifest validation and GIF hashes; APNG bytes and Rust test unchanged"
+}

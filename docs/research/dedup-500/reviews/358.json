@@ -1,0 +1,78 @@
+{
+  "index": 358,
+  "repository": "abonander/img_hash",
+  "commit": "dbfb37f9251fea8f7efeabbb2267ddb1fcd21ca6",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "shortlist",
+  "finding": "Rust blockhash/DCT core; actual manifest dual license differs from single GitHub license metadata and requires package check.",
+  "available_source_evidence": [
+    {
+      "path": "src/alg/blockhash.rs",
+      "local": "03-blockhash.rs",
+      "url": "https://github.com/abonander/img_hash/blob/dbfb37f9251fea8f7efeabbb2267ddb1fcd21ca6/src/alg/blockhash.rs",
+      "sha256": "ac4a026317993d43a9c853f4cf246f70fb2dd4dda721a46b68c1b2480bd93462",
+      "truncated": false,
+      "lines": 220,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/bin/hash_image.rs",
+      "local": "04-hash_image.rs",
+      "url": "https://github.com/abonander/img_hash/blob/dbfb37f9251fea8f7efeabbb2267ddb1fcd21ca6/src/bin/hash_image.rs",
+      "sha256": "6db7c9f21faaffa47aab1e4b36424489f3c38b8bac1596da353f37e4b43c31f8",
+      "truncated": false,
+      "lines": 25,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/dct.rs",
+      "local": "05-dct.rs",
+      "url": "https://github.com/abonander/img_hash/blob/dbfb37f9251fea8f7efeabbb2267ddb1fcd21ca6/src/dct.rs",
+      "sha256": "f2f9dd486804089970f2e91853f6bd5589e934b813c6d15ca599faaaeddcfec7",
+      "truncated": false,
+      "lines": 122,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "Apache-2.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/abonander/img_hash/blob/dbfb37f9251fea8f7efeabbb2267ddb1fcd21ca6/README.md",
+      "sha256": "6935c185e811da449bfa9bccfee939e2e286c57dcc92af6a373bc03bb5ff2508",
+      "truncated": false,
+      "lines": 73,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE-APACHE",
+      "local": "01-LICENSE-APACHE",
+      "url": "https://github.com/abonander/img_hash/blob/dbfb37f9251fea8f7efeabbb2267ddb1fcd21ca6/LICENSE-APACHE",
+      "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+      "truncated": false,
+      "lines": 201,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE-MIT",
+      "local": "02-LICENSE-MIT",
+      "url": "https://github.com/abonander/img_hash/blob/dbfb37f9251fea8f7efeabbb2267ddb1fcd21ca6/LICENSE-MIT",
+      "sha256": "6eb92565025d580b66ff51d982565f646bab9d4062847c2062f78641c24f0d5b",
+      "truncated": false,
+      "lines": 25,
+      "source": false,
+      "test": false
+    }
+  ]
+}

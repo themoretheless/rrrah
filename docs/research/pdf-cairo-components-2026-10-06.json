@@ -1,0 +1,73 @@
+{
+  "date": "2026-10-06",
+  "producer": "CairoSVG 2.8.2",
+  "oracle": "Poppler 72 dpi RGB white",
+  "renderer": "hayro 0.7.1 native RGBA8 white composite",
+  "rows": [
+    {
+      "element": "rect",
+      "source": "tests/fixtures/pdf/cairo-rect.pdf",
+      "source_sha256": "f4459e87bc15ef71ec7848851ef3fe693b60b7f0aefbe12045d6cb501e7487df",
+      "different_pixels": 0,
+      "max_channel_error": 0,
+      "exact": true,
+      "metadata": {
+        "width": 48,
+        "height": 36,
+        "image_index": 0,
+        "image_count": 1
+      }
+    },
+    {
+      "element": "circle",
+      "source": "tests/fixtures/pdf/cairo-circle.pdf",
+      "source_sha256": "81a55b215df7d1cbeb58a486666def093bde6fcba543cd41ebc1cc8c8c607ae0",
+      "different_pixels": 51,
+      "max_channel_error": 47,
+      "exact": false,
+      "metadata": {
+        "width": 48,
+        "height": 36,
+        "image_index": 0,
+        "image_count": 1
+      }
+    },
+    {
+      "element": "triangle",
+      "source": "tests/fixtures/pdf/cairo-triangle.pdf",
+      "source_sha256": "d44f68a739d235b6f87fae1bd0f649bf8646268edea7fde859a9c73dd6dd1edf",
+      "different_pixels": 63,
+      "max_channel_error": 41,
+      "exact": false,
+      "metadata": {
+        "width": 48,
+        "height": 36,
+        "image_index": 0,
+        "image_count": 1
+      }
+    },
+    {
+      "element": "text",
+      "source": "tests/fixtures/pdf/cairo-text.pdf",
+      "source_sha256": "ea1e4d227ebbbca92c329505da4a29d8ca828931dd5d72aa36e28ffe1abee901",
+      "different_pixels": 59,
+      "max_channel_error": 128,
+      "exact": false,
+      "metadata": {
+        "width": 48,
+        "height": 36,
+        "image_index": 0,
+        "image_count": 1
+      }
+    }
+  ],
+  "scope": "exact independent component comparisons, no tolerance relaxation",
+  "rectangle_pipeline": {
+    "tests_passed": 2,
+    "log": "/tmp/rrrah-pdf-cairo-rect-metal.log",
+    "gpu": "Metal Apple M4 Max",
+    "oracle": "full 48x36 Poppler RGBA opaque plane",
+    "preservation": "RAM lease, native/prepared bit-exact pressure-preserving swap and exact mathematical-color Metal frame",
+    "limitations": "reference contains only 0/255 channels, so direct division into linear reference is valid here; not general sRGB conversion"
+  }
+}

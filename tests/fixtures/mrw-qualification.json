@@ -1,0 +1,298 @@
+{
+  "status": "Dynax-7D-and-DiMAGE-A2-native-color-cache-swap-Metal-qualified",
+  "id": 1826,
+  "license": "CC0-1.0",
+  "url": "https://raw.pixls.us/getfile.php/1826/nice/Minolta - Dynax 7D - 3:2.MRW",
+  "sha256": "713819e33e5302ec864d576d57223cfc8dcf46e8d45e0ae744d1fec40290a89f",
+  "raw_offset": 98304,
+  "blocks": [
+    {
+      "tag": "PRD",
+      "offset": 16,
+      "length": 24
+    },
+    {
+      "tag": "WBG",
+      "offset": 48,
+      "length": 12
+    },
+    {
+      "tag": "RIF",
+      "offset": 68,
+      "length": 64
+    },
+    {
+      "tag": "TTW",
+      "offset": 140,
+      "length": 98164
+    }
+  ],
+  "prd_hex": "323138313030303207d80bc807d00bc00c0c590000000001",
+  "oracle": {
+    "libraw_version": "0.22.2-Release",
+    "make": "Minolta",
+    "model": "DYNAX 7D",
+    "width": 3016,
+    "height": 2008,
+    "crop": [
+      0,
+      0,
+      3016,
+      2008
+    ],
+    "wb": [
+      435,
+      256,
+      435,
+      256
+    ],
+    "black": 0,
+    "cblack": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "white": 4091,
+    "cfa": [
+      "R",
+      "G",
+      "G",
+      "B"
+    ],
+    "xyz_to_camera": [
+      [
+        1.023900032,
+        -0.3104000092,
+        -0.1098999977
+      ],
+      [
+        -0.8036999702,
+        1.572700024,
+        0.2451000065
+      ],
+      [
+        -0.09269999713,
+        0.09250000119,
+        0.6870999932
+      ],
+      [
+        0,
+        0,
+        0
+      ]
+    ],
+    "camera_to_rgb": [
+      [
+        1.537334681,
+        -0.4424428344,
+        -0.09489190578
+      ],
+      [
+        -0.01734693907,
+        1.300128818,
+        -0.2827818692
+      ],
+      [
+        0.01572156698,
+        -0.2359941751,
+        1.22027266
+      ]
+    ],
+    "pixels_bytes": 12112256,
+    "pixels_sha256": "298e41b6e446b984dffcf2e8006d1991f5f7720c66a3b2059752c0dff78cdb10"
+  },
+  "reference_pixels_sha256": "298e41b6e446b984dffcf2e8006d1991f5f7720c66a3b2059752c0dff78cdb10",
+  "packed_big_endian_12_bit_samples_exact": true,
+  "sample_count": 6056128,
+  "native_component": "rrrah_decode::MrwLayout",
+  "verification": "RRRAH_MRW_CORPUS=/path cargo test --locked -p rrrah-decode mrw:: -- --include-ignored",
+  "native_metadata": {
+    "make": "KONICA MINOLTA",
+    "model": "DYNAX 7D",
+    "width": 3016,
+    "height": 2008,
+    "wb": [
+      1.6992188,
+      1.0,
+      1.6992188,
+      1.0
+    ],
+    "black_grid": [
+      0.0
+    ],
+    "white": [
+      4091.0
+    ],
+    "cfa": [
+      "R",
+      "G",
+      "G",
+      "B"
+    ],
+    "xyz_to_camera": [
+      [
+        1.0239,
+        -0.3104,
+        -0.1099
+      ],
+      [
+        -0.8037,
+        1.5727,
+        0.2451
+      ],
+      [
+        -0.0927,
+        0.0925,
+        0.6871
+      ],
+      [
+        0.0,
+        0.0,
+        0.0
+      ]
+    ],
+    "camera_to_rgb": [
+      [
+        1.5373347,
+        -0.44244283,
+        -0.094891906
+      ],
+      [
+        -0.01734694,
+        1.3001288,
+        -0.28278187
+      ],
+      [
+        0.015721567,
+        -0.23599418,
+        1.2202727
+      ]
+    ],
+    "crop": [
+      0,
+      0,
+      3016,
+      2008
+    ],
+    "managed_memory": {
+      "limit": 134217728,
+      "used": 12112256,
+      "peak": 21294752,
+      "pixel_capacity": 12112256,
+      "managed": true
+    }
+  },
+  "adapter": "Metal Apple M4 Max",
+  "integration_test": "crates/rrrah-app/tests/minolta_mrw_readback.rs",
+  "remaining_qualification": [
+    "other cameras/storage modes",
+    "full photographic color qualification",
+    "visible window presentation"
+  ],
+  "additional_profiles": [
+    {
+      "id": 4419,
+      "make": "Minolta",
+      "model": "DiMAGE A2",
+      "mode": "12-bit packed 0x59",
+      "license": "CC0-1.0",
+      "url": "https://raw.pixls.us/getfile.php/4419/nice/Minolta - DiMAGE A2 - 4:3.MRW",
+      "sha256": "8655e3428461377dd7c6b28ae98a0b23d659314997ed16333985278f99c9a4b4",
+      "filename": "4419.mrw",
+      "oracle": {
+        "libraw_version": "0.22.2-Release",
+        "make": "Minolta",
+        "model": "DiMAGE A2",
+        "width": 3272,
+        "height": 2456,
+        "crop": [
+          0,
+          0,
+          3272,
+          2456
+        ],
+        "wb": [
+          513,
+          256,
+          368,
+          256
+        ],
+        "black": 0,
+        "cblack": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "white": 3983,
+        "cfa": [
+          "R",
+          "G",
+          "G",
+          "B"
+        ],
+        "xyz_to_camera": [
+          [
+            0.9096999764,
+            -0.2725999951,
+            -0.1053000018
+          ],
+          [
+            -0.8072999716,
+            1.550600052,
+            0.2761999965
+          ],
+          [
+            -0.09660000354,
+            0.09809999913,
+            0.7763000131
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ],
+        "camera_to_rgb": [
+          [
+            1.515587926,
+            -0.4655565321,
+            -0.0500314422
+          ],
+          [
+            -0.006308174692,
+            1.335509539,
+            -0.3292013407
+          ],
+          [
+            0.009385868907,
+            -0.237822786,
+            1.228436947
+          ]
+        ],
+        "pixels_bytes": 16072064,
+        "pixels_sha256": "6a6a893968432f5ef27364ca7a5087553563f749e5eb11cbb50d10f5942739a7"
+      },
+      "metadata_contract": {
+        "crop": [
+          0,
+          0,
+          3272,
+          2456
+        ],
+        "black_grid": [
+          0.0
+        ],
+        "white": [
+          3983.0
+        ]
+      }
+    }
+  ],
+  "content_routing": "MRM magic overrides jpg/dng/bin/MRW suffixes; real-fixture equality and truncated MRM rejection tested"
+}

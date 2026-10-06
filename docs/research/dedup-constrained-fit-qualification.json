@@ -1,0 +1,51 @@
+{
+  "scope": "Explicit bounded color-fit selected-frame qualification; not general duplicate-library completion",
+  "algorithm": "Convex least-squares rectangle optimum: unconstrained interior or analytic minimum on each of four edges; no widening of policy bounds",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/warp.rs": "6502caaa03ed5c76eba701d8d2bfd1b60a435bb3ced4b0a8676228d32d9bded4",
+    "crates/rrrah-dedup/src/local_scan.rs": "4d0b8bec397f52c4aa03bd5db5fbc4878804c9ab43418efeafdd3e2e2f9344ee",
+    "crates/rrrah-dedup/tests/photo_collages.rs": "ce533f1634a948966a015d8162ef04f51c7a9cb882b95db7980c53c332e01daf",
+    "crates/rrrah-dedup/examples/photo_probe.rs": "0f7867862cae400d66a16dac895f8d4c1716177380b991f57923cb065be91393"
+  },
+  "policy": {
+    "gain": [
+      0.2,
+      5
+    ],
+    "maximum_absolute_offset": 0.1,
+    "radius": 3,
+    "color_space": "EncodedSrgb",
+    "residual_tolerance": 0.03,
+    "minimum_matched_fraction": 0.9
+  },
+  "positive_pairs": 20,
+  "positive_accepted": 20,
+  "authored_partial_copy_pairs": 24,
+  "partial_copy_residual_rejections": 20,
+  "partial_copy_without_geometry": 4,
+  "partial_copy_fit_inconclusive": 0,
+  "partial_copy_accepted": 0,
+  "independent_optimizer_check": "Four moment sets compared with independently expanded second-moment objective over 481 x 201 coefficient grids; clipping-counterexample boundary coefficient 3.58/2.7",
+  "limitations": [
+    "Four original camera preview scenes only; transforms and partial copies authored",
+    "No captured burst or held-out calibration",
+    "Existing APIs preserve unconstrained-fit refusal",
+    "No batch/directory fitting integration"
+  ],
+  "commands": [
+    "cargo test -p rrrah-dedup --all-features",
+    "cargo clippy -p rrrah-dedup --all-features --tests --examples --no-deps -- -D warnings",
+    "cargo run -p rrrah-dedup --example photo_probe --features decode -- --constrained-fit --encoded-srgb --radius 3",
+    "cargo run -p rrrah-dedup --example photo_probe --features decode -- --partial-copies --constrained-fit --encoded-srgb --radius 3"
+  ],
+  "validation": {
+    "clippy": "passed with --no-deps; three existing decoder dependency warnings",
+    "diff_check": "passed",
+    "full_feature_suite": {
+      "passed": 123,
+      "failed": 0,
+      "ignored": 0,
+      "exit_code": 0
+    }
+  }
+}

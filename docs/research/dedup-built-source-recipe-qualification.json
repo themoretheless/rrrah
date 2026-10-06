@@ -1,0 +1,41 @@
+{
+  "qualification": "Automatic workspace source/build identity in file fingerprint cache recipes",
+  "source_sha256": {
+    "crates/rrrah-dedup/build.rs": "c37388f748f17ed86bce3ac05dcbb28f58e567579cf4c559eb441014e63e24b4",
+    "crates/rrrah-dedup/Cargo.toml": "71db56013919b2c13458982843ebdd78454b4e5409699ee7daea93cfaffb68a6",
+    "crates/rrrah-dedup/src/decode.rs": "c38bb0f215ea86765b74bb67dbe1f5620cbd9ddcaea17297b263980ba37a90cd",
+    "crates/rrrah-dedup/tests/decode.rs": "9552a1e352e1c3d9769a8b980c104209bcb354846097c0477dc6291045fe0b49"
+  },
+  "identity_inputs": [
+    "All files in rrrah-dedup, rrrah-decode, rrrah-core and rrrah-memory, except target/.git directories",
+    "Workspace Cargo.toml and Cargo.lock",
+    "Rust compiler verbose version",
+    "Target, profile, optimization/debug, rust flags and crate feature environment",
+    "Existing caller recipe salt and per-file resource/color/frame settings retained in runtime key"
+  ],
+  "validation": {
+    "decode_tests": 8,
+    "failed": 0,
+    "library_and_build_script_clippy": "passed",
+    "source_identity_metamorphic": {
+      "relocation_preserves_identity": true,
+      "decoder_source_change_invalidates": true,
+      "restored_source_restores_identity": true,
+      "new_core_source_invalidates": true,
+      "baseline": "2653aa03d4ba6a774c790285d15527d4bb6828d87bc703fc2cf3632938cd339c",
+      "changed": "4b18de39c6bfb8aed1ff44fecdf63731448018e65abda6443b90ebaa103fd37f",
+      "added": "b06ebffc2d51692373ef185a3bcc1a026d3d445cb0e49f2b13ee71de43e5dd0b"
+    }
+  },
+  "evidence": [
+    "Persisted manual v4 and v5 recipe keys cannot hit the current automatically salted recipe.",
+    "Second current-content/current-recipe request remains a cache hit.",
+    "Executing the actual compiled build script against isolated source trees shows relocation invariance, change invalidation, restoration and new-file invalidation."
+  ],
+  "limits": [
+    "Current workspace layout is required by the build script; packaged independent crates are not qualified.",
+    "Conservative source hashing also includes tests/assets, causing harmless extra invalidation.",
+    "Native dynamically linked libraries, system fonts, environment-dependent resources and external runtime settings are not automatically identified; caller salt remains necessary.",
+    "No complete automatic decoder identity claim; cross-profile/platform/build performance still needs qualification."
+  ]
+}

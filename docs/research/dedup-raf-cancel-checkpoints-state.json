@@ -1,0 +1,22 @@
+{
+  "scope": "Synthetic RAF: one-shot cancellation at every observed native pixel decode callback, explicit Cancelled, deterministic healthy retry. Not real-file latency/RSS proof.",
+  "source_sha256": "0117f93568c5fb3510058dec40e06f9c735016fef0648e4a9fbfc75cb7226695",
+  "macos_session": 58460,
+  "linux_session": 3820,
+  "status": "passed",
+  "prior_compile_failures": "Non-Sync Cell in callback repaired using AtomicUsize; initial logs retained.",
+  "platforms": {
+    "macos": {
+      "exit_code": 0,
+      "regression_passed": 12,
+      "ignored": 0,
+      "log": "docs/research/dedup-raf-cancel-regression-macos.log"
+    },
+    "linux": {
+      "exit_code": 0,
+      "regression_passed": 12,
+      "ignored": 0,
+      "log": "docs/research/dedup-raf-cancel-regression-linux.log"
+    }
+  }
+}

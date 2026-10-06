@@ -1,0 +1,38 @@
+{
+  "index": 495,
+  "repository": "maweidong/ai-smart-photo-dedup",
+  "commit": "76bca9285217633228d0c129b0e3d28abcf8b5cf",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "wrapper",
+  "finding": "Python cleaner calls ImageHash pHash; no independent algorithm or calibrated corpus.",
+  "available_source_evidence": [
+    {
+      "path": "dedup.py",
+      "local": "01-dedup.py",
+      "url": "https://github.com/maweidong/ai-smart-photo-dedup/blob/76bca9285217633228d0c129b0e3d28abcf8b5cf/dedup.py",
+      "sha256": "4da4040ce310edd7d2fb5abf94ba8d4bf8a875701a0916a1356a359b5128c1d3",
+      "truncated": false,
+      "lines": 106,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "LICENSE",
+      "local": "00-LICENSE",
+      "url": "https://github.com/maweidong/ai-smart-photo-dedup/blob/76bca9285217633228d0c129b0e3d28abcf8b5cf/LICENSE",
+      "sha256": "c105f569376c7c868bbbdf4a375b175d4dbae9f8a340d7bdb6d3285f0daf8ffe",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

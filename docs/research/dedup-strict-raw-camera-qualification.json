@@ -1,0 +1,111 @@
+{
+  "scope": "Four independent full-resolution RAW/TIFF pairs after ICC fix; spatial feature selection and strict bidirectional verification",
+  "policy": {
+    "pixel_tolerance": 0.03,
+    "minimum_matched_fraction": 0.9,
+    "minimum_coverage_fraction": 0.3,
+    "grid": [
+      16,
+      12
+    ],
+    "quota": 3
+  },
+  "cases": [
+    {
+      "raw": "830.dng",
+      "exit_code": 0,
+      "elapsed_seconds": 6.6340593750355765,
+      "candidate": true,
+      "compared_pixels": [
+        12212224,
+        12206993
+      ],
+      "matched_pixels": [
+        12043261,
+        12042307
+      ],
+      "errors": "",
+      "geometry_present": true,
+      "matched_fraction": [
+        0.9861644365514423,
+        0.9865088806063869
+      ],
+      "raw_sha256": "7a594b66b54f99bb5aba4627c78abfc41213d6911ea54e4f5d2dd6c8505f6968",
+      "raster_sha256": "19e159eedee1e0f98eba8b42a548dfaefcb53e5bbc349c0077f61f6cd214cf96"
+    },
+    {
+      "raw": "898.nef",
+      "exit_code": 0,
+      "elapsed_seconds": 15.808606875012629,
+      "candidate": true,
+      "compared_pixels": [
+        24300900,
+        24321024
+      ],
+      "matched_pixels": [
+        24248274,
+        24268913
+      ],
+      "errors": "",
+      "geometry_present": true,
+      "matched_fraction": [
+        0.9978344011950174,
+        0.9978573681766031
+      ],
+      "raw_sha256": "f90deb2819863f5a6ca9913c255fdd83a94963f4284eb88df9d389da7a6c7665",
+      "raster_sha256": "867f2fa940ce37e5f9e25f9556fe0fae0b65c1ffe682f47fd74b414d6a24fb8c"
+    },
+    {
+      "raw": "1084.orf",
+      "exit_code": 0,
+      "elapsed_seconds": 11.130932958971243,
+      "candidate": true,
+      "compared_pixels": [
+        15925248,
+        15909124
+      ],
+      "matched_pixels": [
+        15318542,
+        15292440
+      ],
+      "errors": "",
+      "geometry_present": true,
+      "matched_fraction": [
+        0.9619028852800283,
+        0.9612370863411461
+      ],
+      "raw_sha256": "b2221977cbc6eba0d3b363351072092e5647eaa0d02a5d8432b5d985b29f669f",
+      "raster_sha256": "b9243fd1bcb98c0377b73cefd361b595ffe345415d3f9222718b725c71545340"
+    },
+    {
+      "raw": "1294.cr2",
+      "exit_code": 0,
+      "elapsed_seconds": 14.183742291003,
+      "candidate": false,
+      "compared_pixels": [
+        24000000,
+        23996128
+      ],
+      "matched_pixels": [
+        21474249,
+        21473013
+      ],
+      "errors": "",
+      "geometry_present": true,
+      "matched_fraction": [
+        0.894760375,
+        0.8948532446568046
+      ],
+      "raw_sha256": "8f28465cee09844ffad95dbd3ec91923717a329c5ec4f3f405f5b4fce83aaea3",
+      "raster_sha256": "2072de2f4315fc4d01e5f9e11ede19641fbacdbfe0ef6149794d15b908b7acd6"
+    }
+  ],
+  "interpretation": "DNG NEF ORF pass; CR2 still fails. Not a held-out calibrated camera corpus; elapsed times are single sequential observations, not benchmark statistics.",
+  "unrelated_negative": {
+    "left": "830.dng",
+    "right": "898.tiff",
+    "geometry": null,
+    "candidate": false,
+    "log": "Ok(\n    LocalFileEvidence {\n        correspondences: [\n            Correspondence {\n                source: [\n                    3096.0,\n                    592.0,\n                ],\n                target: [\n                    3194.0,\n                    1342.0,\n                ],\n            },\n        ],\n        geometry: None,\n        pixels: None,\n        photometric: None,\n        photometric_failure: None,\n        filtered: None,\n        candidate: false,\n    },\n)\nmanaged_used=0 managed_peak=779390192\n"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "scope": "Authored CC0 overlays on seeded textured fixture; unchanged 90% pixel policy",
+  "positive": "800-pixel opaque watermark on 160x160 input",
+  "negative": "6400-pixel opaque edit on 160x160 input",
+  "checks": [
+    "indexed and exhaustive accepted pair sets match labels",
+    "both edited pairs reach geometry and pixel verification",
+    "unrelated texture is rejected",
+    "memory credit releases to zero",
+    "all 11 local collection tests pass"
+  ],
+  "limits": [
+    "Not real watermarks, held-out edits or burst/look-alike calibration",
+    "Reflections and perspective remain excluded by similarity geometry"
+  ],
+  "source_sha256": {
+    "scripts/generate-dedup-edit-fixtures.py": "b76913894beb1a65f4d97f6600f718a06b2cdecf3bf084de5f3fe5ab44da5ec5",
+    "crates/rrrah-dedup/tests/local_collection.rs": "f1a175c82352350fb96a73d110a6d3bc20ac3172743972957fb7d9100b75fbb4",
+    "crates/rrrah-dedup/tests/fixtures/edits/manifest.json": "3a063f0348a089241daff557cfcabc1e082657693afcc9d473843c0e72c69bdb"
+  }
+}

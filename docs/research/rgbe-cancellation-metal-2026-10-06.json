@@ -1,0 +1,27 @@
+{
+  "api": "RgbeCompute::execute_managed_with_cancel",
+  "test_passed": 2,
+  "ignored_in_default_run": 1,
+  "full_dump_passed": 1,
+  "cancel_phases": [
+    "entry",
+    "after CPU/GPU credit before allocation",
+    "during dispatch encoding",
+    "before submission",
+    "after completed readback"
+  ],
+  "logs": [
+    "/tmp/rrrah-rgbe-cancellation-phases.log",
+    "/tmp/rrrah-rgbe-cancellation-full.log"
+  ],
+  "sources": {
+    "crates/rrrah-gpu/src/rgbe_compute.rs": "f74117428def6f98d1901d8deacf573a79557024a45b89a87092f8a6b50ea7ed",
+    "crates/rrrah-gpu/tests/rgbe_compute_readback.rs": "a78f16351c2eb084639b6042cd2712dfec60a067cc5a6992332a5fb2377ab340"
+  },
+  "limitations": [
+    "Submitted GPU work and blocking poll are not interrupted",
+    "Viewer integration not established",
+    "Full dump producer provenance not verified",
+    "No CUDA/NVIDIA or physical display proof"
+  ]
+}

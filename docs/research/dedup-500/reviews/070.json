@@ -1,0 +1,78 @@
+{
+  "index": 70,
+  "repository": "atlassian-labs/webpack-deduplication-plugin",
+  "commit": "fb8b8d763b589fd955972088d0c18cfedc4a86d3",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Webpack dependency graph deduplication; MD5 is package content utility rather than image/file scanning.",
+  "license_metadata": "Apache-2.0",
+  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "tests_detected": 3,
+  "upstream_tests_run": false,
+  "available_source_evidence": [
+    {
+      "path": "src/index.js",
+      "local": "02-index.js",
+      "url": "https://github.com/atlassian-labs/webpack-deduplication-plugin/blob/fb8b8d763b589fd955972088d0c18cfedc4a86d3/src/index.js",
+      "sha256": "bcf63ea53ba7b28f958e01ec6d6946758bbd301488e02b843972bf53ee8bc249",
+      "truncated": false,
+      "lines": 104,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/resolver.js",
+      "local": "03-resolver.js",
+      "url": "https://github.com/atlassian-labs/webpack-deduplication-plugin/blob/fb8b8d763b589fd955972088d0c18cfedc4a86d3/src/resolver.js",
+      "sha256": "73f00f579d5fb5510e3c4a303f3d945df551edb3dbcfb1f7648201fb0710369c",
+      "truncated": false,
+      "lines": 58,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/utils.js",
+      "local": "04-utils.js",
+      "url": "https://github.com/atlassian-labs/webpack-deduplication-plugin/blob/fb8b8d763b589fd955972088d0c18cfedc4a86d3/src/utils.js",
+      "sha256": "43df805047cf6683b405526e5d1b1537321bea531f4ddc1dca016a5a2fdbc666",
+      "truncated": false,
+      "lines": 138,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/__tests__/index.test.js",
+      "local": "05-index.test.js",
+      "url": "https://github.com/atlassian-labs/webpack-deduplication-plugin/blob/fb8b8d763b589fd955972088d0c18cfedc4a86d3/src/__tests__/index.test.js",
+      "sha256": "68a79a84aed955fb03880adb9fb420a823fa1675888a08942805df9ca755a188",
+      "truncated": false,
+      "lines": 153,
+      "source": true,
+      "test": true
+    }
+  ],
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/atlassian-labs/webpack-deduplication-plugin/blob/fb8b8d763b589fd955972088d0c18cfedc4a86d3/README.md",
+      "sha256": "2dc015d767012a4342c7a54869d942cc9dbd5625797b4de3691171e94418af18",
+      "truncated": false,
+      "lines": 48,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/atlassian-labs/webpack-deduplication-plugin/blob/fb8b8d763b589fd955972088d0c18cfedc4a86d3/LICENSE",
+      "sha256": "c2be406f0a56fc95ff5add65df3431f4393c9dd55209424a4ca559a1a2ac4696",
+      "truncated": false,
+      "lines": 201,
+      "source": false,
+      "test": false
+    }
+  ]
+}

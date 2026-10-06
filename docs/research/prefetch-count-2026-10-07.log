@@ -1,0 +1,13 @@
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 18.09s
+     Running unittests src/main.rs (/tmp/rrrah-required-corpus-target/debug/deps/rrrah-9f57a70452950339)
+
+running 5 tests
+test gallery::tests::thumbnail_submit_never_consumes_beyond_window_capacity ... ok
+test gallery::tests::thumbnail_viewport_cancels_active_loader ... ok
+test gallery::tests::thumbnail_submit_discards_already_ready_stale_generation ... ok
+test gallery::tests::thumbnail_queue_replaces_stale_pending_window_at_capacity ... ok
+test gallery::tests::thumbnail_worker_drops_an_inflight_stale_generation ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 159 filtered out; finished in 0.02s
+

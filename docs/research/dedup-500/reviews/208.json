@@ -1,0 +1,78 @@
+{
+  "index": 208,
+  "repository": "bryant24hao/macos-calendar-assistant-skill",
+  "commit": "ecfeec26be02ce01ea64bffa4710d0de4e1f5a60",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Calendar event cleanup/creation; schedule identity.",
+  "available_source_evidence": [
+    {
+      "path": "scripts/add_event.py",
+      "local": "02-add_event.py",
+      "url": "https://github.com/bryant24hao/macos-calendar-assistant-skill/blob/ecfeec26be02ce01ea64bffa4710d0de4e1f5a60/scripts/add_event.py",
+      "sha256": "6050613c6859cb56809fc4d8740d1f5308c5d70165035d27f0330a788750da12",
+      "truncated": false,
+      "lines": 126,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "scripts/calendar_clean.py",
+      "local": "03-calendar_clean.py",
+      "url": "https://github.com/bryant24hao/macos-calendar-assistant-skill/blob/ecfeec26be02ce01ea64bffa4710d0de4e1f5a60/scripts/calendar_clean.py",
+      "sha256": "34ded7e660a977b776a3098cb9d6e20931a26714a859f68bac228f2f703ad472",
+      "truncated": false,
+      "lines": 198,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "scripts/calendar_clean_notify.sh",
+      "local": "04-calendar_clean_notify.sh",
+      "url": "https://github.com/bryant24hao/macos-calendar-assistant-skill/blob/ecfeec26be02ce01ea64bffa4710d0de4e1f5a60/scripts/calendar_clean_notify.sh",
+      "sha256": "a9f4bba193e0ebf4e644a9ee0e12a2ad1c88b85f3ffdbb18f033e1b9cc4d19f4",
+      "truncated": false,
+      "lines": 102,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "scripts/regression_test.py",
+      "local": "05-regression_test.py",
+      "url": "https://github.com/bryant24hao/macos-calendar-assistant-skill/blob/ecfeec26be02ce01ea64bffa4710d0de4e1f5a60/scripts/regression_test.py",
+      "sha256": "b88de01f13195edbeea3285c5e627f6026dce00dd45847781a4a5ee7a8eea495",
+      "truncated": false,
+      "lines": 141,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 2,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/bryant24hao/macos-calendar-assistant-skill/blob/ecfeec26be02ce01ea64bffa4710d0de4e1f5a60/README.md",
+      "sha256": "eaa36db537f59a1df3e11892343ca1047b0ac01c60e5d0fb6cea8c4469f9dc3d",
+      "truncated": false,
+      "lines": 330,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/bryant24hao/macos-calendar-assistant-skill/blob/ecfeec26be02ce01ea64bffa4710d0de4e1f5a60/LICENSE",
+      "sha256": "420a810e5ec25085593c89b8ff5215101d605e636cc4a16a3bea96515879fb9a",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

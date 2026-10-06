@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-06",
+  "scope": "post-decode generation cancellation in raster/model cache adapters; not physical navigation or all concurrent schedules",
+  "fixtures": [
+    "tests/fixtures/models/off-attributes-binary.off",
+    "tests/fixtures/raster/gif-animation-disposal-3.gif"
+  ],
+  "assertions": [
+    "successful model decode allocated managed memory before generation changes",
+    "successful prepared raster decode allocated in its own child budget before generation changes",
+    "cancelled results never enter resident caches",
+    "root and raster child used bytes return to zero",
+    "already cancelled requests never call decode closure"
+  ],
+  "command": "cargo test -p rrrah --bin rrrah speculative_cache_paths_reject --target-dir /tmp/rrrah-required-corpus-target",
+  "log": "/tmp/rrrah-prefetch-cancel-budget.log",
+  "passed": 1,
+  "failed": 0
+}

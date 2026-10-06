@@ -1,0 +1,28 @@
+{
+  "status": "targeted_passed_both_platforms",
+  "macos_test_session": 3077,
+  "macos_clippy_exit": 0,
+  "linux_session": 19727,
+  "source_sha256": {
+    "crates/rrrah-dedup/src/local_collection.rs": "bfd72ba68836bfcda4a6b3840f2c734165c6e242f89a472f3b7d86980e2e8a9c",
+    "crates/rrrah-dedup/tests/projective_files.rs": "6a19fb79c75b6317ac6382058890a9cc872c38b87bed1ddf5e90bd6c4cdd0126"
+  },
+  "scope": "Sampled recursive search shares ordinary traversal, physical alias collection, request factories and final batch source guards; development fixture only",
+  "remaining": [
+    "Terminal macOS/Linux targeted results",
+    "Independent captured-pair calibration",
+    "Full fresh source-frozen regression"
+  ],
+  "macos": {
+    "test_exit": 0,
+    "passed": 1,
+    "ignored": 0,
+    "clippy_exit": 0
+  },
+  "linux": {
+    "exit": 0,
+    "passed": 1,
+    "ignored": 0,
+    "log": "docs/research/dedup-projective-sampled-roots-linux.log"
+  }
+}

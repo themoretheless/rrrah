@@ -1,0 +1,39 @@
+{
+  "scope": "Native EOS 10D optical-black calibration",
+  "black_sensor_rggb": [
+    127,
+    126,
+    127,
+    126
+  ],
+  "independent_libraw_rgbg_absolute": [
+    127,
+    126,
+    126,
+    127
+  ],
+  "mask": {
+    "rows": [
+      12,
+      2068
+    ],
+    "columns": [
+      18,
+      62
+    ],
+    "end_exclusive": true
+  },
+  "crop_independent": [
+    64,
+    12,
+    3088,
+    2056
+  ],
+  "log": "/tmp/rrrah-crw-black.log",
+  "log_sha256": "e19e219f9d83bfacf7886c5ffb9c8124d1dcd5bf82741914fe8a11369d428b61",
+  "limitations": [
+    "One camera/source; masked-region means are camera-specific.",
+    "Crop noted from reference but no new crop API implemented.",
+    "No public CRW color/viewer route; malformed-black boundary fixtures remain pending."
+  ]
+}

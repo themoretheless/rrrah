@@ -1,0 +1,15 @@
+{
+  "change": "Fallible discovered-file enumeration plus exhaustive pixel-search request/snapshot/ID/diagnostic/invalid-source storage with explicit source ordering.",
+  "validation": {
+    "passed": 24,
+    "failed": 0,
+    "dedup_lib_no_deps_clippy": "passed"
+  },
+  "source_sha256": {
+    "crates/rrrah-dedup/src/scan.rs": "9e833b7c4ba6135de0dd9e27c818d8c9b1afbcc1425b87925f8f3069e5f7677a"
+  },
+  "limits": [
+    "Filesystem discover traversal storage, path/request cloning and underlying decoder allocations remain separately unqualified.",
+    "No allocator-exhaustion injection, full shared memory admission or measured RSS."
+  ]
+}

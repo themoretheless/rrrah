@@ -1,0 +1,31 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: function `error` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:4:4
+  |
+4 | fn error(message: &str) -> DecodeError {
+  |    ^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `packed_12` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:9:4
+  |
+9 | fn packed_12(
+  |    ^^^^^^^^^
+
+warning: function `decode_zd` is never used
+  --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:48:15
+   |
+48 | pub(super) fn decode_zd(
+   |               ^^^^^^^^^
+
+warning: `rrrah-decode` (lib) generated 3 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 13.21s
+     Running tests/photos_heldout.rs (target/debug/deps/photos_heldout-9e5858c4f50eef5a)
+
+running 1 test
+related garden views: LocalFileEvidence { correspondences: [Correspondence { source: [138.0, 119.0], target: [112.0, 141.0] }, Correspondence { source: [137.0, 125.0], target: [111.0, 148.0] }, Correspondence { source: [130.0, 124.0], target: [103.0, 147.0] }, Correspondence { source: [139.0, 112.0], target: [113.0, 134.0] }, Correspondence { source: [241.0, 159.0], target: [223.0, 186.0] }, Correspondence { source: [70.0, 24.0], target: [41.0, 37.0] }], geometry: None, pixels: None, photometric: None, photometric_fit_range: None, display_projection: false, photometric_failure: None, filtered: None, candidate: false }
+test related_garden_views_keep_exact_pixel_evidence_separate_from_visual_candidate ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.33s
+

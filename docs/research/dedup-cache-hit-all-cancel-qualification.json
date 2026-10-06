@@ -1,0 +1,37 @@
+{
+  "status": "passed",
+  "tests": {
+    "decode": 10,
+    "cache": 6,
+    "failed": 0,
+    "ignored": 0,
+    "filtered": 0
+  },
+  "caller_cancellation_checkpoints": 9,
+  "generation_cancellation_checkpoints": 9,
+  "checks": [
+    "all hit-path callbacks reject caller cancellation",
+    "same checkpoints reject generation-token changes without caller cancellation",
+    "every caller-cancellation failure followed by successful current-cache retry",
+    "managed reservations zero after each refusal"
+  ],
+  "test_sha256": "bf888bffc1bd1587ad381ca89a73fcc3c740c1d531a6891fa29de3ed4085bd66",
+  "production_decode_sha256": "ff768129d2f0603c21eba765ee7535a37439c263723de82dbd419978e54956d2",
+  "hash_timing": "post-validation, not atomic prelaunch snapshot",
+  "logs": {
+    "tests": {
+      "path": "docs/research/dedup-cache-hit-all-cancel-tests.log",
+      "sha256": "a92678dbf809d90eb6dd0c34fa5ea2f1631ebb01d4862a93d3e1fa5e10c828ba"
+    },
+    "clippy": {
+      "path": "docs/research/dedup-cache-hit-all-cancel-clippy.log",
+      "sha256": "741928544595f23049cbf5db9e462cf9f6dfaee9e8bf095f85ba1539d8cb2c4c"
+    }
+  },
+  "clippy": "passed with existing decoder warnings",
+  "limitations": [
+    "single tiny BMP, not multi-block/large-file cancellation latency",
+    "no production change this step",
+    "full acceptance contract remains incomplete"
+  ]
+}

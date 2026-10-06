@@ -1,0 +1,384 @@
+import asyncio
+import hashlib
+import json
+import logging
+from typing import Any
+
+from pydantic import RedisDsn
+from redis.asyncio import Redis
+from taskiq import TaskiqMessage, TaskiqResult
+from taskiq.abc.middleware import TaskiqMiddleware
+
+from .utils import (
+    REFRESH_LUA_SCRIPT,
+    RELEASE_LUA_SCRIPT,
+    check_and_delete,
+    check_and_refresh,
+    parse_bool_label,
+    parse_int_label,
+    parse_list_label,
+)
+
+logger = logging.getLogger(__name__)
+
+DEDUP_LABEL = "deduplication"
+DEDUP_TTL_LABEL = "deduplication_ttl"
+DEDUP_KEY_FIELDS_LABEL = "deduplication_key_fields"
+DEDUP_EXPLICIT_KEY_LABEL = "deduplication_key"
+SEND_GRACE_TTL = 10
+
+_CACHED_KEY_LABEL = "__taskiq_dedup_cached_key"
+
+
+class DuplicateTaskError(Exception):
+    """Raised when a task with identical name and kwargs is already queued or running.
+
+    Attributes:
+        task_name: Name of the task that was rejected.
+        key: Redis lock key whose owner caused the rejection.
+        holder_task_id: ``task_id`` of the task currently holding the lock, or
+            ``None`` if it could not be retrieved (e.g. the lock was released
+            between the failed acquisition and the lookup).
+    """
+
+    def __init__(
+        self,
+        task_name: str,
+        key: str,
+        holder_task_id: str | None = None,
+    ) -> None:
+        self.task_name = task_name
+        self.key = key
+        self.holder_task_id = holder_task_id
+        super().__init__(
+            f"Task {task_name!r} with the same arguments is already queued or "
+            f"running (key={key!r}, holder_task_id={holder_task_id!r})."
+        )
+
+
+class RedisDeduplicationMiddleware(TaskiqMiddleware):
+    """Prevents duplicate tasks from being queued.
+
+    When a task is dispatched, a Redis lock is acquired for the duration of its
+    execution. Any subsequent task with the same fingerprint is rejected with
+    ``DuplicateTaskError`` while the lock is held. The lock is released automatically
+    on completion or error.
+
+    Attributes:
+        redis_url: Redis connection URL (``str`` or ``RedisDsn``) passed to
+            ``Redis.from_url``.
+        default_deduplication: Whether deduplication is enabled by default.
+        default_ttl: Default lock TTL in seconds.
+        key_prefix: Prefix for all Redis lock keys.
+        heartbeat: Whether to periodically re-extend the lock TTL during task
+            execution so long-running tasks keep their lock.
+        heartbeat_interval: Seconds between heartbeat refreshes. When ``None`` it
+            defaults to a third of the task's TTL (with a 1s floor).
+        fail_open: Whether a Redis error while acquiring the lock lets the task
+            through instead of aborting the send. Detected duplicates still raise
+            ``DuplicateTaskError``.
+    """
+
+    def __init__(
+        self,
+        redis_url: str | RedisDsn,
+        default_deduplication: bool = True,
+        default_ttl: int = 300,
+        key_prefix: str = "taskiq:deduplication",
+        startup_retries: int = 3,
+        startup_retry_delay: float = 1.0,
+        heartbeat: bool = True,
+        heartbeat_interval: float | None = None,
+        fail_open: bool = False,
+    ) -> None:
+        self.redis_url = redis_url
+        self.default_deduplication = default_deduplication
+        self.default_ttl = default_ttl
+        self.key_prefix = key_prefix
+        self.startup_retries = startup_retries
+        self.startup_retry_delay = startup_retry_delay
+        self.heartbeat = heartbeat
+        self.heartbeat_interval = heartbeat_interval
+        self.fail_open = fail_open
+        self._redis: Redis | None = None
+        self._release_script: Any = None
+        self._refresh_script: Any = None
+        self._heartbeats: dict[str, asyncio.Task[None]] = {}
+
+    async def startup(self) -> None:
+        last_error: BaseException | None = None
+        for attempt in range(self.startup_retries):
+            client = Redis.from_url(str(self.redis_url))
+            try:
+                await client.ping()
+                self._redis = client
+                self._release_script = self._redis.register_script(RELEASE_LUA_SCRIPT)
+                self._refresh_script = self._redis.register_script(REFRESH_LUA_SCRIPT)
+                return
+            except Exception as exc:
+                await client.aclose()
+                last_error = exc
+                if attempt < self.startup_retries - 1:
+                    delay = self.startup_retry_delay * (2**attempt)
+                    logger.warning(
+                        "Failed to connect to Redis (attempt %d/%d): %s. "
+                        "Retrying in %.1fs...",
+                        attempt + 1,
+                        self.startup_retries,
+                        exc,
+                        delay,
+                    )
+                    await asyncio.sleep(delay)
+        logger.error(
+            "Failed to connect to Redis after %d attempts.", self.startup_retries
+        )
+        raise ConnectionError(
+            f"Could not connect to Redis after {self.startup_retries} attempts"
+        ) from last_error
+
+    async def shutdown(self) -> None:
+        for task_id in list(self._heartbeats):
+            await self._cancel_heartbeat(task_id)
+        if self._redis is not None:
+            await self._redis.aclose()
+
+    def _build_deduplication_key(self, message: TaskiqMessage) -> str | None:
+        explicit_key: str | None = message.labels.get(DEDUP_EXPLICIT_KEY_LABEL)
+        if explicit_key is not None:
+            return f"{self.key_prefix}:{explicit_key}"
+
+        key_fields = parse_list_label(
+            message.labels.get(DEDUP_KEY_FIELDS_LABEL), DEDUP_KEY_FIELDS_LABEL
+        )
+        if key_fields is not None:
+            missing = [field for field in key_fields if field not in message.kwargs]
+            if missing:
+                logger.warning(
+                    "Task %s requested deduplication_key_fields %r but they are "
+                    "absent from kwargs; they are dropped from the fingerprint, which "
+                    "may cause distinct calls to collide.",
+                    message.task_name,
+                    missing,
+                )
+            if message.args:
+                logger.warning(
+                    "Task %s was called with positional arguments but uses "
+                    "deduplication_key_fields; positional arguments are excluded "
+                    "from the fingerprint.",
+                    message.task_name,
+                )
+            kwargs = {k: v for k, v in message.kwargs.items() if k in key_fields}
+            args: list[Any] = []
+        else:
+            kwargs = message.kwargs
+            args = message.args
+        try:
+            payload = json.dumps(
+                {"task": message.task_name, "args": args, "kwargs": kwargs},
+                sort_keys=True,
+            )
+        except TypeError:
+            return None
+        fingerprint = hashlib.sha256(payload.encode()).hexdigest()[:16]
+        return f"{self.key_prefix}:{fingerprint}"
+
+    def _is_enabled(self, labels: dict[str, Any]) -> bool:
+        return parse_bool_label(
+            labels.get(DEDUP_LABEL), self.default_deduplication, DEDUP_LABEL
+        )
+
+    def _get_ttl(self, labels: dict[str, Any]) -> int:
+        return parse_int_label(
+            labels.get(DEDUP_TTL_LABEL, self.default_ttl),
+            self.default_ttl,
+            DEDUP_TTL_LABEL,
+        )
+
+    async def _release_if_owned(self, key: str, task_id: str) -> None:
+        if self._redis is None:
+            raise RuntimeError(
+                "RedisDeduplicationMiddleware.startup() was never called."
+            )
+        if self._release_script is None:
+            self._release_script = self._redis.register_script(RELEASE_LUA_SCRIPT)
+        released = await check_and_delete(self._release_script, key, task_id)
+        if released:
+            logger.debug("Released lock %s", key)
+        else:
+            logger.debug("Skipped release of lock %s: not owned by this task", key)
+
+    async def _refresh_if_owned(self, key: str, task_id: str, ttl: int) -> bool:
+        if self._redis is None:
+            raise RuntimeError(
+                "RedisDeduplicationMiddleware.startup() was never called."
+            )
+        if self._refresh_script is None:
+            self._refresh_script = self._redis.register_script(REFRESH_LUA_SCRIPT)
+        return await check_and_refresh(self._refresh_script, key, task_id, ttl)
+
+    @staticmethod
+    def _get_cached_key(message: TaskiqMessage) -> str | None:
+        return message.labels.get(_CACHED_KEY_LABEL)
+
+    @staticmethod
+    def _cache_key(message: TaskiqMessage, key: str | None) -> None:
+        message.labels[_CACHED_KEY_LABEL] = key
+
+    async def pre_send(self, message: TaskiqMessage) -> TaskiqMessage:
+        if not self._is_enabled(message.labels):
+            return message
+
+        if self._redis is None:
+            raise RuntimeError(
+                "RedisDeduplicationMiddleware.startup() was never called."
+            )
+        key = self._build_deduplication_key(message)
+        self._cache_key(message, key)
+        if key is None:
+            logger.warning(
+                "Task %s has non-JSON-serializable kwargs; deduplication skipped."
+                " Use the deduplication_key label to deduplicate this task.",
+                message.task_name,
+            )
+            return message
+        ttl = self._get_ttl(message.labels)
+
+        logger.debug("Acquiring lock %s for task %s", key, message.task_name)
+        try:
+            acquired = await self._redis.set(
+                key, message.task_id, ex=min(ttl, SEND_GRACE_TTL), nx=True
+            )
+            holder_task_id = None if acquired else await self._redis.get(key)
+        except Exception as exc:
+            if not self.fail_open:
+                raise
+            logger.warning(
+                "Redis is unavailable (%s); dispatching task %s without "
+                "deduplication (fail_open is enabled).",
+                exc,
+                message.task_name,
+            )
+            # No lock was taken: nothing downstream should release or refresh one.
+            self._cache_key(message, None)
+            return message
+
+        if not acquired:
+            if isinstance(holder_task_id, bytes):
+                holder_task_id = holder_task_id.decode()
+            logger.warning(
+                "Duplicate task %s dropped (key=%s, holder_task_id=%s).",
+                message.task_name,
+                key,
+                holder_task_id,
+            )
+            raise DuplicateTaskError(
+                task_name=message.task_name,
+                key=key,
+                holder_task_id=holder_task_id,
+            )
+
+        logger.debug("Lock %s acquired for task %s", key, message.task_name)
+        return message
+
+    async def post_send(self, message: TaskiqMessage) -> None:
+        # The cached key is set by pre_send() only when deduplication is enabled.
+        key = self._get_cached_key(message)
+        if key is None:
+            return
+        ttl = self._get_ttl(message.labels)
+        if ttl <= SEND_GRACE_TTL:
+            return
+        try:
+            # Returns False when a fast worker already ran and released the lock.
+            extended = await self._refresh_if_owned(key, message.task_id, ttl)
+        except Exception as exc:
+            # The task is already queued; never fail the send. The lock just keeps
+            # its grace TTL.
+            logger.warning("Failed to extend lock %s after send: %s", key, exc)
+            return
+        logger.debug(
+            "Lock %s %s to the full TTL (%ds) after send",
+            key,
+            "extended" if extended else "not extended",
+            ttl,
+        )
+
+    def _get_heartbeat_interval(self, ttl: int) -> float:
+        if self.heartbeat_interval is not None:
+            return self.heartbeat_interval
+        return max(ttl / 3, 1.0)
+
+    async def _heartbeat_loop(
+        self, key: str, task_id: str, ttl: int, interval: float
+    ) -> None:
+        try:
+            while True:
+                await asyncio.sleep(interval)
+                try:
+                    refreshed = await self._refresh_if_owned(key, task_id, ttl)
+                except Exception as exc:
+                    logger.warning("Failed to refresh lock %s: %s", key, exc)
+                    continue
+                if refreshed:
+                    logger.debug("Refreshed lock %s (ttl=%ds)", key, ttl)
+                else:
+                    logger.warning(
+                        "Lock %s no longer owned by task %s; stopping heartbeat.",
+                        key,
+                        task_id,
+                    )
+                    return
+        except asyncio.CancelledError:
+            pass
+
+    async def pre_execute(self, message: TaskiqMessage) -> TaskiqMessage:
+        if not self.heartbeat:
+            return message
+        # The cached key is set by pre_send() only when deduplication is enabled.
+        key = self._get_cached_key(message)
+        if key is None:
+            return message
+        ttl = self._get_ttl(message.labels)
+        interval = self._get_heartbeat_interval(ttl)
+        self._heartbeats[message.task_id] = asyncio.create_task(
+            self._heartbeat_loop(key, message.task_id, ttl, interval)
+        )
+        return message
+
+    async def _cancel_heartbeat(self, task_id: str) -> None:
+        task = self._heartbeats.pop(task_id, None)
+        if task is None:
+            return
+        task.cancel()
+        try:
+            await task
+        except asyncio.CancelledError:
+            pass
+
+    async def _release_lock(self, message: TaskiqMessage) -> None:
+        await self._cancel_heartbeat(message.task_id)
+        # The cached key is set by pre_send() only when deduplication is enabled.
+        key = self._get_cached_key(message)
+        if key is None:
+            return
+        try:
+            await self._release_if_owned(key, message.task_id)
+        except Exception as exc:
+            # The task already ran: raising here would lose its result in the
+            # receiver. The lock expires on its TTL instead.
+            logger.warning("Failed to release lock %s: %s", key, exc)
+
+    async def post_execute(
+        self,
+        message: TaskiqMessage,
+        result: TaskiqResult,
+    ) -> None:
+        await self._release_lock(message)
+
+    async def on_error(
+        self,
+        message: TaskiqMessage,
+        result: TaskiqResult,
+        exception: BaseException,
+    ) -> None:
+        await self._release_lock(message)

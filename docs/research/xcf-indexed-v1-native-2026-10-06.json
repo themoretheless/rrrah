@@ -1,0 +1,169 @@
+{
+  "binary_sha256": "8419b3fe36141d886b254bc5072541da24f20521cb78c1ca5db5ab429b9aa9ba",
+  "manifest": {
+    "license": "CC0-1.0",
+    "construction": "authored big-endian XCF v1, raw tile, two RGB palette entries red/green; indexed alpha samples 127 and 128 test legacy binary threshold",
+    "scope": "native plane and palette expansion; no flattened/color-managed image oracle",
+    "cases": [
+      {
+        "file": "indexed-v1-kind-4.xcf",
+        "sha256": "bcd01ecb4b768f5027bc2c728cb23f1c875450bf83472a167d38d41b425225d8",
+        "native_hex": "0100",
+        "rgba_hex": "00ff00ffff0000ff",
+        "dimensions": [
+          2,
+          1
+        ],
+        "kind": 4
+      },
+      {
+        "file": "indexed-v1-kind-5.xcf",
+        "sha256": "45902e067e39ba934aaa9a0cc4072a49185ed2a3a9081dc7dfeff61d9b2de24c",
+        "native_hex": "017f0080",
+        "rgba_hex": "00ff0000ff0000ff",
+        "dimensions": [
+          2,
+          1
+        ],
+        "kind": 5
+      }
+    ],
+    "specification": "https://developer.gimp.org/core/standards/xcf/"
+  },
+  "results": [
+    {
+      "case": "indexed-v1-kind-4.xcf",
+      "records": [
+        {
+          "icc_profile_bytes": 0
+        },
+        {
+          "tree_node": 0,
+          "parent": null,
+          "sibling": 0,
+          "is_group": false
+        },
+        {
+          "version": 1,
+          "width": 2,
+          "height": 1,
+          "compression": 0,
+          "channels": 0
+        },
+        {
+          "layer_property_count": 0,
+          "count": 0
+        },
+        {
+          "layer_group": 0,
+          "is_group": false,
+          "item_path": []
+        },
+        {
+          "layer_composition": 0,
+          "blend_mode": 0,
+          "composite_mode": null,
+          "composite_space": null,
+          "blend_space": null
+        },
+        {
+          "layer_attributes": 0,
+          "visible": true,
+          "opacity": 1,
+          "offset_x": 0,
+          "offset_y": 0,
+          "apply_mask": false
+        },
+        {
+          "layer": 0,
+          "width": 2,
+          "height": 1,
+          "kind": 4,
+          "mask": 0,
+          "effects": 0,
+          "pixel_blake3": "687376c930d7020a32f04c396fc2e5eab49cd09a738fa03d573033416a6a47ce"
+        },
+        {
+          "indexed_rgba_layer": 0,
+          "pixel_blake3": "5ac065367971269bc86a9238d431ed1b108dfcf775e81b022fcfbf71231a2a6e"
+        },
+        {
+          "managed_peak": 169,
+          "managed_used": 0
+        }
+      ],
+      "native_exact": true,
+      "rgba_authored_exact": true,
+      "python_native_exact": true,
+      "python_palette_exact": true
+    },
+    {
+      "case": "indexed-v1-kind-5.xcf",
+      "records": [
+        {
+          "icc_profile_bytes": 0
+        },
+        {
+          "tree_node": 0,
+          "parent": null,
+          "sibling": 0,
+          "is_group": false
+        },
+        {
+          "version": 1,
+          "width": 2,
+          "height": 1,
+          "compression": 0,
+          "channels": 0
+        },
+        {
+          "layer_property_count": 0,
+          "count": 0
+        },
+        {
+          "layer_group": 0,
+          "is_group": false,
+          "item_path": []
+        },
+        {
+          "layer_composition": 0,
+          "blend_mode": 0,
+          "composite_mode": null,
+          "composite_space": null,
+          "blend_space": null
+        },
+        {
+          "layer_attributes": 0,
+          "visible": true,
+          "opacity": 1,
+          "offset_x": 0,
+          "offset_y": 0,
+          "apply_mask": false
+        },
+        {
+          "layer": 0,
+          "width": 2,
+          "height": 1,
+          "kind": 5,
+          "mask": 0,
+          "effects": 0,
+          "pixel_blake3": "9b504bcf289b9e2499e55c5b3e66042504cb7239545601442d2a5f343a01176a"
+        },
+        {
+          "indexed_rgba_layer": 0,
+          "pixel_blake3": "df8ccd3bceca62c35ecf2623c7e35ab9ef56fd3e2debe9bed6811e83b527fc47"
+        },
+        {
+          "managed_peak": 171,
+          "managed_used": 0
+        }
+      ],
+      "native_exact": true,
+      "rgba_authored_exact": true,
+      "python_native_exact": true,
+      "python_palette_exact": true
+    }
+  ],
+  "oracle": "gimpformats==2025: native planes and image colormap only; raw L/LA image does not implement palette/legacy alpha expansion",
+  "scope": "valid authored v1 layer/palette preservation and authored RGBA; no full viewer qualification"
+}

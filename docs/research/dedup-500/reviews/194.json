@@ -1,0 +1,48 @@
+{
+  "index": 194,
+  "repository": "pelikhan/action-genai-issue-dedup",
+  "commit": "bdb3b5d9451c1090ffcdf123d7447a5e7c7a2528",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "AI issue-dedup action; only release script available in selected source, no native matcher.",
+  "available_source_evidence": [
+    {
+      "path": "release.sh",
+      "local": "02-release.sh",
+      "url": "https://github.com/pelikhan/action-genai-issue-dedup/blob/bdb3b5d9451c1090ffcdf123d7447a5e7c7a2528/release.sh",
+      "sha256": "7d3faeaea13223a368ac4150126c47bf74bcd16b6ff697e760ec0e8ba41d21b3",
+      "truncated": false,
+      "lines": 33,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.es.md",
+      "local": "00-README.es.md",
+      "url": "https://github.com/pelikhan/action-genai-issue-dedup/blob/bdb3b5d9451c1090ffcdf123d7447a5e7c7a2528/README.es.md",
+      "sha256": "e1e7f26b756b6619207f45bc4d1f883fbbc475be264760a8a1d1755e7ea29fdc",
+      "truncated": false,
+      "lines": 146,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/pelikhan/action-genai-issue-dedup/blob/bdb3b5d9451c1090ffcdf123d7447a5e7c7a2528/LICENSE",
+      "sha256": "0e0dc5f236f50a47a5c0a54ef6f48ca508abc393ea69e605b7dae97ac8eb47f5",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

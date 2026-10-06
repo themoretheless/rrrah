@@ -1,0 +1,88 @@
+{
+  "index": 237,
+  "repository": "d3vyce/taskiq-deduplication",
+  "commit": "c1f91bc5e1fbf5140a936bfa859d42eff42eb48e",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Redis task fingerprint ownership script and truncated SHA256; useful task coalescing, not file proof.",
+  "available_source_evidence": [
+    {
+      "path": "src/taskiq_deduplication/__init__.py",
+      "local": "02-__init__.py",
+      "url": "https://github.com/d3vyce/taskiq-deduplication/blob/c1f91bc5e1fbf5140a936bfa859d42eff42eb48e/src/taskiq_deduplication/__init__.py",
+      "sha256": "a929443d10b5ab44b82b561889737877c7d64e171a51f990b431fb2f743bd97a",
+      "truncated": false,
+      "lines": 10,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/taskiq_deduplication/middleware.py",
+      "local": "03-middleware.py",
+      "url": "https://github.com/d3vyce/taskiq-deduplication/blob/c1f91bc5e1fbf5140a936bfa859d42eff42eb48e/src/taskiq_deduplication/middleware.py",
+      "sha256": "363a5c07ff51a8df170863d21567bce9b43068c6a9f41cbe47b334d71762f4c9",
+      "truncated": false,
+      "lines": 384,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/taskiq_deduplication/utils.py",
+      "local": "04-utils.py",
+      "url": "https://github.com/d3vyce/taskiq-deduplication/blob/c1f91bc5e1fbf5140a936bfa859d42eff42eb48e/src/taskiq_deduplication/utils.py",
+      "sha256": "7a572d1ca85cc2716575227b6c5c0ecb4aa60f998df861fe375b27be8d7c5417",
+      "truncated": false,
+      "lines": 104,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/__init__.py",
+      "local": "05-__init__.py",
+      "url": "https://github.com/d3vyce/taskiq-deduplication/blob/c1f91bc5e1fbf5140a936bfa859d42eff42eb48e/tests/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "truncated": false,
+      "lines": 0,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "tests/conftest.py",
+      "local": "06-conftest.py",
+      "url": "https://github.com/d3vyce/taskiq-deduplication/blob/c1f91bc5e1fbf5140a936bfa859d42eff42eb48e/tests/conftest.py",
+      "sha256": "45b78ce25c6285c01cd316d48fb25186ddc92d9958355e25d6729b119edaec7a",
+      "truncated": false,
+      "lines": 59,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 4,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/d3vyce/taskiq-deduplication/blob/c1f91bc5e1fbf5140a936bfa859d42eff42eb48e/README.md",
+      "sha256": "86e320b1417d55386d1b73c165653fd5e2b51019522eae80b48f7b08d24f0cad",
+      "truncated": false,
+      "lines": 71,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/d3vyce/taskiq-deduplication/blob/c1f91bc5e1fbf5140a936bfa859d42eff42eb48e/LICENSE",
+      "sha256": "5768c28c8f953c1faf7866362ad6f4b14e2f4ff4e575172267d94213df1b3281",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

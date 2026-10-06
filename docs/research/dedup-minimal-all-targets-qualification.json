@@ -1,0 +1,20 @@
+{
+  "status": "passed",
+  "command": "cargo test -p rrrah-dedup --no-default-features --all-targets",
+  "counts": {
+    "passed": 107,
+    "failed": 0,
+    "ignored": 0,
+    "filtered": 0
+  },
+  "fix": "cache_hit_scale_probe explicitly requires decode feature",
+  "manifest_sha256": "b044b191757bb0167461b119675bb861c619243fcae91a098257e9b63b922c55",
+  "log_sha256": "a68c7c75d3e917dc64315e994d1c91962dde618820e3d063a9b5f688b3a18a8b",
+  "log": "docs/research/dedup-minimal-all-targets.log",
+  "limitations": [
+    "decode-gated test binaries run zero tests in this invocation",
+    "example targets compile but benchmark mains do not execute",
+    "all-feature regression not repeated",
+    "external native library/build identity qualification remains open"
+  ]
+}

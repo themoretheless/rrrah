@@ -1,0 +1,88 @@
+{
+  "index": 346,
+  "repository": "ThunderGemios10/The-Super-Duper-Script-Editor",
+  "commit": "7510c23a52e88abfe97f405370b042b01754abfe",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Game script editor/text similarity database; not visual media matching.",
+  "available_source_evidence": [
+    {
+      "path": "dupe_db.py",
+      "local": "03-dupe_db.py",
+      "url": "https://github.com/ThunderGemios10/The-Super-Duper-Script-Editor/blob/7510c23a52e88abfe97f405370b042b01754abfe/dupe_db.py",
+      "sha256": "ceee6ab7069a4d768641e02a1bf53d2dd29f6e3546f55c77e650f93f39948e0c",
+      "truncated": false,
+      "lines": 212,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "similarity_db.py",
+      "local": "04-similarity_db.py",
+      "url": "https://github.com/ThunderGemios10/The-Super-Duper-Script-Editor/blob/7510c23a52e88abfe97f405370b042b01754abfe/similarity_db.py",
+      "sha256": "cd5a6812eeefcb6d355ad0c1a61f227ca6296c6f0e88f46dd71c998b15b09646",
+      "truncated": false,
+      "lines": 236,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "diff_match_patch/diff_match_patch.py",
+      "local": "05-diff_match_patch.py",
+      "url": "https://github.com/ThunderGemios10/The-Super-Duper-Script-Editor/blob/7510c23a52e88abfe97f405370b042b01754abfe/diff_match_patch/diff_match_patch.py",
+      "sha256": "b76d885f3a8b763e3e46494253536330bca3cf812124356a4ae298ff380ac095",
+      "truncated": false,
+      "lines": 1920,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "diff_match_patch/diff_match_patch_test.py",
+      "local": "06-diff_match_patch_test.py",
+      "url": "https://github.com/ThunderGemios10/The-Super-Duper-Script-Editor/blob/7510c23a52e88abfe97f405370b042b01754abfe/diff_match_patch/diff_match_patch_test.py",
+      "sha256": "14991ab286f0f9d6ab3adafbadda4dea8ddd1d4d2e4d457f5123a783b7d17ae2",
+      "truncated": false,
+      "lines": 869,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "GPL-3.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 1,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/ThunderGemios10/The-Super-Duper-Script-Editor/blob/7510c23a52e88abfe97f405370b042b01754abfe/README.md",
+      "sha256": "4ef94dea70f82c55fe6ce9467385c88066bd6e66c144a4214d9565825fbd8ca2",
+      "truncated": false,
+      "lines": 127,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "COPYING",
+      "local": "01-COPYING",
+      "url": "https://github.com/ThunderGemios10/The-Super-Duper-Script-Editor/blob/7510c23a52e88abfe97f405370b042b01754abfe/COPYING",
+      "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "truncated": false,
+      "lines": 674,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "diff_match_patch/COPYING",
+      "local": "02-COPYING",
+      "url": "https://github.com/ThunderGemios10/The-Super-Duper-Script-Editor/blob/7510c23a52e88abfe97f405370b042b01754abfe/diff_match_patch/COPYING",
+      "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+      "truncated": false,
+      "lines": 177,
+      "source": false,
+      "test": false
+    }
+  ]
+}

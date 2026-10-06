@@ -1,0 +1,42 @@
+{
+  "source": "Pinned 1294.cr2 LibRaw 0.22.2 rendered TIFF/PPM; 32x32 nearest normalized-position grid",
+  "reference": "Little CMS 2.19 relative colorimetric, linear sRGB D65 destination, no optimization/cache",
+  "files": {
+    "lcms.rgba32le": "9c30da9d620890c41eb711cb7580ad3b8f21eeeb7cfba873b892652344b3f248",
+    "samples.rgba16le": "9455111c3ec934d1fd82f276736d415cd9bde3108b4bb1167620d93690a49897",
+    "profile.icc": "5a7cf8121af089606037d7ee0f14fd6ca0719e341bd163e114e6512c35a8647d",
+    "boundary.rgba16le": "482b4c81edd07590fb37f5ca9304098a81bbff5653673c1240cfb3508a381a75",
+    "boundary-lcms.rgba32le": "56cc8f7b30185ddd40c5188210d4da3d8c8defb62f3dd2f5b4f4ed2fa12c96a7"
+  },
+  "scope": "1024 independent profiled RGB16 samples; not full-camera rendered color qualification",
+  "boundary_samples": {
+    "coordinates": [
+      [
+        3711,
+        0
+      ],
+      [
+        2193,
+        0
+      ],
+      [
+        4407,
+        0
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        2165,
+        0
+      ],
+      [
+        4550,
+        3822
+      ]
+    ],
+    "layout": "Six RGB16 triplets repeated cyclically across 32x32; exact independent PPM payload at TIFF-equivalent coordinates",
+    "reference": "Existing dedup-icc-grid-oracle.cpp using LittleCMS 2.19 on repeated-sample P6; relative colorimetric linear D65 sRGB; NOOPTIMIZE/NOCACHE"
+  }
+}

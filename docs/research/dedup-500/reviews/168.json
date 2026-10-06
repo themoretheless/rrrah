@@ -1,0 +1,68 @@
+{
+  "index": 168,
+  "repository": "dedupeio/dedupe-geocoder",
+  "commit": "ed1506a36e1a153737adab51144911cbd3ab3112",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Geocoder entity-resolution examples; addresses rather than file/image content.",
+  "available_source_evidence": [
+    {
+      "path": "geocoder/deduper.py",
+      "local": "02-deduper.py",
+      "url": "https://github.com/dedupeio/dedupe-geocoder/blob/ed1506a36e1a153737adab51144911cbd3ab3112/geocoder/deduper.py",
+      "sha256": "d029d32eaf01761278f80538e5531bb58289b20a120fde45e6f9f0c928bef033",
+      "truncated": false,
+      "lines": 232,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "linkNewData.py",
+      "local": "03-linkNewData.py",
+      "url": "https://github.com/dedupeio/dedupe-geocoder/blob/ed1506a36e1a153737adab51144911cbd3ab3112/linkNewData.py",
+      "sha256": "bb75998b75ebc735232c525d666896778374264bfb884e88c500c5502aeced88",
+      "truncated": false,
+      "lines": 275,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "loadAddresses.py",
+      "local": "04-loadAddresses.py",
+      "url": "https://github.com/dedupeio/dedupe-geocoder/blob/ed1506a36e1a153737adab51144911cbd3ab3112/loadAddresses.py",
+      "sha256": "7573c47dc58047d0fad6bc1d17e1ce8f4de7e063be50686659a6010c63135c29",
+      "truncated": false,
+      "lines": 263,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/dedupeio/dedupe-geocoder/blob/ed1506a36e1a153737adab51144911cbd3ab3112/README.md",
+      "sha256": "031677f370bbce3752e7fe7a7475e41b75e780b53eb810fc84a40c0455f35531",
+      "truncated": false,
+      "lines": 96,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/dedupeio/dedupe-geocoder/blob/ed1506a36e1a153737adab51144911cbd3ab3112/LICENSE",
+      "sha256": "050b7ee773ad206b2c75f2a3bbe9b24ca177e0364aafd34e830975a6d38d0a85",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

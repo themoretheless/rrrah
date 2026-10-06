@@ -1,0 +1,29 @@
+{
+  "scope": "real RAW decode/view managed admission refusal",
+  "fixture": "tests/IMG_9043.CR3",
+  "adapter": "Metal Apple M4 Max",
+  "cases": [
+    {
+      "cpu_mib": 1,
+      "gpu_mib": 512,
+      "exit_code": 1,
+      "refused_requested_bytes": 22382226,
+      "log": "/tmp/rrrah-raw-view-low-cpu.log",
+      "phase": "managed RAW source admission"
+    },
+    {
+      "cpu_mib": 512,
+      "gpu_mib": 1,
+      "exit_code": 1,
+      "refused_requested_bytes": 73400320,
+      "log": "/tmp/rrrah-raw-view-low-gpu.log",
+      "phase": "renderer atlas admission"
+    }
+  ],
+  "positive_control": "current-raw-performance-2026-10-06.json",
+  "limitations": [
+    "Process-level refusal does not independently prove all last-owner cleanup on the error path",
+    "Target texture and driver memory are outside managed atlas budget",
+    "No physical presentation measurement"
+  ]
+}

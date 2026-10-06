@@ -1,0 +1,126 @@
+{
+  "repository": "iKislay/copium",
+  "metadata": {
+    "name": "iKislay/copium",
+    "url": "https://github.com/iKislay/copium",
+    "description": "Context optimization layer for LLMs. 65-90% token savings with zero quality loss. Drop-in proxy for Claude, GPT, Gemini, and local LLMs (Ollama/VLLM/llama.cpp). Features KV cache-aware compression, session dedup, error cards, and Pichay-proven context paging.",
+    "language": "Python",
+    "stars": 20,
+    "license": "Apache-2.0",
+    "archived": false,
+    "pushed_at": "2026-09-05T20:36:34Z",
+    "default_branch": "main",
+    "queries": [
+      "dedup in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/iKislay/copium/blob/28759a663bc16299222769ca07d53e46caa48fdb/README.md",
+      "sha256": "ea777036c7bd77cca60eda77ebd5c12e370cfa464f3a66f85ce8743a51f3fc2c",
+      "truncated": false,
+      "lines": 1181,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/iKislay/copium/blob/28759a663bc16299222769ca07d53e46caa48fdb/LICENSE",
+      "sha256": "f211de9a90a51190a516277139641c3a41b02dd0e849ef7ea9ae5970e69b20ef",
+      "truncated": false,
+      "lines": 190,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "plugins/copium-oauth2/LICENSE",
+      "local": "02-LICENSE",
+      "url": "https://github.com/iKislay/copium/blob/28759a663bc16299222769ca07d53e46caa48fdb/plugins/copium-oauth2/LICENSE",
+      "sha256": "203da7d148691f4852e2eead8c9a70b87e536bef4c7671aa8dd7326a562c9e4a",
+      "truncated": false,
+      "lines": 3,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "copium/learn/scanner.py",
+      "local": "03-scanner.py",
+      "url": "https://github.com/iKislay/copium/blob/28759a663bc16299222769ca07d53e46caa48fdb/copium/learn/scanner.py",
+      "sha256": "8a70bfc8561bfc71b07916b8c345c7ca31d4d6e6ef932c4d216bab05125cf56e",
+      "truncated": false,
+      "lines": 26,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "copium/mcp_proxy/session_dedup.py",
+      "local": "04-session_dedup.py",
+      "url": "https://github.com/iKislay/copium/blob/28759a663bc16299222769ca07d53e46caa48fdb/copium/mcp_proxy/session_dedup.py",
+      "sha256": "85fa3225170494ab7a109ff194e908dc196610f8b0a1611e169460526463fd0c",
+      "truncated": false,
+      "lines": 204,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "copium/transforms/session_dedup.py",
+      "local": "05-session_dedup.py",
+      "url": "https://github.com/iKislay/copium/blob/28759a663bc16299222769ca07d53e46caa48fdb/copium/transforms/session_dedup.py",
+      "sha256": "cd81f84e4f7d763a899287e7302acdb4656a6f2aa2e96133174b556c29ceea48",
+      "truncated": false,
+      "lines": 457,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/test_ccr_rust_marker_hash_bridge.py",
+      "local": "06-test_ccr_rust_marker_hash_bridge.py",
+      "url": "https://github.com/iKislay/copium/blob/28759a663bc16299222769ca07d53e46caa48fdb/tests/test_ccr_rust_marker_hash_bridge.py",
+      "sha256": "ffa9d7d03ccb6e5506026445b4ca3702b534fe10c7a933bc1e136f7a50e2e702",
+      "truncated": false,
+      "lines": 85,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "benchmarks/claude_session_branch_compare.py",
+      "local": "07-claude_session_branch_compare.py",
+      "url": "https://github.com/iKislay/copium/blob/28759a663bc16299222769ca07d53e46caa48fdb/benchmarks/claude_session_branch_compare.py",
+      "sha256": "e1ee9de2af1f39b37ad9abe9b767e161399533bf55f125df9046408f7a50e0da",
+      "truncated": false,
+      "lines": 595,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "crates/copium-core/src/transforms/simhash.rs",
+      "local": "08-simhash.rs",
+      "url": "https://github.com/iKislay/copium/blob/28759a663bc16299222769ca07d53e46caa48fdb/crates/copium-core/src/transforms/simhash.rs",
+      "sha256": "469861803514a2d460e67b94864269db471f12e3aaa7d2fbf20dda548f19a3f1",
+      "truncated": false,
+      "lines": 263,
+      "source": true,
+      "test": false
+    }
+  ],
+  "errors": [],
+  "commit": "28759a663bc16299222769ca07d53e46caa48fdb",
+  "tree_truncated": false,
+  "source_file_count": 1394,
+  "test_file_count": 567,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "plugins/copium-oauth2/LICENSE",
+    "copium/learn/scanner.py",
+    "benchmarks/claude_session_branch_compare.py",
+    "crates/copium-core/src/transforms/simhash.rs",
+    "tests/test_ccr_rust_marker_hash_bridge.py"
+  ]
+}

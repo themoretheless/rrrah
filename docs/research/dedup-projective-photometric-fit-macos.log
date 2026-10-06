@@ -1,0 +1,18 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: function `sample_pair` is never used
+   --> crates/rrrah-dedup/src/warp.rs:890:4
+    |
+890 | fn sample_pair(
+    |    ^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 5.92s
+     Running tests/projective_geometry.rs (target/debug/deps/projective_geometry-d0822d8b1e5e6358)
+
+running 1 test
+test perspective_photometric_fit_preserves_unfitted_errors_and_limits ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 11 filtered out; finished in 0.01s
+

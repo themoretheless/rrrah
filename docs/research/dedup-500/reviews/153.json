@@ -1,0 +1,78 @@
+{
+  "index": 153,
+  "repository": "rknightion/paperless-ngx-dedupe",
+  "commit": "515e32d2216f32ab7b8818e95aed25197c57cb8e",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Paperless document analysis fingerprint and MinHash tests; OCR/text records rather than native pixel comparison.",
+  "available_source_evidence": [
+    {
+      "path": "packages/core/src/dedup/analysis-hash.ts",
+      "local": "02-analysis-hash.ts",
+      "url": "https://github.com/rknightion/paperless-ngx-dedupe/blob/515e32d2216f32ab7b8818e95aed25197c57cb8e/packages/core/src/dedup/analysis-hash.ts",
+      "sha256": "3f0e8a7800b6897e4049a037586f437ba4187c0db433cd871ccb0b3957e6f303",
+      "truncated": false,
+      "lines": 100,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "packages/core/src/dedup/minhash.ts",
+      "local": "03-minhash.ts",
+      "url": "https://github.com/rknightion/paperless-ngx-dedupe/blob/515e32d2216f32ab7b8818e95aed25197c57cb8e/packages/core/src/dedup/minhash.ts",
+      "sha256": "5ccf5f94e405515adc05d137edc00e7bd1b57cb92ea9a025d431abbd9006ec1f",
+      "truncated": false,
+      "lines": 99,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "packages/core/src/queries/duplicates.ts",
+      "local": "04-duplicates.ts",
+      "url": "https://github.com/rknightion/paperless-ngx-dedupe/blob/515e32d2216f32ab7b8818e95aed25197c57cb8e/packages/core/src/queries/duplicates.ts",
+      "sha256": "94c430170bbfa32521e46adf92e46315bee60f735ca240db97a88012900193f0",
+      "truncated": false,
+      "lines": 999,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "packages/core/src/dedup/__tests__/analysis-hash.test.ts",
+      "local": "05-analysis-hash.test.ts",
+      "url": "https://github.com/rknightion/paperless-ngx-dedupe/blob/515e32d2216f32ab7b8818e95aed25197c57cb8e/packages/core/src/dedup/__tests__/analysis-hash.test.ts",
+      "sha256": "15c62d9e8c29d0c474a5683683346661c3277828419e8bb013b9ede1ec968829",
+      "truncated": false,
+      "lines": 148,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "GPL-3.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 145,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/rknightion/paperless-ngx-dedupe/blob/515e32d2216f32ab7b8818e95aed25197c57cb8e/README.md",
+      "sha256": "5207ed8754fce3e6cca0dc8e3d8c47ed390c5b45b65d19505430d0c6cdd313db",
+      "truncated": false,
+      "lines": 82,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/rknightion/paperless-ngx-dedupe/blob/515e32d2216f32ab7b8818e95aed25197c57cb8e/LICENSE",
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "truncated": false,
+      "lines": 674,
+      "source": false,
+      "test": false
+    }
+  ]
+}

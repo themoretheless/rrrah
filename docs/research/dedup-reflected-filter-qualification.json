@@ -1,0 +1,23 @@
+{
+  "scope": "Reflected filtered linear/encoded-sRGB pixel primitive, reject-outside and constrained least-squares fit",
+  "checks": [
+    "30 library/filter/encoded/photometric/warp tests pass",
+    "49 interior source/target windows match in both selected spaces",
+    "constrained reflected fit also matches both grids",
+    "explicit selected-space evidence retained",
+    "selected early/intermediate/final cancellation checkpoints refuse partial evidence and healthy retry identical",
+    "sample-pair limit at exact bound admits, one below refuses",
+    "alpha edit reduces matched windows in both directions",
+    "library-only Clippy passes"
+  ],
+  "limits": [
+    "Not yet connected to reflected file/collection policy routing",
+    "Authored gradients, not natural resized/recompressed reflected calibration",
+    "No shared global-memory/RSS or cancellation-latency guarantee",
+    "Reflected range/display projection and perspective remain pending"
+  ],
+  "source_sha256": {
+    "crates/rrrah-dedup/src/warp.rs": "f7013aa9d81bedd4b6165825c081a2dab205ee04f02fd7f460473382ced74568",
+    "crates/rrrah-dedup/tests/filtered.rs": "507d3f0253642442588281f8c412ff47227e92b4c45c0850e99eb65ab719639c"
+  }
+}

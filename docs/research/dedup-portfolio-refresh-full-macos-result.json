@@ -1,0 +1,25 @@
+{
+  "session": 35662,
+  "exit_code": 0,
+  "status": "passed_with_source_and_dependency_drift",
+  "groups": 55,
+  "passed": 335,
+  "failed": 0,
+  "ignored": 0,
+  "audited_files": 536,
+  "source_drift": {
+    "Cargo.lock": {
+      "start_sha256": "1a803bb396c8916fdbb5bd4b1c41fbeefa1bde890c045a0d6c59844a17c61155",
+      "current_sha256": "d0999b2b9095148aed051790d4b6deb2820e45b22a479fffe832227dcbf891cb"
+    },
+    "crates/rrrah-core/src/raster.rs": {
+      "start_sha256": "e00b6e8ec24ef2ee40735d27b1c7ffbf9ec5ade333827de719bb2ae9bee4acb3",
+      "current_sha256": "e67166b5c24db5ff713a51d1b3e07055e65ce679b73afe6ef009b370aa735173"
+    },
+    "crates/rrrah-decode/src/raster.rs": {
+      "start_sha256": "2a4e200ab8ed5299e94d093995100553050a9e2b89eb2ef89453e5c22de6cc9a",
+      "current_sha256": "b734f034e7e052faad08c78f88cf62f00e65f66cf8466a35c10c09e5326fcf89"
+    }
+  },
+  "scope": "Terminal full all-feature/all-target rrrah-dedup tests passed. Cargo.lock and two raster sources changed during execution; this is not atomic qualification of the current tree."
+}

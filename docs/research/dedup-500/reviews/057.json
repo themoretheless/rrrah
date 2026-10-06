@@ -1,0 +1,78 @@
+{
+  "index": 57,
+  "repository": "cloud-py-api/mediadc",
+  "commit": "cd42b71c88d7df8656bf9af157d98cfb4b058a7b",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Nextcloud wrapper carries Python average/pHash/dHash routines; AGPL plus nested source licenses need separation.",
+  "license_metadata": "AGPL-3.0",
+  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "tests_detected": 19,
+  "upstream_tests_run": false,
+  "available_source_evidence": [
+    {
+      "path": "python/imagehash.py",
+      "local": "02-imagehash.py",
+      "url": "https://github.com/cloud-py-api/mediadc/blob/cd42b71c88d7df8656bf9af157d98cfb4b058a7b/python/imagehash.py",
+      "sha256": "80df190265dd463a4226b6739c6922d9002ebaa472a6e0238ebdf3a62146da78",
+      "truncated": false,
+      "lines": 121,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/filesplugin.js",
+      "local": "03-filesplugin.js",
+      "url": "https://github.com/cloud-py-api/mediadc/blob/cd42b71c88d7df8656bf9af157d98cfb4b058a7b/src/filesplugin.js",
+      "sha256": "a6efa6aefe5fc6f804e9a43902161d40a3b943ce1f6a78c2277d3499819baac7",
+      "truncated": false,
+      "lines": 109,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/main-admin-settings.js",
+      "local": "04-main-admin-settings.js",
+      "url": "https://github.com/cloud-py-api/mediadc/blob/cd42b71c88d7df8656bf9af157d98cfb4b058a7b/src/main-admin-settings.js",
+      "sha256": "493ca16063de6e86da28a08c3cc6b04bdc31547026c74da9e28b6d865720a8fd",
+      "truncated": false,
+      "lines": 46,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/bootstrap.php",
+      "local": "05-bootstrap.php",
+      "url": "https://github.com/cloud-py-api/mediadc/blob/cd42b71c88d7df8656bf9af157d98cfb4b058a7b/tests/bootstrap.php",
+      "sha256": "6932a4e8b551ae1a218beda9516d018c92b716078954a7c3ba622e56c9149224",
+      "truncated": false,
+      "lines": 35,
+      "source": true,
+      "test": true
+    }
+  ],
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/cloud-py-api/mediadc/blob/cd42b71c88d7df8656bf9af157d98cfb4b058a7b/README.md",
+      "sha256": "57aab6e1b7260059a33d974dd04d5cf7a8cb6e1590bfea7aedd1f0adb1a33cca",
+      "truncated": false,
+      "lines": 53,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/cloud-py-api/mediadc/blob/cd42b71c88d7df8656bf9af157d98cfb4b058a7b/LICENSE",
+      "sha256": "8486a10c4393cee1c25392769ddd3b2d6c242d6ec7928e1414efff7dfb2f07ef",
+      "truncated": false,
+      "lines": 661,
+      "source": false,
+      "test": false
+    }
+  ]
+}

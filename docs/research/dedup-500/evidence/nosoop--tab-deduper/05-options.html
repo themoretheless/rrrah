@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	
+	<style>
+	:root {
+		--panel-bg-color: #FFF;
+		--form-even-color: rgba(0, 0, 0, 0.05);
+		--text-color: #000;
+	}
+	
+	@media (prefers-color-scheme: dark) {
+		:root {
+			--panel-bg-color: #202023;
+			--form-even-color: rgba(255, 255, 255, 0.05);
+			--text-color: #F9F9FA;
+			--subtext-color: #B1B1B3;
+		}
+	}
+	
+	html, body {
+		background-color: var(--panel-bg-color);
+		color: var(--text-color);
+		min-height: 250px;
+	}
+	
+	.info {
+		padding: 0.5rem 0.5rem;
+	}
+	.content {
+		margin-top: 1rem;
+		margin-bottom: 1rem;
+		font-weight: normal;
+		font-size: 100%;
+	}
+	form > div {
+		display: flex;
+		padding: 0.5rem 0.5rem;
+	}
+	form > div > label {
+		flex: auto;
+	}
+	form > div:nth-child(even) {
+		background-color: var(--form-even-color);
+	}
+	label > div:nth-child(1) {
+		font-weight: bold;
+	}
+	</style>
+</head>
+<body><div class="content">
+	<div class="info">
+		<em data-i18n="autosaveNotice"></em>
+	</div>
+	<form class="browser-style">
+		<div>
+			<label for="protect_duplicates">
+				<div data-i18n="protectDuplicatesLabel"></div>
+				<div data-i18n="protectDuplicatesHint"></div>
+			</label>
+			<input type="checkbox" id="protect_duplicates">
+		</div>
+		<div>
+			<label for="move_older">
+				<div data-i18n="moveOrderLabel"></div>
+				<div data-i18n="moveOrderHint"></div>
+			</label>
+			<input type="checkbox" id="move_older">
+		</div>
+		<div>
+			<label for="check_multiwindow">
+				<div data-i18n="checkMultiwindowLabel"></div>
+				<div data-i18n="checkMultiwindowHint"></div>
+			</label>
+			<input type="checkbox" id="check_multiwindow">
+		</div>
+	</form>
+	<script src="options.js"></script>
+	<script src="i18n.js"></script>
+</div></body>
+</html>

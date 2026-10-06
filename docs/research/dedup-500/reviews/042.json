@@ -1,0 +1,98 @@
+{
+  "index": 42,
+  "repository": "SylphxAI/Google-Photos-Delete-Tool",
+  "commit": "8ace69768b9f5d1f186869fbab48c053acbd4381",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "shortlist",
+  "finding": "TS pHash, popcount and cross-port fixture claim; inspect fixtures independently as potential hash oracle.",
+  "license_metadata": "MIT",
+  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "tests_detected": 47,
+  "upstream_tests_run": false,
+  "available_source_evidence": [
+    {
+      "path": "src/core/dedup/phash.ts",
+      "local": "03-phash.ts",
+      "url": "https://github.com/SylphxAI/Google-Photos-Delete-Tool/blob/8ace69768b9f5d1f186869fbab48c053acbd4381/src/core/dedup/phash.ts",
+      "sha256": "2bd41b74bb7b4736d10e7fa3710ee8dd70e15272db368a3ae6ee055959afda48",
+      "truncated": false,
+      "lines": 124,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/core/dedup/scan.ts",
+      "local": "04-scan.ts",
+      "url": "https://github.com/SylphxAI/Google-Photos-Delete-Tool/blob/8ace69768b9f5d1f186869fbab48c053acbd4381/src/core/dedup/scan.ts",
+      "sha256": "145cda5162654fd9746324a05ea1def276e83aa1046bb46685b2954ffce0d9f8",
+      "truncated": false,
+      "lines": 202,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/core/dedup/browser-grid.ts",
+      "local": "05-browser-grid.ts",
+      "url": "https://github.com/SylphxAI/Google-Photos-Delete-Tool/blob/8ace69768b9f5d1f186869fbab48c053acbd4381/src/core/dedup/browser-grid.ts",
+      "sha256": "2817f44b3d5bb234055a82a587f3f535459b395b48c38eb807f7c4bf7212cc6b",
+      "truncated": false,
+      "lines": 154,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/dedup-finder-pro.test.ts",
+      "local": "06-dedup-finder-pro.test.ts",
+      "url": "https://github.com/SylphxAI/Google-Photos-Delete-Tool/blob/8ace69768b9f5d1f186869fbab48c053acbd4381/tests/dedup-finder-pro.test.ts",
+      "sha256": "f87e76142b4e620b992ef0ac33f8468aa405756032c57370bfcfc8feac7b6cd9",
+      "truncated": false,
+      "lines": 200,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "src/ui/dupes/finder.ts",
+      "local": "07-finder.ts",
+      "url": "https://github.com/SylphxAI/Google-Photos-Delete-Tool/blob/8ace69768b9f5d1f186869fbab48c053acbd4381/src/ui/dupes/finder.ts",
+      "sha256": "415a03d3fcbf83dbf7656ff09e34fd28bcedea41ec22c30ecdbec518550a6255",
+      "truncated": false,
+      "lines": 474,
+      "source": true,
+      "test": false
+    }
+  ],
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/SylphxAI/Google-Photos-Delete-Tool/blob/8ace69768b9f5d1f186869fbab48c053acbd4381/README.md",
+      "sha256": "979243a355b866acd99b75e47a7b4e661e939b50bc50352fd0267e3d9c39972d",
+      "truncated": false,
+      "lines": 304,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/SylphxAI/Google-Photos-Delete-Tool/blob/8ace69768b9f5d1f186869fbab48c053acbd4381/LICENSE",
+      "sha256": "f0cefd0119a0b800383038d28547b4d0a004c58a91e42fc0add87cea88128e89",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "docs/LICENSE_PROVENANCE.md",
+      "local": "02-LICENSE_PROVENANCE.md",
+      "url": "https://github.com/SylphxAI/Google-Photos-Delete-Tool/blob/8ace69768b9f5d1f186869fbab48c053acbd4381/docs/LICENSE_PROVENANCE.md",
+      "sha256": "e29f9db6ceed2eec9eb79b57df44eec666386e64903b2d228ea08a0652cdf383",
+      "truncated": false,
+      "lines": 15,
+      "source": false,
+      "test": false
+    }
+  ]
+}

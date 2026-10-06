@@ -1,0 +1,105 @@
+{
+  "repository": "yike-gunshi/info2action",
+  "metadata": {
+    "name": "yike-gunshi/info2action",
+    "url": "https://github.com/yike-gunshi/info2action",
+    "description": "\u4fe1\u606f\u7684\u5c3d\u5934\uff0c\u5e94\u8be5\u662f\u884c\u52a8 \u00b7 Self-hostable AI information engine: multi-source aggregation, cross-source event dedup, AI curation, info-to-action loop",
+    "language": "Python",
+    "stars": 16,
+    "license": "MIT",
+    "archived": false,
+    "pushed_at": "2026-09-16T09:01:42Z",
+    "default_branch": "main",
+    "queries": [
+      "dedup in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/yike-gunshi/info2action/blob/0b8ce7ffc420fa26d3a9ade8b61a4d5850b25bb8/README.md",
+      "sha256": "be50789031db8fe8bc6044c92621dc897464a9abcb0df3cde04ce911b026c889",
+      "truncated": false,
+      "lines": 545,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/yike-gunshi/info2action/blob/0b8ce7ffc420fa26d3a9ade8b61a4d5850b25bb8/LICENSE",
+      "sha256": "d49f1ef33ba3603d9dd8e1054cd391496f26d58997e05420e85f6da10b71b26d",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "src/dedup_actions.py",
+      "local": "02-dedup_actions.py",
+      "url": "https://github.com/yike-gunshi/info2action/blob/0b8ce7ffc420fa26d3a9ade8b61a4d5850b25bb8/src/dedup_actions.py",
+      "sha256": "5aac7f4a0db561178013de57c9b82ffd3768d7bcc7f6e5e475f1cc474762a53f",
+      "truncated": false,
+      "lines": 599,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/global_dedup.py",
+      "local": "03-global_dedup.py",
+      "url": "https://github.com/yike-gunshi/info2action/blob/0b8ce7ffc420fa26d3a9ade8b61a4d5850b25bb8/src/global_dedup.py",
+      "sha256": "eda798272b0a40308c8da40d07c9ad24823c570bb15241b6ecc97ce81b3c356d",
+      "truncated": false,
+      "lines": 150,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "scripts/compare_embedding_providers.py",
+      "local": "04-compare_embedding_providers.py",
+      "url": "https://github.com/yike-gunshi/info2action/blob/0b8ce7ffc420fa26d3a9ade8b61a4d5850b25bb8/scripts/compare_embedding_providers.py",
+      "sha256": "b5e1160ef14bb8ccaf427e28a56c9804e662b6cec4e15adc5527b0ff9b8aec07",
+      "truncated": false,
+      "lines": 923,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "frontend-react/src/hooks/__tests__/useHash.test.ts",
+      "local": "05-useHash.test.ts",
+      "url": "https://github.com/yike-gunshi/info2action/blob/0b8ce7ffc420fa26d3a9ade8b61a4d5850b25bb8/frontend-react/src/hooks/__tests__/useHash.test.ts",
+      "sha256": "53863d28c71456a0bca0482feec77473b0b015a271c350979eb7dc22dfb3cc98",
+      "truncated": false,
+      "lines": 75,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "frontend-react/src/hooks/useHash.ts",
+      "local": "06-useHash.ts",
+      "url": "https://github.com/yike-gunshi/info2action/blob/0b8ce7ffc420fa26d3a9ade8b61a4d5850b25bb8/frontend-react/src/hooks/useHash.ts",
+      "sha256": "d35149d8b84a80f3511b18d5fdd27dfb5fda23f652491b0786d8bc6bc85a9b26",
+      "truncated": false,
+      "lines": 165,
+      "source": true,
+      "test": false
+    }
+  ],
+  "errors": [],
+  "commit": "0b8ce7ffc420fa26d3a9ade8b61a4d5850b25bb8",
+  "tree_truncated": false,
+  "source_file_count": 604,
+  "test_file_count": 253,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "src/dedup_actions.py",
+    "src/global_dedup.py",
+    "frontend-react/src/hooks/useHash.ts",
+    "frontend-react/src/hooks/__tests__/useHash.test.ts"
+  ]
+}

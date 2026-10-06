@@ -1,0 +1,57 @@
+{
+  "completed": 6,
+  "required": 229,
+  "complete": false,
+  "diagnoses": {
+    "no_geometry": 5,
+    "pixel_admission_rejection": 1
+  },
+  "rows": [
+    {
+      "query_id": "200001.jpg",
+      "diagnosis": "no_geometry",
+      "correspondences": 3,
+      "inliers": 0,
+      "accepted_lanes": null
+    },
+    {
+      "query_id": "200101.jpg",
+      "diagnosis": "no_geometry",
+      "correspondences": 1,
+      "inliers": 0,
+      "accepted_lanes": null
+    },
+    {
+      "query_id": "200102.jpg",
+      "diagnosis": "pixel_admission_rejection",
+      "correspondences": 73,
+      "inliers": 73,
+      "accepted_lanes": [
+        false,
+        false
+      ]
+    },
+    {
+      "query_id": "200201.jpg",
+      "diagnosis": "no_geometry",
+      "correspondences": 2,
+      "inliers": 0,
+      "accepted_lanes": null
+    },
+    {
+      "query_id": "200301.jpg",
+      "diagnosis": "no_geometry",
+      "correspondences": 1,
+      "inliers": 0,
+      "accepted_lanes": null
+    },
+    {
+      "query_id": "200302.jpg",
+      "diagnosis": "no_geometry",
+      "correspondences": 0,
+      "inliers": 0,
+      "accepted_lanes": null
+    }
+  ],
+  "scope": "Partial strong-subset copy-origin diagnostic. Candidate rejections are known copy-origin omissions at this policy, not proof of a runtime error or exact pixel identity. No unrelated-pair precision data."
+}

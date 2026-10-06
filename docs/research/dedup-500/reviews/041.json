@@ -1,0 +1,88 @@
+{
+  "index": 41,
+  "repository": "umbertogriffo/fast-near-duplicate-image-search",
+  "commit": "bba6f78954180611a236dc1fc26042072e44961d",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Multiple image hashes with KDTree candidate search and experiments; establish metric/recall before considering index substitution.",
+  "license_metadata": "Apache-2.0",
+  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "tests_detected": 4,
+  "upstream_tests_run": false,
+  "available_source_evidence": [
+    {
+      "path": "src/deduplication/dataset/ImageToHash.py",
+      "local": "02-ImageToHash.py",
+      "url": "https://github.com/umbertogriffo/fast-near-duplicate-image-search/blob/bba6f78954180611a236dc1fc26042072e44961d/src/deduplication/dataset/ImageToHash.py",
+      "sha256": "a12742a3f637ca70b071e42254410f9be0ff67c6f8202018282449907d9daa1e",
+      "truncated": false,
+      "lines": 194,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/deduplication/duplicatefinder/NearDuplicateImageFinder.py",
+      "local": "03-NearDuplicateImageFinder.py",
+      "url": "https://github.com/umbertogriffo/fast-near-duplicate-image-search/blob/bba6f78954180611a236dc1fc26042072e44961d/src/deduplication/duplicatefinder/NearDuplicateImageFinder.py",
+      "sha256": "94d2efc1db43ca2d2176caf5328ef05e4c8031e2b15bf73d099a91c5526d840e",
+      "truncated": false,
+      "lines": 216,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/deduplication/experiments/compare.py",
+      "local": "04-compare.py",
+      "url": "https://github.com/umbertogriffo/fast-near-duplicate-image-search/blob/bba6f78954180611a236dc1fc26042072e44961d/src/deduplication/experiments/compare.py",
+      "sha256": "a56fcfb61691230cb630bd4b7b5f1b9212ca9f64425853cb88cc770b3d6f77a1",
+      "truncated": false,
+      "lines": 64,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/deduplication/tests/__init__.py",
+      "local": "05-__init__.py",
+      "url": "https://github.com/umbertogriffo/fast-near-duplicate-image-search/blob/bba6f78954180611a236dc1fc26042072e44961d/src/deduplication/tests/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "truncated": false,
+      "lines": 0,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "src/deduplication/tests/conftest.py",
+      "local": "06-conftest.py",
+      "url": "https://github.com/umbertogriffo/fast-near-duplicate-image-search/blob/bba6f78954180611a236dc1fc26042072e44961d/src/deduplication/tests/conftest.py",
+      "sha256": "a4d880b44cb5b3544cb32a3cea06d7545fb296652f6353dd92b39756137d936c",
+      "truncated": false,
+      "lines": 67,
+      "source": true,
+      "test": true
+    }
+  ],
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/umbertogriffo/fast-near-duplicate-image-search/blob/bba6f78954180611a236dc1fc26042072e44961d/README.md",
+      "sha256": "aa23aca14dd5cad539bbf5edbb4d3b7d30c50cb1576b486442e6b97cd68f71d4",
+      "truncated": false,
+      "lines": 262,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/umbertogriffo/fast-near-duplicate-image-search/blob/bba6f78954180611a236dc1fc26042072e44961d/LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "truncated": false,
+      "lines": 201,
+      "source": false,
+      "test": false
+    }
+  ]
+}

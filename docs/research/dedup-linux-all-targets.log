@@ -1,0 +1,405 @@
+    Updating crates.io index
+ Downloading crates ...
+  Downloaded arrayref v0.3.9
+  Downloaded shlex v2.0.1
+  Downloaded quote v1.0.47
+  Downloaded cfg-if v1.0.4
+  Downloaded fastrand v2.5.0
+  Downloaded errno v0.3.14
+  Downloaded constant_time_eq v0.4.2
+  Downloaded find-msvc-tools v0.1.9
+  Downloaded thiserror-impl v2.0.19
+  Downloaded thiserror v2.0.19
+  Downloaded tempfile v3.27.0
+  Downloaded arrayvec v0.7.8
+  Downloaded bitflags v2.13.1
+  Downloaded getrandom v0.4.3
+  Downloaded unicode-ident v1.0.24
+  Downloaded once_cell v1.21.4
+  Downloaded proc-macro2 v1.0.107
+  Downloaded cc v1.3.0
+  Downloaded blake3 v1.8.5
+  Downloaded syn v3.0.2
+  Downloaded rustix v1.1.4
+  Downloaded libc v0.2.190
+  Downloaded linux-raw-sys v0.12.1
+   Compiling shlex v2.0.1
+   Compiling proc-macro2 v1.0.107
+   Compiling find-msvc-tools v0.1.9
+   Compiling unicode-ident v1.0.24
+   Compiling quote v1.0.47
+   Compiling cc v1.3.0
+   Compiling cfg-if v1.0.4
+   Compiling libc v0.2.190
+   Compiling arrayvec v0.7.8
+   Compiling constant_time_eq v0.4.2
+   Compiling arrayref v0.3.9
+   Compiling getrandom v0.4.3
+   Compiling rustix v1.1.4
+   Compiling syn v3.0.2
+   Compiling linux-raw-sys v0.12.1
+   Compiling bitflags v2.13.1
+   Compiling thiserror v2.0.19
+   Compiling once_cell v1.21.4
+   Compiling fastrand v2.5.0
+   Compiling tempfile v3.27.0
+   Compiling blake3 v1.8.5
+   Compiling rrrah-dedup v0.1.0 (/workspace/crates/rrrah-dedup)
+   Compiling thiserror-impl v2.0.19
+    Finished `test` profile [optimized + debuginfo] target(s) in 32.81s
+     Running unittests src/lib.rs (/tmp/dedup-target/debug/deps/rrrah_dedup-f626b51e295d7d27)
+
+running 11 tests
+test exact::collision_tests::read_buffer_capacity_failure_is_explicit_and_retry_succeeds ... ok
+test exact::collision_tests::final_content_validation_rejects_change_even_when_metadata_matches ... ok
+test exact::collision_tests::verified_observations_detect_metadata_invisible_pruned_mutations ... ok
+test tests::collision_membership_keeps_arbitrary_order_and_pair_identity ... ok
+test tests::empty_and_duplicate_fingerprints ... ok
+test tests::traversal_work_exhaustion_is_distinct_from_failure ... ok
+test warp::encoded_signal_tests::extended_srgb_landmarks_match_independent_decimal_oracle_without_clipping ... ok
+test warp::encoded_signal_tests::transfer_precedes_premultiplication_and_bilinear_sampling ... ok
+test warp::bounded_fit_tests::boundary_fit_matches_exhaustive_rectangle_and_beats_independent_clipping ... ok
+test exact::collision_tests::colliding_samples_and_full_hashes_still_partition_by_bytes ... ok
+test tests::indexed_search_matches_independent_exhaustive_scan ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/animated.rs (/tmp/dedup-target/debug/deps/animated-396417cf185f30eb)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/build_context.rs (/tmp/dedup-target/debug/deps/build_context-93c3a84a3a96eb0a)
+
+running 2 tests
+test context_is_order_independent_and_excludes_unrelated_environment ... ok
+test native_build_inputs_and_previously_absent_target_overrides_change_context ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/cache.rs (/tmp/dedup-target/debug/deps/cache-0ce7365dd72d1b69)
+
+running 6 tests
+test cache_publication_child ... ok
+test atomic_replacement_and_cancel_preserve_previous_cache ... ok
+test disk_persistence_is_deterministic_and_rejects_invalid_values ... ok
+test roundtrip_requires_content_recipe_and_frame_identity ... ok
+test concurrent_process_writers_publish_only_complete_single_writer_caches ... ok
+test process_exit_during_temp_write_preserves_previous_publication_and_retry ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/container.rs (/tmp/dedup-target/debug/deps/container-01f3c7bdeb372288)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/content_snapshot.rs (/tmp/dedup-target/debug/deps/content_snapshot-98fda482abebd9de)
+
+running 1 test
+test full_digest_rejects_equal_length_mutation_and_budget_excess ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/crop.rs (/tmp/dedup-target/debug/deps/crop-ce831f91a83bdd5d)
+
+running 3 tests
+test uniform_transparent_matches_expose_ambiguity_and_result_limits ... ok
+test bordered_hdr_image_matches_only_the_full_crop ... ok
+test work_budget_and_mid_search_cancel_are_inconclusive ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/decode.rs (/tmp/dedup-target/debug/deps/decode-f76c1db59c0fc297)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/encoded_srgb.rs (/tmp/dedup-target/debug/deps/encoded_srgb-891cea1971096b9f)
+
+running 2 tests
+test seven_by_seven_encoded_windows_retain_broad_color_and_alpha_edits ... ok
+test encoded_affine_changes_match_independent_decimal_fixtures_and_preserve_linear_identity ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/exact_files.rs (/tmp/dedup-target/debug/deps/exact_files-6ec41ca9f7f22d28)
+
+running 14 tests
+test copies_empty_files_and_equal_size_negatives ... ok
+test hardlink_aliases_and_followed_symlink_cycles ... ok
+test missing_input_and_overlap_do_not_lose_valid_results ... ok
+test non_utf8_paths_preserve_exact_identity_and_duplicates ... ok
+test same_length_mutation_during_sample_is_detected ... ok
+test cancellation_during_full_hash_is_bounded ... ok
+test same_samples_different_middle_are_not_duplicates ... ok
+test size_depth_and_entry_limits_are_visible ... ok
+test unavailable_non_utf8_path_preserves_diagnostic_bytes ... ok
+test fifo_replacement_does_not_block_or_hide_healthy_copies ... ok
+test unreadable_file_is_explicit_and_does_not_hide_healthy_copies ... ok
+test verified_scan_preserves_groups_and_observes_every_admitted_file ... ok
+test verified_scan_discards_groups_for_one_shot_cancel_at_every_checkpoint ... ok
+test changing_any_member_does_not_hide_healthy_duplicates ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+     Running tests/filtered.rs (/tmp/dedup-target/debug/deps/filtered-da221505c626177a)
+
+running 4 tests
+test complete_work_is_admitted_before_sampling_and_cancellation_has_no_partial_evidence ... ok
+test independently_known_box_mean_retains_strict_high_frequency_differences ... ok
+test broad_content_edits_and_alpha_changes_remain_visible_after_filtering ... ok
+test reflected_filter_retains_color_space_alpha_work_and_cancel_policy ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/geometry.rs (/tmp/dedup-target/debug/deps/geometry-eba1f7b0cdd57250)
+
+running 9 tests
+test alternative_geometry_keeps_degeneracy_guards_and_deduplicates_identical_models ... ok
+test degenerate_least_squares_refinement_preserves_prior_hypothesis ... ok
+test duplicate_and_collinear_support_cannot_inflate_evidence ... ok
+test noisy_corners_refine_to_independently_known_least_squares_solution ... ok
+test one_shot_cancel_never_publishes_partial_geometry_and_retry_recovers_support ... ok
+test reflected_geometry_keeps_support_original_coordinates_and_cancel_atomicity ... ok
+test scaled_rotated_crop_translation_rejects_watermark_outliers ... ok
+test alternative_geometry_budget_and_cancellation_never_publish_partial_models ... ok
+test capped_residual_candidate_preserves_exact_majority_beside_count_winner ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/groups.rs (/tmp/dedup-target/debug/deps/groups-33ba7a0d75d84205)
+
+running 5 tests
+test invalid_input_budget_and_cancellation_are_explicit ... ok
+test nontransitive_chain_preserves_edge_without_inventing_pair ... ok
+test every_emitted_group_has_all_pairs_for_all_small_graphs ... ok
+test isolated_and_sparse_entries_avoid_unrelated_group_checks ... ok
+test sparse_selection_matches_independent_exhaustive_reference_for_all_six_node_graphs ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+
+     Running tests/icc_oracle.rs (/tmp/dedup-target/debug/deps/icc_oracle-70dc06072953cda1)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/information.rs (/tmp/dedup-target/debug/deps/information-b05f8c69d05f2474)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/linear.rs (/tmp/dedup-target/debug/deps/linear-46c0279a952e34a5)
+
+running 4 tests
+test hdr_and_sub_byte_differences_are_retained ... ok
+test invalid_samples_budget_and_cancel_are_explicit ... ok
+test hdr_fingerprints_keep_highlight_structure_without_quantization ... ok
+test invisible_rgb_and_signed_zero_are_canonical ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/local.rs (/tmp/dedup-target/debug/deps/local-94322868790cf99d)
+
+running 4 tests
+test one_shot_matching_cancellation_discards_every_partial_result_and_retries ... ok
+test flat_images_ambiguous_descriptors_budgets_and_cancel_are_explicit ... ok
+test quarter_turn_crops_are_found_without_manual_correspondences ... ok
+test extracted_crop_matches_drive_geometry_and_pixel_verification ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/local_collection.rs (/tmp/dedup-target/debug/deps/local_collection-28e1e1c22f5e72d1)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/local_index.rs (/tmp/dedup-target/debug/deps/local_index-46eab8a53665308a)
+
+running 6 tests
+test collision_buckets_recipes_and_limits_never_return_partial_results ... ok
+test file_pair_storage_limits_preserve_sorted_complete_results ... ok
+test descriptor_index_equals_independent_exhaustive_variant_search ... ok
+test reverse_matching_preserves_asymmetric_variant_metric_and_hit_limits ... ok
+test file_pair_retrieval_equals_exhaustive_distinct_query_feature_counts ... ok
+test indexed_mutual_matching_equals_exhaustive_ratios_for_every_recipe ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/local_scan.rs (/tmp/dedup-target/debug/deps/local_scan-eb9613e2eef1ed80)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/ordinal.rs (/tmp/dedup-target/debug/deps/ordinal-0a2bf9aac5e215df)
+
+running 1 test
+test monotone_neutral_transfers_preserve_features_and_indexed_correspondences ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/oriented.rs (/tmp/dedup-target/debug/deps/oriented-61880be430250235)
+
+running 4 tests
+test oriented_extraction_cancels_inside_descriptor_work_and_enforces_budgets ... ok
+test independent_arbitrary_rotations_recover_geometry_and_reject_unrelated_texture ... ok
+test independently_resized_images_estimate_non_dyadic_scale_and_rotation ... ok
+test reflected_descriptors_reach_original_geometry_and_pixel_proof ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.23s
+
+     Running tests/pages.rs (/tmp/dedup-target/debug/deps/pages-54fd133b913a73e9)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/photo_collages.rs (/tmp/dedup-target/debug/deps/photo_collages-df5052a284043354)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/photo_files.rs (/tmp/dedup-target/debug/deps/photo_files-54e1c633a89d818b)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/photo_jpeg_oracle.rs (/tmp/dedup-target/debug/deps/photo_jpeg_oracle-8da529b34f02dd18)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/photometric.rs (/tmp/dedup-target/debug/deps/photometric-d8068d50d6c369ce)
+
+running 7 tests
+test explicit_display_projection_retains_hdr_disagreement_and_alpha_edits ... ok
+test bounded_fit_excludes_saturation_from_model_but_never_from_residuals ... ok
+test flat_content_alpha_edits_limits_and_cancellation_do_not_disappear ... ok
+test known_channel_gains_offsets_and_spatial_edit_are_separate_evidence ... ok
+test incomplete_fits_have_specific_reasons_instead_of_invalid_pixel_errors ... ok
+test reflected_gain_offset_preserves_strict_evidence_and_cancel_atomicity ... ok
+test reflected_range_and_display_keep_hdr_alpha_inverse_and_cancellation_evidence ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/pixel_search.rs (/tmp/dedup-target/debug/deps/pixel_search-97597958eda7e23a)
+     Running tests/pixels.rs (/tmp/dedup-target/debug/deps/pixels-dcc8cfda2389d6df)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 4 tests
+test validates_layout_budget_and_cancellation ... ok
+test uniform_hash_collision_is_not_informative ... ok
+test invisible_rgb_is_canonical_but_visible_pixels_are_exact ... ok
+test gradient_has_independently_known_difference_bits ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/presentation_digest.rs (/tmp/dedup-target/debug/deps/presentation_digest-b8b2c8ab2dd43868)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/presentation_kind.rs (/tmp/dedup-target/debug/deps/presentation_kind-03db0546d4a95b2c)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/pyramid.rs (/tmp/dedup-target/debug/deps/pyramid-3de7b8f52b2f6c44)
+
+running 3 tests
+test scale_is_estimated_from_extracted_multiresolution_features ... ok
+test enlarged_quarter_turn_recovers_scale_and_rotation_together ... ok
+test oriented_pyramid_keeps_recipe_source_coordinates_and_admission ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/raster.rs (/tmp/dedup-target/debug/deps/raster-159db4d890946c6a)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/raster_equality.rs (/tmp/dedup-target/debug/deps/raster_equality-9e08d22ed164250f)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/scan.rs (/tmp/dedup-target/debug/deps/scan-6bd49c8a7d8f34ca)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/sequence.rs (/tmp/dedup-target/debug/deps/sequence-7c7c5afd348de952)
+
+running 7 tests
+test admission_cancel_at_every_checkpoint_returns_no_partial_sequence_and_retry_succeeds ... ok
+test complete_coverage_is_required ... ok
+test equivalent_timelines_ignore_frame_splits_but_keep_time_and_pixels ... ok
+test animation_requires_timing_and_compares_repetitions ... ok
+test first_frame_match_does_not_hide_changed_last_frame ... ok
+test rational_extremes_fail_explicitly_without_wrapping ... ok
+test timeline_comparison_matches_independent_discrete_presentation_oracle ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/spatial.rs (/tmp/dedup-target/debug/deps/spatial-c1f78222c5b60f49)
+
+running 1 test
+test spatial_quotas_keep_self_geometry_and_reject_unrelated_texture ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/visual.rs (/tmp/dedup-target/debug/deps/visual-3aaff329791803e5)
+
+running 8 tests
+test cancellation_inside_large_collision_bucket_is_observed ... ok
+test cancelled_insertions_preserve_collision_buckets_and_deep_trees ... ok
+test dense_adaptive_search_keeps_oracle_and_cancellation ... ok
+test duplicate_ids_budgets_and_cancel_do_not_return_partial_indexes ... ok
+test fallible_insert_enforces_total_ids_without_partial_mutation ... ok
+test fallible_search_result_caps_are_inconclusive_and_leave_index_unchanged ... ok
+test full_radius_direct_search_cancellation_never_returns_partial_matches ... ok
+test complete_recipe_index_matches_exhaustive_oracle ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/warp.rs (/tmp/dedup-target/debug/deps/warp-32d5a6936d81d3f1)
+
+running 4 tests
+test bilinear_sampling_keeps_alpha_and_invisible_rgb_separate ... ok
+test crop_overlap_and_single_pixel_edits_are_explicit ... ok
+test reverse_verification_catches_edits_between_scaled_sample_centers ... ok
+test reflected_grids_preserve_hdr_alpha_and_inverse_with_atomic_cancel ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests examples/exact_scale_probe.rs (/tmp/dedup-target/debug/examples/exact_scale_probe-45837dc56c05e93c)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests examples/visual_scale_probe.rs (/tmp/dedup-target/debug/examples/visual_scale_probe-97cca4b7317cc9b4)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

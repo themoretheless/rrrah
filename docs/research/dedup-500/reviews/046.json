@@ -1,0 +1,78 @@
+{
+  "index": 46,
+  "repository": "M-Nabeegh/FileMorrow",
+  "commit": "b6ee1dc94aeba17c6328087bdf7d875074028666",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "shortlist",
+  "finding": "Swift staged SHA256 scanner with byte-identity, recoverable cleanup and progress tests; review mutation protection and bounds.",
+  "license_metadata": "MIT",
+  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "tests_detected": 15,
+  "upstream_tests_run": false,
+  "available_source_evidence": [
+    {
+      "path": "Sources/FileMorrow/DuplicateScanner.swift",
+      "local": "02-DuplicateScanner.swift",
+      "url": "https://github.com/M-Nabeegh/FileMorrow/blob/b6ee1dc94aeba17c6328087bdf7d875074028666/Sources/FileMorrow/DuplicateScanner.swift",
+      "sha256": "5cedcd3f33180979fb76e3f44e77c5c2d607add79f07e26e7bfa9c726cfe34ff",
+      "truncated": false,
+      "lines": 242,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "Sources/FileMorrow/ExtractedArchiveScanner.swift",
+      "local": "03-ExtractedArchiveScanner.swift",
+      "url": "https://github.com/M-Nabeegh/FileMorrow/blob/b6ee1dc94aeba17c6328087bdf7d875074028666/Sources/FileMorrow/ExtractedArchiveScanner.swift",
+      "sha256": "f7176dac56cfa2a5185c9bd06861e502ecfaf74ce8282ab3e4b87eeda518c901",
+      "truncated": false,
+      "lines": 222,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "Sources/FileMorrow/FileScanner.swift",
+      "local": "04-FileScanner.swift",
+      "url": "https://github.com/M-Nabeegh/FileMorrow/blob/b6ee1dc94aeba17c6328087bdf7d875074028666/Sources/FileMorrow/FileScanner.swift",
+      "sha256": "6da197d32828efb1cff21bdab536b00fb97666bd7df377e13a04cfada26dcdf3",
+      "truncated": false,
+      "lines": 129,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "Tests/FileMorrowTests/DuplicateScannerTests.swift",
+      "local": "05-DuplicateScannerTests.swift",
+      "url": "https://github.com/M-Nabeegh/FileMorrow/blob/b6ee1dc94aeba17c6328087bdf7d875074028666/Tests/FileMorrowTests/DuplicateScannerTests.swift",
+      "sha256": "02cf25a089e1bc19383a66d5bcce4d609fc616e0616eb66ecb62052c913d1e58",
+      "truncated": false,
+      "lines": 193,
+      "source": true,
+      "test": true
+    }
+  ],
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/M-Nabeegh/FileMorrow/blob/b6ee1dc94aeba17c6328087bdf7d875074028666/README.md",
+      "sha256": "f3923eb3de2cb0ae6df41f8b11b7772e6e6f174e389768c73eb56f9690f30357",
+      "truncated": false,
+      "lines": 361,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/M-Nabeegh/FileMorrow/blob/b6ee1dc94aeba17c6328087bdf7d875074028666/LICENSE",
+      "sha256": "e36817712c7afe81ae92b3a1ea796524d6fe263edf7e062aee5c63a2c97ffa7f",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "status": "Initial black rows match separately implemented C++ arithmetic; whole color unqualified",
+  "samples_compared": 4593,
+  "max_absolute_error": 0,
+  "tolerance": 5e-05,
+  "reference_kind": "Test-only separately implemented formula, using independent LibRaw sensor/CAMF dumps; not independent whole-image converter",
+  "reference_helper": "scripts/x3f-black-row-reference.cpp",
+  "helper_sha256": "c134066eece7d6abdce23f215779318c602e1cad6402616b075017d69690cbb4",
+  "oracle_sha256": "0a439fd9296c262215abd4c772c9d7eebca122946aceda0e27a4c28b98ddac1e",
+  "source_sha256": "ea436ba459a7478d7b338428656fae905469de269f928749f3388db2b7b0d53f",
+  "tests_passed": 15,
+  "log": "docs/research/x3f-black-independent-2026-10-06.log",
+  "log_sha256": "1ede1a4e35155cf317a5eeaa8fce584705744314590ce4a112fa9f3902bfab25",
+  "remaining": [
+    "Black row smoothing",
+    "Sensor application and filtering",
+    "Independent whole-image color qualification",
+    "Public viewer integration"
+  ]
+}

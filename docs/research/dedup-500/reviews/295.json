@@ -1,0 +1,88 @@
+{
+  "index": 295,
+  "repository": "amasen02/dupehunter",
+  "commit": "9fccbe0550a9b22c097f2325d7e2abbd70fa16d4",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "shortlist",
+  "finding": "Hardlink-aware file scanner/SHA256 hasher and dedupe tests; MIT exact-stage design candidate.",
+  "available_source_evidence": [
+    {
+      "path": "src/dedupe.ts",
+      "local": "02-dedupe.ts",
+      "url": "https://github.com/amasen02/dupehunter/blob/9fccbe0550a9b22c097f2325d7e2abbd70fa16d4/src/dedupe.ts",
+      "sha256": "06bcb88d60baf99186a3650bc7868619feb2166857da64a8f935a90e2d5cdc1c",
+      "truncated": false,
+      "lines": 112,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/hasher.ts",
+      "local": "03-hasher.ts",
+      "url": "https://github.com/amasen02/dupehunter/blob/9fccbe0550a9b22c097f2325d7e2abbd70fa16d4/src/hasher.ts",
+      "sha256": "f6d7837fda35e6f1cad30d2912bae0c3b1485e5e9ac2ad5f6b7029f7d174cc71",
+      "truncated": false,
+      "lines": 13,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/scanner.ts",
+      "local": "04-scanner.ts",
+      "url": "https://github.com/amasen02/dupehunter/blob/9fccbe0550a9b22c097f2325d7e2abbd70fa16d4/src/scanner.ts",
+      "sha256": "14442c99ab9a82f20ca3497ee14673ef0c71b0c95d89bdbbf676631a49b8c2cf",
+      "truncated": false,
+      "lines": 134,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "test/dedupe.test.ts",
+      "local": "05-dedupe.test.ts",
+      "url": "https://github.com/amasen02/dupehunter/blob/9fccbe0550a9b22c097f2325d7e2abbd70fa16d4/test/dedupe.test.ts",
+      "sha256": "2bdbba2757d23c70d59087874c06a399fac6549abba33e7aa3cf2ed2774e19a7",
+      "truncated": false,
+      "lines": 171,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "test/hasher.test.ts",
+      "local": "06-hasher.test.ts",
+      "url": "https://github.com/amasen02/dupehunter/blob/9fccbe0550a9b22c097f2325d7e2abbd70fa16d4/test/hasher.test.ts",
+      "sha256": "0e80cb187d2c79d8393257c003b89a82ecbb0e2ec65c2d15d6d9938566bf9039",
+      "truncated": false,
+      "lines": 47,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 12,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/amasen02/dupehunter/blob/9fccbe0550a9b22c097f2325d7e2abbd70fa16d4/README.md",
+      "sha256": "4085f7311fecbef8717b121011ac006d25236e987734ade2f01520b4ce441a0a",
+      "truncated": false,
+      "lines": 193,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/amasen02/dupehunter/blob/9fccbe0550a9b22c097f2325d7e2abbd70fa16d4/LICENSE",
+      "sha256": "21316b641449303f5a9909ee5b8f6152161af5e591ad1af59d9d55d92afb6b37",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

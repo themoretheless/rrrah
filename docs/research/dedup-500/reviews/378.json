@@ -1,0 +1,78 @@
+{
+  "index": 378,
+  "repository": "jaehl/blockhash",
+  "commit": "b0598ca0d633858be024a49cb6e2d89404411f97",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "shortlist",
+  "finding": "Rust blockhash plus count_ones distance and tests; small MIT core for independent comparison.",
+  "available_source_evidence": [
+    {
+      "path": "src/hash.rs",
+      "local": "02-hash.rs",
+      "url": "https://github.com/jaehl/blockhash/blob/b0598ca0d633858be024a49cb6e2d89404411f97/src/hash.rs",
+      "sha256": "65e54c60031eb01219102ab2ebfd44fc906016190866fa9e3fd8589bb70b46c3",
+      "truncated": false,
+      "lines": 261,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/img.rs",
+      "local": "03-img.rs",
+      "url": "https://github.com/jaehl/blockhash/blob/b0598ca0d633858be024a49cb6e2d89404411f97/src/img.rs",
+      "sha256": "7f4a06f21a7527424c1a704cf58590a2d544a2e64ba6a25ebd2396e11bafa277",
+      "truncated": false,
+      "lines": 121,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/lib.rs",
+      "local": "04-lib.rs",
+      "url": "https://github.com/jaehl/blockhash/blob/b0598ca0d633858be024a49cb6e2d89404411f97/src/lib.rs",
+      "sha256": "e99a6874437bdd1234e5082e4e002ba9f84fd00220baa438df186fd237e709a6",
+      "truncated": false,
+      "lines": 479,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/tests.rs",
+      "local": "05-tests.rs",
+      "url": "https://github.com/jaehl/blockhash/blob/b0598ca0d633858be024a49cb6e2d89404411f97/src/tests.rs",
+      "sha256": "25c8061e0f94f06f59f672fa9f7742910518d6d43919652e28c8f25c6ab08b31",
+      "truncated": false,
+      "lines": 258,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 1,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/jaehl/blockhash/blob/b0598ca0d633858be024a49cb6e2d89404411f97/README.md",
+      "sha256": "3ffabe8648b35960da2bfc478dd44c1fb17d9fa4b108584587d6eda64ae94018",
+      "truncated": false,
+      "lines": 65,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/jaehl/blockhash/blob/b0598ca0d633858be024a49cb6e2d89404411f97/LICENSE",
+      "sha256": "ab4b74701b7673807403a0d6201791da314ec6a932aa0f49e210fe9ca243fb35",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

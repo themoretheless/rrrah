@@ -1,0 +1,68 @@
+{
+  "index": 466,
+  "repository": "AhmedAmgadElsharkawy/Audio-Fingerprinting",
+  "commit": "e1cde82bac76a48a3d01259406fd861ad1dabac7",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Audio spectrogram/music fingerprinting; not raster/RAW comparison.",
+  "available_source_evidence": [
+    {
+      "path": "audio/similarity_calculator.py",
+      "local": "02-similarity_calculator.py",
+      "url": "https://github.com/AhmedAmgadElsharkawy/Audio-Fingerprinting/blob/e1cde82bac76a48a3d01259406fd861ad1dabac7/audio/similarity_calculator.py",
+      "sha256": "2a46a3a975f8b74607372ad42b8df849bf0d0b501dcaa78597d6a21dd604b7ef",
+      "truncated": false,
+      "lines": 49,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "main.py",
+      "local": "03-main.py",
+      "url": "https://github.com/AhmedAmgadElsharkawy/Audio-Fingerprinting/blob/e1cde82bac76a48a3d01259406fd861ad1dabac7/main.py",
+      "sha256": "9b8317e8189de77c6434f6c62bce20c2d9474d9e22255f37a224d2faf06a3f1d",
+      "truncated": false,
+      "lines": 12,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "audio/audio_mixer.py",
+      "local": "04-audio_mixer.py",
+      "url": "https://github.com/AhmedAmgadElsharkawy/Audio-Fingerprinting/blob/e1cde82bac76a48a3d01259406fd861ad1dabac7/audio/audio_mixer.py",
+      "sha256": "b9e249aa0bf394644337f40778e0b8eff3f1ec5f5baa6f2cc65f1d2ca07aae7c",
+      "truncated": false,
+      "lines": 45,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/AhmedAmgadElsharkawy/Audio-Fingerprinting/blob/e1cde82bac76a48a3d01259406fd861ad1dabac7/README.md",
+      "sha256": "a1ba88a233f22a635f18da8a5fc2d11cdba7034c522b2371577cad7c56f2e65a",
+      "truncated": false,
+      "lines": 55,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/AhmedAmgadElsharkawy/Audio-Fingerprinting/blob/e1cde82bac76a48a3d01259406fd861ad1dabac7/LICENSE",
+      "sha256": "6367d265621ffb2d606617509079d39495005a58e08fd9679a07a72059547368",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

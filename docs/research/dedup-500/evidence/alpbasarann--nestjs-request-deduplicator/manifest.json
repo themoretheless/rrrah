@@ -1,0 +1,105 @@
+{
+  "repository": "alpbasarann/nestjs-request-deduplicator",
+  "metadata": {
+    "name": "alpbasarann/nestjs-request-deduplicator",
+    "url": "https://github.com/alpbasarann/nestjs-request-deduplicator",
+    "description": "Prevent duplicate requests in NestJS. Add one decorator to a route and the library handles deduplication, state tracking, and response auditing. No database is bundled \u2014 you bring your own storage (Postgres, Redis, MongoDB, or anything else).",
+    "language": "TypeScript",
+    "stars": 9,
+    "license": "MIT",
+    "archived": false,
+    "pushed_at": "2026-04-20T11:55:50Z",
+    "default_branch": "main",
+    "queries": [
+      "dedup in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/alpbasarann/nestjs-request-deduplicator/blob/108d9454c436f4ede11dd9e62cde7bfe0f97345b/README.md",
+      "sha256": "13e9bc428896850d128091380de1b4919abb199472cd7c98aff1f37ea0ae4111",
+      "truncated": false,
+      "lines": 908,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/alpbasarann/nestjs-request-deduplicator/blob/108d9454c436f4ede11dd9e62cde7bfe0f97345b/LICENSE",
+      "sha256": "121fb43cf087f95e3989c549f82cb16e5eaa6ff19318f78bc53f8323e5336c72",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "src/duplicate-request.exception.ts",
+      "local": "02-duplicate-request.exception.ts",
+      "url": "https://github.com/alpbasarann/nestjs-request-deduplicator/blob/108d9454c436f4ede11dd9e62cde7bfe0f97345b/src/duplicate-request.exception.ts",
+      "sha256": "ea2ae247a54c61b5c4f22fa33676fd00d6ee1bb40d83bd9ab04b77169952febd",
+      "truncated": false,
+      "lines": 22,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/key/hasher.ts",
+      "local": "03-hasher.ts",
+      "url": "https://github.com/alpbasarann/nestjs-request-deduplicator/blob/108d9454c436f4ede11dd9e62cde7bfe0f97345b/src/key/hasher.ts",
+      "sha256": "953c62f43454663592437de116051feef123e3d2465553f32efee8b3ce6c1a60",
+      "truncated": false,
+      "lines": 59,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/constants.ts",
+      "local": "04-constants.ts",
+      "url": "https://github.com/alpbasarann/nestjs-request-deduplicator/blob/108d9454c436f4ede11dd9e62cde7bfe0f97345b/src/constants.ts",
+      "sha256": "551ca5276be3f7956a2c424dcfe8da4a7e7a4a43632e79de2510c5685304a9c6",
+      "truncated": false,
+      "lines": 41,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "test/hash.util.spec.ts",
+      "local": "05-hash.util.spec.ts",
+      "url": "https://github.com/alpbasarann/nestjs-request-deduplicator/blob/108d9454c436f4ede11dd9e62cde7bfe0f97345b/test/hash.util.spec.ts",
+      "sha256": "13a0efbe400ccb18cd2c322863941f7b8592b0896aa31f430c61bad6e3c33b6c",
+      "truncated": false,
+      "lines": 182,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "src/decorator.ts",
+      "local": "06-decorator.ts",
+      "url": "https://github.com/alpbasarann/nestjs-request-deduplicator/blob/108d9454c436f4ede11dd9e62cde7bfe0f97345b/src/decorator.ts",
+      "sha256": "46d4f1f7e8d3b8014a963c9463b5f2971eb6ef9640fdcb403cea7df60256470d",
+      "truncated": false,
+      "lines": 24,
+      "source": true,
+      "test": false
+    }
+  ],
+  "errors": [],
+  "commit": "108d9454c436f4ede11dd9e62cde7bfe0f97345b",
+  "tree_truncated": false,
+  "source_file_count": 37,
+  "test_file_count": 12,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "src/key/hasher.ts",
+    "src/duplicate-request.exception.ts",
+    "src/decorator.ts",
+    "test/hash.util.spec.ts"
+  ]
+}

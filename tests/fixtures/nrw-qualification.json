@@ -1,0 +1,116 @@
+{
+  "status": "native_p7800_subset_sensor_color_metal_qualified",
+  "source": {
+    "camera": "Coolpix P7800",
+    "url": "https://raw.pixls.us/getfile.php/1425/nice/Nikon%20-%20Coolpix%20P7800%20-%2012bit%2012bit%20compressed%20%28%287%29%29%20%284:3%29.NRW",
+    "sha256": "27ac09537dd0f75523864dcf221278e2db354d490534bc13b6eabdc031060e51",
+    "license": "CC0-1.0",
+    "exif_url": "https://raw.pixls.us/getfile.php/1425/exif/DSCN2039.NRW.exif.txt"
+  },
+  "reference": {
+    "libraw_version": "0.22.2-Release",
+    "make": "Nikon",
+    "model": "COOLPIX P7800",
+    "width": 4032,
+    "height": 3024,
+    "crop": [
+      0,
+      0,
+      4032,
+      3024
+    ],
+    "wb": [
+      2.28125,
+      1,
+      1.33984375,
+      1
+    ],
+    "black": 3200,
+    "cblack": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "white": 65504,
+    "cfa": [
+      "R",
+      "G",
+      "G",
+      "B"
+    ],
+    "xyz_to_camera": [
+      [
+        1.032099962,
+        -0.3919999897,
+        -0.09309999645
+      ],
+      [
+        -0.275000006,
+        1.114599943,
+        0.1824000031
+      ],
+      [
+        -0.04419999942,
+        0.1544999927,
+        0.5539000034
+      ],
+      [
+        0,
+        0,
+        0
+      ]
+    ],
+    "camera_to_rgb": [
+      [
+        1.490578175,
+        -0.2760358155,
+        -0.214542374
+      ],
+      [
+        -0.2656733692,
+        1.646362424,
+        -0.3806890547
+      ],
+      [
+        0.009308908135,
+        -0.4864280224,
+        1.477119088
+      ]
+    ]
+  },
+  "sensor_u16le_sha256": "4e95cbf6a45fc2fe48e23312bdaf9da187848a25211abf84282fdf8140e64db5",
+  "sensor_u16le_bytes": 24385536,
+  "oracle_source": "scripts/raw-fixture-oracle.cpp",
+  "storage_observation": {
+    "tiff_byte_order": "<",
+    "width": [
+      4032
+    ],
+    "height": [
+      3024
+    ],
+    "bits": [
+      12
+    ],
+    "compression": [
+      34713
+    ],
+    "strips": 1,
+    "strip_bytes": 24385536,
+    "reference_bytes": 24385536,
+    "big_endian_u16_matches_entire_libraw_mosaic": true,
+    "scope": "Entire pinned P7800 sensor matches BE u16; not a generic NRW mode detector."
+  },
+  "gpu_evidence": {
+    "adapter": "Metal Apple M4 Max",
+    "output_size": [
+      128,
+      96
+    ],
+    "comparison": "exact native versus independent sensor/reference metadata GPU pixels",
+    "scope": "offscreen readback; not physical presentation or all NRW cameras"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "change": "Shared collection feature handoff and streamed descriptor entries",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/local_index.rs": "2193f0bcf877b4f71a8c8a51fb7c9acfed1cdbc1ab28119c91a8b99db28fc59d",
+    "crates/rrrah-dedup/src/local_collection.rs": "c60faf52255d6c589b0aeccc0e8a3373604eae858cf4dea8f5523d7040340258"
+  },
+  "validation": {
+    "local_collection_tests": 8,
+    "local_index_tests": 6,
+    "failed": 0,
+    "library_clippy": "passed"
+  },
+  "behavior": "Public Vec-based API is preserved; collection holds shared managed feature owners rather than copied Vecs. Descriptor entries stream in unchanged BTreeMap file order and feature order.",
+  "limits": [
+    "Visual fingerprints and metric-index storage still need memory admission.",
+    "No RSS reduction or timing improvement has been measured."
+  ]
+}

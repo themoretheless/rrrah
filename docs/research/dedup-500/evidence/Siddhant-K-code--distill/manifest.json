@@ -1,0 +1,105 @@
+{
+  "repository": "Siddhant-K-code/distill",
+  "metadata": {
+    "name": "Siddhant-K-code/distill",
+    "url": "https://github.com/Siddhant-K-code/distill",
+    "description": "Context intelligence layer for LLM agents: persistent memory with write-time dedup, sensitivity tagging, conflict detection, and hierarchical decay. ~12ms. No LLM calls. MIT.",
+    "language": "Go",
+    "stars": 196,
+    "license": "MIT",
+    "archived": false,
+    "pushed_at": "2026-09-30T15:19:27Z",
+    "default_branch": "main",
+    "queries": [
+      "dedup in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/Siddhant-K-code/distill/blob/2417e00dabe498eb8187f4544f001d5a49fbdb45/README.md",
+      "sha256": "ee5dffd26aac3ff547efcc771aa2239c160156868254a17cce4d8ed961fd68bb",
+      "truncated": false,
+      "lines": 1336,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/Siddhant-K-code/distill/blob/2417e00dabe498eb8187f4544f001d5a49fbdb45/LICENSE",
+      "sha256": "a669ee1a7ee2fd4e1a4024d6a2579da845ad577e14b7c177778270df210b02ca",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "main.go",
+      "local": "02-main.go",
+      "url": "https://github.com/Siddhant-K-code/distill/blob/2417e00dabe498eb8187f4544f001d5a49fbdb45/main.go",
+      "sha256": "5ecc661d864bbad57a4a4208ef390112fb77a3a70935712dc03717c52ac74c70",
+      "truncated": false,
+      "lines": 7,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "pkg/dedup/kmeans.go",
+      "local": "03-kmeans.go",
+      "url": "https://github.com/Siddhant-K-code/distill/blob/2417e00dabe498eb8187f4544f001d5a49fbdb45/pkg/dedup/kmeans.go",
+      "sha256": "78aaccacf1fdb30d09f616233e3339e55473cc130e5a1132c044051b5459402b",
+      "truncated": false,
+      "lines": 351,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "pkg/retriever/interface.go",
+      "local": "04-interface.go",
+      "url": "https://github.com/Siddhant-K-code/distill/blob/2417e00dabe498eb8187f4544f001d5a49fbdb45/pkg/retriever/interface.go",
+      "sha256": "f3f9972718a89301d4336341cbf36987a9de474838155aa812f0b1b3fa1ac370",
+      "truncated": false,
+      "lines": 109,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "cmd/api_test.go",
+      "local": "05-api_test.go",
+      "url": "https://github.com/Siddhant-K-code/distill/blob/2417e00dabe498eb8187f4544f001d5a49fbdb45/cmd/api_test.go",
+      "sha256": "640cb4ab12cb30ce7cf63668cd62ae31632db903fa9f619b1952cd6cb2b59bcb",
+      "truncated": false,
+      "lines": 277,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "pkg/retriever/pinecone/client.go",
+      "local": "06-client.go",
+      "url": "https://github.com/Siddhant-K-code/distill/blob/2417e00dabe498eb8187f4544f001d5a49fbdb45/pkg/retriever/pinecone/client.go",
+      "sha256": "cda70f591135182445a3979242eb0c1ec1cd634b4efeb9c7a6966e28974b5970",
+      "truncated": false,
+      "lines": 222,
+      "source": true,
+      "test": false
+    }
+  ],
+  "errors": [],
+  "commit": "2417e00dabe498eb8187f4544f001d5a49fbdb45",
+  "tree_truncated": false,
+  "source_file_count": 285,
+  "test_file_count": 59,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "pkg/dedup/kmeans.go",
+    "pkg/retriever/interface.go",
+    "pkg/retriever/pinecone/client.go",
+    "cmd/api_test.go"
+  ]
+}

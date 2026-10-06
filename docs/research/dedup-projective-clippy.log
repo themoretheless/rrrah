@@ -1,0 +1,76 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+error: docs for function which may panic missing `# Panics` section
+   --> crates/rrrah-dedup/src/geometry.rs:78:1
+    |
+ 78 | / pub fn fit_projective_four(
+ 79 | |     points: &[Correspondence; 4],
+ 80 | |     cancel: impl Fn() -> bool,
+ 81 | | ) -> Result<ProjectiveTransform, GeometryError> {
+    | |_______________________________________________^
+    |
+note: first possible panic found here
+   --> crates/rrrah-dedup/src/geometry.rs:120:21
+    |
+120 |           let pivot = (column..8)
+    |  _____________________^
+121 | |             .max_by(|a, b| rows[*a][column].abs().total_cmp(&rows[*b][column].abs()))
+122 | |             .unwrap();
+    | |_____________________^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_panics_doc
+    = note: `-D clippy::missing-panics-doc` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::missing_panics_doc)]`
+
+error: very complex type used. Consider factoring parts into `type` definitions
+  --> crates/rrrah-dedup/src/geometry.rs:85:39
+   |
+85 |     let normalize = |target: bool| -> Result<([[f64; 2]; 4], [f64; 2], f64), GeometryError> {
+   |                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#type_complexity
+   = note: `-D clippy::type-complexity` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::type_complexity)]`
+
+error: the loop variable `index` is only used to index `rows`
+   --> crates/rrrah-dedup/src/geometry.rs:136:26
+    |
+136 |             for index in column..9 {
+    |                          ^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#needless_range_loop
+    = note: `-D clippy::needless-range-loop` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::needless_range_loop)]`
+help: consider using an iterator
+    |
+136 -             for index in column..9 {
+136 +             for <item> in rows.iter_mut().skip(column) {
+    |
+
+error: item in documentation is missing backticks
+   --> crates/rrrah-dedup/src/geometry.rs:460:31
+    |
+460 | /// Invalid/duplicate inputs, min_inliers below four, work/allocation refusal,
+    |                               ^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#doc_markdown
+    = note: `-D clippy::doc-markdown` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::doc_markdown)]`
+help: try
+    |
+460 - /// Invalid/duplicate inputs, min_inliers below four, work/allocation refusal,
+460 + /// Invalid/duplicate inputs, `min_inliers` below four, work/allocation refusal,
+    |
+
+error: item in documentation is missing backticks
+   --> crates/rrrah-dedup/src/warp.rs:130:12
+    |
+130 | /// Shared max_source_pixels admits the sum of both grids before either pass.
+    |            ^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#doc_markdown
+help: try
+    |
+130 - /// Shared max_source_pixels admits the sum of both grids before either pass.
+130 + /// Shared `max_source_pixels` admits the sum of both grids before either pass.
+    |
+
+error: could not compile `rrrah-dedup` (lib) due to 5 previous errors

@@ -1,0 +1,78 @@
+{
+  "index": 349,
+  "repository": "BrianWeiHaoMa/git-dupe",
+  "commit": "780a471f0c26f0aeb05c39580cdd7bebd6dc3f3f",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Git personal-file attachment keeper; stores files rather than finds duplicates.",
+  "available_source_evidence": [
+    {
+      "path": "src/keeper/gitdupe.rs",
+      "local": "02-gitdupe.rs",
+      "url": "https://github.com/BrianWeiHaoMa/git-dupe/blob/780a471f0c26f0aeb05c39580cdd7bebd6dc3f3f/src/keeper/gitdupe.rs",
+      "sha256": "3ed761f45067f27219168998f9857827683d8bfbe31727463483a2b4c7108100",
+      "truncated": false,
+      "lines": 207,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/attachment.rs",
+      "local": "03-attachment.rs",
+      "url": "https://github.com/BrianWeiHaoMa/git-dupe/blob/780a471f0c26f0aeb05c39580cdd7bebd6dc3f3f/src/attachment.rs",
+      "sha256": "215c73a7b2de3507315491fa3fa98b0e61125da9366c79bc7ef55b8b46eebcdb",
+      "truncated": false,
+      "lines": 49,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/front.rs",
+      "local": "04-front.rs",
+      "url": "https://github.com/BrianWeiHaoMa/git-dupe/blob/780a471f0c26f0aeb05c39580cdd7bebd6dc3f3f/src/front.rs",
+      "sha256": "f90e40508455d2f770b1742049bd040e8b953141cac989c0880a93372b1a0cff",
+      "truncated": false,
+      "lines": 43,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/scenarios/gitdupe.rs",
+      "local": "05-gitdupe.rs",
+      "url": "https://github.com/BrianWeiHaoMa/git-dupe/blob/780a471f0c26f0aeb05c39580cdd7bebd6dc3f3f/tests/scenarios/gitdupe.rs",
+      "sha256": "7b959bdec0e7d0a0029675fd54ab356232b549bb08b0af1acbef6c263e709e76",
+      "truncated": false,
+      "lines": 100,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 94,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/BrianWeiHaoMa/git-dupe/blob/780a471f0c26f0aeb05c39580cdd7bebd6dc3f3f/README.md",
+      "sha256": "c886469c7cf88f7adbec05d2adb8d36fc5f80a5a36162f04e4d904218897d842",
+      "truncated": false,
+      "lines": 274,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/BrianWeiHaoMa/git-dupe/blob/780a471f0c26f0aeb05c39580cdd7bebd6dc3f3f/LICENSE",
+      "sha256": "af08466408f5d6bb420ef10bd0ba58dcdc9618b7b2f1f20bae9308976efcfe96",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

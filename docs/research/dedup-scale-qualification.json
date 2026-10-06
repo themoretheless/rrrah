@@ -1,0 +1,60 @@
+{
+  "scope": "Three independent Pillow resize/rotation fixtures, fixed four patch scales on both inputs, native continuous similarity estimation and bidirectional candidate pixel evidence. Not arbitrary-scale invariance or real-photo confidence.",
+  "manifest_sha256": "a1c4f717dd832f4cbe4588a06c1e18bdff662408d6938906a8e95b10cda29aa8",
+  "fixture_hashes_verified": 16,
+  "recipe": "OrientedScaleBriefV1",
+  "patch_scales": [
+    0.75,
+    1.0,
+    1.25,
+    1.5
+  ],
+  "maximum_descriptor_variant_pairs_per_feature_pair": 16,
+  "geometry_tolerance_pixels": 2,
+  "pixel_candidate_tolerance": 0.03,
+  "minimum_pixel_match_fraction_per_direction": 0.9,
+  "cases": [
+    {
+      "true_scale": 1.35,
+      "degrees": 0,
+      "matches": 149,
+      "inliers": 149,
+      "estimated_a": 1.3498340308846875,
+      "estimated_b": -0.0005772838793476692,
+      "forward_compared": 25600,
+      "forward_matched": 25595,
+      "reverse_compared": 45796,
+      "reverse_matched": 45796
+    },
+    {
+      "true_scale": 0.73125,
+      "degrees": 0,
+      "matches": 71,
+      "inliers": 71,
+      "estimated_a": 0.7304470588235294,
+      "estimated_b": 0.00018823529411764707,
+      "forward_compared": 24964,
+      "forward_matched": 23664,
+      "reverse_compared": 13689,
+      "reverse_matched": 13685
+    },
+    {
+      "true_scale": 1.35,
+      "degrees": 17,
+      "matches": 135,
+      "inliers": 135,
+      "estimated_a": 1.2904581757040774,
+      "estimated_b": -0.39470365699873894,
+      "forward_compared": 22671,
+      "forward_matched": 22558,
+      "reverse_compared": 41215,
+      "reverse_matched": 41215
+    }
+  ],
+  "unrelated_texture_geometry_rejected": true,
+  "mixed_recipes_rejected": true,
+  "mid_variant_cancellation_passed": true,
+  "pixel_budget_passed": true,
+  "full_feature_tests_passed": 95,
+  "dedup_test_clippy_passed": true
+}

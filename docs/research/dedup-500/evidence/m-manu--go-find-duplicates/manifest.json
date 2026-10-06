@@ -1,0 +1,96 @@
+{
+  "repository": "m-manu/go-find-duplicates",
+  "metadata": {
+    "name": "m-manu/go-find-duplicates",
+    "url": "https://github.com/m-manu/go-find-duplicates",
+    "description": "Find duplicate files (photos, videos, music, documents) on your computer, portable hard drives etc.",
+    "language": "Go",
+    "stars": 299,
+    "license": "Apache-2.0",
+    "archived": false,
+    "pushed_at": "2025-02-15T10:33:26Z",
+    "default_branch": "main",
+    "queries": [
+      "duplicate in:name,description",
+      "duplicates in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/m-manu/go-find-duplicates/blob/cd928ba207ba7b78d939597eb48590b1e78b52c6/README.md",
+      "sha256": "8f0e39d9f85004e410cb966c37b3b8f926011973c431e12fc43487dc80eddedd",
+      "truncated": false,
+      "lines": 104,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/m-manu/go-find-duplicates/blob/cd928ba207ba7b78d939597eb48590b1e78b52c6/LICENSE",
+      "sha256": "43070e2d4e532684de521b885f385d0841030efa2b1a20bafb76133a5e1379c1",
+      "truncated": false,
+      "lines": 201,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "service/dir_scanner.go",
+      "local": "02-dir_scanner.go",
+      "url": "https://github.com/m-manu/go-find-duplicates/blob/cd928ba207ba7b78d939597eb48590b1e78b52c6/service/dir_scanner.go",
+      "sha256": "118b171ed61859d526063de8de80f1e0b5d70d84ccae1dc4f148f23b17a3e965",
+      "truncated": false,
+      "lines": 57,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "service/file_hash.go",
+      "local": "03-file_hash.go",
+      "url": "https://github.com/m-manu/go-find-duplicates/blob/cd928ba207ba7b78d939597eb48590b1e78b52c6/service/file_hash.go",
+      "sha256": "eda8c4a8b5a65c7dc53db8141b26dd73398a7c613fd0bcee80ebc746838b8033",
+      "truncated": false,
+      "lines": 100,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "service/find_duplicates.go",
+      "local": "04-find_duplicates.go",
+      "url": "https://github.com/m-manu/go-find-duplicates/blob/cd928ba207ba7b78d939597eb48590b1e78b52c6/service/find_duplicates.go",
+      "sha256": "03563a7fff179340489e855a93df9d75ad182ac94ecb16876e1f6f5456df03d6",
+      "truncated": false,
+      "lines": 134,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "service/file_hash_test.go",
+      "local": "05-file_hash_test.go",
+      "url": "https://github.com/m-manu/go-find-duplicates/blob/cd928ba207ba7b78d939597eb48590b1e78b52c6/service/file_hash_test.go",
+      "sha256": "67964bc6bd4faf2a358cfa5b5067faf520a55e69d5d034a0147bdbbb51872559",
+      "truncated": false,
+      "lines": 35,
+      "source": true,
+      "test": true
+    }
+  ],
+  "errors": [],
+  "commit": "cd928ba207ba7b78d939597eb48590b1e78b52c6",
+  "tree_truncated": false,
+  "source_file_count": 16,
+  "test_file_count": 3,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "service/dir_scanner.go",
+    "service/file_hash.go",
+    "service/find_duplicates.go",
+    "service/file_hash_test.go"
+  ]
+}

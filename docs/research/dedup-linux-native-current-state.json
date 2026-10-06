@@ -1,0 +1,36 @@
+{
+  "status": "terminal passed",
+  "session_id": 57190,
+  "script": "scripts/run-dedup-linux-native.sh",
+  "script_sha256": "9978135692ac75961f0676fe33d6a07a1dc6c0c00d26d0292ed5d53af5f7e570",
+  "validation_dir": "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native",
+  "sysroot_dir_on_docker_host": "/tmp/rrrah-dedup-linux-native/sysroot",
+  "platform": "Ubuntu 24.04 ARM64",
+  "versions": {
+    "rust": "1.98.0",
+    "gcc": "13.3.0",
+    "clang": "18.1.3",
+    "libheif": "1.17.6",
+    "dav1d": "1.4.1"
+  },
+  "uid": 65534,
+  "source_mount": "read-only",
+  "tls": "verified with staged Mozilla CA bundle; verification not disabled",
+  "setup_log": "docs/research/dedup-linux-native-setup.log",
+  "setup_log_sha256": "3f6054dadf673749c824ddf622132b33729fcd65b223359fd46c23560bf23794",
+  "live_log": "/tmp/dedup-linux-native-tests.log",
+  "staged_snapshot": "/tmp/dedup-linux-native-staged-snapshot.json",
+  "setup_notes": [
+    "Docker store full: exported toolchain and target directory use dedicated host folder",
+    "case-sensitive sysroot stays inside Linux VM; incomplete macOS copy is not used",
+    "base libc, libm, loader and libgcc supplied from same Ubuntu image",
+    "usrmerge lib symlink restored in isolated prefix"
+  ],
+  "completion": "unproven; poll same live session, do not restart on observation timeout",
+  "limits": [
+    "this is environment preparation, not successful decoder qualification",
+    "Cargo registry/build storage is on host filesystem; test temporary files are Linux tmpfs",
+    "staged source capture occurred during build, not before launch"
+  ],
+  "qualification": "docs/research/dedup-linux-native-qualification.json"
+}

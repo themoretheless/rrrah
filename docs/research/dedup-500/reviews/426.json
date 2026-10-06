@@ -1,0 +1,78 @@
+{
+  "index": 426,
+  "repository": "dpippenger/reverse-imagesearch",
+  "commit": "617c17b544ff389d1de79a797e3ab05af3407bfe",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "shortlist",
+  "finding": "Go DCT cosine-table caching plus persisted pHash and tests; useful normalization/index/cache reference.",
+  "available_source_evidence": [
+    {
+      "path": "internal/hash/hash.go",
+      "local": "02-hash.go",
+      "url": "https://github.com/dpippenger/reverse-imagesearch/blob/617c17b544ff389d1de79a797e3ab05af3407bfe/internal/hash/hash.go",
+      "sha256": "fe5feb7f5aeef84397c63644f9a8261c46671134e7a15afd7dd1bd6c13b98e61",
+      "truncated": false,
+      "lines": 256,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "cmd/imgsearch/main.go",
+      "local": "03-main.go",
+      "url": "https://github.com/dpippenger/reverse-imagesearch/blob/617c17b544ff389d1de79a797e3ab05af3407bfe/cmd/imgsearch/main.go",
+      "sha256": "309051b09eab1fc7bc710448bc716f85494ebac164c82dc667322b315a266f71",
+      "truncated": false,
+      "lines": 175,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "internal/cache/cache.go",
+      "local": "04-cache.go",
+      "url": "https://github.com/dpippenger/reverse-imagesearch/blob/617c17b544ff389d1de79a797e3ab05af3407bfe/internal/cache/cache.go",
+      "sha256": "6374ea216e7a3617b7b01ade8ab375e02324a2bbe857d3891a46a46d3cb34fe6",
+      "truncated": false,
+      "lines": 371,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "internal/hash/hash_test.go",
+      "local": "05-hash_test.go",
+      "url": "https://github.com/dpippenger/reverse-imagesearch/blob/617c17b544ff389d1de79a797e3ab05af3407bfe/internal/hash/hash_test.go",
+      "sha256": "29ff98b49c38c4ba6859e367112d8293160392ea57f759eb80687cb7fbe43c23",
+      "truncated": false,
+      "lines": 457,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "Apache-2.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 7,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/dpippenger/reverse-imagesearch/blob/617c17b544ff389d1de79a797e3ab05af3407bfe/README.md",
+      "sha256": "c1eadb25f18a05533b7bfa633e5dc12576cd352236f077467a39b3224f80aae3",
+      "truncated": false,
+      "lines": 243,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/dpippenger/reverse-imagesearch/blob/617c17b544ff389d1de79a797e3ab05af3407bfe/LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "truncated": false,
+      "lines": 201,
+      "source": false,
+      "test": false
+    }
+  ]
+}

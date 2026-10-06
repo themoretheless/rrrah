@@ -1,0 +1,70 @@
+{
+  "scope": "Selected-frame transformed-copy collection search; descriptor proposals, mutual matching, similarity geometry and fresh bidirectional pixel verification",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/local_collection.rs": "dccb1765e23d2f4e318ab07951c0cb5da296bfcb4704affd090f79f1b65ef5ba",
+    "crates/rrrah-dedup/src/local_index.rs": "1506deebca74f566b0d5a82362813db7a1e420346319fff409d64e5f47fe8258",
+    "crates/rrrah-dedup/src/local_scan.rs": "cdd715ac65aed6236f41f500e23282cebd240aaad2705070bbb811a83de24ef4",
+    "crates/rrrah-dedup/tests/local_collection.rs": "b3340f8acde675a4a48bad6b25eb44fab7ff016a8c3e151f7fb4fa009e424864",
+    "crates/rrrah-dedup/tests/local_index.rs": "44568316566e3194e34563517a5072916858197ea61e774f173adef7cc1a6977"
+  },
+  "controlled_collection": {
+    "files": 4,
+    "indexed_features": 1395,
+    "descriptor_hits": 44837,
+    "proposed_pairs": 6,
+    "pixel_verification_pairs": 3,
+    "exhaustive_pairs": 6,
+    "accepted_pairs": [
+      [
+        1,
+        2
+      ],
+      [
+        1,
+        3
+      ],
+      [
+        2,
+        3
+      ]
+    ],
+    "indexed_and_exhaustive_agree": true
+  },
+  "retrieval_oracle": {
+    "recipes": 3,
+    "radii": 4,
+    "shared_feature_thresholds": 3,
+    "oracle": "Exhaustive distinct source features with any matching target descriptor; opaque file IDs including u64 max"
+  },
+  "source_integrity": [
+    "All initial snapshots before first decode",
+    "Final source invalidation removes affected edges",
+    "Changed-before-own-decode preserves unaffected healthy pair",
+    "Final generation and one-shot cancellation discard report"
+  ],
+  "limits": [
+    "File and total feature counts",
+    "Descriptor result hits",
+    "Temporary pair accumulators and final proposals",
+    "Original pair comparison admission retained"
+  ],
+  "remaining": [
+    "Actual captured held-out positives and burst/look-alike negatives",
+    "Whole animation local transformations",
+    "Root discovery integration",
+    "Large collection measured latency and memory",
+    "Physical allocation accounting for feature sets and indexes",
+    "Proposal and geometry work can approach exhaustive quadratic cost"
+  ],
+  "validation": {
+    "focused_tests": 10,
+    "full_suite": {
+      "passed": 158,
+      "failed": 0,
+      "ignored": 0,
+      "exit_code": 0
+    },
+    "clippy_exit_code": 0,
+    "diff_check": "passed"
+  }
+}

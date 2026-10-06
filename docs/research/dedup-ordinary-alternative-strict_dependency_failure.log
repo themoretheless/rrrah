@@ -1,0 +1,1247 @@
+    Blocking waiting for file lock on build directory
+    Checking rrrah-memory v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-memory)
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: docs for function which may panic missing `# Panics` section
+   --> crates/rrrah-memory/src/lease_cache.rs:107:5
+    |
+107 |     pub fn remove(&mut self, key: &K) -> Option<V> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+note: first possible panic found here
+   --> crates/rrrah-memory/src/lease_cache.rs:115:26
+    |
+115 |             .map(|value| Arc::try_unwrap(value).ok().expect("removed value has no lease"))
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_panics_doc
+    = note: `-W clippy::missing-panics-doc` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::missing_panics_doc)]`
+
+warning: docs for function which may panic missing `# Panics` section
+   --> crates/rrrah-memory/src/lease_cache.rs:117:5
+    |
+117 |     pub fn take_lru(&mut self) -> Option<(K, V)> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+note: first possible panic found here
+   --> crates/rrrah-memory/src/lease_cache.rs:122:17
+    |
+122 |                 Arc::try_unwrap(value).ok().expect("unpinned victim has no lease"),
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_panics_doc
+
+warning: docs for function which may panic missing `# Panics` section
+   --> crates/rrrah-memory/src/lease_cache.rs:140:5
+    |
+140 |     pub fn insert(&mut self, key: K, value: V, weight: u64) -> Result<Vec<(K, V)>, V> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+note: first possible panic found here
+   --> crates/rrrah-memory/src/lease_cache.rs:150:24
+    |
+150 |               return Err(Arc::try_unwrap(value)
+    |  ________________________^
+151 | |                 .ok()
+152 | |                 .expect("rejected value has no cache owner"));
+    | |____________________________________________________________^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_panics_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> crates/rrrah-memory/src/lease_cache.rs:140:5
+    |
+140 |     pub fn insert(&mut self, key: K, value: V, weight: u64) -> Result<Vec<(K, V)>, V> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_errors_doc
+    = note: `-W clippy::missing-errors-doc` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::missing_errors_doc)]`
+
+warning: docs for function which may panic missing `# Panics` section
+   --> crates/rrrah-memory/src/lease_cache.rs:165:5
+    |
+165 |     pub fn set_limits(&mut self, limits: CacheLimits) -> Option<Vec<(K, V)>> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+note: first possible panic found here
+   --> crates/rrrah-memory/src/lease_cache.rs:173:25
+    |
+173 |                         Arc::try_unwrap(value).ok().expect("unpinned victim has no lease"),
+    |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_panics_doc
+
+warning: docs for function which may panic missing `# Panics` section
+   --> crates/rrrah-memory/src/lease_cache.rs:182:5
+    |
+182 |     pub fn drain_expired(&mut self) -> Vec<(K, V)> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+note: first possible panic found here
+   --> crates/rrrah-memory/src/lease_cache.rs:190:21
+    |
+190 |                     Arc::try_unwrap(value).ok().expect("expired victim has no lease"),
+    |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_panics_doc
+
+warning: docs for function which may panic missing `# Panics` section
+   --> crates/rrrah-memory/src/policy.rs:76:5
+    |
+ 76 |     pub fn set_limits(&mut self, limits: CacheLimits) -> Option<Vec<(K, V)>> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+note: first possible panic found here
+   --> crates/rrrah-memory/src/policy.rs:100:40
+    |
+100 |             victims.push((key.clone(), self.remove(&key).expect("planned victim exists")));
+    |                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_panics_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> crates/rrrah-memory/src/lib.rs:220:5
+    |
+220 |     pub fn try_buffer<T: Copy>(mut self, length: usize, value: T) -> Result<MutableBuffer<T>, BufferError> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_errors_doc
+
+warning: `rrrah-memory` (lib) generated 8 warnings
+    Checking rrrah-core v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-core)
+warning: long literal lacking separators
+  --> crates/rrrah-core/src/develop/ahd.rs:50:16
+   |
+50 |         if t > 0.008856 {
+   |                ^^^^^^^^ help: consider: `0.008_856`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unreadable_literal
+   = note: `-W clippy::unreadable-literal` implied by `-W clippy::pedantic`
+   = help: to override `-W clippy::pedantic` add `#[allow(clippy::unreadable_literal)]`
+
+warning: item in documentation is missing backticks
+  --> crates/rrrah-core/src/develop/ahd.rs:11:35
+   |
+11 | //! 3. Convert both candidates to CIELab and measure, per pixel, how many of its 4 neighbours lie within the
+   |                                   ^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#doc_markdown
+   = note: `-W clippy::doc-markdown` implied by `-W clippy::pedantic`
+   = help: to override `-W clippy::pedantic` add `#[allow(clippy::doc_markdown)]`
+help: try
+   |
+11 - //! 3. Convert both candidates to CIELab and measure, per pixel, how many of its 4 neighbours lie within the
+11 + //! 3. Convert both candidates to `CIELab` and measure, per pixel, how many of its 4 neighbours lie within the
+   |
+
+warning: item in documentation is missing backticks
+  --> crates/rrrah-core/src/develop/ahd.rs:12:53
+   |
+12 | //!    adaptive luminance / chrominance tolerances (ε_L, ε_C from the paper) — the homogeneity.
+   |                                                     ^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#doc_markdown
+help: try
+   |
+12 - //!    adaptive luminance / chrominance tolerances (ε_L, ε_C from the paper) — the homogeneity.
+12 + //!    adaptive luminance / chrominance tolerances (`ε_L`, ε_C from the paper) — the homogeneity.
+   |
+
+warning: item in documentation is missing backticks
+  --> crates/rrrah-core/src/develop/ahd.rs:12:58
+   |
+12 | //!    adaptive luminance / chrominance tolerances (ε_L, ε_C from the paper) — the homogeneity.
+   |                                                          ^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#doc_markdown
+help: try
+   |
+12 - //!    adaptive luminance / chrominance tolerances (ε_L, ε_C from the paper) — the homogeneity.
+12 + //!    adaptive luminance / chrominance tolerances (ε_L, `ε_C` from the paper) — the homogeneity.
+   |
+
+warning: item in documentation is missing backticks
+  --> crates/rrrah-core/src/develop/ahd.rs:42:89
+   |
+42 | /// Linear camera RGB (treated as sRGB/D65 primaries for the homogeneity metric only) → CIELab.
+   |                                                                                         ^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#doc_markdown
+help: try
+   |
+42 - /// Linear camera RGB (treated as sRGB/D65 primaries for the homogeneity metric only) → CIELab.
+42 + /// Linear camera RGB (treated as sRGB/D65 primaries for the homogeneity metric only) → `CIELab`.
+   |
+
+warning: adding items after statements is confusing, since items exist from the start of the scope
+  --> crates/rrrah-core/src/develop/ahd.rs:49:5
+   |
+49 | /     fn f(t: f32) -> f32 {
+50 | |         if t > 0.008856 {
+51 | |             t.cbrt()
+52 | |         } else {
+...  |
+55 | |     }
+   | |_____^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#items_after_statements
+   = note: `-W clippy::items-after-statements` implied by `-W clippy::pedantic`
+   = help: to override `-W clippy::pedantic` add `#[allow(clippy::items_after_statements)]`
+
+warning: casting `usize` to `isize` may wrap around the value
+  --> crates/rrrah-core/src/develop/ahd.rs:63:21
+   |
+63 |     let (ox, oy) = (x0 as isize - MARGIN as isize, y0 as isize - MARGIN as isize);
+   |                     ^^^^^^^^^^^ help: if this is intentional, use `cast_signed()` instead: `x0.cast_signed()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_wrap
+   = note: `-W clippy::cast-possible-wrap` implied by `-W clippy::pedantic`
+   = help: to override `-W clippy::pedantic` add `#[allow(clippy::cast_possible_wrap)]`
+
+warning: casting `usize` to `isize` may wrap around the value
+  --> crates/rrrah-core/src/develop/ahd.rs:63:35
+   |
+63 |     let (ox, oy) = (x0 as isize - MARGIN as isize, y0 as isize - MARGIN as isize);
+   |                                   ^^^^^^^^^^^^^^^ help: if this is intentional, use `cast_signed()` instead: `MARGIN.cast_signed()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_wrap
+
+warning: casting `usize` to `isize` may wrap around the value
+  --> crates/rrrah-core/src/develop/ahd.rs:63:52
+   |
+63 |     let (ox, oy) = (x0 as isize - MARGIN as isize, y0 as isize - MARGIN as isize);
+   |                                                    ^^^^^^^^^^^ help: if this is intentional, use `cast_signed()` instead: `y0.cast_signed()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_wrap
+
+warning: casting `usize` to `isize` may wrap around the value
+  --> crates/rrrah-core/src/develop/ahd.rs:63:66
+   |
+63 |     let (ox, oy) = (x0 as isize - MARGIN as isize, y0 as isize - MARGIN as isize);
+   |                                                                  ^^^^^^^^^^^^^^^ help: if this is intentional, use `cast_signed()` instead: `MARGIN.cast_signed()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_wrap
+
+warning: casting `usize` to `isize` may wrap around the value
+  --> crates/rrrah-core/src/develop/ahd.rs:68:42
+   |
+68 |             mos[y * bw + x] = m.get(ox + x as isize, oy + y as isize);
+   |                                          ^^^^^^^^^^ help: if this is intentional, use `cast_signed()` instead: `x.cast_signed()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_wrap
+
+warning: casting `usize` to `isize` may wrap around the value
+  --> crates/rrrah-core/src/develop/ahd.rs:68:59
+   |
+68 |             mos[y * bw + x] = m.get(ox + x as isize, oy + y as isize);
+   |                                                           ^^^^^^^^^^ help: if this is intentional, use `cast_signed()` instead: `y.cast_signed()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_wrap
+
+warning: casting `usize` to `isize` may wrap around the value
+  --> crates/rrrah-core/src/develop/ahd.rs:69:44
+   |
+69 |             col[y * bw + x] = m.color(ox + x as isize, oy + y as isize);
+   |                                            ^^^^^^^^^^ help: if this is intentional, use `cast_signed()` instead: `x.cast_signed()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_wrap
+
+warning: casting `usize` to `isize` may wrap around the value
+  --> crates/rrrah-core/src/develop/ahd.rs:69:61
+   |
+69 |             col[y * bw + x] = m.color(ox + x as isize, oy + y as isize);
+   |                                                             ^^^^^^^^^^ help: if this is intentional, use `cast_signed()` instead: `y.cast_signed()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_wrap
+
+warning: casting `usize` to `isize` may wrap around the value
+  --> crates/rrrah-core/src/develop/ahd.rs:73:20
+   |
+73 |         y.clamp(0, bh as isize - 1) as usize * bw + x.clamp(0, bw as isize - 1) as usize
+   |                    ^^^^^^^^^^^ help: if this is intentional, use `cast_signed()` instead: `bh.cast_signed()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_wrap
+
+warning: casting `usize` to `isize` may wrap around the value
+  --> crates/rrrah-core/src/develop/ahd.rs:73:64
+   |
+73 |         y.clamp(0, bh as isize - 1) as usize * bw + x.clamp(0, bw as isize - 1) as usize
+   |                                                                ^^^^^^^^^^^ help: if this is intentional, use `cast_signed()` instead: `bw.cast_signed()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_wrap
+
+warning: casting `usize` to `isize` may wrap around the value
+  --> crates/rrrah-core/src/develop/ahd.rs:78:17
+   |
+78 |     for y in 0..bh as isize {
+   |                 ^^^^^^^^^^^ help: if this is intentional, use `cast_signed()` instead: `bh.cast_signed()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_wrap
+
+warning: casting `usize` to `isize` may wrap around the value
+  --> crates/rrrah-core/src/develop/ahd.rs:79:21
+   |
+79 |         for x in 0..bw as isize {
+   |                     ^^^^^^^^^^^ help: if this is intentional, use `cast_signed()` instead: `bw.cast_signed()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_wrap
+
+warning: casting `usize` to `isize` may wrap around the value
+  --> crates/rrrah-core/src/develop/ahd.rs:98:21
+   |
+98 |         for y in 0..bh as isize {
+   |                     ^^^^^^^^^^^ help: if this is intentional, use `cast_signed()` instead: `bh.cast_signed()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_wrap
+
+warning: casting `usize` to `isize` may wrap around the value
+  --> crates/rrrah-core/src/develop/ahd.rs:99:25
+   |
+99 |             for x in 0..bw as isize {
+   |                         ^^^^^^^^^^^ help: if this is intentional, use `cast_signed()` instead: `bw.cast_signed()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_wrap
+
+warning: casting `usize` to `isize` may wrap around the value
+   --> crates/rrrah-core/src/develop/ahd.rs:131:17
+    |
+131 |     for y in 1..bh as isize - 1 {
+    |                 ^^^^^^^^^^^ help: if this is intentional, use `cast_signed()` instead: `bh.cast_signed()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_wrap
+
+warning: casting `usize` to `isize` may wrap around the value
+   --> crates/rrrah-core/src/develop/ahd.rs:132:21
+    |
+132 |         for x in 1..bw as isize - 1 {
+    |                     ^^^^^^^^^^^ help: if this is intentional, use `cast_signed()` instead: `bw.cast_signed()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_wrap
+
+warning: casting `usize` to `isize` may wrap around the value
+   --> crates/rrrah-core/src/develop/ahd.rs:162:32
+    |
+162 |                     let j = cl(x as isize + dx, y as isize + dy);
+    |                                ^^^^^^^^^^ help: if this is intentional, use `cast_signed()` instead: `x.cast_signed()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_wrap
+
+warning: casting `usize` to `isize` may wrap around the value
+   --> crates/rrrah-core/src/develop/ahd.rs:162:49
+    |
+162 |                     let j = cl(x as isize + dx, y as isize + dy);
+    |                                                 ^^^^^^^^^^ help: if this is intentional, use `cast_signed()` instead: `y.cast_signed()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_wrap
+
+warning: `if` chain can be rewritten with `match`
+   --> crates/rrrah-core/src/develop/ahd.rs:168:22
+    |
+168 |               out.push(if sh > sv {
+    |  ______________________^
+169 | |                 rh[i]
+170 | |             } else if sv > sh {
+171 | |                 rv[i]
+...   |
+178 | |             });
+    | |_____________^ help: consider rewriting the `if` chain with `match`: `match sh.cmp(&sv) {...}`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#comparison_chain
+    = note: `-W clippy::comparison-chain` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::comparison_chain)]`
+
+warning: manual implementation of `midpoint` which can overflow
+  --> crates/rrrah-core/src/develop/highlight.rs:87:15
+   |
+87 |     let fx = ((x as f32 + 0.5) / 2.0 - 0.5).clamp(0.0, (cw - 1) as f32);
+   |               ^^^^^^^^^^^^^^^^^^^^^^ help: use `f32::midpoint` instead: `f32::midpoint(x as f32, 0.5)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#manual_midpoint
+   = note: `-W clippy::manual-midpoint` implied by `-W clippy::pedantic`
+   = help: to override `-W clippy::pedantic` add `#[allow(clippy::manual_midpoint)]`
+
+warning: manual implementation of `midpoint` which can overflow
+  --> crates/rrrah-core/src/develop/highlight.rs:88:15
+   |
+88 |     let fy = ((y as f32 + 0.5) / 2.0 - 0.5).clamp(0.0, (ch - 1) as f32);
+   |               ^^^^^^^^^^^^^^^^^^^^^^ help: use `f32::midpoint` instead: `f32::midpoint(y as f32, 0.5)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#manual_midpoint
+
+warning: needless use of `for_each`
+   --> crates/rrrah-core/src/develop/opcodes.rs:323:13
+    |
+323 |             planes.iter().for_each(|p| f64s(&mut o, p));
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: try: `for p in planes.iter() { f64s(&mut o, p); }`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#needless_for_each
+    = note: `-W clippy::needless-for-each` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::needless_for_each)]`
+
+warning: needless use of `for_each`
+   --> crates/rrrah-core/src/develop/opcodes.rs:329:13
+    |
+329 |             planes.iter().for_each(|p| f64s(&mut o, p));
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: try: `for p in planes.iter() { f64s(&mut o, p); }`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#needless_for_each
+
+warning: needless use of `for_each`
+   --> crates/rrrah-core/src/develop/opcodes.rs:351:13
+    |
+351 |             points.iter().for_each(|&(r, c)| u32s(&mut o, &[r, c]));
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: try: `for &(r, c) in points.iter() { u32s(&mut o, &[r, c]); }`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#needless_for_each
+
+warning: needless use of `for_each`
+   --> crates/rrrah-core/src/develop/opcodes.rs:352:13
+    |
+352 |             rects.iter().for_each(|r| u32s(&mut o, r));
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: try: `for r in rects.iter() { u32s(&mut o, r); }`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#needless_for_each
+
+warning: needless use of `for_each`
+   --> crates/rrrah-core/src/develop/opcodes.rs:367:13
+    |
+367 |             table.iter().for_each(|v| o.extend_from_slice(&v.to_be_bytes()));
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: try: `for v in table.iter() { o.extend_from_slice(&v.to_be_bytes()); }`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#needless_for_each
+
+warning: casting `usize` to `isize` may wrap around the value
+   --> crates/rrrah-core/src/develop/opcodes.rs:717:20
+    |
+717 |         Some(c) => c.width.max(c.height) as isize,
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: if this is intentional, use `cast_signed()` instead: `c.width.max(c.height).cast_signed()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_wrap
+
+warning: casting `usize` to `isize` may wrap around the value
+   --> crates/rrrah-core/src/develop/opcodes.rs:738:33
+    |
+738 |                 let (nx, ny) = (x as isize + dx, y as isize + dy);
+    |                                 ^^^^^^^^^^ help: if this is intentional, use `cast_signed()` instead: `x.cast_signed()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_wrap
+
+warning: casting `usize` to `isize` may wrap around the value
+   --> crates/rrrah-core/src/develop/opcodes.rs:738:50
+    |
+738 |                 let (nx, ny) = (x as isize + dx, y as isize + dy);
+    |                                                  ^^^^^^^^^^ help: if this is intentional, use `cast_signed()` instead: `y.cast_signed()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_wrap
+
+warning: casting `usize` to `isize` may wrap around the value
+   --> crates/rrrah-core/src/develop/opcodes.rs:739:46
+    |
+739 |                 if nx < 0 || ny < 0 || nx >= w as isize || ny >= h as isize {
+    |                                              ^^^^^^^^^^ help: if this is intentional, use `cast_signed()` instead: `w.cast_signed()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_wrap
+
+warning: casting `usize` to `isize` may wrap around the value
+   --> crates/rrrah-core/src/develop/opcodes.rs:739:66
+    |
+739 |                 if nx < 0 || ny < 0 || nx >= w as isize || ny >= h as isize {
+    |                                                                  ^^^^^^^^^^ help: if this is intentional, use `cast_signed()` instead: `h.cast_signed()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_wrap
+
+warning: casting `usize` to `isize` may wrap around the value
+  --> crates/rrrah-core/src/develop/xtrans.rs:38:30
+   |
+38 |                 x.rem_euclid(pw as isize) as usize,
+   |                              ^^^^^^^^^^^ help: if this is intentional, use `cast_signed()` instead: `pw.cast_signed()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_wrap
+
+warning: casting `usize` to `isize` may wrap around the value
+  --> crates/rrrah-core/src/develop/xtrans.rs:39:30
+   |
+39 |                 y.rem_euclid(ph as isize) as usize,
+   |                              ^^^^^^^^^^^ help: if this is intentional, use `cast_signed()` instead: `ph.cast_signed()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_wrap
+
+warning: casting `usize` to `isize` may wrap around the value
+  --> crates/rrrah-core/src/develop/xtrans.rs:44:22
+   |
+44 |         for py in 0..ph as isize {
+   |                      ^^^^^^^^^^^ help: if this is intentional, use `cast_signed()` instead: `ph.cast_signed()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_wrap
+
+warning: casting `usize` to `isize` may wrap around the value
+  --> crates/rrrah-core/src/develop/xtrans.rs:45:26
+   |
+45 |             for px in 0..pw as isize {
+   |                          ^^^^^^^^^^^ help: if this is intentional, use `cast_signed()` instead: `pw.cast_signed()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_wrap
+
+warning: redundant closure
+  --> crates/rrrah-core/src/develop/xtrans.rs:86:29
+   |
+86 |     sorted.sort_unstable_by(|a, b| a.total_cmp(b));
+   |                             ^^^^^^^^^^^^^^^^^^^^^ help: replace the closure with the method itself: `f32::total_cmp`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#redundant_closure_for_method_calls
+   = note: `-W clippy::redundant-closure-for-method-calls` implied by `-W clippy::pedantic`
+   = help: to override `-W clippy::pedantic` add `#[allow(clippy::redundant_closure_for_method_calls)]`
+
+warning: casting `usize` to `isize` may wrap around the value
+   --> crates/rrrah-core/src/develop/xtrans.rs:105:18
+    |
+105 |         let yi = y as isize;
+    |                  ^^^^^^^^^^ help: if this is intentional, use `cast_signed()` instead: `y.cast_signed()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_wrap
+
+warning: casting `usize` to `isize` may wrap around the value
+   --> crates/rrrah-core/src/develop/xtrans.rs:125:50
+    |
+125 |                         .map(|&(dx, dy)| m.data[(i as isize + dy * w as isize + dx) as usize]),
+    |                                                  ^^^^^^^^^^ help: if this is intentional, use `cast_signed()` instead: `i.cast_signed()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_wrap
+
+warning: casting `usize` to `isize` may wrap around the value
+   --> crates/rrrah-core/src/develop/xtrans.rs:125:68
+    |
+125 |                         .map(|&(dx, dy)| m.data[(i as isize + dy * w as isize + dx) as usize]),
+    |                                                                    ^^^^^^^^^^ help: if this is intentional, use `cast_signed()` instead: `w.cast_signed()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_wrap
+
+warning: casting `usize` to `isize` may wrap around the value
+   --> crates/rrrah-core/src/develop/xtrans.rs:130:21
+    |
+130 |             let x = x as isize;
+    |                     ^^^^^^^^^^ help: if this is intentional, use `cast_signed()` instead: `x.cast_signed()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_wrap
+
+warning: casting `usize` to `isize` may wrap around the value
+   --> crates/rrrah-core/src/develop/xtrans.rs:169:18
+    |
+169 |         let yi = y as isize;
+    |                  ^^^^^^^^^^ help: if this is intentional, use `cast_signed()` instead: `y.cast_signed()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_wrap
+
+warning: casting `usize` to `isize` may wrap around the value
+   --> crates/rrrah-core/src/develop/xtrans.rs:184:34
+    |
+184 |                         let j = (i as isize + dy * w as isize + dx) as usize;
+    |                                  ^^^^^^^^^^ help: if this is intentional, use `cast_signed()` instead: `i.cast_signed()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_wrap
+
+warning: casting `usize` to `isize` may wrap around the value
+   --> crates/rrrah-core/src/develop/xtrans.rs:184:52
+    |
+184 |                         let j = (i as isize + dy * w as isize + dx) as usize;
+    |                                                    ^^^^^^^^^^ help: if this is intentional, use `cast_signed()` instead: `w.cast_signed()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_wrap
+
+warning: casting `usize` to `isize` may wrap around the value
+   --> crates/rrrah-core/src/develop/xtrans.rs:195:21
+    |
+195 |             let x = x as isize;
+    |                     ^^^^^^^^^^ help: if this is intentional, use `cast_signed()` instead: `x.cast_signed()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_wrap
+
+warning: casting `usize` to `isize` may wrap around the value
+  --> crates/rrrah-core/src/develop/mod.rs:88:23
+   |
+88 |     let period = 2 * (n as isize - 1);
+   |                       ^^^^^^^^^^ help: if this is intentional, use `cast_signed()` instead: `n.cast_signed()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_wrap
+
+warning: casting `usize` to `isize` may wrap around the value
+  --> crates/rrrah-core/src/develop/mod.rs:90:13
+   |
+90 |     if j >= n as isize {
+   |             ^^^^^^^^^^ help: if this is intentional, use `cast_signed()` instead: `n.cast_signed()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_wrap
+
+error: this `if` statement can be collapsed
+   --> crates/rrrah-core/src/develop/mod.rs:192:9
+    |
+192 | /         if let Opcode::FixBadPixelsList { points, rects, .. } = op {
+193 | |             if points.iter().any(|(y, x)| *y >= md.height || *x >= md.width)
+194 | |                 || rects
+195 | |                     .iter()
+...   |
+200 | |         }
+    | |_________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#collapsible_if
+    = note: `-D clippy::collapsible-if` implied by `-D clippy::all`
+    = help: to override `-D clippy::all` add `#[allow(clippy::collapsible_if)]`
+help: collapse nested if block
+    |
+192 ~         if let Opcode::FixBadPixelsList { points, rects, .. } = op
+193 ~             && (points.iter().any(|(y, x)| *y >= md.height || *x >= md.width)
+194 |                 || rects
+195 |                     .iter()
+196 ~                     .any(|r| r[0] >= r[2] || r[1] >= r[3] || r[2] > md.height || r[3] > md.width))
+197 |             {
+198 |                 return Err(DevelopError::Invalid("bad-pixel area outside sensor"));
+199 ~             }
+    |
+
+error: this `if` statement can be collapsed
+   --> crates/rrrah-core/src/develop/mod.rs:203:9
+    |
+203 | /         if let Opcode::GainMap { area, .. } = op {
+204 | |             if area.bottom > md.height || area.right > md.width {
+205 | |                 return Err(DevelopError::Invalid("gain-map area outside sensor"));
+206 | |             }
+207 | |         }
+    | |_________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#collapsible_if
+help: collapse nested if block
+    |
+203 ~         if let Opcode::GainMap { area, .. } = op
+204 ~             && (area.bottom > md.height || area.right > md.width) {
+205 |                 return Err(DevelopError::Invalid("gain-map area outside sensor"));
+206 ~             }
+    |
+
+warning: casting `usize` to `isize` may wrap around the value
+   --> crates/rrrah-core/src/develop/mod.rs:270:38
+    |
+270 |                     let sx = reflect(x as isize + dx, w);
+    |                                      ^^^^^^^^^^ help: if this is intentional, use `cast_signed()` instead: `x.cast_signed()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_wrap
+
+warning: casting `usize` to `isize` may wrap around the value
+   --> crates/rrrah-core/src/develop/mod.rs:271:38
+    |
+271 |                     let sy = reflect(y as isize + dy, h);
+    |                                      ^^^^^^^^^^ help: if this is intentional, use `cast_signed()` instead: `y.cast_signed()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_wrap
+
+warning: casting `usize` to `u32` may truncate the value on targets with 64-bit wide pointers
+  --> crates/rrrah-core/src/frame.rs:97:23
+   |
+97 |             *output = code as u32;
+   |                       ^^^^^^^^^^^
+   |
+   = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+   = note: `-W clippy::cast-possible-truncation` implied by `-W clippy::pedantic`
+   = help: to override `-W clippy::pedantic` add `#[allow(clippy::cast_possible_truncation)]`
+help: ... or use `try_from` and handle the error accordingly
+   |
+97 -             *output = code as u32;
+97 +             *output = u32::try_from(code);
+   |
+
+warning: this function has too many lines (121/100)
+   --> crates/rrrah-core/src/raster.rs:260:5
+    |
+260 | /     pub fn to_linear_srgb_with_budget_and_cancel(
+261 | |         &self,
+262 | |         budget: Option<&rrrah_memory::MemoryBudget>,
+263 | |         cancel: impl Fn() -> bool,
+264 | |     ) -> Result<Self, RasterError> {
+    | |__________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_lines
+    = note: `-W clippy::too-many-lines` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::too_many_lines)]`
+
+warning: adding items after statements is confusing, since items exist from the start of the scope
+  --> crates/rrrah-core/src/rgbe.rs:23:5
+   |
+23 | /     fn axis(coordinate: u32, phase: u32, size: u32) -> (u32, u32, f64) {
+24 | |         let last = phase + (size - 1 - phase) / 2 * 2;
+25 | |         let lower = (phase + coordinate.saturating_sub(phase) / 2 * 2).min(last);
+26 | |         let upper = lower.saturating_add(2).min(last);
+...  |
+32 | |         (lower, upper, weight)
+33 | |     }
+   | |_____^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#items_after_statements
+
+warning: casts from `u32` to `f64` can be expressed infallibly using `From`
+  --> crates/rrrah-core/src/rgbe.rs:30:15
+   |
+30 |             ((coordinate as f64 - lower as f64) / (upper - lower) as f64).clamp(0., 1.)
+   |               ^^^^^^^^^^^^^^^^^
+   |
+   = help: an `as` cast can become silently lossy if the types change in the future
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_lossless
+   = note: `-W clippy::cast-lossless` implied by `-W clippy::pedantic`
+   = help: to override `-W clippy::pedantic` add `#[allow(clippy::cast_lossless)]`
+help: use `f64::from` instead
+   |
+30 -             ((coordinate as f64 - lower as f64) / (upper - lower) as f64).clamp(0., 1.)
+30 +             ((f64::from(coordinate) - lower as f64) / (upper - lower) as f64).clamp(0., 1.)
+   |
+
+warning: casts from `u32` to `f64` can be expressed infallibly using `From`
+  --> crates/rrrah-core/src/rgbe.rs:30:35
+   |
+30 |             ((coordinate as f64 - lower as f64) / (upper - lower) as f64).clamp(0., 1.)
+   |                                   ^^^^^^^^^^^^
+   |
+   = help: an `as` cast can become silently lossy if the types change in the future
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_lossless
+help: use `f64::from` instead
+   |
+30 -             ((coordinate as f64 - lower as f64) / (upper - lower) as f64).clamp(0., 1.)
+30 +             ((coordinate as f64 - f64::from(lower)) / (upper - lower) as f64).clamp(0., 1.)
+   |
+
+warning: casts from `u32` to `f64` can be expressed infallibly using `From`
+  --> crates/rrrah-core/src/rgbe.rs:30:51
+   |
+30 |             ((coordinate as f64 - lower as f64) / (upper - lower) as f64).clamp(0., 1.)
+   |                                                   ^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: an `as` cast can become silently lossy if the types change in the future
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_lossless
+help: use `f64::from` instead
+   |
+30 -             ((coordinate as f64 - lower as f64) / (upper - lower) as f64).clamp(0., 1.)
+30 +             ((coordinate as f64 - lower as f64) / f64::from(upper - lower)).clamp(0., 1.)
+   |
+
+warning: casting `usize` to `u32` may truncate the value on targets with 64-bit wide pointers
+  --> crates/rrrah-core/src/rgbe.rs:36:46
+   |
+36 |         let (x0, x1, tx) = axis(position[0], (phase % 2) as u32, dimensions[0]);
+   |                                              ^^^^^^^^^^^^^^^^^^
+   |
+   = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+   |
+36 -         let (x0, x1, tx) = axis(position[0], (phase % 2) as u32, dimensions[0]);
+36 +         let (x0, x1, tx) = axis(position[0], u32::try_from(phase % 2), dimensions[0]);
+   |
+
+warning: casting `usize` to `u32` may truncate the value on targets with 64-bit wide pointers
+  --> crates/rrrah-core/src/rgbe.rs:37:46
+   |
+37 |         let (y0, y1, ty) = axis(position[1], (phase / 2) as u32, dimensions[1]);
+   |                                              ^^^^^^^^^^^^^^^^^^
+   |
+   = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+   |
+37 -         let (y0, y1, ty) = axis(position[1], (phase / 2) as u32, dimensions[1]);
+37 +         let (y0, y1, ty) = axis(position[1], u32::try_from(phase / 2), dimensions[1]);
+   |
+
+warning: docs for function which may panic missing `# Panics` section
+   --> crates/rrrah-core/src/rgbe.rs:145:5
+    |
+145 |     pub fn new(metadata: &crate::RawMetadata) -> Result<Self, CalibrationError> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+note: first possible panic found here
+   --> crates/rrrah-core/src/rgbe.rs:159:13
+    |
+159 |             grid.values[..].try_into().unwrap()
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_panics_doc
+    = note: `-W clippy::missing-panics-doc` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::missing_panics_doc)]`
+
+warning: docs for function which may panic missing `# Panics` section
+   --> crates/rrrah-core/src/rgbe.rs:215:5
+    |
+215 | /     pub fn reconstruct_linear_rgb(
+216 | |         &self,
+217 | |         position: [u32; 2],
+218 | |         sample: impl Fn(u32, u32) -> u16,
+219 | |     ) -> Option<[f64; 3]> {
+    | |_________________________^
+    |
+note: first possible panic found here
+   --> crates/rrrah-core/src/rgbe.rs:221:23
+    |
+221 |             f64::from(self.normalize_site(x, y, sample(x, y)).unwrap())
+    |                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_panics_doc
+
+warning: docs for function which may panic missing `# Panics` section
+   --> crates/rrrah-core/src/rgbe.rs:235:5
+    |
+235 | /     pub fn normalize_managed(
+236 | |         mosaic: &crate::DecodedMosaic,
+237 | |         budget: &crate::MemoryBudget,
+238 | |         cancelled: &dyn Fn() -> bool,
+239 | |     ) -> Result<(Self, crate::PixelBuffer<f32>), CalibrationError> {
+    | |__________________________________________________________________^
+    |
+note: first possible panic found here
+   --> crates/rrrah-core/src/rgbe.rs:266:27
+    |
+266 |                 *result = calibration.normalize_site(x as u32, y as u32, *sample).unwrap();
+    |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_panics_doc
+
+warning: casting `usize` to `u32` may truncate the value on targets with 64-bit wide pointers
+   --> crates/rrrah-core/src/rgbe.rs:266:54
+    |
+266 |                 *result = calibration.normalize_site(x as u32, y as u32, *sample).unwrap();
+    |                                                      ^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+    |
+266 -                 *result = calibration.normalize_site(x as u32, y as u32, *sample).unwrap();
+266 +                 *result = calibration.normalize_site(u32::try_from(x), y as u32, *sample).unwrap();
+    |
+
+warning: casting `usize` to `u32` may truncate the value on targets with 64-bit wide pointers
+   --> crates/rrrah-core/src/rgbe.rs:266:64
+    |
+266 |                 *result = calibration.normalize_site(x as u32, y as u32, *sample).unwrap();
+    |                                                                ^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+    |
+266 -                 *result = calibration.normalize_site(x as u32, y as u32, *sample).unwrap();
+266 +                 *result = calibration.normalize_site(x as u32, u32::try_from(y), *sample).unwrap();
+    |
+
+warning: this function has too many lines (108/100)
+  --> crates/rrrah-core/src/thumbnail.rs:23:1
+   |
+23 | / pub(crate) fn develop_with_cancel(
+24 | |     mosaic: &DecodedMosaic,
+25 | |     edge: u32,
+26 | |     cancelled: &dyn Fn() -> bool,
+27 | | ) -> Vec<u8> {
+   | |____________^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_lines
+
+warning: casting `i64` to `usize` may truncate the value on targets with 32-bit wide pointers
+  --> crates/rrrah-core/src/thumbnail.rs:71:17
+   |
+71 |         let x = x.clamp(0, i64::from(metadata.width) - 1) as usize;
+   |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+   |
+71 -         let x = x.clamp(0, i64::from(metadata.width) - 1) as usize;
+71 +         let x = usize::try_from(x.clamp(0, i64::from(metadata.width) - 1));
+   |
+
+warning: casting `i64` to `usize` may lose the sign of the value
+  --> crates/rrrah-core/src/thumbnail.rs:71:17
+   |
+71 |         let x = x.clamp(0, i64::from(metadata.width) - 1) as usize;
+   |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_sign_loss
+   = note: `-W clippy::cast-sign-loss` implied by `-W clippy::pedantic`
+   = help: to override `-W clippy::pedantic` add `#[allow(clippy::cast_sign_loss)]`
+
+warning: casting `i64` to `usize` may truncate the value on targets with 32-bit wide pointers
+  --> crates/rrrah-core/src/thumbnail.rs:72:17
+   |
+72 |         let y = y.clamp(0, i64::from(metadata.height) - 1) as usize;
+   |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+   |
+72 -         let y = y.clamp(0, i64::from(metadata.height) - 1) as usize;
+72 +         let y = usize::try_from(y.clamp(0, i64::from(metadata.height) - 1));
+   |
+
+warning: casting `i64` to `usize` may lose the sign of the value
+  --> crates/rrrah-core/src/thumbnail.rs:72:17
+   |
+72 |         let y = y.clamp(0, i64::from(metadata.height) - 1) as usize;
+   |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_sign_loss
+
+warning: casting `i64` to `usize` may truncate the value on targets with 32-bit wide pointers
+  --> crates/rrrah-core/src/thumbnail.rs:80:25
+   |
+80 |         let color = cfa[phase as usize] as usize;
+   |                         ^^^^^^^^^^^^^^
+   |
+   = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+   |
+80 -         let color = cfa[phase as usize] as usize;
+80 +         let color = cfa[usize::try_from(phase)] as usize;
+   |
+
+warning: casting `i64` to `usize` may lose the sign of the value
+  --> crates/rrrah-core/src/thumbnail.rs:80:25
+   |
+80 |         let color = cfa[phase as usize] as usize;
+   |                         ^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_sign_loss
+
+warning: casting `i64` to `usize` may truncate the value on targets with 32-bit wide pointers
+  --> crates/rrrah-core/src/thumbnail.rs:81:37
+   |
+81 |         let gain = if color == 1 && phase as usize != first_green {
+   |                                     ^^^^^^^^^^^^^^
+   |
+   = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+   |
+81 -         let gain = if color == 1 && phase as usize != first_green {
+81 +         let gain = if color == 1 && usize::try_from(phase) != first_green {
+   |
+
+warning: casting `i64` to `usize` may lose the sign of the value
+  --> crates/rrrah-core/src/thumbnail.rs:81:37
+   |
+81 |         let gain = if color == 1 && phase as usize != first_green {
+   |                                     ^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_sign_loss
+
+warning: casting `u32` to `f32` may cause a loss of precision (`u32` is 32 bits wide, but `f32`'s mantissa is only 23 bits wide)
+  --> crates/rrrah-core/src/thumbnail.rs:95:35
+   |
+95 |                 .map_display_uv([(x as f32 + 0.5) / out_w as f32, (y as f32 + 0.5) / out_h as f32]);
+   |                                   ^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_precision_loss
+   = note: `-W clippy::cast-precision-loss` implied by `-W clippy::pedantic`
+   = help: to override `-W clippy::pedantic` add `#[allow(clippy::cast_precision_loss)]`
+
+warning: casting `u32` to `f32` may cause a loss of precision (`u32` is 32 bits wide, but `f32`'s mantissa is only 23 bits wide)
+  --> crates/rrrah-core/src/thumbnail.rs:95:53
+   |
+95 |                 .map_display_uv([(x as f32 + 0.5) / out_w as f32, (y as f32 + 0.5) / out_h as f32]);
+   |                                                     ^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_precision_loss
+
+warning: casting `u32` to `f32` may cause a loss of precision (`u32` is 32 bits wide, but `f32`'s mantissa is only 23 bits wide)
+  --> crates/rrrah-core/src/thumbnail.rs:95:68
+   |
+95 |                 .map_display_uv([(x as f32 + 0.5) / out_w as f32, (y as f32 + 0.5) / out_h as f32]);
+   |                                                                    ^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_precision_loss
+
+warning: casting `u32` to `f32` may cause a loss of precision (`u32` is 32 bits wide, but `f32`'s mantissa is only 23 bits wide)
+  --> crates/rrrah-core/src/thumbnail.rs:95:86
+   |
+95 |                 .map_display_uv([(x as f32 + 0.5) / out_w as f32, (y as f32 + 0.5) / out_h as f32]);
+   |                                                                                      ^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_precision_loss
+
+warning: casting `f32` to `i64` may truncate the value
+  --> crates/rrrah-core/src/thumbnail.rs:97:37
+   |
+97 |                 i64::from(crop.x) + (uv[0] * crop.width as f32).floor().min((crop.width - 1) as f32) as i64;
+   |                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+
+warning: casting `u32` to `f32` may cause a loss of precision (`u32` is 32 bits wide, but `f32`'s mantissa is only 23 bits wide)
+  --> crates/rrrah-core/src/thumbnail.rs:97:46
+   |
+97 |                 i64::from(crop.x) + (uv[0] * crop.width as f32).floor().min((crop.width - 1) as f32) as i64;
+   |                                              ^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_precision_loss
+
+warning: casting `u32` to `f32` may cause a loss of precision (`u32` is 32 bits wide, but `f32`'s mantissa is only 23 bits wide)
+  --> crates/rrrah-core/src/thumbnail.rs:97:77
+   |
+97 |                 i64::from(crop.x) + (uv[0] * crop.width as f32).floor().min((crop.width - 1) as f32) as i64;
+   |                                                                             ^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_precision_loss
+
+warning: casting `f32` to `i64` may truncate the value
+  --> crates/rrrah-core/src/thumbnail.rs:99:37
+   |
+99 |                 i64::from(crop.y) + (uv[1] * crop.height as f32).floor().min((crop.height - 1) as f32) as i64;
+   |                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+
+warning: casting `u32` to `f32` may cause a loss of precision (`u32` is 32 bits wide, but `f32`'s mantissa is only 23 bits wide)
+  --> crates/rrrah-core/src/thumbnail.rs:99:46
+   |
+99 |                 i64::from(crop.y) + (uv[1] * crop.height as f32).floor().min((crop.height - 1) as f32) as i64;
+   |                                              ^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_precision_loss
+
+warning: casting `u32` to `f32` may cause a loss of precision (`u32` is 32 bits wide, but `f32`'s mantissa is only 23 bits wide)
+  --> crates/rrrah-core/src/thumbnail.rs:99:78
+   |
+99 |                 i64::from(crop.y) + (uv[1] * crop.height as f32).floor().min((crop.height - 1) as f32) as i64;
+   |                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_precision_loss
+
+warning: casting `u32` to `f32` may cause a loss of precision (`u32` is 32 bits wide, but `f32`'s mantissa is only 23 bits wide)
+   --> crates/rrrah-core/src/thumbnail.rs:106:17
+    |
+106 |                 crop.width as f32 / axis_w as f32,
+    |                 ^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_precision_loss
+
+warning: casting `u32` to `f32` may cause a loss of precision (`u32` is 32 bits wide, but `f32`'s mantissa is only 23 bits wide)
+   --> crates/rrrah-core/src/thumbnail.rs:106:37
+    |
+106 |                 crop.width as f32 / axis_w as f32,
+    |                                     ^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_precision_loss
+
+warning: casting `u32` to `f32` may cause a loss of precision (`u32` is 32 bits wide, but `f32`'s mantissa is only 23 bits wide)
+   --> crates/rrrah-core/src/thumbnail.rs:107:17
+    |
+107 |                 crop.height as f32 / axis_h as f32,
+    |                 ^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_precision_loss
+
+warning: casting `u32` to `f32` may cause a loss of precision (`u32` is 32 bits wide, but `f32`'s mantissa is only 23 bits wide)
+   --> crates/rrrah-core/src/thumbnail.rs:107:38
+    |
+107 |                 crop.height as f32 / axis_h as f32,
+    |                                      ^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_precision_loss
+
+warning: casting `u32` to `f32` may cause a loss of precision (`u32` is 32 bits wide, but `f32`'s mantissa is only 23 bits wide)
+   --> crates/rrrah-core/src/thumbnail.rs:111:21
+    |
+111 |                     crop.x as f32 + uv[0] * crop.width as f32,
+    |                     ^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_precision_loss
+
+warning: casting `u32` to `f32` may cause a loss of precision (`u32` is 32 bits wide, but `f32`'s mantissa is only 23 bits wide)
+   --> crates/rrrah-core/src/thumbnail.rs:111:45
+    |
+111 |                     crop.x as f32 + uv[0] * crop.width as f32,
+    |                                             ^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_precision_loss
+
+warning: casting `u32` to `f32` may cause a loss of precision (`u32` is 32 bits wide, but `f32`'s mantissa is only 23 bits wide)
+   --> crates/rrrah-core/src/thumbnail.rs:112:21
+    |
+112 |                     crop.y as f32 + uv[1] * crop.height as f32,
+    |                     ^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_precision_loss
+
+warning: casting `u32` to `f32` may cause a loss of precision (`u32` is 32 bits wide, but `f32`'s mantissa is only 23 bits wide)
+   --> crates/rrrah-core/src/thumbnail.rs:112:45
+    |
+112 |                     crop.y as f32 + uv[1] * crop.height as f32,
+    |                                             ^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_precision_loss
+
+warning: casting `u32` to `f32` may cause a loss of precision (`u32` is 32 bits wide, but `f32`'s mantissa is only 23 bits wide)
+   --> crates/rrrah-core/src/thumbnail.rs:412:35
+    |
+412 |                 .map_display_uv([(x as f32 + 0.5) / w as f32, (y as f32 + 0.5) / h as f32]);
+    |                                   ^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_precision_loss
+
+warning: casting `u32` to `f32` may cause a loss of precision (`u32` is 32 bits wide, but `f32`'s mantissa is only 23 bits wide)
+   --> crates/rrrah-core/src/thumbnail.rs:412:53
+    |
+412 |                 .map_display_uv([(x as f32 + 0.5) / w as f32, (y as f32 + 0.5) / h as f32]);
+    |                                                     ^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_precision_loss
+
+warning: casting `u32` to `f32` may cause a loss of precision (`u32` is 32 bits wide, but `f32`'s mantissa is only 23 bits wide)
+   --> crates/rrrah-core/src/thumbnail.rs:412:64
+    |
+412 |                 .map_display_uv([(x as f32 + 0.5) / w as f32, (y as f32 + 0.5) / h as f32]);
+    |                                                                ^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_precision_loss
+
+warning: casting `u32` to `f32` may cause a loss of precision (`u32` is 32 bits wide, but `f32`'s mantissa is only 23 bits wide)
+   --> crates/rrrah-core/src/thumbnail.rs:412:82
+    |
+412 |                 .map_display_uv([(x as f32 + 0.5) / w as f32, (y as f32 + 0.5) / h as f32]);
+    |                                                                                  ^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_precision_loss
+
+warning: casting `f64` to `u32` may truncate the value
+   --> crates/rrrah-core/src/thumbnail.rs:428:29
+    |
+428 |                 for sy in ((lower[1].floor() as u32 / 2 * 2)..upper[1].ceil() as u32).step_by(2) {
+    |                             ^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+
+warning: casting `f64` to `u32` may lose the sign of the value
+   --> crates/rrrah-core/src/thumbnail.rs:428:29
+    |
+428 |                 for sy in ((lower[1].floor() as u32 / 2 * 2)..upper[1].ceil() as u32).step_by(2) {
+    |                             ^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_sign_loss
+
+warning: casting `f64` to `u32` may truncate the value
+   --> crates/rrrah-core/src/thumbnail.rs:428:63
+    |
+428 |                 for sy in ((lower[1].floor() as u32 / 2 * 2)..upper[1].ceil() as u32).step_by(2) {
+    |                                                               ^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+
+warning: casting `f64` to `u32` may lose the sign of the value
+   --> crates/rrrah-core/src/thumbnail.rs:428:63
+    |
+428 |                 for sy in ((lower[1].floor() as u32 / 2 * 2)..upper[1].ceil() as u32).step_by(2) {
+    |                                                               ^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_sign_loss
+
+warning: casting `f64` to `u32` may truncate the value
+   --> crates/rrrah-core/src/thumbnail.rs:432:33
+    |
+432 |                     for sx in ((lower[0].floor() as u32 / 2 * 2)..upper[0].ceil() as u32).step_by(2) {
+    |                                 ^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+
+warning: casting `f64` to `u32` may lose the sign of the value
+   --> crates/rrrah-core/src/thumbnail.rs:432:33
+    |
+432 |                     for sx in ((lower[0].floor() as u32 / 2 * 2)..upper[0].ceil() as u32).step_by(2) {
+    |                                 ^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_sign_loss
+
+warning: casting `f64` to `u32` may truncate the value
+   --> crates/rrrah-core/src/thumbnail.rs:432:67
+    |
+432 |                     for sx in ((lower[0].floor() as u32 / 2 * 2)..upper[0].ceil() as u32).step_by(2) {
+    |                                                                   ^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+
+warning: casting `f64` to `u32` may lose the sign of the value
+   --> crates/rrrah-core/src/thumbnail.rs:432:67
+    |
+432 |                     for sx in ((lower[0].floor() as u32 / 2 * 2)..upper[0].ceil() as u32).step_by(2) {
+    |                                                                   ^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_sign_loss
+
+warning: casting `usize` to `u32` may truncate the value on targets with 64-bit wide pointers
+   --> crates/rrrah-core/src/thumbnail.rs:436:38
+    |
+436 | ...                   let px = (phase % 2) as u32;
+    |                                ^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+    |
+436 -                             let px = (phase % 2) as u32;
+436 +                             let px = u32::try_from(phase % 2);
+    |
+
+warning: casting `usize` to `u32` may truncate the value on targets with 64-bit wide pointers
+   --> crates/rrrah-core/src/thumbnail.rs:437:38
+    |
+437 | ...                   let py = (phase / 2) as u32;
+    |                                ^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+    |
+437 -                             let py = (phase / 2) as u32;
+437 +                             let py = u32::try_from(phase / 2);
+    |
+
+warning: casting `f64` to `u32` may truncate the value
+   --> crates/rrrah-core/src/thumbnail.rs:453:25
+    |
+453 |                         center[0].floor().min(f64::from(crop.x + crop.width - 1)) as u32,
+    |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+
+warning: casting `f64` to `u32` may lose the sign of the value
+   --> crates/rrrah-core/src/thumbnail.rs:453:25
+    |
+453 |                         center[0].floor().min(f64::from(crop.x + crop.width - 1)) as u32,
+    |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_sign_loss
+
+warning: casting `f64` to `u32` may truncate the value
+   --> crates/rrrah-core/src/thumbnail.rs:454:25
+    |
+454 |                         center[1].floor().min(f64::from(crop.y + crop.height - 1)) as u32,
+    |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+
+warning: casting `f64` to `u32` may lose the sign of the value
+   --> crates/rrrah-core/src/thumbnail.rs:454:25
+    |
+454 |                         center[1].floor().min(f64::from(crop.y + crop.height - 1)) as u32,
+    |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_sign_loss
+
+warning: casting `f64` to `f32` may truncate the value
+   --> crates/rrrah-core/src/thumbnail.rs:462:35
+    |
+462 |             let rgb = rgb.map(|v| v as f32);
+    |                                   ^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+
+warning: `rrrah-core` (lib) generated 113 warnings
+error: could not compile `rrrah-core` (lib) due to 2 previous errors; 113 warnings emitted
+warning: build failed, waiting for other jobs to finish...

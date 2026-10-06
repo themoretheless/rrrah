@@ -1,0 +1,24 @@
+{
+  "scope": "minimal axial RGB/CMYK gradients; strict external comparison, no broad AI qualification",
+  "rows": [
+    {
+      "name": "gradient-rgb",
+      "different_pixels": 96,
+      "max_channel_error": 11,
+      "native_first_row_hex": "f4000bdf0020ca0035b5004a9f00608a007575008a60009f4a00b53500ca2000df0b00f4",
+      "poppler_first_row_hex": "ff0000ea0015d4002abf0040aa005595006a8000806a00955500aa4000bf2a00d41500ea",
+      "rgb_center_sample_matches_authored_linear_ramp": true
+    },
+    {
+      "name": "gradient-cmyk",
+      "different_pixels": 96,
+      "max_channel_error": 45,
+      "native_first_row_hex": "00aaea00a4e2039dda3c97d2658eca7d86c2917dbaa473b2b567aac659a1d44499e32290",
+      "poppler_first_row_hex": "00adef19a9e830a2e2479ada5d90d37285cb8677c39968bbac57b2bd44a9ce2fa0dd1896"
+    }
+  ],
+  "limitations": [
+    "RGB mismatch reflects pixel-center versus pixel-edge sample convention in this authored ramp; strict Poppler parity still fails",
+    "CMYK discrepancy mixes sampling and color conversion; cause not isolated yet"
+  ]
+}

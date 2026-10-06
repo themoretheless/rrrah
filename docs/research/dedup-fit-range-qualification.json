@@ -1,0 +1,32 @@
+{
+  "scope": "Explicit bounded fitting primitive plus full-resolution known-crop-shift diagnostic; not file/collection integration or calibrated acceptance",
+  "api": "verify_photometric_bidirectional_in_range",
+  "range": [
+    0.0,
+    1.0
+  ],
+  "semantics": "Only model fitting excludes out-of-range RGB. Residuals include every overlapping pixel; alpha never fitted. Existing APIs use no range and preserve defaults.",
+  "authored_fixture": {
+    "pixels": 20,
+    "fitted_samples": 19,
+    "compared_pixels": 20,
+    "matched_pixels": 19,
+    "saturation_residual": 3.0,
+    "edits_alpha_cancel_invalid_range_insufficient_samples": "passed"
+  },
+  "cr2_diagnostic": {
+    "fitted_samples_each": 22756604,
+    "compared_each": 24000000,
+    "matched": [
+      21548605,
+      21548319
+    ],
+    "required_fraction": 0.9,
+    "passes": false,
+    "managed_used_after": 0,
+    "managed_peak_bytes": 965485168
+  },
+  "tests_passed": 10,
+  "selected_clippy": "passed",
+  "remaining": "Range fitting is insufficient for CR2 render. Nonlinear clipping/render models, independent lookalikes, file integration and broad camera qualification remain open."
+}

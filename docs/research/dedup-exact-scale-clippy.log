@@ -1,0 +1,25 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: adding items after statements is confusing, since items exist from the start of the scope
+   --> crates/rrrah-dedup/src/exact.rs:128:13
+    |
+128 |             use std::os::unix::fs::MetadataExt;
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#items_after_statements
+    = note: `-W clippy::items-after-statements` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::items_after_statements)]`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+warning: allocating a local array larger than 16384 bytes
+  --> crates/rrrah-dedup/examples/exact_scale_probe.rs:13:22
+   |
+13 |         let buffer = [0x5au8; 64 * 1024];
+   |                      ^^^^^^^^^^^^^^^^^^^
+   |
+   = help: consider allocating on the heap with `vec![0x5au8; 64 * 1024].into_boxed_slice()`
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#large_stack_arrays
+   = note: `-W clippy::large-stack-arrays` implied by `-W clippy::pedantic`
+   = help: to override `-W clippy::pedantic` add `#[allow(clippy::large_stack_arrays)]`
+
+warning: `rrrah-dedup` (example "exact_scale_probe") generated 1 warning
+    Finished `dev` profile [optimized + debuginfo] target(s) in 0.54s

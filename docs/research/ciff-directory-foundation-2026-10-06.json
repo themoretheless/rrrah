@@ -1,0 +1,21 @@
+{
+  "scope": "Bounded borrowing CIFF directory foundation; no CRW sensor decoding or viewing",
+  "evidence": {
+    "/tmp/rrrah-ciff-reference.cpp": "837aa51751e86eac2d9084f6f889eaf38393bd668abced8fc3c0fa9e6beb8faa",
+    "/tmp/rrrah-identify-reference.cpp": "715cfb9904b8b657f3f658e653da5fea4efa4bc78d16bd955c796843b1696e14",
+    "/tmp/rrrah-ciff-foundation.log": "75acf55f34bff6f87fce2390d83f617d058dabe20ee4304f1093f9a8d9f04aa4",
+    "/tmp/rrrah-ciff-full-decode.log": "8d47abe2ee84fb617edfc2c78b4021b7a15359978a093472d59294a4b9b9032b"
+  },
+  "reference_urls": [
+    "https://github.com/LibRaw/LibRaw/blob/0.22.2/src/metadata/ciff.cpp",
+    "https://github.com/LibRaw/LibRaw/blob/0.22.2/src/metadata/identify.cpp"
+  ],
+  "focused_passed": 2,
+  "full_decode_passed": 707,
+  "full_decode_ignored": 36,
+  "limitations": [
+    "Synthetic directory fixtures only; no camera-produced CRW source qualified.",
+    "No entropy, WB, color, RAM cache, swap, GPU or viewer integration.",
+    "Prefix safety does not imply detection of every truncation: CIFF has no declared total file length."
+  ]
+}

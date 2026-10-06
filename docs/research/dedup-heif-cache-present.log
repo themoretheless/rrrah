@@ -1,0 +1,35 @@
+   Compiling rrrah-decode v0.1.0 (/workspace/crates/rrrah-decode)
+warning: function `error` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:4:4
+  |
+4 | fn error(message: &str) -> DecodeError {
+  |    ^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `packed_12` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:9:4
+  |
+9 | fn packed_12(
+  |    ^^^^^^^^^
+
+warning: function `decode_zd` is never used
+  --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:48:15
+   |
+48 | pub(super) fn decode_zd(
+   |               ^^^^^^^^^
+
+warning: `rrrah-decode` (lib) generated 3 warnings
+   Compiling rrrah-dedup v0.1.0 (/workspace/crates/rrrah-dedup)
+warning: linker stderr: /validation/sysroot/usr/bin/ld: /validation/target/debug/deps/libjpegxr-8d01a0594e000fc4.rlib(2e643c6506a180d9-strenc.o): in function `StrIOEncInit':
+         /validation/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/jpegxr-0.3.1/jxrlib/image/encode/strenc.c:485:(.text.StrIOEncInit+0xf0): the use of `tmpnam' is dangerous, better use `mkstemp'
+  |
+  = note: `#[warn(linker_messages)]` on by default
+
+warning: linker stdout: /validation/sysroot/usr/bin/ld: /validation/target/debug/deps/libjpegxr-8d01a0594e000fc4.rlib(2e643c6506a180d9-strenc.o): note: the message above does not take linker garbage collection into account
+
+warning: `rrrah-dedup` (example "font_cache_probe") generated 2 warnings
+    Finished `dev` profile [optimized + debuginfo] target(s) in 49.81s
+     Running `/validation/target/debug/examples/font_cache_probe /workspace/tests/fixtures/raster/profiled.heic /validation/font-cache-fixtures/heif-cache.bin`
+cached_result_hit=false
+cache_hit=false equal_to_fresh=true reused=Fingerprint { variants: [[18229436526339555327, 18446744073709518847, 18229436526339555327, 18446744073709518847], [4611686018427387904, 18446708820483505660, 4611686018427387904, 18446708820483505660], [4432676831360, 72620543991349248, 4432676831360, 72620543991349248], [18446744073709551102, 9259471340325830656, 18446744073709551102, 9259471340325830656], [13844082881149796352, 18446744073709551102, 13844082881149796352, 18446744073709551102], [18302628885633695743, 18446735208355954559, 18302628885633695743, 18446735208355954559], [18446708820483505406, 36028797018963968, 18446708820483505406, 36028797018963968], [16512, 216740164743987200, 16512, 216740164743987200]], mean_linear_rgb: [0.3229304056909309, 0.32289207466986974, 0.3227568700472716], luminance_stddev: 0.23298009591444094 } fresh=Fingerprint { variants: [[18229436526339555327, 18446744073709518847, 18229436526339555327, 18446744073709518847], [4611686018427387904, 18446708820483505660, 4611686018427387904, 18446708820483505660], [4432676831360, 72620543991349248, 4432676831360, 72620543991349248], [18446744073709551102, 9259471340325830656, 18446744073709551102, 9259471340325830656], [13844082881149796352, 18446744073709551102, 13844082881149796352, 18446744073709551102], [18302628885633695743, 18446735208355954559, 18302628885633695743, 18446735208355954559], [18446708820483505406, 36028797018963968, 18446708820483505406, 36028797018963968], [16512, 216740164743987200, 16512, 216740164743987200]], mean_linear_rgb: [0.3229304056909309, 0.32289207466986974, 0.3227568700472716], luminance_stddev: 0.23298009591444094 }

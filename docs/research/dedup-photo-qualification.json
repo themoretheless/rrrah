@@ -1,0 +1,182 @@
+{
+  "scope": "Four independent CC0 camera JPEG preview scenes, 20 transformed positives and six distinct-scene negatives. No RAW/raster equivalence or burst qualification.",
+  "fixture_manifest": "crates/rrrah-dedup/tests/fixtures/photos/manifest.json",
+  "fixture_manifest_sha256": "0842a3f329c469d2aa95521ae73f8e188de480dd47c149d5c281dd775321c9ad",
+  "command": "CARGO_TARGET_DIR=/tmp/rrrah-dedup-target cargo run -p rrrah-dedup --features decode --example photo_probe",
+  "policy_source": "crates/rrrah-dedup/examples/photo_probe.rs",
+  "positive_count": 20,
+  "accepted_positives": 10,
+  "negative_count": 6,
+  "false_positives": 0,
+  "results": [
+    {
+      "scene": 830,
+      "variant": "resize",
+      "candidate": true,
+      "matches": 91,
+      "inliers": 91,
+      "detail": "830 resize: candidate=true matches=91 inliers=91 pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 68160, compared_pixels: 67947, matched_pixels: 67162, maximum_channel_error: 0.08057229686528444, squared_error: 13.743941027496867 }, reverse: WarpEvidence { source_pixels: 38400, compared_pixels: 38400, matched_pixels: 38342, maximum_channel_error: 0.042908234728706085, squared_error: 3.02785431118419 } })"
+    },
+    {
+      "scene": 830,
+      "variant": "crop",
+      "candidate": true,
+      "matches": 237,
+      "inliers": 237,
+      "detail": "830 crop: candidate=true matches=237 inliers=237 pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 68160, compared_pixels: 38640, matched_pixels: 38640, maximum_channel_error: 0.0, squared_error: 0.0 }, reverse: WarpEvidence { source_pixels: 38640, compared_pixels: 38640, matched_pixels: 38640, maximum_channel_error: 0.0, squared_error: 0.0 } })"
+    },
+    {
+      "scene": 830,
+      "variant": "rotate",
+      "candidate": true,
+      "matches": 129,
+      "inliers": 129,
+      "detail": "830 rotate: candidate=true matches=129 inliers=129 pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 68160, compared_pixels: 68160, matched_pixels: 67659, maximum_channel_error: 0.14026351892119013, squared_error: 7.8328949380398685 }, reverse: WarpEvidence { source_pixels: 110630, compared_pixels: 67637, matched_pixels: 67527, maximum_channel_error: 0.06238499609297665, squared_error: 5.698738488576503 } })"
+    },
+    {
+      "scene": 830,
+      "variant": "brightness",
+      "candidate": false,
+      "matches": 404,
+      "inliers": 404,
+      "detail": "830 brightness: candidate=false matches=404 inliers=404 pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 68160, compared_pixels: 68160, matched_pixels: 142, maximum_channel_error: 0.22472193837165833, squared_error: 2256.276074747927 }, reverse: WarpEvidence { source_pixels: 68160, compared_pixels: 68160, matched_pixels: 142, maximum_channel_error: 0.22472193837165833, squared_error: 2256.276074747927 } })"
+    },
+    {
+      "scene": 830,
+      "variant": "jpeg",
+      "candidate": true,
+      "matches": 89,
+      "inliers": 88,
+      "detail": "830 jpeg: candidate=true matches=89 inliers=88 pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 68160, compared_pixels: 68160, matched_pixels: 63770, maximum_channel_error: 0.14053279161453247, squared_error: 32.25203425769554 }, reverse: WarpEvidence { source_pixels: 68160, compared_pixels: 68160, matched_pixels: 63770, maximum_channel_error: 0.14053279161453247, squared_error: 32.25203425769554 } })"
+    },
+    {
+      "scene": 898,
+      "variant": "resize",
+      "candidate": true,
+      "matches": 82,
+      "inliers": 82,
+      "detail": "898 resize: candidate=true matches=82 inliers=82 pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 68480, compared_pixels: 67559, matched_pixels: 63582, maximum_channel_error: 0.6918377670151379, squared_error: 126.77054045252002 }, reverse: WarpEvidence { source_pixels: 38400, compared_pixels: 38293, matched_pixels: 36786, maximum_channel_error: 0.30447289467239314, squared_error: 25.632230027625404 } })"
+    },
+    {
+      "scene": 898,
+      "variant": "crop",
+      "candidate": true,
+      "matches": 428,
+      "inliers": 428,
+      "detail": "898 crop: candidate=true matches=428 inliers=428 pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 68480, compared_pixels: 38880, matched_pixels: 38880, maximum_channel_error: 0.0, squared_error: 0.0 }, reverse: WarpEvidence { source_pixels: 38880, compared_pixels: 38880, matched_pixels: 38880, maximum_channel_error: 0.0, squared_error: 0.0 } })"
+    },
+    {
+      "scene": 898,
+      "variant": "rotate",
+      "candidate": true,
+      "matches": 189,
+      "inliers": 189,
+      "detail": "898 rotate: candidate=true matches=189 inliers=189 pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 68480, compared_pixels: 68480, matched_pixels: 65554, maximum_channel_error: 0.4250507315817338, squared_error: 51.370610647035676 }, reverse: WarpEvidence { source_pixels: 111000, compared_pixels: 68124, matched_pixels: 65041, maximum_channel_error: 0.415366829378109, squared_error: 60.05158704108698 } })"
+    },
+    {
+      "scene": 898,
+      "variant": "brightness",
+      "candidate": false,
+      "matches": 332,
+      "inliers": 332,
+      "detail": "898 brightness: candidate=false matches=332 inliers=332 pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 68480, compared_pixels: 68480, matched_pixels: 44983, maximum_channel_error: 0.5547987520694733, squared_error: 678.6789849376578 }, reverse: WarpEvidence { source_pixels: 68480, compared_pixels: 68480, matched_pixels: 44983, maximum_channel_error: 0.5547987520694733, squared_error: 678.6789849376578 } })"
+    },
+    {
+      "scene": 898,
+      "variant": "jpeg",
+      "candidate": true,
+      "matches": 181,
+      "inliers": 179,
+      "detail": "898 jpeg: candidate=true matches=181 inliers=179 pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 68480, compared_pixels: 68480, matched_pixels: 64562, maximum_channel_error: 0.4176262319087982, squared_error: 58.87045798218026 }, reverse: WarpEvidence { source_pixels: 68480, compared_pixels: 68480, matched_pixels: 64562, maximum_channel_error: 0.4176262319087982, squared_error: 58.87045798218026 } })"
+    },
+    {
+      "scene": 1084,
+      "variant": "resize",
+      "candidate": false,
+      "matches": 142,
+      "inliers": 140,
+      "detail": "1084 resize: candidate=false matches=142 inliers=140 pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 76800, compared_pixels: 76003, matched_pixels: 56680, maximum_channel_error: 0.45009179813312455, squared_error: 322.9349011831463 }, reverse: WarpEvidence { source_pixels: 43200, compared_pixels: 42958, matched_pixels: 36572, maximum_channel_error: 0.26186990608634, squared_error: 60.06561391468978 } })"
+    },
+    {
+      "scene": 1084,
+      "variant": "crop",
+      "candidate": true,
+      "matches": 323,
+      "inliers": 322,
+      "detail": "1084 crop: candidate=true matches=323 inliers=322 pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 76800, compared_pixels: 43200, matched_pixels: 43200, maximum_channel_error: 0.0, squared_error: 0.0 }, reverse: WarpEvidence { source_pixels: 43200, compared_pixels: 43200, matched_pixels: 43200, maximum_channel_error: 0.0, squared_error: 0.0 } })"
+    },
+    {
+      "scene": 1084,
+      "variant": "rotate",
+      "candidate": false,
+      "matches": 189,
+      "inliers": 185,
+      "detail": "1084 rotate: candidate=false matches=189 inliers=185 pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 76800, compared_pixels: 76800, matched_pixels: 62211, maximum_channel_error: 0.46877148510348826, squared_error: 248.54713272891905 }, reverse: WarpEvidence { source_pixels: 122472, compared_pixels: 76480, matched_pixels: 62094, maximum_channel_error: 0.49028158008938916, squared_error: 239.70136825902082 } })"
+    },
+    {
+      "scene": 1084,
+      "variant": "brightness",
+      "candidate": false,
+      "matches": 470,
+      "inliers": 470,
+      "detail": "1084 brightness: candidate=false matches=470 inliers=470 pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 76800, compared_pixels: 76800, matched_pixels: 4753, maximum_channel_error: 0.5547987520694733, squared_error: 7681.227125389528 }, reverse: WarpEvidence { source_pixels: 76800, compared_pixels: 76800, matched_pixels: 4753, maximum_channel_error: 0.5547987520694733, squared_error: 7681.227125389528 } })"
+    },
+    {
+      "scene": 1084,
+      "variant": "jpeg",
+      "candidate": false,
+      "matches": 222,
+      "inliers": 217,
+      "detail": "1084 jpeg: candidate=false matches=222 inliers=217 pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 76800, compared_pixels: 76800, matched_pixels: 44388, maximum_channel_error: 0.6481384634971619, squared_error: 475.13506934123086 }, reverse: WarpEvidence { source_pixels: 76800, compared_pixels: 76800, matched_pixels: 44388, maximum_channel_error: 0.6481384634971619, squared_error: 475.13506934123086 } })"
+    },
+    {
+      "scene": 1294,
+      "variant": "resize",
+      "candidate": false,
+      "matches": 67,
+      "inliers": 67,
+      "detail": "1294 resize: candidate=false matches=67 inliers=67 pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 68160, compared_pixels: 68006, matched_pixels: 39495, maximum_channel_error: 0.5850672214277515, squared_error: 724.5670397468037 }, reverse: WarpEvidence { source_pixels: 38400, compared_pixels: 37716, matched_pixels: 28161, maximum_channel_error: 0.36031035027906144, squared_error: 143.86324782071384 } })"
+    },
+    {
+      "scene": 1294,
+      "variant": "crop",
+      "candidate": true,
+      "matches": 119,
+      "inliers": 118,
+      "detail": "1294 crop: candidate=true matches=119 inliers=118 pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 68160, compared_pixels: 38640, matched_pixels: 38640, maximum_channel_error: 0.0, squared_error: 0.0 }, reverse: WarpEvidence { source_pixels: 38640, compared_pixels: 38640, matched_pixels: 38640, maximum_channel_error: 0.0, squared_error: 0.0 } })"
+    },
+    {
+      "scene": 1294,
+      "variant": "rotate",
+      "candidate": false,
+      "matches": 143,
+      "inliers": 143,
+      "detail": "1294 rotate: candidate=false matches=143 inliers=143 pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 68160, compared_pixels: 68160, matched_pixels: 51256, maximum_channel_error: 0.5413473083778413, squared_error: 258.4619045368238 }, reverse: WarpEvidence { source_pixels: 110630, compared_pixels: 67619, matched_pixels: 53427, maximum_channel_error: 0.3814301449234304, squared_error: 179.87281889740066 } })"
+    },
+    {
+      "scene": 1294,
+      "variant": "brightness",
+      "candidate": false,
+      "matches": 364,
+      "inliers": 364,
+      "detail": "1294 brightness: candidate=false matches=364 inliers=364 pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 68160, compared_pixels: 68160, matched_pixels: 15300, maximum_channel_error: 0.5547987520694733, squared_error: 6215.580913790556 }, reverse: WarpEvidence { source_pixels: 68160, compared_pixels: 68160, matched_pixels: 15300, maximum_channel_error: 0.5547987520694733, squared_error: 6215.580913790556 } })"
+    },
+    {
+      "scene": 1294,
+      "variant": "jpeg",
+      "candidate": false,
+      "matches": 202,
+      "inliers": 202,
+      "detail": "1294 jpeg: candidate=false matches=202 inliers=202 pixels=Some(BidirectionalEvidence { forward: WarpEvidence { source_pixels: 68160, compared_pixels: 68160, matched_pixels: 34749, maximum_channel_error: 0.6685326099395752, squared_error: 428.29016921985874 }, reverse: WarpEvidence { source_pixels: 68160, compared_pixels: 68160, matched_pixels: 34749, maximum_channel_error: 0.6685326099395752, squared_error: 428.29016921985874 } })"
+    }
+  ],
+  "negatives": [
+    "negative 830 898: candidate=false matches=0 inliers=0",
+    "negative 830 1084: candidate=false matches=0 inliers=0",
+    "negative 830 1294: candidate=false matches=0 inliers=0",
+    "negative 898 1084: candidate=false matches=0 inliers=0",
+    "negative 898 1294: candidate=false matches=0 inliers=0",
+    "negative 1084 1294: candidate=false matches=0 inliers=0"
+  ],
+  "remaining": "Photometric verification for brightness changes and resampling/compression residuals; thresholds are not calibrated by these four scenes."
+}

@@ -109,10 +109,21 @@ pub struct FilmstripTile {
     pub highlighted: bool,
 }
 
+#[derive(Debug, thiserror::Error)]
+pub enum FilmstripUploadError {
+    #[error("invalid thumbnail dimensions or RGBA8 payload")]
+    Invalid,
+    #[error(transparent)]
+    Memory(#[from] rrrah_core::BufferError),
+    #[error("thumbnail texture admission: {0}")]
+    TextureMemory(rrrah_core::BufferError),
+}
+
 #[derive(Debug)]
 struct TextureSlot {
     _texture: wgpu::Texture,
     bind_group: wgpu::BindGroup,
+    _reservation: Option<std::sync::Arc<rrrah_core::Reservation>>,
 }
 
 #[repr(C)]
@@ -191,6 +202,8 @@ pub struct FilmstripRenderer {
     slots: Vec<Option<TextureSlot>>,
     free_slots: Vec<usize>,
     viewport: [f32; 2],
+    upload_queue_budget: Option<rrrah_core::MemoryBudget>,
+    texture_budget: Option<rrrah_core::MemoryBudget>,
 }
 
 impl FilmstripRenderer {
@@ -381,8 +394,41 @@ impl FilmstripRenderer {
             tex_draws: Vec::new(),
             slots: Vec::new(),
             free_slots: Vec::new(),
+            upload_queue_budget: None,
+            texture_budget: None,
             viewport,
         }
+    }
+
+    /// Conservatively snapshot all resident tile credits for the submitted strip.
+    pub fn resource_lease(&self) -> crate::GpuResourceLease {
+        crate::GpuResourceLease::new(
+            self.slots
+                .iter()
+                .flatten()
+                .filter_map(|slot| slot._reservation.clone()),
+        )
+    }
+
+    pub fn resident_bytes(&self) -> u64 {
+        self.slots
+            .iter()
+            .flatten()
+            .map(|slot| u64::from(slot._texture.width()) * u64::from(slot._texture.height()) * 4)
+            .sum()
+    }
+
+    /// Cap live RGBA8 texture payload; removing a slot releases its reservation.
+    /// Driver overhead and in-flight retention are excluded.
+    pub fn with_texture_budget(mut self, budget: rrrah_core::MemoryBudget) -> Self {
+        self.texture_budget = Some(budget);
+        self
+    }
+
+    /// Admit aligned thumbnail queue payload until submitted GPU work completes.
+    pub fn with_upload_queue_budget(mut self, budget: rrrah_core::MemoryBudget) -> Self {
+        self.upload_queue_budget = Some(budget);
+        self
     }
 
     pub fn resize(&mut self, queue: &wgpu::Queue, viewport: [f32; 2]) {
@@ -404,6 +450,50 @@ impl FilmstripRenderer {
         height: u32,
         rgba8: &[u8],
     ) -> FilmstripTileId {
+        self.try_upload_tile(device, queue, width, height, rgba8)
+            .expect("thumbnail upload refused; use try_upload_tile for budgeted uploads")
+    }
+
+    /// Validates and admits before allocation; refusal leaves existing slots intact.
+    pub fn try_upload_tile(
+        &mut self,
+        device: &wgpu::Device,
+        queue: &wgpu::Queue,
+        width: u32,
+        height: u32,
+        rgba8: &[u8],
+    ) -> Result<FilmstripTileId, FilmstripUploadError> {
+        let bytes = u64::from(width)
+            .checked_mul(u64::from(height))
+            .and_then(|n| n.checked_mul(4))
+            .ok_or(FilmstripUploadError::Invalid)?;
+        if width == 0
+            || height == 0
+            || width > device.limits().max_texture_dimension_2d
+            || height > device.limits().max_texture_dimension_2d
+            || bytes != rgba8.len() as u64
+        {
+            return Err(FilmstripUploadError::Invalid);
+        }
+        let reservation = self
+            .texture_budget
+            .as_ref()
+            .map(|budget| budget.try_reserve(bytes))
+            .transpose()
+            .map_err(FilmstripUploadError::TextureMemory)?
+            .map(std::sync::Arc::new);
+        let _queued_upload = crate::QueuedUploadReservation {
+            queue: queue.clone(),
+            resources: crate::GpuResourceLease::new(reservation.iter().cloned()),
+            reservation: self
+                .upload_queue_budget
+                .as_ref()
+                .map(|budget| {
+                    let row = (u64::from(width) * 4).div_ceil(256) * 256;
+                    budget.try_reserve(row * u64::from(height))
+                })
+                .transpose()?,
+        };
         let texture = device.create_texture(&wgpu::TextureDescriptor {
             label: Some("Rrrah filmstrip tile texture"),
             size: wgpu::Extent3d {
@@ -455,13 +545,14 @@ impl FilmstripRenderer {
         let slot = TextureSlot {
             _texture: texture,
             bind_group,
+            _reservation: reservation,
         };
         if let Some(index) = self.free_slots.pop() {
             self.slots[index] = Some(slot);
-            FilmstripTileId(index)
+            Ok(FilmstripTileId(index))
         } else {
             self.slots.push(Some(slot));
-            FilmstripTileId(self.slots.len() - 1)
+            Ok(FilmstripTileId(self.slots.len() - 1))
         }
     }
 

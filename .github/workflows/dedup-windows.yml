@@ -1,0 +1,29 @@
+name: dedup-windows
+on:
+  push:
+    paths:
+      - 'crates/rrrah-dedup/**'
+      - 'Cargo.toml'
+      - 'Cargo.lock'
+      - '.github/workflows/dedup-windows.yml'
+  pull_request:
+    paths:
+      - 'crates/rrrah-dedup/**'
+      - 'Cargo.toml'
+      - 'Cargo.lock'
+      - '.github/workflows/dedup-windows.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  exact-identity:
+    runs-on: windows-latest
+    env:
+      CARGO_TERM_COLOR: always
+      RUSTFLAGS: '-Dwarnings'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Native Windows exact search, physical aliases and replacement
+        run: cargo test -p rrrah-dedup --no-default-features --lib --test exact_files --locked

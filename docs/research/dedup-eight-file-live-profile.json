@@ -1,0 +1,11 @@
+{
+  "scope": "One-second process sampling during eight-file native RAW/TIFF collection run; not whole-run stage timing",
+  "profile_sha256": "cd361cb53c90b8b8a6891ec50b1350749ae2f705c97b08edd4f57f386ad27c16",
+  "finding": "Main-thread sampled stacks are in descriptor_file_pairs and LocalDescriptorIndex::search, including VisualIndex/HammingIndex traversal and cancellation callback",
+  "rss_observations_kib": [
+    2210592,
+    1608976
+  ],
+  "rss_scope": "Two instantaneous process observations, includes allocator-retained memory; neither peak nor managed allocation total",
+  "status": "Collection process still live at recording; no terminal result claimed"
+}

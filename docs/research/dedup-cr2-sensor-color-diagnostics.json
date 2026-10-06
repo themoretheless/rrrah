@@ -1,0 +1,194 @@
+{
+  "scope": "Fresh independent CR2 sensor and color metadata qualification, locating post-unpack rendered-image divergence",
+  "source_raw_sha256": "8f28465cee09844ffad95dbd3ec91923717a329c5ec4f3f405f5b4fce83aaea3",
+  "native_binary_sha256": "b7b821a90442a2a24112edfa8cf9b36224940b9aba61efb1f04c82b63753e225",
+  "oracle_binary_sha256": "4bd5618c1f9c07aea268fdb60a691cb0a1962153b1f944cc32d64e09f339d955",
+  "native": {
+    "make": "Canon",
+    "model": "Canon EOS 80D",
+    "width": 6288,
+    "height": 4056,
+    "wb": [
+      1.7294922,
+      1.0,
+      1.7841797,
+      1.0
+    ],
+    "black_grid": [
+      512.0,
+      512.0,
+      511.0,
+      511.0
+    ],
+    "white": [
+      16383.0
+    ],
+    "cfa": [
+      "R",
+      "G",
+      "G",
+      "B"
+    ],
+    "xyz_to_camera": [
+      [
+        0.7457,
+        -0.0671,
+        -0.0937
+      ],
+      [
+        -0.4849,
+        1.2495,
+        0.2643
+      ],
+      [
+        -0.1213,
+        0.2354,
+        0.5492
+      ],
+      [
+        0.0,
+        0.0,
+        0.0
+      ]
+    ],
+    "camera_to_rgb": [
+      [
+        1.987941861152649,
+        -1.1597687005996704,
+        0.1718268245458603
+      ],
+      [
+        -0.19817782938480377,
+        1.7509959936141968,
+        -0.5528181791305542
+      ],
+      [
+        0.032044265419244766,
+        -0.621062695980072,
+        1.58901846408844
+      ]
+    ],
+    "crop": [
+      276,
+      46,
+      6000,
+      4000
+    ]
+  },
+  "libraw": {
+    "libraw_version": "0.22.2-Release",
+    "make": "Canon",
+    "model": "EOS 80D",
+    "width": 6288,
+    "height": 4056,
+    "crop": [
+      264,
+      36,
+      6024,
+      4020
+    ],
+    "wb": [
+      1771,
+      1024,
+      1827,
+      1024
+    ],
+    "black": 511,
+    "cblack": [
+      0,
+      0,
+      1,
+      1,
+      0,
+      0
+    ],
+    "white": 16383,
+    "cfa": [
+      "R",
+      "G",
+      "G",
+      "B"
+    ],
+    "xyz_to_camera": [
+      [
+        0.7457000017,
+        -0.06710000336,
+        -0.09369999915
+      ],
+      [
+        -0.4848999977,
+        1.249500036,
+        0.2642999887
+      ],
+      [
+        -0.121299997,
+        0.2354000062,
+        0.5491999984
+      ],
+      [
+        0,
+        0,
+        0
+      ]
+    ],
+    "camera_to_rgb": [
+      [
+        1.987941861,
+        -1.159768701,
+        0.1718268245
+      ],
+      [
+        -0.1981778294,
+        1.750995994,
+        -0.5528181791
+      ],
+      [
+        0.03204426542,
+        -0.621062696,
+        1.589018464
+      ]
+    ]
+  },
+  "agreement": {
+    "complete_sensor_bytes": 51008256,
+    "sensor_sha256": "e134ed67fe75e7976d6236f778d6b28cde3c80de7e9264e1ba684846f99fad27",
+    "sensor_bytes_identical": true,
+    "wb_normalized_max_absolute_error": 1.2499999924031613e-08,
+    "camera_to_rgb_max_absolute_error": 4.0032954728985715e-10,
+    "cfa_identical": true,
+    "white_level_identical": true
+  },
+  "remaining_differences": {
+    "native_black_grid": [
+      512.0,
+      512.0,
+      511.0,
+      511.0
+    ],
+    "libraw_black_plus_cblack": [
+      0,
+      0,
+      1,
+      1
+    ],
+    "libraw_global_black": 511,
+    "native_active_crop": [
+      276,
+      46,
+      6000,
+      4000
+    ],
+    "libraw_active_crop": [
+      264,
+      36,
+      6024,
+      4020
+    ]
+  },
+  "interpretation": "Unpacked samples and selected color/WB coefficients do not explain distance 106; divergence lies downstream. Black-level mapping, demosaic, crop/normalization and raster color transform remain candidate causes; none proven.",
+  "validation": {
+    "native_probe_exit_code": 0,
+    "oracle_exit_code": 0,
+    "independent_comparison_assertions": "passed"
+  }
+}

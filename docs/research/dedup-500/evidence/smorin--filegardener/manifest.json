@@ -1,0 +1,136 @@
+{
+  "repository": "smorin/filegardener",
+  "metadata": {
+    "name": "smorin/filegardener",
+    "url": "https://github.com/smorin/filegardener",
+    "description": "File gardener - file maintenance utilities - file dedup, only copy detection, prune empty dirs",
+    "language": "Python",
+    "stars": 9,
+    "license": "MIT",
+    "archived": false,
+    "pushed_at": "2026-09-29T15:15:36Z",
+    "default_branch": "master",
+    "queries": [
+      "dedup in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.rst",
+      "local": "00-README.rst",
+      "url": "https://github.com/smorin/filegardener/blob/5c84acd8b57506375202f2631aa7f67bc1bccccb/README.rst",
+      "sha256": "b0ebeb11dbaf8685cdb43321af2f41d3f3f3434e6abfd96ab0b1d43cd51e4024",
+      "truncated": false,
+      "lines": 306,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/smorin/filegardener/blob/5c84acd8b57506375202f2631aa7f67bc1bccccb/LICENSE",
+      "sha256": "dda1e46097ddd2812dd8de02c5e19f2d29f3cb27eddcf7df9e8c8c86046dd30d",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "test_data/1dup/seconddir/LICENSE",
+      "local": "02-LICENSE",
+      "url": "https://github.com/smorin/filegardener/blob/5c84acd8b57506375202f2631aa7f67bc1bccccb/test_data/1dup/seconddir/LICENSE",
+      "sha256": "c12dd61a3868c674312e979d0ec179ee84c82e8e63c742875238ac912fbd1bac",
+      "truncated": false,
+      "lines": 13,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "filegardener.py",
+      "local": "03-filegardener.py",
+      "url": "https://github.com/smorin/filegardener/blob/5c84acd8b57506375202f2631aa7f67bc1bccccb/filegardener.py",
+      "sha256": "f6e30a6681f6bbf0291425ef29fdf906e68922b82849be77f7bd16c51cf94571",
+      "truncated": false,
+      "lines": 969,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "setup.py",
+      "local": "04-setup.py",
+      "url": "https://github.com/smorin/filegardener/blob/5c84acd8b57506375202f2631aa7f67bc1bccccb/setup.py",
+      "sha256": "24cd26ff37f46f8a80e967e9db8f45986bf2c15b6c0cd3e79f4e1c6f9fec5b0d",
+      "truncated": false,
+      "lines": 134,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tasks/__init__.py",
+      "local": "05-__init__.py",
+      "url": "https://github.com/smorin/filegardener/blob/5c84acd8b57506375202f2631aa7f67bc1bccccb/tasks/__init__.py",
+      "sha256": "aef763edc8169270595795a4e293599ba1418c7d38073369c58c80b65d9718a7",
+      "truncated": false,
+      "lines": 8,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "test_data/1dup/firstdir/liten.py",
+      "local": "06-liten.py",
+      "url": "https://github.com/smorin/filegardener/blob/5c84acd8b57506375202f2631aa7f67bc1bccccb/test_data/1dup/firstdir/liten.py",
+      "sha256": "85dcde83cb5e42c40c28281ad1bf1cfdadcd0a357b56acb34680fe575f943774",
+      "truncated": false,
+      "lines": 701,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "test_data/1dup/firstdir/test_liten.py",
+      "local": "07-test_liten.py",
+      "url": "https://github.com/smorin/filegardener/blob/5c84acd8b57506375202f2631aa7f67bc1bccccb/test_data/1dup/firstdir/test_liten.py",
+      "sha256": "842a28c7deb4c2a3892de256cbdf394d4da7bd123f23e85872971fd7e3ca290b",
+      "truncated": false,
+      "lines": 116,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "test_data/nodups/firstdir/liten.py",
+      "local": "08-liten.py",
+      "url": "https://github.com/smorin/filegardener/blob/5c84acd8b57506375202f2631aa7f67bc1bccccb/test_data/nodups/firstdir/liten.py",
+      "sha256": "85dcde83cb5e42c40c28281ad1bf1cfdadcd0a357b56acb34680fe575f943774",
+      "truncated": false,
+      "lines": 701,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "test_data/1dup/seconddir/tests/compat.py",
+      "local": "09-compat.py",
+      "url": "https://github.com/smorin/filegardener/blob/5c84acd8b57506375202f2631aa7f67bc1bccccb/test_data/1dup/seconddir/tests/compat.py",
+      "sha256": "45d1855feb379a34fa236f252944c2e0ab08a37a3c4b18c993ad479aaa9fdb0f",
+      "truncated": false,
+      "lines": 20,
+      "source": true,
+      "test": true
+    }
+  ],
+  "errors": [],
+  "commit": "5c84acd8b57506375202f2631aa7f67bc1bccccb",
+  "tree_truncated": false,
+  "source_file_count": 247,
+  "test_file_count": 26,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.rst",
+    "LICENSE",
+    "test_data/1dup/seconddir/LICENSE",
+    "test_data/1dup/firstdir/liten.py",
+    "test_data/1dup/firstdir/test_liten.py",
+    "test_data/nodups/firstdir/liten.py",
+    "test_data/1dup/seconddir/tests/compat.py"
+  ]
+}

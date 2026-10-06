@@ -1,0 +1,74 @@
+{
+  "status": "HEIF checked initialization implemented; four macOS HEIF tests passed",
+  "test_session": 51167,
+  "log": "dedup-heif-checked-init-tests.log",
+  "runtime_identity_gap": "ldd confirms libheif, libdav1d and transitive shared dependencies; fingerprint keys do not automatically include their loaded contents or runtime plugin configuration",
+  "source_finding": "LibHeif::new ignores heif_init error; new_checked propagates errors. rrrah HEIF decoder now uses new_checked().map_err(invalid).",
+  "limits": [
+    "This change does not fix complete native-resource cache identity",
+    "Initialization/plugin failure injection and native Linux qualification pending"
+  ],
+  "test_exit_code": 0,
+  "linux_heif_session": 63541,
+  "linux_heif_log": "dedup-heif-checked-init-linux-final.log",
+  "linux_plugin_setup": "Explicit LIBHEIF_PLUGIN_PATH; official Ubuntu libheif-plugin-libde265 and libde265-0 restored; ldd resolves HEVC and AOM plugin dependencies",
+  "linux_heif_status": "4 tests passed; final runner exit 0",
+  "linux_plugin_sha256": "dedup-linux-heif-plugin-sha256.txt",
+  "linux_last_observation": "Same session 63541 live; rrrah-decode test target compiling with CPU activity",
+  "next_reproduction": "Prepared heif-cache mode and cached-hit diagnostic before fresh decode. Populate with HEVC plugin then run same binary/cache with plugin absent; verify whether persisted entry hides fresh decoder failure.",
+  "heif_cache_probe_check": "dedup-heif-cache-probe-check.log",
+  "reproduction_script": "scripts/qualify-dedup-heif-cache.sh",
+  "reproduction_script_status": "Prepared and syntax checked; execution pending completion of current Linux decoder build",
+  "runner_repair": "Runner now execs Docker rather than reading trailing bytes after process return; prior running-script edit caused shell-only exit 1 after successful tests",
+  "cache_reproduction": {
+    "status": "Confirmed on current binary, native Linux",
+    "same_binary_and_input": true,
+    "plugin_present": "cache miss; reused equals fresh; exit 0",
+    "plugin_absent": "cached_result_hit=true, then fresh decode fails InvalidHeif UnsupportedCodec; script exits 1",
+    "logs": [
+      "dedup-heif-cache-before-fix-absent.log",
+      "dedup-heif-cache-qualification.log"
+    ],
+    "next": "Include actual HEIF decoder/plugin runtime identity and availability in cache recipe/admission; preserve correct stable-resource reuse"
+  },
+  "fix_status": "Native Linux plugin-present / missing / restored scenario passed; 12 macOS decode tests passed",
+  "fix_scope": "HEVC descriptors ordered by priority plus libheif version enter BMFF fingerprint recipes; inventory revalidated before cache return and admission",
+  "fix_limit": "Does not hash native library/plugin bytes; same-name same-version replacement identity remains incomplete",
+  "fixed_linux_log": "dedup-heif-cache-fixed-qualification.log",
+  "fixed_macos_log": "dedup-heif-inventory-decode-tests.log",
+  "fixed_behavior": {
+    "present": "miss, equals fresh",
+    "missing": "UnsupportedCodec before cached evidence returned",
+    "restored": "hit, equals fresh",
+    "script_exit_code": 0
+  },
+  "fixed_logs": [
+    "dedup-heif-cache-fixed-present.log",
+    "dedup-heif-cache-fixed-absent.log",
+    "dedup-heif-cache-fixed-restored.log",
+    "dedup-heif-cache-fixed-qualification.log",
+    "dedup-heif-inventory-decode-tests.log"
+  ],
+  "fixed_source_sha256": {
+    "crates/rrrah-decode/src/heif.rs": "1b2ad2466859bc1be4bfe4f9f2427551f88bbec24941cf8727785021cad995c5",
+    "crates/rrrah-decode/src/lib.rs": "95eb4b7de6223779f07cb712530ba8202449072d1b8d388ca79d6f74e59e9738",
+    "crates/rrrah-dedup/src/decode.rs": "0b582c0cb09669fb64b644b66c84f56b9b10f49384c7e874f5170ee06caa7047"
+  },
+  "avif_without_hevc": {
+    "status": "Native Linux first miss and repeated hit both equal fresh AVIF decode, exit 0",
+    "fixture": "tests/fixtures/raster/avif-alpha-icc.avif",
+    "plugin_path": "/no-plugins",
+    "limits": "One alpha/ICC AVIF fixture; not all AVIF variants",
+    "logs": [
+      "dedup-avif-no-hevc-first.log",
+      "dedup-avif-no-hevc-repeat.log"
+    ]
+  },
+  "avif_without_hevc_matrix": {
+    "fixtures": 9,
+    "runs": 18,
+    "status": "All first misses and repeated hits equal fresh decoding, exit 0",
+    "artifact": "dedup-avif-no-hevc-matrix.json",
+    "scope": "Available AVIF alpha/ICC plus eight orientation fixtures; cache consistency, not independent color/orientation correctness"
+  }
+}

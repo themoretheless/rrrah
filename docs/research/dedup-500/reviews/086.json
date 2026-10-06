@@ -1,0 +1,78 @@
+{
+  "index": 86,
+  "repository": "mcollina/async-cache-dedupe",
+  "commit": "b303aba7affd22875b3f598c575cb17e55913859",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Async query cache wrappers can inspire in-flight work deduplication; no image/file matching algorithm.",
+  "license_metadata": "MIT",
+  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "tests_detected": 20,
+  "upstream_tests_run": false,
+  "available_source_evidence": [
+    {
+      "path": "src/cache.js",
+      "local": "02-cache.js",
+      "url": "https://github.com/mcollina/async-cache-dedupe/blob/b303aba7affd22875b3f598c575cb17e55913859/src/cache.js",
+      "sha256": "c9d9805320ffc636dd140e85a7383e64314c1dc109f53663db760f3c39972ffb",
+      "truncated": false,
+      "lines": 391,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/symbol.js",
+      "local": "03-symbol.js",
+      "url": "https://github.com/mcollina/async-cache-dedupe/blob/b303aba7affd22875b3f598c575cb17e55913859/src/symbol.js",
+      "sha256": "4da325646f7337cc99316313ba5e9de04043e029f9266e5b5f994947b459a636",
+      "truncated": false,
+      "lines": 14,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/util.js",
+      "local": "04-util.js",
+      "url": "https://github.com/mcollina/async-cache-dedupe/blob/b303aba7affd22875b3f598c575cb17e55913859/src/util.js",
+      "sha256": "d6dab9171c5631fa312fbe5af810bfbc03bd1a09cd13dd6cf1a0b5e11f79904b",
+      "truncated": false,
+      "lines": 160,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "test/base.test.js",
+      "local": "05-base.test.js",
+      "url": "https://github.com/mcollina/async-cache-dedupe/blob/b303aba7affd22875b3f598c575cb17e55913859/test/base.test.js",
+      "sha256": "c87d4c731fe6b02aba967cfcbe4a94397dca713cf3a5d64b1433d86695417992",
+      "truncated": false,
+      "lines": 785,
+      "source": true,
+      "test": true
+    }
+  ],
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/mcollina/async-cache-dedupe/blob/b303aba7affd22875b3f598c575cb17e55913859/README.md",
+      "sha256": "4b819788803e5f3866baff4ae0d0d062c8dedb88e876e81cbd938ea4e115c88b",
+      "truncated": false,
+      "lines": 472,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/mcollina/async-cache-dedupe/blob/b303aba7affd22875b3f598c575cb17e55913859/LICENSE",
+      "sha256": "47404ffc18f1267832bc0623857871de5a3a93ebb19693f5e1b963af91fab54b",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+    Finished `test` profile [optimized + debuginfo] target(s) in 1.90s
+     Running unittests src/lib.rs (/tmp/rrrah-dedup-target/debug/deps/rrrah_dedup-e1c451b346790d9e)
+
+running 12 tests
+test exact::collision_tests::read_buffer_capacity_failure_is_explicit_and_retry_succeeds ... ok
+test tests::empty_and_duplicate_fingerprints ... ok
+test warp::encoded_signal_tests::transfer_precedes_premultiplication_and_bilinear_sampling ... ok
+test warp::encoded_signal_tests::extended_srgb_landmarks_match_independent_decimal_oracle_without_clipping ... ok
+test tests::traversal_work_exhaustion_is_distinct_from_failure ... ok
+test tests::collision_membership_keeps_arbitrary_order_and_pair_identity ... ok
+test warp::bounded_fit_tests::boundary_fit_matches_exhaustive_rectangle_and_beats_independent_clipping ... ok
+test tests::indexed_search_matches_independent_exhaustive_scan ... ok
+test exact::collision_tests::verified_observations_detect_metadata_invisible_pruned_mutations ... ok
+test exact::collision_tests::final_content_validation_rejects_change_even_when_metadata_matches ... ok
+test exact::collision_tests::colliding_samples_and_full_hashes_still_partition_by_bytes ... ok
+test cache::publication_tests::directory_sync_failure_reports_already_published_complete_cache ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/cache.rs (/tmp/rrrah-dedup-target/debug/deps/cache-150e189b5c8624a0)
+
+running 6 tests
+test cache_publication_child ... ok
+test roundtrip_requires_content_recipe_and_frame_identity ... ok
+test disk_persistence_is_deterministic_and_rejects_invalid_values ... ok
+test atomic_replacement_and_cancel_preserve_previous_cache ... ok
+test process_exit_during_temp_write_preserves_previous_publication_and_retry ... ok
+test concurrent_process_writers_publish_only_complete_single_writer_caches ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.75s
+

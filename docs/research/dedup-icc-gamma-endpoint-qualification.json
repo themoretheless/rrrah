@@ -1,0 +1,42 @@
+{
+  "scope": "ICC single-entry gamma curve endpoint regression, one full-resolution CR2/TIFF pair",
+  "before": {
+    "native_boundary_red": -1383.7443,
+    "lcms_boundary_red": -7.171535e-05,
+    "global_distance": 106
+  },
+  "fix": "Convert source ICC curveType single-entry u8Fixed8 gamma to mathematically equivalent parametric type 0 before constructing moxcms extended-range transform; no clipping or profile bypass",
+  "after": {
+    "tiff_minimum": [
+      -0.00044139812,
+      9.340898e-08,
+      -7.5665615e-05
+    ],
+    "tiff_maximum": [
+      1.000532,
+      0.9999891,
+      0.99987847
+    ],
+    "global_distance": 0,
+    "strict_matched": [
+      21474249,
+      21473013
+    ],
+    "strict_compared": [
+      24000000,
+      23996128
+    ],
+    "strict_candidate": false,
+    "photometric_matched": [
+      13401077,
+      10924600
+    ],
+    "photometric_candidate": false,
+    "managed_used_after": 0
+  },
+  "validation": {
+    "independent_icc_grids": 2,
+    "decode_color_tests": 6
+  },
+  "remaining": "Demosaic/highlight/render differences still prevent unchanged 90 percent pixel acceptance. Not all ICC curves/cameras qualified."
+}

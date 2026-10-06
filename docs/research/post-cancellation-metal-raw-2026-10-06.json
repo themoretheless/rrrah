@@ -1,0 +1,35 @@
+{
+  "recorded_at": "2026-10-06T04:20:34.564025+00:00",
+  "status": "passed available hardware and corpus checks",
+  "adapter": "Metal Apple M4 Max",
+  "source_sha256": {
+    "crates/rrrah-app/src/main.rs": "688450db2b39c5b688f72d099ffcdb93d6ed1fdc3d2817622c8d1ef3db4c0648",
+    "crates/rrrah-app/src/gallery.rs": "717819322692b1cc73c74a22b35dd1a024be077e42cbe3f8857fae38416665c3",
+    "crates/rrrah-app/tests/hdr_raster_swap.rs": "87be6bcaf17675ac58d7df8381dfd3beefa90d38b8effc8434fe78b82cb96190",
+    "crates/rrrah-app/tests/ttl_swap_metal.rs": "364a9f340f68e26ae3969106615f5d6a33ac87586cd2d85afb2cc4d85359f1b8",
+    "crates/rrrah-swap/src/lib.rs": "db3108d1a58ccf11226d3f039df5ddf414878e4114bc03d0665b1165d5489177",
+    "crates/rrrah-decode/src/lib.rs": "115174fa07593adfb64223c47547483ba94c57b7459f1158b812e1b1c4c7d379",
+    "tests/IMG_9043.CR3": "d06cbb10e84882cf130430bdc88ed2652c2622b96dea8d6a854c09e3bee37e59"
+  },
+  "runs": [
+    {
+      "command": "RRRAH_GPU_BACKEND=metal cargo test -p rrrah --test hdr_raster_swap --test ttl_swap_metal --locked --target-dir /tmp/rrrah-required-corpus-target -- --nocapture",
+      "log": "/tmp/rrrah-post-cancellation-metal.log",
+      "passed": 5,
+      "ignored": 0
+    },
+    {
+      "command": "cargo test -p rrrah --bin rrrah gallery::tests::raw_prefetch --locked --target-dir /tmp/rrrah-required-corpus-target -- --ignored --skip raw_prefetch_count_limit_counts_retained_neighbours_after_missing_file --nocapture",
+      "log": "/tmp/rrrah-post-lifetime-real-raw-final.log",
+      "passed": 3,
+      "ignored": 0
+    }
+  ],
+  "limits": [
+    "Metal tests verify offscreen GPU readback, not physical HDR presentation.",
+    "No CUDA or NVIDIA hardware qualification.",
+    "External Sony DSC-F828 SRF prerequisite unavailable; SRF-dependent test excluded, not reported passed.",
+    "Earlier broad RAW filter produced 3 passes and one missing-environment prerequisite failure; /tmp/rrrah-post-lifetime-real-raw.log preserves it.",
+    "These runs do not measure active native parser shutdown latency or foreground joining completion races."
+  ]
+}

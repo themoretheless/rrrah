@@ -1,0 +1,18 @@
+{
+  "scope": "CRW low-two-bit plane and merge",
+  "full_decode_passed": 714,
+  "full_decode_ignored": 38,
+  "external_low_plane_passed": 1,
+  "samples_compared": 6518336,
+  "source_sha256": "b0730eb3a67cc2281a32e0b2ee104199246928d954a68b7e5b72366514c73d02",
+  "oracle_sha256": "3aecb01756492569734885710dafd6ffc26421ac0b5a7fa1c151973d48cd389a",
+  "logs": {
+    "/tmp/rrrah-crw-low-full.log": "c00318bc494cb23d24c3091f37a7d46de0757b3a33fcfa9624b569135fdd9e86",
+    "/tmp/rrrah-crw-low-plane.log": "4f75ad80e0e0aa4a947cbbdfee3927e7823921f4dea74019395ccc36c9dbbed8"
+  },
+  "limitations": [
+    "High ten bits for the external test are derived from the independent oracle, not native entropy decoding.",
+    "2672-width correction is synthetic boundary coverage only; no camera corpus for this branch.",
+    "Full native sensor and color/viewer remain unqualified."
+  ]
+}

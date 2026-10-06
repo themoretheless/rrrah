@@ -1,0 +1,15 @@
+{
+  "scope": "CRW high-bit difference block and predictor foundation",
+  "passed": 713,
+  "ignored": 37,
+  "log": "/tmp/rrrah-crw-block-full.log",
+  "log_sha256": "1f58491df1624cb10a122e5514f2eb1f025ad0ab18ebb3e04c3e5230c996da7c",
+  "contracts": [
+    "64-difference blocks, distinct first/rest Huffman trees, EOB and run checks",
+    "DC carry and alternating predictors reset on sensor row boundaries",
+    "Atomic predictor state on invalid sample/overflow"
+  ],
+  "limitations": [
+    "Synthetic block fixtures only; camera tables, low-bit merge and full sensor qualification remain pending."
+  ]
+}

@@ -1,0 +1,105 @@
+{
+  "repository": "cboyd0319/JobSentinel",
+  "metadata": {
+    "name": "cboyd0319/JobSentinel",
+    "url": "https://github.com/cboyd0319/JobSentinel",
+    "description": "Self-hosted job search automation: scrape multiple boards, de-dupe, score to your prefs, and alert you\u2014private by default; runs locally for free.",
+    "language": "TypeScript",
+    "stars": 27,
+    "license": "MIT",
+    "archived": false,
+    "pushed_at": "2026-09-14T07:23:56Z",
+    "default_branch": "main",
+    "queries": [
+      "dupe in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/cboyd0319/JobSentinel/blob/49c827fdcb92e44c1ff9ebaf381ecce5f952fb61/README.md",
+      "sha256": "ce9fd698ef0439fefb8602c3cbaf0947ebf86173d1ed87199c4b4d37b5a4341d",
+      "truncated": false,
+      "lines": 435,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/cboyd0319/JobSentinel/blob/49c827fdcb92e44c1ff9ebaf381ecce5f952fb61/LICENSE",
+      "sha256": "24bf0fc6a0e15572c4a5d153a4f3ffc10fea06909b4edc5a3a979a6c65b57164",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "src/shared/jobMatchScore.ts",
+      "local": "02-jobMatchScore.ts",
+      "url": "https://github.com/cboyd0319/JobSentinel/blob/49c827fdcb92e44c1ff9ebaf381ecce5f952fb61/src/shared/jobMatchScore.ts",
+      "sha256": "31820182737aa0c37c97dd511a26b04d2f5fbb242e7e440d799f4ff849388b8e",
+      "truncated": false,
+      "lines": 3,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "crates/jobsentinel-documents/src/resume_match_score.rs",
+      "local": "03-resume_match_score.rs",
+      "url": "https://github.com/cboyd0319/JobSentinel/blob/49c827fdcb92e44c1ff9ebaf381ecce5f952fb61/crates/jobsentinel-documents/src/resume_match_score.rs",
+      "sha256": "59598e7cd693cedfb28b106fcc7a97b5d9eb5aea433241f720cd1610ddfb708a",
+      "truncated": false,
+      "lines": 234,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "crates/jobsentinel-domain/src/job_hash.rs",
+      "local": "04-job_hash.rs",
+      "url": "https://github.com/cboyd0319/JobSentinel/blob/49c827fdcb92e44c1ff9ebaf381ecce5f952fb61/crates/jobsentinel-domain/src/job_hash.rs",
+      "sha256": "9ac85b9c19558c92268517346c7e4707e9bb0c74952e16fae52e1677e3ec8fe7",
+      "truncated": false,
+      "lines": 97,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "crates/jobsentinel-storage/src/resume/matcher_tests.rs",
+      "local": "05-matcher_tests.rs",
+      "url": "https://github.com/cboyd0319/JobSentinel/blob/49c827fdcb92e44c1ff9ebaf381ecce5f952fb61/crates/jobsentinel-storage/src/resume/matcher_tests.rs",
+      "sha256": "4dfafacf53fbc807c368a607763870374ef8b3adb272595ea5dbf7714463ea2d",
+      "truncated": false,
+      "lines": 403,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "crates/jobsentinel-storage/src/tests/duplicate_edge_cases.rs",
+      "local": "06-duplicate_edge_cases.rs",
+      "url": "https://github.com/cboyd0319/JobSentinel/blob/49c827fdcb92e44c1ff9ebaf381ecce5f952fb61/crates/jobsentinel-storage/src/tests/duplicate_edge_cases.rs",
+      "sha256": "6545647d7b11caaefe6d42ba6d48d70ba13dbd3523f347250f222888fc7b6cd5",
+      "truncated": false,
+      "lines": 62,
+      "source": true,
+      "test": true
+    }
+  ],
+  "errors": [],
+  "commit": "49c827fdcb92e44c1ff9ebaf381ecce5f952fb61",
+  "tree_truncated": false,
+  "source_file_count": 1291,
+  "test_file_count": 426,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "src/shared/jobMatchScore.ts",
+    "crates/jobsentinel-documents/src/resume_match_score.rs",
+    "crates/jobsentinel-domain/src/job_hash.rs",
+    "crates/jobsentinel-storage/src/tests/duplicate_edge_cases.rs"
+  ]
+}

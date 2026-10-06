@@ -1,0 +1,78 @@
+{
+  "index": 230,
+  "repository": "igoramadas/dedupr",
+  "commit": "015246a299dcde2e1004ca2a8f8dd56ad3271f65",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Node file hash options include sampled fast mode; sample size must not become equality proof.",
+  "available_source_evidence": [
+    {
+      "path": "src/cmd.ts",
+      "local": "02-cmd.ts",
+      "url": "https://github.com/igoramadas/dedupr/blob/015246a299dcde2e1004ca2a8f8dd56ad3271f65/src/cmd.ts",
+      "sha256": "c0975d849b1dc45e35ac4fc72788e768a617f6f2dd030111a542899e8d188389",
+      "truncated": false,
+      "lines": 98,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/index.ts",
+      "local": "03-index.ts",
+      "url": "https://github.com/igoramadas/dedupr/blob/015246a299dcde2e1004ca2a8f8dd56ad3271f65/src/index.ts",
+      "sha256": "ef2249314fab6c85bea8133a4c9d5bedad6d1d09dae5b62299eb4b60f942bda0",
+      "truncated": false,
+      "lines": 337,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/types.ts",
+      "local": "04-types.ts",
+      "url": "https://github.com/igoramadas/dedupr/blob/015246a299dcde2e1004ca2a8f8dd56ad3271f65/src/types.ts",
+      "sha256": "a3cef6a3ce78a5263facfc45b6cab286c89348d2d73cd4ce85b8f2fc1da2957a",
+      "truncated": false,
+      "lines": 55,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "bin/dedupr",
+      "local": "05-dedupr",
+      "url": "https://github.com/igoramadas/dedupr/blob/015246a299dcde2e1004ca2a8f8dd56ad3271f65/bin/dedupr",
+      "sha256": "1ca72b93752c276c633847b2a50b026915f888f71962242466ffbe03f0fa7ba2",
+      "truncated": false,
+      "lines": 6,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/igoramadas/dedupr/blob/015246a299dcde2e1004ca2a8f8dd56ad3271f65/README.md",
+      "sha256": "1a6d6480abc54a573165e3bc1eb078a8301f795259eaad7aca65cd8e1d6b819d",
+      "truncated": false,
+      "lines": 146,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/igoramadas/dedupr/blob/015246a299dcde2e1004ca2a8f8dd56ad3271f65/LICENSE",
+      "sha256": "002c2696d92b5c8cf956c11072baa58eaf9f6ade995c031ea635c6a1ee342ad1",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

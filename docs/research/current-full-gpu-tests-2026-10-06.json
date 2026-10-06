@@ -1,0 +1,16 @@
+{
+  "command": "cargo test -p rrrah-gpu --tests --locked --target-dir /tmp/rrrah-required-corpus-target",
+  "passed": 87,
+  "failed": 0,
+  "ignored": 3,
+  "ignored_cases": [
+    "test full_sensor_linear_exposure_chunked_readback ... ignored, allocates about 0.8 GB of GPU buffers; full-resolution local qualification",
+    "test full_sensor_managed_exposure_budgets_and_checks_every_pixel ... ignored, full-resolution managed compute uses about 2 GB of tracked buffers",
+    "test full_f828_managed_rgbe_matches_cpu_reference ... ignored, requires independent DSC-F828 full-sensor dump; authored four-channel normalization, not as-shot color qualification"
+  ],
+  "log": "/tmp/rrrah-current-full-gpu-tests.log",
+  "limitations": [
+    "Unit and actual offscreen GPU tests combined, not all counts GPU executions",
+    "No physical display or NVIDIA/CUDA proof"
+  ]
+}

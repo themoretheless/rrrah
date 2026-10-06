@@ -1,0 +1,105 @@
+{
+  "repository": "neotoxicfr/mtg-scanner-art-index",
+  "metadata": {
+    "name": "neotoxicfr/mtg-scanner-art-index",
+    "url": "https://github.com/neotoxicfr/mtg-scanner-art-index",
+    "description": "Daily-updated perceptual art-hash index of MTG card illustrations, published as a SQLite release",
+    "language": "Python",
+    "stars": 1,
+    "license": "MIT",
+    "archived": false,
+    "pushed_at": "2026-10-04T11:39:19Z",
+    "default_branch": "main",
+    "queries": [
+      "perceptual hash in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/neotoxicfr/mtg-scanner-art-index/blob/39c3cafe08b5991f621ad43ad72edddae00c8fd5/README.md",
+      "sha256": "7eaa0f6c8ae128201dd73a23d55e0b14f41c0dadb8c01bdb190a727dc187b394",
+      "truncated": false,
+      "lines": 149,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/neotoxicfr/mtg-scanner-art-index/blob/39c3cafe08b5991f621ad43ad72edddae00c8fd5/LICENSE",
+      "sha256": "e015c2e2c03a5e1fb3e3d2080d64e2771b66a2072d1952dafe0c290ad02c337a",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "image_hash.py",
+      "local": "02-image_hash.py",
+      "url": "https://github.com/neotoxicfr/mtg-scanner-art-index/blob/39c3cafe08b5991f621ad43ad72edddae00c8fd5/image_hash.py",
+      "sha256": "ba50d43f722d2aabc81b532d9d7063e4231d3920d7eecfcaef363e832cac9e0a",
+      "truncated": false,
+      "lines": 90,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "build_index.py",
+      "local": "03-build_index.py",
+      "url": "https://github.com/neotoxicfr/mtg-scanner-art-index/blob/39c3cafe08b5991f621ad43ad72edddae00c8fd5/build_index.py",
+      "sha256": "58ad29d1355f0662ede8602e29ded74d473a1005964dacec803ba4df59373f67",
+      "truncated": false,
+      "lines": 627,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "embed.py",
+      "local": "04-embed.py",
+      "url": "https://github.com/neotoxicfr/mtg-scanner-art-index/blob/39c3cafe08b5991f621ad43ad72edddae00c8fd5/embed.py",
+      "sha256": "14da756e3fd908eaad615aac95ef13ac979f6d3a6bc7df62f4f0b55a9b8ba4ac",
+      "truncated": false,
+      "lines": 133,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/test_image_hash.py",
+      "local": "05-test_image_hash.py",
+      "url": "https://github.com/neotoxicfr/mtg-scanner-art-index/blob/39c3cafe08b5991f621ad43ad72edddae00c8fd5/tests/test_image_hash.py",
+      "sha256": "2c2e44783092da16d8c334ade164f2486cf6f664317bd1f8b682e94808e5974c",
+      "truncated": false,
+      "lines": 63,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "example/match_example.py",
+      "local": "06-match_example.py",
+      "url": "https://github.com/neotoxicfr/mtg-scanner-art-index/blob/39c3cafe08b5991f621ad43ad72edddae00c8fd5/example/match_example.py",
+      "sha256": "b400670bf41154e4b80dfd0ced470f3ae446399e842d7e9b0f8a5827b9ad5715",
+      "truncated": false,
+      "lines": 47,
+      "source": true,
+      "test": false
+    }
+  ],
+  "errors": [],
+  "commit": "39c3cafe08b5991f621ad43ad72edddae00c8fd5",
+  "tree_truncated": false,
+  "source_file_count": 9,
+  "test_file_count": 5,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "image_hash.py",
+    "example/match_example.py",
+    "build_index.py",
+    "tests/test_image_hash.py"
+  ]
+}

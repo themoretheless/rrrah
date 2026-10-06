@@ -1,0 +1,28 @@
+warning: function `error` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:4:4
+  |
+4 | fn error(message: &str) -> DecodeError {
+  |    ^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `packed_12` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:9:4
+  |
+9 | fn packed_12(
+  |    ^^^^^^^^^
+
+warning: function `decode_zd` is never used
+  --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:48:15
+   |
+48 | pub(super) fn decode_zd(
+   |               ^^^^^^^^^
+
+warning: `rrrah-decode` (lib) generated 3 warnings
+    Finished `dev` profile [optimized + debuginfo] target(s) in 0.21s
+     Running `/tmp/rrrah-required-corpus-target/debug/examples/raw_view_timing --swap-view tests/IMG_9074.CR3`
+adapter: Metal Apple M4 Max
+IMG_9074.CR3: 15 samples / 3 warmups; swap_restore p50/p95 40.749/61.363 ms; upload enqueue 17.136/34.291 ms; frame completion 10.699/12.621 ms; total 67.596/94.556 ms
+IMG_9074.CR3: resident zoom/pan 60 frames; p50/p95 1.895/2.438 ms
+managed_cpu: used=0 peak=104075392 limit=268435456
+managed_gpu: used=0 peak=146800640 limit=268435456

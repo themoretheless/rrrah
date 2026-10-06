@@ -1,0 +1,143 @@
+{
+  "scope": "authored page geometry vs Poppler -cropbox at 72dpi",
+  "rows": [
+    {
+      "case": "0",
+      "source_sha256": "514d48d16e9edc4f6fb11d492b2421f306cd56eec99433ab6d2351e4767714a9",
+      "native": {
+        "width": 10,
+        "height": 20,
+        "image_index": 0,
+        "image_count": 1
+      },
+      "oracle_dimensions": [
+        10,
+        20
+      ],
+      "different_pixels": 0,
+      "exact": true,
+      "error": null
+    },
+    {
+      "case": "90",
+      "source_sha256": "c1aca7633975f499c63da3a1de7fe8a260e535cced1c3e6de8380bca6e0f6a8b",
+      "native": {
+        "width": 20,
+        "height": 10,
+        "image_index": 0,
+        "image_count": 1
+      },
+      "oracle_dimensions": [
+        20,
+        10
+      ],
+      "different_pixels": 0,
+      "exact": true,
+      "error": null
+    },
+    {
+      "case": "180",
+      "source_sha256": "2826788c9d906d345132e5789fc7c1aa1d794b6e9579e835a3ef380f64ce3ead",
+      "native": {
+        "width": 10,
+        "height": 20,
+        "image_index": 0,
+        "image_count": 1
+      },
+      "oracle_dimensions": [
+        10,
+        20
+      ],
+      "different_pixels": 0,
+      "exact": true,
+      "error": null
+    },
+    {
+      "case": "270",
+      "source_sha256": "0ec84c7393d9db3ecaceeaa8c1d631612302aaa0e27b3943f70944c28c3d11b6",
+      "native": {
+        "width": 20,
+        "height": 10,
+        "image_index": 0,
+        "image_count": 1
+      },
+      "oracle_dimensions": [
+        20,
+        10
+      ],
+      "different_pixels": 0,
+      "exact": true,
+      "error": null
+    },
+    {
+      "case": "crop",
+      "source_sha256": "6094499bd8350853c2f8d92280a00e30fd3163f390e8a071d30d248357ed78f7",
+      "native": {
+        "width": 6,
+        "height": 12,
+        "image_index": 0,
+        "image_count": 1
+      },
+      "oracle_dimensions": [
+        6,
+        12
+      ],
+      "different_pixels": 0,
+      "exact": true,
+      "error": null
+    },
+    {
+      "case": "unit",
+      "source_sha256": "592a2328927c0479da50ee071338585dcbd5c65b81d9e1fd21ea64726eb69572",
+      "native": {
+        "width": 10,
+        "height": 20,
+        "image_index": 0,
+        "image_count": 1
+      },
+      "oracle_dimensions": [
+        10,
+        20
+      ],
+      "different_pixels": 0,
+      "exact": true,
+      "error": null
+    }
+  ],
+  "initial_observation": "before UserUnit correction; Poppler 26.10.0 also ignored UserUnit at 72dpi; agreement is not UserUnit semantics qualification",
+  "user_unit_correction": {
+    "semantics_source": "https://pdfa.org/how-big-can-your-pdf-page-be/",
+    "unit": 2,
+    "corrected_dimensions": [
+      20,
+      40
+    ],
+    "reference": "mathematical opaque green top 20 rows, red bottom 20 rows",
+    "tests_passed": 646,
+    "ignored": 35,
+    "metal_tests_passed": 2,
+    "native_prepared_unit_swap_restores": 2,
+    "logs": [
+      "/tmp/rrrah-pdf-user-unit.log",
+      "/tmp/rrrah-pdf-unit-regression.log",
+      "/tmp/rrrah-pdf-unit-metal-regression.log"
+    ]
+  },
+  "invalid_user_unit_regression": {
+    "passed": 1,
+    "values": [
+      "0",
+      "-1",
+      "/Invalid",
+      "100000"
+    ],
+    "assertions": [
+      "typed invalid UserUnit for zero/negative/non-number",
+      "typed page geometry refusal for excessive positive unit",
+      "peak reservation equals source copy only: no output reservation",
+      "used managed bytes zero after all refusals"
+    ],
+    "log": "/tmp/rrrah-pdf-invalid-unit.log",
+    "scope": "four constructed page-field mutations, not arbitrary malformed PDF coverage"
+  }
+}

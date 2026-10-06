@@ -1,0 +1,93 @@
+= dedupe
+
+
+== Description
+
+Dedupe provides Mongoid and ActiveRecord 3 with a uniqueness validation that protects your datastore from duplicate records, defined by your domain.
+
+The following model defines a uniqueness constraint:
+  
+  class Model
+    include Mongoid::Document
+    
+    field :foo
+    field :bar
+    field :baz
+    
+    validates_uniqueness :using => :with_matching_foo_and_bar
+    scope :with_matching_foo_and_bar, lambda { |instance|
+      where :foo => instance.foo, :bar => instance.bar
+      # our hypothetical domain requires that we disregard :baz
+    }
+    
+  end
+
+Any attempt to save a record with the same "foo" and "bar" values will fail.
+
+  > existing = Model.create! :foo => "a", :bar => "b", :baz => "c"
+  => #<Model _id: 123abc, foo: "a", bar: "b", baz: "c">
+   
+  > duplicate = Model.new :foo => "a", :bar => "b", :baz => "z"
+  => #<Model _id: 456def, foo: "a", bar: "b", baz: "z">
+  
+  > duplicate.valid?
+  => false
+  
+  > duplicate.errors.full_messages
+  => ["Duplicates existing record"]
+  
+  > duplicate.save!
+  Mongoid::Errors::Validations: Validation failed...
+
+The gem also provides a few other methods, possibly useful for cleaning up datastores already corrupted with duplicate records.
+  
+  > duplicate.duplicate?
+  => true
+  
+  > duplicate.duplicates.to_a
+  => [#<Model _id: 123abc, foo: "a", bar: "b", baz: "c">]
+  
+  > existing.duplicates.to_a
+  => []
+
+
+== Installation & Usage
+
+Add the gem to your Gemfile:
+  gem 'dedupe'
+
+Add a scope or "finder" method to your model that a) accepts an instance of your model and b) returns a relation/criterion that would select all duplicate instances in your datastore.  In the above example, this method is:
+  scope :with_matching_foo_and_bar, lambda { |instance| 
+    where :foo => instance.foo, :baz => instance.baz
+  }
+
+But you could also define:
+  def with_matching_foo_and_bar(instance)
+    where :foo => instance.foo, :baz => instance.baz
+  end
+
+Then, mix the Dedupe module into your model using the "validates_uniqueness" macro, passing it the name of your scope/finder:
+  validates_uniqueness :using => :with_matching_foo_and_bar
+
+
+== Note on require-order issues
+
+Dedupe doesn't declare a dependency on Mongoid or ActiveRecord because it can be used with either individually or both simultaneously.  Therefore, they must be required *before* Dedupe for it to work.  I haven't had trouble with this, but if you do please create an issue here: http://github.com/jamescallmebrent/dedupe/issues
+
+Check out this post by Yehuda Katz for more about require-order problems:
+http://yehudakatz.com/2010/04/17/ruby-require-order-problems/
+
+
+== Note on Patches/Pull Requests
+
+* Fork the project.
+* Make your feature addition or bug fix.
+* Add tests for it. This is important so I don't break it in a
+  future version unintentionally.
+* Commit, do not mess with rakefile, version, or history.
+  (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
+* Send me a pull request. Bonus points for topic branches.
+
+== Copyright
+
+Copyright (c) 2010 Brent Hargrave. See LICENSE for details.

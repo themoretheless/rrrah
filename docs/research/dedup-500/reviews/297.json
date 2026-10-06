@@ -1,0 +1,88 @@
+{
+  "index": 297,
+  "repository": "v6/super-duper-vault-train",
+  "commit": "499161f9feca4584dd5729bb256440bd85f9d1de",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Vault/Consul/MariaDB shell deployment scripts; no duplicate detection evidence.",
+  "available_source_evidence": [
+    {
+      "path": "account.sh",
+      "local": "02-account.sh",
+      "url": "https://github.com/v6/super-duper-vault-train/blob/499161f9feca4584dd5729bb256440bd85f9d1de/account.sh",
+      "sha256": "f89af6e5e681d79be74ce3a603726893253c76975df7fc823a4458cf3e1bc444",
+      "truncated": false,
+      "lines": 54,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "configureconsul.sh",
+      "local": "03-configureconsul.sh",
+      "url": "https://github.com/v6/super-duper-vault-train/blob/499161f9feca4584dd5729bb256440bd85f9d1de/configureconsul.sh",
+      "sha256": "7df44de232a842b7e5fcbd87052be27196334fb11c9991fe4387c66b8d782ddf",
+      "truncated": false,
+      "lines": 26,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "configuremariadb.sh",
+      "local": "04-configuremariadb.sh",
+      "url": "https://github.com/v6/super-duper-vault-train/blob/499161f9feca4584dd5729bb256440bd85f9d1de/configuremariadb.sh",
+      "sha256": "97f9502f1a02dd015644871dbfd9cc0adde6fac836f780cd9d7cd43a6f2b01dd",
+      "truncated": false,
+      "lines": 9,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "consuldownload.sh",
+      "local": "05-consuldownload.sh",
+      "url": "https://github.com/v6/super-duper-vault-train/blob/499161f9feca4584dd5729bb256440bd85f9d1de/consuldownload.sh",
+      "sha256": "abf22a66daa22adf06086d96a23f3dd72eacca25a00db1a7c9f68c1a2969c862",
+      "truncated": false,
+      "lines": 14,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "consulsystemd.sh",
+      "local": "06-consulsystemd.sh",
+      "url": "https://github.com/v6/super-duper-vault-train/blob/499161f9feca4584dd5729bb256440bd85f9d1de/consulsystemd.sh",
+      "sha256": "6e99f468d6b192196fbf729ef6e508ddb352c0304b2cbee6b3d6554ed7a5a7f9",
+      "truncated": false,
+      "lines": 80,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "GPL-3.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/v6/super-duper-vault-train/blob/499161f9feca4584dd5729bb256440bd85f9d1de/README.md",
+      "sha256": "115305d2ae4411667b89bcaa8629786ebf540570e5419b3f3d52c68ad499c17c",
+      "truncated": false,
+      "lines": 134,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/v6/super-duper-vault-train/blob/499161f9feca4584dd5729bb256440bd85f9d1de/LICENSE",
+      "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "truncated": false,
+      "lines": 674,
+      "source": false,
+      "test": false
+    }
+  ]
+}

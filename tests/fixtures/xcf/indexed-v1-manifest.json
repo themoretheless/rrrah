@@ -1,0 +1,30 @@
+{
+  "license": "CC0-1.0",
+  "construction": "authored big-endian XCF v1, raw tile, two RGB palette entries red/green; indexed alpha samples 127 and 128 test legacy binary threshold",
+  "scope": "native plane and palette expansion; no flattened/color-managed image oracle",
+  "cases": [
+    {
+      "file": "indexed-v1-kind-4.xcf",
+      "sha256": "bcd01ecb4b768f5027bc2c728cb23f1c875450bf83472a167d38d41b425225d8",
+      "native_hex": "0100",
+      "rgba_hex": "00ff00ffff0000ff",
+      "dimensions": [
+        2,
+        1
+      ],
+      "kind": 4
+    },
+    {
+      "file": "indexed-v1-kind-5.xcf",
+      "sha256": "45902e067e39ba934aaa9a0cc4072a49185ed2a3a9081dc7dfeff61d9b2de24c",
+      "native_hex": "017f0080",
+      "rgba_hex": "00ff0000ff0000ff",
+      "dimensions": [
+        2,
+        1
+      ],
+      "kind": 5
+    }
+  ],
+  "specification": "https://developer.gimp.org/core/standards/xcf/"
+}

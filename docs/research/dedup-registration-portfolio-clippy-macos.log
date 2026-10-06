@@ -1,0 +1,20 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+error: the borrowed expression implements the required traits
+    --> crates/rrrah-dedup/src/warp.rs:1599:90
+     |
+1599 |     let anchored=refine_projective_pixels_anchored(source,target,initial,policy.anchored,&cancelled)?;
+     |                                                                                          ^^^^^^^^^^ help: change this to: `cancelled`
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#needless_borrows_for_generic_args
+     = note: `-D clippy::needless-borrows-for-generic-args` implied by `-D warnings`
+     = help: to override `-D warnings` add `#[allow(clippy::needless_borrows_for_generic_args)]`
+
+error: the borrowed expression implements the required traits
+    --> crates/rrrah-dedup/src/warp.rs:1600:85
+     |
+1600 |     let unanchored=refine_projective_pixels(source,target,initial,policy.unanchored,&cancelled)?;
+     |                                                                                     ^^^^^^^^^^ help: change this to: `cancelled`
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#needless_borrows_for_generic_args
+
+error: could not compile `rrrah-dedup` (lib) due to 2 previous errors

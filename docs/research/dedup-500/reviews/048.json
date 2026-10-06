@@ -1,0 +1,98 @@
+{
+  "index": 48,
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Android duplicate scan lifecycle and MD5/group-id data models; group hash identity does not establish image similarity.",
+  "license_metadata": "GPL-3.0",
+  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "available_source_evidence": [
+    {
+      "path": "app/src/main/java/com/cleansweep/service/DuplicateScanService.kt",
+      "local": "02-DuplicateScanService.kt",
+      "url": "https://github.com/loopotto/CleanSweep/blob/2af68f24f57c72731ceb2945fcfd41e97fa33bc0/app/src/main/java/com/cleansweep/service/DuplicateScanService.kt",
+      "sha256": "da661ef180d2e72b728adcd2589cb3ed38c8e7ca57e390032f6502feedc42164",
+      "truncated": false,
+      "lines": 549,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/service/DuplicateScanStateHolder.kt",
+      "local": "03-DuplicateScanStateHolder.kt",
+      "url": "https://github.com/loopotto/CleanSweep/blob/2af68f24f57c72731ceb2945fcfd41e97fa33bc0/app/src/main/java/com/cleansweep/service/DuplicateScanStateHolder.kt",
+      "sha256": "1d446aa92d9a5c7149cfbb41c0c907f94bc73c70ac184a52bb0c61c16dc2d4ac",
+      "truncated": false,
+      "lines": 111,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/domain/model/ScanResultGroup.kt",
+      "local": "04-ScanResultGroup.kt",
+      "url": "https://github.com/loopotto/CleanSweep/blob/2af68f24f57c72731ceb2945fcfd41e97fa33bc0/app/src/main/java/com/cleansweep/domain/model/ScanResultGroup.kt",
+      "sha256": "0ca4598a5fa3490243d85b890170506d9ab0759c56b84057ca735c9aee05ece8",
+      "truncated": false,
+      "lines": 80,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/domain/repository/DuplicatesRepository.kt",
+      "local": "05-DuplicatesRepository.kt",
+      "url": "https://github.com/loopotto/CleanSweep/blob/2af68f24f57c72731ceb2945fcfd41e97fa33bc0/app/src/main/java/com/cleansweep/domain/repository/DuplicatesRepository.kt",
+      "sha256": "1a776eb7206d191d2ce8dd71d344c13c46b83d1323818efbded99e683b4e3414",
+      "truncated": false,
+      "lines": 226,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/domain/usecase/DuplicateFinderUseCase.kt",
+      "local": "06-DuplicateFinderUseCase.kt",
+      "url": "https://github.com/loopotto/CleanSweep/blob/2af68f24f57c72731ceb2945fcfd41e97fa33bc0/app/src/main/java/com/cleansweep/domain/usecase/DuplicateFinderUseCase.kt",
+      "sha256": "d46a989d366c3be4152874a51166da1ee687935eccba8837dcf713a1dd37345a",
+      "truncated": false,
+      "lines": 201,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/domain/usecase/DuplicateGroup.kt",
+      "local": "07-DuplicateGroup.kt",
+      "url": "https://github.com/loopotto/CleanSweep/blob/2af68f24f57c72731ceb2945fcfd41e97fa33bc0/app/src/main/java/com/cleansweep/domain/usecase/DuplicateGroup.kt",
+      "sha256": "8469958d5e76a54172b0753a9e0ed592e7f52e92cb87711b8aa2337ea3f1950d",
+      "truncated": false,
+      "lines": 33,
+      "source": true,
+      "test": false
+    }
+  ],
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/loopotto/CleanSweep/blob/2af68f24f57c72731ceb2945fcfd41e97fa33bc0/README.md",
+      "sha256": "deacc644e6418ca6b897517a9978546f36a3453d025269f7d228a364fc74df5d",
+      "truncated": false,
+      "lines": 100,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/loopotto/CleanSweep/blob/2af68f24f57c72731ceb2945fcfd41e97fa33bc0/LICENSE",
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "truncated": false,
+      "lines": 674,
+      "source": false,
+      "test": false
+    }
+  ]
+}

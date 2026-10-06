@@ -1,0 +1,20 @@
+{
+  "scope": "CIFF unique bounded lookup plus bounded native CRW sensor reconstruction",
+  "default_passed": 717,
+  "ignored": 39,
+  "external_full_sensor_cases": 2,
+  "logs": {
+    "/tmp/rrrah-crw-bounded-10d.log": "0c04414edbf55897598d023406fe2be175c2175a942354bee17f7353219d50a6",
+    "/tmp/rrrah-crw-bounded-d30.log": "b312a5dee404cf34bf133a9d99e0874ccfad3c6d4e0ad750fc0206fffd100059",
+    "/tmp/rrrah-crw-bounded-full.log": "0fa0b2f1d67d0dc1528f12f708631d9b6705840381a6254e9e20477bb56432d4"
+  },
+  "contracts": [
+    "Sensor geometry obtained from unique CIFF 1031 record",
+    "Entropy and low-bit reads confined to unique CIFF 2005 payload",
+    "Tree lookup capped at depth16/4096 records, cancellable, duplicate tags refused"
+  ],
+  "limitations": [
+    "Depth/count caps implemented but maximum-depth/record-limit fixtures not yet exercised.",
+    "External camera tables, low-plane-present sources only; no public metadata/color/viewer route."
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "date": "2026-10-06",
+  "scope": "two authored opaque pages and one constant half-alpha red page; mathematical RGBA and Poppler white RGB composition reference",
+  "fixture": "tests/fixtures/pdf/red-green-pages.pdf",
+  "pages": 3,
+  "native_prepared_swap_roundtrips": 6,
+  "gpu": {
+    "adapter": "Apple M4 Max",
+    "backend": "Metal",
+    "offscreen_readback": true,
+    "physical_presentation": false
+  },
+  "assertions": [
+    "PDF signature wins misleading .mrw extension including selected page 1",
+    "uppercase PDF extension is supported",
+    "managed native opaque RGBA samples match red/green reference",
+    "prepared Metal frames match mathematical linear reference",
+    "RAM lease blocks shrinking below retained frame",
+    "native and prepared sample restoration bit-exact",
+    "page index/count/color preserved",
+    "restore pressure retains swap copy for successful retry",
+    "root managed bytes return to zero after last owners drop"
+  ],
+  "tests": {
+    "pdf_readback_passed": 1,
+    "pdf_readback_ignored": 0,
+    "app_passed": 116,
+    "app_ignored": 10,
+    "failed": 0
+  },
+  "logs": [
+    "/tmp/rrrah-pdf-metal.log",
+    "/tmp/rrrah-pdf-app-regression.log",
+    "/tmp/rrrah-pdf-alpha-metal.log"
+  ],
+  "command": "cargo test -p rrrah --test pdf_readback --target-dir /tmp/rrrah-required-corpus-target -- --nocapture",
+  "remaining": [
+    "transparency/color/fonts and independent producers",
+    "internal renderer/parser scratch budget",
+    "interruptible native rasterization",
+    "physical navigation and presentation"
+  ],
+  "alpha_reference": {
+    "fixture": "tests/fixtures/pdf/red-alpha.pdf",
+    "source_sha256": "aaff7abe88d1051b553e531246d6e38ca6a3f78334045dc39cfda13fa40d25ee",
+    "native_rgba": [
+      255,
+      0,
+      0,
+      128
+    ],
+    "poppler_white_rgb": [
+      255,
+      127,
+      127
+    ],
+    "full_plane_pixels": 100,
+    "native_test_log": "/tmp/rrrah-pdf-alpha-tests.log",
+    "native_test_passed": 1,
+    "oracle_command": "pdftoppm -r 72 tests/fixtures/pdf/red-alpha.pdf /tmp/rrrah-pdf-alpha-oracle",
+    "limits": "constant alpha fill only; blends, masks, knockout, arbitrary transparency and color still unqualified"
+  },
+  "fallible_buffer_revalidation": {
+    "date": "2026-10-06",
+    "change": "source and final RGBA copy use try_reserve_exact and reserve actual Vec capacity before filling; allocator errors propagate as typed memory errors",
+    "pdf_unit_passed": 2,
+    "gpu_passed": 1,
+    "logs": [
+      "/tmp/rrrah-pdf-fallible-buffer.log",
+      "/tmp/rrrah-pdf-fallible-metal.log"
+    ],
+    "limits": "does not make Hayro internal pixmap/parser allocation fallible or fully budgeted"
+  },
+  "malformed_budget_regression": {
+    "passed": 3,
+    "log": "/tmp/rrrah-pdf-malformed-budget.log",
+    "assertions": [
+      "malformed PDF graph returns typed InvalidPdf and releases source reservation",
+      "budget smaller than source refuses before allocation with zero peak and zero retained credit"
+    ],
+    "scope": "one compact malformed graph and source admission, not arbitrary malformed PDF fuzz coverage"
+  }
+}

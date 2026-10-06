@@ -12,6 +12,8 @@ use rrrah_gpu::{FilmstripTile, FilmstripTileId};
 
 use crate::gallery::FolderTile;
 
+use crate::gallery::SourceStamp;
+
 /// Maximum number of uploaded thumbnail textures kept resident.
 pub const THUMB_CACHE_CAPACITY: usize = 128;
 
@@ -21,6 +23,7 @@ pub const THUMB_CACHE_CAPACITY: usize = 128;
 #[derive(Debug)]
 pub struct ThumbCache {
     entries: HashMap<PathBuf, (FilmstripTileId, u64)>,
+    sources: HashMap<PathBuf, (PathBuf, SourceStamp)>,
     clock: u64,
     capacity: usize,
 }
@@ -29,11 +32,48 @@ impl ThumbCache {
     pub fn new(capacity: usize) -> Self {
         Self {
             entries: HashMap::new(),
+            sources: HashMap::new(),
             clock: 0,
             capacity: capacity.max(1),
         }
     }
 
+    /// Revalidate on folder refresh, outside the drawing path.
+    pub fn invalidate_changed_sources(&mut self) -> Vec<FilmstripTileId> {
+        let stale: Vec<_> = self
+            .sources
+            .iter()
+            .filter(|(_, (p, s))| SourceStamp::read(p) != *s)
+            .map(|(f, _)| f.clone())
+            .collect();
+        stale
+            .into_iter()
+            .filter_map(|f| {
+                self.sources.remove(&f);
+                self.entries.remove(&f).map(|(id, _)| id)
+            })
+            .collect()
+    }
+    #[cfg(test)]
+    pub fn insert_source(
+        &mut self,
+        folder: PathBuf,
+        source: PathBuf,
+        id: FilmstripTileId,
+    ) -> Option<FilmstripTileId> {
+        self.insert_decoded_source(folder, source.clone(), SourceStamp::read(&source), id)
+    }
+    pub fn insert_decoded_source(
+        &mut self,
+        folder: PathBuf,
+        source: PathBuf,
+        stamp: SourceStamp,
+        id: FilmstripTileId,
+    ) -> Option<FilmstripTileId> {
+        let evicted = self.insert(folder.clone(), id);
+        self.sources.insert(folder, (source, stamp));
+        evicted
+    }
     pub fn contains(&self, path: &std::path::Path) -> bool {
         self.entries.contains_key(path)
     }
@@ -51,6 +91,17 @@ impl ThumbCache {
         Some(entry.0)
     }
 
+    /// Return an old texture for residency-pressure eviction before admission.
+    pub fn evict_oldest(&mut self) -> Option<FilmstripTileId> {
+        let victim = self
+            .entries
+            .iter()
+            .min_by_key(|(_, (_, tick))| *tick)
+            .map(|(path, _)| path.clone())?;
+        self.sources.remove(&victim);
+        self.entries.remove(&victim).map(|(id, _)| id)
+    }
+
     /// Insert a texture. Returns the evicted texture handle, if any, so the
     /// caller can remove it from the GPU.
     pub fn insert(&mut self, path: PathBuf, id: FilmstripTileId) -> Option<FilmstripTileId> {
@@ -66,6 +117,7 @@ impl ThumbCache {
             .iter()
             .min_by_key(|(_, (_, tick))| *tick)
             .map(|(path, _)| path.clone())?;
+        self.sources.remove(&victim);
         self.entries.remove(&victim).map(|(id, _)| id)
     }
 }
@@ -148,6 +200,61 @@ mod tests {
 
     fn id(value: usize) -> FilmstripTileId {
         FilmstripTileId::from_raw_for_test(value)
+    }
+
+    #[test]
+    fn source_and_external_wal_palette_changes_invalidate_textures() {
+        let dir = tempfile::tempdir().unwrap();
+        let folder = dir.path().join("textures");
+        std::fs::create_dir(&folder).unwrap();
+        std::fs::create_dir(dir.path().join("pics")).unwrap();
+        let source = folder.join("grid.wal");
+        let palette = dir.path().join("pics/colormap.pcx");
+        std::fs::write(&source, b"unchanged WAL source").unwrap();
+        std::fs::write(&palette, b"first palette").unwrap();
+        let mut cache = ThumbCache::new(2);
+        cache.insert_source(folder.clone(), source.clone(), id(1));
+        assert!(cache.invalidate_changed_sources().is_empty());
+        std::fs::write(&palette, b"other palette").unwrap();
+        assert_eq!(cache.invalidate_changed_sources(), vec![id(1)]);
+        assert!(!cache.contains(&folder));
+        cache.insert_source(folder.clone(), source.clone(), id(2));
+        std::fs::remove_file(&palette).unwrap();
+        assert_eq!(cache.invalidate_changed_sources(), vec![id(2)]);
+        cache.insert_source(folder.clone(), source.clone(), id(3));
+        std::fs::write(&palette, b"new palette").unwrap();
+        assert_eq!(cache.invalidate_changed_sources(), vec![id(3)]);
+        cache.insert_source(folder.clone(), source.clone(), id(4));
+        std::fs::write(&source, b"changed WAL source").unwrap();
+        assert_eq!(cache.invalidate_changed_sources(), vec![id(4)]);
+        let decoded_stamp = SourceStamp::read(&source);
+        std::fs::write(&palette, b"changed during decoding").unwrap();
+        cache.insert_decoded_source(folder.clone(), source.clone(), decoded_stamp, id(8));
+        assert_eq!(cache.invalidate_changed_sources(), vec![id(8)]);
+        cache.insert_source(folder.clone(), source, id(5));
+        assert_eq!(cache.insert(PathBuf::from("another folder"), id(6)), None);
+        assert_eq!(cache.insert(PathBuf::from("third folder"), id(7)), Some(id(5)));
+        assert!(!cache.sources.contains_key(&folder));
+    }
+
+    #[test]
+    fn pressure_eviction_promotes_recency_and_clears_source_inventory() {
+        let mut cache = ThumbCache::new(3);
+        for (name, handle) in [("a", 1), ("b", 2)] {
+            cache.insert_decoded_source(
+                PathBuf::from(name),
+                PathBuf::from("missing"),
+                SourceStamp::default(),
+                id(handle),
+            );
+        }
+        assert_eq!(cache.get(Path::new("a")), Some(id(1)));
+        assert_eq!(cache.evict_oldest(), Some(id(2)));
+        assert!(!cache.sources.contains_key(Path::new("b")));
+        assert!(!cache.contains(Path::new("b")));
+        assert_eq!(cache.evict_oldest(), Some(id(1)));
+        assert!(cache.sources.is_empty());
+        assert_eq!(cache.evict_oldest(), None);
     }
 
     #[test]

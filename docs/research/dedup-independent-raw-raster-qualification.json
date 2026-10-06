@@ -1,0 +1,111 @@
+{
+  "scope": "Independent full-resolution LibRaw rendered TIFF versus native RAW development global fingerprint evidence; no pixel/local duplicate decision",
+  "oracle": {
+    "library": "LibRaw 0.22.2",
+    "renderer_sha256": "87231c7b8e3923e2ae701a8b28074fcc98a8f6932835b2597162dc2687a31e40",
+    "command_options": [
+      "-w",
+      "-W",
+      "-o",
+      "1",
+      "-q",
+      "0",
+      "-6",
+      "-T"
+    ],
+    "raster_color": "Explicit untagged sRGB caller declaration; nonlinear default renderer transfer"
+  },
+  "probe_sha256": "493e8ef6706b4b4f459fd69740da3a898a023b4d2cfd2bfd0d19b942d040131f",
+  "source_sha256": {
+    "crates/rrrah-dedup/examples/raw_raster_probe.rs": "e182b849b6cbcfc9248fb619d8e09f64c33dedaa070777d5f0b74db02842a0b5",
+    "crates/rrrah-dedup/Cargo.toml": "a1f8b749fa10d2e29641dc44c1c5b035d447bd330f43826ff622493bc936bd87",
+    "tests/fixtures/raw-color-corpus.json": "8de6c9b152f7f010a3f6f8671e8a6e2ccfeaf2fa6faff5bdfe2917af3b135a5c"
+  },
+  "cases": [
+    {
+      "filename": "830.dng",
+      "raw_sha256": "7a594b66b54f99bb5aba4627c78abfc41213d6911ea54e4f5d2dd6c8505f6968",
+      "raster_sha256": "19e159eedee1e0f98eba8b42a548dfaefcb53e5bbc349c0077f61f6cd214cf96",
+      "status": "passed",
+      "raw_dimensions": [
+        4288,
+        2848
+      ],
+      "raster_dimensions": [
+        4309,
+        2868
+      ],
+      "global_distance": 60,
+      "right_transform": 0,
+      "informative": true,
+      "managed_peak": 470205440
+    },
+    {
+      "filename": "898.nef",
+      "raw_sha256": "f90deb2819863f5a6ca9913c255fdd83a94963f4284eb88df9d389da7a6c7665",
+      "raster_sha256": "867f2fa940ce37e5f9e25f9556fe0fae0b65c1ffe682f47fd74b414d6a24fb8c",
+      "status": "passed",
+      "raw_dimensions": [
+        6032,
+        4032
+      ],
+      "raster_dimensions": [
+        6032,
+        4032
+      ],
+      "global_distance": 20,
+      "right_transform": 0,
+      "informative": true,
+      "managed_peak": 908266496
+    },
+    {
+      "filename": "1084.orf",
+      "raw_sha256": "b2221977cbc6eba0d3b363351072092e5647eaa0d02a5d8432b5d985b29f669f",
+      "raster_sha256": "b9243fd1bcb98c0377b73cefd361b595ffe345415d3f9222718b725c71545340",
+      "status": "passed",
+      "raw_dimensions": [
+        4608,
+        3456
+      ],
+      "raster_dimensions": [
+        4640,
+        3472
+      ],
+      "global_distance": 32,
+      "right_transform": 0,
+      "informative": true,
+      "managed_peak": 604461568
+    },
+    {
+      "filename": "1294.cr2",
+      "raw_sha256": "8f28465cee09844ffad95dbd3ec91923717a329c5ec4f3f405f5b4fce83aaea3",
+      "raster_sha256": "2072de2f4315fc4d01e5f9e11ede19641fbacdbfe0ef6149794d15b908b7acd6",
+      "status": "passed",
+      "raw_dimensions": [
+        6000,
+        4000
+      ],
+      "raster_dimensions": [
+        6024,
+        4020
+      ],
+      "global_distance": 106,
+      "right_transform": 0,
+      "informative": true,
+      "managed_peak": 952041344
+    }
+  ],
+  "validation": {
+    "native_build_exit_code": 0,
+    "clippy_example_exit_code": 0,
+    "decoded_cases": 4,
+    "managed_reservations_released": true
+  },
+  "finding": "Distances 60,20,32,106; CR2 native development and independent rendered TIFF differ strongly. Radius 64 would omit this known same-source positive. Thresholds have not been widened to hide the gap.",
+  "remaining": [
+    "Identify CR2 development/color/normalization divergence",
+    "Qualify local geometry and pixel evidence for independently developed RAW/raster pairs",
+    "Held-out color and camera corpus with negative calibration",
+    "No exact equality or universal RAW/raster support established"
+  ]
+}

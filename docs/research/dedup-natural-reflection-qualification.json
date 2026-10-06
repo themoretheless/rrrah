@@ -1,0 +1,28 @@
+{
+  "scope": "Strict reflected selected-frame comparison on four known rendered camera-preview scenes",
+  "positive_comparisons": 8,
+  "cross_scene_negative_comparisons": 24,
+  "independent_scenes": 4,
+  "checks": [
+    "all 32 ordered file comparisons agree with scene labels",
+    "every accepted pair has reflected geometry and bidirectional pixel evidence",
+    "at least 98% of original source pixels matched in each direction",
+    "managed memory credit returns to zero after every comparison",
+    "one targeted photo test passed; eight other photo tests filtered"
+  ],
+  "limits": [
+    "Known same corpus; not held-out photographic calibration",
+    "Generated lossless horizontal reflections of rendered previews; not captured mirrored photographs",
+    "No reflected resampling/crop/color edits/bursts/look-alikes qualification",
+    "No full RAW development or collection retrieval qualification"
+  ],
+  "source_sha256": {
+    "crates/rrrah-dedup/src/local_scan.rs": "b77aabe06a70fe7e95f3c30a1d797783258f83a52560d48bae65de9306a9d914",
+    "crates/rrrah-dedup/src/local.rs": "db53e176bec2ca49ead69e81291fcb4a173e0f327f9481617a2288ce16edfa91",
+    "crates/rrrah-dedup/src/geometry.rs": "58bf2f734859fa5187a5f60899387a60a9ff8e421effc0bd1eb7bd7bac52a713",
+    "crates/rrrah-dedup/src/warp.rs": "ea4033f307524993f7253e667763adff1083a74f35709ca282d4bec5f66dfb25",
+    "crates/rrrah-dedup/tests/photo_files.rs": "0ad03c6acc9502ae283739ba60597f3c3341924467a9cc2d6b31a9912ac6c518",
+    "scripts/generate-dedup-photo-reflections.py": "a0f9bf24e56d1d6428a0ae5806f35c2d7f093a4fbd653b21e53f8502bf8591f0",
+    "crates/rrrah-dedup/tests/fixtures/photos/reflections-manifest.json": "baca59f5b5c35d992e4c02894da84dce71fb1c2a2064459ced9edce8bf9057e9"
+  }
+}

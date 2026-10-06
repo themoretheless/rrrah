@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Auto Cut</title>
+	<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+	<header>
+		<div class="titlebar">
+			<h1>Auto Cut</h1>
+			<div class="head-actions">
+				<span id="ffmpegStatus" class="pill">checking…</span>
+				<button id="settingsBtn" class="icon" title="Settings">⚙</button>
+			</div>
+		</div>
+		<div class="seq">
+			<span id="seqName" class="seq-name">no sequence</span>
+			<button id="refreshBtn" class="link" title="Re-read the timeline">reload</button>
+		</div>
+		<div id="seqMeta" class="seq-meta"></div>
+	</header>
+
+	<section id="settingsPanel" class="settings hidden">
+		<label class="wide">
+			<span>ffmpeg path</span>
+			<input id="ffmpegPath" type="text" placeholder="auto-detected — set only if not found" />
+		</label>
+		<p class="note">Leave empty unless the pill above says ffmpeg is missing.</p>
+		<button id="diagBtn" class="secondary wide">Run diagnostics</button>
+	</section>
+
+	<section class="block">
+		<label class="wide">
+			<span>Preset</span>
+			<select id="preset"></select>
+		</label>
+		<p id="presetHint" class="hint"></p>
+	</section>
+
+	<section class="block">
+		<div class="block-title">Detection</div>
+		<label>
+			<span>Noise threshold</span>
+			<span class="field">
+				<input id="noise" type="number" step="1" value="-35" />
+				<em>dB</em>
+			</span>
+		</label>
+		<button id="measureBtn" class="secondary wide">Measure from audio</button>
+		<label>
+			<span>Min silence</span>
+			<span class="field"><input id="minSilence" type="number" step="0.05" min="0.05" value="0.5" /><em>s</em></span>
+		</label>
+		<label>
+			<span>Cut padding</span>
+			<span class="field"><input id="padding" type="number" step="0.01" min="0" value="0.05" /><em>s</em></span>
+		</label>
+		<label>
+			<span>Merge cuts within</span>
+			<span class="field"><input id="mergeWithin" type="number" step="0.05" min="0" value="0.25" /><em>s</em></span>
+		</label>
+		<label>
+			<span>Min kept clip</span>
+			<span class="field"><input id="minKeep" type="number" step="0.05" min="0" value="0.3" /><em>s</em></span>
+		</label>
+	</section>
+
+	<section class="block">
+		<div class="block-title">Analyze which tracks</div>
+		<label>
+			<span>Video</span>
+			<select id="videoTrack"></select>
+		</label>
+		<label>
+			<span>Audio</span>
+			<select id="audioTrack"></select>
+		</label>
+		<p class="hint">Only these drive detection. Every other unlocked track is cut at the same
+			points, so b-roll and music stay in sync.</p>
+	</section>
+
+	<section class="block actions">
+		<button id="analyzeBtn" class="primary wide">Analyze</button>
+		<div id="planSummary" class="plan-summary">No plan yet — click Analyze.</div>
+		<div id="planDetail" class="plan-detail"></div>
+		<button id="applyBtn" class="danger wide" disabled>Apply cuts</button>
+		<button id="cancelBtn" class="secondary wide hidden">Cancel</button>
+	</section>
+
+	<div id="progressWrap" class="progress hidden">
+		<div class="progress-track"><div id="progressBar" class="progress-bar"></div></div>
+		<div id="progressText" class="progress-text"></div>
+	</div>
+
+	<div id="log" class="log"></div>
+
+	<script src="js/lib/CSInterface.js"></script>
+	<script src="js/core.js"></script>
+	<script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+{
+  "repository": "Anuj7411/sipcode",
+  "metadata": {
+    "name": "Anuj7411/sipcode",
+    "url": "https://github.com/Anuj7411/sipcode",
+    "description": "Keep Claude Code context clean. Open-source toolkit: drift detection, re-read dedup, integrity scoring, AST-aware reads, 15 MCP tools. 62.6% measured savings, reproducible.",
+    "language": "TypeScript",
+    "stars": 46,
+    "license": "MIT",
+    "archived": false,
+    "pushed_at": "2026-07-04T16:56:11Z",
+    "default_branch": "main",
+    "queries": [
+      "dedup in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/Anuj7411/sipcode/blob/16f261ce06ee93ab9c61b5f72ca5142173f189bb/README.md",
+      "sha256": "5db3515fb954399477964210c25eb7522a60d1e4f924da6a439b6e1de86592c0",
+      "truncated": false,
+      "lines": 351,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/Anuj7411/sipcode/blob/16f261ce06ee93ab9c61b5f72ca5142173f189bb/LICENSE",
+      "sha256": "308c8be80b87217cc426fa5469c5e3ab263d504c2f285d9e8fda0cdc917271aa",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "src/modules/manifest/scanFiles.ts",
+      "local": "02-scanFiles.ts",
+      "url": "https://github.com/Anuj7411/sipcode/blob/16f261ce06ee93ab9c61b5f72ca5142173f189bb/src/modules/manifest/scanFiles.ts",
+      "sha256": "6b7173351c35ee6d5bf863a9c5ef37ffc82d94b16866ce8d4ecd0247810545e8",
+      "truncated": false,
+      "lines": 163,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/modules/proxy/hookReadDedup.ts",
+      "local": "03-hookReadDedup.ts",
+      "url": "https://github.com/Anuj7411/sipcode/blob/16f261ce06ee93ab9c61b5f72ca5142173f189bb/src/modules/proxy/hookReadDedup.ts",
+      "sha256": "3a8919bc6d8d85a407a7836f989b6e271c4533f8159aceb7ea50b40d30fcb923",
+      "truncated": false,
+      "lines": 293,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/modules/proxy/rewriters/dedupRead.ts",
+      "local": "04-dedupRead.ts",
+      "url": "https://github.com/Anuj7411/sipcode/blob/16f261ce06ee93ab9c61b5f72ca5142173f189bb/src/modules/proxy/rewriters/dedupRead.ts",
+      "sha256": "d318aee520dce3210c7aaf50e6bf1ac8a31a3a8dab1140fdfcaac8411bd2b2e0",
+      "truncated": false,
+      "lines": 117,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/modules/manifest/scanFiles.test.ts",
+      "local": "05-scanFiles.test.ts",
+      "url": "https://github.com/Anuj7411/sipcode/blob/16f261ce06ee93ab9c61b5f72ca5142173f189bb/tests/modules/manifest/scanFiles.test.ts",
+      "sha256": "aa178f51b3517762a49679bbab78129ca241c7cb01cc07bb9e23e7873a9a237a",
+      "truncated": false,
+      "lines": 59,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "src/modules/benchmark/compare.ts",
+      "local": "06-compare.ts",
+      "url": "https://github.com/Anuj7411/sipcode/blob/16f261ce06ee93ab9c61b5f72ca5142173f189bb/src/modules/benchmark/compare.ts",
+      "sha256": "d6aa7759fde6a5ccfafd8e37affb7bb8080b453fff1c0ddb56b17d35b188fd6c",
+      "truncated": false,
+      "lines": 60,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/modules/benchmark/format-compare.ts",
+      "local": "07-format-compare.ts",
+      "url": "https://github.com/Anuj7411/sipcode/blob/16f261ce06ee93ab9c61b5f72ca5142173f189bb/src/modules/benchmark/format-compare.ts",
+      "sha256": "1ea67d862803b72408076e33e58196641a211cd341af6da9ae2da7cae388e0fc",
+      "truncated": false,
+      "lines": 70,
+      "source": true,
+      "test": false
+    }
+  ],
+  "errors": [],
+  "commit": "16f261ce06ee93ab9c61b5f72ca5142173f189bb",
+  "tree_truncated": false,
+  "source_file_count": 514,
+  "test_file_count": 206,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "src/modules/benchmark/compare.ts",
+    "src/modules/benchmark/format-compare.ts",
+    "src/modules/manifest/scanFiles.ts",
+    "tests/modules/manifest/scanFiles.test.ts"
+  ]
+}

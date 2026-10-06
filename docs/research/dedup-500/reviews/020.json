@@ -1,0 +1,108 @@
+{
+  "index": 20,
+  "repository": "mtalcott/google-photos-deduper",
+  "commit": "9e3127dab23fb0b7799e32e4596f57697298da44",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Embedding database and cosine clustering; approximate group scores and union-find are not pairwise duplicate evidence.",
+  "license_metadata": "AGPL-3.0",
+  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "tests_detected": 24,
+  "upstream_tests_run": false,
+  "available_source_evidence": [
+    {
+      "path": "lib/duplicate-detector.ts",
+      "local": "02-duplicate-detector.ts",
+      "url": "https://github.com/mtalcott/google-photos-deduper/blob/9e3127dab23fb0b7799e32e4596f57697298da44/lib/duplicate-detector.ts",
+      "sha256": "1209669763b81683a7940e101edef895908c80c77729f0605a63540818b86d94",
+      "truncated": false,
+      "lines": 1163,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "lib/scan-log.ts",
+      "local": "03-scan-log.ts",
+      "url": "https://github.com/mtalcott/google-photos-deduper/blob/9e3127dab23fb0b7799e32e4596f57697298da44/lib/scan-log.ts",
+      "sha256": "dbf63330fe8cf2e4d20b9fdcccb33ff79ab38559f9bf77a9c84b1d8644d49973",
+      "truncated": false,
+      "lines": 265,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "lib/scan-results.ts",
+      "local": "04-scan-results.ts",
+      "url": "https://github.com/mtalcott/google-photos-deduper/blob/9e3127dab23fb0b7799e32e4596f57697298da44/lib/scan-results.ts",
+      "sha256": "5105d3df380ff5a30a7c43c421b78d7af500f3094d7a5b0c7ad9472b5303bf60",
+      "truncated": false,
+      "lines": 14,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/lib/duplicate-detector.test.ts",
+      "local": "05-duplicate-detector.test.ts",
+      "url": "https://github.com/mtalcott/google-photos-deduper/blob/9e3127dab23fb0b7799e32e4596f57697298da44/tests/lib/duplicate-detector.test.ts",
+      "sha256": "acecd8c64feeb86cae94b7eea204bff97d7ac788db2cefd7fed5fe5fe92ceab6",
+      "truncated": false,
+      "lines": 573,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "components/DuplicateGroups.tsx",
+      "local": "06-DuplicateGroups.tsx",
+      "url": "https://github.com/mtalcott/google-photos-deduper/blob/9e3127dab23fb0b7799e32e4596f57697298da44/components/DuplicateGroups.tsx",
+      "sha256": "c813eaf87e40ebab30a1fc5e6b63c2d4783e74aeb35a2e428588570deeac6d51",
+      "truncated": false,
+      "lines": 451,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "components/ScanProgress.tsx",
+      "local": "07-ScanProgress.tsx",
+      "url": "https://github.com/mtalcott/google-photos-deduper/blob/9e3127dab23fb0b7799e32e4596f57697298da44/components/ScanProgress.tsx",
+      "sha256": "b54b8bbc6da1b2e47ddf3687e279a20ab7666b7d9b392da885fa4c6c247c8309",
+      "truncated": false,
+      "lines": 130,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/components/duplicate-groups.test.tsx",
+      "local": "08-duplicate-groups.test.tsx",
+      "url": "https://github.com/mtalcott/google-photos-deduper/blob/9e3127dab23fb0b7799e32e4596f57697298da44/tests/components/duplicate-groups.test.tsx",
+      "sha256": "e3387a6e4d5acfaa4ff703432df0f97a7b4f1be2cb75f83edd9231e4078041d4",
+      "truncated": false,
+      "lines": 283,
+      "source": true,
+      "test": true
+    }
+  ],
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/mtalcott/google-photos-deduper/blob/9e3127dab23fb0b7799e32e4596f57697298da44/README.md",
+      "sha256": "dd0c22b7fe01158264ce949230ebbec1fcf041fa94f7cf91445ff3960d93c8f6",
+      "truncated": false,
+      "lines": 95,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/mtalcott/google-photos-deduper/blob/9e3127dab23fb0b7799e32e4596f57697298da44/LICENSE",
+      "sha256": "0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0",
+      "truncated": false,
+      "lines": 661,
+      "source": false,
+      "test": false
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "qualification": "Isolated no-decode source build and scoped recipe identity",
+  "source_sha256": {
+    "crates/rrrah-dedup/build.rs": "b1f2e5b3a6efa1019f53031ffc97d188e6c615a83c093e23ab8abc33b5235ca4"
+  },
+  "validation": {
+    "isolated_minimal_tests": 39,
+    "workspace_decode_tests": 8,
+    "failed": 0,
+    "workspace_build_script_and_library_clippy": "passed",
+    "compiled_build_script_probes": {
+      "relocation_preserves_identity": true,
+      "own_source_change_invalidates": true,
+      "decoder_without_source_context_rejected": true
+    }
+  },
+  "setup": "Native dedup source, actual build.rs, four integration targets and the compiled transfer oracle fixture copied into an independent temporary Cargo project. A normalized minimal manifest omits optional local decoder/core dependencies; target output is outside the input tree.",
+  "behavior": [
+    "Full workspace builds retain source identity over all four required crates.",
+    "Without the four-crate context, no-decode builds hash their own package source with a distinct scope marker.",
+    "Decode-enabled isolated builds reject missing dependency source identity explicitly."
+  ],
+  "limits": [
+    "This is isolated source/minimal-manifest qualification, not cargo package/publish or full decoder package portability.",
+    "Decoder dependency identity export, packaged source resolution and external runtime identity remain unresolved.",
+    "Conservative input hashing includes tests/assets; no build/runtime performance claim."
+  ]
+}

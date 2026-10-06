@@ -1,0 +1,91 @@
+{
+  "status": "fixtures acquired and independently generated; library evaluation pending",
+  "sources": 6,
+  "files": 36,
+  "ids": [
+    2414,
+    2418,
+    2883,
+    5025,
+    1425,
+    5495
+  ],
+  "visual_inspection": "Contact sheet inspected: 2414/2418 are related garden views, not unrelated negatives; remaining sources show road, color chart, watercolor paints and snowy landscape",
+  "required_tests": [
+    "same-source transformed positives",
+    "exact-pixel negatives including related captures",
+    "unrelated cross-scene negatives",
+    "explicit handling of related capture geometry and residuals"
+  ],
+  "generator": "scripts/generate-dedup-photo-fixtures.py",
+  "manifest": "crates/rrrah-dedup/tests/fixtures/photos-heldout/manifest.json",
+  "limitations": "New evidence set; not a universal semantic calibration or proof of acquisition timing/burst metadata",
+  "evaluation": {
+    "session_id": 96945,
+    "status": "passed",
+    "platform": "macOS",
+    "log": "dedup-heldout-photo-macos.log",
+    "tests": "crates/rrrah-dedup/tests/photos_heldout.rs",
+    "expected_cases": {
+      "exact_self": 6,
+      "exact_distinct": 15,
+      "transformed_positive": 30,
+      "unrelated_visual_negative": 14
+    },
+    "policy": "Unchanged LocalFilePolicy/PhotometricPolicy from existing photo_files suite; filter radius 2",
+    "related_capture_policy": "2414/2418 are tested as exact-pixel distinct, excluded from unrelated visual negatives; visual relationship qualification remains separate",
+    "completed_tests": [
+      "exact_pixels_keep_related_captures_and_other_scenes_distinct",
+      "unchanged_filter_policy_rejects_unrelated_heldout_scenes"
+    ],
+    "remaining": "Native Linux and wider real burst/look-alike qualification",
+    "exit_code": 0,
+    "tests_passed": 3,
+    "transformed_accepted": 30,
+    "unrelated_rejected": 14,
+    "exact_distinct_rejected": 15
+  },
+  "linux": {
+    "session_id": 33809,
+    "status": "passed",
+    "log": "dedup-heldout-photo-linux.log",
+    "exit_code": 0,
+    "tests_passed": 4,
+    "note": "Includes direct positives/negatives and related-view observation; latest collection test requires separate Linux run"
+  },
+  "related_capture_observation": {
+    "session_id": 83328,
+    "exit_code": 0,
+    "test_passed": 1,
+    "log": "dedup-related-garden-macos.log",
+    "visual_candidate": false,
+    "geometry_absent": true,
+    "scope": "Exact pixels remain distinct; observed visual result is negative under unchanged thresholds. This does not establish semantic truth, general burst rejection or calibrated probability."
+  },
+  "collection_evaluation": {
+    "session_id": 79352,
+    "status": "passed",
+    "platform": "macOS",
+    "log": "dedup-heldout-collection-macos.log",
+    "files": 12,
+    "exhaustive_pairs": 66,
+    "required_crop_edges": 6,
+    "invariants": [
+      "indexed candidates equal complete pair oracle",
+      "each source crop recovered",
+      "no unrelated scene edges",
+      "related garden pair treated separately",
+      "no source/processing issues",
+      "managed resources released"
+    ],
+    "exit_code": 0,
+    "tests_passed": 1
+  },
+  "linux_collection": {
+    "session_id": 85595,
+    "status": "passed",
+    "log": "dedup-heldout-collection-linux.log",
+    "exit_code": 0,
+    "tests_passed": 1
+  }
+}

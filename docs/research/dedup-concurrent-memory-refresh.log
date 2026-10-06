@@ -1,0 +1,61 @@
+    Blocking waiting for file lock on package cache
+   Compiling rrrah-memory v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-memory)
+    Finished `test` profile [optimized + debuginfo] target(s) in 2.23s
+     Running unittests src/lib.rs (/tmp/rrrah-dedup-target/debug/deps/rrrah_memory-a0d195a99e254284)
+
+running 37 tests
+test lease_cache::tests::drain_expired_respects_owner_pins_and_returns_ownership ... ok
+test policy::limit_tests::count_and_byte_limits_are_independent_and_replacement_is_transactional ... ok
+test lease_cache::tests::zero_ttl_entries_expire_without_invalidating_existing_leases ... ok
+test policy::limit_tests::disabling_ttl_does_not_resurrect_entries_or_change_expiration_order ... ok
+test policy::limit_tests::expired_entries_are_preferred_over_live_lru_victims ... ok
+test policy::limit_tests::expired_pinned_data_and_external_owners_keep_memory_accounted ... ok
+test lease_cache::tests::explicit_invalidation_refuses_consumers_and_clears_owner_pin ... ok
+test policy::limit_tests::resizing_preserves_pins_and_returns_ordered_spill_without_partial_failure ... ok
+test policy::limit_tests::maximum_byte_capacity_keeps_admission_arithmetic_exact ... ok
+test policy::limit_tests::spill_receives_only_successful_unpinned_evictions ... ok
+test lease_cache::tests::last_consumer_release_allows_spill_and_preserves_allocation_accounting ... ok
+test policy::limit_tests::ttl_is_insertion_age_not_idle_age_and_boundary_is_exact ... ok
+test policy::limit_tests::unrepresentable_ttl_rejects_admission_without_eviction_or_replacement ... ok
+test lease_cache::tests::cross_thread_clone_release_notifies_after_ownership_changes ... ok
+test policy::tests::deadline_tracking_survives_replacement_pins_and_expiry ... ok
+test policy::tests::eviction_index_tracks_pin_unpin_hits_and_clock_rollover ... ok
+test policy::tests::evicts_by_bytes_and_recency ... ok
+test policy::tests::extreme_byte_weights_cannot_overflow_admission ... ok
+test policy::tests::next_expiry_skips_future_and_protected_entries_then_tracks_unpin ... ok
+test policy::tests::prefetch_does_not_evict_pinned_visible_frame ... ok
+test policy::tests::rejected_replacement_preserves_old_value_other_entries_and_recency ... ok
+test policy::tests::rejects_an_entry_larger_than_budget ... ok
+test staged_buffer_tests::staged_buffer_reuses_credit_and_preserves_child_and_last_owner_accounting ... ok
+test staged_buffer_tests::staged_growth_charges_all_ancestors_and_overflow_releases_credit ... ok
+test tests::adoption_keeps_allocation_and_float_bits_unchanged ... ok
+test tests::available_bytes_tracks_ancestor_pressure_and_last_buffer_owner ... ok
+test tests::capacity_overflow_cancellation_and_adoption ... ok
+test tests::child_budgets_share_parent_and_keep_live_buffer_reservations ... ok
+test tests::legacy_arc_adoption_preserves_allocation_and_last_owner_accounting ... ok
+test tests::merging_different_local_budgets_preserves_credit_even_with_shared_parent ... ok
+test tests::merging_full_budget_transfers_credit_through_all_ancestors_without_admission ... ok
+test tests::shared_legacy_arc_is_rejected_without_reservation_or_data_changes ... ok
+test tests::shared_owners_hold_reservation_until_last_drop ... ok
+test policy::tests::indexed_policy_matches_sequence_model_under_mixed_pressure ... ok
+test tests::concurrent_reservations_never_overcommit ... ok
+test policy::tests::bulk_admission_preserves_visible_and_orders_thousands_of_victims ... ok
+test lease_cache::tests::concurrent_release_and_eviction_retain_budget_until_last_owner ... ok
+
+test result: ok. 37 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+
+     Running tests/ttl_ownership.rs (/tmp/rrrah-dedup-target/debug/deps/ttl_ownership-5975a2cf3f6bdc6e)
+
+running 1 test
+test real_ttl_refuses_new_consumers_but_retains_leases_and_external_allocation_owners ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.11s
+
+   Doc-tests rrrah_memory
+
+running 1 test
+test crates/rrrah-memory/src/lib.rs - (line 25) ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+all doctests ran in 0.96s; merged doctests compilation took 0.64s

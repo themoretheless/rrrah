@@ -14,7 +14,11 @@
 //! # Raw storage variants (dispatch in [`Rw2Quirks::decode_pixels`])
 //!
 //! - **(a) Uncompressed 16-bit** (`Compression = 1`): one `u16` per sample in
-//!   container byte order. This covers both true 16-bit storage and the
+//!   container byte order. Legacy Panasonic mode 34828 (tag 0x000B), with
+//!   12-bit precision and exact unpacked strip size, stores samples in the
+//!   high twelve bits; the low nibble is discarded. FZ50 is independently
+//!   qualified against LibRaw, including nonzero discarded low bits.
+//!   This covers both true 16-bit storage and the
 //!   "14-bit in 16-bit" unpacked variant of higher-end models; the two are
 //!   told apart from the packed variant by comparing the declared strip byte
 //!   count against `width * height * 2` (and by `BitsPerSample == 16`).
@@ -61,10 +65,10 @@
 //!   (tag `0x002D`, most RW2 models) 15 must be added to these black levels;
 //!   dcraw uses them as-is, and this implementation follows dcraw. Revisit
 //!   with real camera files.
-//! - White level: max of `0x000E`-`0x0010` (`LinearityLimit` R/G/B) when
+//! - White level: RGB values of `0x000E`-`0x0010` (`LinearityLimit` R/G/B) when
 //!   present, else `(1 << bits_per_sample) - 1`.
 //! - Geometry: active area from `0x0004`-`0x0007` (SensorTop/Left/Bottom/
-//!   `RightBorder`, treated as border widths) and crop from `0x002F`-`0x0032`
+//!   `RightBorder`, absolute sensor coordinates) and crop from `0x002F`-`0x0032`
 //!   (`CropTop`/`CropLeft`/`CropBottom`/`CropRight`, treated as absolute
 //!   coordinates). Both are emitted only when present and self-consistent.
 //! - Color matrix: RW2 carries none; identity `xyz_to_camera` is emitted.
@@ -193,6 +197,7 @@ impl CameraQuirks for Rw2Quirks {
             .find(|directory| directory.is_top_level())
             .unwrap_or(raw);
 
+        let legacy_packed = legacy_packed_profile(raw)?;
         let make = optional_ascii(FORMAT, ifd0, tags::MAKE)?.unwrap_or_default();
         let model = optional_ascii(FORMAT, ifd0, tags::MODEL)?.unwrap_or_default();
         let orientation = match optional_scalar(FORMAT, ifd0, tags::ORIENTATION)? {
@@ -203,6 +208,9 @@ impl CameraQuirks for Rw2Quirks {
         let (width, height) =
             dimensions(raw)?.ok_or_else(|| camera_error(FORMAT, "raw IFD has no image dimensions"))?;
         let bits = bits_per_sample(raw)?;
+        if legacy_packed {
+            legacy_packed_bytes(container, raw, width, height)?;
+        }
         let cfa = cfa_pattern(raw)?;
 
         let black_level = black_level(ifd0, &cfa)?;
@@ -245,6 +253,7 @@ impl CameraQuirks for Rw2Quirks {
         raw: &CameraDirectory<'_>,
         cancelled: &(dyn Fn() -> bool + Sync),
     ) -> Result<Vec<u16>, DecodeError> {
+        let legacy_packed = legacy_packed_profile(raw)?;
         let (width, height) =
             dimensions(raw)?.ok_or_else(|| camera_error(FORMAT, "raw IFD has no image dimensions"))?;
         let bits = bits_per_sample(raw)?;
@@ -264,6 +273,28 @@ impl CameraQuirks for Rw2Quirks {
             .and_then(|count| count.checked_mul(2))
             .ok_or_else(|| camera_error(FORMAT, "arithmetic overflow computing frame byte length"))?;
 
+        if legacy_packed {
+            let bytes = legacy_packed_bytes(container, raw, width, height)?;
+            if cancelled() {
+                return Err(DecodeError::Cancelled);
+            }
+            let mut pixels = Vec::new();
+            pixels
+                .try_reserve_exact(sample_count)
+                .map_err(|_| camera_error(FORMAT, "legacy packed allocation failed"))?;
+            for row in bytes.chunks_exact(width_usize / 10 * 16) {
+                if cancelled() {
+                    return Err(DecodeError::Cancelled);
+                }
+                for block in row.chunks_exact(16) {
+                    for pair in block[..15].chunks_exact(3) {
+                        pixels.push(u16::from(pair[0]) | (u16::from(pair[1] & 15) << 8));
+                        pixels.push(u16::from(pair[1] >> 4) | (u16::from(pair[2]) << 4));
+                    }
+                }
+            }
+            return Ok(pixels);
+        }
         match compression {
             tags::COMPRESSION_LOSSLESS_JPEG => {
                 decode_lossless_jpeg(container, &storage, width, height, sample_count, cancelled)
@@ -307,6 +338,62 @@ impl CameraQuirks for Rw2Quirks {
             )),
         }
     }
+}
+
+fn legacy_packed_profile(raw: &CameraDirectory<'_>) -> Result<bool, DecodeError> {
+    if optional_scalar(FORMAT, raw, 0x000b)? == Some(34316)
+        && raw.entry(FORMAT, pana::RAW_DATA_OFFSET)?.is_none()
+    {
+        let width = dimensions(raw)?.map_or(0, |size| size.0);
+        if optional_scalar(FORMAT, raw, 0x002d)? == Some(2)
+            && bits_per_sample(raw)? == 12
+            && width != 0
+            && width % 10 == 0
+            && optional_ascii(FORMAT, raw, tags::MODEL)?.as_deref() == Some("DMC-FZ8")
+        {
+            return Ok(true);
+        }
+        return Err(camera_error(
+            FORMAT,
+            "legacy Panasonic RAW mode 34316 without RawDataOffset is not qualified; refusing incorrect sensor samples",
+        ));
+    }
+    Ok(false)
+}
+
+fn legacy_packed_bytes<'a>(
+    container: &'a CameraFile<'_>,
+    raw: &CameraDirectory<'_>,
+    width: u32,
+    height: u32,
+) -> Result<&'a [u8], DecodeError> {
+    let length = u64::from(width)
+        .checked_mul(u64::from(height))
+        .and_then(|samples| samples.checked_mul(8))
+        .map(|bytes| bytes / 5)
+        .ok_or_else(|| camera_error(FORMAT, "legacy packed length overflow"))?;
+    let storage = storage_segments(container, raw)?;
+    if optional_scalar(FORMAT, raw, tags::COMPRESSION)?.unwrap_or(1) != 1
+        || storage.offsets.len() != 1
+        || storage.total_declared_bytes()? != Some(length)
+        || optional_scalar(FORMAT, raw, tags::ROWS_PER_STRIP)?.is_some_and(|rows| rows < u64::from(height))
+    {
+        return Err(camera_error(
+            FORMAT,
+            "invalid legacy Panasonic packed strip layout",
+        ));
+    }
+    let start =
+        usize::try_from(storage.offsets[0]).map_err(|_| camera_error(FORMAT, "strip offset overflow"))?;
+    let length =
+        usize::try_from(length).map_err(|_| camera_error(FORMAT, "legacy packed length overflow"))?;
+    let end = start
+        .checked_add(length)
+        .ok_or_else(|| camera_error(FORMAT, "strip end overflow"))?;
+    container
+        .data()
+        .get(start..end)
+        .ok_or_else(|| camera_error(FORMAT, "truncated legacy Panasonic packed strip"))
 }
 
 /// Image dimensions from standard tags, falling back to the Panasonic sensor
@@ -545,6 +632,17 @@ fn black_level(ifd0: &CameraDirectory<'_>, cfa: &CfaPattern) -> Result<LevelGrid
             "partial Panasonic black level: tags 0x001C/0x001D/0x001E must appear together",
         ));
     };
+    let legacy_left_aligned = optional_scalar(FORMAT, ifd0, 0x000b)? == Some(34828);
+    let legacy_packed = legacy_packed_profile(ifd0)?;
+    let offset = if !legacy_left_aligned
+        && !legacy_packed
+        && (optional_scalar(FORMAT, ifd0, 0x0118)?.is_none()
+            || optional_scalar(FORMAT, ifd0, 0x002d)?.is_some_and(|version| version <= 4))
+    {
+        15_u16
+    } else {
+        0
+    };
     let level = |color: &CfaColor| -> Result<f32, DecodeError> {
         let value = match color {
             CfaColor::Red => red,
@@ -559,6 +657,9 @@ fn black_level(ifd0: &CameraDirectory<'_>, cfa: &CfaPattern) -> Result<LevelGrid
         };
         let value = u16::try_from(value)
             .map_err(|_| camera_error(FORMAT, format!("black level {value} exceeds u16")))?;
+        let value = value
+            .checked_add(offset)
+            .ok_or_else(|| camera_error(FORMAT, "Panasonic black level offset exceeds u16"))?;
         Ok(f32::from(value))
     };
     let values = cfa.cells.iter().map(level).collect::<Result<Vec<_>, _>>()?;
@@ -570,25 +671,38 @@ fn black_level(ifd0: &CameraDirectory<'_>, cfa: &CfaPattern) -> Result<LevelGrid
     })
 }
 
-/// White level: max of the `LinearityLimit` tags when present, else the
-/// bit-depth maximum.
+/// Native per-channel linearity limits are RGB normalization endpoints.
+/// Never merge different channel limits: that changes WB and highlight hue.
 fn white_level(ifd0: &CameraDirectory<'_>, bits: u8) -> Result<WhiteLevel, DecodeError> {
-    let mut limit: Option<u64> = None;
-    for tag in [
+    if legacy_packed_profile(ifd0)? {
+        // Exact FZ8 calibration, independently verified against LibRaw 0.22.2.
+        return Ok(WhiteLevel(vec![3967.0; 3]));
+    }
+    let limits = [
         pana::LINEARITY_LIMIT_RED,
         pana::LINEARITY_LIMIT_GREEN,
         pana::LINEARITY_LIMIT_BLUE,
-    ] {
-        if let Some(value) = optional_scalar(FORMAT, ifd0, tag)? {
-            limit = Some(limit.map_or(value, |current| current.max(value)));
-        }
+    ]
+    .map(|tag| optional_scalar(FORMAT, ifd0, tag))
+    .into_iter()
+    .collect::<Result<Vec<_>, _>>()?;
+    if limits.iter().all(Option::is_none) {
+        return Ok(WhiteLevel(vec![((1_u32 << u32::from(bits)) - 1) as f32]));
     }
-    let level = match limit {
-        Some(value) => u32::try_from(value)
-            .map_err(|_| camera_error(FORMAT, format!("white level {value} exceeds u32")))?,
-        None => (1_u32 << u32::from(bits)) - 1,
-    };
-    Ok(WhiteLevel(vec![level as f32]))
+    let values = limits
+        .into_iter()
+        .map(|value| {
+            let value =
+                value.ok_or_else(|| camera_error(FORMAT, "partial Panasonic RGB linearity limits"))?;
+            let value = u16::try_from(value)
+                .map_err(|_| camera_error(FORMAT, "Panasonic linearity limit exceeds u16"))?;
+            if value == 0 {
+                return Err(camera_error(FORMAT, "Panasonic linearity limit is zero"));
+            }
+            Ok(f32::from(value))
+        })
+        .collect::<Result<Vec<_>, DecodeError>>()?;
+    Ok(WhiteLevel(values))
 }
 
 /// White balance gains from the WB level tags (dcraw `cam_mul[]`),
@@ -621,7 +735,7 @@ fn white_balance(ifd0: &CameraDirectory<'_>) -> Result<[f32; 4], DecodeError> {
     Ok([gain(red)?, 1.0, gain(blue)?, 1.0])
 }
 
-/// Active area from the four Sensor*Border tags (treated as border widths);
+/// Active area from the four Sensor*Border tags (absolute sensor coordinates);
 /// `None` unless all four are present and leave a non-empty rectangle.
 fn bordered_rect(
     ifd0: &CameraDirectory<'_>,
@@ -644,18 +758,14 @@ fn bordered_rect(
     };
     let (left, top) = (to_u32(left, left_tag)?, to_u32(top, top_tag)?);
     let (right, bottom) = (to_u32(right, right_tag)?, to_u32(bottom, bottom_tag)?);
-    let Some(inner_width) = width.checked_sub(left).and_then(|value| value.checked_sub(right)) else {
-        return Ok(None);
-    };
-    let Some(inner_height) = height
-        .checked_sub(top)
-        .and_then(|value| value.checked_sub(bottom))
-    else {
-        return Ok(None);
-    };
-    if inner_width == 0 || inner_height == 0 {
-        return Ok(None);
+    if right > width || bottom > height || right <= left || bottom <= top {
+        return Err(camera_error(
+            FORMAT,
+            "sensor borders are outside the stored mosaic",
+        ));
     }
+    let inner_width = right - left;
+    let inner_height = bottom - top;
     Ok(Some(Rect::new(left, top, inner_width, inner_height)))
 }
 
@@ -727,6 +837,13 @@ fn decode_unpacked16(
     pixels.resize(sample_count, 0);
 
     let byte_order = container.byte_order();
+    let legacy_left_aligned = optional_scalar(FORMAT, raw, 0x000b)? == Some(34828);
+    if legacy_left_aligned && bits_per_sample(raw)? != 12 {
+        return Err(camera_error(
+            FORMAT,
+            "legacy Panasonic mode 34828 requires 12-bit samples",
+        ));
+    }
     let data = container.data();
     let mut first_row = 0_usize;
     for (index, &offset) in storage.offsets.iter().enumerate() {
@@ -752,8 +869,14 @@ fn decode_unpacked16(
             .checked_mul(width)
             .ok_or_else(|| camera_error(FORMAT, "arithmetic overflow computing strip target"))?;
         let target = &mut pixels[target_start..target_start + rows * width];
-        for (sample, chunk) in target.iter_mut().zip(bytes.chunks_exact(2)) {
-            *sample = byte_order.u16(chunk);
+        for (index, (sample, chunk)) in target.iter_mut().zip(bytes.chunks_exact(2)).enumerate() {
+            if index % 4096 == 0 && cancelled() {
+                return Err(DecodeError::Cancelled);
+            }
+            let value = byte_order.u16(chunk);
+            // The low nibble is outside the declared sample precision; real
+            // FZ50 files contain nonzero low bits, which LibRaw discards too.
+            *sample = if legacy_left_aligned { value >> 4 } else { value };
         }
         first_row += rows;
     }
@@ -1212,11 +1335,11 @@ mod tests {
             },
             Spec {
                 tag: pana::SENSOR_BOTTOM_BORDER,
-                val: Val::U16(2),
+                val: Val::U16(10),
             },
             Spec {
                 tag: pana::SENSOR_RIGHT_BORDER,
-                val: Val::U16(4),
+                val: Val::U16(10),
             },
             Spec {
                 tag: pana::CFA_PATTERN,
@@ -1292,6 +1415,56 @@ mod tests {
     }
 
     #[test]
+    fn keeps_rgb_linearity_limits_and_rejects_partial_or_invalid_limits() {
+        let mut specs = metadata_placeholder();
+        specs.retain(|entry| {
+            ![
+                pana::LINEARITY_LIMIT_RED,
+                pana::LINEARITY_LIMIT_GREEN,
+                pana::LINEARITY_LIMIT_BLUE,
+            ]
+            .contains(&entry.tag)
+        });
+        specs.extend([
+            short(pana::LINEARITY_LIMIT_RED, 3900),
+            short(pana::LINEARITY_LIMIT_GREEN, 4000),
+            short(pana::LINEARITY_LIMIT_BLUE, 3800),
+        ]);
+        let (bytes, _) = build_rw2(&[specs], &[0; 16]);
+        let file = parse_normalized(&bytes);
+        let directory = &file.directories()[0];
+        let white = white_level(directory, 12).unwrap();
+        assert_eq!(white.0, vec![3900.0, 4000.0, 3800.0]);
+        let metadata = quirks().read_metadata(&file, directory).unwrap();
+        assert_eq!(
+            white.bayer_quad(&metadata.cfa).unwrap(),
+            [3800.0, 4000.0, 4000.0, 3900.0]
+        );
+        for limits in [
+            vec![short(pana::LINEARITY_LIMIT_RED, 3900)],
+            vec![
+                short(pana::LINEARITY_LIMIT_RED, 0),
+                short(pana::LINEARITY_LIMIT_GREEN, 4000),
+                short(pana::LINEARITY_LIMIT_BLUE, 3800),
+            ],
+        ] {
+            let mut specs = metadata_placeholder();
+            specs.retain(|entry| {
+                ![
+                    pana::LINEARITY_LIMIT_RED,
+                    pana::LINEARITY_LIMIT_GREEN,
+                    pana::LINEARITY_LIMIT_BLUE,
+                ]
+                .contains(&entry.tag)
+            });
+            specs.extend(limits);
+            let (bytes, _) = build_rw2(&[specs], &[0; 16]);
+            let file = parse_normalized(&bytes);
+            assert!(white_level(&file.directories()[0], 12).is_err());
+        }
+    }
+
+    #[test]
     fn reads_panasonic_metadata_tags() {
         let blob = [0_u8; 16];
         let placeholder = metadata_placeholder();
@@ -1315,8 +1488,8 @@ mod tests {
             [CfaColor::Blue, CfaColor::Green, CfaColor::Green, CfaColor::Red]
         );
         // BGGR cells map black [B,G,G,R] -> [120, 50, 50, 100].
-        assert_eq!(metadata.black_level.values, [120.0, 50.0, 50.0, 100.0]);
-        assert_eq!(metadata.white_level.0, [4095.0]);
+        assert_eq!(metadata.black_level.values, [135.0, 65.0, 65.0, 115.0]);
+        assert_eq!(metadata.white_level.0, [4000.0, 4095.0, 4000.0]);
         // Exact binary fractions (512/256, 384/256): comparison is deterministic.
         #[allow(clippy::float_cmp)]
         {
@@ -1361,6 +1534,126 @@ mod tests {
         let raw = quirks().select_raw_ifd(&file).unwrap();
         let (width, height) = dimensions(raw).unwrap().unwrap();
         assert_eq!((width, height), (300, 200));
+    }
+
+    #[test]
+    fn legacy_fz8_packed_pairs_are_bounded_and_cancellable() {
+        let samples = [0_u16, 4095, 1, 2048, 255, 256, 3000, 42, 1234, 2345];
+        let mut blob = Vec::new();
+        for pair in samples.chunks_exact(2) {
+            blob.extend_from_slice(&[
+                pair[0] as u8,
+                ((pair[0] >> 8) | ((pair[1] & 15) << 4)) as u8,
+                (pair[1] >> 4) as u8,
+            ]);
+        }
+        blob.push(0xaa); // separator is not a sample
+        for declared in [15, 16] {
+            let mut specs = vec![
+                long(pana::SENSOR_WIDTH, 10),
+                long(pana::SENSOR_HEIGHT, 1),
+                short(tags::BITS_PER_SAMPLE, 12),
+                short(tags::COMPRESSION, 1),
+                short(0x000b, 34316),
+                short(0x002d, 2),
+                Spec {
+                    tag: tags::MODEL,
+                    val: Val::Text("DMC-FZ8".into()),
+                },
+                long(tags::STRIP_OFFSETS, 0),
+                long(tags::STRIP_BYTE_COUNTS, declared),
+            ];
+            let offset = u32::try_from(blob_offset_for(std::slice::from_ref(&specs))).unwrap();
+            specs[7] = long(tags::STRIP_OFFSETS, offset);
+            let (bytes, _) = build_rw2(&[specs], &blob);
+            let file = parse_normalized(&bytes);
+            let raw = quirks().select_raw_ifd(&file).unwrap();
+            let result = quirks().decode_pixels(&file, raw, &|| false);
+            if declared == 16 {
+                assert_eq!(result.unwrap(), samples);
+                assert!(matches!(
+                    quirks().decode_pixels(&file, raw, &|| true),
+                    Err(DecodeError::Cancelled)
+                ));
+                let truncated = parse_normalized(&bytes[..bytes.len() - 1]);
+                let raw = quirks().select_raw_ifd(&truncated).unwrap();
+                assert!(quirks().decode_pixels(&truncated, raw, &|| false).is_err());
+                assert!(
+                    quirks()
+                        .read_metadata(&truncated, raw)
+                        .unwrap_err()
+                        .to_string()
+                        .contains("truncated legacy")
+                );
+            } else {
+                assert!(result.is_err());
+                assert!(
+                    quirks()
+                        .read_metadata(&file, raw)
+                        .unwrap_err()
+                        .to_string()
+                        .contains("strip layout")
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn legacy_panasonic_left_aligned_samples_and_black_level() {
+        let samples = [0_u16, 1, 255, 2048, 4094, 4095];
+        for (bits, bad_padding, mode) in [
+            (12, false, 34828),
+            (12, true, 34828),
+            (14, false, 34828),
+            (12, false, 34316),
+        ] {
+            let mut blob: Vec<u8> = samples
+                .iter()
+                .flat_map(|value| (value << 4).to_le_bytes())
+                .collect();
+            if bad_padding {
+                blob[0] |= 1;
+            }
+            let mut specs = vec![
+                long(pana::SENSOR_WIDTH, 3),
+                long(pana::SENSOR_HEIGHT, 2),
+                short(tags::BITS_PER_SAMPLE, bits),
+                short(tags::COMPRESSION, 1),
+                short(pana::CFA_PATTERN, 4),
+                short(0x000b, mode),
+                long(tags::STRIP_OFFSETS, 0),
+                long(tags::STRIP_BYTE_COUNTS, 12),
+                short(pana::BLACK_LEVEL_RED, 0),
+                short(pana::BLACK_LEVEL_GREEN, 0),
+                short(pana::BLACK_LEVEL_BLUE, 0),
+            ];
+            let offset = u32::try_from(blob_offset_for(std::slice::from_ref(&specs))).unwrap();
+            specs[6] = long(tags::STRIP_OFFSETS, offset);
+            let (bytes, _) = build_rw2(&[specs], &blob);
+            let file = parse_normalized(&bytes);
+            let raw = quirks().select_raw_ifd(&file).unwrap();
+            let result = quirks().decode_pixels(&file, raw, &|| false);
+            if bits == 12 && mode == 34828 {
+                assert_eq!(result.unwrap(), samples);
+                let cfa = bayer([CfaColor::Blue, CfaColor::Green, CfaColor::Green, CfaColor::Red]);
+                assert_eq!(black_level(raw, &cfa).unwrap().values, vec![0.0; 4]);
+                assert!(matches!(
+                    quirks().decode_pixels(&file, raw, &|| true),
+                    Err(DecodeError::Cancelled)
+                ));
+            } else {
+                assert!(result.is_err());
+                if mode == 34316 {
+                    assert!(
+                        quirks()
+                            .read_metadata(&file, raw)
+                            .unwrap_err()
+                            .to_string()
+                            .contains("without RawDataOffset")
+                    );
+                }
+            }
+        }
     }
 
     #[test]
@@ -1582,25 +1875,26 @@ mod tests {
 
     #[test]
     fn honours_cancellation() {
-        let blob = [0_u8; 16];
+        let expected: Vec<u16> = (0..8192).map(|value| value as u16).collect();
+        let blob: Vec<u8> = expected.iter().flat_map(|value| value.to_le_bytes()).collect();
         let placeholder = vec![
-            long(pana::SENSOR_WIDTH, 4),
-            long(pana::SENSOR_HEIGHT, 2),
+            long(pana::SENSOR_WIDTH, 32),
+            long(pana::SENSOR_HEIGHT, 256),
             short(tags::BITS_PER_SAMPLE, 16),
             short(tags::COMPRESSION, 1),
             short(pana::CFA_PATTERN, 1),
             long(tags::STRIP_OFFSETS, 0),
-            long(tags::STRIP_BYTE_COUNTS, 16),
+            long(tags::STRIP_BYTE_COUNTS, 16384),
         ];
         let blob_offset = u32::try_from(blob_offset_for(std::slice::from_ref(&placeholder))).unwrap();
         let specs = vec![
-            long(pana::SENSOR_WIDTH, 4),
-            long(pana::SENSOR_HEIGHT, 2),
+            long(pana::SENSOR_WIDTH, 32),
+            long(pana::SENSOR_HEIGHT, 256),
             short(tags::BITS_PER_SAMPLE, 16),
             short(tags::COMPRESSION, 1),
             short(pana::CFA_PATTERN, 1),
             long(tags::STRIP_OFFSETS, blob_offset),
-            long(tags::STRIP_BYTE_COUNTS, 16),
+            long(tags::STRIP_BYTE_COUNTS, 16384),
         ];
         let (bytes, _) = build_rw2(&[specs], &blob);
         let file = parse_normalized(&bytes);
@@ -1609,6 +1903,8 @@ mod tests {
             quirks().decode_pixels(&file, raw, &|| true),
             Err(DecodeError::Cancelled)
         ));
+        assert_eq!(quirks().decode_pixels(&file, raw, &|| false).unwrap(), expected);
+        super::super::assert_pixel_cancellation_checkpoints(&quirks(), &file, raw);
     }
 
     /// Minimal file with tunable bps/compression for rejection tests.

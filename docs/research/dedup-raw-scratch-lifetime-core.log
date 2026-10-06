@@ -1,0 +1,28 @@
+   Compiling serde_derive v1.0.229
+   Compiling serde v1.0.229
+   Compiling rrrah-core v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-core)
+    Finished `test` profile [optimized + debuginfo] target(s) in 15.45s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_core-8f1ba64f95836195)
+
+running 12 tests
+test develop::pipeline_tests::gain_map_does_not_turn_unclipped_hdr_into_clipping ... ok
+test develop::pipeline_tests::rgbe_full_development_preserves_emerald_color_crop_and_budget ... ok
+test develop::pipeline_tests::scene_linear_output_retains_g2_hdr_and_managed_ownership ... ok
+test develop::pipeline_tests::xtrans_has_a_sensor_developed_thumbnail_and_linear_view ... ok
+test develop::tests::bad_pixels_use_same_phase_and_radial_vignette_is_spatial ... ok
+test develop::tests::fully_clipped_image_stays_finite_and_neutral_after_wb ... ok
+test develop::tests::opcode_wire_is_strict_and_gain_interpolates ... ok
+test develop::tests::monotone_curves_have_no_overshoot_and_reject_bad_points ... ok
+test develop::tests::spatial_highlights_preserve_unclipped_channels_and_use_nearby_color ... ok
+test develop::tests::quality_cancellation_is_checked_inside_tiles_and_rows ... ok
+test develop::tests::constant_color_and_measured_sites_survive_quality_demosaic ... ok
+test develop::pipeline_tests::random_ahd_tiles_equal_a_single_full_frame_evaluation ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 67 filtered out; finished in 0.03s
+
+     Running tests/color_precision.rs (target/debug/deps/color_precision-29dff190e45fd7f2)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.00s
+

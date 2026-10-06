@@ -1,0 +1,26 @@
+   Compiling rrrah-dedup v0.1.0 (/workspace/crates/rrrah-dedup)
+    Finished `test` profile [optimized + debuginfo] target(s) in 8.25s
+     Running tests/projective_geometry.rs (/validation/target/debug/deps/projective_geometry-2ca9eaaa948a5890)
+
+running 8 tests
+test invalid_horizon_and_cancel_checkpoints ... ok
+test perspective_mapping_and_permutations ... ok
+test perspective_inverse_grid_catches_unsampled_edit ... ok
+test perspective_pixels_hdr_edits_horizon_and_cancel ... ok
+test full_support_refinement_beats_minimal_hypotheses_on_noisy_points ... ok
+test robust_perspective_outliers_budget_and_cancellation ... ok
+test projective_filter_preserves_strict_edits_and_terminal_cancellation ... ok
+test pixel_registration_reduces_known_offset_and_obeys_terminal_limits ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+     Running tests/warp.rs (/validation/target/debug/deps/warp-ed7520e306523881)
+
+running 4 tests
+test reflected_grids_preserve_hdr_alpha_and_inverse_with_atomic_cancel ... ok
+test bilinear_sampling_keeps_alpha_and_invisible_rgb_separate ... ok
+test reverse_verification_catches_edits_between_scaled_sample_centers ... ok
+test crop_overlap_and_single_pixel_edits_are_explicit ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

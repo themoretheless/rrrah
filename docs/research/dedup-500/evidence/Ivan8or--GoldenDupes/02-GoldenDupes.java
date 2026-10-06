@@ -1,0 +1,143 @@
+package online.umbcraft.libraries;
+
+import online.umbcraft.libraries.utils.ConfigPath;
+import online.umbcraft.libraries.dupes.*;
+import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SimpleBarChart;
+import org.bstats.charts.SimplePie;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+
+
+public final class GoldenDupes extends JavaPlugin {
+
+    private static GoldenDupes instance;
+
+    public void onReloadCommand() {
+        reloadConfig();
+    }
+
+    public void onEnable() {
+        instance = this;
+
+        File configFile = new File(instance.getDataFolder(), "config.yml");
+
+        if (!configFile.exists()) {
+            instance.saveDefaultConfig();
+            return;
+        }
+
+        //bStats metrics
+        Metrics metrics = new Metrics(this, 11145);
+
+        // currently does not exist - placeholder
+        metrics.addCustomChart(new SimpleBarChart("server_sizes_bar",
+                () -> {
+                    Map<String, Integer> map = new HashMap<>();
+                    int playercount = getServer().getOnlinePlayers().size();
+
+                    String[] categories = {"0","1","2-4","5-10","11-20","21-30","31-50","51-75","76-100","101+"};
+                    int[] limits =         {0,1,2,5,11,21,31,51,76,100};
+
+                    for(String cat: categories)
+                        map.put(cat,0);
+
+                    for(int i = 0; i < categories.length; i++)
+                        if(playercount <= limits[i]) {
+                            map.put(categories[i], 1);
+                            return map;
+                        }
+
+                    map.put(categories[categories.length-1],1);
+                    return map;
+                }));
+
+
+        metrics.addCustomChart(new SimplePie("server_sizes_pie",
+                () -> {
+                    int playercount = getServer().getOnlinePlayers().size();
+
+                    String[] categories = {"0","1","2-4","5-10","11-20","21-30","31-50","51-75","76-100","101+"};
+                    int[] limits =         {0,1,2,5,11,21,31,51,76,100};
+
+                    for(int i = 0; i < categories.length; i++)
+                        if(playercount <= limits[i]) {
+                            return categories[i];
+                        }
+                    return categories[categories.length-1];
+                }));
+
+        final ConfigPath[] allDoFlags = {
+                ConfigPath.AUTOCRAFT_DO,
+                ConfigPath.PISTON_DO,
+                ConfigPath.NETHER_DO,
+                ConfigPath.ANVIL_DO,
+                ConfigPath.DONKEY_DO};
+
+
+        for(ConfigPath dupe: allDoFlags) {
+            metrics.addCustomChart(new SimplePie(dupe.toString(),
+                    () -> getConfig().getString(dupe.path())));
+        }
+
+        Dupe.loadConfig(getConfig());
+
+        // starts autocraft dupe handler if the dupe is enabled
+        if (getConfig().getBoolean(ConfigPath.AUTOCRAFT_DO.path())) {
+            getServer().getPluginManager().registerEvents(
+                    new AutocraftDupe(), this);
+        }
+
+        // starts autocraft dupe handler if the dupe is enabled
+        if (getConfig().getBoolean(ConfigPath.DONKEY_DO.path())) {
+            getServer().getPluginManager().registerEvents(
+                    new DonkeyDupe(), this);
+        }
+
+        // starts nether portal minecart dupe handler if the dupe is enabled
+        if (getConfig().getBoolean(ConfigPath.NETHER_DO.path())) {
+            getServer().getPluginManager().registerEvents(
+                    new NetherPortalDupe(), this);
+        }
+
+        // starts anvil dupe handler if the dupe is enabled
+        if (getConfig().getBoolean(ConfigPath.ANVIL_DO.path())) {
+        getServer().getPluginManager().registerEvents(
+                new AnvilDupe(), this);
+        }
+
+        // starts piston dupe handler if the dupe is enabled
+        if (getConfig().getBoolean(ConfigPath.PISTON_DO.path())) {
+            getServer().getPluginManager().registerEvents(
+                    new PistonDupe(), this);
+        }
+
+    }
+
+    // Server version, e.g. 1.20.2-R0.1-SNAPSHOT -> {"1","20","2"}
+    private final static String[] serverVersion = Bukkit.getServer().getBukkitVersion()
+            .substring(0, Bukkit.getServer().getBukkitVersion().indexOf("-"))
+            .split("\\.");
+
+    private final static int mcFirstVersion = Integer.parseInt(serverVersion[0]);
+    public final static int majorVersion = Integer.parseInt(serverVersion[1]);
+    public final static int minorVersion = serverVersion.length == 3 ? Integer.parseInt(serverVersion[2]) : 0;
+
+    public static GoldenDupes getInstance() {
+        return instance;
+    }
+
+    public static boolean isFolia() {
+        try {
+            Class.forName("io.papermc.paper.threadedregions.RegionizedServer");
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+    }
+
+}

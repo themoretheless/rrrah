@@ -1,0 +1,93 @@
+{
+  "status": "macOS 27 and Linux 28 tests passed; Windows cross check/Clippy passed; native Windows pending",
+  "source": "crates/rrrah-dedup/src/exact.rs",
+  "finding": "Non-Unix canonical-path identity cannot merge differently named hardlinks",
+  "acceptance_test": "physical_hardlinks_are_aliases_while_copied_bytes_are_separate_files",
+  "test_file": "crates/rrrah-dedup/tests/exact_files.rs",
+  "native_windows_run": false,
+  "candidate_safe_interface": "winapi_util::file::information from open handle; volume_serial_number and file_index",
+  "constraints": [
+    "Keep handle identity and path observations consistent during mutation",
+    "Propagate identity acquisition errors rather than fallback silently",
+    "Preserve source descriptor identity during confirmation",
+    "Run native Windows hardlink and replacement fixtures before qualifying"
+  ],
+  "official_rust_reference": "https://doc.rust-lang.org/stable/src/std/os/windows/fs.rs.html",
+  "implementation": "winapi_util::file::information on open handles; Windows volume/file index; fallible observation; descriptor-based confirmation",
+  "host_exact_tests": 15,
+  "host_log": "/tmp/dedup-windows-identity-host.log",
+  "target_install_session": 37993,
+  "target_install_log": "/tmp/dedup-windows-target.log",
+  "logs": {
+    "windows-check": {
+      "path": "docs/research/dedup-identity-replacement-windows-check.log",
+      "sha256": "1cc8655f6a0d9a8242f2819827476d2b979b6207c8796c616f42cabc418006c5"
+    },
+    "windows-focused-clippy": {
+      "path": "docs/research/dedup-identity-windows-focused-clippy.log",
+      "sha256": "671a45071a8e8b3f4befbbf4319ad7151e691ebb38f97d13fcd43cb229816872"
+    },
+    "host-tests": {
+      "path": "docs/research/dedup-identity-host-tests.log",
+      "sha256": "fdb76d59c26e368e99c0d6b14b95cb8d34728a0ee9f0c80cff68dd01c6195dde"
+    },
+    "macos": {
+      "path": "docs/research/dedup-identity-replacement-macos.log",
+      "sha256": "07281485ae9f5a05dd6c0bb030b7c8feabd82298f230491e1f9836c34ae7a635"
+    },
+    "clippy": {
+      "path": "docs/research/dedup-identity-replacement-clippy.log",
+      "sha256": "7e0b8a19d5199311737f6178dfe81146079cbe3d210598eefb2fef837c486d72"
+    },
+    "windows-clippy": {
+      "path": "docs/research/dedup-identity-replacement-windows-clippy.log",
+      "sha256": "48702441e1c54197f19b7b237bf6fb637c56e2d493dd7dfe2e27ef300e15d127"
+    },
+    "linux": {
+      "path": "docs/research/dedup-identity-linux.log",
+      "sha256": "37aeec1e7f1dca8116272bcca812344182f791d406d1377e7cc84a24710d272e"
+    }
+  },
+  "post_host_test_changes": "Equivalent target-specific Clippy fixes and documented fallible signature",
+  "source_snapshot": {
+    "crates/rrrah-dedup/src/exact.rs": "d48c32e9a7b651ef8cb54fa7cf18d8d33cdfef76c9d3f71564a2146caa354f47",
+    "crates/rrrah-dedup/Cargo.toml": "47f644bf629bae317d7e8164706f0cc4a5853ebd8af7e0f91f93d5ec0a2cf24a",
+    "crates/rrrah-dedup/tests/exact_files.rs": "c2fc66a4b5289105d0e2705039ae93dfb8db2116037f29c1cf3ef00793e395be"
+  },
+  "host_lib_tests": 12,
+  "windows_ci": ".github/workflows/dedup-windows.yml",
+  "windows_ci_executed": false,
+  "replacement_fixture": "Retains original inode/index at a second path; replaces source with identical bytes and restored mtime; original snapshot refuses and new snapshot retry succeeds",
+  "linux_tests": {
+    "lib": 12,
+    "exact_files": 16,
+    "total": 28
+  },
+  "followup_resource_review": {
+    "status": "Observed-size recheck implemented; deterministic fresh-handle race simulation passed on macOS; Windows cross-check passed; native Windows pending",
+    "paths": [
+      "crates/rrrah-dedup/src/exact.rs:Stamp::new",
+      "crates/rrrah-dedup/src/exact.rs:ContentSnapshot::read"
+    ],
+    "finding": "ContentSnapshot checks max_bytes against fs::metadata before fallible Windows Stamp acquisition opens the path again and takes fresh descriptor metadata",
+    "counterexample": "Initially small path is replaced by a larger file before Windows Stamp::new opens it; stamp/hash can refer consistently to the replacement while the earlier policy check referred to the original",
+    "required_fix": "Apply max_bytes to the acquired stamp as well before hashing; retain source-change attribution and same-path retry",
+    "evidence_kind": "Actual 4-to-16-byte replacement injected between initial metadata and fresh-handle observation; Policy at limit 8 with only initial callback; verified retry at limit 16",
+    "implementation": "ContentSnapshot::read_observed validates acquired Stamp bytes before hashing; public read delegates to default observation",
+    "test": "replacement_after_initial_metadata_cannot_bypass_observed_size_limit"
+  },
+  "resource_logs": {
+    "macos": {
+      "path": "docs/research/dedup-observed-size-macos.log",
+      "sha256": "658c95d04b9d870a7f6af35725f034b1541e64684471911f81d526d0b4366b60"
+    },
+    "windows-check": {
+      "path": "docs/research/dedup-observed-size-windows-check.log",
+      "sha256": "df73513d3d81790109ea238611ff83c127d47c1a43dbcc420f6cdd619646e3b3"
+    },
+    "clippy": {
+      "path": "docs/research/dedup-observed-size-clippy.log",
+      "sha256": "718d5b33dd7a271a931057981453c2f95f89d94fcc071effd90aa2b497848af5"
+    }
+  }
+}

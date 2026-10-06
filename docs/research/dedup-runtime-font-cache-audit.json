@@ -1,0 +1,64 @@
+{
+  "status": "Behavioral stale-cache reproduction confirmed on native Linux",
+  "requirement": "Repeated scans: complete decoder/recipe identity",
+  "finding": "SVG text decoding loads system fonts into a process-local OnceLock, while fingerprint_file cache keys include source digest, build identity, explicit recipe and decode limits only. System font contents are not automatically represented. Identical SVG bytes and binary can therefore address the same persisted cache entry across processes with different font sets. This is a causal source inference, not an executed stale-cache reproduction.",
+  "evidence": {
+    "svg": "FONTS.get_or_init loads system fonts when text elements exist",
+    "cache": "fingerprint_file derives recipe from build identity and policy/request fields",
+    "build": "Build identity hashes workspace source/compiler/environment; does not hash runtime font contents"
+  },
+  "source_sha256": {
+    "crates/rrrah-dedup/src/decode.rs": "ff768129d2f0603c21eba765ee7535a37439c263723de82dbd419978e54956d2",
+    "crates/rrrah-dedup/build.rs": "ea12b6297f3282d6c98b5ed186708ccc5d7ac441f1f370e700f088e334d22b48",
+    "crates/rrrah-dedup/build_context.rs": "8c5ab4c2ee9532bcb60a979f390d6e0fab7af17e84f0018fcf2e8084abf5f711",
+    "crates/rrrah-decode/src/svg.rs": "171ab68ec044cd0624a1acdeb2615170b01f2c37131c02b4542cf723d0b6c860"
+  },
+  "next_work": [
+    "Create isolated two-process SVG font-set reproduction without changing user fonts",
+    "Expose identity of the actual loaded font database from decoder",
+    "Include that identity in cache admission/reuse and test persisted cache invalidation"
+  ],
+  "limits": [
+    "System font discovery/snapshot allocation remains outside complete managed memory/cancellation qualification",
+    "Native dynamic library identity remains incomplete"
+  ],
+  "reproduction": {
+    "same_binary": true,
+    "same_svg": true,
+    "same_cache": true,
+    "first_process": "No system fonts: cache miss and fresh agree, exit 0",
+    "second_process": "DejaVu fonts mounted only in isolated container: cache hit differs from fresh decode, exit 1",
+    "logs": [
+      "dedup-font-cache-linux-empty.log",
+      "dedup-font-cache-linux-changed.log"
+    ],
+    "fonts": "Ubuntu fonts-dejavu-core 2.37-8"
+  },
+  "fix_status": "Behavioral font-change invalidation and stable-font reuse passed on native Linux",
+  "fix": "SVG decoder retains immutable font bytes and hashes font contents, face metadata/order and generic family selection; SVG fingerprint recipe incorporates same snapshot identity",
+  "verification": {
+    "check": "cargo check --all-features --example font_cache_probe passed",
+    "linux_empty_session": 8781,
+    "macos_decode_session": 15381,
+    "pending": "Repeat changed-font and stable-font reuse using same newly built Linux binary",
+    "macos_decode_tests": "12 passed, terminal exit 0",
+    "linux_empty": "cache_hit=false equal_to_fresh=true, exit 0",
+    "linux_changed": "cache_hit=false equal_to_fresh=true, exit 0",
+    "linux_stable": "cache_hit=true equal_to_fresh=true, exit 0",
+    "clippy": "Scoped command exit 0; existing rrrah-decode warnings remain, not a warnings-denied gate",
+    "macos_svg_tests": "4 passed, terminal exit 0; alpha, unsupported elements, dimensions and managed-output admission"
+  },
+  "fixed_source_sha256": {
+    "crates/rrrah-dedup/src/decode.rs": "07dd54bbc01a456b1bc0504a9bd05366c54d06b894f1b99d9cbda4c2b5ec0e7f",
+    "crates/rrrah-dedup/build.rs": "ea12b6297f3282d6c98b5ed186708ccc5d7ac441f1f370e700f088e334d22b48",
+    "crates/rrrah-dedup/build_context.rs": "8c5ab4c2ee9532bcb60a979f390d6e0fab7af17e84f0018fcf2e8084abf5f711",
+    "crates/rrrah-decode/src/svg.rs": "e4ee6018d3b508ade9909bd62d07aa3ea4d4a712ed96155a70f4039ff4b3ef48"
+  },
+  "fixed_logs": [
+    "dedup-font-cache-fixed-linux-empty.log",
+    "dedup-font-cache-fixed-linux-changed.log",
+    "dedup-font-cache-fixed-linux-stable.log",
+    "dedup-font-cache-fixed-decode-tests.log",
+    "dedup-font-snapshot-svg-tests.log"
+  ]
+}

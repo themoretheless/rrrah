@@ -49,7 +49,7 @@ fn phase_index(position: vec2<i32>) -> u32 {
 
 fn cfa_color(position: vec2<i32>) -> u32 { return parameters.cfa[phase_index(position)]; }
 
-fn normalized_sample(position: vec2<i32>) -> f32 {
+fn sensor_sample(position: vec2<i32>) -> f32 {
     let coordinate = clamped_sensor_coordinate(position);
     let phase = phase_index(coordinate);
     // Keep all coordinate arithmetic signed. WGSL does not implicitly convert
@@ -68,8 +68,18 @@ fn normalized_sample(position: vec2<i32>) -> f32 {
         0,
     ).r);
     let black = parameters.black[phase];
-    let range = max(parameters.white[phase] - black, 1.0);
+    let range = select(max(parameters.white[phase] - black, 1.0), parameters.white[phase] - black, parameters._padding.x == 1u);
     return max(encoded - black, 0.0) / range;
+}
+
+fn normalized_sample(position: vec2<i32>) -> f32 {
+    // WB belongs to each photosite before interpolation, including G2.
+    let phase = phase_index(position);
+    let color = parameters.cfa[phase];
+    let first_green = select(1u, 0u, parameters.cfa[0] == 1u);
+    let gain = select(parameters.white_balance[color], parameters.white_balance.w,
+        color == 1u && phase != first_green);
+    return sensor_sample(position) * gain;
 }
 
 fn bilinear_demosaic(position: vec2<i32>) -> vec3<f32> {
@@ -100,20 +110,120 @@ fn inverse_orientation(display_uv: vec2<f32>) -> vec2<f32> {
         case 2u: { return vec2<f32>(1.0 - display_uv.x, 1.0 - display_uv.y); }
         case 3u: { return vec2<f32>(display_uv.x, 1.0 - display_uv.y); }
         case 4u: { return vec2<f32>(display_uv.y, display_uv.x); }
-        case 5u: { return vec2<f32>(1.0 - display_uv.y, display_uv.x); }
+        case 5u: { return vec2<f32>(display_uv.y, 1.0 - display_uv.x); }
         case 6u: { return vec2<f32>(1.0 - display_uv.y, 1.0 - display_uv.x); }
-        case 7u: { return vec2<f32>(display_uv.y, 1.0 - display_uv.x); }
+        case 7u: { return vec2<f32>(1.0 - display_uv.y, display_uv.x); }
         default: { return display_uv; }
     }
 }
 
 fn camera_rgb_at(raw_position: vec2<f32>) -> vec3<f32> {
-    return bilinear_demosaic(vec2<i32>(round(raw_position)));
+    let position = vec2<i32>(round(raw_position));
+    let rgb = bilinear_demosaic(position);
+    let quad = position - (position % vec2<i32>(2));
+    let clipped = sensor_sample(quad) >= 1.0 || sensor_sample(quad + vec2<i32>(1,0)) >= 1.0
+        || sensor_sample(quad + vec2<i32>(0,1)) >= 1.0 || sensor_sample(quad + vec2<i32>(1,1)) >= 1.0;
+    let minimum = min(rgb.r,min(rgb.g,rgb.b));
+    if clipped && minimum >= 1.0 && parameters._padding.y == 0u { return vec3<f32>(minimum); }
+    return rgb;
 }
 
+// Integrate complete Bayer cells over a destination pixel's sensor footprint.
+// Sampling isolated photosites at a large stride aliases CFA phase and edges.
+fn quad_camera_rgb(origin: vec2<i32>) -> vec3<f32> {
+    let offsets = array<vec2<i32>,4>(vec2<i32>(0,0),vec2<i32>(1,0),vec2<i32>(0,1),vec2<i32>(1,1));
+    var rgb = vec3<f32>(0.0);
+    var clipped = false;
+    let first_green = select(1u,0u,parameters.cfa[0] == 1u);
+    for (var phase = 0u; phase < 4u; phase += 1u) {
+        let raw = sensor_sample(origin+offsets[phase]);
+        let color = parameters.cfa[phase];
+        let gain = select(parameters.white_balance[color],parameters.white_balance.w,color == 1u && phase != first_green);
+        rgb[color] += raw*gain*select(1.0,0.5,color == 1u);
+        clipped = clipped || raw >= 1.0;
+    }
+    let minimum = min(rgb.r,min(rgb.g,rgb.b));
+    if clipped && minimum >= 1.0 && parameters._padding.y == 0u { return vec3<f32>(minimum); }
+    return rgb;
+}
+
+fn area_camera_rgb(position: vec2<f32>, distance: f32) -> vec3<f32> {
+    let center = position+vec2<f32>(0.5);
+    let lower = max(vec2<f32>(parameters.crop_origin),center-vec2<f32>(distance*0.5));
+    let upper = min(vec2<f32>(parameters.crop_origin+parameters.crop_size),center+vec2<f32>(distance*0.5));
+    let start = (vec2<i32>(floor(lower))/2)*2;
+    let end = vec2<i32>(ceil(upper));
+    var sum = vec3<f32>(0.0);
+    var total = 0.0;
+    for (var y = start.y; y < end.y; y += 2) {
+        for (var x = start.x; x < end.x; x += 2) {
+            let origin = vec2<i32>(x,y);
+            let overlap = max(vec2<f32>(0.0),min(vec2<f32>(origin+vec2<i32>(2)),upper)-max(vec2<f32>(origin),lower));
+            let weight = overlap.x*overlap.y;
+            sum += quad_camera_rgb(origin)*weight;
+            total += weight;
+        }
+    }
+    return sum/max(total,0.00000001);
+}
+
+// RGBE uses four independent two-pixel lattices, including at sensor edges.
+fn rgbe_axis(coordinate:i32,phase:i32,size:i32)->vec3<f32> {
+    let last=phase+((size-1-phase)/2)*2;
+    let lower=min(phase+(max(coordinate-phase,0)/2)*2,last);
+    let upper=min(lower+2,last);
+    var weight=0.0;
+    if upper>lower { weight=clamp(f32(coordinate-lower)/f32(upper-lower),0.0,1.0); }
+    return vec3<f32>(f32(lower),f32(upper),weight);
+}
+fn rgbe_planes(position:vec2<i32>)->vec4<f32> {
+    var planes=vec4<f32>(0.0);
+    let coordinate=clamped_sensor_coordinate(position);
+    for(var phase=0u;phase<4u;phase+=1u) {
+        let x=rgbe_axis(coordinate.x,i32(phase%2u),i32(parameters.raw_size.x));
+        let y=rgbe_axis(coordinate.y,i32(phase/2u),i32(parameters.raw_size.y));
+        let a=sensor_sample(vec2<i32>(i32(x.x),i32(y.x)));
+        let b=sensor_sample(vec2<i32>(i32(x.y),i32(y.x)));
+        let c=sensor_sample(vec2<i32>(i32(x.x),i32(y.y)));
+        let d=sensor_sample(vec2<i32>(i32(x.y),i32(y.y)));
+        let channel=parameters.cfa[phase];
+        planes[channel]=mix(mix(a,b,x.z),mix(c,d,x.z),y.z)*parameters.white_balance[channel];
+    }
+    return planes;
+}
+fn rgbe_filtered(position:vec2<f32>,distance:f32)->vec4<f32> {
+    if distance<2.0 { return rgbe_planes(vec2<i32>(round(position))); }
+    let center=position+vec2<f32>(0.5);
+    let lower=max(vec2<f32>(parameters.crop_origin),center-vec2<f32>(distance*0.5));
+    let upper=min(vec2<f32>(parameters.crop_origin+parameters.crop_size),center+vec2<f32>(distance*0.5));
+    let start=(vec2<i32>(floor(lower))/2)*2;
+    let end=vec2<i32>(ceil(upper));
+    var sum=vec4<f32>(0.0);
+    var total=0.0;
+    for(var y=start.y;y<end.y;y+=2) { for(var x=start.x;x<end.x;x+=2) {
+        let origin=vec2<i32>(x,y);
+        let overlap=max(vec2<f32>(0.0),min(vec2<f32>(origin+vec2<i32>(2)),upper)-max(vec2<f32>(origin),lower));
+        let weight=overlap.x*overlap.y;
+        var planes=vec4<f32>(0.0);
+        for(var phase=0u;phase<4u;phase+=1u) {
+            let channel=parameters.cfa[phase];
+            let offset=vec2<i32>(i32(phase%2u),i32(phase/2u));
+            let last=offset+((vec2<i32>(parameters.raw_size)-vec2<i32>(1)-offset)/2)*2;
+            planes[channel]=sensor_sample(min(origin+offset,last))*parameters.white_balance[channel];
+        }
+        sum+=planes*weight; total+=weight;
+    }}
+    return sum/max(total,0.00000001);
+}
 fn developed_rgb_at(raw_position: vec2<f32>, raw_pixel_footprint: f32) -> vec3<f32> {
+    if parameters._padding.x == 1u {
+        let planes=rgbe_filtered(raw_position,raw_pixel_footprint);
+        return vec3<f32>(dot(parameters.camera_to_rgb_0,planes),dot(parameters.camera_to_rgb_1,planes),dot(parameters.camera_to_rgb_2,planes))*exp2(parameters.exposure_stops);
+    }
     var camera_rgb: vec3<f32>;
-    if raw_pixel_footprint > 1.5 {
+    if raw_pixel_footprint >= 2.0 {
+        camera_rgb = area_camera_rgb(raw_position,raw_pixel_footprint);
+    } else if raw_pixel_footprint > 1.5 {
         let distance = min(raw_pixel_footprint * 0.25, 12.0);
         camera_rgb = 0.25 * (
             camera_rgb_at(raw_position + vec2<f32>(-distance, -distance)) +
@@ -122,7 +232,6 @@ fn developed_rgb_at(raw_position: vec2<f32>, raw_pixel_footprint: f32) -> vec3<f
             camera_rgb_at(raw_position + vec2<f32>(distance, distance))
         );
     } else { camera_rgb = camera_rgb_at(raw_position); }
-    camera_rgb *= parameters.white_balance.xyz;
     let linear_rgb = vec3<f32>(
         dot(parameters.camera_to_rgb_0.xyz, camera_rgb),
         dot(parameters.camera_to_rgb_1.xyz, camera_rgb),
@@ -189,5 +298,6 @@ fn fs_main(@builtin(position) fragment: vec4<f32>) -> @location(0) vec4<f32> {
     let crop_extent = max(vec2<f32>(parameters.crop_size) - vec2<f32>(1.0), vec2<f32>(0.0));
     let raw_position = vec2<f32>(parameters.crop_origin) + raw_uv * crop_extent;
     let linear_rgb = developed_rgb_at(raw_position, 1.0 / scale);
+    if parameters._padding.y == 1u { return vec4<f32>(linear_rgb, 1.0); }
     return vec4<f32>(aces_tone_map(linear_rgb), 1.0);
 }

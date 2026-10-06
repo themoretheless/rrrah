@@ -1,0 +1,78 @@
+{
+  "index": 305,
+  "repository": "NomaDamas/dupey",
+  "commit": "618a9edee0f9244aa3b26c97bf630ddadfc0059b",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Rust office-document family/MinHash CLI with skip patterns/tests; explainable candidate relationships, no pixel normalizer.",
+  "available_source_evidence": [
+    {
+      "path": "crates/dupey-cli/src/main.rs",
+      "local": "02-main.rs",
+      "url": "https://github.com/NomaDamas/dupey/blob/618a9edee0f9244aa3b26c97bf630ddadfc0059b/crates/dupey-cli/src/main.rs",
+      "sha256": "964ed1cfb70d936031952e7b42cadea8ab6ec12335d27d4b33bec911dbe47e27",
+      "truncated": false,
+      "lines": 400,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "crates/dupey-cli/src/skip.rs",
+      "local": "03-skip.rs",
+      "url": "https://github.com/NomaDamas/dupey/blob/618a9edee0f9244aa3b26c97bf630ddadfc0059b/crates/dupey-cli/src/skip.rs",
+      "sha256": "cb8f7626a8747ff0a2af78f76789c68c836e6c8291d9a8ccdec9eb4ec996d809",
+      "truncated": false,
+      "lines": 124,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "crates/dupey-core/src/error.rs",
+      "local": "04-error.rs",
+      "url": "https://github.com/NomaDamas/dupey/blob/618a9edee0f9244aa3b26c97bf630ddadfc0059b/crates/dupey-core/src/error.rs",
+      "sha256": "f1dd9529ce33bacae4de7f9467e9d7233fa98de38e8190987b19134133942af3",
+      "truncated": false,
+      "lines": 19,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "crates/dupey-cli/tests/cli.rs",
+      "local": "05-cli.rs",
+      "url": "https://github.com/NomaDamas/dupey/blob/618a9edee0f9244aa3b26c97bf630ddadfc0059b/crates/dupey-cli/tests/cli.rs",
+      "sha256": "08ef2be4e39f11d117e2b07df2d44f758fb5e66824177865c5cd023fada338ad",
+      "truncated": false,
+      "lines": 496,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 1,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/NomaDamas/dupey/blob/618a9edee0f9244aa3b26c97bf630ddadfc0059b/README.md",
+      "sha256": "545ed7d419d9cb6cc5cb1b120e6c0cd21e802e30ef4671a24e9479398fb8bffb",
+      "truncated": false,
+      "lines": 227,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/NomaDamas/dupey/blob/618a9edee0f9244aa3b26c97bf630ddadfc0059b/LICENSE",
+      "sha256": "a45464d8af35ccd41cdcc3fa61f090da4e14b1426a21c2ab7477f2f86b5dcc90",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

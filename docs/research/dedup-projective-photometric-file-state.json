@@ -1,0 +1,24 @@
+{
+  "status": "macos_direct_gate_passed_linux_and_integration_pending",
+  "session": 52325,
+  "scope": "Explicit selected-file anchored geometry plus bounded photometric final comparison; direct mode only, no indexed/root integration proof",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/local_scan.rs": "d2e898d062b322a49af786a5a2107211d2f9496c1d731edb178060aefac49265",
+    "crates/rrrah-dedup/src/warp.rs": "06c4e24d7291d311f78b41e9edc7571f8cc541209591a473476894de788c9f09",
+    "crates/rrrah-dedup/tests/projective_files.rs": "084f772088fa4d0545cf485422286909e9ba886f8e196f7b80d4324999035133"
+  },
+  "remaining": [
+    "Linux file mode",
+    "Index/root integration and mutation/cancellation gates",
+    "Independent combined perspective and illumination positives/negatives",
+    "Complete contract"
+  ],
+  "macos": {
+    "exit": 0,
+    "passed": 1,
+    "failed": 0,
+    "ignored": 0,
+    "clippy_exit": 0,
+    "log": "docs/research/dedup-projective-photometric-file-macos.log"
+  }
+}

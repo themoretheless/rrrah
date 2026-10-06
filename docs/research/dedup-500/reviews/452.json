@@ -1,0 +1,78 @@
+{
+  "index": 452,
+  "repository": "Intervention/imagehash",
+  "commit": "f66faf81b2b05ea26fe4fbbf7a896edfafbefebd",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "PHP strategy/analyzer/hash bytes with test providers; independent oracle candidate, image backend normalization remains important.",
+  "available_source_evidence": [
+    {
+      "path": "src/Hash.php",
+      "local": "02-Hash.php",
+      "url": "https://github.com/Intervention/imagehash/blob/f66faf81b2b05ea26fe4fbbf7a896edfafbefebd/src/Hash.php",
+      "sha256": "c20db411ae052e9e3a9d41f81341c33ba92d898bbbc23349aaa495a181dd3fbc",
+      "truncated": false,
+      "lines": 214,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/ImageHasher.php",
+      "local": "03-ImageHasher.php",
+      "url": "https://github.com/Intervention/imagehash/blob/f66faf81b2b05ea26fe4fbbf7a896edfafbefebd/src/ImageHasher.php",
+      "sha256": "8d63968af2e6dee70948350d10eba66785daa8838b729bc2a4441a52f026f0a9",
+      "truncated": false,
+      "lines": 86,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/Analyzers/ImageHashAnalyzer.php",
+      "local": "04-ImageHashAnalyzer.php",
+      "url": "https://github.com/Intervention/imagehash/blob/f66faf81b2b05ea26fe4fbbf7a896edfafbefebd/src/Analyzers/ImageHashAnalyzer.php",
+      "sha256": "d851855ae4198e65d446093eebdf2902dd96fd2d208c9af600a4e001c9cdbad5",
+      "truncated": false,
+      "lines": 24,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/Providers/HashDataProvider.php",
+      "local": "05-HashDataProvider.php",
+      "url": "https://github.com/Intervention/imagehash/blob/f66faf81b2b05ea26fe4fbbf7a896edfafbefebd/tests/Providers/HashDataProvider.php",
+      "sha256": "ecee4e0d1894d7ec9e9c27c3a3bd1920be5a3ed9838e253c92010a1478467aab",
+      "truncated": false,
+      "lines": 232,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 7,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/Intervention/imagehash/blob/f66faf81b2b05ea26fe4fbbf7a896edfafbefebd/README.md",
+      "sha256": "21714c89059bda10d3d12e2ba88aa33dc3f5a15f962ae064b50cd4da0c692b76",
+      "truncated": false,
+      "lines": 136,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE.md",
+      "local": "01-LICENSE.md",
+      "url": "https://github.com/Intervention/imagehash/blob/f66faf81b2b05ea26fe4fbbf7a896edfafbefebd/LICENSE.md",
+      "sha256": "180325b1fc71c383d7cc7bdf109ff13b7c96dfa5c1ffe881cc68c31bc5a75c2b",
+      "truncated": false,
+      "lines": 22,
+      "source": false,
+      "test": false
+    }
+  ]
+}

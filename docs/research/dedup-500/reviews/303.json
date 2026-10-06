@@ -1,0 +1,88 @@
+{
+  "index": 303,
+  "repository": "kekyo/DupeNukem",
+  "commit": "8f7f26b9d7eb18167bfeaeb6ac54d09256dc9559",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "WebView duplex messaging bridge; name DupeNukem not content deduplication.",
+  "available_source_evidence": [
+    {
+      "path": "DupeNukem.Core/CallableTargetAttribute.cs",
+      "local": "02-CallableTargetAttribute.cs",
+      "url": "https://github.com/kekyo/DupeNukem/blob/8f7f26b9d7eb18167bfeaeb6ac54d09256dc9559/DupeNukem.Core/CallableTargetAttribute.cs",
+      "sha256": "d15fe764786509b3a17a6aa6bb67363e9408f33ef428f5f5db5a254763c110ea",
+      "truncated": false,
+      "lines": 31,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "DupeNukem.Core/ConverterContext.cs",
+      "local": "03-ConverterContext.cs",
+      "url": "https://github.com/kekyo/DupeNukem/blob/8f7f26b9d7eb18167bfeaeb6ac54d09256dc9559/DupeNukem.Core/ConverterContext.cs",
+      "sha256": "235b68d02baf9ca4db4cb5d964fd195947844dbfc48defbe4882a4b1bbb4ff3e",
+      "truncated": false,
+      "lines": 154,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "DupeNukem.Core/ExceptionPropertyAttribute.cs",
+      "local": "04-ExceptionPropertyAttribute.cs",
+      "url": "https://github.com/kekyo/DupeNukem/blob/8f7f26b9d7eb18167bfeaeb6ac54d09256dc9559/DupeNukem.Core/ExceptionPropertyAttribute.cs",
+      "sha256": "a03eaee6b340e1ea97eda5edc06d78e70e28f688f7049232502de251e47d3580",
+      "truncated": false,
+      "lines": 27,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "samples/DupeNukem.WebView2/ViewModels/TestFragments.cs",
+      "local": "05-TestFragments.cs",
+      "url": "https://github.com/kekyo/DupeNukem/blob/8f7f26b9d7eb18167bfeaeb6ac54d09256dc9559/samples/DupeNukem.WebView2/ViewModels/TestFragments.cs",
+      "sha256": "8234a7c99912e61abba10a2f272861fead9d46e0ee111e1fb89f5602d2dd20c2",
+      "truncated": false,
+      "lines": 463,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "DupeNukem.Core/IMessenger.cs",
+      "local": "06-IMessenger.cs",
+      "url": "https://github.com/kekyo/DupeNukem/blob/8f7f26b9d7eb18167bfeaeb6ac54d09256dc9559/DupeNukem.Core/IMessenger.cs",
+      "sha256": "b705ff68a296e967f0e12edbbbe9f48f93069eee524e4c89dbf3430a1e1bd239",
+      "truncated": false,
+      "lines": 97,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "Apache-2.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/kekyo/DupeNukem/blob/8f7f26b9d7eb18167bfeaeb6ac54d09256dc9559/README.md",
+      "sha256": "72d333fd62edba771878b98da09cc7823cea083f5a4a3b4b004ac28115168ab9",
+      "truncated": false,
+      "lines": 745,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/kekyo/DupeNukem/blob/8f7f26b9d7eb18167bfeaeb6ac54d09256dc9559/LICENSE",
+      "sha256": "58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd",
+      "truncated": false,
+      "lines": 202,
+      "source": false,
+      "test": false
+    }
+  ]
+}

@@ -1,0 +1,687 @@
+{
+  "generator": "generate-dedup-photo-fixtures.py",
+  "pillow": "12.3.0",
+  "scope": "Embedded rendered camera JPEG derivatives; not full RAW development. Brightness multiplies encoded RGB values, not scene-linear exposure.",
+  "cases": [
+    {
+      "source": {
+        "id": 830,
+        "make": "Pentax",
+        "model": "K-x",
+        "mode": "12bit (3:2)",
+        "license": "CC0-1.0",
+        "url": "https://raw.pixls.us/getfile.php/830/nice/Pentax - K-x - 12bit (3:2).DNG",
+        "sha256": "7a594b66b54f99bb5aba4627c78abfc41213d6911ea54e4f5d2dd6c8505f6968",
+        "filename": "830.dng",
+        "exif_url": "https://raw.pixls.us/getfile.php/830/exif/IMGP6431.DNG.exif.txt",
+        "oracle": {
+          "libraw_version": "0.22.2-Release",
+          "make": "Pentax",
+          "model": "K-x",
+          "width": 4352,
+          "height": 2868,
+          "crop": [
+            0,
+            0,
+            4309,
+            2868
+          ],
+          "wb": [
+            1.30078125,
+            1.03125,
+            3.09375,
+            0
+          ],
+          "black": 0,
+          "cblack": [
+            0,
+            0,
+            0,
+            0,
+            2,
+            2
+          ],
+          "white": 4094,
+          "cfa": [
+            "B",
+            "G",
+            "G",
+            "R"
+          ],
+          "xyz_to_camera": [
+            [
+              0.8842999935,
+              -0.2836999893,
+              -0.0625
+            ],
+            [
+              -0.5024999976,
+              1.264400005,
+              0.2667999864
+            ],
+            [
+              -0.0410999991,
+              0.1234000027,
+              0.7409999967
+            ],
+            [
+              0,
+              0,
+              0
+            ]
+          ],
+          "pixels_sha256": "d759e7b57a563bbcbc2b591bb0ec6ea448d337f9386c18368b5b428339777bb1",
+          "pixels_bytes": 24963072,
+          "camera_to_rgb": [
+            [
+              1.535092473,
+              -0.4414236248,
+              -0.09366887063
+            ],
+            [
+              -0.1290688217,
+              1.457166314,
+              -0.3280975223
+            ],
+            [
+              0.02730530128,
+              -0.3555700183,
+              1.328264713
+            ]
+          ]
+        },
+        "metadata_contract": {
+          "crop": [
+            10,
+            10,
+            4288,
+            2848
+          ],
+          "black_grid": [
+            1,
+            9,
+            9,
+            0
+          ],
+          "white": [
+            4094
+          ],
+          "source": "DNG DefaultCrop and BlackLevel/WhiteLevel tags"
+        }
+      },
+      "preview_offset": 13069536,
+      "preview_length": 1290255,
+      "preview_sha256": "70c756e0948d862ae362c378d1c5a04f8b6573269dd7f0c633f597412002e4de",
+      "preview_original_dimensions": [
+        4288,
+        2848
+      ],
+      "files": [
+        {
+          "variant": "base",
+          "file": "830-base.png",
+          "dimensions": [
+            320,
+            213
+          ],
+          "sha256": "943fc72128ba36baed63f5fa54a7681f090923ec086135746f57a094806d5652"
+        },
+        {
+          "variant": "resize",
+          "file": "830-resize.png",
+          "dimensions": [
+            240,
+            160
+          ],
+          "sha256": "f65b0287bcc29602d703e17748a5edb9766bb41b7da9c4d3e203ac6d024fe1a4"
+        },
+        {
+          "variant": "crop",
+          "file": "830-crop.png",
+          "dimensions": [
+            240,
+            161
+          ],
+          "sha256": "31f96204f7eb908a0102ef0c440d6b69339e82b488b1be46ebf52328209fefba"
+        },
+        {
+          "variant": "rotate",
+          "file": "830-rotate.png",
+          "dimensions": [
+            370,
+            299
+          ],
+          "sha256": "9f457b5500249a1a00ceebec386068591ab5640f7d1a63bb468da1449ff5e8c1"
+        },
+        {
+          "variant": "brightness",
+          "file": "830-brightness.png",
+          "dimensions": [
+            320,
+            213
+          ],
+          "sha256": "3b2ea8fa3a192d3ef39f4ee509fdce005a95d759cc40418ec958e25daac49c2a"
+        },
+        {
+          "variant": "jpeg",
+          "file": "830-jpeg.jpg",
+          "dimensions": [
+            320,
+            213
+          ],
+          "sha256": "5d6665e43d73dab4b6661c60b5e37fcc654801fd42e896557e6c9e507aa3ef5e"
+        }
+      ]
+    },
+    {
+      "source": {
+        "id": 898,
+        "make": "Nikon",
+        "model": "D750",
+        "mode": "14bit 14bit compressed (Lossless) (3:2)",
+        "license": "CC0-1.0",
+        "url": "https://raw.pixls.us/getfile.php/898/nice/Nikon - D750 - 14bit 14bit compressed (Lossless) (3:2).NEF",
+        "sha256": "f90deb2819863f5a6ca9913c255fdd83a94963f4284eb88df9d389da7a6c7665",
+        "filename": "898.nef",
+        "exif_url": "https://raw.pixls.us/getfile.php/898/exif/lossless_compressed_14_bit.NEF.exif.txt",
+        "oracle": {
+          "libraw_version": "0.22.2-Release",
+          "make": "Nikon",
+          "model": "D750",
+          "width": 6032,
+          "height": 4032,
+          "crop": [
+            0,
+            0,
+            6032,
+            4032
+          ],
+          "wb": [
+            2.078125,
+            1,
+            1.20703125,
+            1
+          ],
+          "black": 600,
+          "cblack": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "white": 16383,
+          "cfa": [
+            "R",
+            "G",
+            "G",
+            "B"
+          ],
+          "xyz_to_camera": [
+            [
+              0.90200001,
+              -0.2890000045,
+              -0.07150000334
+            ],
+            [
+              -0.4535000026,
+              1.243600011,
+              0.234799996
+            ],
+            [
+              -0.09340000153,
+              0.1919,
+              0.7085999846
+            ],
+            [
+              0,
+              0,
+              0
+            ]
+          ],
+          "pixels_sha256": "c1107b4670dc965e6d2b5578d93956b8e698a1f8c3519355af9c5e63cb0cb0a2",
+          "pixels_bytes": 48642048,
+          "camera_to_rgb": [
+            [
+              1.646769881,
+              -0.4497508705,
+              -0.1970189512
+            ],
+            [
+              -0.1824048758,
+              1.597314954,
+              -0.414910078
+            ],
+            [
+              0.01195938885,
+              -0.4379329979,
+              1.425973654
+            ]
+          ]
+        },
+        "metadata_contract": {
+          "crop": [
+            0,
+            0,
+            6032,
+            4032
+          ],
+          "black_grid": [
+            600,
+            600,
+            600,
+            600
+          ],
+          "white": [
+            16383
+          ],
+          "source": "Full sensor extent; Nikon MakerNote 0x003d black; 14-bit full-scale policy"
+        }
+      },
+      "preview_offset": 963072,
+      "preview_length": 974652,
+      "preview_sha256": "6f7df4ae32795ed5ea13d0deec3a6e72f8d18e02dec8da483348bb3a0220e4a5",
+      "preview_original_dimensions": [
+        6016,
+        4016
+      ],
+      "files": [
+        {
+          "variant": "base",
+          "file": "898-base.png",
+          "dimensions": [
+            320,
+            214
+          ],
+          "sha256": "259e512cf451db4d5a05b1b35cbb0a5f0a9a09527236ac1eb8650648a7eed401"
+        },
+        {
+          "variant": "resize",
+          "file": "898-resize.png",
+          "dimensions": [
+            240,
+            160
+          ],
+          "sha256": "c3c774178078d87b5ef6389f493faa69b90ec651854a7670acbc2ecd87581d7c"
+        },
+        {
+          "variant": "crop",
+          "file": "898-crop.png",
+          "dimensions": [
+            240,
+            162
+          ],
+          "sha256": "d206f2bbb975117577d31b20e343295a7700d7058af8ea4f99add1eab31f8dfe"
+        },
+        {
+          "variant": "rotate",
+          "file": "898-rotate.png",
+          "dimensions": [
+            370,
+            300
+          ],
+          "sha256": "7873e7d6b8d73e6c9234e25737cde27d5b0ddad431cead1e6ec593cf2e9036b1"
+        },
+        {
+          "variant": "brightness",
+          "file": "898-brightness.png",
+          "dimensions": [
+            320,
+            214
+          ],
+          "sha256": "2be8b04bd03fa484a56118316aa0d04a7c5028b487803bf6439bf3683aca93b6"
+        },
+        {
+          "variant": "jpeg",
+          "file": "898-jpeg.jpg",
+          "dimensions": [
+            320,
+            214
+          ],
+          "sha256": "825261fd0b195241afed8b03f05d04d76f9195c09a55eadbb465dc158312d1ff"
+        }
+      ]
+    },
+    {
+      "source": {
+        "id": 1084,
+        "make": "Olympus",
+        "model": "E-M5",
+        "mode": "16bit (4:3)",
+        "license": "CC0-1.0",
+        "url": "https://raw.pixls.us/getfile.php/1084/nice/Olympus - E-M5 - 16bit (4:3).ORF",
+        "sha256": "b2221977cbc6eba0d3b363351072092e5647eaa0d02a5d8432b5d985b29f669f",
+        "filename": "1084.orf",
+        "exif_url": "https://raw.pixls.us/getfile.php/1084/exif/P2082705.ORF.exif.txt",
+        "oracle": {
+          "libraw_version": "0.22.2-Release",
+          "make": "Olympus",
+          "model": "E-M5",
+          "width": 4640,
+          "height": 3472,
+          "crop": [
+            0,
+            0,
+            4640,
+            3472
+          ],
+          "wb": [
+            2.015625,
+            1,
+            1.875,
+            0
+          ],
+          "black": 0,
+          "cblack": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "white": 4065,
+          "cfa": [
+            "R",
+            "G",
+            "G",
+            "B"
+          ],
+          "xyz_to_camera": [
+            [
+              0.8379999995,
+              -0.2630000114,
+              -0.06390000135
+            ],
+            [
+              -0.2887000144,
+              1.07249999,
+              0.2495999932
+            ],
+            [
+              -0.06270000339,
+              0.1427000016,
+              0.5437999964
+            ],
+            [
+              0,
+              0,
+              0
+            ]
+          ],
+          "pixels_sha256": "70bacb72d5afc198efa2f7fd1230812b5b6ff0eaf3b2ebb7d8fe599afd014611",
+          "pixels_bytes": 32220160,
+          "camera_to_rgb": [
+            [
+              1.705488563,
+              -0.532386899,
+              -0.1731016785
+            ],
+            [
+              -0.2921513021,
+              1.816804051,
+              -0.5246527791
+            ],
+            [
+              0.03221755102,
+              -0.4933459461,
+              1.461128354
+            ]
+          ]
+        },
+        "metadata_contract": {
+          "crop": [
+            8,
+            8,
+            4608,
+            3456
+          ],
+          "black_grid": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "white": [
+            4095
+          ],
+          "source": "Olympus ImageProcessing crop/black and ValidBits=12 full-scale policy"
+        }
+      },
+      "preview_offset": 52224,
+      "preview_length": 1073391,
+      "preview_sha256": "787df0c517f0d19152a88899df6378964ee932b8858415d8da0069b78f3cefae",
+      "preview_original_dimensions": [
+        3200,
+        2400
+      ],
+      "files": [
+        {
+          "variant": "base",
+          "file": "1084-base.png",
+          "dimensions": [
+            320,
+            240
+          ],
+          "sha256": "6c610a3de1962c93925d41d401efbdf83cc95548bf82f1962ef51347569642e9"
+        },
+        {
+          "variant": "resize",
+          "file": "1084-resize.png",
+          "dimensions": [
+            240,
+            180
+          ],
+          "sha256": "443ac23be51a452cb8264d154b19f6287c34bfb798c6aab9e5b6185c2d8e4182"
+        },
+        {
+          "variant": "crop",
+          "file": "1084-crop.png",
+          "dimensions": [
+            240,
+            180
+          ],
+          "sha256": "276a328173d54b8136f834ccdcf4586c04e16cd8fb00e8ac8c55eb9a7cd797c6"
+        },
+        {
+          "variant": "rotate",
+          "file": "1084-rotate.png",
+          "dimensions": [
+            378,
+            324
+          ],
+          "sha256": "18b2fe9a6d40698a9122913599ab90a2b9ef70dffb3ef0a1b8a57ee58d35ba06"
+        },
+        {
+          "variant": "brightness",
+          "file": "1084-brightness.png",
+          "dimensions": [
+            320,
+            240
+          ],
+          "sha256": "83a5a1a0e93c9d82774976e741ec0bfc2b0fa512514b321f0912b73f12506f5a"
+        },
+        {
+          "variant": "jpeg",
+          "file": "1084-jpeg.jpg",
+          "dimensions": [
+            320,
+            240
+          ],
+          "sha256": "ade9071d74caa082f7a2e9877064ea6f24b87a52441b9d3f801ecaca025cae71"
+        }
+      ]
+    },
+    {
+      "source": {
+        "id": 1294,
+        "make": "Canon",
+        "model": "EOS 80D",
+        "mode": "RAW (3:2)",
+        "license": "CC0-1.0",
+        "url": "https://raw.pixls.us/getfile.php/1294/nice/Canon - EOS 80D - RAW (3:2).CR2",
+        "sha256": "8f28465cee09844ffad95dbd3ec91923717a329c5ec4f3f405f5b4fce83aaea3",
+        "filename": "1294.cr2",
+        "exif_url": "https://raw.pixls.us/getfile.php/1294/exif/IMG_0098.CR2.exif.txt",
+        "oracle": {
+          "libraw_version": "0.22.2-Release",
+          "make": "Canon",
+          "model": "EOS 80D",
+          "width": 6288,
+          "height": 4056,
+          "crop": [
+            264,
+            36,
+            6024,
+            4020
+          ],
+          "wb": [
+            1771,
+            1024,
+            1827,
+            1024
+          ],
+          "black": 511,
+          "cblack": [
+            0,
+            0,
+            1,
+            1,
+            0,
+            0
+          ],
+          "white": 16383,
+          "cfa": [
+            "R",
+            "G",
+            "G",
+            "B"
+          ],
+          "xyz_to_camera": [
+            [
+              0.7457000017,
+              -0.06710000336,
+              -0.09369999915
+            ],
+            [
+              -0.4848999977,
+              1.249500036,
+              0.2642999887
+            ],
+            [
+              -0.121299997,
+              0.2354000062,
+              0.5491999984
+            ],
+            [
+              0,
+              0,
+              0
+            ]
+          ],
+          "pixels_sha256": "e134ed67fe75e7976d6236f778d6b28cde3c80de7e9264e1ba684846f99fad27",
+          "pixels_bytes": 51008256,
+          "camera_to_rgb": [
+            [
+              1.987941861,
+              -1.159768701,
+              0.1718268245
+            ],
+            [
+              -0.1981778294,
+              1.750995994,
+              -0.5528181791
+            ],
+            [
+              0.03204426542,
+              -0.621062696,
+              1.589018464
+            ]
+          ]
+        },
+        "metadata_contract": {
+          "crop": [
+            276,
+            46,
+            6000,
+            4000
+          ],
+          "black_grid": [
+            512,
+            512,
+            511,
+            511
+          ],
+          "white": [
+            16383
+          ],
+          "source": "Canon SensorInfo crop and ColorData black; SOF3 14-bit full-scale policy"
+        }
+      },
+      "preview_offset": 74420,
+      "preview_length": 5201554,
+      "preview_sha256": "6696cd55742d49427c252234c1589b477ee329091b71a7012bb742b8b1d5ddb8",
+      "preview_original_dimensions": [
+        6000,
+        4000
+      ],
+      "files": [
+        {
+          "variant": "base",
+          "file": "1294-base.png",
+          "dimensions": [
+            320,
+            213
+          ],
+          "sha256": "33f2f8ae054dec2682ad7f18811f229f1c6c0676e889871a271bb9c773fe9c5a"
+        },
+        {
+          "variant": "resize",
+          "file": "1294-resize.png",
+          "dimensions": [
+            240,
+            160
+          ],
+          "sha256": "391351fd89cfe927c413adb49d88b03d43a244cf030ae16993c5c8bfbfe53040"
+        },
+        {
+          "variant": "crop",
+          "file": "1294-crop.png",
+          "dimensions": [
+            240,
+            161
+          ],
+          "sha256": "132644207aeb64865729bbdaa3decce60d837aeba95b432cfb3bca361b40ce99"
+        },
+        {
+          "variant": "rotate",
+          "file": "1294-rotate.png",
+          "dimensions": [
+            370,
+            299
+          ],
+          "sha256": "c6cc05bc816009b1b188023d2919ebc9ffeb2a3a886e7c9062f4b12668649556"
+        },
+        {
+          "variant": "brightness",
+          "file": "1294-brightness.png",
+          "dimensions": [
+            320,
+            213
+          ],
+          "sha256": "655813280433baeadae884df89d4822f7e9681216d6460dd43a9b81872617e5a"
+        },
+        {
+          "variant": "jpeg",
+          "file": "1294-jpeg.jpg",
+          "dimensions": [
+            320,
+            213
+          ],
+          "sha256": "4e674f0c2166fb18382076fecec29ec8fd52d3698bfc54ae3875156cddaafd29"
+        }
+      ]
+    }
+  ]
+}

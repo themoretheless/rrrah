@@ -1,0 +1,88 @@
+{
+  "index": 27,
+  "repository": "mattilyra/LSH",
+  "commit": "a57069bfb70f4b620d47931f81966b5a73c1b480",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Text MinHash/LSH and MurmurHash; candidate retrieval architecture only, generated Cython source needs the original pyx reviewed.",
+  "license_metadata": "MIT",
+  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "tests_detected": 1,
+  "upstream_tests_run": false,
+  "available_source_evidence": [
+    {
+      "path": "lsh/MurmurHash3.cpp",
+      "local": "02-MurmurHash3.cpp",
+      "url": "https://github.com/mattilyra/LSH/blob/a57069bfb70f4b620d47931f81966b5a73c1b480/lsh/MurmurHash3.cpp",
+      "sha256": "30f121ed155ebf336af398aabb7d8d157afdfafc8d981e7b48d2a1ceb4b63e4e",
+      "truncated": false,
+      "lines": 335,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "lsh/MurmurHash3.h",
+      "local": "03-MurmurHash3.h",
+      "url": "https://github.com/mattilyra/LSH/blob/a57069bfb70f4b620d47931f81966b5a73c1b480/lsh/MurmurHash3.h",
+      "sha256": "9af2003e3885c841fa0ac08cb5d5f31541ee9d793f8a9c4a4f771f43fb0d6f41",
+      "truncated": false,
+      "lines": 37,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "lsh/cMinhash.cpp",
+      "local": "04-cMinhash.cpp",
+      "url": "https://github.com/mattilyra/LSH/blob/a57069bfb70f4b620d47931f81966b5a73c1b480/lsh/cMinhash.cpp",
+      "sha256": "555ed7994254bd783374b0038a167b46a013b528104448f254bff181e2ff801b",
+      "truncated": true,
+      "lines": 6260,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "lsh/test/test_cache.py",
+      "local": "05-test_cache.py",
+      "url": "https://github.com/mattilyra/LSH/blob/a57069bfb70f4b620d47931f81966b5a73c1b480/lsh/test/test_cache.py",
+      "sha256": "c71e88aa2a3dc6a956121f4a7468002ef6aaa67ca91ed5b7ab4e475cf9211a5b",
+      "truncated": false,
+      "lines": 216,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "lsh/cMinhash.pyx",
+      "local": "06-cMinhash.pyx",
+      "url": "https://github.com/mattilyra/LSH/blob/a57069bfb70f4b620d47931f81966b5a73c1b480/lsh/cMinhash.pyx",
+      "sha256": "948f34abeaf16e874ef984dc2c3b6363994dc66a197c2bc57e260fd44447ebc0",
+      "truncated": false,
+      "lines": 95,
+      "source": true,
+      "test": false
+    }
+  ],
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/mattilyra/LSH/blob/a57069bfb70f4b620d47931f81966b5a73c1b480/README.md",
+      "sha256": "b9e013e2a7dc5b7a54124f089e302eae591aefe57717d450cc0ee0f5827d7408",
+      "truncated": false,
+      "lines": 28,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/mattilyra/LSH/blob/a57069bfb70f4b620d47931f81966b5a73c1b480/LICENSE",
+      "sha256": "9425af60ec68a046799e644d6933e45a1b6c70ca5fc335130335862ecfcdd5ff",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

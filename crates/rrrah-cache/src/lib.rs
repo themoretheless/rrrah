@@ -11,6 +11,15 @@ mod key;
 mod mosaic_object_v1;
 mod mosaic_payload_v1;
 mod ram;
+mod raster_payload;
+pub use raster_payload::{RasterPayloadError, raster_payload_len, read_raster_payload, write_raster_payload};
+mod raster_ram;
+pub use raster_ram::RasterRamCache;
+mod swap;
+pub use swap::{
+    ImageSwapCache, ImageSwapConfig, ImageSwapStats, MAX_SWAP_QUEUE_COUNT, MosaicSwapCache, MosaicSwapConfig,
+    MosaicSwapStats, RasterSwapCache, SpillAdmission, SwapPayload, SwapPayloadError,
+};
 mod weighted_lru;
 
 #[cfg(feature = "bench-internals")]
@@ -35,10 +44,11 @@ pub use mosaic_payload_v1::{
     MAX_MOSAIC_DESCRIPTOR_BYTES, MAX_MOSAIC_SAMPLES, MOSAIC_PAYLOAD_HEADER_V1_BYTES,
     MOSAIC_PAYLOAD_SCHEMA_ID, MOSAIC_PAYLOAD_SCHEMA_VERSION_V1, MosaicDecodeLimits, MosaicPayloadError,
     MosaicPayloadStatsV1, PreparedMosaicPayloadV1, decode_mosaic_payload_v1,
-    decode_mosaic_payload_v1_with_limits, encode_mosaic_payload_v1, mosaic_payload_schema_v1,
-    prepare_mosaic_payload_v1,
+    decode_mosaic_payload_v1_with_budget, decode_mosaic_payload_v1_with_limits, encode_mosaic_payload_v1,
+    mosaic_payload_schema_v1, prepare_mosaic_payload_v1,
 };
 pub use ram::{DEFAULT_RAM_CACHE_BYTES, MosaicRamCache};
+pub use rrrah_memory::{CacheLease, CacheLimits, LeaseCache, MemoryBudget, Reservation};
 pub use weighted_lru::WeightedLru;
 
 // Cross-layer wire caps are part of one composition contract. Keep these as

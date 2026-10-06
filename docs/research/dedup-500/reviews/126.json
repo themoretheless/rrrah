@@ -1,0 +1,68 @@
+{
+  "index": 126,
+  "repository": "LowLevelLogic/synology-dedup-photos",
+  "commit": "2210ae14215c8c5e3690c99a7a984f0cc21fcff0",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "shortlist",
+  "finding": "Rust SHA256 plus dHash and quantized cosine; complementary exact and visual stages, no detected tests.",
+  "available_source_evidence": [
+    {
+      "path": "src/main.rs",
+      "local": "02-main.rs",
+      "url": "https://github.com/LowLevelLogic/synology-dedup-photos/blob/2210ae14215c8c5e3690c99a7a984f0cc21fcff0/src/main.rs",
+      "sha256": "bcd643f41a4759cf404de44e1cd5d8630f9b22b753cfabe700a397c506004e81",
+      "truncated": false,
+      "lines": 2160,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/nas.rs",
+      "local": "03-nas.rs",
+      "url": "https://github.com/LowLevelLogic/synology-dedup-photos/blob/2210ae14215c8c5e3690c99a7a984f0cc21fcff0/src/nas.rs",
+      "sha256": "a1e88f6ca5252270eb2458d5397d34b10e5eeb0fa3e8da25cdceb2df78278591",
+      "truncated": false,
+      "lines": 549,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/semantic.rs",
+      "local": "04-semantic.rs",
+      "url": "https://github.com/LowLevelLogic/synology-dedup-photos/blob/2210ae14215c8c5e3690c99a7a984f0cc21fcff0/src/semantic.rs",
+      "sha256": "56701a393aa24193e07ec08f479449cfb1931ee33c958b0adbc717797409cb82",
+      "truncated": false,
+      "lines": 160,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/LowLevelLogic/synology-dedup-photos/blob/2210ae14215c8c5e3690c99a7a984f0cc21fcff0/README.md",
+      "sha256": "5f5161b983d6acc1a8904f49bd2ad6b89c61c168578dfd347673c14e143adf02",
+      "truncated": false,
+      "lines": 137,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/LowLevelLogic/synology-dedup-photos/blob/2210ae14215c8c5e3690c99a7a984f0cc21fcff0/LICENSE",
+      "sha256": "05770b19466c9940ff8235d476a61d72c7a0348481f09ce4bd9b816cef331336",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

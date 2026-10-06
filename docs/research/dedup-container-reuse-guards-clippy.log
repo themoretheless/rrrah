@@ -1,0 +1,48 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+    Checking rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+error[E0369]: binary operation `==` cannot be applied to type `&rrrah_core::BufferError`
+  --> crates/rrrah-decode/src/x3f.rs:15:20
+   |
+ 4 | #[derive(Debug, thiserror::Error, PartialEq, Eq)]
+   |                                   --------- in this derive macro expansion
+...
+15 |     Memory(#[from] rrrah_core::BufferError),
+   |                    ^^^^^^^^^^^^^^^^^^^^^^^
+   |
+note: `rrrah_core::BufferError` does not implement `std::cmp::PartialEq`
+  --> crates/rrrah-memory/src/lib.rs:67:1
+   |
+67 | pub enum BufferError {
+   | ^^^^^^^^^^^^^^^^^^^^ `rrrah_core::BufferError` is defined in another crate
+
+error[E0277]: the trait bound `rrrah_core::BufferError: std::cmp::Eq` is not satisfied
+   --> crates/rrrah-decode/src/x3f.rs:15:20
+    |
+  4 | #[derive(Debug, thiserror::Error, PartialEq, Eq)]
+    |                                              -- in this derive macro expansion
+...
+ 15 |     Memory(#[from] rrrah_core::BufferError),
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^ the trait `std::cmp::Eq` is not implemented for `rrrah_core::BufferError`
+    |
+note: required by a bound in `std::cmp::AssertParamIsEq`
+   --> /Users/themoretheless/.rustup/toolchains/stable-aarch64-apple-darwin/lib/rustlib/src/rust/library/core/src/cmp.rs:380:31
+    |
+380 | pub struct AssertParamIsEq<T: Eq + PointeeSized> {
+    |                               ^^ required by this bound in `AssertParamIsEq`
+
+error[E0308]: mismatched types
+   --> crates/rrrah-decode/src/x3f.rs:110:105
+    |
+110 |         Ok(X3fLegacyChannels {width:self.info.width,height:self.info.height,legacy_offset:offset,pixels:pixels.freeze()})
+    |                                                                                                         ^^^^^^^^^^^^^^^ expected `PixelBuffer<u16>`, found `SharedBuffer<u16>`
+    |
+    = note: expected struct `rrrah_core::PixelBuffer<u16>`
+               found struct `rrrah_core::SharedBuffer<u16>`
+help: call `Into::into` on this expression to convert `rrrah_core::SharedBuffer<u16>` into `rrrah_core::PixelBuffer<u16>`
+    |
+110 |         Ok(X3fLegacyChannels {width:self.info.width,height:self.info.height,legacy_offset:offset,pixels:pixels.freeze().into()})
+    |                                                                                                                        +++++++
+
+Some errors have detailed explanations: E0277, E0308, E0369.
+For more information about an error, try `rustc --explain E0277`.
+error: could not compile `rrrah-decode` (lib) due to 3 previous errors

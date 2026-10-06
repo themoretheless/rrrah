@@ -1,0 +1,30 @@
+{
+  "status": "development_gate_passed_both_platforms",
+  "macos_session": 64433,
+  "scope": "All 66 direct pairs/index equivalence, six known perspective positives, fourteen unrelated source negatives; finite development corpus",
+  "maximum_corner_shift": 1.0,
+  "source_sha256": {
+    "crates/rrrah-dedup/src/local_collection.rs": "9206159096b95b7475cf081bd920cfbae0417cb373ded6a45da0adad969d174a",
+    "crates/rrrah-dedup/tests/projective_files.rs": "158c5bf9b813113aea4d057c226b4ddccfe95b8a32bb32bc81193863f050edb1"
+  },
+  "macos": {
+    "exit": 0,
+    "passed": 1,
+    "ignored": 0,
+    "required_positive_pairs": 6,
+    "required_unrelated_pairs": 14,
+    "direct_pairs": 66,
+    "index_matches_direct": true
+  },
+  "linux_session": 95348,
+  "linux": {
+    "exit": 0,
+    "passed": 1,
+    "ignored": 0,
+    "required_positive_pairs": 6,
+    "required_unrelated_pairs": 14,
+    "direct_pairs": 66,
+    "index_matches_direct": true,
+    "log": "docs/research/dedup-registration-anchor-exhaustive-linux.log"
+  }
+}

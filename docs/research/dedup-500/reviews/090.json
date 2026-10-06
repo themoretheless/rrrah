@@ -1,0 +1,78 @@
+{
+  "index": 90,
+  "repository": "toki-plus/AB-Video-Deduplicator",
+  "commit": "809514f94b52c35d2fedf9433d06909267c8feff",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Video frame alteration/compositing utility rather than detection of duplicates; no comparison engine in selected sources.",
+  "license_metadata": "MIT",
+  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "available_source_evidence": [
+    {
+      "path": "src/main.py",
+      "local": "02-main.py",
+      "url": "https://github.com/toki-plus/AB-Video-Deduplicator/blob/809514f94b52c35d2fedf9433d06909267c8feff/src/main.py",
+      "sha256": "436661cc76139e23a33cb4e30a6476aa08a941ae28222f6dee8fabef4adde697",
+      "truncated": false,
+      "lines": 601,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/resources.py",
+      "local": "03-resources.py",
+      "url": "https://github.com/toki-plus/AB-Video-Deduplicator/blob/809514f94b52c35d2fedf9433d06909267c8feff/src/resources.py",
+      "sha256": "b82cf16e9336ddb380e2e628dce076912d18b4bf621e982d34c1d90d394ed00e",
+      "truncated": false,
+      "lines": 156,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "utils/extract_frames.py",
+      "local": "04-extract_frames.py",
+      "url": "https://github.com/toki-plus/AB-Video-Deduplicator/blob/809514f94b52c35d2fedf9433d06909267c8feff/utils/extract_frames.py",
+      "sha256": "ab3765e469e707c9a2bdb7d823a8dedb8023c435728000c70a6469044c4598ff",
+      "truncated": false,
+      "lines": 28,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "utils/gen_test_video.py",
+      "local": "05-gen_test_video.py",
+      "url": "https://github.com/toki-plus/AB-Video-Deduplicator/blob/809514f94b52c35d2fedf9433d06909267c8feff/utils/gen_test_video.py",
+      "sha256": "6de75e8967b1393f80d9243d5813a9d151f399d833f03d913ed0a171655cd7f1",
+      "truncated": false,
+      "lines": 42,
+      "source": true,
+      "test": false
+    }
+  ],
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/toki-plus/AB-Video-Deduplicator/blob/809514f94b52c35d2fedf9433d06909267c8feff/README.md",
+      "sha256": "cf85850ff6d67331922682deb9637d3a1025e05ae1331dadcabd74e5ce3d1630",
+      "truncated": false,
+      "lines": 121,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/toki-plus/AB-Video-Deduplicator/blob/809514f94b52c35d2fedf9433d06909267c8feff/LICENSE",
+      "sha256": "73d19f8d08cdb36e776bba4d1ca143c46976933e0f796a62cd64cbeeec1a107a",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

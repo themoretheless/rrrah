@@ -1,0 +1,115 @@
+{
+  "repository": "titaniumtushar/burp-mcp-plus",
+  "metadata": {
+    "name": "titaniumtushar/burp-mcp-plus",
+    "url": "https://github.com/titaniumtushar/burp-mcp-plus",
+    "description": "MCP wrapper for Burp Suite that builds complete, well-formed HTTP requests from structured input + ingests dedup/JS exports for token-thrifty AI-assisted pentesting. Bundles a fixed Burp extension.",
+    "language": "Python",
+    "stars": 7,
+    "license": "MIT",
+    "archived": false,
+    "pushed_at": "2026-05-05T08:32:06Z",
+    "default_branch": "main",
+    "queries": [
+      "dedup in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/titaniumtushar/burp-mcp-plus/blob/4c0ed1e06726a812359797a3067888144532063b/README.md",
+      "sha256": "30da90cd2c4f56aa41e017374f005ef0bc5aedd45aa59e6035faf5fa821b72d4",
+      "truncated": false,
+      "lines": 321,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/titaniumtushar/burp-mcp-plus/blob/4c0ed1e06726a812359797a3067888144532063b/LICENSE",
+      "sha256": "f6cd893595079d1807bd5003c3e2b4e4f0492a0d0a24b3d05ea163e0af817dd1",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "src/burp_mcp_plus/dedup.py",
+      "local": "02-dedup.py",
+      "url": "https://github.com/titaniumtushar/burp-mcp-plus/blob/4c0ed1e06726a812359797a3067888144532063b/src/burp_mcp_plus/dedup.py",
+      "sha256": "236064611ef6c274c1a7a10a084591020876aefb3ba4f9f7078fa71be7f6dac7",
+      "truncated": false,
+      "lines": 215,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "burp-extension/deduped_history.py",
+      "local": "03-deduped_history.py",
+      "url": "https://github.com/titaniumtushar/burp-mcp-plus/blob/4c0ed1e06726a812359797a3067888144532063b/burp-extension/deduped_history.py",
+      "sha256": "ea8b75aefff10f119c1e2b8ba1ebc8a12f49f15d5f8e66e51ece34196c53bfe3",
+      "truncated": false,
+      "lines": 962,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/burp_mcp_plus/__init__.py",
+      "local": "04-__init__.py",
+      "url": "https://github.com/titaniumtushar/burp-mcp-plus/blob/4c0ed1e06726a812359797a3067888144532063b/src/burp_mcp_plus/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "truncated": false,
+      "lines": 0,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/__init__.py",
+      "local": "05-__init__.py",
+      "url": "https://github.com/titaniumtushar/burp-mcp-plus/blob/4c0ed1e06726a812359797a3067888144532063b/tests/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "truncated": false,
+      "lines": 0,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "src/burp_mcp_plus/builder.py",
+      "local": "06-builder.py",
+      "url": "https://github.com/titaniumtushar/burp-mcp-plus/blob/4c0ed1e06726a812359797a3067888144532063b/src/burp_mcp_plus/builder.py",
+      "sha256": "11da643454ad4c5343c9d27898e9db967aff5ec74a44fc4b7d3267ceb8b5a4ad",
+      "truncated": false,
+      "lines": 305,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/test_builder.py",
+      "local": "07-test_builder.py",
+      "url": "https://github.com/titaniumtushar/burp-mcp-plus/blob/4c0ed1e06726a812359797a3067888144532063b/tests/test_builder.py",
+      "sha256": "0f017ab6802a04f677c502e18819522f17b3b60b3fdd18f70e337888473dcd88",
+      "truncated": false,
+      "lines": 199,
+      "source": true,
+      "test": true
+    }
+  ],
+  "errors": [],
+  "commit": "4c0ed1e06726a812359797a3067888144532063b",
+  "tree_truncated": false,
+  "source_file_count": 9,
+  "test_file_count": 2,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "src/burp_mcp_plus/dedup.py",
+    "burp-extension/deduped_history.py",
+    "src/burp_mcp_plus/builder.py",
+    "tests/test_builder.py"
+  ]
+}

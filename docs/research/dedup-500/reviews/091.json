@@ -1,0 +1,78 @@
+{
+  "index": 91,
+  "repository": "claudioemmanuel/squeez",
+  "commit": "5bb983418153ac30cdd35b100cd0e52058fb80db",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Rust text shingle MinHash/Jaccard and cross-agent cache dedup; useful versioned-fingerprint concepts only.",
+  "license_metadata": "Apache-2.0",
+  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "tests_detected": 101,
+  "upstream_tests_run": false,
+  "available_source_evidence": [
+    {
+      "path": "src/context/hash.rs",
+      "local": "02-hash.rs",
+      "url": "https://github.com/claudioemmanuel/squeez/blob/5bb983418153ac30cdd35b100cd0e52058fb80db/src/context/hash.rs",
+      "sha256": "b7f3b2d599897cc983d01e113d0492d0a7f6efc25e9125d2c238bd08b56d67fc",
+      "truncated": false,
+      "lines": 164,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/context/retrieve.rs",
+      "local": "03-retrieve.rs",
+      "url": "https://github.com/claudioemmanuel/squeez/blob/5bb983418153ac30cdd35b100cd0e52058fb80db/src/context/retrieve.rs",
+      "sha256": "b1500051b4f7beeaa0df2177225ffdf578e20a40739052a8957a2462eab8a2dc",
+      "truncated": false,
+      "lines": 367,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/strategies/dedup.rs",
+      "local": "04-dedup.rs",
+      "url": "https://github.com/claudioemmanuel/squeez/blob/5bb983418153ac30cdd35b100cd0e52058fb80db/src/strategies/dedup.rs",
+      "sha256": "853797e9e4cf677966face9cc4db2e1943556f62b6b9d37f221f0afa89a48de8",
+      "truncated": false,
+      "lines": 22,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/test_cross_agent_dedup.rs",
+      "local": "05-test_cross_agent_dedup.rs",
+      "url": "https://github.com/claudioemmanuel/squeez/blob/5bb983418153ac30cdd35b100cd0e52058fb80db/tests/test_cross_agent_dedup.rs",
+      "sha256": "561a6f24fbeb758d66b397f3a2c43059e242319458c27c32e225de8008b14301",
+      "truncated": false,
+      "lines": 103,
+      "source": true,
+      "test": true
+    }
+  ],
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/claudioemmanuel/squeez/blob/5bb983418153ac30cdd35b100cd0e52058fb80db/README.md",
+      "sha256": "2246517c54c0a5423a80a268d7678150339d9eb803c052a1d1f2a054d91f5f2e",
+      "truncated": false,
+      "lines": 717,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/claudioemmanuel/squeez/blob/5bb983418153ac30cdd35b100cd0e52058fb80db/LICENSE",
+      "sha256": "0ad859ba49ea50268b7cc3f2e9e670fd9b724a6df1b949c263d6f35a173ba087",
+      "truncated": false,
+      "lines": 201,
+      "source": false,
+      "test": false
+    }
+  ]
+}

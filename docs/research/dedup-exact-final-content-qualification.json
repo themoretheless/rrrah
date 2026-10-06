@@ -1,0 +1,27 @@
+{
+  "scope": "Full content revalidation of byte-confirmed exact group members and mismatching representatives",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/exact.rs": "1b630858baf08341af261835043078bd87bb78679c3892ecc755fcc014d46e7e",
+    "crates/rrrah-dedup/tests/exact_files.rs": "2350d133e1120b46b929dd7d986039d7557cce1bdf36f9f8cf12bf1f35c3cc26"
+  },
+  "changes": [
+    "Retain actual initial full content digests independently of injected grouping digest",
+    "Final group admission rereads complete file and excludes content changes",
+    "When byte comparison fails, revalidate representative digest and retry healthy candidates after removing changed representative"
+  ],
+  "oracle": "Unit injection makes metadata match changed same-size content; open succeeds but full-content admission excludes changed member and preserves other members",
+  "validation": {
+    "macos_unit_tests": 7,
+    "macos_exact_integration_tests": 11,
+    "linux_unit_tests": 7,
+    "linux_exact_integration_tests": 12,
+    "failed": 0,
+    "clippy_no_decode_exit_code": 0
+  },
+  "limitations": [
+    "Observation sequence remains non-atomic; writes after last read cannot be excluded",
+    "Metadata-invisible changes in size/sample-pruned branches remain open",
+    "Additional full reads of final positive members and mismatching representatives increase I/O; bytes_read includes them",
+    "All-feature integration still requires decoder build availability"
+  ]
+}

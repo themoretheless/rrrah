@@ -1,0 +1,95 @@
+{
+  "repository": "sonalgoyal/hiho",
+  "metadata": {
+    "name": "sonalgoyal/hiho",
+    "url": "https://github.com/sonalgoyal/hiho",
+    "description": "Hadoop Data Integration with various databases, ftp servers, salesforce. Incremental update, dedup, append, merge your data on Hadoop.",
+    "language": "Java",
+    "stars": 91,
+    "license": "Apache-2.0",
+    "archived": false,
+    "pushed_at": "2013-04-11T06:53:10Z",
+    "default_branch": "master",
+    "queries": [
+      "dedup in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/sonalgoyal/hiho/blob/77dd5af9b4b19167f062112945433dd588d10640/README.md",
+      "sha256": "d3bf74c574d56b4371e747247701d60146d4d68bb3187e82730ca2eac68e4d8c",
+      "truncated": false,
+      "lines": 386,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE.txt",
+      "local": "01-LICENSE.txt",
+      "url": "https://github.com/sonalgoyal/hiho/blob/77dd5af9b4b19167f062112945433dd588d10640/LICENSE.txt",
+      "sha256": "3bae71f91d7722edbc093481acf8b9ce24ea665e425e40e3b0995a61104dea58",
+      "truncated": false,
+      "lines": 244,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/dedup/DedupJob.java",
+      "local": "02-DedupJob.java",
+      "url": "https://github.com/sonalgoyal/hiho/blob/77dd5af9b4b19167f062112945433dd588d10640/src/main/java/co/nubetech/hiho/dedup/DedupJob.java",
+      "sha256": "a3b910de78e1ed65f74036fb48b33e5c1817791ec1c176f8ff2495babcef00f2",
+      "truncated": false,
+      "lines": 235,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/dedup/DedupKeyMapper.java",
+      "local": "03-DedupKeyMapper.java",
+      "url": "https://github.com/sonalgoyal/hiho/blob/77dd5af9b4b19167f062112945433dd588d10640/src/main/java/co/nubetech/hiho/dedup/DedupKeyMapper.java",
+      "sha256": "feefba67feca49141434d8ced1b8468a7f5bfcaa77fb4d8e0d67fec6fed1f3be",
+      "truncated": false,
+      "lines": 43,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/dedup/DedupKeyReducer.java",
+      "local": "04-DedupKeyReducer.java",
+      "url": "https://github.com/sonalgoyal/hiho/blob/77dd5af9b4b19167f062112945433dd588d10640/src/main/java/co/nubetech/hiho/dedup/DedupKeyReducer.java",
+      "sha256": "a4a0ed3e62c7e5196bd3e4e9967c57f419869c7c6e27118c6b77e1a5b6c8586a",
+      "truncated": false,
+      "lines": 45,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/dedup/TestDedupJob.java",
+      "local": "05-TestDedupJob.java",
+      "url": "https://github.com/sonalgoyal/hiho/blob/77dd5af9b4b19167f062112945433dd588d10640/src/test/java/co/nubetech/hiho/dedup/TestDedupJob.java",
+      "sha256": "846b95a6078bfd33f09f057fface44eac21e4faf96f62c76932c2e364adb8902",
+      "truncated": false,
+      "lines": 537,
+      "source": true,
+      "test": true
+    }
+  ],
+  "errors": [],
+  "commit": "77dd5af9b4b19167f062112945433dd588d10640",
+  "tree_truncated": false,
+  "source_file_count": 133,
+  "test_file_count": 48,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE.txt",
+    "src/main/java/co/nubetech/hiho/dedup/DedupJob.java",
+    "src/main/java/co/nubetech/hiho/dedup/DedupKeyMapper.java",
+    "src/main/java/co/nubetech/hiho/dedup/DedupKeyReducer.java",
+    "src/test/java/co/nubetech/hiho/dedup/TestDedupJob.java"
+  ]
+}

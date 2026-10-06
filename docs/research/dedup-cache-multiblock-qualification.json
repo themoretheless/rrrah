@@ -1,0 +1,38 @@
+{
+  "status": "passed",
+  "tests": {
+    "decode": 11,
+    "cache": 6,
+    "failed": 0,
+    "ignored": 0,
+    "filtered": 0
+  },
+  "source_bytes": 8388608,
+  "fixture": "one-pixel BMP with legal trailing bytes; full source read spans 128 blocks",
+  "managed_budget_bytes": 33554432,
+  "cancellation_checkpoints": 263,
+  "maximum_callback_cancel_to_return_microseconds": 26,
+  "checks": [
+    "all caller cancellation checkpoints reject cached evidence",
+    "no retained managed reservations after each refusal",
+    "final retry hits cache with original fingerprint"
+  ],
+  "logs": {
+    "tests": {
+      "path": "docs/research/dedup-cache-multiblock-tests.log",
+      "sha256": "f73a1d2ef171860add5c05c4410ee6cbd713dc36da560ff2dd75424d94beeee2"
+    },
+    "clippy": {
+      "path": "docs/research/dedup-cache-multiblock-clippy.log",
+      "sha256": "2c041858acae0bceffd149b18a1a66e4483f4c7e7580a1a1641817889b8246c7"
+    }
+  },
+  "test_sha256": "08de074c860096b99cd87adf52bb24b82a52068919cd8a3bb15121abf9f71df5",
+  "clippy": "passed with existing decoder warnings",
+  "limits": [
+    "single warm local filesystem fixture, no cold/remote/device-failure I/O measurement",
+    "latency starts inside callback returning cancellation, excludes wait for current OS read",
+    "not decoder latency, high-resolution pixels, RSS or peak heap qualification",
+    "post-validation test hash only, not atomic whole-source snapshot"
+  ]
+}

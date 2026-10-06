@@ -1,0 +1,63 @@
+{
+  "scope": "Explicit caller-declared linear sRGB primaries for untagged linear raster samples",
+  "source_sha256": {
+    "crates/rrrah-decode/src/lib.rs": "263805188c5ab73cd3d31cc1abe5a123ad24526c30c2c94bd232ab0ced43bd5d",
+    "crates/rrrah-decode/src/pfm.rs": "300ab170dba043d76235d8b6f7a589a30f92582e93f124a168ad16bb237b3d89",
+    "crates/rrrah-decode/src/raster.rs": "1bf5357da299d89b6c7cd551df64bcfc3d94304dbb19a7b3e8eeeaaa1e237a7e",
+    "crates/rrrah-dedup/src/decode.rs": "69d0787ed3b607776bb5e9c1cec3115218cf2d138a463933630cdc6800cb7b74",
+    "crates/rrrah-dedup/tests/pixel_search.rs": "bbb3f872f70befe26149e99e7da31dd7859d2a19161c5eab2fdecc36e7eaedfe"
+  },
+  "request_field": "assume_untagged_linear_srgb",
+  "default": false,
+  "admission": "Only LinearRgbUnspecified becomes LinearSrgb; declared color, ICC and unspecified encoded RGB remain unchanged",
+  "cache_recipe": "rrrah-file-linear-fingerprint-v4 with both assumption flags",
+  "pfm_qualification": {
+    "authored_files": 4,
+    "strict_color_issues": 4,
+    "explicit_linear_equal": [
+      [
+        1,
+        2
+      ]
+    ],
+    "explicit_linear_different_pairs": 5,
+    "index_confirmation_pairs": 1,
+    "samples_preserved": [
+      -0.1,
+      2.0,
+      0.1234,
+      1.0
+    ],
+    "variations": [
+      "little/big endian",
+      "sub-byte precision",
+      "advisory sample scale"
+    ]
+  },
+  "validation": {
+    "pixel_search_tests_passed": 11,
+    "decoder_policy_unit_passed": 1,
+    "decoder_pfm_tests_passed": 4,
+    "clippy": "dedup crate tests/examples all features no-deps -D warnings passed",
+    "current_full_feature_suite": {
+      "passed": 147,
+      "failed": 0,
+      "ignored": 0,
+      "exit_code": 0
+    },
+    "diff_check": "passed"
+  },
+  "limitations": [
+    "Caller assumption is not independent source-color calibration",
+    "Native positive corpus here is authored PFM only; shared HDR/EXR routing not independently qualified by this case",
+    "Other linear RGB primaries need their own explicit transforms",
+    "Root convenience defaults remain strict; assumptions supplied through per-file requests"
+  ],
+  "commands": [
+    "cargo test -p rrrah-dedup --all-features",
+    "cargo test -p rrrah-dedup --all-features --test pixel_search",
+    "cargo test -p rrrah-decode --lib linear_assumption_tests",
+    "cargo test -p rrrah-decode --lib pfm",
+    "cargo clippy -p rrrah-dedup --all-features --tests --examples --no-deps -- -D warnings"
+  ]
+}

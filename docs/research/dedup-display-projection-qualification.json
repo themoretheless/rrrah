@@ -1,0 +1,34 @@
+{
+  "feature": "warp::verify_photometric_display_projection",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/warp.rs": "a935eac9a5a17563dffe658cc4da0e595ee05306755479f60dfad46f99f7c818",
+    "crates/rrrah-dedup/tests/photometric.rs": "8b6e42a2dbad9829a890e902ede36482e468017759e5a7cbfe0bda7de2e2f2e0"
+  },
+  "validation": {
+    "filtered_tests": 3,
+    "photometric_tests": 5,
+    "warp_tests": 3,
+    "failed": 0,
+    "library_and_photometric_clippy": "passed"
+  },
+  "policy": [
+    "Explicit display-range projection; never normalized-pixel identity.",
+    "Fit uses original opaque samples in the declared range.",
+    "Residuals project fitted prediction and observed RGB into the range in premultiplied coordinates; alpha remains unchanged.",
+    "Original strict bidirectional evidence is returned alongside projected evidence.",
+    "Nonfinite fitted values reject before projection."
+  ],
+  "evidence": [
+    "Authored HDR value 4 versus displayed value 1: nineteen fit samples, all twenty projected residual matches, nineteen strict matches with maximum error exactly 3.",
+    "Alpha edit remains a projected residual failure.",
+    "Fully saturated low-information input rejects fitting.",
+    "Cancellation remains an error; source storage stays unchanged.",
+    "Existing unprojected photometric/filter/geometry tests pass."
+  ],
+  "remaining": [
+    "Not integrated into file or collection selection policies yet.",
+    "No current CR2/native full-resolution or independent held-out corpus qualification.",
+    "Projection intentionally loses distinctions outside the declared range; strict evidence must remain visible and projected scores cannot establish exact identity.",
+    "No threshold calibration, scale or memory claim."
+  ]
+}

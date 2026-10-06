@@ -1,0 +1,59 @@
+{
+  "scope": "Canonical normalized frame-key semantics and untagged HDR color admission; not general HDR/RAW file matching",
+  "source_sha256": {
+    "crates/rrrah-dedup/tests/raster.rs": "45ad1d175a65f39fb421cacf99ecac7565bca5a4775c0faae590c2096018695c",
+    "crates/rrrah-dedup/tests/pixel_search.rs": "4d20eb943671d27b769ce761afc05286a3f43ec6ce630d6e4228b80df29db655"
+  },
+  "normalized_matrix": {
+    "frames": 11,
+    "ordered_pair_checks": 121,
+    "independent_classes": 7,
+    "representations": [
+      "linear RGBA32Float",
+      "encoded sRGB RGBA8 endpoint",
+      "encoded sRGB RGBA16 endpoint"
+    ],
+    "cases": [
+      "HDR values above one retained",
+      "negative RGB retained",
+      "sub-byte visible differences retained",
+      "visible alpha changes remain different",
+      "hidden RGB ignored at alpha zero",
+      "positive/negative zero canonicalized",
+      "8/16-bit equivalent endpoints share exact key"
+    ],
+    "result": "Direct selected-frame equality and key equality match every independently authored class label; normalized float views match the original declared-linear samples"
+  },
+  "untagged_pfm": {
+    "authored_files": 4,
+    "variations": [
+      "little endian",
+      "big endian",
+      "sub-byte RGB difference",
+      "advisory sample scale"
+    ],
+    "strict_index_issues": 4,
+    "encoded_srgb_assumption_index_issues": 4,
+    "encoded_srgb_assumption_direct_pair_issues": 6,
+    "error": "ColorTransformRequired",
+    "equal_claims": 0,
+    "different_claims": 0,
+    "reason": "PFM has unspecified linear primaries; assume_untagged_srgb explicitly does not override them"
+  },
+  "validation": {
+    "latest_raster_tests": 5,
+    "latest_pixel_search_tests": 10,
+    "new_tests": 2,
+    "clippy": "passed all features tests/examples no-deps -D warnings; existing decoder warnings remain",
+    "production_changes": false
+  },
+  "limitations": [
+    "Authored normalized samples, not independent captured HDR or RAW/raster color corpus",
+    "Untagged linear HDR lacks an explicit source-primaries override in file collection APIs",
+    "No single new 146-test full-suite run; previous 144-test full suite plus two new targeted tests"
+  ],
+  "commands": [
+    "cargo test -p rrrah-dedup --all-features --test raster --test pixel_search",
+    "cargo clippy -p rrrah-dedup --all-features --tests --examples --no-deps -- -D warnings"
+  ]
+}

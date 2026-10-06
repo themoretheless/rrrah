@@ -1,0 +1,40 @@
+    Blocking waiting for file lock on build directory
+   Compiling rrrah-decode v0.1.0 (/workspace/crates/rrrah-decode)
+warning: linker stderr: /validation/sysroot/usr/bin/ld: /validation/target/debug/deps/libjpegxr-61e4c82e0f52fb6c.rlib(2e643c6506a180d9-strenc.o): in function `StrIOEncInit':
+         /validation/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/jpegxr-0.3.1/jxrlib/image/encode/strenc.c:485:(.text.StrIOEncInit+0xf0): the use of `tmpnam' is dangerous, better use `mkstemp'
+  |
+  = note: `#[warn(linker_messages)]` on by default
+
+warning: linker stdout: /validation/sysroot/usr/bin/ld: /validation/target/debug/deps/libjpegxr-61e4c82e0f52fb6c.rlib(2e643c6506a180d9-strenc.o): note: the message above does not take linker garbage collection into account
+
+warning: `rrrah-decode` (lib test) generated 2 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 22m 47s
+     Running unittests src/lib.rs (/validation/target/debug/deps/rrrah_decode-c11902d0fca8bb48)
+
+running 23 tests
+test raster_corpus::dpx_signature_overrides_camera_suffix ... ok
+test raster_corpus::dcx_selection_under_camera_suffix_preserves_page_metadata ... ok
+test raster_corpus::cursor_hotspot_survives_decode_and_display_transform ... ok
+test raster_corpus::exr_straight_alpha_matches_associated_reference_composition ... ok
+test raster_corpus::exr_zero_alpha_emission_is_not_silently_discarded ... ok
+test raster_corpus::farbfeld_interoperability_color_and_straight_alpha_reach_display ... ok
+test raster_corpus::cineon_samples_match_openimageio_and_camera_suffix_routes_raster ... ok
+test raster_corpus::dpx_storage_matches_independent_ffmpeg_samples ... ok
+test raster_corpus::independent_precision_corpus_preserves_every_native_sample ... ok
+test raster_corpus::macbinary_magic_wins_over_a_misleading_raw_extension ... ok
+test raster_corpus::openraster_mime_magic_overrides_camera_suffix ... ok
+test raster_corpus::nclx_srgb_avif_reaches_display_without_icc ... ok
+test raster_corpus::profiled_avif_reaches_linear_display_and_preserves_alpha ... ok
+test raster_corpus::precision_containers_reject_truncated_headers_and_pixels ... ok
+test raster_corpus::rla_premultiplied_interpretation_preserves_compositing ... ok
+test raster_corpus::softimage_packets_match_openimageio_native_samples ... ok
+test raster_corpus::softimage_signature_overrides_raw_extension ... ok
+test raster_corpus::wad3_selected_textures_match_vgio_indices_and_authored_palette ... ok
+test raster_corpus::wal_game_tree_resolves_palette_through_public_router ... ok
+test raster_corpus::rla_indexed_rows_and_byte_planes_match_openimageio ... ok
+test raster_corpus::wal_with_explicit_palette_matches_pillow_and_preserves_transparent_rgb ... ok
+test raster_corpus::each_independent_container_rejects_a_truncated_header ... ok
+test raster_corpus::independent_raster_corpus_matches_dimensions_alpha_and_pixels ... ok
+
+test result: ok. 23 passed; 0 failed; 0 ignored; 0 measured; 797 filtered out; finished in 0.83s
+

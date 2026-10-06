@@ -1,0 +1,98 @@
+{
+  "index": 3,
+  "repository": "windirstat/windirstat",
+  "commit": "a92886ff41934946d306909c01ee4447f3b60580",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Windows duplicate display/control source; inspected excerpts do not establish a portable comparison engine.",
+  "license_metadata": "GPL-3.0",
+  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "tests_detected": 16,
+  "upstream_tests_run": false,
+  "available_source_evidence": [
+    {
+      "path": "windirstat/ItemDupe.cpp",
+      "local": "03-ItemDupe.cpp",
+      "url": "https://github.com/windirstat/windirstat/blob/a92886ff41934946d306909c01ee4447f3b60580/windirstat/ItemDupe.cpp",
+      "sha256": "652ee6a59db30aa5c00cafceffef35a0151d0a726f0c854892d2dfa25be434ce",
+      "truncated": false,
+      "lines": 194,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "windirstat/ItemDupe.h",
+      "local": "04-ItemDupe.h",
+      "url": "https://github.com/windirstat/windirstat/blob/a92886ff41934946d306909c01ee4447f3b60580/windirstat/ItemDupe.h",
+      "sha256": "d5f8821e2098d439f09223a433a95f2b747d11b48d26ad7873b01dfb2f2df5c7",
+      "truncated": false,
+      "lines": 58,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "windirstat/Controls/FileDupeControl.cpp",
+      "local": "05-FileDupeControl.cpp",
+      "url": "https://github.com/windirstat/windirstat/blob/a92886ff41934946d306909c01ee4447f3b60580/windirstat/Controls/FileDupeControl.cpp",
+      "sha256": "c8f7945dfe548b40d366c3cfed5580ff99ba2ac43bc970490fface9be52d747b",
+      "truncated": false,
+      "lines": 284,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/Harness/Desktop.cs",
+      "local": "06-Desktop.cs",
+      "url": "https://github.com/windirstat/windirstat/blob/a92886ff41934946d306909c01ee4447f3b60580/tests/Harness/Desktop.cs",
+      "sha256": "31c0e8e6171c733026abec911acfe63cfdabaee4ca967c0d8736cbda72116cae",
+      "truncated": false,
+      "lines": 384,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "tests/Build-PgoTrainingProfiles.ps1",
+      "local": "07-Build-PgoTrainingProfiles.ps1",
+      "url": "https://github.com/windirstat/windirstat/blob/a92886ff41934946d306909c01ee4447f3b60580/tests/Build-PgoTrainingProfiles.ps1",
+      "sha256": "52debce6017aa5126972bf37c4e7521fcc351e2bdf1892de892d337346f8468d",
+      "truncated": false,
+      "lines": 877,
+      "source": true,
+      "test": true
+    }
+  ],
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/windirstat/windirstat/blob/a92886ff41934946d306909c01ee4447f3b60580/README.md",
+      "sha256": "e247a8cb973f335be941fe0124fc3e216a0d49fb4ce2d0f8667f010c88a350cd",
+      "truncated": false,
+      "lines": 113,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE.md",
+      "local": "01-LICENSE.md",
+      "url": "https://github.com/windirstat/windirstat/blob/a92886ff41934946d306909c01ee4447f3b60580/LICENSE.md",
+      "sha256": "631086d069c8ec9db1b308d050d096d53f74afb595635a5bd06dc254fc82cd06",
+      "truncated": false,
+      "lines": 675,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "setup/msi/license.rtf",
+      "local": "02-license.rtf",
+      "url": "https://github.com/windirstat/windirstat/blob/a92886ff41934946d306909c01ee4447f3b60580/setup/msi/license.rtf",
+      "sha256": "c05e607221c3a92464d8861e04974c51954711f6ab4bba3a51fa6c6ef284f604",
+      "truncated": false,
+      "lines": 126,
+      "source": false,
+      "test": false
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "status": "all_pairs_gate_passed_both_platforms",
+  "macos_session": 88761,
+  "linux_session": 72084,
+  "scope": "All 66 direct comparisons versus native index, six required perspective positives, fourteen unrelated base-capture negatives; finite development corpus",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/warp.rs": "62512b32fa022f8dc929e5ee09a0684b433db36d8f4582a799c2eaf84edab747",
+    "crates/rrrah-dedup/src/local_scan.rs": "9205cc160d2b7b6f00ff55ec243a3d244e5975ca6949785bb2d7f69bcb1751ff",
+    "crates/rrrah-dedup/src/local_collection.rs": "0b6cfc3f34478db6c26bdf663d15b37c2f46ef300fb4b6bb5360aece6df137f7",
+    "crates/rrrah-dedup/tests/projective_files.rs": "fa3aa7eb8f6c1bff4e25c456e94942500aff3060fe8ca16bd0e4f2486b09cc41"
+  },
+  "remaining": [
+    "Terminal exhaustive gate outcomes",
+    "Complete independent all-580 portfolio evaluation",
+    "Captured/burst/look-alike calibration",
+    "Complete library contract"
+  ],
+  "macos": {
+    "session": 88761,
+    "exit": 0,
+    "passed": 1,
+    "ignored": 0,
+    "direct_pairs": 66,
+    "required_positive_pairs": 6,
+    "required_unrelated_pairs": 14,
+    "index_matches_direct": true,
+    "source_drift": [],
+    "log": "docs/research/dedup-registration-portfolio-exhaustive-macos.log",
+    "log_sha256": "dc904baeb38196812186549174c0a65b3c0c9fa27e4932258a48933b44cc8d6e"
+  },
+  "linux": {
+    "session": 72084,
+    "exit": 0,
+    "passed": 1,
+    "ignored": 0,
+    "direct_pairs": 66,
+    "required_positive_pairs": 6,
+    "required_unrelated_pairs": 14,
+    "index_matches_direct": true,
+    "log": "docs/research/dedup-registration-portfolio-exhaustive-linux.log",
+    "log_sha256": "9319aea2a0379c80a27fb7b95ae23baefdb066f0769824b1e7ef4782f6c838a6",
+    "source_drift": []
+  }
+}

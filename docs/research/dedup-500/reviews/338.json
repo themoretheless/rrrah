@@ -1,0 +1,78 @@
+{
+  "index": 338,
+  "repository": "muldon/dupeRep",
+  "commit": "ac279e54568cbb2df42ec152bbf6db49fd0bc007",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "needs-deeper-source",
+  "finding": "Spring DupeApplication entrypoint only; purpose and underlying matcher need deeper source/README review before reuse.",
+  "available_source_evidence": [
+    {
+      "path": "dupe.sh",
+      "local": "02-dupe.sh",
+      "url": "https://github.com/muldon/dupeRep/blob/ac279e54568cbb2df42ec152bbf6db49fd0bc007/dupe.sh",
+      "sha256": "e363c25f15785c0fdef7db8440fafe3933d3710a1f89f04a0958bd5f1b608211",
+      "truncated": false,
+      "lines": 1,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/main/java/br/ufu/facom/lascam/DupeApplication.java",
+      "local": "03-DupeApplication.java",
+      "url": "https://github.com/muldon/dupeRep/blob/ac279e54568cbb2df42ec152bbf6db49fd0bc007/src/main/java/br/ufu/facom/lascam/DupeApplication.java",
+      "sha256": "b63a27a1742b069ecd3cd537674a8a582390bb7667a1cb1095aaeb172497bb29",
+      "truncated": false,
+      "lines": 43,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/main/java/br/ufu/facom/lascam/dupe/DupeApp.java",
+      "local": "04-DupeApp.java",
+      "url": "https://github.com/muldon/dupeRep/blob/ac279e54568cbb2df42ec152bbf6db49fd0bc007/src/main/java/br/ufu/facom/lascam/dupe/DupeApp.java",
+      "sha256": "46dc4dbf1a4f212a2b9831b2b224e4dbae31b9d721fcc8809208f8fc24c225c8",
+      "truncated": false,
+      "lines": 137,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/test/java/br/ufu/facom/lascam/DupeTest.java",
+      "local": "05-DupeTest.java",
+      "url": "https://github.com/muldon/dupeRep/blob/ac279e54568cbb2df42ec152bbf6db49fd0bc007/src/test/java/br/ufu/facom/lascam/DupeTest.java",
+      "sha256": "6e8fcbf2b46b079e58f85bd752be329756f0cf0811999f3be25615ff8856bb89",
+      "truncated": false,
+      "lines": 455,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 9,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/muldon/dupeRep/blob/ac279e54568cbb2df42ec152bbf6db49fd0bc007/README.md",
+      "sha256": "51a8e3c7e48e7d0eddf71573b15ec458ce84fc5bcb88f46cc1f00a00bb03faa6",
+      "truncated": false,
+      "lines": 90,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/muldon/dupeRep/blob/ac279e54568cbb2df42ec152bbf6db49fd0bc007/LICENSE",
+      "sha256": "3934edb985d104e63c99b651ae4eb2d99fbad4609998d6d11062792b7d48671f",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

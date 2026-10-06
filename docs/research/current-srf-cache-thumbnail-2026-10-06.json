@@ -1,0 +1,25 @@
+{
+  "fixture": "/tmp/rrrah-sony-f828.srf",
+  "sha256": "07739f94bcab0c7e198d418ac65172d0dce04bb84a7683ecffd0bfe4b32f6d79",
+  "tests": [
+    {
+      "name": "raw_prefetch_count_limit_counts_retained_neighbours_after_missing_file",
+      "passed": 1,
+      "log": "/tmp/rrrah-current-srf-count-prefetch.log"
+    },
+    {
+      "name": "raw_thumbnail_source_and_preview_share_managed_root",
+      "passed": 1,
+      "log": "/tmp/rrrah-current-srf-thumbnail-budget.log"
+    }
+  ],
+  "scope": [
+    "Missing neighbour failure does not consume count1 disk retention quota",
+    "Next valid neighbour stored, restored with RGBE quad3/0/2/1",
+    "32MiB thumbnail refusal and64MiB success share root accounting"
+  ],
+  "limitations": [
+    "Source origin/camera oracle not independently verified",
+    "Thumbnail test is resource ownership, not independent color qualification"
+  ]
+}

@@ -46,10 +46,11 @@ fn job(index: usize) -> ThumbnailJob {
 
 fn ready(index: usize) -> ThumbnailReady {
     ThumbnailReady {
+        source_stamp: Default::default(),
         index,
         width: THUMB_EDGE,
         height: THUMB_EDGE,
-        pixels: vec![0; RGBA_BYTES_PER_THUMB],
+        pixels: std::sync::Arc::new(vec![0; RGBA_BYTES_PER_THUMB]).into(),
     }
 }
 

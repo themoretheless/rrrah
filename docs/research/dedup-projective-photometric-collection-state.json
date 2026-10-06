@@ -1,0 +1,42 @@
+{
+  "status": "direct_index_gates_passed_both_platforms",
+  "macos_session": 82701,
+  "linux_session": 83010,
+  "scope": "Four-file collection, six direct pairs, three required positives, index/direct equivalence, unrelated rejections and explicit refusals; no complete contract claim",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/local_collection.rs": "a2601d24812b1a83b7a9728f16f69b2dc59b5f924ef4b9ec05e6145c6178aadf",
+    "crates/rrrah-dedup/src/local_scan.rs": "d2e898d062b322a49af786a5a2107211d2f9496c1d731edb178060aefac49265",
+    "crates/rrrah-dedup/tests/projective_files.rs": "abe4d55e0176671696cdbd0da35150b7983e92af70383e551c5fa5b4e4ad4dff"
+  },
+  "remaining": [
+    "Terminal gate outcomes",
+    "Roots integration",
+    "Late mutation/generation/cancel collection gates",
+    "Independent perspective plus illumination calibration",
+    "Complete library contract"
+  ],
+  "linux_initial": {
+    "session": 72024,
+    "exit": 101,
+    "reason": "Test used nonexistent report.comparisons field; corrected to report.local",
+    "log": "docs/research/dedup-projective-photometric-collection-linux.log"
+  },
+  "linux_log": "docs/research/dedup-projective-photometric-collection-linux-corrected.log",
+  "clippy_session": 17374,
+  "macos": {
+    "exit": 0,
+    "passed": 1,
+    "ignored": 0,
+    "direct_pairs": 6,
+    "required_positive_pairs": 3,
+    "index_equals_direct": true,
+    "clippy_exit": 0
+  },
+  "linux": {
+    "exit": 0,
+    "passed": 1,
+    "ignored": 0,
+    "log": "docs/research/dedup-projective-photometric-collection-linux-corrected.log",
+    "scope": "Four-file direct/index gate before expanded roots assertions were compiled"
+  }
+}

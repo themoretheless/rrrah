@@ -1,0 +1,51 @@
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on build directory
+   Compiling rrrah-core v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-core)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `test` profile [optimized + debuginfo] target(s) in 31.82s
+     Running unittests src/lib.rs (/tmp/rrrah-dedup-target/debug/deps/rrrah_decode-fef1cf096a77eef0)
+
+running 40 tests
+test xcf::selected_layer_tests::selected_gimp_layers_preserve_mask_and_rollback_partial_cancellation ... ignored, requires pinned external GIMP gimp-2-6-file.xcf fixture
+test xcf::selected_layer_tests::hidden_layer_pixels_do_not_consume_flatten_working_budget ... ok
+test xcf::selected_layer_tests::hidden_only_canvas_still_checks_global_compression_before_allocation ... ok
+test xcf::selected_layer_tests::legacy_composition_defaults_are_explicit_and_unknown_choices_refuse_before_allocation ... ok
+test xcf::selected_layer_tests::legacy_flatten_masks_visibility_and_negative_offset_keep_managed_ownership ... ok
+test xcf::selected_layer_tests::legacy_grayscale_flatten_preserves_levels_alpha_and_last_owner ... ok
+test xcf::selected_layer_tests::legacy_flatten_preserves_indexed_pixels_and_releases_working_canvas ... ok
+test xcf::selected_layer_tests::legacy_half_opacity_mask_preserves_uncovered_and_composited_pixels ... ok
+test xcf::selected_layer_tests::legacy_normal_flatten_composes_bottom_to_top ... ok
+test xcf::selected_layer_tests::selected_indexed_layers_preserve_native_bytes_and_managed_ownership ... ok
+test xcf::tests::channel_hierarchy_decodes_under_shared_budget_and_releases_last_owner ... ok
+test xcf::tests::channel_records_validate_parent_dimensions_and_borrow_metadata ... ok
+test xcf::tests::borrowed_properties_accept_historic_palette_size_and_stop_at_end ... ok
+test xcf::tests::duplicate_and_overlapping_object_offsets_are_rejected ... ok
+test xcf::tests::composition_attributes_preserve_auto_and_unknown_values_without_fallback ... ok
+test xcf::tests::embedded_icc_is_borrowed_and_invalid_parasites_never_become_no_profile ... ok
+test xcf::tests::empty_main_level_uses_one_null_pointer_and_no_tile_scratch ... ok
+test xcf::tests::excessive_layer_sizes_and_name_lengths_fail_before_payload_reads ... ok
+test xcf::tests::hierarchy_checks_main_level_and_edge_tile_tables ... ok
+test xcf::tests::managed_level_assembly_keeps_edge_rows_and_rolls_back_failures ... ok
+test xcf::selected_layer_tests::common_raster_route_preserves_xcf_pixels_profile_and_budget ... ok
+test xcf::tests::float_composite_preserves_hdr_and_validates_all_samples_before_writes ... ok
+test xcf::tests::group_membership_borrows_paths_and_rejects_duplicate_or_unbounded_records ... ok
+test xcf::tests::high_precision_samples_preserve_hdr_and_reject_ambiguous_or_nonfinite_values ... ok
+test xcf::tests::layer_attributes_preserve_signed_offsets_and_float_opacity_precedence ... ok
+test xcf::tests::layer_records_borrow_names_and_preserve_mask_references ... ok
+test xcf::tests::legacy_u8_expansion_covers_modes_palette_alpha_and_budget_rollback ... ok
+test xcf::tests::malformed_and_excessive_headers_refuse_without_panics ... ok
+test xcf::tests::long_rle_runs_and_invalid_lengths_are_bounded ... ok
+test xcf::tests::normal_composite_preserves_alpha_mask_clipping_and_input_validation ... ok
+test xcf::tests::managed_tree_resolves_groups_and_rolls_back_missing_parent_or_cancellation ... ok
+test xcf::tests::object_tables_are_borrowed_and_validate_both_offset_widths ... ok
+test xcf::tests::palette_extraction_refuses_duplicates_and_trailing_malformed_properties ... ok
+test xcf::tests::premultiplied_group_scales_color_once_and_matches_straight_source_over ... ok
+test xcf::tests::every_half_pattern_matches_independent_python_ieee_oracle_or_is_refused ... ok
+test xcf::tests::property_truncation_and_count_limit_are_terminal_errors ... ok
+test xcf::tests::rgba_preparation_transfers_shared_owner_at_full_ram_capacity ... ok
+test xcf::tests::tile_codecs_match_interleaved_pixels_and_leave_source_untouched ... ok
+test xcf::tests::valid_indexed_v1_files_preserve_native_palette_and_bounded_rgba ... ok
+test xcf::tests::version_specific_precision_and_offset_layouts ... ok
+
+test result: ok. 39 passed; 0 failed; 1 ignored; 0 measured; 700 filtered out; finished in 0.01s
+

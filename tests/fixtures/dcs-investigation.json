@@ -1,0 +1,123 @@
+{
+  "status": "native-DCS520C-subset-public-cache-Metal-qualified",
+  "camera": "Kodak DCS520C",
+  "source": {
+    "url": "https://raw.pixls.us/getfile.php/2573/nice/Kodak - DCS520C - 12bit (3:2).TIF",
+    "license": "CC0",
+    "bytes": 1970973,
+    "sha256": "d95e983bea9cf13f356e49b0f59629306bc7a51882ff20766c74ccff5f007d69"
+  },
+  "sensor": {
+    "width": 1736,
+    "height": 1160,
+    "bits": 12,
+    "strip_offset": 273056,
+    "strip_bytes": 1697917,
+    "jpeg_geometry": [
+      868,
+      1160,
+      12,
+      2
+    ]
+  },
+  "qualification_failure": {
+    "strict_decoder": "11 remaining entropy bits, buffer 0x38f, immediately before EOI",
+    "diagnostic_only_padding_bypass": {
+      "first_mismatching_sample": 0,
+      "native": 482,
+      "libraw_0_22_2": 1346,
+      "explanation": "482 is encoded JPEG value; Kodak private tag 2317 maps curve[482] to 1346. Full-sensor comparison still blocked by strict entropy-tail refusal."
+    },
+    "conclusion": "Resolved for pinned DCS520C: apply native response curve and admit only exact observed redundant category-6 +49 symbol followed by 111 padding and EOI. Generic JPEG still refuses."
+  },
+  "memory_contract": {
+    "output_bytes": 4027520,
+    "geometry_checked_before_output_allocation": true
+  },
+  "next_step": "Broaden DCS tail/camera/viewport qualification; continue remaining 20 format families, physical HDR and CUDA/NVIDIA execution.",
+  "response_curve": {
+    "private_tag": 2317,
+    "count": 4096,
+    "encoded_first_sample": 482,
+    "linear_first_sample": 1346
+  },
+  "sensor_qualification": {
+    "oracle": "LibRaw 0.22.2 unpack",
+    "samples_compared": 2013760,
+    "mismatches": 0,
+    "tests_passed": 3,
+    "negative_cases": [
+      "altered tail bits",
+      "truncated source",
+      "JPEG geometry mismatch",
+      "insufficient output budget",
+      "pre-cancellation"
+    ],
+    "last_owner_releases_budget": true,
+    "public_route": false
+  },
+  "native_adapter_qualification": {
+    "shared_camera_quirks": true,
+    "generic_sensor_ifd_selection": true,
+    "make": "Kodak",
+    "model": "DCS520C",
+    "cfa": [
+      1,
+      0,
+      2,
+      1
+    ],
+    "black": 178,
+    "white": 4095,
+    "black_source": "LibRaw 0.22.2 colordata DCS520C exact-model calibration",
+    "wb": [
+      0.9585605234460196,
+      1,
+      1.9912758996728461,
+      1
+    ],
+    "orientation": {
+      "native_tag": 9,
+      "interpreted": "Normal"
+    },
+    "full_sensor_matches_oracle": true,
+    "public_dispatch_registered": true
+  },
+  "public_route_qualification": {
+    "original_tiff_suffix": true,
+    "backend_id": 22,
+    "backend_revision": 1,
+    "managed_full_sensor": true,
+    "full_sensor_oracle_mismatches": 0,
+    "last_owner_bytes": 4027520,
+    "last_owner_release_bytes": 0,
+    "insufficient_budget_refuses_without_leak": true,
+    "opaque_cpu_thumbnail": true,
+    "real_fixture_tests_passed": 4
+  },
+  "storage_gpu_qualification": {
+    "adapter": "Metal Apple M4 Max",
+    "viewport": [
+      128,
+      96
+    ],
+    "independent_sensor_and_color_metadata_frame_equal": true,
+    "ram_lease_identity": true,
+    "leased_eviction_refused": true,
+    "persistent_disk_pixels_metadata_frame_equal": true,
+    "swap_pixels_metadata_frame_equal": true,
+    "pressure_refusal_preserves_entry_and_retry": true,
+    "last_owner_memory_released": true,
+    "physical_display_qualified": false
+  },
+  "required_corpus": {
+    "registered": true,
+    "case_id": 2573,
+    "filename": "2573.tif",
+    "sensor_sha256": "8f66425276edb479f8f9f4b98c5e5849332752c0b20688c26ec3322e208a6152",
+    "total_required_with_local_cr3": 29,
+    "whole_corpus_run_verified": true,
+    "managed_memory_mib": 256,
+    "native_binary_sha256": "2fd012b62fc22f2ff51c58e714eff8e501a26f38bf86ae3b1f5759c8786c89ff"
+  }
+}

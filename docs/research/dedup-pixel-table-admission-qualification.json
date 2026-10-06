@@ -1,0 +1,23 @@
+{
+  "change": "Fallible request/key hash tables and snapshot vector with explicit ordered IDs and ordered keys preserving scan order.",
+  "validation": {
+    "lib_pixel_search_raster_equality_scan_tests": 34,
+    "pixel_search_after_order_test": 15,
+    "failed": 0,
+    "dedup_lib_no_deps_clippy": "passed"
+  },
+  "checks": [
+    "Two independent pixel-key buckets preserve ordered equal pairs and counters for four request permutations.",
+    "Constant-key injection still requires direct pixel confirmation.",
+    "Mutation/generation/cancellation, corrupted source diagnostics and HDR behavior preserved."
+  ],
+  "source_sha256": {
+    "crates/rrrah-dedup/src/pixel_index.rs": "a54c13d2a23c047d6095520a2d6cbc3bad0ff704646c3f745ae4169cd2caeace",
+    "crates/rrrah-dedup/tests/pixel_search.rs": "034721eea243377479ae620ca88a6bcdcf09fdbcd7f8b67fa193b7a43e080659"
+  },
+  "limits": [
+    "confirm_pixels downstream maps and decoder allocations are separate admission gaps.",
+    "No actual allocator exhaustion injection or full shared byte-budget/RSS proof.",
+    "Sorting and request cloning remain separate indivisible allocation/latency concerns."
+  ]
+}

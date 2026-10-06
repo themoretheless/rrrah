@@ -1,0 +1,21 @@
+{
+  "scope": "One sequential before/after pair on eight pinned RAW/TIFF files",
+  "output_identical": true,
+  "output_sha256": "601ce913749cc372a2150f96f812b02994c03b401fe313b4756047e35271b3a7",
+  "runs": [
+    {
+      "variant": "before",
+      "seconds": 225.80569712497527,
+      "exit_code": 0
+    },
+    {
+      "variant": "after",
+      "seconds": 97.80742958397605,
+      "exit_code": 0
+    }
+  ],
+  "observed_ratio": 2.3086763253613753,
+  "changes": "Generation token filtering and direct pair preverification; collection descriptor retrieval still indexed",
+  "conditions": "Prior run overlapped photo regressions, after run overlapped brief ICC test compilation. Different CPU/cache conditions, fixed before-then-after order, one observation each. No clean causal speedup claim.",
+  "remaining": "Repeat counterbalanced isolated timings and qualify larger collections."
+}

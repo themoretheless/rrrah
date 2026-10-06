@@ -1,0 +1,46 @@
+   Compiling rrrah-decode v0.1.0 (/workspace/crates/rrrah-decode)
+error: expected `;`, found keyword `super`
+    --> crates/rrrah-decode/src/camtiff/rw2.rs:2028:15
+     |
+2028 |         output
+     |               ^ help: add `;` here
+2029 |         super::super::assert_pixel_cancellation_checkpoints(&quirks(), &file, raw);
+     |         ----- unexpected token
+
+error[E0423]: expected value, found macro `file`
+    --> crates/rrrah-decode/src/camtiff/rw2.rs:2029:73
+     |
+2029 |         super::super::assert_pixel_cancellation_checkpoints(&quirks(), &file, raw);
+     |                                                                         ^^^^ not a value
+
+error[E0425]: cannot find value `raw` in this scope
+    --> crates/rrrah-decode/src/camtiff/rw2.rs:2029:79
+     |
+2029 |         super::super::assert_pixel_cancellation_checkpoints(&quirks(), &file, raw);
+     |                                                                               ^^^ not found in this scope
+     |
+note: these functions exist but are inaccessible
+    --> crates/rrrah-decode/src/ply.rs:798:5
+     |
+ 798 |     fn raw(values: &PlyScalars) -> Vec<u8> {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::ply::tests::raw`: not accessible
+     |
+    ::: crates/rrrah-decode/src/nrrd.rs:352:5
+     |
+ 352 |     fn raw(header: &str, payload: &[u8]) -> Vec<u8> {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `crate::nrrd::tests::raw`: not accessible
+
+error[E0308]: mismatched types
+    --> crates/rrrah-decode/src/camtiff/rw2.rs:1931:81
+     |
+1931 |     fn ljpeg_stream(width: u16, height: u16, precision: u8, samples: &[u16]) -> Vec<u8> {
+     |        ------------                                                             ^^^^^^^ expected `Vec<u8>`, found `()`
+     |        |
+     |        implicitly returns `()` as its body has no tail or `return` expression
+     |
+     = note: expected struct `Vec<u8>`
+             found unit type `()`
+
+Some errors have detailed explanations: E0308, E0423, E0425.
+For more information about an error, try `rustc --explain E0308`.
+error: could not compile `rrrah-decode` (lib test) due to 4 previous errors

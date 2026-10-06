@@ -1,0 +1,1128 @@
+{
+  "change": "Inline first ID, allocate hash membership only for additional collision IDs",
+  "library_tests_passed": 14,
+  "visual_tests_passed": 8,
+  "library_clippy_no_deps": "passed",
+  "oracle_queries": 810,
+  "rss_measurements": [
+    {
+      "distribution": "random",
+      "entries": 1000,
+      "maximum_rss_bytes": 8617984,
+      "measurements": [
+        {
+          "distribution": "random",
+          "entries": 1000,
+          "radius": 0,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.003486708,
+          "index_seconds": [
+            4.541e-06,
+            4.334e-06,
+            3e-06,
+            2.541e-06
+          ],
+          "exhaustive_seconds": [
+            2.3292e-05,
+            2.3292e-05,
+            2.7124e-05,
+            2.3166e-05
+          ],
+          "hits_per_run": 4,
+          "oracle_equal": true
+        },
+        {
+          "distribution": "random",
+          "entries": 1000,
+          "radius": 8,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.003486708,
+          "index_seconds": [
+            4.0625e-05,
+            2.8749999999999997e-05,
+            1.175e-05,
+            1.0624999999999999e-05
+          ],
+          "exhaustive_seconds": [
+            2.3084e-05,
+            2.3125e-05,
+            2.3e-05,
+            2.3082e-05
+          ],
+          "hits_per_run": 4,
+          "oracle_equal": true
+        },
+        {
+          "distribution": "random",
+          "entries": 1000,
+          "radius": 32,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.003486708,
+          "index_seconds": [
+            7.916600000000001e-05,
+            4.9542999999999996e-05,
+            4.3584e-05,
+            3.9665999999999996e-05
+          ],
+          "exhaustive_seconds": [
+            2.3083999999999998e-05,
+            2.3166999999999997e-05,
+            2.3125e-05,
+            2.3125e-05
+          ],
+          "hits_per_run": 4,
+          "oracle_equal": true
+        },
+        {
+          "distribution": "random",
+          "entries": 1000,
+          "radius": 128,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.003486708,
+          "index_seconds": [
+            0.00017658299999999999,
+            0.000143625,
+            0.000121751,
+            0.00011179200000000002
+          ],
+          "exhaustive_seconds": [
+            8.195899999999999e-05,
+            7.3751e-05,
+            6.9e-05,
+            6.7418e-05
+          ],
+          "hits_per_run": 3983,
+          "oracle_equal": true
+        },
+        {
+          "distribution": "random",
+          "entries": 1000,
+          "radius": 256,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.003486708,
+          "index_seconds": [
+            8.8833e-05,
+            7.854099999999999e-05,
+            7.3417e-05,
+            7.2625e-05
+          ],
+          "exhaustive_seconds": [
+            8.191599999999999e-05,
+            7.2791e-05,
+            6.8083e-05,
+            6.6501e-05
+          ],
+          "hits_per_run": 4000,
+          "oracle_equal": true
+        }
+      ],
+      "previous_peak_rss_bytes": 10059776
+    },
+    {
+      "distribution": "random",
+      "entries": 10000,
+      "maximum_rss_bytes": 72646656,
+      "measurements": [
+        {
+          "distribution": "random",
+          "entries": 10000,
+          "radius": 0,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.064522708,
+          "index_seconds": [
+            6.541e-06,
+            4.6669999999999995e-06,
+            3.208e-06,
+            2.875e-06
+          ],
+          "exhaustive_seconds": [
+            0.000232041,
+            0.000232041,
+            0.00023270799999999998,
+            0.00023175
+          ],
+          "hits_per_run": 4,
+          "oracle_equal": true
+        },
+        {
+          "distribution": "random",
+          "entries": 10000,
+          "radius": 8,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.064522708,
+          "index_seconds": [
+            0.00020291599999999998,
+            7.7291e-05,
+            4.7499999999999996e-05,
+            3.5375000000000006e-05
+          ],
+          "exhaustive_seconds": [
+            0.000231708,
+            0.000231707,
+            0.000231917,
+            0.000231834
+          ],
+          "hits_per_run": 4,
+          "oracle_equal": true
+        },
+        {
+          "distribution": "random",
+          "entries": 10000,
+          "radius": 32,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.064522708,
+          "index_seconds": [
+            0.000999708,
+            0.000745374,
+            0.0006696250000000001,
+            0.000631667
+          ],
+          "exhaustive_seconds": [
+            0.000231916,
+            0.000231959,
+            0.000231958,
+            0.000231708
+          ],
+          "hits_per_run": 4,
+          "oracle_equal": true
+        },
+        {
+          "distribution": "random",
+          "entries": 10000,
+          "radius": 128,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.064522708,
+          "index_seconds": [
+            0.0023600410000000002,
+            0.0020923749999999996,
+            0.002100208,
+            0.002171041
+          ],
+          "exhaustive_seconds": [
+            0.0009723329999999999,
+            0.000962291,
+            0.000982416,
+            0.000973959
+          ],
+          "hits_per_run": 39882,
+          "oracle_equal": true
+        },
+        {
+          "distribution": "random",
+          "entries": 10000,
+          "radius": 256,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.064522708,
+          "index_seconds": [
+            0.0010573330000000001,
+            0.001011417,
+            0.000976958,
+            0.000977375
+          ],
+          "exhaustive_seconds": [
+            0.000977291,
+            0.000951625,
+            0.0009250410000000001,
+            0.000911167
+          ],
+          "hits_per_run": 40000,
+          "oracle_equal": true
+        }
+      ],
+      "previous_peak_rss_bytes": 83492864
+    },
+    {
+      "distribution": "random",
+      "entries": 50000,
+      "maximum_rss_bytes": 427982848,
+      "measurements": [
+        {
+          "distribution": "random",
+          "entries": 50000,
+          "radius": 0,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.559094875,
+          "index_seconds": [
+            8.123999999999999e-06,
+            6.375000000000001e-06,
+            3.917e-06,
+            7.042e-06
+          ],
+          "exhaustive_seconds": [
+            0.001160249,
+            0.00115875,
+            0.0011704990000000002,
+            0.0011652919999999998
+          ],
+          "hits_per_run": 4,
+          "oracle_equal": true
+        },
+        {
+          "distribution": "random",
+          "entries": 50000,
+          "radius": 8,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.559094875,
+          "index_seconds": [
+            0.0006684589999999999,
+            0.00031629200000000003,
+            0.00020987399999999998,
+            0.000199917
+          ],
+          "exhaustive_seconds": [
+            0.00116175,
+            0.001158542,
+            0.001158375,
+            0.0011585
+          ],
+          "hits_per_run": 4,
+          "oracle_equal": true
+        },
+        {
+          "distribution": "random",
+          "entries": 50000,
+          "radius": 32,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.559094875,
+          "index_seconds": [
+            0.011752792,
+            0.011825209,
+            0.012201083000000001,
+            0.012445792
+          ],
+          "exhaustive_seconds": [
+            0.001174582,
+            0.001204334,
+            0.0011954180000000002,
+            0.001186249
+          ],
+          "hits_per_run": 4,
+          "oracle_equal": true
+        },
+        {
+          "distribution": "random",
+          "entries": 50000,
+          "radius": 128,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.559094875,
+          "index_seconds": [
+            0.018590666,
+            0.017934709,
+            0.016972,
+            0.018858542
+          ],
+          "exhaustive_seconds": [
+            0.005229,
+            0.005240416,
+            0.005308708,
+            0.005233207
+          ],
+          "hits_per_run": 199469,
+          "oracle_equal": true
+        },
+        {
+          "distribution": "random",
+          "entries": 50000,
+          "radius": 256,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.559094875,
+          "index_seconds": [
+            0.005585125,
+            0.005546542000000001,
+            0.005649375,
+            0.0056447089999999995
+          ],
+          "exhaustive_seconds": [
+            0.005179417,
+            0.005153834,
+            0.0052461669999999995,
+            0.0052325010000000005
+          ],
+          "hits_per_run": 200000,
+          "oracle_equal": true
+        }
+      ],
+      "previous_peak_rss_bytes": 476102656
+    },
+    {
+      "distribution": "collision",
+      "entries": 1000,
+      "maximum_rss_bytes": 4390912,
+      "measurements": [
+        {
+          "distribution": "collision",
+          "entries": 1000,
+          "radius": 0,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.001073584,
+          "index_seconds": [
+            0.000122291,
+            8.916599999999999e-05,
+            7.966700000000001e-05,
+            7.8666e-05
+          ],
+          "exhaustive_seconds": [
+            2.8084e-05,
+            2.6875000000000003e-05,
+            2.6541999999999998e-05,
+            2.6458000000000003e-05
+          ],
+          "hits_per_run": 2000,
+          "oracle_equal": true
+        },
+        {
+          "distribution": "collision",
+          "entries": 1000,
+          "radius": 8,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.001073584,
+          "index_seconds": [
+            7.729199999999999e-05,
+            7.2958e-05,
+            7.2708e-05,
+            7.1124e-05
+          ],
+          "exhaustive_seconds": [
+            2.725e-05,
+            2.6374999999999997e-05,
+            2.6249999999999998e-05,
+            2.625e-05
+          ],
+          "hits_per_run": 2000,
+          "oracle_equal": true
+        },
+        {
+          "distribution": "collision",
+          "entries": 1000,
+          "radius": 32,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.001073584,
+          "index_seconds": [
+            7.149999999999999e-05,
+            7.079300000000001e-05,
+            7.137599999999999e-05,
+            7.0875e-05
+          ],
+          "exhaustive_seconds": [
+            2.6251e-05,
+            2.6166e-05,
+            2.6167e-05,
+            2.6209e-05
+          ],
+          "hits_per_run": 2000,
+          "oracle_equal": true
+        },
+        {
+          "distribution": "collision",
+          "entries": 1000,
+          "radius": 128,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.001073584,
+          "index_seconds": [
+            7.129200000000001e-05,
+            7.0874e-05,
+            7.075e-05,
+            7.0542e-05
+          ],
+          "exhaustive_seconds": [
+            2.6040999999999997e-05,
+            2.625e-05,
+            2.6042e-05,
+            2.629e-05
+          ],
+          "hits_per_run": 2000,
+          "oracle_equal": true
+        },
+        {
+          "distribution": "collision",
+          "entries": 1000,
+          "radius": 256,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.001073584,
+          "index_seconds": [
+            8.0209e-05,
+            7.303999999999999e-05,
+            7.2291e-05,
+            7.304100000000001e-05
+          ],
+          "exhaustive_seconds": [
+            7.0251e-05,
+            6.6126e-05,
+            6.608300000000001e-05,
+            6.5875e-05
+          ],
+          "hits_per_run": 4000,
+          "oracle_equal": true
+        }
+      ],
+      "previous_peak_rss_bytes": 4685824
+    },
+    {
+      "distribution": "collision",
+      "entries": 10000,
+      "maximum_rss_bytes": 21037056,
+      "measurements": [
+        {
+          "distribution": "collision",
+          "entries": 10000,
+          "radius": 0,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.009786542,
+          "index_seconds": [
+            0.0011961229999999999,
+            0.000983374,
+            0.001220208,
+            0.0010578330000000002
+          ],
+          "exhaustive_seconds": [
+            0.000256916,
+            0.000248709,
+            0.000259501,
+            0.000249875
+          ],
+          "hits_per_run": 20000,
+          "oracle_equal": true
+        },
+        {
+          "distribution": "collision",
+          "entries": 10000,
+          "radius": 8,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.009786542,
+          "index_seconds": [
+            0.0009548750000000001,
+            0.000933584,
+            0.000989458,
+            0.0012062079999999998
+          ],
+          "exhaustive_seconds": [
+            0.000257041,
+            0.00024883399999999997,
+            0.00026575000000000004,
+            0.000258208
+          ],
+          "hits_per_run": 20000,
+          "oracle_equal": true
+        },
+        {
+          "distribution": "collision",
+          "entries": 10000,
+          "radius": 32,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.009786542,
+          "index_seconds": [
+            0.0012830839999999999,
+            0.001038667,
+            0.000879417,
+            0.000889707
+          ],
+          "exhaustive_seconds": [
+            0.000258916,
+            0.000245377,
+            0.000251,
+            0.000250416
+          ],
+          "hits_per_run": 20000,
+          "oracle_equal": true
+        },
+        {
+          "distribution": "collision",
+          "entries": 10000,
+          "radius": 128,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.009786542,
+          "index_seconds": [
+            0.000883917,
+            0.000943042,
+            0.000866667,
+            0.000872999
+          ],
+          "exhaustive_seconds": [
+            0.000254667,
+            0.0002555,
+            0.000254083,
+            0.00024883399999999997
+          ],
+          "hits_per_run": 20000,
+          "oracle_equal": true
+        },
+        {
+          "distribution": "collision",
+          "entries": 10000,
+          "radius": 256,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.009786542,
+          "index_seconds": [
+            0.000974209,
+            0.0009064979999999999,
+            0.000874332,
+            0.000876751
+          ],
+          "exhaustive_seconds": [
+            0.0008252919999999999,
+            0.000790501,
+            0.0007790000000000001,
+            0.000786666
+          ],
+          "hits_per_run": 40000,
+          "oracle_equal": true
+        }
+      ],
+      "previous_peak_rss_bytes": 21004288
+    },
+    {
+      "distribution": "collision",
+      "entries": 50000,
+      "maximum_rss_bytes": 91668480,
+      "measurements": [
+        {
+          "distribution": "collision",
+          "entries": 50000,
+          "radius": 0,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.050291958,
+          "index_seconds": [
+            0.006145542,
+            0.0057795419999999995,
+            0.005578167,
+            0.005958459
+          ],
+          "exhaustive_seconds": [
+            0.0012701260000000001,
+            0.00124579,
+            0.0012410840000000002,
+            0.001356875
+          ],
+          "hits_per_run": 100000,
+          "oracle_equal": true
+        },
+        {
+          "distribution": "collision",
+          "entries": 50000,
+          "radius": 8,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.050291958,
+          "index_seconds": [
+            0.005913125,
+            0.005937167,
+            0.005788290999999999,
+            0.005665459
+          ],
+          "exhaustive_seconds": [
+            0.0012422079999999999,
+            0.001220081,
+            0.0012365409999999999,
+            0.001225209
+          ],
+          "hits_per_run": 100000,
+          "oracle_equal": true
+        },
+        {
+          "distribution": "collision",
+          "entries": 50000,
+          "radius": 32,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.050291958,
+          "index_seconds": [
+            0.005809833,
+            0.005426124,
+            0.005512625,
+            0.005867291
+          ],
+          "exhaustive_seconds": [
+            0.001216292,
+            0.001234958,
+            0.0012239990000000001,
+            0.001225084
+          ],
+          "hits_per_run": 100000,
+          "oracle_equal": true
+        },
+        {
+          "distribution": "collision",
+          "entries": 50000,
+          "radius": 128,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.050291958,
+          "index_seconds": [
+            0.005815835,
+            0.005658375,
+            0.005871999,
+            0.0059753340000000005
+          ],
+          "exhaustive_seconds": [
+            0.001223624,
+            0.001233876,
+            0.001233249,
+            0.001220043
+          ],
+          "hits_per_run": 100000,
+          "oracle_equal": true
+        },
+        {
+          "distribution": "collision",
+          "entries": 50000,
+          "radius": 256,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.050291958,
+          "index_seconds": [
+            0.005532499,
+            0.005260167,
+            0.005415751,
+            0.0055489580000000005
+          ],
+          "exhaustive_seconds": [
+            0.004643958,
+            0.004541417,
+            0.004592751,
+            0.004723125
+          ],
+          "hits_per_run": 200000,
+          "oracle_equal": true
+        }
+      ],
+      "previous_peak_rss_bytes": 91815936
+    },
+    {
+      "distribution": "clustered",
+      "entries": 1000,
+      "maximum_rss_bytes": 7176192,
+      "measurements": [
+        {
+          "distribution": "clustered",
+          "entries": 1000,
+          "radius": 0,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.012859292,
+          "index_seconds": [
+            1.5833999999999998e-05,
+            1.1917000000000001e-05,
+            1.0709e-05,
+            1.3375e-05
+          ],
+          "exhaustive_seconds": [
+            2.4042e-05,
+            2.3917e-05,
+            2.3958000000000003e-05,
+            2.3915000000000004e-05
+          ],
+          "hits_per_run": 4,
+          "oracle_equal": true
+        },
+        {
+          "distribution": "clustered",
+          "entries": 1000,
+          "radius": 8,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.012859292,
+          "index_seconds": [
+            0.000226083,
+            0.00020608400000000001,
+            0.000221709,
+            0.000186208
+          ],
+          "exhaustive_seconds": [
+            2.4791e-05,
+            2.3958000000000003e-05,
+            2.3833e-05,
+            2.3458e-05
+          ],
+          "hits_per_run": 4,
+          "oracle_equal": true
+        },
+        {
+          "distribution": "clustered",
+          "entries": 1000,
+          "radius": 32,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.012859292,
+          "index_seconds": [
+            0.000172457,
+            0.00012024799999999999,
+            0.00011341699999999999,
+            0.00011170699999999999
+          ],
+          "exhaustive_seconds": [
+            4.9667e-05,
+            4.5333999999999997e-05,
+            4.3625e-05,
+            4.3168000000000004e-05
+          ],
+          "hits_per_run": 2000,
+          "oracle_equal": true
+        },
+        {
+          "distribution": "clustered",
+          "entries": 1000,
+          "radius": 128,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.012859292,
+          "index_seconds": [
+            0.0001115,
+            0.000111167,
+            0.000110791,
+            0.000111333
+          ],
+          "exhaustive_seconds": [
+            4.3166000000000007e-05,
+            4.3125e-05,
+            4.3333e-05,
+            4.3125e-05
+          ],
+          "hits_per_run": 2000,
+          "oracle_equal": true
+        },
+        {
+          "distribution": "clustered",
+          "entries": 1000,
+          "radius": 256,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.012859292,
+          "index_seconds": [
+            9.6874e-05,
+            7.875e-05,
+            7.720700000000001e-05,
+            7.3667e-05
+          ],
+          "exhaustive_seconds": [
+            7.5125e-05,
+            6.841699999999999e-05,
+            6.7e-05,
+            6.6125e-05
+          ],
+          "hits_per_run": 4000,
+          "oracle_equal": true
+        }
+      ],
+      "previous_peak_rss_bytes": 7323648
+    },
+    {
+      "distribution": "clustered",
+      "entries": 10000,
+      "maximum_rss_bytes": 26066944,
+      "measurements": [
+        {
+          "distribution": "clustered",
+          "entries": 10000,
+          "radius": 0,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.158624875,
+          "index_seconds": [
+            5.4916999999999996e-05,
+            2.9999e-05,
+            2.65e-05,
+            2.7041e-05
+          ],
+          "exhaustive_seconds": [
+            0.000232542,
+            0.000232709,
+            0.000232375,
+            0.00023212500000000002
+          ],
+          "hits_per_run": 4,
+          "oracle_equal": true
+        },
+        {
+          "distribution": "clustered",
+          "entries": 10000,
+          "radius": 8,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.158624875,
+          "index_seconds": [
+            0.002770166,
+            0.0024954160000000003,
+            0.0031175400000000002,
+            0.0028089589999999998
+          ],
+          "exhaustive_seconds": [
+            0.000234334,
+            0.000243209,
+            0.00024350099999999997,
+            0.00025170799999999996
+          ],
+          "hits_per_run": 29,
+          "oracle_equal": true
+        },
+        {
+          "distribution": "clustered",
+          "entries": 10000,
+          "radius": 32,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.158624875,
+          "index_seconds": [
+            0.00166,
+            0.0012850000000000001,
+            0.0011870840000000001,
+            0.001185709
+          ],
+          "exhaustive_seconds": [
+            0.0005566659999999999,
+            0.000534416,
+            0.000534083,
+            0.000532499
+          ],
+          "hits_per_run": 20000,
+          "oracle_equal": true
+        },
+        {
+          "distribution": "clustered",
+          "entries": 10000,
+          "radius": 128,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.158624875,
+          "index_seconds": [
+            0.001632208,
+            0.001451292,
+            0.001245584,
+            0.0012161680000000001
+          ],
+          "exhaustive_seconds": [
+            0.000573375,
+            0.000548209,
+            0.0005410419999999999,
+            0.000525083
+          ],
+          "hits_per_run": 20000,
+          "oracle_equal": true
+        },
+        {
+          "distribution": "clustered",
+          "entries": 10000,
+          "radius": 256,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.158624875,
+          "index_seconds": [
+            0.0010700010000000001,
+            0.001044458,
+            0.00101725,
+            0.0009824589999999998
+          ],
+          "exhaustive_seconds": [
+            0.000947541,
+            0.0009332920000000001,
+            0.0009111260000000001,
+            0.0008989579999999999
+          ],
+          "hits_per_run": 40000,
+          "oracle_equal": true
+        }
+      ],
+      "previous_peak_rss_bytes": 26820608
+    },
+    {
+      "distribution": "clustered",
+      "entries": 50000,
+      "maximum_rss_bytes": 99926016,
+      "measurements": [
+        {
+          "distribution": "clustered",
+          "entries": 50000,
+          "radius": 0,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.834263958,
+          "index_seconds": [
+            0.000646792,
+            0.000318583,
+            0.000337459,
+            0.000312959
+          ],
+          "exhaustive_seconds": [
+            0.0011825,
+            0.001177,
+            0.001186584,
+            0.0011767079999999998
+          ],
+          "hits_per_run": 4,
+          "oracle_equal": true
+        },
+        {
+          "distribution": "clustered",
+          "entries": 50000,
+          "radius": 8,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.834263958,
+          "index_seconds": [
+            0.012505708,
+            0.012004207999999999,
+            0.013158958000000002,
+            0.012951042
+          ],
+          "exhaustive_seconds": [
+            0.001200458,
+            0.001192499,
+            0.001182332,
+            0.001175541
+          ],
+          "hits_per_run": 257,
+          "oracle_equal": true
+        },
+        {
+          "distribution": "clustered",
+          "entries": 50000,
+          "radius": 32,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.834263958,
+          "index_seconds": [
+            0.007642292,
+            0.0078122899999999995,
+            0.007675876,
+            0.007946124
+          ],
+          "exhaustive_seconds": [
+            0.0029784589999999997,
+            0.00301225,
+            0.0029875,
+            0.002980416
+          ],
+          "hits_per_run": 100000,
+          "oracle_equal": true
+        },
+        {
+          "distribution": "clustered",
+          "entries": 50000,
+          "radius": 128,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.834263958,
+          "index_seconds": [
+            0.007357457999999999,
+            0.007555958999999999,
+            0.007282375000000001,
+            0.006973417
+          ],
+          "exhaustive_seconds": [
+            0.0029626239999999996,
+            0.002934041,
+            0.0029467499999999997,
+            0.0028674169999999997
+          ],
+          "hits_per_run": 100000,
+          "oracle_equal": true
+        },
+        {
+          "distribution": "clustered",
+          "entries": 50000,
+          "radius": 256,
+          "queries_per_run": 4,
+          "runs": 4,
+          "warmups": 2,
+          "build_seconds": 0.834263958,
+          "index_seconds": [
+            0.005800209,
+            0.005818666,
+            0.0057530820000000005,
+            0.0057505839999999996
+          ],
+          "exhaustive_seconds": [
+            0.005140333,
+            0.005144166,
+            0.005176542,
+            0.005137834
+          ],
+          "hits_per_run": 200000,
+          "oracle_equal": true
+        }
+      ],
+      "previous_peak_rss_bytes": 100679680
+    }
+  ],
+  "limits": [
+    "Whole-process RSS, includes inputs and oracle; one process per case, no statistical bound",
+    "No shared byte-budget admission or hard cancellation latency guarantee",
+    "Full 203-test run precedes this change and concurrent decoder changes"
+  ],
+  "source_sha256": {
+    "crates/rrrah-dedup/src/lib.rs": "c86bb3792362f504faedf37e0960ceeef5a15f7ca7401eb738f715069881a639",
+    "crates/rrrah-dedup/src/visual.rs": "755c8718ed19c9388d9f6f8078b0823208b24d8dd46f5feca53029e3d0794715",
+    "crates/rrrah-dedup/tests/visual.rs": "54abd45e2151e3946ffd6ba589edcd0db3d9df3ea894f5d2204ede1eda9955a6",
+    "crates/rrrah-dedup/examples/visual_scale_probe.rs": "1a74b1cbc9df4c4e02d726f644525c352bc2cbc83fb9fc45e7583182b2614c63"
+  },
+  "local_collection_local_scan_tests_passed": 20
+}

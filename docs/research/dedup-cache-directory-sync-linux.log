@@ -1,0 +1,88 @@
+   Compiling rrrah-decode v0.1.0 (/workspace/crates/rrrah-decode)
+   Compiling rrrah-dedup v0.1.0 (/workspace/crates/rrrah-dedup)
+warning: function `error` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:4:4
+  |
+4 | fn error(message: &str) -> DecodeError {
+  |    ^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `packed_12` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:9:4
+  |
+9 | fn packed_12(
+  |    ^^^^^^^^^
+
+warning: function `decode_zd` is never used
+  --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:48:15
+   |
+48 | pub(super) fn decode_zd(
+   |               ^^^^^^^^^
+
+warning: `rrrah-decode` (lib) generated 3 warnings
+warning: linker stderr: /validation/sysroot/usr/bin/ld: /validation/target/debug/deps/libjpegxr-8d01a0594e000fc4.rlib(2e643c6506a180d9-strenc.o): in function `StrIOEncInit':
+         /validation/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/jpegxr-0.3.1/jxrlib/image/encode/strenc.c:485:(.text.StrIOEncInit+0xf0): the use of `tmpnam' is dangerous, better use `mkstemp'
+  |
+  = note: `#[warn(linker_messages)]` on by default
+
+warning: linker stdout: /validation/sysroot/usr/bin/ld: /validation/target/debug/deps/libjpegxr-8d01a0594e000fc4.rlib(2e643c6506a180d9-strenc.o): note: the message above does not take linker garbage collection into account
+
+warning: `rrrah-dedup` (test "cache") generated 2 warnings
+warning: `rrrah-dedup` (lib test) generated 2 warnings (2 duplicates)
+    Finished `test` profile [optimized + debuginfo] target(s) in 54.48s
+     Running unittests src/lib.rs (/validation/target/debug/deps/rrrah_dedup-cf43884b9200638c)
+
+running 37 tests
+test cache::publication_tests::directory_sync_failure_reports_already_published_complete_cache ... ok
+test animated::timeline_key_tests::rational_sum_overflow_is_inconclusive_despite_direct_timeline_equality ... ok
+test animated::timeline_key_tests::zero_duration_timelines_ignore_pixels_but_retain_repetition ... ok
+test container::reuse_tests::candidate_collisions_and_signature_failures_cannot_replace_direct_evidence ... ok
+test container::reuse_tests::indexed_groups_remove_changed_sources_without_losing_healthy_edges ... ok
+test container::reuse_tests::retained_left_reuses_pixels_and_rejects_changed_source_and_cancellation ... ok
+test container::reuse_tests::retained_left_survives_memory_refusal_and_releases_before_row_change ... ok
+test container::reuse_tests::indexed_groups_keep_selected_pages_and_animation_scopes_separate ... ok
+test container::reuse_tests::signature_preparation_errors_remain_pair_issues_without_unique_classification ... ok
+test container::reuse_tests::stale_different_signatures_are_errors_and_equal_signatures_require_confirmation ... ok
+test container::reuse_tests::indexed_groups_keep_labels_under_collisions_failure_and_candidate_caps ... ok
+test exact::collision_tests::colliding_samples_and_full_hashes_still_partition_by_bytes ... ok
+test exact::collision_tests::final_content_validation_rejects_change_even_when_metadata_matches ... ok
+test exact::collision_tests::read_buffer_capacity_failure_is_explicit_and_retry_succeeds ... ok
+test exact::collision_tests::verified_observations_detect_metadata_invisible_pruned_mutations ... ok
+test local_scan::feature_memory_tests::grayscale_admission_accounts_for_other_owners_and_releases_on_cancel ... ok
+test local_scan::feature_memory_tests::retained_feature_storage_keeps_credit_until_last_owner ... ok
+test local_scan::reflected_model_confirmation_tests::a_rejected_second_model_does_not_convert_first_fit_failure_to_a_negative ... ok
+test local_scan::reflected_model_confirmation_tests::alternative_confirmation_cancel_and_work_limits_remain_terminal ... ok
+test local_scan::reflected_model_confirmation_tests::coefficient_bounds_and_low_variance_failures_are_also_model_specific ... ok
+test local_scan::reflected_model_confirmation_tests::exhausted_model_fits_preserve_first_inconclusive_reason ... ok
+test local_scan::reflected_model_confirmation_tests::insufficient_fit_support_in_first_model_does_not_hide_second_verified_model ... ok
+test local_scan::reflected_model_confirmation_tests::ordinary_alternative_models_recover_photometric_range_and_display_fits ... ok
+test local_scan::reflected_model_confirmation_tests::reflected_ranged_models_recover_fit_and_preserve_selected_domain ... ok
+test local_scan::reflected_model_confirmation_tests::selected_encoded_filter_retains_auxiliary_linear_failure ... ok
+test pages::page_key_tests::key_retains_page_order_and_count_independently_of_first_page ... ok
+test pixel_index::tests::injected_constant_keys_still_require_direct_pixel_confirmation ... ok
+test tests::collision_membership_keeps_arbitrary_order_and_pair_identity ... ok
+test tests::empty_and_duplicate_fingerprints ... ok
+test tests::indexed_search_matches_independent_exhaustive_scan ... ok
+test tests::traversal_work_exhaustion_is_distinct_from_failure ... ok
+test warp::bounded_fit_tests::boundary_fit_matches_exhaustive_rectangle_and_beats_independent_clipping ... ok
+test warp::encoded_signal_tests::extended_srgb_landmarks_match_independent_decimal_oracle_without_clipping ... ok
+test warp::encoded_signal_tests::transfer_precedes_premultiplication_and_bilinear_sampling ... ok
+test container::reuse_tests::reused_pair_latches_every_cancellation_checkpoint_and_generation_token ... ok
+test container::reuse_tests::indexed_groups_cancel_without_partial_output_at_every_normal_checkpoint ... ok
+test container::reuse_tests::whole_signature_pipeline_cancels_at_every_checkpoint_without_report_or_leaks ... ok
+
+test result: ok. 37 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 9.53s
+
+     Running tests/cache.rs (/validation/target/debug/deps/cache-00421ae7a9c4c564)
+
+running 6 tests
+test cache_publication_child ... ok
+test disk_persistence_is_deterministic_and_rejects_invalid_values ... ok
+test atomic_replacement_and_cancel_preserve_previous_cache ... ok
+test roundtrip_requires_content_recipe_and_frame_identity ... ok
+test concurrent_process_writers_publish_only_complete_single_writer_caches ... ok
+test process_exit_during_temp_write_preserves_previous_publication_and_retry ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+

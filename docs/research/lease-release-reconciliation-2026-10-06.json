@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-06",
+  "change": "LeaseCache skips Weak strong-count reconciliation when no consumer release has occurred",
+  "ordering": "CacheLease Drop drops its Arc value before Release-store notification; owner consumes with AcqRel swap before scanning; releases during scan remain signalled for the next operation",
+  "scope": "managed lease ownership and cache eviction correctness; no physical RSS, viewer latency or throughput measurement",
+  "results": {
+    "memory_unit": 35,
+    "memory_positive_ttl": 1,
+    "memory_doctest": 1,
+    "cache_unit": 111,
+    "cache_integration": 5,
+    "swap_unit": 7,
+    "swap_expired_spill": 1,
+    "metal_ttl": 2,
+    "failed": 0
+  },
+  "metal_adapter": "Metal Apple M4 Max",
+  "logs": [
+    "/tmp/rrrah-lease-release-tests.log",
+    "/tmp/rrrah-lease-release-memory.log",
+    "/tmp/rrrah-lease-release-metal.log",
+    "/tmp/rrrah-lease-concurrent-release.log"
+  ],
+  "assertions": [
+    "no release skips scan",
+    "cross-thread clone release does not permit eviction while another consumer remains",
+    "last consumer release permits eviction",
+    "positive TTL RAW CR3 and float HDR survive held lease, expiry and streamed swap with matching Metal frames",
+    "64 iterations concurrently release 16 worker leases while owner changes byte limits",
+    "held keeper forbids eviction and keeps 64 bytes reserved",
+    "after all consumers release, victim transfer retains credit until victim drops"
+  ],
+  "performance_measured": false,
+  "concurrency_limit": "thread stress covers observed schedules; not exhaustive model checking"
+}

@@ -1,0 +1,78 @@
+{
+  "index": 365,
+  "repository": "Nr90/imgsim",
+  "commit": "5caa057144b0230beaffbf4d8e6fd8c914f7a50b",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Go average/difference hash with tests; global candidates only, no crop verification.",
+  "available_source_evidence": [
+    {
+      "path": "ahash.go",
+      "local": "02-ahash.go",
+      "url": "https://github.com/Nr90/imgsim/blob/5caa057144b0230beaffbf4d8e6fd8c914f7a50b/ahash.go",
+      "sha256": "d0b0b194c2a9fd1c65ed52f312a8e017460db098b91b9017cdbb30bbeb554838",
+      "truncated": false,
+      "lines": 64,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "dhash.go",
+      "local": "03-dhash.go",
+      "url": "https://github.com/Nr90/imgsim/blob/5caa057144b0230beaffbf4d8e6fd8c914f7a50b/dhash.go",
+      "sha256": "c931021254cad17497ce768bd337b986696ce1d4a92b550f1acc75eb66d65d15",
+      "truncated": false,
+      "lines": 41,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "hash.go",
+      "local": "04-hash.go",
+      "url": "https://github.com/Nr90/imgsim/blob/5caa057144b0230beaffbf4d8e6fd8c914f7a50b/hash.go",
+      "sha256": "ee3e90f1ad864ac163911fc37d229bc3fc29d1df688b786227b3c4a96c977986",
+      "truncated": false,
+      "lines": 18,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "ahash_test.go",
+      "local": "05-ahash_test.go",
+      "url": "https://github.com/Nr90/imgsim/blob/5caa057144b0230beaffbf4d8e6fd8c914f7a50b/ahash_test.go",
+      "sha256": "ebdbebf32d5e7d09a2143577304ff8a57c369f6fc02c717a10bfbe7a74aee02b",
+      "truncated": false,
+      "lines": 71,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 3,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/Nr90/imgsim/blob/5caa057144b0230beaffbf4d8e6fd8c914f7a50b/README.md",
+      "sha256": "87b71221ff608afdb73be8617a92c8e1a85ed06e0f33fcb32cd59df7a4b7a12a",
+      "truncated": false,
+      "lines": 51,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/Nr90/imgsim/blob/5caa057144b0230beaffbf4d8e6fd8c914f7a50b/LICENSE",
+      "sha256": "dbf2d149206e509f09986509395b6ad03076cdfa56cf220e6285e07a046ec183",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

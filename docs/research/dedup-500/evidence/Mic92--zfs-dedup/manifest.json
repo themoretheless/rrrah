@@ -1,0 +1,84 @@
+{
+  "repository": "Mic92/zfs-dedup",
+  "metadata": {
+    "name": "Mic92/zfs-dedup",
+    "url": "https://github.com/Mic92/zfs-dedup",
+    "description": "offline deduplication for zfs",
+    "language": "Rust",
+    "stars": 55,
+    "license": "MIT",
+    "archived": false,
+    "pushed_at": "2026-10-04T20:43:41Z",
+    "default_branch": "main",
+    "queries": [
+      "dedup in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/Mic92/zfs-dedup/blob/a69c243d6128b41ab745b10e450059fb14d2895d/README.md",
+      "sha256": "814cd62b7b75dccd861aea1fbe2e2822a9f397174a7cb06be73acb86e0e93957",
+      "truncated": false,
+      "lines": 126,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/Mic92/zfs-dedup/blob/a69c243d6128b41ab745b10e450059fb14d2895d/LICENSE",
+      "sha256": "5f8c27fe9f2b5749f41008840b86f9170c49de05d7008155bf82db81236820d1",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "src/dedup.rs",
+      "local": "02-dedup.rs",
+      "url": "https://github.com/Mic92/zfs-dedup/blob/a69c243d6128b41ab745b10e450059fb14d2895d/src/dedup.rs",
+      "sha256": "4270a2188f05fe58a6cdc7df9e8e305892aebe818cf634a5eabd0c1e2e6558e0",
+      "truncated": false,
+      "lines": 634,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/hasher.rs",
+      "local": "03-hasher.rs",
+      "url": "https://github.com/Mic92/zfs-dedup/blob/a69c243d6128b41ab745b10e450059fb14d2895d/src/hasher.rs",
+      "sha256": "da744f63e6a5b199489b2419b4e3dbd8e1e41984b77e6f6819a9c1860e58de21",
+      "truncated": false,
+      "lines": 352,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/bloom.rs",
+      "local": "04-bloom.rs",
+      "url": "https://github.com/Mic92/zfs-dedup/blob/a69c243d6128b41ab745b10e450059fb14d2895d/src/bloom.rs",
+      "sha256": "9459b4c12cc1ba4ecd0be9e453b4d3c18335458ddd0e65604f5a2f7be253bc8f",
+      "truncated": false,
+      "lines": 81,
+      "source": true,
+      "test": false
+    }
+  ],
+  "errors": [],
+  "commit": "a69c243d6128b41ab745b10e450059fb14d2895d",
+  "tree_truncated": false,
+  "source_file_count": 11,
+  "test_file_count": 0,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "src/dedup.rs",
+    "src/hasher.rs",
+    "src/bloom.rs"
+  ]
+}

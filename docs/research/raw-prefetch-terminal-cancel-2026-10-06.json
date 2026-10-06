@@ -1,0 +1,15 @@
+{
+  "date": "2026-10-06",
+  "change": "RAW preload treats disk CacheError::Cancelled as terminal and rechecks generation after disk restore before native decode fallback",
+  "results": {
+    "app_passed": 116,
+    "app_ignored": 10,
+    "real_cr3_preload_passed": 1,
+    "failed": 0
+  },
+  "logs": [
+    "/tmp/rrrah-raw-prefetch-terminal-cancel.log",
+    "/tmp/rrrah-raw-prefetch-terminal-real.log"
+  ],
+  "scope": "source control-flow fix and existing app/real RAW preload regression; cancellation exactly during disk-to-decode transition not deterministically injected; no performance claim"
+}

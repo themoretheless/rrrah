@@ -1,0 +1,68 @@
+{
+  "index": 341,
+  "repository": "cynipe/domo",
+  "commit": "9e96438014110d8731f6f406599897610d310832",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Jenkins CLI; super-duper wording false positive.",
+  "available_source_evidence": [
+    {
+      "path": "lib/domo.rb",
+      "local": "02-domo.rb",
+      "url": "https://github.com/cynipe/domo/blob/9e96438014110d8731f6f406599897610d310832/lib/domo.rb",
+      "sha256": "f046ed98582a2457f7a90074eace868775e7d332d23b89ad31852fd8b86b70a7",
+      "truncated": false,
+      "lines": 5,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "lib/domo/cli.rb",
+      "local": "03-cli.rb",
+      "url": "https://github.com/cynipe/domo/blob/9e96438014110d8731f6f406599897610d310832/lib/domo/cli.rb",
+      "sha256": "63f5329164bd84f9eb3f38bcd5801c0496e9d7107a92e466f387c07987dfcc90",
+      "truncated": false,
+      "lines": 104,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "lib/domo/core.rb",
+      "local": "04-core.rb",
+      "url": "https://github.com/cynipe/domo/blob/9e96438014110d8731f6f406599897610d310832/lib/domo/core.rb",
+      "sha256": "11605333c906f51fa719461cc9c0e2586b0945e51a2f1e2ffb4f26704350093a",
+      "truncated": false,
+      "lines": 186,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.rst",
+      "local": "00-README.rst",
+      "url": "https://github.com/cynipe/domo/blob/9e96438014110d8731f6f406599897610d310832/README.rst",
+      "sha256": "dc2b9d4a700c2298c397fcc632375d280fca822af3eca376d8a574d93cd11e91",
+      "truncated": false,
+      "lines": 66,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENCE.txt",
+      "local": "01-LICENCE.txt",
+      "url": "https://github.com/cynipe/domo/blob/9e96438014110d8731f6f406599897610d310832/LICENCE.txt",
+      "sha256": "4870a9748c51f8a8200fc434e5dfd0dec4e612e3907b9e14fc455a6c6961fa98",
+      "truncated": false,
+      "lines": 18,
+      "source": false,
+      "test": false
+    }
+  ]
+}

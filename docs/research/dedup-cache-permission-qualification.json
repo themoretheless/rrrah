@@ -1,0 +1,42 @@
+{
+  "status": "passed",
+  "tests": {
+    "macos_cache": 7,
+    "linux_ext4_cache": 7,
+    "failed": 0,
+    "ignored": 0,
+    "filtered": 0
+  },
+  "linux_identity": "uid/gid 65534",
+  "filesystem": "persistent Linux VM ext4, same mount qualified in directory-sync artifact",
+  "checks": [
+    "parent mode 0555 yields pre-publication PermissionDenied",
+    "previous bytes and independently verified 64-record writer remain unchanged",
+    "no extra temporary files",
+    "restoring parent permissions allows complete new writer publication"
+  ],
+  "root_behavior": "permission qualification explicitly refuses privileged execution; no silent bypass pass",
+  "source_hash": "c05d2a88ef543e5338df546717ba4dc520bc9c8a11da7e009e9d3231b5abbac1",
+  "hash_timing": "post-validation only",
+  "logs": {
+    "macos": {
+      "path": "docs/research/dedup-cache-permission-macos.log",
+      "sha256": "28f8a858ee8f56d81bc6431bb36a3de266abc319f6949f95c772097e825d3b90"
+    },
+    "linux": {
+      "path": "docs/research/dedup-cache-permission-linux.log",
+      "sha256": "06959e4c2617a87c53b4207786c29b9a67fd5202053d45758593f1ad4f76bf49"
+    },
+    "clippy": {
+      "path": "docs/research/dedup-cache-permission-clippy.log",
+      "sha256": "5d7724b3b11750f91c8bed765af95e579749627c3a56740a117e9adf23accd5e"
+    }
+  },
+  "clippy": "minimal scoped passed",
+  "limits": [
+    "Unix permission fixture, not ACL/read-only mount/disk-full qualification",
+    "process tests do not simulate power loss",
+    "production source unchanged this step",
+    "full acceptance remains incomplete"
+  ]
+}

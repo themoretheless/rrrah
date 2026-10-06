@@ -1,0 +1,54 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: function `error` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:4:4
+  |
+4 | fn error(message: &str) -> DecodeError {
+  |    ^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `packed_12` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:9:4
+  |
+9 | fn packed_12(
+  |    ^^^^^^^^^
+
+warning: function `decode_zd` is never used
+  --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:48:15
+   |
+48 | pub(super) fn decode_zd(
+   |               ^^^^^^^^^
+
+warning: `rrrah-decode` (lib) generated 3 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 5.81s
+     Running tests/projective_files.rs (target/debug/deps/projective_files-af2b447668e34079)
+
+running 1 test
+oracle-perspective 2414: forward=45073/64738 reverse=66647/67298
+oracle-filtered 2414 radius=1: forward=61632/63690 reverse=66125/66234
+oracle-filtered 2414 radius=2: forward=62260/62650 reverse=65134/65178
+oracle-filtered 2414 radius=3: forward=61542/61618 reverse=64104/64130
+oracle-perspective 2418: forward=49078/64738 reverse=66035/67298
+oracle-filtered 2418 radius=1: forward=60818/63690 reverse=65911/66234
+oracle-filtered 2418 radius=2: forward=61727/62650 reverse=65058/65178
+oracle-filtered 2418 radius=3: forward=61316/61618 reverse=64081/64130
+oracle-perspective 2883: forward=15773/18228 reverse=18306/18592
+oracle-filtered 2883 radius=1: forward=17129/17680 reverse=17771/18040
+oracle-filtered 2883 radius=2: forward=16997/17141 reverse=17496/17496
+oracle-filtered 2883 radius=3: forward=16552/16611 reverse=16960/16960
+oracle-perspective 5025: forward=67175/72885 reverse=73150/75481
+oracle-filtered 5025 radius=1: forward=68874/71781 reverse=73915/74365
+oracle-filtered 5025 radius=2: forward=69850/70685 reverse=73181/73257
+oracle-filtered 5025 radius=3: forward=69383/69597 reverse=72126/72157
+oracle-perspective 1425: forward=66684/72885 reverse=73553/75481
+oracle-filtered 1425 radius=1: forward=68461/71781 reverse=73191/74365
+oracle-filtered 1425 radius=2: forward=69609/70685 reverse=73248/73257
+oracle-filtered 1425 radius=3: forward=69354/69597 reverse=72157/72157
+oracle-perspective 5495: forward=52437/72885 reverse=74299/75481
+oracle-filtered 5495 radius=1: forward=69146/71781 reverse=74104/74365
+oracle-filtered 5495 radius=2: forward=70094/70685 reverse=73181/73257
+oracle-filtered 5495 radius=3: forward=69474/69597 reverse=72141/72157
+test perspective_generator_geometry_diagnostic ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 3.55s
+

@@ -1,0 +1,78 @@
+{
+  "index": 82,
+  "repository": "9001/copyparty",
+  "commit": "74b17374c24b89ec365965781eee130f1cee5fd7",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Server/media hash and dedup tests; inspected password hashing is not file hashing, deeper up2k path needed before reuse.",
+  "license_metadata": "MIT",
+  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "tests_detected": 23,
+  "upstream_tests_run": false,
+  "available_source_evidence": [
+    {
+      "path": "copyparty/pwhash.py",
+      "local": "02-pwhash.py",
+      "url": "https://github.com/9001/copyparty/blob/74b17374c24b89ec365965781eee130f1cee5fd7/copyparty/pwhash.py",
+      "sha256": "41b6ebbd38b2ea1d8495c57cd59c72d255467813d9428e9e32f537aaf3fd560a",
+      "truncated": false,
+      "lines": 167,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "bin/mtag/media-hash.py",
+      "local": "03-media-hash.py",
+      "url": "https://github.com/9001/copyparty/blob/74b17374c24b89ec365965781eee130f1cee5fd7/bin/mtag/media-hash.py",
+      "sha256": "93af674d9b836cca5157cb68d5054199b67101db9cbbde377ff0c4174ea96a1a",
+      "truncated": false,
+      "lines": 73,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "contrib/plugins/meadup.js",
+      "local": "04-meadup.js",
+      "url": "https://github.com/9001/copyparty/blob/74b17374c24b89ec365965781eee130f1cee5fd7/contrib/plugins/meadup.js",
+      "sha256": "3206e11cdf7aeb965dcf430d536936f39130f46970503a4afe0592cc00f28c5b",
+      "truncated": false,
+      "lines": 506,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/test_dedup.py",
+      "local": "05-test_dedup.py",
+      "url": "https://github.com/9001/copyparty/blob/74b17374c24b89ec365965781eee130f1cee5fd7/tests/test_dedup.py",
+      "sha256": "1109fefdf44e7573bbcf990bd2c5f8d2eeede56737f6e9defe20b2bd3da6d736",
+      "truncated": false,
+      "lines": 247,
+      "source": true,
+      "test": true
+    }
+  ],
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/9001/copyparty/blob/74b17374c24b89ec365965781eee130f1cee5fd7/README.md",
+      "sha256": "2de7c4ff0b9b894d2074194b01c834fd014ad62cd984b971c38e0de6dbca5ac8",
+      "truncated": false,
+      "lines": 3472,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/9001/copyparty/blob/74b17374c24b89ec365965781eee130f1cee5fd7/LICENSE",
+      "sha256": "80eaf8877de90ac04483db88cbd01899beea96870be15f6ddae3c94b9c2596bd",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

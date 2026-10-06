@@ -1,0 +1,84 @@
+{
+  "repository": "devonmurphy/GathererImageGatherer",
+  "metadata": {
+    "name": "devonmurphy/GathererImageGatherer",
+    "url": "https://github.com/devonmurphy/GathererImageGatherer",
+    "description": "Builds a database of Magic the Gathering card images with card name, set, and perceptual hash of artwork.",
+    "language": "Python",
+    "stars": 3,
+    "license": "MIT",
+    "archived": false,
+    "pushed_at": "2019-12-14T17:46:44Z",
+    "default_branch": "master",
+    "queries": [
+      "perceptual hash in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/devonmurphy/GathererImageGatherer/blob/aff7adee18a16fd5e9a23d52093b65018e9b46d9/README.md",
+      "sha256": "361e8c64c94dc3312ff96effd8dbcd46b8111c42567ea04a042b035629ff477b",
+      "truncated": false,
+      "lines": 56,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE.md",
+      "local": "01-LICENSE.md",
+      "url": "https://github.com/devonmurphy/GathererImageGatherer/blob/aff7adee18a16fd5e9a23d52093b65018e9b46d9/LICENSE.md",
+      "sha256": "b4f71c85a015555a0208e1307c03d1c5f9edf3deb3ffe2f15d765761400f1376",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "getHash.py",
+      "local": "02-getHash.py",
+      "url": "https://github.com/devonmurphy/GathererImageGatherer/blob/aff7adee18a16fd5e9a23d52093b65018e9b46d9/getHash.py",
+      "sha256": "77d69c5c8a18b32ef43be56656291fa41fe93d5d91c6561ec59e39049193f4ec",
+      "truncated": false,
+      "lines": 45,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "buildBinaryDatabase.py",
+      "local": "03-buildBinaryDatabase.py",
+      "url": "https://github.com/devonmurphy/GathererImageGatherer/blob/aff7adee18a16fd5e9a23d52093b65018e9b46d9/buildBinaryDatabase.py",
+      "sha256": "c277290e9ba089b9a503e5720f0be33cbb3bb02e970121c76d57a1ca5d326a8f",
+      "truncated": false,
+      "lines": 71,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "createTables.sql",
+      "local": "04-createTables.sql",
+      "url": "https://github.com/devonmurphy/GathererImageGatherer/blob/aff7adee18a16fd5e9a23d52093b65018e9b46d9/createTables.sql",
+      "sha256": "1f0434fc928232cbd55e529aaabb6a9028b0efdfec686d22abd314e0bf9d1afb",
+      "truncated": false,
+      "lines": 22,
+      "source": true,
+      "test": false
+    }
+  ],
+  "errors": [],
+  "commit": "aff7adee18a16fd5e9a23d52093b65018e9b46d9",
+  "tree_truncated": false,
+  "source_file_count": 6,
+  "test_file_count": 0,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE.md",
+    "getHash.py",
+    "buildBinaryDatabase.py",
+    "createTables.sql"
+  ]
+}

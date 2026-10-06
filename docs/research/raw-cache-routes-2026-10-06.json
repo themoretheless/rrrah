@@ -1,0 +1,93 @@
+{
+  "date": "2026-10-06",
+  "host": "Apple M4 Max",
+  "platform": "macOS-26.7.1-arm64-arm-64bit-Mach-O",
+  "profile": "cargo dev, local opt-level 1, dependencies opt-level 3",
+  "entrypoint": "rrrah-app/examples/raw_view_timing.rs --cache-only",
+  "scope": "warm CPU-ready mosaic routes; setup/write outside timing; no GPU upload or physical presentation; 4 warmup and 16 measured rounds with rotating route order; RAM route averages 1000 hits per round",
+  "correctness": "all decoded/restored metadata and sensor pixels compared each iteration; RAM shared allocation identity checked; managed root and restore budgets return to zero",
+  "percentiles": "nearest rank",
+  "results": [
+    {
+      "file": "IMG_9043.CR3",
+      "source_sha256": "d06cbb10e84882cf130430bdc88ed2652c2622b96dea8d6a854c09e3bee37e59",
+      "pixel_bytes": 50989120,
+      "routes": {
+        "decode": {
+          "samples": 16,
+          "p50_ms": 43.59775,
+          "p95_ms": 44.162375
+        },
+        "disk": {
+          "samples": 16,
+          "p50_ms": 34.380208,
+          "p95_ms": 35.547458
+        },
+        "swap": {
+          "samples": 16,
+          "p50_ms": 33.36975,
+          "p95_ms": 33.9075
+        },
+        "ram": {
+          "samples": 16,
+          "p50_ms": 0.000163,
+          "p95_ms": 0.00018
+        }
+      }
+    },
+    {
+      "file": "1826.mrw",
+      "source_sha256": "713819e33e5302ec864d576d57223cfc8dcf46e8d45e0ae744d1fec40290a89f",
+      "pixel_bytes": 12112256,
+      "routes": {
+        "decode": {
+          "samples": 16,
+          "p50_ms": 5.229916,
+          "p95_ms": 5.620833
+        },
+        "disk": {
+          "samples": 16,
+          "p50_ms": 8.110666,
+          "p95_ms": 8.653583
+        },
+        "swap": {
+          "samples": 16,
+          "p50_ms": 7.899958,
+          "p95_ms": 8.448375
+        },
+        "ram": {
+          "samples": 16,
+          "p50_ms": 0.000156,
+          "p95_ms": 0.000174
+        }
+      }
+    },
+    {
+      "file": "830.dng",
+      "source_sha256": "7a594b66b54f99bb5aba4627c78abfc41213d6911ea54e4f5d2dd6c8505f6968",
+      "pixel_bytes": 24963072,
+      "routes": {
+        "decode": {
+          "samples": 16,
+          "p50_ms": 201.59925,
+          "p95_ms": 206.191666
+        },
+        "disk": {
+          "samples": 16,
+          "p50_ms": 16.847916,
+          "p95_ms": 17.796291
+        },
+        "swap": {
+          "samples": 16,
+          "p50_ms": 16.359333,
+          "p95_ms": 16.446959
+        },
+        "ram": {
+          "samples": 16,
+          "p50_ms": 0.000158,
+          "p95_ms": 0.000162
+        }
+      }
+    }
+  ]
+}

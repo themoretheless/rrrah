@@ -1,0 +1,20 @@
+{
+  "change": "Shared fallible bounded read-buffer allocation for hash, byte confirmation, prefix and source-range copies; explicit OutOfMemory I/O error.",
+  "validation": {
+    "lib_snapshot_exact_pages_tests": 37,
+    "failed": 0,
+    "dedup_lib_no_deps_clippy": "passed"
+  },
+  "checks": [
+    "Impossible capacity is rejected with OutOfMemory; small-buffer retry succeeds.",
+    "Byte-confirmed exact scan and verified cancellation tests preserve results.",
+    "TIFF source-range and prefix paths retain page/ICC behavior."
+  ],
+  "source_sha256": {
+    "crates/rrrah-dedup/src/exact.rs": "398df029bf7b98e2b066e6a9716521c13406b2241244def7bcc3d56431126341"
+  },
+  "limits": [
+    "Capacity arithmetic refusal is not actual OS memory-exhaustion injection.",
+    "Read buffers still outside shared memory budget; traversal/maps/path clones remain unqualified."
+  ]
+}

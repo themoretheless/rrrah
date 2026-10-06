@@ -1,0 +1,78 @@
+{
+  "index": 16,
+  "repository": "anishathalye/periscope",
+  "commit": "a279bfd38e6ff8f4730e52fc670d8e24b98eda7a",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Persistent file scan/hash operations with directory/completion tests; GPL and Go preclude direct Rust reuse.",
+  "license_metadata": "GPL-3.0",
+  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "tests_detected": 16,
+  "upstream_tests_run": false,
+  "available_source_evidence": [
+    {
+      "path": "cmd/psc/hash.go",
+      "local": "02-hash.go",
+      "url": "https://github.com/anishathalye/periscope/blob/a279bfd38e6ff8f4730e52fc670d8e24b98eda7a/cmd/psc/hash.go",
+      "sha256": "073e75e3b07aa5a412ef01584649c19c03853733480ced03f7146c9d5e555e52",
+      "truncated": false,
+      "lines": 35,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "cmd/psc/scan.go",
+      "local": "03-scan.go",
+      "url": "https://github.com/anishathalye/periscope/blob/a279bfd38e6ff8f4730e52fc670d8e24b98eda7a/cmd/psc/scan.go",
+      "sha256": "1724471f94d6c06e65537727c12641f8ac7dff4be0c7ab6a4228e011651b301c",
+      "truncated": false,
+      "lines": 48,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "internal/periscope/hash.go",
+      "local": "04-hash.go",
+      "url": "https://github.com/anishathalye/periscope/blob/a279bfd38e6ff8f4730e52fc670d8e24b98eda7a/internal/periscope/hash.go",
+      "sha256": "e98f0d256341b7c9891aba7ec6177f8011d83a42f244d619277672297001c79a",
+      "truncated": false,
+      "lines": 57,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "internal/periscope/hash_test.go",
+      "local": "05-hash_test.go",
+      "url": "https://github.com/anishathalye/periscope/blob/a279bfd38e6ff8f4730e52fc670d8e24b98eda7a/internal/periscope/hash_test.go",
+      "sha256": "24bd0282052606a21b8c64d93b4d9c37e19381d64cd9e1140ac109326fc8b080",
+      "truncated": false,
+      "lines": 78,
+      "source": true,
+      "test": true
+    }
+  ],
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/anishathalye/periscope/blob/a279bfd38e6ff8f4730e52fc670d8e24b98eda7a/README.md",
+      "sha256": "a542c2115b6b15ddbd140aa95d2c905874606f0e51c68829e7cd78450a4f7f44",
+      "truncated": false,
+      "lines": 200,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE.txt",
+      "local": "01-LICENSE.txt",
+      "url": "https://github.com/anishathalye/periscope/blob/a279bfd38e6ff8f4730e52fc670d8e24b98eda7a/LICENSE.txt",
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "truncated": false,
+      "lines": 674,
+      "source": false,
+      "test": false
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "index": 100,
+  "repository": "mk-fg/image-deduplication-tool",
+  "commit": "b78cef579284f33b59959800b7037277c27648f1",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "wrapper",
+  "finding": "ctypes pHash library wrapper; wrapper WTFPL does not establish libpHash license or image decode behavior.",
+  "license_metadata": "WTFPL",
+  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "available_source_evidence": [
+    {
+      "path": "image_matcher.py",
+      "local": "02-image_matcher.py",
+      "url": "https://github.com/mk-fg/image-deduplication-tool/blob/b78cef579284f33b59959800b7037277c27648f1/image_matcher.py",
+      "sha256": "cd71ed9961b5295a0f388dca0534c67d28feda7c5b2eb7595def8c652168c611",
+      "truncated": false,
+      "lines": 200,
+      "source": true,
+      "test": false
+    }
+  ],
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/mk-fg/image-deduplication-tool/blob/b78cef579284f33b59959800b7037277c27648f1/README.md",
+      "sha256": "ce824d0da1ff70f92130368f36245aeb66622fb0b93345d717ba97cebfd80262",
+      "truncated": false,
+      "lines": 162,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "COPYING",
+      "local": "01-COPYING",
+      "url": "https://github.com/mk-fg/image-deduplication-tool/blob/b78cef579284f33b59959800b7037277c27648f1/COPYING",
+      "sha256": "dc1342cc1cb49e24c1c9e8a495acc9625ce2e04146c116279af0ab0949cd829c",
+      "truncated": false,
+      "lines": 13,
+      "source": false,
+      "test": false
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "status": "recursive_directory_gate_passed_both_platforms",
+  "macos_tests_passed": 1,
+  "linux_tests_passed": 1,
+  "scope": [
+    "Overlapping roots",
+    "Unix hardlink alias",
+    "Two physical identity-copy paths",
+    "Corrupt source retained as issue",
+    "Selected page setting preserved",
+    "Substituted request path refused before decode",
+    "Physical file limit refused before decode"
+  ],
+  "source_sha256": {
+    "crates/rrrah-dedup/src/local_collection.rs": "2d2132a6fe321e35fa3cc840860cc31f168fe1d4cc61f081f4d10635ba02d338",
+    "crates/rrrah-dedup/src/local_scan.rs": "dbc7aa69a952917ca82ca5ab07d4d505fe674913e2acc356e2607829b209fd66",
+    "crates/rrrah-dedup/tests/projective_files.rs": "bbc5e19aebd07d0683238006ceb3392bba529de8ef269d02ab8cea3f6880237c",
+    "scripts/run-dedup-linux-native.sh": "7d75de5aaa56caf635552f9f4de1a5a4c6e88a670da9ede46b854fe630ca4785"
+  },
+  "remaining": [
+    "Windows recursive/file-identity qualification",
+    "Captured perspective calibration",
+    "Large nested directory and performance qualification",
+    "Current full regression is still live and source drift recorded"
+  ],
+  "own_all_features_lib_clippy_passed": true
+}

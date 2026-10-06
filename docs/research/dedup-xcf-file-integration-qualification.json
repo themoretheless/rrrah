@@ -1,0 +1,24 @@
+{
+  "validation": {
+    "passed": 9,
+    "failed": 0,
+    "ignored": 0,
+    "filtered": 0
+  },
+  "command": "cargo test -p rrrah-dedup --all-features --test decode",
+  "source_sha256": {
+    "crates/rrrah-dedup/tests/decode.rs": "136f7e02c0e6a85a86e6329977083d38f740f8f9b2c2fbacccb29a884ee34f9b",
+    "tests/fixtures/xcf/profiled-normal-overlay-v1.xcf": "8d7e5cd8d9bd2af8f71c26cb4d3627e13065fb1a205b53ff9d294818b326d477",
+    "tests/fixtures/xcf/normal-overlay-v1.xcf": "31a16c524bcd0a0f6fc3345fbfefdf07c0205891e179675f692e4ae03295f0c9"
+  },
+  "checks": [
+    "Profiled two-layer XCF matches identical content named with misleading CR3 suffix.",
+    "Same-size 2x1 solid BMP is not equal to XCF flattened pixels.",
+    "Untagged XCF explicitly fails normalization.",
+    "Managed memory releases after successful equality, color error and cancellation."
+  ],
+  "limits": [
+    "Authored two-pixel XCF fixture; not independent GIMP flatten oracle.",
+    "No general layer blend/group support or real edited-document retrieval qualification."
+  ]
+}

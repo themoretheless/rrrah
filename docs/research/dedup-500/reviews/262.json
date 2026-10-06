@@ -1,0 +1,78 @@
+{
+  "index": 262,
+  "repository": "RhoninSeiei/astrbot_plugin_rss_forwarder",
+  "commit": "436d7c45aed97e8c89c575d13d8c86cdbadbf8c2",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "RSS semantic suppression/delivery orchestration; event/text duplicates rather than images.",
+  "available_source_evidence": [
+    {
+      "path": "semantic_dedup.py",
+      "local": "02-semantic_dedup.py",
+      "url": "https://github.com/RhoninSeiei/astrbot_plugin_rss_forwarder/blob/436d7c45aed97e8c89c575d13d8c86cdbadbf8c2/semantic_dedup.py",
+      "sha256": "70df6e621a409d6e3015fd597b203f8fceb3fb824d83945b92180787d68766f5",
+      "truncated": false,
+      "lines": 604,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "aggregate_card_image.py",
+      "local": "03-aggregate_card_image.py",
+      "url": "https://github.com/RhoninSeiei/astrbot_plugin_rss_forwarder/blob/436d7c45aed97e8c89c575d13d8c86cdbadbf8c2/aggregate_card_image.py",
+      "sha256": "18c33d17e76725267739f938dd7c4246818758a1f8a680adbae3c42a84ca0c50",
+      "truncated": false,
+      "lines": 269,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "commands.py",
+      "local": "04-commands.py",
+      "url": "https://github.com/RhoninSeiei/astrbot_plugin_rss_forwarder/blob/436d7c45aed97e8c89c575d13d8c86cdbadbf8c2/commands.py",
+      "sha256": "e90faaec7b59e6e91ddf711838c2f1c831c93e092a10e1b730ae761b9fa03e98",
+      "truncated": false,
+      "lines": 486,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/test_semantic_dedup.py",
+      "local": "05-test_semantic_dedup.py",
+      "url": "https://github.com/RhoninSeiei/astrbot_plugin_rss_forwarder/blob/436d7c45aed97e8c89c575d13d8c86cdbadbf8c2/tests/test_semantic_dedup.py",
+      "sha256": "60910f720d591563e9aeb7e4542bbee0877bf5681908e35b90d6de51eedec833",
+      "truncated": false,
+      "lines": 200,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "AGPL-3.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 18,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.en.md",
+      "local": "00-README.en.md",
+      "url": "https://github.com/RhoninSeiei/astrbot_plugin_rss_forwarder/blob/436d7c45aed97e8c89c575d13d8c86cdbadbf8c2/README.en.md",
+      "sha256": "7311aa402105abab2bc550d29ff72c7a300879033f997049d76ac2f2e986c467",
+      "truncated": false,
+      "lines": 167,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/RhoninSeiei/astrbot_plugin_rss_forwarder/blob/436d7c45aed97e8c89c575d13d8c86cdbadbf8c2/LICENSE",
+      "sha256": "f440d399276dcbd8a845dee6e873a54c1f59ff44b502b45f3bc9352224ed5789",
+      "truncated": false,
+      "lines": 661,
+      "source": false,
+      "test": false
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "scope": "Pinned real camera pixel decode: generation changes at first/middle/final callback, typed cancellation, pre-read stale-token refusal, managed retry and baseline pixel equality. Callback operation placement, not measured wall-clock latency or full native allocation accounting.",
+  "source_sha256": "bafac48f3c7853d6e42db812693db940653123440c58463074021d9ccbb01a14",
+  "platforms": {
+    "macos": {
+      "exit_code": 0,
+      "passed": 7,
+      "checkpoints": [
+        [
+          "Arw",
+          "4024",
+          "[1, 2012, 4024]"
+        ],
+        [
+          "Cr2",
+          "16872",
+          "[1, 8436, 16872]"
+        ],
+        [
+          "Nef",
+          "9970",
+          "[1, 4985, 9970]"
+        ],
+        [
+          "Orf",
+          "3472",
+          "[1, 1736, 3472]"
+        ],
+        [
+          "Pef",
+          "2868",
+          "[1, 1434, 2868]"
+        ],
+        [
+          "Raf",
+          "3288",
+          "[1, 1644, 3288]"
+        ],
+        [
+          "Rw2",
+          "3472",
+          "[1, 1736, 3472]"
+        ]
+      ],
+      "log": "dedup-real-generation-cancel-macos.log"
+    },
+    "linux": {
+      "exit_code": 0,
+      "passed": 7,
+      "checkpoints": [
+        [
+          "Arw",
+          "4024",
+          "[1, 2012, 4024]"
+        ],
+        [
+          "Cr2",
+          "16872",
+          "[1, 8436, 16872]"
+        ],
+        [
+          "Nef",
+          "9970",
+          "[1, 4985, 9970]"
+        ],
+        [
+          "Orf",
+          "3472",
+          "[1, 1736, 3472]"
+        ],
+        [
+          "Pef",
+          "2868",
+          "[1, 1434, 2868]"
+        ],
+        [
+          "Raf",
+          "3288",
+          "[1, 1644, 3288]"
+        ],
+        [
+          "Rw2",
+          "3472",
+          "[1, 1736, 3472]"
+        ]
+      ],
+      "log": "dedup-real-generation-cancel-linux.log"
+    }
+  }
+}

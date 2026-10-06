@@ -1,0 +1,62 @@
+{
+  "scope": "CR2 independent RAW/raster discrepancy diagnostics; controlled highlight-recovery ablation",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/linear.rs": "9ba055f4a73063eed2d757e47cbd6d0b1b53b9f1fed6c1cbd777d3106141e059",
+    "crates/rrrah-dedup/tests/linear.rs": "5d65b2dcc57ce18d826b8d567373ca57fc2d31d0e1f0d1b32ca2e5a9f97e8812",
+    "crates/rrrah-dedup/examples/raw_raster_probe.rs": "70cd934f68c4d874dcf97797c421d9c2f14d78e2e833b4f73bdad00c11961406"
+  },
+  "sampling": "32x32 equal normalized-position nearest pixels, 3072 RGB channel observations per image; sampled means, not full-image averages or pixel correspondence",
+  "default": {
+    "evidence": {
+      "raw_dimensions": [
+        6000,
+        4000
+      ],
+      "raster_dimensions": [
+        6024,
+        4020
+      ],
+      "global_distance": 106,
+      "right_transform": 0,
+      "informative": true,
+      "managed_peak": 952041344
+    },
+    "statistics": "input 0: linear channel means [0.156994674809539, 0.11919675126500806, 0.15766478257273775], above-one channels 110/3072, negative channels 3/3072\ninput 1: linear channel means [0.11181879959359264, 0.11448447286631591, 0.11239191424635919], above-one channels 33/3072, negative channels 0/3072\n"
+  },
+  "no_highlight_recovery": {
+    "evidence": {
+      "raw_dimensions": [
+        6000,
+        4000
+      ],
+      "raster_dimensions": [
+        6024,
+        4020
+      ],
+      "global_distance": 106,
+      "right_transform": 0,
+      "informative": true,
+      "managed_peak": 952041344
+    },
+    "statistics": "input 0: linear channel means [0.16614163841950358, 0.10079153166680044, 0.1642556514429998], above-one channels 90/3072, negative channels 3/3072\ninput 1: linear channel means [0.11181879959359264, 0.11448447286631591, 0.11239191424635919], above-one channels 33/3072, negative channels 0/3072\n"
+  },
+  "findings": [
+    "Identity transform selected in both runs",
+    "Raw crop 6000x4000 versus independent raster 6024x4020",
+    "Disabling highlight recovery leaves global distance 106 unchanged",
+    "Sampled red/blue means diverge more than green; does not alone identify WB/matrix/demosaic cause"
+  ],
+  "api": "LinearRgbaView::rgba provides canonical unquantized samples, preserving negative/HDR values and zeroing invisible RGB",
+  "validation": {
+    "linear_tests_passed": 4,
+    "clippy_example_exit_code": 0,
+    "native_probe_runs_succeeded": 2,
+    "managed_reservations_released": true
+  },
+  "remaining": [
+    "Independent sensor WB/matrix/active-crop causal comparison",
+    "Independent demosaic/color normalization alignment",
+    "Local geometric/pixel RAW/raster qualification",
+    "Captured held-out corpus calibration"
+  ]
+}

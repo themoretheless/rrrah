@@ -1,0 +1,88 @@
+{
+  "index": 223,
+  "repository": "alpbasarann/nestjs-request-deduplicator",
+  "commit": "108d9454c436f4ede11dd9e62cde7bfe0f97345b",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Request serialization/SHA256 and decorator cache; normalization/singleflight concepts only.",
+  "available_source_evidence": [
+    {
+      "path": "src/duplicate-request.exception.ts",
+      "local": "02-duplicate-request.exception.ts",
+      "url": "https://github.com/alpbasarann/nestjs-request-deduplicator/blob/108d9454c436f4ede11dd9e62cde7bfe0f97345b/src/duplicate-request.exception.ts",
+      "sha256": "ea2ae247a54c61b5c4f22fa33676fd00d6ee1bb40d83bd9ab04b77169952febd",
+      "truncated": false,
+      "lines": 22,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/key/hasher.ts",
+      "local": "03-hasher.ts",
+      "url": "https://github.com/alpbasarann/nestjs-request-deduplicator/blob/108d9454c436f4ede11dd9e62cde7bfe0f97345b/src/key/hasher.ts",
+      "sha256": "953c62f43454663592437de116051feef123e3d2465553f32efee8b3ce6c1a60",
+      "truncated": false,
+      "lines": 59,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/constants.ts",
+      "local": "04-constants.ts",
+      "url": "https://github.com/alpbasarann/nestjs-request-deduplicator/blob/108d9454c436f4ede11dd9e62cde7bfe0f97345b/src/constants.ts",
+      "sha256": "551ca5276be3f7956a2c424dcfe8da4a7e7a4a43632e79de2510c5685304a9c6",
+      "truncated": false,
+      "lines": 41,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "test/hash.util.spec.ts",
+      "local": "05-hash.util.spec.ts",
+      "url": "https://github.com/alpbasarann/nestjs-request-deduplicator/blob/108d9454c436f4ede11dd9e62cde7bfe0f97345b/test/hash.util.spec.ts",
+      "sha256": "13a0efbe400ccb18cd2c322863941f7b8592b0896aa31f430c61bad6e3c33b6c",
+      "truncated": false,
+      "lines": 182,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "src/decorator.ts",
+      "local": "06-decorator.ts",
+      "url": "https://github.com/alpbasarann/nestjs-request-deduplicator/blob/108d9454c436f4ede11dd9e62cde7bfe0f97345b/src/decorator.ts",
+      "sha256": "46d4f1f7e8d3b8014a963c9463b5f2971eb6ef9640fdcb403cea7df60256470d",
+      "truncated": false,
+      "lines": 24,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 12,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/alpbasarann/nestjs-request-deduplicator/blob/108d9454c436f4ede11dd9e62cde7bfe0f97345b/README.md",
+      "sha256": "13e9bc428896850d128091380de1b4919abb199472cd7c98aff1f37ea0ae4111",
+      "truncated": false,
+      "lines": 908,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/alpbasarann/nestjs-request-deduplicator/blob/108d9454c436f4ede11dd9e62cde7bfe0f97345b/LICENSE",
+      "sha256": "121fb43cf087f95e3989c549f82cb16e5eaa6ff19318f78bc53f8323e5336c72",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

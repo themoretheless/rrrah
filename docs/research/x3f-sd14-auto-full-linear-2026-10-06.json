@@ -1,0 +1,40 @@
+{
+  "status": "passed",
+  "scope": "Explicit Auto WB complete native legacy processing; original Sunlight WB and public viewing remain unqualified",
+  "source_sha256": "c32f247eb372c3e66ad3b433518ec11f898fdc317c8432ebe025b46d4917bcf3",
+  "independent_input_sha256": "25d6c8ed033cf7aaa3b1dc3971f98a03055a1d50f8df76367dd7982f7e759853",
+  "reference_source_sha256": "d18d9e43a096eea04eee2148e53068f8fa45ce95395d97128b1aa37b477eab43",
+  "reference_binary_sha256": "a92514c980b28e87bc73992102183da4e6845b493aa075e04aee2e3a813f7a69",
+  "reference_command": [
+    "-4",
+    "-W",
+    "-o",
+    "1"
+  ],
+  "compiler_flags": [
+    "-O2",
+    "-ffp-contract=off",
+    "-DNO_JASPER",
+    "-DNO_JPEG",
+    "-DNO_LCMS"
+  ],
+  "input_edit": "WB_DESC UTF-16 value Sunlight replaced with Auto and null padding; all offsets and sensor/CAMF bytes unchanged",
+  "changed_byte_offsets": [
+    924,
+    928,
+    930,
+    932,
+    934,
+    936,
+    938
+  ],
+  "reference_ppm_sha256": "ececc2dce5820752b251f539b508f46e4fe200f86790826eb4ec352881513604",
+  "dimensions": [
+    2639,
+    1757
+  ],
+  "rgb16_channels": 13910169,
+  "mismatches": 0,
+  "maximum_difference": 0,
+  "managed_processing_final_used": 0
+}

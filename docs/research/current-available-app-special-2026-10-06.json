@@ -1,0 +1,28 @@
+{
+  "passed": 10,
+  "failed": 0,
+  "ignored": 0,
+  "selected_cases": [
+    "foreground_loader_tests::raw_thumbnail_source_and_preview_share_managed_root",
+    "foreground_loader_tests::source_kind_pressure_preserves_visible_then_releases_unpinned_raw",
+    "raw_ram_preload_tests::idle_timer_spills_real_raw_and_restores_sensor_values",
+    "raw_ram_preload_tests::native_raw_preload_hits_ram_and_disk_without_transferring_visible_pin",
+    "gallery::tests::raw_prefetch_count_limit_counts_retained_neighbours_after_missing_file",
+    "gallery::tests::raw_prefetch_count_limit_preserves_highest_priority_neighbour",
+    "gallery::tests::raster_selection_warms_real_raw_neighbour_without_nonraw_failures",
+    "gallery::tests::raw_prefetch_respects_shared_budget_and_recovers_after_release",
+    "thumbnail_retry_tests::thumbnail_budget_callbacks_progress_without_surface_redraw",
+    "gallery::tests::raw_prefetch_byte_limit_preserves_present_priority_neighbour"
+  ],
+  "excluded_cases": [
+    "metal_upload_retains_raw_lease_until_submission_completion (Sony SR2)",
+    "real_ai_pages_use_shared_ram_hits_and_independent_prefetch_keys (AI corpus)",
+    "real_3fr_decode_admission_refusal_recovers_disk_and_swap (Hasselblad 3FR)"
+  ],
+  "log": "/tmp/rrrah-current-available-app-special.log",
+  "local_srf_sha256": "07739f94bcab0c7e198d418ac65172d0dce04bb84a7683ecffd0bfe4b32f6d79",
+  "limitations": [
+    "Special tests excluded explicitly, not counted passed",
+    "Source provenance and physical window presentation not established"
+  ]
+}

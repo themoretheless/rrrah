@@ -1,0 +1,90 @@
+{
+  "status": "passed",
+  "macos_session": 4693,
+  "linux_session": 24347,
+  "scope": "Existing synthetic CR2, uncompressed/compressed NEF, ORF, ARW, RW2, PEF callback sweeps and healthy retry; full camtiff regression. Not real-file latency proof.",
+  "source_sha256": {
+    "mod.rs": "d1bd570eb588dc8422b2f7d3302b7f26b2ea57266ffb4cb7c593b9b0c6befb83",
+    "cr2.rs": "d99b9afe392c5ffcf6679b6c7d84eb551de8dd13a901408bf11e03fa6fe647f2",
+    "nef.rs": "e14f7679baf914056c8877d04e6ca8dda9849cb246292441fcbaa25b214c2cfb",
+    "orf.rs": "f6603260dd9933c6e01a1bee54cea4405a865517822e26e42c34d43b01824984",
+    "arw.rs": "48d5f1eacc1b3829ebcc8975c7271866afc2e6d5c46dd039130769dfab73cbcf",
+    "rw2.rs": "bb3ad725448f5863b5154fae7538709faa6a18b122e24ed9de8c9960f5d72883",
+    "pef.rs": "40affec2ece356af9996e24bf98117b2c7b84b604954a71d7010faf4790df4b8"
+  },
+  "platforms": {
+    "macos": {
+      "exit_code": 0,
+      "passed": 151,
+      "ignored": 22,
+      "checkpoints": [
+        [
+          "ARW",
+          "2"
+        ],
+        [
+          "CR2",
+          "11"
+        ],
+        [
+          "NEF",
+          "5"
+        ],
+        [
+          "NEF",
+          "5"
+        ],
+        [
+          "ORF",
+          "3"
+        ],
+        [
+          "PEF",
+          "3"
+        ],
+        [
+          "RW2",
+          "1"
+        ]
+      ],
+      "log": "dedup-camera-cancel-sweep-macos-fixed.log"
+    },
+    "linux": {
+      "exit_code": 0,
+      "passed": 151,
+      "ignored": 22,
+      "checkpoints": [
+        [
+          "ARW",
+          "2"
+        ],
+        [
+          "CR2",
+          "11"
+        ],
+        [
+          "NEF",
+          "5"
+        ],
+        [
+          "NEF",
+          "5"
+        ],
+        [
+          "ORF",
+          "3"
+        ],
+        [
+          "PEF",
+          "3"
+        ],
+        [
+          "RW2",
+          "1"
+        ]
+      ],
+      "log": "dedup-camera-cancel-sweep-linux-fixed.log"
+    }
+  },
+  "compile_repair": "RW2 sweep call moved from adjacent JPEG fixture helper into cancellation test; previous failed logs retained."
+}

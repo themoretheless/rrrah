@@ -1,0 +1,88 @@
+{
+  "index": 169,
+  "repository": "james-cube/firefox-bookmarks-deduplicator",
+  "commit": "5153d9fd2a79b97e106796f0c3e35ddc920204a6",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Firefox bookmark JSON merge; URL/tree identities.",
+  "available_source_evidence": [
+    {
+      "path": "firefox_bookmarks_deduplicator/deduplicator.py",
+      "local": "02-deduplicator.py",
+      "url": "https://github.com/james-cube/firefox-bookmarks-deduplicator/blob/5153d9fd2a79b97e106796f0c3e35ddc920204a6/firefox_bookmarks_deduplicator/deduplicator.py",
+      "sha256": "c940c49a0c3bbc6760135c75c580c3af5bf7213a375d07e97dec31219cc87849",
+      "truncated": false,
+      "lines": 24,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "firefox_bookmarks_deduplicator/deduplicator_utils.py",
+      "local": "03-deduplicator_utils.py",
+      "url": "https://github.com/james-cube/firefox-bookmarks-deduplicator/blob/5153d9fd2a79b97e106796f0c3e35ddc920204a6/firefox_bookmarks_deduplicator/deduplicator_utils.py",
+      "sha256": "d05ada549f0fd6224b3b026e14c5a4c72a51182fc78f5ec7ac5f9e57cbaf8546",
+      "truncated": false,
+      "lines": 92,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "firefox_bookmarks_deduplicator/__init__.py",
+      "local": "04-__init__.py",
+      "url": "https://github.com/james-cube/firefox-bookmarks-deduplicator/blob/5153d9fd2a79b97e106796f0c3e35ddc920204a6/firefox_bookmarks_deduplicator/__init__.py",
+      "sha256": "e16f1596201850fd4a63680b27f603cb64e67176159be3d8ed78a4403fdb1700",
+      "truncated": false,
+      "lines": 1,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/deduplicator_utils_test.py",
+      "local": "05-deduplicator_utils_test.py",
+      "url": "https://github.com/james-cube/firefox-bookmarks-deduplicator/blob/5153d9fd2a79b97e106796f0c3e35ddc920204a6/tests/deduplicator_utils_test.py",
+      "sha256": "9bebed7c8c61f443f245f6b4f93c7548cbc243c4bd27d6085ed7f48b81861f89",
+      "truncated": false,
+      "lines": 77,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "firefox_bookmarks_deduplicator/__main__.py",
+      "local": "06-__main__.py",
+      "url": "https://github.com/james-cube/firefox-bookmarks-deduplicator/blob/5153d9fd2a79b97e106796f0c3e35ddc920204a6/firefox_bookmarks_deduplicator/__main__.py",
+      "sha256": "9bd22dc58bfb9973874fa0e81653a9827ee04de9ce5c2ab4ad376621d6ad833a",
+      "truncated": false,
+      "lines": 4,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 4,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/james-cube/firefox-bookmarks-deduplicator/blob/5153d9fd2a79b97e106796f0c3e35ddc920204a6/README.md",
+      "sha256": "1702ec08540efe84966096d6424cb8dccb285ab942bafd739223c0d0882acb14",
+      "truncated": false,
+      "lines": 35,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/james-cube/firefox-bookmarks-deduplicator/blob/5153d9fd2a79b97e106796f0c3e35ddc920204a6/LICENSE",
+      "sha256": "c24596caba54a87aae8d602ad352983d3bbcb9441668ef2c4efe97e4cc05e436",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

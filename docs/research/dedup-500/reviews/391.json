@@ -1,0 +1,78 @@
+{
+  "index": 391,
+  "repository": "umahmood/perceptive",
+  "commit": "f317dc40448e418e0b76937da896b631a527b8cb",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Go hash library with invalid-hash error/test; doc false-positive claims not independently demonstrated.",
+  "available_source_evidence": [
+    {
+      "path": "doc.go",
+      "local": "02-doc.go",
+      "url": "https://github.com/umahmood/perceptive/blob/f317dc40448e418e0b76937da896b631a527b8cb/doc.go",
+      "sha256": "e06bdc4a47b8530afbe7eb91e06f9d12026118a7737a794a0c12f4a789e4d780",
+      "truncated": false,
+      "lines": 88,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "perceptive.go",
+      "local": "03-perceptive.go",
+      "url": "https://github.com/umahmood/perceptive/blob/f317dc40448e418e0b76937da896b631a527b8cb/perceptive.go",
+      "sha256": "ce9f8c590e6f91eef1d9e258c27083c3fa710e0dbe55310cb990ecd5331fb0d5",
+      "truncated": false,
+      "lines": 163,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "version.go",
+      "local": "04-version.go",
+      "url": "https://github.com/umahmood/perceptive/blob/f317dc40448e418e0b76937da896b631a527b8cb/version.go",
+      "sha256": "2f0c225932ea8084d590cfa28aa2c851ba8873e371be146ae596e412f190f0d7",
+      "truncated": false,
+      "lines": 15,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "perceptive_test/perceptive_test.go",
+      "local": "05-perceptive_test.go",
+      "url": "https://github.com/umahmood/perceptive/blob/f317dc40448e418e0b76937da896b631a527b8cb/perceptive_test/perceptive_test.go",
+      "sha256": "d05159aed1e99ca8d2e561fba19949544717894a2cedb16ad076ef6ba5f880f8",
+      "truncated": false,
+      "lines": 166,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 1,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/umahmood/perceptive/blob/f317dc40448e418e0b76937da896b631a527b8cb/README.md",
+      "sha256": "8cec1a944aced924fa869958d8ba4337400c9f6d682716e75928f8d7831fed4c",
+      "truncated": false,
+      "lines": 115,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE.md",
+      "local": "01-LICENSE.md",
+      "url": "https://github.com/umahmood/perceptive/blob/f317dc40448e418e0b76937da896b631a527b8cb/LICENSE.md",
+      "sha256": "87cb65430de8bde410547cdccde27c60a86c5429155ad6007180f1e8104b514f",
+      "truncated": false,
+      "lines": 22,
+      "source": false,
+      "test": false
+    }
+  ]
+}

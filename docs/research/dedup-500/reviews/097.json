@@ -1,0 +1,78 @@
+{
+  "index": 97,
+  "repository": "gkamradt/SemanticDeduplicator",
+  "commit": "868399b68bc33e92c94f84b31c852d5866964235",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "LLM-augmented item/text embeddings and cosine matching; remote semantic processing conflicts with a native image matcher.",
+  "license_metadata": "MIT",
+  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "tests_detected": 1,
+  "upstream_tests_run": false,
+  "available_source_evidence": [
+    {
+      "path": "src/semantic_deduplicator/__init__.py",
+      "local": "02-__init__.py",
+      "url": "https://github.com/gkamradt/SemanticDeduplicator/blob/868399b68bc33e92c94f84b31c852d5866964235/src/semantic_deduplicator/__init__.py",
+      "sha256": "fb72fc9eecbbe4c3d68ee5eb6efdb01f3ca74f8513332672a2dd549abb4f8b85",
+      "truncated": false,
+      "lines": 1,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/semantic_deduplicator/main.py",
+      "local": "03-main.py",
+      "url": "https://github.com/gkamradt/SemanticDeduplicator/blob/868399b68bc33e92c94f84b31c852d5866964235/src/semantic_deduplicator/main.py",
+      "sha256": "93ada411a8fa50e8fbf1f68a18a315c77c7ad28a0af259084534ec26940ee61a",
+      "truncated": false,
+      "lines": 432,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/semantic_deduplicator/utils.py",
+      "local": "04-utils.py",
+      "url": "https://github.com/gkamradt/SemanticDeduplicator/blob/868399b68bc33e92c94f84b31c852d5866964235/src/semantic_deduplicator/utils.py",
+      "sha256": "0543f07bb7c36c555d094c1d6385ae8f6e5421ea4937bacd0329f04d411517e5",
+      "truncated": false,
+      "lines": 41,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/test_main.py",
+      "local": "05-test_main.py",
+      "url": "https://github.com/gkamradt/SemanticDeduplicator/blob/868399b68bc33e92c94f84b31c852d5866964235/tests/test_main.py",
+      "sha256": "c68ffb81f2afb27eb917d68d51868cecd9f773c64cc1445c881d1aa3ba02993d",
+      "truncated": false,
+      "lines": 105,
+      "source": true,
+      "test": true
+    }
+  ],
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/gkamradt/SemanticDeduplicator/blob/868399b68bc33e92c94f84b31c852d5866964235/README.md",
+      "sha256": "f064946e2f4580ca17da44d7172a8396ae0f0632c529e53ed6c553eb7423e188",
+      "truncated": false,
+      "lines": 203,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/gkamradt/SemanticDeduplicator/blob/868399b68bc33e92c94f84b31c852d5866964235/LICENSE",
+      "sha256": "1945c4d6cb8525233e4973a6e9f595d0c7b8be35833bfed7d8004bee519b3c17",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

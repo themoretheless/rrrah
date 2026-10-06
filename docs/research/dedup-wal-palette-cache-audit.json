@@ -1,0 +1,186 @@
+{
+  "status": "fingerprint_file palette mutation/removal/restoration qualified on macOS and Linux; retained-path audit ongoing",
+  "source": "WAL decode_using_game_palette reads wal_palette_path(request.path), ending in pics/colormap.pcx; fingerprint_file does not snapshot/hash this dependency",
+  "regression": "cached_wal_tracks_external_palette_changes_and_removal",
+  "log": "dedup-wal-palette-cache-before.log",
+  "next": "Qualify shared snapshots on native Linux and add retained presentation dependency-mutation coverage",
+  "fix": "Snapshot/hash WAL palette dependency before lookup; revalidate complete content before hit return and cache admission; recognized raster magic excludes irrelevant WAL dependency",
+  "regression_scope": "Palette change, removal, restoration/reuse, managed output release",
+  "macos_session": 15945,
+  "macos_log": "dedup-wal-palette-cache-fixed-macos-final.log",
+  "linux_log": "dedup-wal-palette-cache-fixed-linux.log",
+  "repair": "Initial 64-byte exact prefix read rejected short images; bounded by observed source length after regression exposed UnexpectedEof",
+  "limits": "Concurrent ABA dependency mutations and other cache/presentation paths still require audit",
+  "macos_result": "14 decode integration tests passed, terminal exit 0",
+  "linux_session": 56457,
+  "cross_path_audit": {
+    "status": "Source-level dependency guard gap identified; behavioral reproduction pending",
+    "paths": [
+      "src/container.rs: PresentationSignature and PreparedLeft keep only main ContentSnapshot",
+      "src/scan.rs: pixel confirmation and batch final guards snapshot only request.path",
+      "src/local_scan.rs: source guards snapshot only main path",
+      "src/pixel_index.rs: indexed snapshots keep only main ContentSnapshot"
+    ],
+    "implication": "External palette mutation can escape retained presentation and batch source freshness guards",
+    "next": "Reproduce late palette mutation in public indexed/grouped scan, then share decoder source/dependency snapshot across retained paths"
+  },
+  "linux_result": "14 decode integration tests passed, terminal exit 0",
+  "indexed_regression": {
+    "test": "indexed_wal_palette_mutation_discards_stale_source_decisions",
+    "session": 83248,
+    "log": "dedup-wal-indexed-dependency-before.log",
+    "status": "Confirmed failure: late external palette mutation leaves stale different-pair decisions; expected healthy pair (2,3) retained",
+    "exit_code": 101,
+    "fixed": "Passed on macOS; preserves healthy (2,3), discards stale decisions and reports Changed for source 1",
+    "fixed_log": "dedup-wal-indexed-dependency-fixed.log"
+  },
+  "shared_fix": "DecodeSourceSnapshot retains main file and external palette; its verify revalidates both. Decoder, pixel index, pair/group scan, local collection/scan and container prepared/signature snapshots use shared type.",
+  "shared_regression_log": "dedup-shared-dependency-regression.log",
+  "shared_fix_limits": "61 macOS tests across five affected suites pass; native Linux full regression running; broader retained-path mutation tests and ABA remain incomplete",
+  "shared_dependency_regression": {
+    "platform": "macOS",
+    "session_id": 89767,
+    "exit_code": 0,
+    "passed": 61,
+    "suites": 5,
+    "log": "docs/research/dedup-shared-dependency-regression.log",
+    "scope": [
+      "decode",
+      "pixel_search",
+      "container",
+      "scan",
+      "local_scan"
+    ],
+    "linux": "pending"
+  },
+  "linux_shared_full": {
+    "session_id": 15806,
+    "log": "dedup-shared-dependency-linux-full.log",
+    "status": "passed",
+    "exit_code": 0,
+    "passed": 289,
+    "suite_outputs": 51
+  },
+  "presentation_regression": {
+    "test": "selected_presentation_rejects_external_palette_mutation_and_recovers",
+    "scope": "Direct selected-frame comparison, dependency mutation error and restored retry; full retained batch mutation is separate",
+    "macos_session": 42923,
+    "linux_session": 64501,
+    "status": "macOS passed; Linux waiting for full-suite build lock",
+    "macos_log": "dedup-wal-presentation-macos-final.log",
+    "linux_log": "dedup-wal-presentation-linux.log",
+    "macos_exit_code": 0,
+    "macos_passed": 1,
+    "test_compile_repairs": [
+      "Trait-object coercion parentheses",
+      "Restore palette through a borrow retained by the comparison closure"
+    ],
+    "linux_status": "passed in four-test suite",
+    "linux_exit_code": 0
+  },
+  "presentation_group_regression": {
+    "test": "presentation_groups_remove_external_palette_stale_edges_and_retry",
+    "scope": [
+      "exhaustive grouping",
+      "indexed grouping",
+      "late dependency mutation",
+      "healthy pair preservation",
+      "restored retry",
+      "managed resource release"
+    ],
+    "platform": "macOS",
+    "session_id": 93389,
+    "exit_code": 0,
+    "log": "dedup-wal-groups-macos.log",
+    "suite_passed": 2,
+    "linux_session": 64501,
+    "linux_status": "passed in four-test suite",
+    "linux_exit_code": 0
+  },
+  "presentation_group_removal_regression": {
+    "test": "presentation_groups_remove_external_palette_stale_edges_and_retry",
+    "cases": [
+      "exhaustive mutation",
+      "indexed mutation",
+      "exhaustive removal",
+      "indexed removal"
+    ],
+    "expected_removal_error": "source 1 Io(NotFound)",
+    "retry": "all three equality edges and one three-member group restored",
+    "session_id": 6224,
+    "platform": "macOS",
+    "exit_code": 0,
+    "suite_passed": 2,
+    "log": "dedup-wal-groups-removal-macos.log",
+    "linux_session": 64501,
+    "linux_status": "passed in four-test suite",
+    "linux_exit_code": 0
+  },
+  "cancellation_regression": {
+    "test": "wal_fingerprint_one_shot_cancellation_never_admits_partial_cache_and_retries",
+    "platform": "macOS",
+    "session_id": 86692,
+    "exit_code": 0,
+    "suite_passed": 3,
+    "cold_checkpoints": 48,
+    "warm_checkpoints": 22,
+    "invariants": [
+      "each one-shot cancellation yields cancellation diagnostic",
+      "managed budget released",
+      "cancelled miss does not admit cache entry",
+      "warm cancellation preserves existing valid entry",
+      "retry succeeds"
+    ],
+    "log": "dedup-wal-cancellation-macos-final.log",
+    "limits": "Callback checkpoints only; indivisible native decoder latency and external process cancellation remain unqualified",
+    "linux_session": 64501,
+    "linux_status": "passed in four-test suite",
+    "linux_exit_code": 0
+  },
+  "external_resource_limit_regression": {
+    "test": "wal_external_palette_obeys_source_byte_limit_even_with_warm_cache",
+    "platform": "macOS",
+    "session_id": 21591,
+    "exit_code": 0,
+    "suite_passed": 4,
+    "log": "dedup-wal-resource-macos.log",
+    "wal_bytes": 440,
+    "palette_bytes": 1217,
+    "limited_max_file_bytes": 440,
+    "expected": "Source(Policy); no managed leak; restored policy reuses valid cache",
+    "linux_session": 64501,
+    "linux_status": "passed in four-test suite",
+    "linux_exit_code": 0
+  },
+  "macos_shared_full": {
+    "session_id": 27347,
+    "exit_code": 0,
+    "passed": 288,
+    "suite_outputs": 51,
+    "log": "dedup-shared-dependency-macos-full.log",
+    "additional_wal_suite": "4 passed independently after launch; absent from original full run"
+  },
+  "physical_replacement_regression": {
+    "test": "presentation_groups_remove_external_palette_stale_edges_and_retry",
+    "cases": [
+      "exhaustive grouping same-byte atomic palette replacement",
+      "indexed grouping same-byte atomic palette replacement"
+    ],
+    "platform": "macOS",
+    "session_id": 27182,
+    "exit_code": 0,
+    "suite_passed": 4,
+    "log": "dedup-wal-replacement-macos.log",
+    "expected": "Changed; remove stale source edges; preserve healthy pair; fresh scan restores all edges",
+    "linux_session": 64501,
+    "linux_status": "passed in four-test suite",
+    "linux_exit_code": 0
+  },
+  "linux_shared_wal_suite": {
+    "session_id": 64501,
+    "exit_code": 0,
+    "passed": 4,
+    "log": "dedup-wal-presentation-linux.log",
+    "scope": "direct presentation freshness, exhaustive/indexed mutation/removal/same-byte replacement, source limit, cancellation checkpoint sweep and retry"
+  }
+}

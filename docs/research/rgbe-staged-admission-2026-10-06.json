@@ -1,0 +1,19 @@
+{
+  "change": "RGBE managed compute admits CPU and GPU credit before output allocation",
+  "default_test_passed": 2,
+  "default_ignored": 1,
+  "full_dump_test_passed": 1,
+  "logs": [
+    "/tmp/rrrah-rgbe-staged-admission.log",
+    "/tmp/rrrah-rgbe-staged-full.log"
+  ],
+  "sources": {
+    "crates/rrrah-gpu/src/rgbe_compute.rs": "8038828194d47f5b2c1151e21b29ced56b2435509cf1d2b890f00a23dca45dbf",
+    "crates/rrrah-gpu/tests/rgbe_compute_readback.rs": "3952e3f0563a999e7a7fa171c97982c2128ae0de3da976c7db119a52988043cc"
+  },
+  "limitations": [
+    "Full dump origin still unverified; GPU/CPU parity only",
+    "No cancellation API added to RGBE in this change",
+    "Driver RSS outside budgets"
+  ]
+}

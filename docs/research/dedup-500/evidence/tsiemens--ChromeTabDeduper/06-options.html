@@ -1,0 +1,113 @@
+<!doctype html>
+<!-- Copyright (c) 2018 Trevor Siemens. -->
+<html>
+  <head>
+    <title>Tab Deduper Options</title>
+    <link rel="stylesheet" href="css/options.css">
+
+    <!--
+      - JavaScript and HTML must be in separate files: see the Content Security
+      - Policy documentation[1] for details and explanation.
+      -
+      - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
+    -->
+    <script src="js/options.js" type="module"></script>
+  </head>
+
+  <body>
+    <h1>Tab Deduper Options</h1>
+    <div id="container">
+
+      <h2>Pattern Rules</h2>
+      <p>Below, each text box can have one pattern per line.
+      Unless otherwise specified, each line can either be:<br>
+      &nbsp;&nbsp;- A simple text match on the URL, starting from the beginning of the domain.<br>
+      &nbsp;&nbsp;- A regular expression, marked with a backtick (<code>`</code>) at the begginning of the line (backtick is placed after a negating <code>-</code>, if used).
+      </p>
+
+      <div class="group-header">Global Options</div>
+
+      <div>
+        <label class="checkbox-container">
+          <input id="dedup-all-windows-checkbox" type="checkbox" checked="checked">
+          Dedupe tabs across all windows
+        </label>
+        <label class="checkbox-container">
+          <input id="use-title-default-checkbox" type="checkbox" checked="checked">
+          Also check tab title when comparing tabs for duplicates
+          <span class="info-icon" title="Tabs will be considered duplicates only if BOTH the URL and title are the same.">i</span>
+        </label>
+      </div>
+      <div>
+        <label class="checkbox-container">
+          <input id="ignore-fragment-default-checkbox" type="checkbox" checked="checked">
+          Ignore URL fragments (after <code>#</code>) by default
+          <span class="info-icon" title="Fragments are standard in URLs for indicating a specific position within the page, and will often update when clicking or navigating to sections within the page. On some sites, query parameters (?...) are used for this purpose instead, which is not standard. Other sites would often use query parameters to specify the query for a search results page, etc. Use URL replacements below on specific sites to remove them in such cases.">i</span>
+        </label>
+      </div>
+
+      <div class="group-header">URL Exemptions</div>
+      <div style="margin:5pt">
+        <textarea id="url-exempt-tb" class="scrollable-textbox"
+                  placeholder="eg. somedomain.com or `^somedomain\.com"></textarea>
+      </div>
+      <p id="url-exempt-errors" class="error-txt"></p>
+
+      <div class="group-header">Title Use Overrides</div>
+      <div style="margin:5pt">
+        Each line enables using the title, or prefix with - to disable use of title.
+        <div style="margin-bottom:5pt">
+          <textarea id="title-override-tb" class="scrollable-textbox"
+                    placeholder="eg. somedomain.com or `^somedomain\.com"></textarea>
+        </div>
+         <p id="title-override-errors" class="error-txt"></p>
+      </div>
+
+      <div class="group-header">Fragment Use Overrides</div>
+      <div style="margin:5pt">
+        Each line enables including fragments, or prefix with - to ignore fragments.
+        <div style="margin-bottom:5pt">
+          <textarea id="fragment-override-tb" class="scrollable-textbox"
+                    placeholder="eg. somedomain.com or `^somedomain\.com"></textarea>
+        </div>
+        <p id="fragment-override-errors" class="error-txt"></p>
+      </div>
+
+      <div style="margin-bottom:5pt" class="group-header">URL Pattern Replacements for Matching</div>
+      <p>
+        These patterns (ECMAScript/Javascript regular expression replacements)
+        are applied to URLs before being compared with each other.
+        <br>
+        Does not modify the actual tab URLs.
+      </p>
+      <p>
+        One <code>pattern`replacement[`flags]</code> per line. Separate with a backtick.
+      </p>
+      <div style="margin:5pt">
+        <textarea id="url-transform-tb" class="scrollable-textbox"
+                  placeholder="eg. ^(.*)\.somedomain\.com`$1.foo.com"></textarea>
+      </div>
+      <p id="url-transform-errors" class="error-txt"></p>
+
+      <div style="margin-top:10pt; margin-bottom:20pt">
+         <button id="save-button" class="button-base save-button">Save</button>
+         <div id="save-errors" style="margin-top:5pt" class="error-txt"></div>
+      </div>
+
+      <div class="group-header-2">Try URL Conversions</div>
+      Try out how URL transforms and fragment overrides affect any URL.<br/>
+      Enter a URL and hit <b>Convert</b> to see how it will be represented<br/>
+      when compared against other URL representations.
+      <div style="margin-top:10pt">
+         <input id="convert-sample-url-text" type="text" placeholder="somedomain.com/path#frag"
+                style="width:300px" />
+          &nbsp;-&gt;&nbsp;
+         <div id="convert-test-result" style="display:inline-block"></div>
+      </div>
+      <div style="margin-top:10pt">
+         <button id="convert-test-button" class="button-base test-button">Convert</button>
+      </div>
+
+    </div>
+  </body>
+</html>

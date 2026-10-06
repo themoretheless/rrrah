@@ -1,0 +1,341 @@
+{
+  "scope": "Exact-file scaling and all-file observation cost; warm-cache, one Darwin arm64 host",
+  "command": "cargo run -p rrrah-dedup --no-default-features --release --example exact_scale_probe",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/exact.rs": "63d2c3a1a26918d0f693810c7583a9430185f6b674e3ffd33b5f88fc47204f17",
+    "crates/rrrah-dedup/examples/exact_scale_probe.rs": "f0f95cd175b2191412b14ac412a5cb2820a75e4936be5d5a47cd727b67fd20c7"
+  },
+  "host": {
+    "architecture": "Darwin arm64",
+    "memory_bytes": 137438953472,
+    "logical_cpus": 16
+  },
+  "fixture": {
+    "file_bytes": 65536,
+    "file_counts": [
+      128,
+      1024,
+      8192
+    ],
+    "duplicate_files_fraction": 0.25,
+    "duplicate_group_size": 4,
+    "content": "Deterministic xorshift64 byte streams; unique seed per unique file, common seed for each labelled duplicate group.",
+    "oracle": "Known file-to-group labels checked on every warmup and timed result; no errors, omissions or extra groups."
+  },
+  "conditions": [
+    "Fixture generation excluded from timing.",
+    "Both modes warmed before each size.",
+    "Four paired repetitions alternate ordinary/verified order.",
+    "No other assistant build/test jobs overlapped final timed runs; external host workload not controlled.",
+    "Times include discovery and content reads but exclude result-oracle assertions."
+  ],
+  "summary": [
+    {
+      "files": 128,
+      "verified": false,
+      "seconds_median": 0.0122419375,
+      "seconds_min": 0.011846041,
+      "seconds_max": 0.012688458,
+      "bytes_read": 8388608,
+      "groups": 8
+    },
+    {
+      "files": 128,
+      "verified": true,
+      "seconds_median": 0.029718,
+      "seconds_min": 0.028901042,
+      "seconds_max": 0.030203541,
+      "bytes_read": 25165824,
+      "groups": 8
+    },
+    {
+      "files": 1024,
+      "verified": false,
+      "seconds_median": 0.218103,
+      "seconds_min": 0.100361583,
+      "seconds_max": 0.286191625,
+      "bytes_read": 67108864,
+      "groups": 64
+    },
+    {
+      "files": 1024,
+      "verified": true,
+      "seconds_median": 0.421314875,
+      "seconds_min": 0.366611417,
+      "seconds_max": 0.45888375,
+      "bytes_read": 201326592,
+      "groups": 64
+    },
+    {
+      "files": 8192,
+      "verified": false,
+      "seconds_median": 0.768903958,
+      "seconds_min": 0.768751166,
+      "seconds_max": 0.774563583,
+      "bytes_read": 536870912,
+      "groups": 512
+    },
+    {
+      "files": 8192,
+      "verified": true,
+      "seconds_median": 1.852133375,
+      "seconds_min": 1.849301125,
+      "seconds_max": 1.9263510419999998,
+      "bytes_read": 1610612736,
+      "groups": 512
+    }
+  ],
+  "samples": [
+    {
+      "files": 128,
+      "file_bytes": 65536,
+      "expected_groups": 8,
+      "verified": false,
+      "repetition": 0,
+      "seconds": 0.012125292,
+      "bytes_read": 8388608,
+      "complete": true
+    },
+    {
+      "files": 128,
+      "file_bytes": 65536,
+      "expected_groups": 8,
+      "verified": true,
+      "repetition": 0,
+      "seconds": 0.030203541,
+      "bytes_read": 25165824,
+      "complete": true
+    },
+    {
+      "files": 128,
+      "file_bytes": 65536,
+      "expected_groups": 8,
+      "verified": true,
+      "repetition": 1,
+      "seconds": 0.030083375,
+      "bytes_read": 25165824,
+      "complete": true
+    },
+    {
+      "files": 128,
+      "file_bytes": 65536,
+      "expected_groups": 8,
+      "verified": false,
+      "repetition": 1,
+      "seconds": 0.012358583,
+      "bytes_read": 8388608,
+      "complete": true
+    },
+    {
+      "files": 128,
+      "file_bytes": 65536,
+      "expected_groups": 8,
+      "verified": false,
+      "repetition": 2,
+      "seconds": 0.012688458,
+      "bytes_read": 8388608,
+      "complete": true
+    },
+    {
+      "files": 128,
+      "file_bytes": 65536,
+      "expected_groups": 8,
+      "verified": true,
+      "repetition": 2,
+      "seconds": 0.028901042,
+      "bytes_read": 25165824,
+      "complete": true
+    },
+    {
+      "files": 128,
+      "file_bytes": 65536,
+      "expected_groups": 8,
+      "verified": true,
+      "repetition": 3,
+      "seconds": 0.029352625,
+      "bytes_read": 25165824,
+      "complete": true
+    },
+    {
+      "files": 128,
+      "file_bytes": 65536,
+      "expected_groups": 8,
+      "verified": false,
+      "repetition": 3,
+      "seconds": 0.011846041,
+      "bytes_read": 8388608,
+      "complete": true
+    },
+    {
+      "files": 1024,
+      "file_bytes": 65536,
+      "expected_groups": 64,
+      "verified": false,
+      "repetition": 0,
+      "seconds": 0.100361583,
+      "bytes_read": 67108864,
+      "complete": true
+    },
+    {
+      "files": 1024,
+      "file_bytes": 65536,
+      "expected_groups": 64,
+      "verified": true,
+      "repetition": 0,
+      "seconds": 0.397120875,
+      "bytes_read": 201326592,
+      "complete": true
+    },
+    {
+      "files": 1024,
+      "file_bytes": 65536,
+      "expected_groups": 64,
+      "verified": true,
+      "repetition": 1,
+      "seconds": 0.445508875,
+      "bytes_read": 201326592,
+      "complete": true
+    },
+    {
+      "files": 1024,
+      "file_bytes": 65536,
+      "expected_groups": 64,
+      "verified": false,
+      "repetition": 1,
+      "seconds": 0.286191625,
+      "bytes_read": 67108864,
+      "complete": true
+    },
+    {
+      "files": 1024,
+      "file_bytes": 65536,
+      "expected_groups": 64,
+      "verified": false,
+      "repetition": 2,
+      "seconds": 0.176877417,
+      "bytes_read": 67108864,
+      "complete": true
+    },
+    {
+      "files": 1024,
+      "file_bytes": 65536,
+      "expected_groups": 64,
+      "verified": true,
+      "repetition": 2,
+      "seconds": 0.366611417,
+      "bytes_read": 201326592,
+      "complete": true
+    },
+    {
+      "files": 1024,
+      "file_bytes": 65536,
+      "expected_groups": 64,
+      "verified": true,
+      "repetition": 3,
+      "seconds": 0.45888375,
+      "bytes_read": 201326592,
+      "complete": true
+    },
+    {
+      "files": 1024,
+      "file_bytes": 65536,
+      "expected_groups": 64,
+      "verified": false,
+      "repetition": 3,
+      "seconds": 0.259328583,
+      "bytes_read": 67108864,
+      "complete": true
+    },
+    {
+      "files": 8192,
+      "file_bytes": 65536,
+      "expected_groups": 512,
+      "verified": false,
+      "repetition": 0,
+      "seconds": 0.774563583,
+      "bytes_read": 536870912,
+      "complete": true
+    },
+    {
+      "files": 8192,
+      "file_bytes": 65536,
+      "expected_groups": 512,
+      "verified": true,
+      "repetition": 0,
+      "seconds": 1.9263510419999998,
+      "bytes_read": 1610612736,
+      "complete": true
+    },
+    {
+      "files": 8192,
+      "file_bytes": 65536,
+      "expected_groups": 512,
+      "verified": true,
+      "repetition": 1,
+      "seconds": 1.849301125,
+      "bytes_read": 1610612736,
+      "complete": true
+    },
+    {
+      "files": 8192,
+      "file_bytes": 65536,
+      "expected_groups": 512,
+      "verified": false,
+      "repetition": 1,
+      "seconds": 0.768784041,
+      "bytes_read": 536870912,
+      "complete": true
+    },
+    {
+      "files": 8192,
+      "file_bytes": 65536,
+      "expected_groups": 512,
+      "verified": false,
+      "repetition": 2,
+      "seconds": 0.768751166,
+      "bytes_read": 536870912,
+      "complete": true
+    },
+    {
+      "files": 8192,
+      "file_bytes": 65536,
+      "expected_groups": 512,
+      "verified": true,
+      "repetition": 2,
+      "seconds": 1.853515458,
+      "bytes_read": 1610612736,
+      "complete": true
+    },
+    {
+      "files": 8192,
+      "file_bytes": 65536,
+      "expected_groups": 512,
+      "verified": true,
+      "repetition": 3,
+      "seconds": 1.850751292,
+      "bytes_read": 1610612736,
+      "complete": true
+    },
+    {
+      "files": 8192,
+      "file_bytes": 65536,
+      "expected_groups": 512,
+      "verified": false,
+      "repetition": 3,
+      "seconds": 0.769023875,
+      "bytes_read": 536870912,
+      "complete": true
+    }
+  ],
+  "validation": {
+    "timed_runs": 24,
+    "warmup_runs": 6,
+    "all_oracle_checks": "passed",
+    "example_clippy": "passed"
+  },
+  "limits": [
+    "One host, warm filesystem cache, synthetic same-size files and fixed duplicate fraction.",
+    "No cold-cache, large individual file, adversarial metadata, network filesystem, visual decoder/index throughput, RSS or memory-bound measurement.",
+    "No general superiority or calibrated probability claim."
+  ]
+}

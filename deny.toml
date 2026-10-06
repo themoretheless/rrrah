@@ -5,12 +5,16 @@ ignore = []
 allow = [
     "MIT",
     "Apache-2.0",
+    # target-lexicon, required by native codec system-deps.
+    "Apache-2.0 WITH LLVM-exception",
     "BSD-2-Clause",
     "BSD-3-Clause",
     "ISC",
     "Zlib",
     "Unicode-3.0",
     "CC0-1.0",
+    # astcenc-sys bindings; bundled Arm decoder is Apache-2.0.
+    "Unlicense",
     # Required by the transitive `directories` crate (dirs-sys -> option-ext).
     "MPL-2.0",
 ]

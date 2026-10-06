@@ -43,6 +43,10 @@ pub(crate) struct LosslessJpegImage {
 
 #[derive(Debug, Clone, PartialEq, Eq, Error)]
 pub(crate) enum LosslessJpegError {
+    #[error("lossless JPEG geometry {actual:?} differs from declared {expected:?}")]
+    GeometryMismatch { expected: [u32; 4], actual: [u32; 4] },
+    #[error("unqualified Leaf MOS JPEG geometry")]
+    UnqualifiedLeafGeometry,
     #[error("lossless JPEG is missing its initial SOI marker")]
     MissingSoi,
     #[error(
@@ -594,12 +598,66 @@ pub(crate) struct ExternalHuffmanTable<'a> {
     pub(crate) symbols: &'a [u8],
 }
 
+/// Reads SOF3 sample precision without allocating or decoding the mosaic.
+pub(crate) fn probe_precision(bytes: &[u8]) -> Result<u8, LosslessJpegError> {
+    let mut reader = MarkerReader::new(bytes, 0);
+    if reader.next_marker()?.code != SOI {
+        return Err(LosslessJpegError::MissingSoi);
+    }
+    loop {
+        let marker = reader.next_marker()?;
+        if marker.code == SOF3 {
+            return Ok(parse_frame(reader.segment(marker)?)?.precision);
+        }
+        if marker.code == SOS || marker.code == EOI {
+            return Err(LosslessJpegError::MissingFrame);
+        }
+        reader.segment(marker)?;
+    }
+}
+
 /// Decodes a complete lossless Huffman JPEG payload.
 pub(crate) fn decode(
     bytes: &[u8],
     cancelled: &dyn Fn() -> bool,
 ) -> Result<LosslessJpegImage, LosslessJpegError> {
-    decode_impl(bytes, cancelled, true, &[], false)
+    decode_impl(bytes, cancelled, true, &[], false, false, None)
+}
+
+/// Declared container geometry checked before JPEG output allocation.
+#[cfg(test)]
+pub(crate) fn decode_bounded_geometry(
+    bytes: &[u8],
+    geometry: [u32; 4],
+    cancelled: &dyn Fn() -> bool,
+) -> Result<LosslessJpegImage, LosslessJpegError> {
+    decode_impl(bytes, cancelled, true, &[], false, false, Some((geometry, false)))
+}
+
+/// Qualified DCS520C stream: fixed geometry and one observed redundant
+/// trailing difference (category 6, +49), followed by ordinary one-fill padding.
+/// Generic JPEG callers retain strict sample-count validation.
+pub(crate) fn decode_kodak_dcs520(
+    bytes: &[u8],
+    cancelled: &dyn Fn() -> bool,
+) -> Result<LosslessJpegImage, LosslessJpegError> {
+    decode_impl(
+        bytes,
+        cancelled,
+        true,
+        &[],
+        false,
+        false,
+        Some(([868, 1160, 12, 2], true)),
+    )
+}
+
+/// Format-scoped compatibility for the qualified Leaf MOS SOF/SOS convention.
+pub(crate) fn decode_leaf_mos(
+    bytes: &[u8],
+    cancelled: &dyn Fn() -> bool,
+) -> Result<LosslessJpegImage, LosslessJpegError> {
+    decode_impl(bytes, cancelled, true, &[], false, true, None)
 }
 
 /// `word_refill` exists so benchmarks can A/B the bulk entropy refill against
@@ -610,7 +668,7 @@ pub(crate) fn decode_with_refill(
     cancelled: &dyn Fn() -> bool,
     word_refill: bool,
 ) -> Result<LosslessJpegImage, LosslessJpegError> {
-    decode_impl(bytes, cancelled, word_refill, &[], false)
+    decode_impl(bytes, cancelled, word_refill, &[], false, false, None)
 }
 
 /// Decodes a complete lossless Huffman JPEG payload, seeding the DC Huffman
@@ -629,7 +687,15 @@ pub(crate) fn decode_with_external_tables(
     external_tables: &[ExternalHuffmanTable<'_>],
     prefer_external: bool,
 ) -> Result<LosslessJpegImage, LosslessJpegError> {
-    decode_impl(bytes, cancelled, true, external_tables, prefer_external)
+    decode_impl(
+        bytes,
+        cancelled,
+        true,
+        external_tables,
+        prefer_external,
+        false,
+        None,
+    )
 }
 
 #[allow(clippy::too_many_lines)]
@@ -639,6 +705,8 @@ fn decode_impl(
     word_refill: bool,
     external_tables: &[ExternalHuffmanTable<'_>],
     prefer_external: bool,
+    leaf_mos: bool,
+    expected_geometry: Option<([u32; 4], bool)>,
 ) -> Result<LosslessJpegImage, LosslessJpegError> {
     let mut reader = MarkerReader::new(bytes, 0);
     if !matches!(reader.next_marker(), Ok(Marker { code: SOI, .. })) {
@@ -700,7 +768,29 @@ fn decode_impl(
                     return Err(LosslessJpegError::DuplicateFrame);
                 }
                 let payload = reader.segment(marker)?;
-                let parsed = parse_frame(payload)?;
+                let parsed = parse_frame_with_mos(payload, leaf_mos)?;
+                if leaf_mos
+                    && ((parsed.width, parsed.height, parsed.precision) != (2004, 5344, 16)
+                        || parsed
+                            .components
+                            .iter()
+                            .map(|component| component.id)
+                            .collect::<Vec<_>>()
+                            != [1, 2])
+                {
+                    return Err(LosslessJpegError::UnqualifiedLeafGeometry);
+                }
+                if let Some((expected, _)) = expected_geometry {
+                    let actual = [
+                        u32::from(parsed.width),
+                        u32::from(parsed.height),
+                        u32::from(parsed.precision),
+                        parsed.components.len() as u32,
+                    ];
+                    if expected != actual {
+                        return Err(LosslessJpegError::GeometryMismatch { expected, actual });
+                    }
+                }
                 let sample_count = parsed.sample_count()?;
                 if sample_count > MAX_OUTPUT_SAMPLES {
                     return Err(LosslessJpegError::SampleLimit {
@@ -762,6 +852,7 @@ fn decode_impl(
                     samples,
                     cancelled,
                     word_refill,
+                    expected_geometry.is_some_and(|(_, dcs_tail)| dcs_tail),
                 )?;
                 reader.position = next_position;
                 for component in &scan.components {
@@ -836,6 +927,10 @@ fn decode_impl(
 }
 
 fn parse_frame(payload: &[u8]) -> Result<Frame, LosslessJpegError> {
+    parse_frame_with_mos(payload, false)
+}
+
+fn parse_frame_with_mos(payload: &[u8], leaf_mos: bool) -> Result<Frame, LosslessJpegError> {
     if payload.len() < 6 {
         return Err(LosslessJpegError::InvalidSegmentLength {
             marker: SOF3,
@@ -867,6 +962,9 @@ fn parse_frame(payload: &[u8]) -> Result<Frame, LosslessJpegError> {
         });
     }
 
+    // Compatibility is limited to the qualified two-component Leaf header.
+    let leaf_mos = leaf_mos && precision == 16 && payload[6..] == [0, 0x11, 0, 1, 0x11, 1];
+
     let mut components = Vec::new();
     components
         .try_reserve_exact(component_count)
@@ -875,10 +973,14 @@ fn parse_frame(payload: &[u8]) -> Result<Frame, LosslessJpegError> {
         })?;
     for encoded in payload[6..].chunks_exact(3) {
         let id = encoded[0];
-        if components
-            .iter()
-            .any(|component: &FrameComponent| component.id == id)
-        {
+        if components.iter().any(|component: &FrameComponent| {
+            component.id
+                == if leaf_mos && precision == 16 && component_count == 2 && id < 2 {
+                    id + 1
+                } else {
+                    id
+                }
+        }) {
             return Err(LosslessJpegError::DuplicateFrameComponent { component_id: id });
         }
         let horizontal = encoded[1] >> 4;
@@ -890,12 +992,20 @@ fn parse_frame(payload: &[u8]) -> Result<Frame, LosslessJpegError> {
                 vertical,
             });
         }
-        if encoded[2] != 0 {
+        if encoded[2] != 0
+            && !(leaf_mos && precision == 16 && component_count == 2 && id == 1 && encoded[2] == 1)
+        {
             return Err(LosslessJpegError::NonzeroQuantizationSelector {
                 component_id: id,
                 selector: encoded[2],
             });
         }
+        // Leaf MOS numbers SOF components from zero and SOS components from one.
+        let id = if leaf_mos && precision == 16 && component_count == 2 && id < 2 {
+            id + 1
+        } else {
+            id
+        };
         components.push(FrameComponent { id });
     }
     Ok(Frame {
@@ -1062,6 +1172,7 @@ fn decode_scan(
     samples: &mut [u16],
     cancelled: &dyn Fn() -> bool,
     word_refill: bool,
+    dcs_tail: bool,
 ) -> Result<(Marker, usize), LosslessJpegError> {
     let width = usize::from(frame.width);
     let height = usize::from(frame.height);
@@ -1144,6 +1255,19 @@ fn decode_scan(
         }
     }
 
+    if dcs_tail
+        && entropy.bit_count == 11
+        && entropy.bit_buffer == 0x38f
+        && scan.components.len() == 2
+        && scan.predictor == 1
+        && scan.point_transform == 0
+        && restart_interval == 0
+        && bytes.get(entropy.position..entropy.position + 2) == Some(&[MARKER_PREFIX, EOI])
+    {
+        // Exact observed extra symbol 01 + 110001; retain strict validation
+        // of the remaining 111 padding and EOI. No other extra data is accepted.
+        entropy.consume_bits(8);
+    }
     let marker = entropy.finish_marker()?;
     Ok((marker, entropy.position))
 }
@@ -1231,6 +1355,78 @@ fn unexpected_end(
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn mos_header_compatibility_does_not_relax_strict_dng() {
+        let payload = [16, 0, 1, 0, 2, 2, 0, 0x11, 0, 1, 0x11, 1];
+        assert!(matches!(
+            super::parse_frame(&payload),
+            Err(super::LosslessJpegError::NonzeroQuantizationSelector { .. })
+        ));
+        let frame = super::parse_frame_with_mos(&payload, true).unwrap();
+        assert_eq!(frame.components.iter().map(|c| c.id).collect::<Vec<_>>(), [1, 2]);
+        for (position, value) in [(0, 14), (6, 2), (8, 1), (9, 0), (10, 0x21), (11, 2)] {
+            let mut invalid = payload;
+            invalid[position] = value;
+            assert!(
+                super::parse_frame_with_mos(&invalid, true).is_err(),
+                "mutation {position}"
+            );
+        }
+    }
+    #[test]
+    #[ignore = "requires pinned Leaf Aptus 22 MOS source"]
+    fn leaf_mos_nonstandard_quantization_selector_is_rejected() {
+        let source = std::fs::read(std::env::var("RRRAH_MOS_SOURCE").unwrap()).unwrap();
+        assert_eq!(source.len(), 23_423_633);
+        let payload = &source[531_582..531_582 + 22_892_051];
+        assert!(matches!(
+            super::decode(payload, &|| false),
+            Err(super::LosslessJpegError::NonzeroQuantizationSelector {
+                component_id: 1,
+                selector: 1,
+            })
+        ));
+    }
+    #[test]
+    #[ignore = "requires pinned Leaf Aptus 22 MOS and full-sensor oracle"]
+    fn leaf_mos_compatibility_matches_independent_sensor() {
+        let source = std::fs::read(std::env::var("RRRAH_MOS_SOURCE").unwrap()).unwrap();
+        let oracle = std::fs::read(std::env::var("RRRAH_MOS_ORACLE").unwrap()).unwrap();
+        let payload = &source[531_582..531_582 + 22_892_051];
+        let decoded = super::decode_impl(payload, &|| false, true, &[], false, true, None).unwrap();
+        assert_eq!(
+            (decoded.width, decoded.height, decoded.precision),
+            (2004, 5344, 16)
+        );
+        assert_eq!(decoded.component_ids, [1, 2]);
+        let mut oversized = payload.to_vec();
+        oversized[9..11].copy_from_slice(&4008_u16.to_be_bytes());
+        assert!(matches!(
+            super::decode_leaf_mos(&oversized, &|| false),
+            Err(super::LosslessJpegError::UnqualifiedLeafGeometry)
+        ));
+        assert_eq!(decoded.samples.len() * 2, oracle.len());
+        assert!(
+            super::decode_impl(
+                &payload[..payload.len() / 2],
+                &|| false,
+                true,
+                &[],
+                false,
+                true,
+                None
+            )
+            .is_err()
+        );
+        assert!(super::decode_impl(payload, &|| true, true, &[], false, true, None).is_err());
+        for (index, (actual, expected)) in decoded.samples.iter().zip(oracle.chunks_exact(2)).enumerate() {
+            assert_eq!(
+                *actual,
+                u16::from_le_bytes([expected[0], expected[1]]),
+                "sample {index}"
+            );
+        }
+    }
     use super::*;
 
     const TEST_PRECISION: u8 = 12;
@@ -1812,6 +2008,37 @@ mod tests {
         assert!(matches!(
             decode(&lossy_quantization_table, &|| false),
             Err(LosslessJpegError::UnsupportedMarker { marker: 0xdb, .. })
+        ));
+    }
+
+    #[test]
+    fn container_geometry_is_checked_before_entropy_decode() {
+        let samples = [1 << (TEST_PRECISION - 1)];
+        let fixture = build_fixture(1, 1, TEST_PRECISION, 1, 1, 0, 0, &samples);
+        let expected = [1, 1, u32::from(TEST_PRECISION), 1];
+        assert_eq!(
+            decode_bounded_geometry(&fixture, expected, &|| false)
+                .unwrap()
+                .samples,
+            samples
+        );
+        for field in 0..4 {
+            let mut wrong = expected;
+            wrong[field] += 1;
+            assert_eq!(
+                decode_bounded_geometry(&fixture, wrong, &|| false),
+                Err(LosslessJpegError::GeometryMismatch {
+                    expected: wrong,
+                    actual: expected
+                })
+            );
+        }
+        // Geometry refusal precedes reading a deliberately truncated entropy stream.
+        let truncated = &fixture[..fixture.len() - 3];
+        let wrong = [2, 1, u32::from(TEST_PRECISION), 1];
+        assert!(matches!(
+            decode_bounded_geometry(truncated, wrong, &|| false),
+            Err(LosslessJpegError::GeometryMismatch { .. })
         ));
     }
 

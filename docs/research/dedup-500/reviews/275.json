@@ -1,0 +1,88 @@
+{
+  "index": 275,
+  "repository": "trondhindenes/flansible",
+  "commit": "b905029b697b75deef090f02d1d044ffb5ebc410",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Ansible REST wrapper; super-duper description false positive.",
+  "available_source_evidence": [
+    {
+      "path": "setup.py",
+      "local": "02-setup.py",
+      "url": "https://github.com/trondhindenes/flansible/blob/b905029b697b75deef090f02d1d044ffb5ebc410/setup.py",
+      "sha256": "c6ecccf1c15f6c8d91eec40f3ca2395a5d5708191cb2787abfbf97b8a0a294ce",
+      "truncated": false,
+      "lines": 46,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "Flansible/__init__.py",
+      "local": "03-__init__.py",
+      "url": "https://github.com/trondhindenes/flansible/blob/b905029b697b75deef090f02d1d044ffb5ebc410/Flansible/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "truncated": false,
+      "lines": 0,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "Flansible/runserver.py",
+      "local": "04-runserver.py",
+      "url": "https://github.com/trondhindenes/flansible/blob/b905029b697b75deef090f02d1d044ffb5ebc410/Flansible/runserver.py",
+      "sha256": "fefd3215c412eea637e4f402fd61396027f4a5629f65c03848ff5b3e7442c14e",
+      "truncated": false,
+      "lines": 12,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "Flansible/Utils/debug.sh",
+      "local": "05-debug.sh",
+      "url": "https://github.com/trondhindenes/flansible/blob/b905029b697b75deef090f02d1d044ffb5ebc410/Flansible/Utils/debug.sh",
+      "sha256": "ca96eb665596fbbfeb17521cfbbf547022c86d8102a3965be46fabe5b1213982",
+      "truncated": false,
+      "lines": 10,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "Flansible/flansible/ModelClasses.py",
+      "local": "06-ModelClasses.py",
+      "url": "https://github.com/trondhindenes/flansible/blob/b905029b697b75deef090f02d1d044ffb5ebc410/Flansible/flansible/ModelClasses.py",
+      "sha256": "886d12be3547721ea5a459055ed3098007baf673e9db6165c05533c6251842b1",
+      "truncated": false,
+      "lines": 51,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/trondhindenes/flansible/blob/b905029b697b75deef090f02d1d044ffb5ebc410/README.md",
+      "sha256": "b0373b8debd32c06fed3ed15753df44b72e2a46b33282ee95c97469f6a6ba950",
+      "truncated": false,
+      "lines": 172,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE.md",
+      "local": "01-LICENSE.md",
+      "url": "https://github.com/trondhindenes/flansible/blob/b905029b697b75deef090f02d1d044ffb5ebc410/LICENSE.md",
+      "sha256": "75807ce187b6763b1c2c2da560a707493c22af94c5b5af8a6fbc3c4e143a064b",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

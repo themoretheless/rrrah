@@ -1,0 +1,33 @@
+{
+  "status": "real-perspective-gate-failed",
+  "macos_session": 67804,
+  "linux_session": 27137,
+  "source_sha256": "6c83d38a632f5d04b8e699f50c5048f0d774b0a4eb994df532f8e530e9f40494",
+  "scope": "Projective selected-file comparator shares source/dependency/native decode/cancellation lifecycle with similarity comparison. Identity/resource/cancel test plus local_scan regression; real perspective, collection integration remain pending.",
+  "initial_identity_regression": {
+    "macos": {
+      "exit_code": 0,
+      "passed": 12,
+      "log": "dedup-projective-files-macos-fixed.log"
+    },
+    "linux": {
+      "exit_code": 0,
+      "passed": 12,
+      "log": "dedup-projective-files-linux.log"
+    }
+  },
+  "perspective_derivatives": {
+    "exit_code": 101,
+    "required": 6,
+    "rejected_positive_ids": [
+      "2414",
+      "2418",
+      "2883",
+      "5025",
+      "5495"
+    ],
+    "passed_positive_count": 1,
+    "log": "dedup-real-perspective-macos.log",
+    "next": "Refine minimal four-point consensus using its full support; retain strict thresholds and independent Pillow source fixture. Resampling residuals need separately qualified filtered verification, not relaxed equality."
+  }
+}

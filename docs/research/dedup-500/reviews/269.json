@@ -1,0 +1,98 @@
+{
+  "index": 269,
+  "repository": "hydrogenjs/hydrogen",
+  "commit": "3741dd891aa955311f089d41dd2b570ae4169d4c",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Static site generator; super-duper wording false positive.",
+  "available_source_evidence": [
+    {
+      "path": "src/index.ts",
+      "local": "02-index.ts",
+      "url": "https://github.com/hydrogenjs/hydrogen/blob/3741dd891aa955311f089d41dd2b570ae4169d4c/src/index.ts",
+      "sha256": "e5b102095ea92ddecdf8e9a7c589c856b5d449ff0b9232ec8b4020e43fc984f6",
+      "truncated": false,
+      "lines": 1,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": ".eslintrc.js",
+      "local": "03-.eslintrc.js",
+      "url": "https://github.com/hydrogenjs/hydrogen/blob/3741dd891aa955311f089d41dd2b570ae4169d4c/.eslintrc.js",
+      "sha256": "9130e10f771a95613639afbd18e354c7d2ec820bdef705f963ea49a3d6e05ccc",
+      "truncated": false,
+      "lines": 52,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "jest.config.js",
+      "local": "04-jest.config.js",
+      "url": "https://github.com/hydrogenjs/hydrogen/blob/3741dd891aa955311f089d41dd2b570ae4169d4c/jest.config.js",
+      "sha256": "4700d35ab7bac2c1db7d0beeaa025c70216f3601f3e2a8fb4e8392600b76ad5c",
+      "truncated": false,
+      "lines": 8,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "__tests__/helpers/index.spec.ts",
+      "local": "05-index.spec.ts",
+      "url": "https://github.com/hydrogenjs/hydrogen/blob/3741dd891aa955311f089d41dd2b570ae4169d4c/__tests__/helpers/index.spec.ts",
+      "sha256": "7f135cddf29f9c909f0a76af2dcce9cdfc52c3ea72188afe716085aa9c7f5925",
+      "truncated": false,
+      "lines": 21,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "src/commands/build.ts",
+      "local": "06-build.ts",
+      "url": "https://github.com/hydrogenjs/hydrogen/blob/3741dd891aa955311f089d41dd2b570ae4169d4c/src/commands/build.ts",
+      "sha256": "c251b0958008d6a9cfc8e1fefa2c9e3ac4548b47182bd0eeddb7579d7c389dd0",
+      "truncated": false,
+      "lines": 65,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/commands/generate.ts",
+      "local": "07-generate.ts",
+      "url": "https://github.com/hydrogenjs/hydrogen/blob/3741dd891aa955311f089d41dd2b570ae4169d4c/src/commands/generate.ts",
+      "sha256": "9f3b8c0cb6ff0bed81ffd588c288587ab222c12cf9ccb6646bef1bf42afa79bf",
+      "truncated": false,
+      "lines": 15,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 4,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/hydrogenjs/hydrogen/blob/3741dd891aa955311f089d41dd2b570ae4169d4c/README.md",
+      "sha256": "a01abcf5803cd5335422a8ef14cc622b0691bb614fb4aead09de70a590c215a9",
+      "truncated": false,
+      "lines": 117,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/hydrogenjs/hydrogen/blob/3741dd891aa955311f089d41dd2b570ae4169d4c/LICENSE",
+      "sha256": "a2c27e85068512e54c60cce4924f6aa66d786ce010ed93239bd47f1ea718e16d",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

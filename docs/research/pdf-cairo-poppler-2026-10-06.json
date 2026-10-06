@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-06",
+  "status": "external generator decode succeeds; strict independent pixel qualification fails",
+  "source": "tests/fixtures/pdf/cairo-text-shapes.pdf",
+  "source_sha256": "a7347a12ff38720d62c9f4b0ebcd3428e54f3c378e98d0968dceccb1d695e24b",
+  "svg": "tests/fixtures/pdf/cairo-text-shapes.svg",
+  "producer": "CairoSVG 2.8.2 with installed Cairo; SVG to PDF",
+  "license": "CC0-1.0 authored SVG",
+  "dimensions": [
+    48,
+    36
+  ],
+  "native": "hayro 0.7.1 ordinary rrrah decoder RGBA8, composited on white",
+  "oracle": "Poppler pdftoppm -r 72",
+  "comparison": {
+    "pixels": 1728,
+    "different_pixels": 173,
+    "max_channel_error": 128,
+    "exact": false,
+    "native_composite_sha256": "c49b8f93a363295035b72aa0ce2ec5a5cd9317ac6b21907dd172890e81a7da17",
+    "oracle_sha256": "95dce148e880e4499a36f67c0213f4a144b497f1975ce9c4555288fa2921a8b9"
+  },
+  "diagnosis": "not isolated; raster edge, font and rendering behavior need separate comparisons; no tolerance relaxation",
+  "dump_command": "cargo run -p rrrah-decode --example raster_fixture_dump --target-dir /tmp/rrrah-required-corpus-target -- tests/fixtures/pdf/cairo-text-shapes.pdf 0 /tmp/rrrah-pdf-cairo-native.rgba",
+  "log": "/tmp/rrrah-pdf-cairo-dump.log"
+}

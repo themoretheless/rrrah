@@ -1,0 +1,96 @@
+{
+  "repository": "mikeleppane/visualvault",
+  "metadata": {
+    "name": "mikeleppane/visualvault",
+    "url": "https://github.com/mikeleppane/visualvault",
+    "description": "Terminal-based media file organizer with smart date-based organization, duplicate detection, and a beautiful TUI. Organize your photo/video collection efficiently from the command line. Written in Rust using Ratatui ",
+    "language": "Rust",
+    "stars": 66,
+    "license": "MIT",
+    "archived": false,
+    "pushed_at": "2026-10-05T16:46:08Z",
+    "default_branch": "main",
+    "queries": [
+      "duplicate in:name,description",
+      "duplicates in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/mikeleppane/visualvault/blob/6dab7e85633ccb3d5a43b25e2fd1b00300758b83/README.md",
+      "sha256": "5d0963793e7bbe14243a44ec4b00733d87b24aa9ba2e9e3dff8bdc310d4f4134",
+      "truncated": false,
+      "lines": 1000,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/mikeleppane/visualvault/blob/6dab7e85633ccb3d5a43b25e2fd1b00300758b83/LICENSE",
+      "sha256": "21fb5a5395f0f650feb3688f00c858e59eefa51c3c945a19da2c3ed2a4d8a3d2",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "crates/core/src/duplicate_detector.rs",
+      "local": "02-duplicate_detector.rs",
+      "url": "https://github.com/mikeleppane/visualvault/blob/6dab7e85633ccb3d5a43b25e2fd1b00300758b83/crates/core/src/duplicate_detector.rs",
+      "sha256": "583ad5f06ba94d2360aa010ec56dc02567ee3fce72a3f73ad1f5fecbe1f779d1",
+      "truncated": false,
+      "lines": 653,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "crates/core/src/scanner.rs",
+      "local": "03-scanner.rs",
+      "url": "https://github.com/mikeleppane/visualvault/blob/6dab7e85633ccb3d5a43b25e2fd1b00300758b83/crates/core/src/scanner.rs",
+      "sha256": "484c8700ed8df1e4f712f97ca09e191c9a5b7ba84269b75e76bb3da787a0a6dd",
+      "truncated": false,
+      "lines": 1249,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "crates/app/src/duplicates.rs",
+      "local": "04-duplicates.rs",
+      "url": "https://github.com/mikeleppane/visualvault/blob/6dab7e85633ccb3d5a43b25e2fd1b00300758b83/crates/app/src/duplicates.rs",
+      "sha256": "76633fecf82939db354616a0a86c3dc552f0452b8d7c7207181eac6f2667f034",
+      "truncated": false,
+      "lines": 282,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/integration/scanner.rs",
+      "local": "05-scanner.rs",
+      "url": "https://github.com/mikeleppane/visualvault/blob/6dab7e85633ccb3d5a43b25e2fd1b00300758b83/tests/integration/scanner.rs",
+      "sha256": "156be26e7cfacdc68010486b2e219e32f5488835e4c318aea895060fe7495f75",
+      "truncated": false,
+      "lines": 227,
+      "source": true,
+      "test": true
+    }
+  ],
+  "errors": [],
+  "commit": "6dab7e85633ccb3d5a43b25e2fd1b00300758b83",
+  "tree_truncated": false,
+  "source_file_count": 55,
+  "test_file_count": 10,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "crates/core/src/scanner.rs",
+    "crates/core/src/duplicate_detector.rs",
+    "crates/app/src/duplicates.rs",
+    "tests/integration/scanner.rs"
+  ]
+}

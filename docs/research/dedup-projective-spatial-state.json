@@ -1,0 +1,20 @@
+{
+  "status": "direct_spatial_projective_mode_identity_gate_passed_macos",
+  "scope": "Existing spatial feature admission reused for explicit projective file comparison; descriptors, geometric and pixel thresholds unchanged. No independent repeatability/recall improvement claimed.",
+  "macos_test_passed": true,
+  "source_sha256": {
+    "crates/rrrah-dedup/src/local_scan.rs": "d8b9023d3480ccc033073fd9a82e3b14a6f29cc6c92c982160d8c013d5029a3b",
+    "crates/rrrah-dedup/tests/projective_files.rs": "95842761da2719d8bd3b0030b066354790ced29ad30645b82ede911621f38c7f"
+  },
+  "remaining": [
+    "Linux gate",
+    "Spatial projective collection/index consistency",
+    "Independent paired evaluation after frozen baseline completes"
+  ],
+  "linux_direct_gate": {
+    "exit": 0,
+    "passed": 1,
+    "ignored": 0,
+    "log": "docs/research/dedup-projective-spatial-linux.log"
+  }
+}

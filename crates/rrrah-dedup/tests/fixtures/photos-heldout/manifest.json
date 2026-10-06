@@ -1,0 +1,1014 @@
+{
+  "generator": "generate-dedup-photo-fixtures.py",
+  "pillow": "12.3.0",
+  "scope": "Embedded rendered camera JPEG derivatives; not full RAW development. Brightness multiplies encoded RGB values, not scene-linear exposure.",
+  "cases": [
+    {
+      "source": {
+        "id": 2414,
+        "make": "Sony",
+        "model": "ILCE-7M3",
+        "mode": "14bit 14bit compressed (3:2)",
+        "license": "CC0-1.0",
+        "url": "https://raw.pixls.us/getfile.php/2414/nice/Sony - ILCE-7M3 - 14bit 14bit compressed (3:2).ARW",
+        "sha256": "250784580ea527442c09004417bb0eead484f2bf3ee8f9121a776ac65bb50d0f",
+        "filename": "2414.arw",
+        "exif_url": "https://raw.pixls.us/getfile.php/2414/exif/_DSC0009.ARW.exif.txt",
+        "oracle": {
+          "libraw_version": "0.22.2-Release",
+          "make": "Sony",
+          "model": "ILCE-7M3",
+          "width": 6048,
+          "height": 4024,
+          "crop": [
+            0,
+            0,
+            6024,
+            4024
+          ],
+          "wb": [
+            2272,
+            1024,
+            1800,
+            1024
+          ],
+          "black": 512,
+          "cblack": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "white": 16383,
+          "cfa": [
+            "R",
+            "G",
+            "G",
+            "B"
+          ],
+          "xyz_to_camera": [
+            [
+              0.7373999953,
+              -0.2389000058,
+              -0.05510000139
+            ],
+            [
+              -0.5435000062,
+              1.316200018,
+              0.2518999875
+            ],
+            [
+              -0.1005999967,
+              0.1794999987,
+              0.6552000046
+            ],
+            [
+              0,
+              0,
+              0
+            ]
+          ],
+          "pixels_sha256": "89ceacf8cfa2ce810a67646a6c423f6fd0ad280ef6e8a5d83744c239c2ad8f2f",
+          "pixels_bytes": 48674304,
+          "camera_to_rgb": [
+            [
+              1.635386348,
+              -0.4219624102,
+              -0.2134238929
+            ],
+            [
+              -0.1310720742,
+              1.542707086,
+              -0.4116349518
+            ],
+            [
+              0.0114296414,
+              -0.4195929468,
+              1.408163309
+            ]
+          ]
+        },
+        "metadata_contract": {
+          "crop": [
+            12,
+            12,
+            6000,
+            4000
+          ],
+          "black_grid": [
+            512
+          ],
+          "white": [
+            16383
+          ],
+          "source": "Sony DefaultCrop; documented Sony compressed black offset and 14-bit linearized full scale"
+        }
+      },
+      "preview_offset": 151714,
+      "preview_length": 1150105,
+      "preview_sha256": "b3fc2dd71ef116d050d08bf9831adde955dc99e83c980c9b92a37272f9de18c2",
+      "preview_original_dimensions": [
+        1616,
+        1080
+      ],
+      "files": [
+        {
+          "variant": "base",
+          "file": "2414-base.png",
+          "dimensions": [
+            320,
+            214
+          ],
+          "sha256": "2c7d263d3cb93496085db6d743d0eb53586585a6568d5dbce5736f51e33303c4"
+        },
+        {
+          "variant": "resize",
+          "file": "2414-resize.png",
+          "dimensions": [
+            240,
+            160
+          ],
+          "sha256": "2e79f46c39471119ce605b693a160ab8eda7c5470d2913539b83662f626e025e"
+        },
+        {
+          "variant": "crop",
+          "file": "2414-crop.png",
+          "dimensions": [
+            240,
+            162
+          ],
+          "sha256": "7d60a19a30c64ca8052981dda6db3041786eb4b2bd6193fed8302da882bc757d"
+        },
+        {
+          "variant": "rotate",
+          "file": "2414-rotate.png",
+          "dimensions": [
+            370,
+            300
+          ],
+          "sha256": "197372f3eeece3b34efbbbdd06f3fb0e423ce885196176061997e547c09adcda"
+        },
+        {
+          "variant": "brightness",
+          "file": "2414-brightness.png",
+          "dimensions": [
+            320,
+            214
+          ],
+          "sha256": "06a61c0de6736a4c9cf402bd7e670131e937a99c4f37dd829e26ee423e64873e"
+        },
+        {
+          "variant": "jpeg",
+          "file": "2414-jpeg.jpg",
+          "dimensions": [
+            320,
+            214
+          ],
+          "sha256": "305f2fd08b108aa0d6f85fe86d82c6738a84a15bf16812a59f509a7df68675f6"
+        }
+      ]
+    },
+    {
+      "source": {
+        "id": 2418,
+        "make": "Sony",
+        "model": "ILCE-7M3",
+        "mode": "14bit 14bit uncompressed (3:2)",
+        "license": "CC0-1.0",
+        "url": "https://raw.pixls.us/getfile.php/2418/nice/Sony - ILCE-7M3 - 14bit 14bit uncompressed (3:2).ARW",
+        "sha256": "ece80551abf64949dbe826985a80f1d9b265401ee4ea6b989e1829549616fdcd",
+        "filename": "2418.arw",
+        "exif_url": "https://raw.pixls.us/getfile.php/2418/exif/UNCOMPRESSED_14bit.ARW.exif.txt",
+        "oracle": {
+          "libraw_version": "0.22.2-Release",
+          "make": "Sony",
+          "model": "ILCE-7M3",
+          "width": 6048,
+          "height": 4024,
+          "crop": [
+            0,
+            0,
+            6024,
+            4024
+          ],
+          "wb": [
+            2340,
+            1024,
+            1664,
+            1024
+          ],
+          "black": 512,
+          "cblack": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "white": 16383,
+          "cfa": [
+            "R",
+            "G",
+            "G",
+            "B"
+          ],
+          "xyz_to_camera": [
+            [
+              0.7373999953,
+              -0.2389000058,
+              -0.05510000139
+            ],
+            [
+              -0.5435000062,
+              1.316200018,
+              0.2518999875
+            ],
+            [
+              -0.1005999967,
+              0.1794999987,
+              0.6552000046
+            ],
+            [
+              0,
+              0,
+              0
+            ]
+          ],
+          "pixels_sha256": "d135a2f7f1c9dc0987ce1703a15b07bf4b9f48f754ef7bbd6a1d56b7f10ca158",
+          "pixels_bytes": 48674304,
+          "camera_to_rgb": [
+            [
+              1.635386348,
+              -0.4219624102,
+              -0.2134238929
+            ],
+            [
+              -0.1310720742,
+              1.542707086,
+              -0.4116349518
+            ],
+            [
+              0.0114296414,
+              -0.4195929468,
+              1.408163309
+            ]
+          ]
+        },
+        "metadata_contract": {
+          "crop": [
+            12,
+            12,
+            6000,
+            4000
+          ],
+          "black_grid": [
+            512
+          ],
+          "white": [
+            16383
+          ],
+          "source": "Sony DefaultCrop; documented 14-bit uncompressed black offset and full scale"
+        }
+      },
+      "preview_offset": 151714,
+      "preview_length": 1181733,
+      "preview_sha256": "7554933af6040538a18f3524e5b9c7f8cfaf1068e7b32fac14d6125ba1315abe",
+      "preview_original_dimensions": [
+        1616,
+        1080
+      ],
+      "files": [
+        {
+          "variant": "base",
+          "file": "2418-base.png",
+          "dimensions": [
+            320,
+            214
+          ],
+          "sha256": "0fcc61edab868ebaef60c2187cfe1e53f3704a2ec7e365e74ef5d89e49380d97"
+        },
+        {
+          "variant": "resize",
+          "file": "2418-resize.png",
+          "dimensions": [
+            240,
+            160
+          ],
+          "sha256": "b5f50f454cd87834e5224cda9603d77bed0e5f0f191031253162c765d96f8695"
+        },
+        {
+          "variant": "crop",
+          "file": "2418-crop.png",
+          "dimensions": [
+            240,
+            162
+          ],
+          "sha256": "da58a7e8298353b458305d4949eda81aac609fb4d2f14e8c75e8392c3bae8e14"
+        },
+        {
+          "variant": "rotate",
+          "file": "2418-rotate.png",
+          "dimensions": [
+            370,
+            300
+          ],
+          "sha256": "a134964bd1f7af7a03fe5e07f617bd5c6e6e3cdcdc16d9f716e3f110490d97a2"
+        },
+        {
+          "variant": "brightness",
+          "file": "2418-brightness.png",
+          "dimensions": [
+            320,
+            214
+          ],
+          "sha256": "b45a7c4d27355f223c7d5a899d415b9a5da6b0d47d53f80475bd859ad70efc09"
+        },
+        {
+          "variant": "jpeg",
+          "file": "2418-jpeg.jpg",
+          "dimensions": [
+            320,
+            214
+          ],
+          "sha256": "386f1d3b073bc87d8f2cea66dd36ab5c58bd34d23c3bf19a9f1961e042e49420"
+        }
+      ]
+    },
+    {
+      "source": {
+        "id": 2883,
+        "make": "Fujifilm",
+        "model": "X-A2",
+        "mode": "12bit 12bit uncompressed (3:2)",
+        "license": "CC0-1.0",
+        "url": "https://raw.pixls.us/getfile.php/2883/nice/Fujifilm - X-A2 - 12bit 12bit uncompressed (3:2).RAF",
+        "sha256": "58ad687b23138c3c49ebeb6c1f80daf13185349be364b947e2bf27e39a462d2f",
+        "filename": "2883.raf",
+        "exif_url": "https://raw.pixls.us/getfile.php/2883/exif/DSCF2073.RAF.exif.txt",
+        "oracle": {
+          "libraw_version": "0.22.2-Release",
+          "make": "Fujifilm",
+          "model": "X-A2",
+          "width": 5120,
+          "height": 3288,
+          "crop": [
+            0,
+            0,
+            4952,
+            3288
+          ],
+          "wb": [
+            542,
+            302,
+            535,
+            0
+          ],
+          "black": 0,
+          "cblack": [
+            0,
+            0,
+            0,
+            0,
+            2,
+            2
+          ],
+          "white": 4095,
+          "cfa": [
+            "R",
+            "G",
+            "G",
+            "B"
+          ],
+          "xyz_to_camera": [
+            [
+              1.076300025,
+              -0.4560000002,
+              -0.09170000255
+            ],
+            [
+              -0.3346000016,
+              1.131100059,
+              0.2321999967
+            ],
+            [
+              -0.0474999994,
+              0.113499999,
+              0.5842999816
+            ],
+            [
+              0,
+              0,
+              0
+            ]
+          ],
+          "pixels_sha256": "522a48c3b44e563cfc91be64c045a8b2b2e9e8e430247e1e7b28dc5fa9df62e2",
+          "pixels_bytes": 33669120,
+          "camera_to_rgb": [
+            [
+              1.380017877,
+              -0.1431287825,
+              -0.2368890345
+            ],
+            [
+              -0.2098091096,
+              1.640211463,
+              -0.4304023385
+            ],
+            [
+              0.01119909808,
+              -0.3915051818,
+              1.380306125
+            ]
+          ]
+        },
+        "metadata_contract": {
+          "crop": [
+            28,
+            12,
+            4896,
+            3264
+          ],
+          "black_grid": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "white": [
+            4095
+          ],
+          "source": "RAF directory crop/black; 12-bit full-scale policy"
+        }
+      },
+      "preview_offset": 2304,
+      "preview_length": 8925,
+      "preview_sha256": "e27268f0c822499f2399f69ebc4cbbbee8f67bf7641130c3f845019fcc3b970d",
+      "preview_original_dimensions": [
+        160,
+        120
+      ],
+      "files": [
+        {
+          "variant": "base",
+          "file": "2883-base.png",
+          "dimensions": [
+            160,
+            120
+          ],
+          "sha256": "7aab92911e3bd9e93e263e2491c6e386acf5684b21de95c69ca009d09862cbb0"
+        },
+        {
+          "variant": "resize",
+          "file": "2883-resize.png",
+          "dimensions": [
+            120,
+            90
+          ],
+          "sha256": "cd391567fc18789e538a7657621c83140dab832d68706ea0526edd11d2a0eb9e"
+        },
+        {
+          "variant": "crop",
+          "file": "2883-crop.png",
+          "dimensions": [
+            120,
+            90
+          ],
+          "sha256": "c80c3866c1a364a6e9c50feca089f469405d99c31d4191d213ff677c453b437f"
+        },
+        {
+          "variant": "rotate",
+          "file": "2883-rotate.png",
+          "dimensions": [
+            190,
+            162
+          ],
+          "sha256": "a38f1aedc691eea2a0e2079108d55fdd5f17094df59cbcc864836e45c55406e7"
+        },
+        {
+          "variant": "brightness",
+          "file": "2883-brightness.png",
+          "dimensions": [
+            160,
+            120
+          ],
+          "sha256": "339dec217ff18f5d0b478c157dfe75b6decad54ddf7c5eac802073082a440243"
+        },
+        {
+          "variant": "jpeg",
+          "file": "2883-jpeg.jpg",
+          "dimensions": [
+            160,
+            120
+          ],
+          "sha256": "8d7d308715f865a4b512f7d9a064ef20cd3970161eec7566a590096e1513280e"
+        }
+      ]
+    },
+    {
+      "source": {
+        "id": 5025,
+        "make": "Panasonic",
+        "model": "DMC-GH2",
+        "mode": "4:3",
+        "license": "CC0-1.0",
+        "url": "https://raw.pixls.us/getfile.php/5025/nice/Panasonic - DMC-GH2 - 4:3.RW2",
+        "sha256": "87516d28f8594dcfd20b0577883ad0d35662efc503674b1e3688aa894d32a2c0",
+        "filename": "5025.rw2",
+        "exif_url": "https://raw.pixls.us/getfile.php/5025/exif/_1040800.RW2.exif.txt",
+        "oracle": {
+          "libraw_version": "0.22.2-Release",
+          "make": "Panasonic",
+          "model": "DMC-GH2",
+          "width": 4760,
+          "height": 3472,
+          "crop": [
+            0,
+            0,
+            4624,
+            3472
+          ],
+          "wb": [
+            624,
+            263,
+            440,
+            0
+          ],
+          "black": 15,
+          "cblack": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "white": 3989,
+          "cfa": [
+            "B",
+            "G",
+            "G",
+            "R"
+          ],
+          "xyz_to_camera": [
+            [
+              0.7779999971,
+              -0.2409999967,
+              -0.08060000092
+            ],
+            [
+              -0.3912999928,
+              1.172399998,
+              0.2484000027
+            ],
+            [
+              -0.1018000022,
+              0.2389999926,
+              0.5297999978
+            ],
+            [
+              0,
+              0,
+              0
+            ]
+          ],
+          "pixels_sha256": "90ac674eded1ec883e3351b4524a44bd26fe9c797b92ef773c6466c598d6610f",
+          "pixels_bytes": 33053440,
+          "camera_to_rgb": [
+            [
+              1.604271889,
+              -0.5180213451,
+              -0.08625059575
+            ],
+            [
+              -0.2120729536,
+              1.769111514,
+              -0.5570386052
+            ],
+            [
+              0.02250282094,
+              -0.6764394641,
+              1.653936625
+            ]
+          ]
+        },
+        "metadata_contract": {
+          "crop": [
+            8,
+            4,
+            4608,
+            3456
+          ],
+          "black_grid": [
+            15,
+            15,
+            15,
+            15
+          ],
+          "white": [
+            3967,
+            3967,
+            3967
+          ],
+          "source": "Panasonic sensor borders; legacy black offset +15; native RGB LinearityLimit tags"
+        }
+      },
+      "preview_offset": 32256,
+      "preview_length": 596789,
+      "preview_sha256": "c699ae2fbf830ee688a64be8551857026ed379843ec8d0714b9ee97d2cd750bc",
+      "preview_original_dimensions": [
+        1920,
+        1440
+      ],
+      "files": [
+        {
+          "variant": "base",
+          "file": "5025-base.png",
+          "dimensions": [
+            320,
+            240
+          ],
+          "sha256": "f9a6e40fab52e522f398ad38e747ed76141fb3f683b560e046f124d3ae968125"
+        },
+        {
+          "variant": "resize",
+          "file": "5025-resize.png",
+          "dimensions": [
+            240,
+            180
+          ],
+          "sha256": "18a373b9d909d71c370fdfaab0609b73196d0bb96c1d4c7b9d94cec3a7636a9a"
+        },
+        {
+          "variant": "crop",
+          "file": "5025-crop.png",
+          "dimensions": [
+            240,
+            180
+          ],
+          "sha256": "cd852b8b1949cc29a26f9755ae2d0cf7b8079be17b17a30452705b3745072b14"
+        },
+        {
+          "variant": "rotate",
+          "file": "5025-rotate.png",
+          "dimensions": [
+            378,
+            324
+          ],
+          "sha256": "69540e6ad15e4228be67e7833b357f69fc46efddb1cb701c53a7cdcd50af5abc"
+        },
+        {
+          "variant": "brightness",
+          "file": "5025-brightness.png",
+          "dimensions": [
+            320,
+            240
+          ],
+          "sha256": "08214ad1d18d31b63e1c3e3906550ba2f7b1f68b790dc5af4906be5cac0fcbd7"
+        },
+        {
+          "variant": "jpeg",
+          "file": "5025-jpeg.jpg",
+          "dimensions": [
+            320,
+            240
+          ],
+          "sha256": "ee47702e88553516841b3a30c6eb8b7ed717eb43ff7e695b79154310e35abc33"
+        }
+      ]
+    },
+    {
+      "source": {
+        "id": 1425,
+        "make": "Nikon",
+        "model": "COOLPIX P7800",
+        "mode": "12bit tag, unpacked BE u16, Nikon mode 7",
+        "license": "CC0-1.0",
+        "url": "https://raw.pixls.us/getfile.php/1425/nice/Nikon%20-%20Coolpix%20P7800%20-%2012bit%2012bit%20compressed%20%28%287%29%29%20%284:3%29.NRW",
+        "sha256": "27ac09537dd0f75523864dcf221278e2db354d490534bc13b6eabdc031060e51",
+        "filename": "1425.nrw",
+        "exif_url": "https://raw.pixls.us/getfile.php/1425/exif/DSCN2039.NRW.exif.txt",
+        "oracle": {
+          "libraw_version": "0.22.2-Release",
+          "make": "Nikon",
+          "model": "COOLPIX P7800",
+          "width": 4032,
+          "height": 3024,
+          "crop": [
+            0,
+            0,
+            4032,
+            3024
+          ],
+          "wb": [
+            2.28125,
+            1,
+            1.33984375,
+            1
+          ],
+          "black": 3200,
+          "cblack": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "white": 65504,
+          "cfa": [
+            "R",
+            "G",
+            "G",
+            "B"
+          ],
+          "xyz_to_camera": [
+            [
+              1.032099962,
+              -0.3919999897,
+              -0.09309999645
+            ],
+            [
+              -0.275000006,
+              1.114599943,
+              0.1824000031
+            ],
+            [
+              -0.04419999942,
+              0.1544999927,
+              0.5539000034
+            ],
+            [
+              0,
+              0,
+              0
+            ]
+          ],
+          "camera_to_rgb": [
+            [
+              1.490578175,
+              -0.2760358155,
+              -0.214542374
+            ],
+            [
+              -0.2656733692,
+              1.646362424,
+              -0.3806890547
+            ],
+            [
+              0.009308908135,
+              -0.4864280224,
+              1.477119088
+            ]
+          ],
+          "pixels_bytes": 24385536,
+          "pixels_sha256": "4e95cbf6a45fc2fe48e23312bdaf9da187848a25211abf84282fdf8140e64db5"
+        },
+        "metadata_contract": {
+          "crop": [
+            0,
+            0,
+            4032,
+            3024
+          ],
+          "black_grid": [
+            3200.0
+          ],
+          "white": [
+            65504.0
+          ]
+        }
+      },
+      "preview_offset": 24420544,
+      "preview_length": 2571557,
+      "preview_sha256": "1c88d6ba21d36160ab7fb0d54233adf52afbb1202900703ea9c74e6ada72af76",
+      "preview_original_dimensions": [
+        4000,
+        3000
+      ],
+      "files": [
+        {
+          "variant": "base",
+          "file": "1425-base.png",
+          "dimensions": [
+            320,
+            240
+          ],
+          "sha256": "774d0ec8fc5230fd89d533467d83aa3f5ebc857c61bae1a63226b3a357e105ad"
+        },
+        {
+          "variant": "resize",
+          "file": "1425-resize.png",
+          "dimensions": [
+            240,
+            180
+          ],
+          "sha256": "a74d8d8ea1d80f4cab255f6c2adde829ba6e463187b2eca9cb80b0d121893314"
+        },
+        {
+          "variant": "crop",
+          "file": "1425-crop.png",
+          "dimensions": [
+            240,
+            180
+          ],
+          "sha256": "fa370210a40c6a92dd5f0797e828eac6ed4d081bc564d6e270c817e612e57561"
+        },
+        {
+          "variant": "rotate",
+          "file": "1425-rotate.png",
+          "dimensions": [
+            378,
+            324
+          ],
+          "sha256": "f62a591f4df44cc61e55eaf62f041761ae991879748180021d6166eea97095a7"
+        },
+        {
+          "variant": "brightness",
+          "file": "1425-brightness.png",
+          "dimensions": [
+            320,
+            240
+          ],
+          "sha256": "0097c33f2274ee9ef21ffaccfbc58e27dd6b6dc4a56a3acc7f66820e2cbd96c7"
+        },
+        {
+          "variant": "jpeg",
+          "file": "1425-jpeg.jpg",
+          "dimensions": [
+            320,
+            240
+          ],
+          "sha256": "6daa0d8609c6703d847aa408ebc3e4f04dc4708be6dff822dc83054dd359e691"
+        }
+      ]
+    },
+    {
+      "source": {
+        "id": 5495,
+        "make": "Nikon",
+        "model": "COOLPIX P7700",
+        "mode": "Nikon mode 7, BE u16",
+        "license": "CC0-1.0",
+        "url": "https://raw.pixls.us/getfile.php/5495/nice/Nikon%20-%20Coolpix%20P7700%20-%2012bit%2012bit%20compressed%20%28%287%29%29%20%284:3%29.NRW",
+        "sha256": "559aaf6616e092b363e72bb36422c4d1c024da3c0d4ba582126fa16d42e96cb8",
+        "filename": "5495.nrw",
+        "oracle": {
+          "libraw_version": "0.22.2-Release",
+          "make": "Nikon",
+          "model": "COOLPIX P7700",
+          "width": 4032,
+          "height": 3024,
+          "crop": [
+            0,
+            0,
+            4032,
+            3024
+          ],
+          "wb": [
+            1.9296875,
+            1,
+            1.5546875,
+            1
+          ],
+          "black": 3200,
+          "cblack": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "white": 65504,
+          "cfa": [
+            "R",
+            "G",
+            "G",
+            "B"
+          ],
+          "xyz_to_camera": [
+            [
+              1.032099962,
+              -0.3919999897,
+              -0.09309999645
+            ],
+            [
+              -0.275000006,
+              1.114599943,
+              0.1824000031
+            ],
+            [
+              -0.04419999942,
+              0.1544999927,
+              0.5539000034
+            ],
+            [
+              0,
+              0,
+              0
+            ]
+          ],
+          "camera_to_rgb": [
+            [
+              1.490578175,
+              -0.2760358155,
+              -0.214542374
+            ],
+            [
+              -0.2656733692,
+              1.646362424,
+              -0.3806890547
+            ],
+            [
+              0.009308908135,
+              -0.4864280224,
+              1.477119088
+            ]
+          ],
+          "pixels_bytes": 24385536,
+          "pixels_sha256": "3050dd59d42242749e0c241c05bc00a37daeb522660cbede97dc6f1bd52ef376"
+        },
+        "metadata_contract": {
+          "crop": [
+            0,
+            0,
+            4032,
+            3024
+          ],
+          "black_grid": [
+            3200.0
+          ],
+          "white": [
+            65504.0
+          ]
+        }
+      },
+      "preview_offset": 24421168,
+      "preview_length": 2564468,
+      "preview_sha256": "7a69de076366450a4f2f5940264940b2cc3187a87546e1c2b023db8eedece385",
+      "preview_original_dimensions": [
+        4000,
+        3000
+      ],
+      "files": [
+        {
+          "variant": "base",
+          "file": "5495-base.png",
+          "dimensions": [
+            320,
+            240
+          ],
+          "sha256": "b7ae4afe559c7f23e82c7e3d542a8667c04fd9653262733d36603d34b825aa25"
+        },
+        {
+          "variant": "resize",
+          "file": "5495-resize.png",
+          "dimensions": [
+            240,
+            180
+          ],
+          "sha256": "3aae0f5dd6bb5fda34529c48b8b69887607decb4bb0907ce36102e193fbe410f"
+        },
+        {
+          "variant": "crop",
+          "file": "5495-crop.png",
+          "dimensions": [
+            240,
+            180
+          ],
+          "sha256": "0729c6c8b73281c6a31d5f3b0a78159850d641a4ff9529b21ab70e8999dfa7fa"
+        },
+        {
+          "variant": "rotate",
+          "file": "5495-rotate.png",
+          "dimensions": [
+            378,
+            324
+          ],
+          "sha256": "ce6e162dc87644647c0688b91ab840cbe812cb1fd256dbf2ed2749617b00966f"
+        },
+        {
+          "variant": "brightness",
+          "file": "5495-brightness.png",
+          "dimensions": [
+            320,
+            240
+          ],
+          "sha256": "f80f8cd914ff2a2d49a94bf817cf810d307989ab2e988582bce579da4002ad5e"
+        },
+        {
+          "variant": "jpeg",
+          "file": "5495-jpeg.jpg",
+          "dimensions": [
+            320,
+            240
+          ],
+          "sha256": "77977e493a4d3d727f278a0932cfde12a085c85001d04b174399bce1f8ca4095"
+        }
+      ]
+    }
+  ]
+}

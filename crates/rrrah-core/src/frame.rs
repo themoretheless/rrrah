@@ -1,5 +1,3 @@
-use std::sync::Arc;
-
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
@@ -16,6 +14,9 @@ pub enum CfaColor {
     Yellow = 5,
     White = 6,
     Unknown = 255,
+    /// Distinct emerald response plane of Sony RGBE sensors. Appended to retain
+    /// existing serde enum indices; the cache wire code is explicitly 7.
+    Emerald = 7,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -67,6 +68,35 @@ impl CfaPattern {
             });
         }
         Ok(encoded)
+    }
+
+    /// Four distinct sensor planes encoded in R/G/B/E order for reconstruction.
+    /// This does not treat emerald as a second ordinary green Bayer site.
+    pub fn rgbe_quad(&self) -> Result<[u32; 4], FrameError> {
+        let unsupported = || FrameError::UnsupportedCfa {
+            width: self.width,
+            height: self.height,
+        };
+        if self.width != 2 || self.height != 2 || self.cells.len() != 4 {
+            return Err(unsupported());
+        }
+        let mut result = [0u32; 4];
+        let mut seen = [false; 4];
+        for (output, color) in result.iter_mut().zip(&self.cells) {
+            let code = match color {
+                CfaColor::Red => 0,
+                CfaColor::Green => 1,
+                CfaColor::Blue => 2,
+                CfaColor::Emerald => 3,
+                _ => return Err(unsupported()),
+            };
+            if seen[code] {
+                return Err(unsupported());
+            }
+            seen[code] = true;
+            *output = code as u32;
+        }
+        Ok(result)
     }
 
     pub fn validate(&self) -> Result<(), FrameError> {
@@ -209,9 +239,9 @@ impl Orientation {
             Self::Rotate180 => [1.0 - u, 1.0 - v],
             Self::VerticalFlip => [u, 1.0 - v],
             Self::Transpose => [v, u],
-            Self::Rotate90 => [1.0 - v, u],
+            Self::Rotate90 => [v, 1.0 - u],
             Self::Transverse => [1.0 - v, 1.0 - u],
-            Self::Rotate270 => [v, 1.0 - u],
+            Self::Rotate270 => [1.0 - v, u],
             Self::Normal | Self::Unknown => [u, v],
         }
     }
@@ -237,7 +267,8 @@ pub struct RawMetadata {
     pub black_level: LevelGrid,
     pub white_level: WhiteLevel,
     /// Resolved multiplicative camera-space correction gains in
-    /// `[red, green, blue, second_green]` order. Decode backends choose the
+    /// `[red, green, blue, fourth_plane]` order. The fourth plane is G2
+    /// for Bayer or Emerald for RGBE. Decode backends choose the
     /// common scale (currently green-normalized); renderers must preserve it
     /// unchanged and keep exposure as a separate scene-linear operation.
     pub white_balance: [f32; 4],
@@ -265,6 +296,11 @@ impl RawMetadata {
         } else {
             (crop.width, crop.height)
         }
+    }
+
+    /// Dimensions of the developed color thumbnail, including crop and orientation.
+    pub fn thumbnail_dimensions(&self, edge: u32) -> (u32, u32) {
+        crate::thumbnail::dimensions(self.display_dimensions(), edge)
     }
 
     pub fn validate(&self) -> Result<(), FrameError> {
@@ -295,6 +331,9 @@ impl RawMetadata {
         {
             return Err(FrameError::NonFiniteMetadata("color calibration"));
         }
+        if self.white_balance.iter().any(|value| *value <= 0.0) {
+            return Err(FrameError::InvalidWhiteBalance);
+        }
         if self.white_level.0.is_empty()
             || self
                 .white_level
@@ -311,14 +350,18 @@ impl RawMetadata {
 #[derive(Debug, Clone)]
 pub struct DecodedMosaic {
     pub metadata: RawMetadata,
-    /// Shared ownership keeps handoff to the UI/GPU/cache O(1). Keeping the
-    /// decoder's `Vec` allocation intact avoids a full-frame copy that an
-    /// `Arc<[u16]>` conversion would otherwise require.
-    pub pixels: Arc<Vec<u16>>,
+    /// Shared immutable ownership keeps UI/GPU/cache handoff O(1).
+    /// Managed buffers retain their memory reservation across every handoff;
+    /// legacy decoder vectors remain explicitly unaccounted until adopted.
+    pub pixels: rrrah_memory::PixelBuffer<u16>,
 }
 
 impl DecodedMosaic {
-    pub fn new(metadata: RawMetadata, pixels: Arc<Vec<u16>>) -> Result<Self, FrameError> {
+    pub fn new(
+        metadata: RawMetadata,
+        pixels: impl Into<rrrah_memory::PixelBuffer<u16>>,
+    ) -> Result<Self, FrameError> {
+        let pixels = pixels.into();
         metadata.validate()?;
         let expected = usize::try_from(metadata.width)
             .ok()
@@ -338,74 +381,74 @@ impl DecodedMosaic {
         Ok(Self { metadata, pixels })
     }
 
+    /// Adopts exclusive legacy pixels into a budget without copying samples.
+    /// Existing managed pixels retain their original budget.
+    pub fn try_manage_pixels(
+        mut self,
+        budget: &rrrah_memory::MemoryBudget,
+    ) -> Result<Self, rrrah_memory::BufferError> {
+        self.pixels = self.pixels.try_manage(budget)?;
+        Ok(self)
+    }
+
     pub fn byte_len(&self) -> usize {
         self.pixels.len() * size_of::<u16>()
     }
 
-    /// Produce a compact RGBA8 thumbnail using deterministic nearest sampling.
-    /// This is intentionally CPU-only and allocation-bounded; callers can run
-    /// it on the decode pool and upload the result as a small GPU texture.
-    #[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)]
-    pub fn thumbnail_rgba8(&self, max_dimension: u32) -> Vec<u8> {
-        let max_dimension = max_dimension.max(1);
-        let source_long_edge = self.metadata.width.max(self.metadata.height);
-        let (out_w, out_h) = if source_long_edge <= max_dimension {
-            (self.metadata.width, self.metadata.height)
-        } else {
-            let scaled = |dimension: u32| {
-                u32::try_from(
-                    u64::from(dimension)
-                        .saturating_mul(u64::from(max_dimension))
-                        .div_ceil(u64::from(source_long_edge)),
-                )
-                .unwrap_or(max_dimension)
-                .max(1)
-            };
-            (scaled(self.metadata.width), scaled(self.metadata.height))
-        };
-        let Some(output_bytes) = usize::try_from(out_w)
-            .ok()
-            .and_then(|width| {
-                usize::try_from(out_h)
-                    .ok()
-                    .and_then(|height| width.checked_mul(height))
-            })
-            .and_then(|pixels| pixels.checked_mul(4))
-        else {
-            return Vec::new();
-        };
-        let mut out = vec![0_u8; output_bytes];
-        let white = self
-            .metadata
-            .white_level
-            .0
-            .first()
-            .copied()
-            .unwrap_or(f32::from(u16::MAX))
-            .max(1.0);
-        let channels = usize::from(self.metadata.components_per_pixel);
-        let source_width = usize::try_from(self.metadata.width).unwrap_or(usize::MAX);
-        let output_width = usize::try_from(out_w).unwrap_or(1);
-        for oy in 0..out_h {
-            let y0 = u64::from(oy).saturating_mul(u64::from(self.metadata.height)) / u64::from(out_h);
-            for ox in 0..out_w {
-                let x0 = u64::from(ox).saturating_mul(u64::from(self.metadata.width)) / u64::from(out_w);
-                let src = usize::try_from(y0)
-                    .unwrap_or(usize::MAX)
-                    .saturating_mul(source_width)
-                    .saturating_add(usize::try_from(x0).unwrap_or(usize::MAX))
-                    .saturating_mul(channels);
-                let value = f32::from(self.pixels.get(src).copied().unwrap_or(0)) / white;
-                let byte = (value.clamp(0.0, 1.0) * 255.0 + 0.5) as u8;
-                let dst = usize::try_from(oy)
-                    .unwrap_or(usize::MAX)
-                    .saturating_mul(output_width)
-                    .saturating_add(usize::try_from(ox).unwrap_or(usize::MAX))
-                    .saturating_mul(4);
-                out[dst..dst + 4].copy_from_slice(&[byte, byte, byte, 255]);
-            }
+    /// Develop a bounded color preview with WB, Bayer interpolation, camera
+    /// transform, tone mapping and sRGB encoding. Crop and orientation match
+    /// the display dimensions. Unsupported profiles return an empty buffer.
+    /// Reserve the bounded preview before development. Shared output retains
+    /// its allocation credit until the last CPU owner releases it.
+    pub fn thumbnail_rgba8_managed(
+        &self,
+        max_dimension: u32,
+        budget: &crate::MemoryBudget,
+    ) -> Result<crate::PixelBuffer<u8>, crate::ThumbnailError> {
+        self.thumbnail_rgba8_managed_with_cancel(max_dimension, budget, &|| false)
+    }
+    pub fn thumbnail_rgba8_managed_with_cancel(
+        &self,
+        max_dimension: u32,
+        budget: &crate::MemoryBudget,
+        cancelled: &dyn Fn() -> bool,
+    ) -> Result<crate::PixelBuffer<u8>, crate::ThumbnailError> {
+        if cancelled() {
+            return Err(crate::ThumbnailError::Cancelled);
         }
-        out
+        self.metadata.validate()?;
+        let count = (self.metadata.width as usize)
+            .checked_mul(self.metadata.height as usize)
+            .and_then(|n| n.checked_mul(self.metadata.components_per_pixel as usize))
+            .ok_or(FrameError::DimensionOverflow)?;
+        if self.pixels.len() != count {
+            return Err(FrameError::InvalidPixelCount {
+                expected: count,
+                actual: self.pixels.len(),
+            }
+            .into());
+        }
+        let (w, h) = self.metadata.thumbnail_dimensions(max_dimension);
+        let bytes = u64::from(w)
+            .checked_mul(u64::from(h))
+            .and_then(|n| n.checked_mul(4))
+            .ok_or(FrameError::DimensionOverflow)?;
+        let reservation = budget.try_reserve(bytes)?;
+        let output = crate::thumbnail::develop_with_cancel(self, max_dimension, cancelled);
+        if cancelled() {
+            return Err(crate::ThumbnailError::Cancelled);
+        }
+        if output.len() as u64 != bytes {
+            return Err(crate::ThumbnailError::Develop);
+        }
+        Ok(reservation.try_adopt(output)?.into())
+    }
+
+    pub fn thumbnail_rgba8(&self, max_dimension: u32) -> Vec<u8> {
+        crate::thumbnail::develop(self, max_dimension)
+    }
+    pub fn thumbnail_rgba8_with_cancel(&self, max_dimension: u32, cancelled: &dyn Fn() -> bool) -> Vec<u8> {
+        crate::thumbnail::develop_with_cancel(self, max_dimension, cancelled)
     }
 }
 
@@ -427,6 +470,8 @@ pub enum FrameError {
     InvalidLevelGrid { expected: usize, actual: usize },
     #[error("non-finite {0} metadata")]
     NonFiniteMetadata(&'static str),
+    #[error("white-balance correction gains must be positive")]
+    InvalidWhiteBalance,
     #[error("{0} lies outside the decoded image")]
     InvalidRectangle(&'static str),
     #[error("invalid pixel count: expected {expected}, got {actual}")]
@@ -524,9 +569,9 @@ mod tests {
             ([0.8, 0.2], Orientation::Rotate180),
             ([0.2, 0.2], Orientation::VerticalFlip),
             ([0.8, 0.2], Orientation::Transpose),
-            ([0.2, 0.2], Orientation::Rotate90),
+            ([0.8, 0.8], Orientation::Rotate90),
             ([0.2, 0.8], Orientation::Transverse),
-            ([0.8, 0.8], Orientation::Rotate270),
+            ([0.2, 0.2], Orientation::Rotate270),
         ];
         for (want, orientation) in expected {
             let got = orientation.map_display_uv(uv);
@@ -641,6 +686,20 @@ mod tests {
     }
 
     #[test]
+    fn metadata_rejects_zero_or_negative_wb_including_second_green() {
+        for channel in 0..4 {
+            for value in [0.0, -1.0] {
+                let mut metadata = valid_metadata();
+                metadata.white_balance[channel] = value;
+                assert!(matches!(
+                    metadata.validate(),
+                    Err(FrameError::InvalidWhiteBalance)
+                ));
+            }
+        }
+    }
+
+    #[test]
     fn metadata_rejects_non_finite_calibration_and_white_level() {
         let mut metadata = valid_metadata();
         metadata.white_balance[2] = f32::INFINITY;
@@ -655,5 +714,54 @@ mod tests {
             metadata.validate(),
             Err(FrameError::NonFiniteMetadata("white level"))
         ));
+    }
+    #[test]
+    fn managed_mosaic_clones_retain_pixel_reservation_and_exact_allocation() {
+        let budget = rrrah_memory::MemoryBudget::new(8);
+        let mosaic = DecodedMosaic::new(valid_metadata(), Arc::new(vec![1_u16, 2, 3, 65535])).unwrap();
+        let pointer = mosaic.pixels.as_ptr();
+        let mosaic = mosaic.try_manage_pixels(&budget).unwrap();
+        assert!(mosaic.pixels.is_managed());
+        assert_eq!(mosaic.pixels.as_ptr(), pointer);
+        let consumer = mosaic.clone();
+        drop(mosaic);
+        assert_eq!(budget.used(), 8);
+        assert_eq!(&*consumer.pixels, &[1, 2, 3, 65535]);
+        drop(consumer);
+        assert_eq!(budget.used(), 0);
+    }
+}
+
+#[cfg(test)]
+mod rgbe_tests {
+    use super::*;
+    #[test]
+    fn rgbe_keeps_distinct_plane_identity_and_refuses_bayer_reduction() {
+        let mut cfa = CfaPattern {
+            width: 2,
+            height: 2,
+            cells: vec![CfaColor::Emerald, CfaColor::Red, CfaColor::Blue, CfaColor::Green],
+        };
+        assert_eq!(cfa.rgbe_quad().unwrap(), [3, 0, 2, 1]);
+        assert_eq!(cfa.color_at(0, 0), Some(CfaColor::Emerald));
+        assert!(cfa.bayer_quad().is_err());
+        cfa.cells[0] = CfaColor::Green;
+        assert!(cfa.rgbe_quad().is_err());
+        assert!(cfa.bayer_quad().is_ok());
+        cfa.cells[0] = CfaColor::Cyan;
+        assert!(cfa.rgbe_quad().is_err());
+        cfa.width = 1;
+        assert!(cfa.rgbe_quad().is_err());
+        assert_eq!(
+            [
+                CfaColor::Red as u8,
+                CfaColor::Green as u8,
+                CfaColor::Blue as u8,
+                CfaColor::White as u8,
+                CfaColor::Unknown as u8,
+                CfaColor::Emerald as u8
+            ],
+            [0, 1, 2, 6, 255, 7]
+        );
     }
 }

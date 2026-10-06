@@ -1,0 +1,126 @@
+{
+  "repository": "sergey-dryabzhinsky/dedupsqlfs",
+  "metadata": {
+    "name": "sergey-dryabzhinsky/dedupsqlfs",
+    "url": "https://github.com/sergey-dryabzhinsky/dedupsqlfs",
+    "description": "Deduplicating filesystem via Python3, FUSE and SQLite",
+    "language": "C",
+    "stars": 30,
+    "license": "MIT",
+    "archived": false,
+    "pushed_at": "2026-08-04T10:37:14Z",
+    "default_branch": "master",
+    "queries": [
+      "dedup in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/sergey-dryabzhinsky/dedupsqlfs/blob/b83a903fbae4cb17457125e3c15466d61c00ef91/README.md",
+      "sha256": "970f4a265e772b01687c911aa52aa932a60be27c03351210996e1e75bfdc0bfb",
+      "truncated": false,
+      "lines": 151,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/sergey-dryabzhinsky/dedupsqlfs/blob/b83a903fbae4cb17457125e3c15466d61c00ef91/LICENSE",
+      "sha256": "90d826ccb0486e0f80d616220c9104e845193bdfeb5e1338408caaae1dc58866",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "lib-dynload/_llfuse/LICENSE",
+      "local": "02-LICENSE",
+      "url": "https://github.com/sergey-dryabzhinsky/dedupsqlfs/blob/b83a903fbae4cb17457125e3c15466d61c00ef91/lib-dynload/_llfuse/LICENSE",
+      "sha256": "d1068d8ebfd2b859bf36dee2949da562de103ea4cfa53f9a6352ae5bff7eec37",
+      "truncated": false,
+      "lines": 499,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "dedupsqlfs/fuse/dedupfs.py",
+      "local": "03-dedupfs.py",
+      "url": "https://github.com/sergey-dryabzhinsky/dedupsqlfs/blob/b83a903fbae4cb17457125e3c15466d61c00ef91/dedupsqlfs/fuse/dedupfs.py",
+      "sha256": "33d8e805d1a54d1c4949aa9dd7b1964187af444333b5d4a0f75ed55423368a0e",
+      "truncated": false,
+      "lines": 597,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "dedupsqlfs/app/actions/rehash.py",
+      "local": "04-rehash.py",
+      "url": "https://github.com/sergey-dryabzhinsky/dedupsqlfs/blob/b83a903fbae4cb17457125e3c15466d61c00ef91/dedupsqlfs/app/actions/rehash.py",
+      "sha256": "88aa7b7a58904af33339d50d47d850ff1dd8fce318dfa42b99465bdc720f2201",
+      "truncated": false,
+      "lines": 113,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "lib-dynload/_lz4/lz4libs/xxhash.c",
+      "local": "05-xxhash.c",
+      "url": "https://github.com/sergey-dryabzhinsky/dedupsqlfs/blob/b83a903fbae4cb17457125e3c15466d61c00ef91/lib-dynload/_lz4/lz4libs/xxhash.c",
+      "sha256": "7ae8273e2eae674db237c4d0c300e4a69bff8832b0e5b4e08552255fde006fa2",
+      "truncated": false,
+      "lines": 1030,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "lib-dynload/_recordclass/lib/recordclass/test/match/test_dataobject_match.py",
+      "local": "06-test_dataobject_match.py",
+      "url": "https://github.com/sergey-dryabzhinsky/dedupsqlfs/blob/b83a903fbae4cb17457125e3c15466d61c00ef91/lib-dynload/_recordclass/lib/recordclass/test/match/test_dataobject_match.py",
+      "sha256": "d67c7277bd108444cbf8cd6bf6cc48fd02e30fdbfc4517668bee76b17009b63f",
+      "truncated": false,
+      "lines": 100,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "dedupsqlfs/db/mysql/table/hash.py",
+      "local": "07-hash.py",
+      "url": "https://github.com/sergey-dryabzhinsky/dedupsqlfs/blob/b83a903fbae4cb17457125e3c15466d61c00ef91/dedupsqlfs/db/mysql/table/hash.py",
+      "sha256": "feec930bc77026d8195fae219dd2938b1662ee0a766f400646bbe506e3a025d1",
+      "truncated": false,
+      "lines": 136,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "dedupsqlfs/db/sqlite/table/hash.py",
+      "local": "08-hash.py",
+      "url": "https://github.com/sergey-dryabzhinsky/dedupsqlfs/blob/b83a903fbae4cb17457125e3c15466d61c00ef91/dedupsqlfs/db/sqlite/table/hash.py",
+      "sha256": "b989623b3ef11aedb57356acc2b34de9bcd8f375061defdf794c86414dda7047",
+      "truncated": false,
+      "lines": 112,
+      "source": true,
+      "test": false
+    }
+  ],
+  "errors": [],
+  "commit": "b83a903fbae4cb17457125e3c15466d61c00ef91",
+  "tree_truncated": false,
+  "source_file_count": 478,
+  "test_file_count": 43,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "lib-dynload/_llfuse/LICENSE",
+    "dedupsqlfs/db/mysql/table/hash.py",
+    "dedupsqlfs/db/sqlite/table/hash.py",
+    "dedupsqlfs/fuse/dedupfs.py",
+    "lib-dynload/_recordclass/lib/recordclass/test/match/test_dataobject_match.py"
+  ]
+}

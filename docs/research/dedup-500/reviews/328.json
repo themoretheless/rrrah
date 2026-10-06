@@ -1,0 +1,88 @@
+{
+  "index": 328,
+  "repository": "nikuscs/scanr",
+  "commit": "b9137c53b076bcd492757d41a6084c065635ee8b",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Rust AST/Bloom function similarity; possible local-evidence concept, source-code rather than photo domain.",
+  "available_source_evidence": [
+    {
+      "path": "src/commands/dupes.rs",
+      "local": "03-dupes.rs",
+      "url": "https://github.com/nikuscs/scanr/blob/b9137c53b076bcd492757d41a6084c065635ee8b/src/commands/dupes.rs",
+      "sha256": "9887c8d05aa2a8c5d5da8f0b0f376ba6b284d9f9fbba57b305ae61b3984626f4",
+      "truncated": false,
+      "lines": 362,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/commands/scan.rs",
+      "local": "04-scan.rs",
+      "url": "https://github.com/nikuscs/scanr/blob/b9137c53b076bcd492757d41a6084c065635ee8b/src/commands/scan.rs",
+      "sha256": "497ff6dabba56adfca735bc4bd5c3bef5ec48912b014f14301855ff695a2ed0f",
+      "truncated": false,
+      "lines": 67,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/similarity/ast_fingerprint.rs",
+      "local": "05-ast_fingerprint.rs",
+      "url": "https://github.com/nikuscs/scanr/blob/b9137c53b076bcd492757d41a6084c065635ee8b/src/similarity/ast_fingerprint.rs",
+      "sha256": "a78e81e5163a307356f76e5ab15f6f36cce505d9eaf5498ce811262f9b581a25",
+      "truncated": false,
+      "lines": 632,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/similarity/tests/function_similarity_test.rs",
+      "local": "06-function_similarity_test.rs",
+      "url": "https://github.com/nikuscs/scanr/blob/b9137c53b076bcd492757d41a6084c065635ee8b/src/similarity/tests/function_similarity_test.rs",
+      "sha256": "dc9de53b240e9b18eaad3c9c2ec01763f40787cda3a06b478d8afced87cccb26",
+      "truncated": false,
+      "lines": 415,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 8,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/nikuscs/scanr/blob/b9137c53b076bcd492757d41a6084c065635ee8b/README.md",
+      "sha256": "e4caeb7703b7e4434d0d699bec85fdd59f36e70f3b7e552d589a0a27a3eb25b6",
+      "truncated": false,
+      "lines": 285,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/nikuscs/scanr/blob/b9137c53b076bcd492757d41a6084c065635ee8b/LICENSE",
+      "sha256": "1497e3e3f9c8ab1ca43287a06459ca2ce8af714a5ea39d56dd926a1eff7e8e43",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "src/similarity/LICENSE",
+      "local": "02-LICENSE",
+      "url": "https://github.com/nikuscs/scanr/blob/b9137c53b076bcd492757d41a6084c065635ee8b/src/similarity/LICENSE",
+      "sha256": "93923cc26a47d98e27316fe2bf9764ac4087d138253bb52e88e76333aa526ae6",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

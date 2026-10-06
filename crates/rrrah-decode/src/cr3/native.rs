@@ -67,6 +67,7 @@ pub(crate) struct NativeFrame<'a> {
     pub(crate) ctmd_track_id: Option<u32>,
     pub(crate) ctmd_sample_location: SampleLocation,
     pub(crate) as_shot_white_balance: EosR8AsShotWhiteBalance,
+    pub(crate) sensor_levels: ctmd::EosR8SensorLevels,
 }
 
 impl fmt::Debug for NativeFrame<'_> {
@@ -94,6 +95,8 @@ impl fmt::Debug for NativeFrame<'_> {
             .field("ctmd_track_id", &self.ctmd_track_id)
             .field("ctmd_sample_location", &self.ctmd_sample_location)
             .field("as_shot_white_balance", &self.as_shot_white_balance)
+            .field("normal_white", &self.sensor_levels.normal_white)
+            .field("specular_white", &self.sensor_levels.specular_white)
             .finish()
     }
 }
@@ -232,6 +235,7 @@ pub(crate) fn parse_with_limits(
 
     let ctmd = select_ctmd_sample(&file, data, limits.max_ctmd_sample_bytes)?;
     let as_shot_white_balance = ctmd::extract_eos_r8_as_shot_white_balance(ctmd.bytes)?;
+    let sensor_levels = ctmd::extract_eos_r8_sensor_levels(ctmd.bytes)?;
 
     Ok(NativeFrame {
         file_len: file.file_len,
@@ -246,6 +250,7 @@ pub(crate) fn parse_with_limits(
         ctmd_track_id: ctmd.track_id,
         ctmd_sample_location: ctmd.location,
         as_shot_white_balance,
+        sensor_levels,
     })
 }
 
@@ -558,7 +563,7 @@ mod tests {
                     frame.as_shot_white_balance.red_numerator,
                     frame.as_shot_white_balance.red_denominator,
                     frame.as_shot_white_balance.blue_numerator,
-                    frame.as_shot_white_balance.blue_denominator,
+                    frame.as_shot_white_balance.second_green,
                 ],
                 white_balance
             );

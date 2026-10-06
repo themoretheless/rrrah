@@ -1,0 +1,82 @@
+{
+  "revision": "225c40c9f5d0ea3ff0e793ee1dacc386c198c3d4",
+  "sources": [
+    {
+      "name": "VectorApple.ai",
+      "source": "https://media.githubusercontent.com/media/opendesigndev/illustrator-parser-pdfcpu/225c40c9f5d0ea3ff0e793ee1dacc386c198c3d4/__tests__/fixtures/VectorApple.ai",
+      "sha256": "c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06",
+      "bytes": 1062861
+    },
+    {
+      "name": "one.ai",
+      "source": "https://media.githubusercontent.com/media/opendesigndev/illustrator-parser-pdfcpu/225c40c9f5d0ea3ff0e793ee1dacc386c198c3d4/__tests__/fixtures/one.ai",
+      "sha256": "97786949c268233a446e1738fb9c2f941e4d109811bd2f972948cdb7a45d64b4",
+      "bytes": 204049
+    }
+  ],
+  "decoder_sha256": "1be11811561152f45316e692a2f6bafdca16f7f1b72583be21464e69353db205",
+  "poppler_version": "pdftoppm version 26.10.0\nCopyright 2005-2026 The Poppler Developers - http://poppler.freedesktop.org\nCopyright 1996-2011, 2022 Glyph & Cog, LLC",
+  "scope": "Strict 72 dpi white-composite RGB comparison; no tolerance. No GPU, private AI data or full format qualification.",
+  "pages": [
+    {
+      "file": "VectorApple.ai",
+      "index": 0,
+      "exact": false,
+      "native": {
+        "width": 301,
+        "height": 246,
+        "image_index": 0,
+        "image_count": 1
+      },
+      "poppler_header": "P6\n301 246",
+      "different_pixels": 33054,
+      "max_channel_error": 213,
+      "rgba_sha256": "a84138ff1851b9f661731778107fdd6d6d10535c523cd1c6cd6aba113f2295d7"
+    },
+    {
+      "file": "one.ai",
+      "index": 0,
+      "exact": false,
+      "native": {
+        "width": 1366,
+        "height": 768,
+        "image_index": 0,
+        "image_count": 2
+      },
+      "poppler_header": "P6\n1366 768",
+      "different_pixels": 2790,
+      "max_channel_error": 115,
+      "rgba_sha256": "027fc9ed92a3b78452a61c4fafcaec04944eeaad3b1e753b809f7edc0cf4b417"
+    },
+    {
+      "file": "one.ai",
+      "index": 1,
+      "exact": true,
+      "native": {
+        "width": 177,
+        "height": 175,
+        "image_index": 1,
+        "image_count": 2
+      },
+      "poppler_header": "P6\n177 175",
+      "different_pixels": 0,
+      "max_channel_error": 0,
+      "rgba_sha256": "155a1e78cb7d2dd3d3aaf2832e7591b61f9ec0cbf5b97bef36a7787a5907f38f"
+    }
+  ],
+  "viewer_tests": [
+    {
+      "test": "foreground_loader_tests::real_ai_pages_use_shared_ram_hits_and_independent_prefetch_keys",
+      "exit": 0,
+      "passed": true,
+      "output": "test foreground_loader_tests::real_ai_pages_use_shared_ram_hits_and_independent_prefetch_keys ... ok\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 128 filtered out; finished in 0.22s"
+    },
+    {
+      "test": "real_ai_pages_swap_preserves_pixels_and_metal_frame",
+      "exit": 0,
+      "passed": true,
+      "output": "test real_ai_pages_swap_preserves_pixels_and_metal_frame ... ok\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 1.00s\nAI adapter: Metal Apple M4 Max"
+    }
+  ],
+  "combined_gate": "failed: two pages differ from Poppler; viewer transport tests pass"
+}

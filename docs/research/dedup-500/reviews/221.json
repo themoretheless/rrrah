@@ -1,0 +1,78 @@
+{
+  "index": 221,
+  "repository": "alexgQQ/dedupe",
+  "commit": "7f2b3d411e4919010c1af41821aa041835358f40",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Go image hash types and dedicated hash tests; promising visual oracle but preprocessing/calibration not yet established.",
+  "available_source_evidence": [
+    {
+      "path": "dedupe.go",
+      "local": "02-dedupe.go",
+      "url": "https://github.com/alexgQQ/dedupe/blob/7f2b3d411e4919010c1af41821aa041835358f40/dedupe.go",
+      "sha256": "064083a3f78d4a7885936b1c452d5a2a8c8a7b6daf26f4a71c63a2643b660092",
+      "truncated": false,
+      "lines": 146,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "hash/hash.go",
+      "local": "03-hash.go",
+      "url": "https://github.com/alexgQQ/dedupe/blob/7f2b3d411e4919010c1af41821aa041835358f40/hash/hash.go",
+      "sha256": "f5a7a5bcb5fc6724adc914e73d59b39a23e5adc19333194e261ba98b05073a99",
+      "truncated": false,
+      "lines": 159,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "cmd/dedupe/main.go",
+      "local": "04-main.go",
+      "url": "https://github.com/alexgQQ/dedupe/blob/7f2b3d411e4919010c1af41821aa041835358f40/cmd/dedupe/main.go",
+      "sha256": "30521b9a6fcd0c8cbabe1ecccd1301be3a86288f572110f392fbfdc6b8b617f9",
+      "truncated": false,
+      "lines": 238,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "hash/hash_test.go",
+      "local": "05-hash_test.go",
+      "url": "https://github.com/alexgQQ/dedupe/blob/7f2b3d411e4919010c1af41821aa041835358f40/hash/hash_test.go",
+      "sha256": "519e682abdab7721dc8a2206432665e8baf4e4759f988d35fc725d88b6ce0f10",
+      "truncated": false,
+      "lines": 79,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 5,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/alexgQQ/dedupe/blob/7f2b3d411e4919010c1af41821aa041835358f40/README.md",
+      "sha256": "01c726dfe2548b6743b0eb39636fcc849d3e1a634fb4256d637514a1f6639906",
+      "truncated": false,
+      "lines": 141,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/alexgQQ/dedupe/blob/7f2b3d411e4919010c1af41821aa041835358f40/LICENSE",
+      "sha256": "e08f00cb2a20682ba7ad91e9105da35fa993994cf50deb58df53ee0268bb4171",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

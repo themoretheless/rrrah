@@ -1,0 +1,164 @@
+{
+  "binary_sha256": "5af066ebcac84190fa874fcdbe5fb884ce0b87d0868a969940f9d2ea228daa68",
+  "manifest": {
+    "license": "CC0-1.0",
+    "construction": "authored big-endian XCF v0, raw tile, two RGB palette entries red/green; indexed alpha samples 127 and 128 test legacy binary threshold",
+    "scope": "native plane and palette expansion; no flattened/color-managed image oracle",
+    "cases": [
+      {
+        "file": "indexed-v0-kind-4.xcf",
+        "sha256": "0166bf06e56f4c0efa415f73efb0438f62a0a6f47dc874b4defcf847100fce04",
+        "native_hex": "0100",
+        "rgba_hex": "00ff00ffff0000ff",
+        "dimensions": [
+          2,
+          1
+        ],
+        "kind": 4
+      },
+      {
+        "file": "indexed-v0-kind-5.xcf",
+        "sha256": "76f76d13a8620dd3d6f850f1df92189883b3f398089ac6c4a5c5f77c81f5b4f4",
+        "native_hex": "017f0080",
+        "rgba_hex": "00ff0000ff0000ff",
+        "dimensions": [
+          2,
+          1
+        ],
+        "kind": 5
+      }
+    ]
+  },
+  "results": [
+    {
+      "case": "indexed-v0-kind-4.xcf",
+      "records": [
+        {
+          "icc_profile_bytes": 0
+        },
+        {
+          "tree_node": 0,
+          "parent": null,
+          "sibling": 0,
+          "is_group": false
+        },
+        {
+          "version": 0,
+          "width": 2,
+          "height": 1,
+          "compression": 0,
+          "channels": 0
+        },
+        {
+          "layer_property_count": 0,
+          "count": 0
+        },
+        {
+          "layer_group": 0,
+          "is_group": false,
+          "item_path": []
+        },
+        {
+          "layer_composition": 0,
+          "blend_mode": 0,
+          "composite_mode": null,
+          "composite_space": null,
+          "blend_space": null
+        },
+        {
+          "layer_attributes": 0,
+          "visible": true,
+          "opacity": 1,
+          "offset_x": 0,
+          "offset_y": 0,
+          "apply_mask": false
+        },
+        {
+          "layer": 0,
+          "width": 2,
+          "height": 1,
+          "kind": 4,
+          "mask": 0,
+          "effects": 0,
+          "pixel_blake3": "687376c930d7020a32f04c396fc2e5eab49cd09a738fa03d573033416a6a47ce"
+        },
+        {
+          "indexed_rgba_layer": 0,
+          "pixel_blake3": "5ac065367971269bc86a9238d431ed1b108dfcf775e81b022fcfbf71231a2a6e"
+        },
+        {
+          "managed_peak": 169,
+          "managed_used": 0
+        }
+      ],
+      "native_exact": true,
+      "rgba_exact": true
+    },
+    {
+      "case": "indexed-v0-kind-5.xcf",
+      "records": [
+        {
+          "icc_profile_bytes": 0
+        },
+        {
+          "tree_node": 0,
+          "parent": null,
+          "sibling": 0,
+          "is_group": false
+        },
+        {
+          "version": 0,
+          "width": 2,
+          "height": 1,
+          "compression": 0,
+          "channels": 0
+        },
+        {
+          "layer_property_count": 0,
+          "count": 0
+        },
+        {
+          "layer_group": 0,
+          "is_group": false,
+          "item_path": []
+        },
+        {
+          "layer_composition": 0,
+          "blend_mode": 0,
+          "composite_mode": null,
+          "composite_space": null,
+          "blend_space": null
+        },
+        {
+          "layer_attributes": 0,
+          "visible": true,
+          "opacity": 1,
+          "offset_x": 0,
+          "offset_y": 0,
+          "apply_mask": false
+        },
+        {
+          "layer": 0,
+          "width": 2,
+          "height": 1,
+          "kind": 5,
+          "mask": 0,
+          "effects": 0,
+          "pixel_blake3": "9b504bcf289b9e2499e55c5b3e66042504cb7239545601442d2a5f343a01176a"
+        },
+        {
+          "indexed_rgba_layer": 0,
+          "pixel_blake3": "df8ccd3bceca62c35ecf2623c7e35ab9ef56fd3e2debe9bed6811e83b527fc47"
+        },
+        {
+          "managed_peak": 171,
+          "managed_used": 0
+        }
+      ],
+      "native_exact": true,
+      "rgba_exact": true
+    }
+  ],
+  "scope": "authored v0 palette/tile payloads; not full XCF viewer support",
+  "status": "superseded: v0 indexed file premise invalid; see xcf-indexed-v1-native-2026-10-06.json"
+}

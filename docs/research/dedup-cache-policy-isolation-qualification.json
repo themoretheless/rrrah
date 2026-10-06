@@ -1,0 +1,38 @@
+{
+  "status": "passed",
+  "tests": {
+    "decode": 12,
+    "cache": 6,
+    "failed": 0,
+    "ignored": 0,
+    "filtered": 0
+  },
+  "checks": [
+    "untagged PPM interpreted as sRGB caches only under explicit interpretation",
+    "strict PPM request still errors after permissive entry exists",
+    "linear-assumption toggle creates separate entry even where encoded interpretation stays equal",
+    "three TIFF pages each initially miss then hit their own fingerprint",
+    "independently labelled page fingerprints differ pairwise",
+    "lower directory limit rejects even when page entries exist",
+    "out-of-range fourth page rejects",
+    "managed reservations return to zero"
+  ],
+  "logs": {
+    "tests": {
+      "path": "docs/research/dedup-cache-policy-isolation-tests.log",
+      "sha256": "e21eb384312b51a9f780042092822cc3004d3cb14d447ae2bbca304d2dfd27ed"
+    },
+    "clippy": {
+      "path": "docs/research/dedup-cache-policy-isolation-clippy.log",
+      "sha256": "8d04f6b84eda5fe62658710ce3cd1f910e18c61fd9dc50f07eb49d5bbcf6c109"
+    }
+  },
+  "test_sha256": "3766a18a7b5a584aa09f9a32accb572212ce97692e9985645eea5f996a661fa8",
+  "hash_timing": "post-validation only",
+  "clippy": "passed with existing decoder warnings",
+  "limits": [
+    "two generated fixture families, not complete color/RAW/platform recipe qualification",
+    "production key implementation unchanged",
+    "full acceptance contract remains incomplete"
+  ]
+}

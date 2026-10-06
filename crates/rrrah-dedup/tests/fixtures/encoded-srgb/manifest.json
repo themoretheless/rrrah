@@ -1,0 +1,33 @@
+{
+  "generator": "generate-dedup-encoded-srgb-fixtures.py",
+  "license": "CC0-1.0",
+  "reference": "https://www.w3.org/TR/2026/CRD-css-color-4-20260930/#color-conversion-code",
+  "precision_decimal_digits": 80,
+  "dimensions": [
+    17,
+    17
+  ],
+  "scope": "Authored encoded-space affine gain .7 and offset .02, central 9x9 encoded additive edit .15, central 3x3 alpha removal. Mathematical fixtures; no native rrrah conversion used.",
+  "files": [
+    {
+      "file": "affine.rgba32le",
+      "sha256": "825a8cfbcf36391bc621323534a5b7d5ec277e314f6af810f23119c2363c0849"
+    },
+    {
+      "file": "alpha-edit.rgba32le",
+      "sha256": "1ed5261577ed6d4f880f50dd302a7f624535e0e4b0ab5b3b9959dddb65c3fa49"
+    },
+    {
+      "file": "broad-edit.rgba32le",
+      "sha256": "8b7756bad95101070c26fe13eb9383fc6071184432291326c8099601413e804d"
+    },
+    {
+      "file": "source.rgba32le",
+      "sha256": "25d9cbe09c3f85ad8d8fdbdef7a84dc57770f1e9a9b6789c9df1be6cb8c70bdd"
+    },
+    {
+      "file": "transfer.tsv",
+      "sha256": "6cbc667db7d84312a3a01fb5214011bde82e626180db12903d145951b7400a5c"
+    }
+  ]
+}

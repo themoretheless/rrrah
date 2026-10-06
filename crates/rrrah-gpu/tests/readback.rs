@@ -479,3 +479,111 @@ fn out_of_gamut_camera_colors_desaturate_matching_cpu_reference() {
         }
     }
 }
+
+#[test]
+fn raw_atlas_budget_accounts_halos_and_preserves_image_on_refusal() {
+    let instance = common::headless_instance();
+    let adapter = pollster::block_on(common::request_adapter(
+        &instance,
+        &wgpu::RequestAdapterOptions::default(),
+    ))
+    .unwrap();
+    eprintln!("RAW budget adapter: {:?}", adapter.get_info());
+    let (device, queue) =
+        pollster::block_on(adapter.request_device(&wgpu::DeviceDescriptor::default())).unwrap();
+    let tiling = rrrah_gpu::TilingOverrides {
+        tile_size: Some(32),
+        tile_halo: Some(2),
+    };
+    let small = common::uniform_mosaic(32, 32, 32768, 65535.0);
+    let large = common::uniform_mosaic(64, 32, 32768, 65535.0);
+    let plan = rrrah_gpu::plan_tiling(
+        32,
+        32,
+        device.limits().max_texture_dimension_2d,
+        device.limits().max_texture_array_layers,
+        tiling,
+    )
+    .unwrap();
+    let queued_bytes =
+        u64::from(plan.texture_extent) * (u64::from(plan.texture_extent) * 2).div_ceil(256) * 256;
+    let queued = rrrah_core::MemoryBudget::new(queued_bytes);
+    let bytes = plan.atlas_bytes;
+    let budget = rrrah_core::MemoryBudget::new(bytes * 2);
+    let extent = u64::from(plan.texture_extent);
+    let pack_bytes = extent * extent * 2 + (extent * 2).div_ceil(256) * 256 * extent;
+    let cpu = rrrah_core::MemoryBudget::new(pack_bytes);
+    let mut renderer =
+        rrrah_gpu::RawRenderer::new_with_budget(&device, common::READBACK_FORMAT, budget.clone())
+            .with_upload_memory_budget(cpu.clone());
+    renderer
+        .upload_mosaic_with_tiling(&device, &queue, &small, tiling)
+        .unwrap();
+    let queue_tight = rrrah_core::MemoryBudget::new(queued_bytes - 1);
+    renderer = renderer.with_upload_queue_budget(queue_tight.clone());
+    assert!(matches!(
+        renderer.upload_mosaic_with_tiling(&device, &queue, &small, tiling),
+        Err(rrrah_gpu::GpuError::Memory(_))
+    ));
+    assert_eq!(queue_tight.peak(), 0);
+    assert!(renderer.has_image());
+    renderer = renderer.with_upload_queue_budget(queued.clone());
+    renderer
+        .upload_mosaic_with_tiling(&device, &queue, &small, tiling)
+        .unwrap();
+    assert_eq!(queued.peak(), queued_bytes);
+    device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
+    assert_eq!(queued.used(), 0);
+    device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
+    assert_eq!(budget.used(), bytes);
+    assert_eq!(cpu.peak(), pack_bytes);
+    assert_eq!(cpu.used(), 0);
+    let tight = rrrah_core::MemoryBudget::new(pack_bytes - 1);
+    renderer = renderer.with_upload_memory_budget(tight.clone());
+    assert!(matches!(
+        renderer.upload_mosaic_with_tiling(&device, &queue, &small, tiling),
+        Err(rrrah_gpu::GpuError::Memory(_))
+    ));
+    assert_eq!(tight.used(), 0);
+    device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
+    assert_eq!(budget.used(), bytes);
+    assert!(renderer.has_image());
+    renderer = renderer.with_upload_memory_budget(cpu.clone());
+    assert!(bytes > small.byte_len() as u64);
+    assert!(matches!(
+        renderer.upload_mosaic_with_tiling(&device, &queue, &large, tiling),
+        Err(rrrah_gpu::GpuError::Memory(_))
+    ));
+    assert!(renderer.has_image());
+    assert_eq!(renderer.resident_bytes(), bytes);
+    device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
+    assert_eq!(budget.used(), bytes);
+    renderer
+        .upload_mosaic_with_tiling(&device, &queue, &small, tiling)
+        .unwrap();
+    assert_eq!(budget.peak(), bytes * 2);
+    renderer.clear_image();
+    device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
+    renderer = renderer.with_upload_queue_budget(queued.child(queued_bytes));
+    // The two-layer upload is refused by the independent queue limit.
+    assert!(matches!(
+        renderer.upload_mosaic_with_tiling(&device, &queue, &large, tiling),
+        Err(rrrah_gpu::GpuError::Memory(_))
+    ));
+    let large_queued = rrrah_core::MemoryBudget::new(queued_bytes * 2);
+    renderer = renderer.with_upload_queue_budget(large_queued.clone());
+    device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
+    assert_eq!(budget.used(), 0);
+    renderer
+        .upload_mosaic_with_tiling(&device, &queue, &large, tiling)
+        .unwrap();
+    device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
+    assert_eq!(budget.used(), bytes * 2);
+    drop(renderer);
+    device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
+    assert_eq!(queued.used(), 0);
+    assert_eq!(large_queued.used(), 0);
+    assert_eq!(large_queued.peak(), queued_bytes * 2);
+    device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
+    assert_eq!(budget.used(), 0);
+}

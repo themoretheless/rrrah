@@ -33,9 +33,9 @@ fn milliseconds(duration: Duration) -> f64 {
     clippy::cast_sign_loss
 )]
 fn percentile(values: &mut [f64], fraction: f64) -> f64 {
+    assert!(!values.is_empty() && fraction > 0. && fraction <= 1.);
     values.sort_by(f64::total_cmp);
-    let index = ((values.len() - 1) as f64 * fraction).round() as usize;
-    values[index.min(values.len() - 1)]
+    values[(values.len() as f64 * fraction).ceil() as usize - 1]
 }
 
 fn pixel_digest(pixels: &[u16]) -> String {

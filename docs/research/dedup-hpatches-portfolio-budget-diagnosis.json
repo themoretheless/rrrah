@@ -1,0 +1,94 @@
+{
+  "status": "diagnosed_probe_resource_admission_limit",
+  "recorded_pairs": 176,
+  "required_pairs": 580,
+  "affected_pairs": [
+    [
+      "i_fruits",
+      2
+    ],
+    [
+      "i_fruits",
+      3
+    ],
+    [
+      "i_fruits",
+      4
+    ],
+    [
+      "i_fruits",
+      5
+    ],
+    [
+      "i_fruits",
+      6
+    ],
+    [
+      "i_nuts",
+      2
+    ],
+    [
+      "i_nuts",
+      3
+    ]
+  ],
+  "frozen_probe_sha256": "78f67dd602e36d8094ea018810a66930f6abaec2b9bbfc9873f26755a7b53b86",
+  "pixels_per_image": 102400,
+  "required_two_lane_bidirectional_pixel_visits": 409600,
+  "frozen_max_source_pixels": 400000,
+  "window_work_required": 3686400,
+  "frozen_window_budget": 4000000,
+  "finding": "Two 320x320 inputs require 409600 pixel visits for both required lanes. The frozen probe admits 400000 and correctly returns Pixels(Budget). This is a probe resource configuration limitation, not a measured matching rejection.",
+  "next_action": "Preserve the running frozen all-580 evaluation. Qualify a separate probe with an explicitly sufficient resource budget; keep matching thresholds fixed and retain original refusal records.",
+  "case_resource_admission": [
+    {
+      "sequence": "i_fruits",
+      "target_index": 2,
+      "required_pixel_visits": 409600,
+      "exceeds_original_400000": true,
+      "fits_corrected_409600": true
+    },
+    {
+      "sequence": "i_fruits",
+      "target_index": 3,
+      "required_pixel_visits": 409600,
+      "exceeds_original_400000": true,
+      "fits_corrected_409600": true
+    },
+    {
+      "sequence": "i_fruits",
+      "target_index": 4,
+      "required_pixel_visits": 409600,
+      "exceeds_original_400000": true,
+      "fits_corrected_409600": true
+    },
+    {
+      "sequence": "i_fruits",
+      "target_index": 5,
+      "required_pixel_visits": 409600,
+      "exceeds_original_400000": true,
+      "fits_corrected_409600": true
+    },
+    {
+      "sequence": "i_fruits",
+      "target_index": 6,
+      "required_pixel_visits": 409600,
+      "exceeds_original_400000": true,
+      "fits_corrected_409600": true
+    },
+    {
+      "sequence": "i_nuts",
+      "target_index": 2,
+      "required_pixel_visits": 409600,
+      "exceeds_original_400000": true,
+      "fits_corrected_409600": true
+    },
+    {
+      "sequence": "i_nuts",
+      "target_index": 3,
+      "required_pixel_visits": 409600,
+      "exceeds_original_400000": true,
+      "fits_corrected_409600": true
+    }
+  ]
+}

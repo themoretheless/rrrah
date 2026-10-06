@@ -1,0 +1,68 @@
+{
+  "index": 162,
+  "repository": "VenomVendor/DeduplicateSMS",
+  "commit": "da9fe1545661e610bc94ba295ec5ce09f6c772cd",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Android SMS AsyncTask and duplicate list; record-domain comparisons.",
+  "available_source_evidence": [
+    {
+      "path": "app/src/main/java/com/venomvendor/sms/deduplicate/activity/Deduplication.java",
+      "local": "02-Deduplication.java",
+      "url": "https://github.com/VenomVendor/DeduplicateSMS/blob/da9fe1545661e610bc94ba295ec5ce09f6c772cd/app/src/main/java/com/venomvendor/sms/deduplicate/activity/Deduplication.java",
+      "sha256": "4da5eb4746cd28ed4dac91be7972a6fc4310b2a918d924597e3697276a98d57e",
+      "truncated": false,
+      "lines": 495,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "app/src/main/java/com/venomvendor/sms/deduplicate/data/DuplicateList.java",
+      "local": "03-DuplicateList.java",
+      "url": "https://github.com/VenomVendor/DeduplicateSMS/blob/da9fe1545661e610bc94ba295ec5ce09f6c772cd/app/src/main/java/com/venomvendor/sms/deduplicate/data/DuplicateList.java",
+      "sha256": "867401da789de0f6e3154e672ab992577b95099ab545bdeecee84808b0d157a5",
+      "truncated": false,
+      "lines": 18,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "app/src/main/java/com/venomvendor/sms/deduplicate/data/FindDuplicates.java",
+      "local": "04-FindDuplicates.java",
+      "url": "https://github.com/VenomVendor/DeduplicateSMS/blob/da9fe1545661e610bc94ba295ec5ce09f6c772cd/app/src/main/java/com/venomvendor/sms/deduplicate/data/FindDuplicates.java",
+      "sha256": "659aba8feee3c3470e9629f1b33c7824c0665b90258bfe0921be4a697d961bce",
+      "truncated": false,
+      "lines": 212,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "Apache-2.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/VenomVendor/DeduplicateSMS/blob/da9fe1545661e610bc94ba295ec5ce09f6c772cd/README.md",
+      "sha256": "3a85cf4300883ae1f18cac7335705cfb13c2a034d38b83073b956fb51a700f73",
+      "truncated": false,
+      "lines": 28,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/VenomVendor/DeduplicateSMS/blob/da9fe1545661e610bc94ba295ec5ce09f6c772cd/LICENSE",
+      "sha256": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1",
+      "truncated": false,
+      "lines": 201,
+      "source": false,
+      "test": false
+    }
+  ]
+}

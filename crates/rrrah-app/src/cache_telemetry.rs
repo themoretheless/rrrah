@@ -372,6 +372,14 @@ impl CacheTelemetry {
         }
     }
 
+    /// A valid neighbour belongs to another decoder, so the RAW check completed
+    /// without a cache hit, write or decoding failure.
+    pub fn record_prefetch_skipped(&self, generation: u64) {
+        if self.prefetch_generation.load(Ordering::Acquire) == generation {
+            self.prefetch_completed.fetch_add(1, Ordering::Relaxed);
+        }
+    }
+
     pub fn finish_prefetch(&self, generation: u64) {
         self.set_prefetch_phase(generation, PrefetchPhase::Complete);
     }

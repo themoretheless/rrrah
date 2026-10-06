@@ -1,0 +1,43 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: function `error` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:4:4
+  |
+4 | fn error(message: &str) -> DecodeError {
+  |    ^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `packed_12` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:9:4
+  |
+9 | fn packed_12(
+  |    ^^^^^^^^^
+
+warning: function `decode_zd` is never used
+  --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:48:15
+   |
+48 | pub(super) fn decode_zd(
+   |               ^^^^^^^^^
+
+warning: `rrrah-decode` (lib) generated 3 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 13.31s
+     Running tests/decode.rs (target/debug/deps/decode-5a0200c3e292c20e)
+
+running 1 test
+test cached_content_does_not_bypass_extension_selected_decoder_errors ... FAILED
+
+failures:
+
+---- cached_content_does_not_bypass_extension_selected_decoder_errors stdout ----
+
+thread 'cached_content_does_not_bypass_extension_selected_decoder_errors' (2038967) panicked at crates/rrrah-dedup/tests/decode.rs:633:5:
+cache must retain the fresh decoder's error behavior
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    cached_content_does_not_bypass_extension_selected_decoder_errors
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 12 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p rrrah-dedup --test decode`

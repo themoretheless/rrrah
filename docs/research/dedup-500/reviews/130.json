@@ -1,0 +1,78 @@
+{
+  "index": 130,
+  "repository": "benetech/VideoDeduplication",
+  "commit": "59222c64250886aefdc70e0541d830ca9200b5d7",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Video match-generation entrypoints with frame sampling; inspect matching backend before applying animation policies.",
+  "available_source_evidence": [
+    {
+      "path": "generate_matches.py",
+      "local": "02-generate_matches.py",
+      "url": "https://github.com/benetech/VideoDeduplication/blob/59222c64250886aefdc70e0541d830ca9200b5d7/generate_matches.py",
+      "sha256": "7c97a486dd41ada2436e52538a52540813a925a4ed39b4c59c028efdc3119f95",
+      "truncated": false,
+      "lines": 55,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "generate_matches_remote.py",
+      "local": "03-generate_matches_remote.py",
+      "url": "https://github.com/benetech/VideoDeduplication/blob/59222c64250886aefdc70e0541d830ca9200b5d7/generate_matches_remote.py",
+      "sha256": "e934f1e8d36eca0098d55a78980d28352239c19aa0e2e97225357e2a0e7e264f",
+      "truncated": false,
+      "lines": 53,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "generate_remote_matches.py",
+      "local": "04-generate_remote_matches.py",
+      "url": "https://github.com/benetech/VideoDeduplication/blob/59222c64250886aefdc70e0541d830ca9200b5d7/generate_remote_matches.py",
+      "sha256": "dc1a1e29d56fd01e664b02f6fe1c11cf87ced5e2d989c3657ccc34c02ae991bd",
+      "truncated": false,
+      "lines": 49,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "server/tests/db/access/test_matches_dao.py",
+      "local": "05-test_matches_dao.py",
+      "url": "https://github.com/benetech/VideoDeduplication/blob/59222c64250886aefdc70e0541d830ca9200b5d7/server/tests/db/access/test_matches_dao.py",
+      "sha256": "a15c0612661cc6c7e30d74c68529cc74ac13a95b682a77d3e96cc32169d33b6f",
+      "truncated": false,
+      "lines": 227,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "GPL-3.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 24,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/benetech/VideoDeduplication/blob/59222c64250886aefdc70e0541d830ca9200b5d7/README.md",
+      "sha256": "790162ab3286cc379d803b2a46dadcaf6ac38f918736c71bc72349cd7789159c",
+      "truncated": false,
+      "lines": 326,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/benetech/VideoDeduplication/blob/59222c64250886aefdc70e0541d830ca9200b5d7/LICENSE",
+      "sha256": "db577a83cb12a0be806cd166a31fa86335768c7981424181028a1a1bfbac0c62",
+      "truncated": false,
+      "lines": 219,
+      "source": false,
+      "test": false
+    }
+  ]
+}

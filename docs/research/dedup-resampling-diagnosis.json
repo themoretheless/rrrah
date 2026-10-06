@@ -1,0 +1,149 @@
+{
+  "scope": "Centered least-squares refinement of winning similarity support plus independent camera-preview resampling/JPEG diagnosis. Four scenes are development fixtures, not general calibration.",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/geometry.rs": "2b1130ca65b451ebfd5f8d9375266e63f35ff7f64542755affd12dfc62093f37",
+    "crates/rrrah-dedup/tests/geometry.rs": "183bc8a32476d56f457aa6537806a0644153cb51fd89f3da0b7ef7414f81992c",
+    "crates/rrrah-dedup/examples/photo_probe.rs": "946576e881f42dc1a03f7c67b0e769133437f2d6616c4520182e729862ffaac8",
+    "crates/rrrah-dedup/tests/photo_jpeg_oracle.rs": "7c9b3dab72c924c056e8b749cc14ed6aa4b64ad95e7b8dd147282b243b83e450",
+    "crates/rrrah-dedup/tests/fixtures/photos-jpeg-oracle/manifest.json": "2bd5c13310dfc347121c5b572cf99f717326aa108c80819c6b8057f77c4eb382",
+    "scripts/generate-dedup-photo-jpeg-oracles.py": "c8e88c7c45cc668de1c71017aee3cca79b814b370e394aabb955a47b3764a1c5"
+  },
+  "commands": [
+    "cargo run -p rrrah-dedup --features decode --example photo_probe -- --photometric --geometry-oracle",
+    "cargo run -p rrrah-dedup --features decode --example photo_probe -- --jpeg-decoder-oracle",
+    "cargo test -p rrrah-dedup --all-features",
+    "cargo clippy -p rrrah-dedup --all-features --tests --examples --no-deps -- -D warnings"
+  ],
+  "geometry_oracle": "Identity for JPEG; known authored 17-degree Pillow expanded rotation in pixel-center coordinates. No feature matching used to obtain these oracle transforms. Resize not covered by this geometry oracle.",
+  "oracle_results": [
+    {
+      "scene": 830,
+      "variant": "rotate",
+      "directional_matched_fractions": [
+        0.9931044600938967,
+        0.9992606612645649
+      ],
+      "both_meet_90_percent": true,
+      "detail": "oracle 830 rotate: geometry=Transform { a: 0.9563047559630354, b: -0.29237170472273677, translation: [0.9779907232857461, 94.26498277119475] } feature_geometry=Some(GeometryEvidence { transform: Transform { a: 0.9562960539957427, b: -0.2922218059124442, translation: [1.0359361392467576, 94.27122832309249] }, inliers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128], squared_error: 34.612039368177236 }) residual=BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.9614947905708133, 0.9611707930592567, 0.9554555624802048], offset: [0.008066812589307748, 0.004654651144485461, 0.003090596790810571], fitted_samples: 68160, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 68160, matched_pixels: 67690, maximum_channel_error: 0.134600748599467, squared_error: 6.3894928970772655 } }, reverse: PhotometricEvidence { gain: [0.9420890822005173, 0.9448900991953443, 0.9393854303546741], offset: [0.017705769691984785, 0.010389416802011331, 0.006804726492458432], fitted_samples: 67628, pixels: WarpEvidence { source_pixels: 110630, compared_pixels: 67628, matched_pixels: 67578, maximum_channel_error: 0.06088016163078086, squared_error: 4.096110233751125 } } }"
+    },
+    {
+      "scene": 830,
+      "variant": "jpeg",
+      "directional_matched_fractions": [
+        0.9418133802816901,
+        0.9523767605633803
+      ],
+      "both_meet_90_percent": true,
+      "detail": "oracle 830 jpeg: geometry=Transform { a: 1.0, b: 0.0, translation: [0.0, 0.0] } feature_geometry=Some(GeometryEvidence { transform: Transform { a: 0.999289425445198, b: -1.3985015314041365e-6, translation: [0.08463378248266723, 0.07136778704331448] }, inliers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88], squared_error: 10.566052809128587 }) residual=BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [1.0069590874030654, 0.9306405373794114, 0.957620075060684], offset: [0.0011232001158870686, 0.00957280739529931, 0.005659044813221811], fitted_samples: 68160, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 68160, matched_pixels: 64194, maximum_channel_error: 0.13692937099875802, squared_error: 30.650732400700196 } }, reverse: PhotometricEvidence { gain: [0.8982856836062586, 0.9866214501112943, 0.926561953277201], offset: [0.02505176879265747, 0.003937580822943626, 0.005578859320599899], fitted_samples: 68160, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 68160, matched_pixels: 64914, maximum_channel_error: 0.11503935564466972, squared_error: 29.12023403447083 } } }"
+    },
+    {
+      "scene": 898,
+      "variant": "rotate",
+      "directional_matched_fractions": [
+        0.961901285046729,
+        0.9590569258844999
+      ],
+      "both_meet_90_percent": true,
+      "detail": "oracle 898 rotate: geometry=Transform { a: 0.9563047559630354, b: -0.29237170472273677, translation: [0.8318048709243762, 94.28683039321324] } feature_geometry=Some(GeometryEvidence { transform: Transform { a: 0.9581892486639422, b: -0.29063187676831187, translation: [0.6483810122603018, 93.84344545740332] }, inliers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188], squared_error: 77.44647909462384 }) residual=BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.9376820998665006, 0.9390439818728642, 0.9334629527131953], offset: [0.0035861965389762523, 0.0014006973505889912, 0.0015069902513764888], fitted_samples: 68480, pixels: WarpEvidence { source_pixels: 68480, compared_pixels: 68480, matched_pixels: 65871, maximum_channel_error: 0.41455024862113166, squared_error: 35.88972706690467 } }, reverse: PhotometricEvidence { gain: [0.9236927304605665, 0.9246694858794877, 0.9185212559936587], offset: [0.005569037333046478, 0.0020485163411551807, 0.0022225492645208365], fitted_samples: 67948, pixels: WarpEvidence { source_pixels: 111000, compared_pixels: 67948, matched_pixels: 65166, maximum_channel_error: 0.29695219164341213, squared_error: 41.08953333254858 } } }"
+    },
+    {
+      "scene": 898,
+      "variant": "jpeg",
+      "directional_matched_fractions": [
+        0.943516355140187,
+        0.9427570093457944
+      ],
+      "both_meet_90_percent": true,
+      "detail": "oracle 898 jpeg: geometry=Transform { a: 1.0, b: 0.0, translation: [0.0, 0.0] } feature_geometry=Some(GeometryEvidence { transform: Transform { a: 1.0, b: 0.0, translation: [0.0, 0.0] }, inliers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180], squared_error: 39.0 }) residual=BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.9646192100011326, 0.9778374866846933, 0.9334619898401663], offset: [0.0018087772251368234, 0.000404969186497791, 0.0019566388833499038], fitted_samples: 68480, pixels: WarpEvidence { source_pixels: 68480, compared_pixels: 68480, matched_pixels: 64612, maximum_channel_error: 0.39772626171194525, squared_error: 55.29740743399695 } }, reverse: PhotometricEvidence { gain: [1.0032693520944844, 1.002669432563604, 1.0262160482643305], offset: [0.00033914222893725865, 9.036078408240084e-5, -0.0009403600605997764], fitted_samples: 68480, pixels: WarpEvidence { source_pixels: 68480, compared_pixels: 68480, matched_pixels: 64560, maximum_channel_error: 0.41621546756150274, squared_error: 58.51039611738382 } } }"
+    },
+    {
+      "scene": 1084,
+      "variant": "rotate",
+      "directional_matched_fractions": [
+        0.847890625,
+        0.8533037798704194
+      ],
+      "both_meet_90_percent": false,
+      "detail": "oracle 1084 rotate: geometry=Transform { a: 0.9563047559630354, b: -0.29237170472273677, translation: [1.0309727095287968, 93.85486856569378] } feature_geometry=Some(GeometryEvidence { transform: Transform { a: 0.9573804573804574, b: -0.29417879417879417, translation: [0.7775467775467817, 94.04989604989606] }, inliers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188], squared_error: 79.96777546777558 }) residual=BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.9704712892889026, 0.9710324829072239, 0.9744472311106608], offset: [0.007343966985702777, 0.005630003065037303, 0.004735058493290589], fitted_samples: 76800, pixels: WarpEvidence { source_pixels: 76800, compared_pixels: 76800, matched_pixels: 65118, maximum_channel_error: 0.2814970851828107, squared_error: 122.3777828616844 } }, reverse: PhotometricEvidence { gain: [0.9649136047592257, 0.9573399210294276, 0.9575065612351981], offset: [0.012207920417482532, 0.01103437870494961, 0.008900967580749902], fitted_samples: 76246, pixels: WarpEvidence { source_pixels: 122472, compared_pixels: 76246, matched_pixels: 65061, maximum_channel_error: 0.38952145541331806, squared_error: 114.036234539089 } } }"
+    },
+    {
+      "scene": 1084,
+      "variant": "jpeg",
+      "directional_matched_fractions": [
+        0.5709635416666666,
+        0.5674739583333334
+      ],
+      "both_meet_90_percent": false,
+      "detail": "oracle 1084 jpeg: geometry=Transform { a: 1.0, b: 0.0, translation: [0.0, 0.0] } feature_geometry=Some(GeometryEvidence { transform: Transform { a: 1.0003942062653848, b: -4.222052056836931e-5, translation: [-0.0906406049099686, -0.025487763293824628] }, inliers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 146, 147, 148, 149, 150, 151, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 205, 207, 208, 209, 210, 211, 212, 213, 214, 216, 217, 218, 219, 220, 221], squared_error: 46.66303360273931 }) residual=BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.9865914810343566, 0.9856339868592012, 0.9526437072362359], offset: [0.004354830116853059, 0.0025501468368256675, 0.006808729823628512], fitted_samples: 76800, pixels: WarpEvidence { source_pixels: 76800, compared_pixels: 76800, matched_pixels: 43850, maximum_channel_error: 0.6414609538814393, squared_error: 463.1629043980655 } }, reverse: PhotometricEvidence { gain: [0.9533191984860839, 0.9881381089974645, 1.0030468912150956], offset: [0.014387188361115688, 0.0036518824002124417, 0.00216911448175261], fitted_samples: 76800, pixels: WarpEvidence { source_pixels: 76800, compared_pixels: 76800, matched_pixels: 43582, maximum_channel_error: 0.6419039553228854, squared_error: 466.9803669197922 } } }"
+    },
+    {
+      "scene": 1294,
+      "variant": "rotate",
+      "directional_matched_fractions": [
+        0.7598884976525822,
+        0.8008960785473472
+      ],
+      "both_meet_90_percent": false,
+      "detail": "oracle 1294 rotate: geometry=Transform { a: 0.9563047559630354, b: -0.29237170472273677, translation: [0.9779907232857461, 94.26498277119475] } feature_geometry=Some(GeometryEvidence { transform: Transform { a: 0.9561062444480573, b: -0.2919024647895411, translation: [1.0807126779509986, 94.15323072545549] }, inliers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142], squared_error: 60.11987669994881 }) residual=BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.9478236437176967, 0.9486801926783042, 0.9461768787746062], offset: [0.0094231193145973, 0.00907142051937046, 0.008114530600527609], fitted_samples: 68160, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 68160, matched_pixels: 51794, maximum_channel_error: 0.5200509277603235, squared_error: 221.9322031949109 } }, reverse: PhotometricEvidence { gain: [0.9557832283384922, 0.9555444369573218, 0.9563852409611269], offset: [0.010838571003401742, 0.01053490310915875, 0.009228955443001702], fitted_samples: 67628, pixels: WarpEvidence { source_pixels: 110630, compared_pixels: 67628, matched_pixels: 54163, maximum_channel_error: 0.3415461064050507, squared_error: 152.85800350321315 } } }"
+    },
+    {
+      "scene": 1294,
+      "variant": "jpeg",
+      "directional_matched_fractions": [
+        0.5071449530516432,
+        0.5073943661971831
+      ],
+      "both_meet_90_percent": false,
+      "detail": "oracle 1294 jpeg: geometry=Transform { a: 1.0, b: 0.0, translation: [0.0, 0.0] } feature_geometry=Some(GeometryEvidence { transform: Transform { a: 1.0, b: 0.0, translation: [0.0, 0.0] }, inliers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201], squared_error: 41.0 }) residual=BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.9745689076212667, 0.9758093648175583, 0.9281298221773493], offset: [0.005390509642392544, 0.0029708823563300013, 0.010954373699001374], fitted_samples: 68160, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 68160, matched_pixels: 34567, maximum_channel_error: 0.6496116690399261, squared_error: 400.1329073960797 } }, reverse: PhotometricEvidence { gain: [0.9906020408362419, 0.9964054708962321, 1.0320309488504835], offset: [0.002148918897050156, 0.0028870093430438393, -0.00353324652823081], fitted_samples: 68160, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 68160, matched_pixels: 34584, maximum_channel_error: 0.6690850488454488, squared_error: 423.174584803632 } } }"
+    }
+  ],
+  "jpeg_decoder_oracle": [
+    {
+      "scene": 830,
+      "compared_pixels": 68160,
+      "matched_pixels": 68160,
+      "maximum_linear_channel_error": 0.01460278034210205,
+      "detail": "jpeg-decoder-oracle 830: WarpEvidence { source_pixels: 68160, compared_pixels: 68160, matched_pixels: 68160, maximum_channel_error: 0.01460278034210205, squared_error: 0.10725368221542533 }"
+    },
+    {
+      "scene": 898,
+      "compared_pixels": 68480,
+      "matched_pixels": 68480,
+      "maximum_linear_channel_error": 0.022349119186401367,
+      "detail": "jpeg-decoder-oracle 898: WarpEvidence { source_pixels: 68480, compared_pixels: 68480, matched_pixels: 68480, maximum_channel_error: 0.022349119186401367, squared_error: 0.21449426267805757 }"
+    },
+    {
+      "scene": 1084,
+      "compared_pixels": 76800,
+      "matched_pixels": 76800,
+      "maximum_linear_channel_error": 0.024629652500152588,
+      "detail": "jpeg-decoder-oracle 1084: WarpEvidence { source_pixels: 76800, compared_pixels: 76800, matched_pixels: 76800, maximum_channel_error: 0.024629652500152588, squared_error: 1.6702174298359933 }"
+    },
+    {
+      "scene": 1294,
+      "compared_pixels": 68160,
+      "matched_pixels": 68160,
+      "maximum_linear_channel_error": 0.026138901710510254,
+      "detail": "jpeg-decoder-oracle 1294: WarpEvidence { source_pixels: 68160, compared_pixels: 68160, matched_pixels: 68160, maximum_channel_error: 0.026138901710510254, squared_error: 1.0326596828621402 }"
+    }
+  ],
+  "positive_acceptance": {
+    "accepted": 14,
+    "total": 20,
+    "remaining": 6
+  },
+  "distinct_scene_negatives": {
+    "total": 6,
+    "accepted": 0
+  },
+  "full_feature_tests_passed": 107,
+  "clippy_passed": true,
+  "dependency_warnings": 3,
+  "findings": [
+    "Four of the six remaining failures persist under authored geometry: rotations and JPEGs for scenes 1084 and 1294.",
+    "Native JPEG readback agrees with independent Pillow/libjpeg PNG oracle within unchanged linear tolerance .03 at every pixel in all four JPEGs.",
+    "Two resize failures still require exact sampling/aspect-ratio and frequency analysis.",
+    "Least-squares refinement is independently qualified by symmetric noisy corners with analytically known transform and residual .2; degenerate refinement retains the prior model."
+  ],
+  "remaining": "Frequency-aware visual residual qualification with real edit/burst negatives; resizing geometry analysis; all other open acceptance-contract rows remain."
+}

@@ -1,0 +1,50 @@
+{
+  "authored": true,
+  "width": 144,
+  "height": 144,
+  "scope": "Synthetic information/collision controls, not captured bursts",
+  "gradient": "nine 16-pixel vertical cells, encoded RGB=40+20*cell",
+  "checker": "alternating encoded +/-30 at each pixel; monotonic area means preserve dHash signs",
+  "expected_pixel_equal": [
+    [
+      "transparent-red",
+      "transparent-blue"
+    ]
+  ],
+  "expected_pixel_different": [
+    [
+      "black",
+      "white"
+    ],
+    [
+      "gradient",
+      "gradient-checker"
+    ]
+  ],
+  "files": [
+    {
+      "name": "black",
+      "sha256": "ad342cb8b765d6b15e02f2700b9fd9a9b1554646163d51b93d75580f1780871d"
+    },
+    {
+      "name": "white",
+      "sha256": "c9f32faa4da0c566f18023d26c973f848209bd0d8f7183c5ebde9eb794e189db"
+    },
+    {
+      "name": "transparent-red",
+      "sha256": "319bb97da6a71a31ab9d2533bbb0d1a1e34c207c46192b3319f38438a8fb85e0"
+    },
+    {
+      "name": "transparent-blue",
+      "sha256": "2e758d3819cb593a129b6dd835ba1fcca4a0e46a93fa8a0b8da1f13ff2ea10a0"
+    },
+    {
+      "name": "gradient",
+      "sha256": "2a318e6cf055644498a83a95e51c1fd71c4a83a02d2b8ffa62a5e55ed1a5192c"
+    },
+    {
+      "name": "gradient-checker",
+      "sha256": "c87e7350afa586a7c5fb445752eb4692abcdee0669ea02feb0d4fb1f95fe3d5f"
+    }
+  ]
+}

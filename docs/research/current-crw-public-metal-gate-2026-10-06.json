@@ -1,0 +1,93 @@
+{
+  "scope": "Pinned D30/10D sensor plus public EOS 10D route acceptance",
+  "manifest_sha256": "f52b6a40d4f8b7644ce2a8281131e6eb562f6accf7d7ec20c5a195ce953a8f86",
+  "cases": [
+    {
+      "id": 1307,
+      "passed": true,
+      "source_sha256": "4ee482f2b6f9f1a8d370703ea04e9f2abaa49356973a7f56b229af93a78e8a2e",
+      "oracle_sha256": "8ac62f45a4ee04efebed7900eb46dd263dc4a03a96c4fe711dc41b6bec6078fe",
+      "table_sha256": "94fb55465b45059889b7e5588d7c44311f1ec529ba3ce073bfda6b950d830683",
+      "log": "docs/research/current-crw-public-metal-gate-2026-10-06-1307.log",
+      "log_sha256": "e3ae600df46f52a9a4009724cd6f4f550382d480b9aa5b77ee1862f70465817f",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-decode",
+        "--lib",
+        "real_full_sensor_entropy",
+        "--locked",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target",
+        "--",
+        "--ignored",
+        "--nocapture"
+      ]
+    },
+    {
+      "id": 2027,
+      "passed": true,
+      "source_sha256": "b0730eb3a67cc2281a32e0b2ee104199246928d954a68b7e5b72366514c73d02",
+      "oracle_sha256": "3aecb01756492569734885710dafd6ffc26421ac0b5a7fa1c151973d48cd389a",
+      "table_sha256": "1f96c603f8c2f9d47bd5c1b2c8fa25fc87507f8f6c66cbbccaadc6b5af4f6ac0",
+      "log": "docs/research/current-crw-public-metal-gate-2026-10-06-2027.log",
+      "log_sha256": "32fb36d7f8a7b3908de41ffee3c715d4aad45e41cdaf76c0e690463855e3199f",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-decode",
+        "--lib",
+        "real_full_sensor_entropy",
+        "--locked",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target",
+        "--",
+        "--ignored",
+        "--nocapture"
+      ]
+    }
+  ],
+  "limitations": [
+    "Public EOS 10D router uses bundled table-zero; D30 remains sensor-only with external table-one.",
+    "Metal proof covers native-output preservation; no independent color or physical display oracle."
+  ],
+  "public_route": {
+    "passed": true,
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rrrah-decode",
+      "--lib",
+      "crw::",
+      "--locked",
+      "--target-dir",
+      "/private/tmp/rrrah-required-corpus-target",
+      "--",
+      "--include-ignored"
+    ],
+    "log": "docs/research/current-crw-public-metal-gate-2026-10-06-public.log",
+    "log_sha256": "f93a7e139fa13184116695f036bc09980ba9304edc86a741459d8b9d8ce8e5ef"
+  },
+  "metal": {
+    "passed": true,
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rrrah",
+      "--test",
+      "crw_swap_metal",
+      "--locked",
+      "--target-dir",
+      "/private/tmp/rrrah-required-corpus-target",
+      "--",
+      "--ignored",
+      "--nocapture"
+    ],
+    "log": "docs/research/current-crw-public-metal-gate-2026-10-06-metal.log",
+    "log_sha256": "299d60688cd219243a93467c90e6bf6f33c5015b47d7daf60205cf8062663af9"
+  }
+}

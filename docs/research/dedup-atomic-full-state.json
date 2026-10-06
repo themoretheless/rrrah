@@ -1,0 +1,32 @@
+{
+  "status": "failed_color_policy_fixture",
+  "session": 74739,
+  "source_snapshot": "docs/research/dedup-atomic-source-snapshot.json",
+  "source_snapshot_sha256": "7f8b92ae6c82ddd01042c9e07c7709bc365b452473c0ad4ab0be83f6ff962464",
+  "files": 2341,
+  "workspace": "/Users/themoretheless/.codex/tmp/rrrah-dedup-atomic-20261006",
+  "command": [
+    "cargo",
+    "test",
+    "--locked",
+    "-p",
+    "rrrah-dedup",
+    "--all-features",
+    "--all-targets"
+  ],
+  "log": "docs/research/dedup-atomic-full-macos.log",
+  "remaining": [
+    "Terminal outcome",
+    "Post-run isolated source hash and file-set audit",
+    "Comparison to current workspace",
+    "Native Linux fixed-snapshot qualification",
+    "All 18 acceptance requirements"
+  ],
+  "exit_code": 101,
+  "test_groups_completed": 8,
+  "passed": 85,
+  "failed": 1,
+  "source_integrity": "docs/research/dedup-atomic-terminal-integrity.json",
+  "failure": "cached_page_selection_and_color_assumptions_never_cross_reuse",
+  "finding": "Old fixture uses standard P6 PPM and expects unspecified color rejection. Current decoder correctly identifies standard PPM BT.709. Cache key still separates explicit color assumptions. Untagged TGA replacement pending qualification."
+}

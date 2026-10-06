@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-06",
+  "scope": "LeaseCache get_cloned of u64 with all cache consumers held, no releases during timing; excludes pixels/decode/disk/GPU/UI",
+  "protocol": {
+    "entries": [
+      1,
+      64,
+      1024,
+      16384
+    ],
+    "warmup_samples": 3,
+    "measured_samples": 20,
+    "operations_per_sample": 10000,
+    "percentiles": "nearest rank",
+    "profile": "dev opt-level=1",
+    "validation": "lookup checksum and entry count after each sample; held leases reject zero limit; after last lease release all entries transfer as victims"
+  },
+  "comparison": "current release notification vs temporary source-identical copy with unconditional reconciliation scan; counterfactual, not previous release build",
+  "current_csv": "lease-lookup-release-notified.csv",
+  "counterfactual_csv": "lease-lookup-forced-scan.csv",
+  "current_command": "cargo run -p rrrah-memory --example lease_lookup_timing --target-dir /tmp/rrrah-required-corpus-target",
+  "counterfactual_manifest": "/tmp/rrrah-lease-scan-counterfactual/Cargo.toml",
+  "source_sha256": "ad7c0d3d33b7daacc0b7e457b303619bc3d19904fda6bfcf204c02d4ee23bbae",
+  "limitations": [
+    "sequential runs, no paired/randomized process order",
+    "steady live consumers only; frequent release notification still scans",
+    "no end-user latency or physical memory claim"
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "index": 197,
+  "repository": "WSH032/image-deduplicate-cluster-webui",
+  "commit": "02963057d5ae9368f8f481f44e2d30b7c63ed946",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "wrapper",
+  "finding": "Image WebUI delegates to PHash and clustering libraries; inspect delegated algorithms before selecting runtime.",
+  "available_source_evidence": [
+    {
+      "path": "deduplicate_images.py",
+      "local": "02-deduplicate_images.py",
+      "url": "https://github.com/WSH032/image-deduplicate-cluster-webui/blob/02963057d5ae9368f8f481f44e2d30b7c63ed946/deduplicate_images.py",
+      "sha256": "7e7fcecdcb9eb716bf7454958d61626636c0f28cfe33320fbb8e1bf75968c64c",
+      "truncated": false,
+      "lines": 52,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "img_dedup_clust/deduplicate_fn.py",
+      "local": "03-deduplicate_fn.py",
+      "url": "https://github.com/WSH032/image-deduplicate-cluster-webui/blob/02963057d5ae9368f8f481f44e2d30b7c63ed946/img_dedup_clust/deduplicate_fn.py",
+      "sha256": "909a2d747512a4e37bcd73b2cfb6d55b193b5f86e27c2a46e5a1f09181b77e11",
+      "truncated": false,
+      "lines": 739,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "img_dedup_clust/deduplicate_js.py",
+      "local": "04-deduplicate_js.py",
+      "url": "https://github.com/WSH032/image-deduplicate-cluster-webui/blob/02963057d5ae9368f8f481f44e2d30b7c63ed946/img_dedup_clust/deduplicate_js.py",
+      "sha256": "b5232d14bbe392638a17ddbf73d15d37cb2c24c8ec55daf9516b14141773f137",
+      "truncated": false,
+      "lines": 72,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "run_deduplicate_images.ps1",
+      "local": "05-run_deduplicate_images.ps1",
+      "url": "https://github.com/WSH032/image-deduplicate-cluster-webui/blob/02963057d5ae9368f8f481f44e2d30b7c63ed946/run_deduplicate_images.ps1",
+      "sha256": "6a1b787514247687bd614d7977d211262765d7b97a071aac13f1c09c11e17046",
+      "truncated": false,
+      "lines": 5,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "Apache-2.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/WSH032/image-deduplicate-cluster-webui/blob/02963057d5ae9368f8f481f44e2d30b7c63ed946/README.md",
+      "sha256": "97de517c156f3ea663ddfc273f52583ffecb249868bd378eb0b07e463e2e28d4",
+      "truncated": false,
+      "lines": 255,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/WSH032/image-deduplicate-cluster-webui/blob/02963057d5ae9368f8f481f44e2d30b7c63ed946/LICENSE",
+      "sha256": "50e6751797c50dedd75ef1b8a0d9e42f5f8472e9fbce91f34718e9f97b0c780a",
+      "truncated": false,
+      "lines": 201,
+      "source": false,
+      "test": false
+    }
+  ]
+}

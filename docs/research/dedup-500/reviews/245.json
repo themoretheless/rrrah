@@ -1,0 +1,78 @@
+{
+  "index": 245,
+  "repository": "francetem/deduper",
+  "commit": "6ddec2c426312468606bde72813ce20bbddeb316",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Java generic deduper with ImagePHash module and tests; inspect image math as independent oracle.",
+  "available_source_evidence": [
+    {
+      "path": "src/main/java/org/ehu/dedupe/classifier/Deduper.java",
+      "local": "02-Deduper.java",
+      "url": "https://github.com/francetem/deduper/blob/6ddec2c426312468606bde72813ce20bbddeb316/src/main/java/org/ehu/dedupe/classifier/Deduper.java",
+      "sha256": "244b6b4deb2b9bb5116b6062a87f9d50eaae494e26fb9bb42a9f57d101b7ace0",
+      "truncated": false,
+      "lines": 106,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/main/java/org/ehu/dedupe/derive/image/ImagePHash.java",
+      "local": "03-ImagePHash.java",
+      "url": "https://github.com/francetem/deduper/blob/6ddec2c426312468606bde72813ce20bbddeb316/src/main/java/org/ehu/dedupe/derive/image/ImagePHash.java",
+      "sha256": "fe6767afa2a48d0165ea39874bb410a81a4563976c6342433a1153c7b9c915fe",
+      "truncated": false,
+      "lines": 205,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/main/java/org/ehu/dedupe/derive/image/Match.java",
+      "local": "04-Match.java",
+      "url": "https://github.com/francetem/deduper/blob/6ddec2c426312468606bde72813ce20bbddeb316/src/main/java/org/ehu/dedupe/derive/image/Match.java",
+      "sha256": "ca0a422baf0f18460680eee49469e31d193350c899a2193d82dc8f8a646aee55",
+      "truncated": false,
+      "lines": 25,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/test/java/org/ehu/dedupe/classifier/DeduperTest.java",
+      "local": "05-DeduperTest.java",
+      "url": "https://github.com/francetem/deduper/blob/6ddec2c426312468606bde72813ce20bbddeb316/src/test/java/org/ehu/dedupe/classifier/DeduperTest.java",
+      "sha256": "78628cb679edd7c2cfc93cdf496c53504f6a68a776527c6923099f8bfa6cb399",
+      "truncated": false,
+      "lines": 50,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "Apache-2.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 30,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/francetem/deduper/blob/6ddec2c426312468606bde72813ce20bbddeb316/README.md",
+      "sha256": "3738609579d2a8c3afa328512228f15f5bb3060974dac12b7522fefc1953440e",
+      "truncated": false,
+      "lines": 50,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/francetem/deduper/blob/6ddec2c426312468606bde72813ce20bbddeb316/LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "truncated": false,
+      "lines": 201,
+      "source": false,
+      "test": false
+    }
+  ]
+}

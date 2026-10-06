@@ -1,0 +1,84 @@
+{
+  "repository": "frankzch/ai-news-brief",
+  "metadata": {
+    "name": "frankzch/ai-news-brief",
+    "url": "https://github.com/frankzch/ai-news-brief",
+    "description": "Open-source AI news aggregator & daily digest engine: pulls 94 sources (RSS, Hacker News, Reddit, X, YouTube transcripts, GitHub Trending), LLM-filters, scores, dedups (SimHash + pgvector) and writes EN/\u4e2d\u6587 summaries. Powers inbrief.info.",
+    "language": "Python",
+    "stars": 7,
+    "license": "MIT",
+    "archived": false,
+    "pushed_at": "2026-09-19T14:48:34Z",
+    "default_branch": "main",
+    "queries": [
+      "dedup in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/frankzch/ai-news-brief/blob/f5fc9c95df20f15e956e6ce906e96da3eaca6c27/README.md",
+      "sha256": "ce0345fab05992126672dc4f1d9ebcd93726b559be52681f9612885d256040ec",
+      "truncated": false,
+      "lines": 186,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/frankzch/ai-news-brief/blob/f5fc9c95df20f15e956e6ce906e96da3eaca6c27/LICENSE",
+      "sha256": "54ff00fa8d98bc03023d39c9be5f7c644b84e4249708bcbcca048ee3748a4950",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "src/lsh_dedup.py",
+      "local": "02-lsh_dedup.py",
+      "url": "https://github.com/frankzch/ai-news-brief/blob/f5fc9c95df20f15e956e6ce906e96da3eaca6c27/src/lsh_dedup.py",
+      "sha256": "b94cf9a21c46a526ace4d6f3ff344315df5aace7939e4ccdfde1cb275b939dfc",
+      "truncated": false,
+      "lines": 50,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/ai_engine.py",
+      "local": "03-ai_engine.py",
+      "url": "https://github.com/frankzch/ai-news-brief/blob/f5fc9c95df20f15e956e6ce906e96da3eaca6c27/src/ai_engine.py",
+      "sha256": "ab2c6043461fb73adc999cb1a616796702960354f7cba34eb10a4189cbdab3bd",
+      "truncated": false,
+      "lines": 236,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/browser_utils.py",
+      "local": "04-browser_utils.py",
+      "url": "https://github.com/frankzch/ai-news-brief/blob/f5fc9c95df20f15e956e6ce906e96da3eaca6c27/src/browser_utils.py",
+      "sha256": "5608b7ec77fe8f4bbce3855f54f434a3fafd31b19474c46fb2baeff23f8ed54d",
+      "truncated": false,
+      "lines": 462,
+      "source": true,
+      "test": false
+    }
+  ],
+  "errors": [],
+  "commit": "f5fc9c95df20f15e956e6ce906e96da3eaca6c27",
+  "tree_truncated": false,
+  "source_file_count": 22,
+  "test_file_count": 0,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "src/lsh_dedup.py",
+    "src/ai_engine.py",
+    "src/browser_utils.py"
+  ]
+}

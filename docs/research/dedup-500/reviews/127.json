@@ -1,0 +1,98 @@
+{
+  "index": 127,
+  "repository": "hunhee98/pluck",
+  "commit": "06e19ad0bc5a17d2b405add257063c4d84732954",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "MCP code retrieval and session dedup benchmarks; no image comparison engine in selected source.",
+  "available_source_evidence": [
+    {
+      "path": "crates/pluck-mcp/benches/session_dedup.rs",
+      "local": "02-session_dedup.rs",
+      "url": "https://github.com/hunhee98/pluck/blob/06e19ad0bc5a17d2b405add257063c4d84732954/crates/pluck-mcp/benches/session_dedup.rs",
+      "sha256": "e5067726f785ac2743a154aa263a2e716cb3ab07303e4fbf0926f72dd5b1e42a",
+      "truncated": false,
+      "lines": 224,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "homebrew/pluck.rb",
+      "local": "03-pluck.rb",
+      "url": "https://github.com/hunhee98/pluck/blob/06e19ad0bc5a17d2b405add257063c4d84732954/homebrew/pluck.rb",
+      "sha256": "de3ca1101e2f2a8dceda5d5e72f7054487b5d289473b9864b9f159029e177061",
+      "truncated": false,
+      "lines": 37,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "scripts/bootstrap.sh",
+      "local": "04-bootstrap.sh",
+      "url": "https://github.com/hunhee98/pluck/blob/06e19ad0bc5a17d2b405add257063c4d84732954/scripts/bootstrap.sh",
+      "sha256": "1ae6ba668179f913ff510945437379d23431333c69bd702f9f37eedcbb1f4771",
+      "truncated": false,
+      "lines": 40,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "crates/pluck-core/src/digest/handlers/pytest.rs",
+      "local": "05-pytest.rs",
+      "url": "https://github.com/hunhee98/pluck/blob/06e19ad0bc5a17d2b405add257063c4d84732954/crates/pluck-core/src/digest/handlers/pytest.rs",
+      "sha256": "9ce0bd3a3f7f08256b9174236909341e0078de25a75da6a75675ef83e7e1ee2a",
+      "truncated": false,
+      "lines": 382,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "crates/pluck-bench/src/driver.rs",
+      "local": "06-driver.rs",
+      "url": "https://github.com/hunhee98/pluck/blob/06e19ad0bc5a17d2b405add257063c4d84732954/crates/pluck-bench/src/driver.rs",
+      "sha256": "2f73978b205c7e59d609e1309d94d218d0f4a6c6eff73c083b74e0cfb8aec2ec",
+      "truncated": false,
+      "lines": 136,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "crates/pluck-bench/src/main.rs",
+      "local": "07-main.rs",
+      "url": "https://github.com/hunhee98/pluck/blob/06e19ad0bc5a17d2b405add257063c4d84732954/crates/pluck-bench/src/main.rs",
+      "sha256": "a8473ddf14c3949d9477b7abb03eaa4dc9be36b22da2a04e783452d0cda86e9e",
+      "truncated": false,
+      "lines": 70,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.ko.md",
+      "local": "00-README.ko.md",
+      "url": "https://github.com/hunhee98/pluck/blob/06e19ad0bc5a17d2b405add257063c4d84732954/README.ko.md",
+      "sha256": "6d2a6366c58714febcd0d51dad1820035f16e2378838cb78f3bc7e6ee90cc9b8",
+      "truncated": false,
+      "lines": 281,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/hunhee98/pluck/blob/06e19ad0bc5a17d2b405add257063c4d84732954/LICENSE",
+      "sha256": "f6e65ec187ebb1f7bc1de6c5ba8b6a30fa394378aefe4cf457ed433a5a56a428",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

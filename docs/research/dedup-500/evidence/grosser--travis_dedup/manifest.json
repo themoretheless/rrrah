@@ -1,0 +1,94 @@
+{
+  "repository": "grosser/travis_dedup",
+  "metadata": {
+    "name": "grosser/travis_dedup",
+    "url": "https://github.com/grosser/travis_dedup",
+    "description": "Stop all builds on the same PR when a new job starts",
+    "language": "Ruby",
+    "stars": 37,
+    "license": "MIT",
+    "archived": false,
+    "pushed_at": "2019-10-21T16:30:44Z",
+    "default_branch": "master",
+    "queries": [
+      "dedup in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "Readme.md",
+      "local": "00-Readme.md",
+      "url": "https://github.com/grosser/travis_dedup/blob/56fa29a06d52bf617981b50543607798ea9ee26f/Readme.md",
+      "sha256": "3c1defe09044223fa940640725d2414e64c7c69988a6aefaed0fd1ff7d8c8fc5",
+      "truncated": false,
+      "lines": 57,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "lib/travis_dedup.rb",
+      "local": "01-travis_dedup.rb",
+      "url": "https://github.com/grosser/travis_dedup/blob/56fa29a06d52bf617981b50543607798ea9ee26f/lib/travis_dedup.rb",
+      "sha256": "c8501dbb8c876f552e30fa037822973f4b87ec73b9db4cd43c00839391f93643",
+      "truncated": false,
+      "lines": 141,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "lib/travis_dedup/version.rb",
+      "local": "02-version.rb",
+      "url": "https://github.com/grosser/travis_dedup/blob/56fa29a06d52bf617981b50543607798ea9ee26f/lib/travis_dedup/version.rb",
+      "sha256": "3924434313159fcad8eed933670bfe79a9d73a26dc71e84c7f0d78c4e651d35d",
+      "truncated": false,
+      "lines": 3,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "server/app.rb",
+      "local": "03-app.rb",
+      "url": "https://github.com/grosser/travis_dedup/blob/56fa29a06d52bf617981b50543607798ea9ee26f/server/app.rb",
+      "sha256": "960c90f2dca41d294ecec6490b433896d80ab7779f71e4ba538cd50ed2743195",
+      "truncated": false,
+      "lines": 66,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "spec/travis_dedup_spec.rb",
+      "local": "04-travis_dedup_spec.rb",
+      "url": "https://github.com/grosser/travis_dedup/blob/56fa29a06d52bf617981b50543607798ea9ee26f/spec/travis_dedup_spec.rb",
+      "sha256": "0e65b351b113560651da4cdb8980cc69c48e34ea8cd2e3285f089d20ec7f5177",
+      "truncated": false,
+      "lines": 245,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "bin/travis-dedup",
+      "local": "05-travis-dedup",
+      "url": "https://github.com/grosser/travis_dedup/blob/56fa29a06d52bf617981b50543607798ea9ee26f/bin/travis-dedup",
+      "sha256": "92bf84337153078517eb2710d77429144f7e8ca8fb5bd24a8d98de3323e07be2",
+      "truncated": false,
+      "lines": 9,
+      "source": true,
+      "test": false
+    }
+  ],
+  "errors": [],
+  "commit": "56fa29a06d52bf617981b50543607798ea9ee26f",
+  "tree_truncated": false,
+  "source_file_count": 6,
+  "test_file_count": 2,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "Readme.md",
+    "bin/travis-dedup",
+    "lib/travis_dedup.rb",
+    "server/app.rb",
+    "spec/travis_dedup_spec.rb"
+  ]
+}

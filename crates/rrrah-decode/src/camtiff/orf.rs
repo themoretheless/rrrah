@@ -32,7 +32,8 @@
 //!   does not, the packing phase is unverifiable and the file is rejected
 //!   with a typed error rather than guessed.
 //! - `Compression = 1`, `BitsPerSample = 16`: plain uncompressed `u16`
-//!   rows in the container byte order (used by higher-end models).
+//!   rows, or a shorter single-strip Olympus adaptive entropy stream with
+//!   photometric 1 and 12 valid sensor bits. E-M5 is independently qualified.
 //! - `Compression = 7`: lossless JPEG via the shared
 //!   [`crate::dng::lossless_jpeg`] decoder (single strip only).
 //!
@@ -41,10 +42,7 @@
 //! - any other `Compression` value (Olympus uses e.g. 6 for previews and
 //!   proprietary codes on some models);
 //! - `BitsPerSample` other than 12/16;
-//! - the C-series Huffman variant (`olympus_load_raw` in dcraw) and the
-//!   proprietary OM System (OM-1 family) bitstream: both masquerade as
-//!   `Compression = 1`, so they are caught by the strict strip byte-count
-//!   validation of the 12-bit/16-bit paths and rejected as unverifiable;
+//! - entropy variants with a different declared valid sensor precision;
 //! - tiled storage (never observed in ORF);
 //! - missing/unsupported CFA tags or a non-2x2 RGB Bayer pattern.
 //!
@@ -54,8 +52,9 @@
 //! `CFARepeatPatternDim` (33421) / `CFAPattern` (33422) tags; black level
 //! from `BlackLevel` (50714, default 0), white level from `WhiteLevel`
 //! (50717, default `2^bps - 1`, documented approximation — Olympus' exact
-//! per-model saturation lives in the makernote, which is not parsed);
-//! white balance from `AsShotNeutral` (50728) when present; the
+//! per-model saturation policy still requires independent qualification);
+//! the shared resolver reads Olympus WB, black grids and crop from `MakerNote`
+//! `ImageProcessing`, with EXIF CFA fallback for entropy files. The
 //! `ColorMatrix1/2` + `CalibrationIlluminant1/2` pair goes through the
 //! shared D65 selection in `rrrah_core`; `ActiveArea` (50829) and
 //! `DefaultCropOrigin`/`DefaultCropSize` (50719/50720) are honored when
@@ -135,8 +134,14 @@ impl CameraQuirks for OrfQuirks {
     ) -> Result<CameraMetadata, DecodeError> {
         let width = required_u32(raw, tags::IMAGE_WIDTH)?;
         let height = required_u32(raw, tags::IMAGE_LENGTH)?;
-        let bits_per_sample = read_bits_per_sample(raw)?;
-        if optional_scalar(FORMAT, raw, tags::PHOTOMETRIC_INTERPRETATION)? != Some(tags::PHOTOMETRIC_CFA) {
+        let mut bits_per_sample = read_bits_per_sample(raw)?;
+        let entropy = is_entropy(raw, width, height)?;
+        if entropy {
+            bits_per_sample = 12;
+        }
+        if optional_scalar(FORMAT, raw, tags::PHOTOMETRIC_INTERPRETATION)? != Some(tags::PHOTOMETRIC_CFA)
+            && !entropy
+        {
             return Err(orf_error(
                 "raw IFD photometric is not CFA (32803); RGB/linear ORF variants are unsupported",
             ));
@@ -160,7 +165,11 @@ impl CameraQuirks for OrfQuirks {
             None => Orientation::Normal,
         };
 
-        let cfa = read_cfa(raw)?;
+        let cfa = if entropy {
+            super::pef::read_cfa(FORMAT, container, raw)?
+        } else {
+            read_cfa(raw)?
+        };
         let black_level = read_black_level(raw)?;
         let white_level = read_white_level(raw, bits_per_sample)?;
         let white_balance = read_white_balance(raw)?;
@@ -235,6 +244,18 @@ impl CameraQuirks for OrfQuirks {
             .map_err(|_| orf_error(format!("could not allocate {total} samples")))?;
         output.resize(total, 0);
 
+        if is_entropy(raw, width, height)? {
+            if offsets.len() != 1 {
+                return Err(orf_error("Olympus entropy requires a single strip"));
+            }
+            super::olympus_entropy::decode(
+                strip_bytes(container, offsets[0], byte_counts[0])?,
+                &mut output,
+                width_usize,
+                cancelled,
+            )?;
+            return Ok(output);
+        }
         match compression {
             tags::COMPRESSION_UNCOMPRESSED => decode_uncompressed(
                 container,
@@ -256,6 +277,21 @@ impl CameraQuirks for OrfQuirks {
         }?;
         Ok(output)
     }
+}
+
+fn is_entropy(raw: &CameraDirectory<'_>, width: u32, height: u32) -> Result<bool, DecodeError> {
+    if optional_scalar(FORMAT, raw, tags::PHOTOMETRIC_INTERPRETATION)? != Some(1)
+        || optional_scalar(FORMAT, raw, tags::COMPRESSION)? != Some(1)
+        || read_bits_per_sample(raw)? != 16
+    {
+        return Ok(false);
+    }
+    let counts = raw
+        .entry(FORMAT, tags::STRIP_BYTE_COUNTS)?
+        .ok_or_else(|| orf_error("missing strip byte counts"))?
+        .unsigned_values()
+        .map_err(|e| orf_error(e.to_string()))?;
+    Ok(counts.len() == 1 && counts[0] < u64::from(width) * u64::from(height) * 2)
 }
 
 fn required_u32(raw: &CameraDirectory<'_>, tag: u16) -> Result<u32, DecodeError> {
@@ -1147,5 +1183,6 @@ mod tests {
             matches!(error, DecodeError::Cancelled),
             "unexpected error: {error}"
         );
+        super::super::assert_pixel_cancellation_checkpoints(&OrfQuirks, &file, raw);
     }
 }

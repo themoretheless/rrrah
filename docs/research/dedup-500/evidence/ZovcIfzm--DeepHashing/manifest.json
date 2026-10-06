@@ -1,0 +1,84 @@
+{
+  "repository": "ZovcIfzm/DeepHashing",
+  "metadata": {
+    "name": "ZovcIfzm/DeepHashing",
+    "url": "https://github.com/ZovcIfzm/DeepHashing",
+    "description": "Image hashing is the one-way process of converting an image into a binary hash such that similar images have similar hashes. This has promising applications in speeding up approximate nearest neighbor search when trying to retrieve similar images from a database as well as in security for verifying an image hasn\u2019t been perceptually modified. Utilizing deep learning, we implement a model that learns these binary hashes under three primary constraints. First, we minimize the loss in information between the continuous model output and the quantized binary hash. Second, we make sure the binary values are distributed evenly on each bit. Third, we ensure different bits are as independent as possible through a relaxed orthogonality constraint on each fully connected layer of the model. In addition, we implement a variant of the same model that takes advantage of training data labeled for classification tasks in order to generate hashes that are near one another for images of the same class and far away for images of different classes. We evaulate the supervised and unsupervised variants of this model on the MNIST and CIFAR-10 datasets, as was done in the original paper, as well as a recent malaria diagnosis dataset from the NLM.",
+    "language": "Python",
+    "stars": 4,
+    "license": "MIT",
+    "archived": false,
+    "pushed_at": "2021-01-28T21:05:25Z",
+    "default_branch": "main",
+    "queries": [
+      "perceptual hash in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/ZovcIfzm/DeepHashing/blob/f7e07feb6b26a55ae2ca8dc4d131a6613a768410/README.md",
+      "sha256": "bc8e8f0587c1fc1bd5cfeec81ae6a17938aa90f2113b051d9bd10c55b75a2141",
+      "truncated": false,
+      "lines": 9,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/ZovcIfzm/DeepHashing/blob/f7e07feb6b26a55ae2ca8dc4d131a6613a768410/LICENSE",
+      "sha256": "fed5de918d916a2019e9cc7c988ee105c4b9e432eef67c31f418effeb6457571",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "EvaluateCIFAR.py",
+      "local": "02-EvaluateCIFAR.py",
+      "url": "https://github.com/ZovcIfzm/DeepHashing/blob/f7e07feb6b26a55ae2ca8dc4d131a6613a768410/EvaluateCIFAR.py",
+      "sha256": "a6449c8672f078da7f57609174439edbfce9619f57ea839c571ef1cfbb6534f9",
+      "truncated": false,
+      "lines": 51,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "EvaluateMNIST.py",
+      "local": "03-EvaluateMNIST.py",
+      "url": "https://github.com/ZovcIfzm/DeepHashing/blob/f7e07feb6b26a55ae2ca8dc4d131a6613a768410/EvaluateMNIST.py",
+      "sha256": "de8fd3e029d3401253d5ce9bb93657b2082d0afc9f59117735bfbcf9257d36ea",
+      "truncated": false,
+      "lines": 32,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "EvaluateMalaria.py",
+      "local": "04-EvaluateMalaria.py",
+      "url": "https://github.com/ZovcIfzm/DeepHashing/blob/f7e07feb6b26a55ae2ca8dc4d131a6613a768410/EvaluateMalaria.py",
+      "sha256": "67fc89bc949a8efe538140958fa368567a2d9dfd25784345bd7518390e1718f2",
+      "truncated": false,
+      "lines": 43,
+      "source": true,
+      "test": false
+    }
+  ],
+  "errors": [],
+  "commit": "f7e07feb6b26a55ae2ca8dc4d131a6613a768410",
+  "tree_truncated": false,
+  "source_file_count": 12,
+  "test_file_count": 0,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "EvaluateCIFAR.py",
+    "EvaluateMNIST.py",
+    "EvaluateMalaria.py"
+  ]
+}

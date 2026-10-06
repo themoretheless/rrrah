@@ -1,0 +1,51 @@
+{
+  "scope": "Separate ordinal luminance candidate recipe, tested transfer invariance and exact indexed retrieval; unresolved real ICC positive retained",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/ordinal.rs": "e1c1d1b0e41b1c5adb26d1085a9d131d3888f03af20a33b60140ed86e35e45fe",
+    "crates/rrrah-dedup/src/local.rs": "07c5b95d6c2c0fc87799e65e6b1c192d0bf462cd25e19ff3e8156b7c5660ecad",
+    "crates/rrrah-dedup/src/local_index.rs": "b8ade61591486cd6681766eb72105729fce82318631ad61a854807f488fc7c10",
+    "crates/rrrah-dedup/tests/ordinal.rs": "68141ea32e15c0de8b8ffb48737c94cb1485c678bfb51819db5962fadbe5d2bb",
+    "crates/rrrah-dedup/tests/local_index.rs": "859dcd72b64e7e95a916dbe32a8e7c345860f7b969adb8ab4a93b43a2c250191",
+    "crates/rrrah-dedup/examples/raw_raster_probe.rs": "eccd9f11793102ade4f19f9bd614387cbd6465640f70e2fdfe8247d069a16b68"
+  },
+  "api": "extract_rank_oriented",
+  "recipe": "RankOrientedScaleBriefV1",
+  "normalization": "Mid-rank empirical CDF of premultiplied luminance, distinct recipe; original linear samples unchanged",
+  "qualified": {
+    "synthetic_opaque_neutral_transfers": [
+      0.5,
+      2.0,
+      3.0
+    ],
+    "descriptor_and_positions_identical_after_transfers": true,
+    "independent_unrelated_texture_below_ten_correspondences": true,
+    "indexed_matches_exhaustive": true,
+    "descriptor_index_oracle_recipes": 4,
+    "explicit_budget_and_cancel_errors": true
+  },
+  "real_cr2_tiff": {
+    "features": [
+      496,
+      494
+    ],
+    "mutual_correspondences": 1,
+    "geometry": null,
+    "descriptor_threshold": 64,
+    "geometric_minimum_inliers": 10,
+    "interpretation": "Ordinal luminance alone does not resolve this colored RAW/ICC render mismatch; no acceptance inferred"
+  },
+  "validation": {
+    "local_index_tests_passed": 6,
+    "ordinal_test_passed": 1,
+    "clippy_selected_example_and_tests_exit_code": 0,
+    "native_probe_exit_code": 0
+  },
+  "limitations": [
+    "Not integrated into default pair/collection extraction",
+    "Only opaque neutral strictly increasing non-quantized transfer invariance qualified",
+    "RGB channel transforms, crop-dependent ranks, HDR clipping and quantization not invariant",
+    "Sorting has cancellation before/after but not during comparison",
+    "Counts bound allocations; no full managed-memory or large-scale performance qualification",
+    "Real RAW/raster pixel verification and held-out positives/negatives remain open"
+  ]
+}

@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script>
+        if (typeof module === 'object') {
+            window.module = module;
+            module = undefined;
+        }
+    </script>
+
+    <!-- jquery -->
+    <script>
+        window.$ = window.jQuery = require("jquery");
+    </script>
+
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" defer></script>
+
+    <!-- fontawesome -->
+    <script src="../node_modules/@fortawesome/fontawesome-free/js/all.min.js" defer></script>
+
+    <!-- noty -->
+    <link rel="stylesheet" href="../node_modules/noty/lib/noty.css">
+    <link rel="stylesheet" href="../node_modules/noty/lib/themes/bootstrap-v4.css">
+    <script type="text/javascript" src="../node_modules/noty/lib/noty.min.js" defer></script>
+
+    <!-- introJS -->
+    <link rel="stylesheet" href="../node_modules/intro.js/minified/introjs.min.css">
+    <link rel="stylesheet" href="../node_modules/intro.js/themes/introjs-modern.css">
+    <script type="text/javascript" src="../node_modules/intro.js/minified/intro.min.js" defer></script>
+
+    <!-- animate.css -->
+    <link rel="stylesheet" href="../node_modules/animate.css/animate.min.css">
+
+    <!-- project css -->
+    <link rel="stylesheet" href="css/core.css">
+
+    <!-- datatables -->
+    <!-- core -->
+    <link rel="stylesheet" href="../node_modules/datatables.net-dt/css/jquery.dataTables.min.css">
+    <script type="text/javascript" src="../node_modules/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="../node_modules/datatables.net-dt/js/dataTables.dataTables.min.js"></script>
+
+    <!-- scroller -->
+    <link rel="stylesheet" href="../node_modules/datatables.net-scroller-dt/css/scroller.dataTables.min.css">
+    <script type="text/javascript" src="../node_modules/datatables.net-scroller-dt/js/scroller.dataTables.min.js"></script>
+
+    <title>media-dupes</title>
+
+</head>
+
+<body class="">
+
+    <!--Modal: Splash -->
+    <div class="modal animated fadeOut" id="myModalSplash" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content no-border">
+                <div class="modal-body">
+                    <center><img src="img/icon/icon.png" class="ifl-image" height="256"></center>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal: Splash -->
+
+
+    <!--Modal: URL Image preview -->
+    <div class="modal animated fadeIn" id="myModalImagePreview" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <!-- header -->
+                <div class="modal-header">
+                    <h5 class="modal-title">Preview</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                </div>
+                <!-- content -->
+                <div class="modal-body">
+                    <center>
+                        <img id="imagePreview" src="" class="ifl-image" width="256">
+                    </center>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal: URL Image preview -->
+
+    <!-- main ui container -->
+    <div id="mainContainer" class="animated fadeIn delay-1s container-fluid mediaDupes_nonSelectableText h-100 d-flex flex-column">
+
+        <!-- empty line -->
+        <div class="row-fluid row-empty">&nbsp;</div>
+
+        <!-- Heading: -->
+        <div class="row-fluid" data-step="1" data-intro="<h5>Intro</h5>Welcome to <b>media-dupes</b>, a minimal content duplicator for common media services like youtube.<br><br>The following intro explains how to use this application.">
+
+            <!-- spinner -->
+            <div id="md_spinner" name="md_spinner" class="spinner-grow text-danger float-left" role="status" hidden>
+                <span class="sr-only">Loading...</span>
+            </div>
+
+            <!-- app name -->
+            <h2>media-dupes <img src="img/icon/icon.png" height="32" onclick="windowMainClickDistract();"></h2>
+
+            <!-- thumb preview -->
+            <!--
+            <img id="mainWindowThumbnailPreview" class="float-left rounded" onclick='$("#myModalThumbnail").modal("show")' src='' height="30">
+            -->
+
+            <!-- app description: -->
+            <h3>a minimal content duplicator for common media services like youtube</h3>
+        </div>
+
+         <!-- empty line -->
+        <div class="row-fluid row-empty">&nbsp;</div>
+
+        <!-- add URL -->
+        <div class="input-group mb-3">
+            <input type="text" class="form-control form-control-sm" placeholder="url" id="inputNewUrl" name="inputNewUrl" onkeyup="urlInputFieldOnKeyUp()" onfocus="urlInputFieldOnFocus();" onKeyPress="urlInputFieldOnKeyPress(event)" data-step="2" data-intro="Paste your media-service URL into this field.<br><br><u>Example:</u><br><i>http://www.youtube.com/watch?v=90AiXO1pAiA</i>">
+            <div class="input-group-append">
+                <button class="btn btn-secondary btn-sm mediaDupes_btnSmallWidth" type="button" id="buttonAddUrl" name="buttonAddUrl" title="add url to todo-list" onclick="windowMainClickButtonAddUrl();" data-step="3" data-intro="Now add this URL to the todo-list by pressing the <b>Add URL</b> button."><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+
+        <!-- #102 - new todo-list is a table -->
+        <div class="row-fluid" id="todoList">
+            <table id="example" class="display" style="width:100%" data-step="4" data-intro="The ToDo list shows the queued urls">
+                <thead>
+                    <tr>
+                        <th>ID</th> <!-- generated id -->
+                        <th><i class="fas fa-cloud" title="Source service"></i></th> <!-- favicon -->
+                        <th><i class="far fa-image" title="Preview"></i></th> <!-- preview image -->
+                        <th><i class="fas fa-play" title="Pre-listen 5 seconds"></i></th> <!-- play / prelisten button -->
+                        <th><i class="fas fa-link" title="Link Url"></i></th> <!-- shortened url -->
+                        <th>Url (long)</th> <!-- url -->
+                        <th><i class="fas fa-info" title="Status"></i></th> <!-- status -->
+                        <th><i class="fas fa-trash-alt" title="Remove URL"></i></th> <!-- delete / remove button -->
+                    </tr>
+                </thead>
+            </table>
+        </div>
+
+        <!-- empty line -->
+        <div class="row-fluid row-empty">&nbsp;</div>
+
+        <!-- start buttons-->
+        <div class="row-fluid" data-step="5" data-intro="Start the download by one of the action buttons.">
+            <!-- video using .exec -->
+            <button
+                id="buttonStartVideoExec"
+                name="buttonStartVideoExec"
+                type="button"
+                class="btn btn-secondary btn-sm mediaDupes_btnDownloadActionWidth"
+                title="Start downloading all content from todo-list and store them as video files"
+                onclick="windowMainClickButtonVideo();"
+                disabled
+                data-step="6"
+                data-intro="The <b>Video</b> button tries to download each url from on your <b>todo-list</b>.">
+                <i class="fas fa-video"></i> Video <i class="fas fa-download"></i>
+            </button>
+            <!-- video: not using .exec() -->
+
+            <!--
+            <button
+                id="buttonStartVideo"
+                name="buttonStartVideo"
+                type="button"
+                class="btn btn-secondary btn-sm mediaDupes_btnDownloadActionWidth"
+                title="Unstable: Currently works only for youtube.com urls"
+                onclick="windowMainClickButtonVideoV2();"
+                data-step="7"
+                data-intro="The <b>Youtube Video</b> button is experimental right now and works only for youtube.com urls.">
+                <i class="fas fa-video"></i> Youtube video
+            </button>
+            -->
+
+
+            <!-- audio: using exec() -->
+            <button
+                id="buttonStartAudioExec"
+                name="buttonStartAudioExec"
+                type="button"
+                class="btn btn-secondary btn-sm mediaDupes_btnDownloadActionWidth float-right"
+                title="Start downloading all content from todo-list and store them as audio files"
+                onclick="windowMainClickButtonAudio();"
+                disabled
+                data-step="7"
+                data-intro="The <b>Audio</b> button tries to download each url from on your <b>todo-list</b>.">
+                <i class="fas fa-music"></i> Audio <i class="fas fa-download"></i>
+            </button>
+        </div>
+
+        <!-- empty line -->
+        <div class="row-fluid row-empty">&nbsp;</div>
+
+        <!-- show log -->
+        <!-- h-100 d-flex flex-column -->
+        <div class="row-fluid">
+            <textarea
+                class="form-control"
+                id="textareaLogOutput"
+                name="textareaLogOutput"
+                placeholder="application log"
+                readonly
+                data-step="8" data-intro="The <b>application log</b> shows some details about the download process">
+            </textarea>
+        </div>
+
+        <!-- The rest is aligned at bottom of the page -->
+        <div class="fixed-bottom applicationWindowBottom">
+
+        <!-- extra buttons-->
+        <div class="row-fluid">
+            <!-- Settings -->
+            <button
+                id="buttonShowSettings"
+                name="buttonShowSettings"
+                type="button"
+                class="btn btn-outline-secondary btn-sm mediaDupes_btnDefaultWidth"
+                title="Shows settings"
+                onclick="windowMainClickButtonSettings();">
+                <i class="fas fa-cog"></i> Settings
+            </button>
+            <!-- Intro -->
+            <button
+                id="buttonShowHelp"
+                name="buttonShowHelp"
+                type="button"
+                class="btn btn-outline-secondary btn-sm mediaDupes_btnDefaultWidth"
+                title="Shows a short intro to explain how media-dupes works"
+                onclick="windowMainClickButtonIntro();">
+                <i class="fas fa-info"></i> Intro
+            </button>
+            <!-- Download folder -->
+            <button
+                id="buttonShowDownloadFolder"
+                name="buttonShowDownloadFolder"
+                type="button"
+                class="btn btn-outline-secondary btn-sm mediaDupes_btnDefaultWidth"
+                title="Opens the download folder"
+                onclick="windowMainClickButtonDownloads();">
+                <i class="far fa-folder-open"></i> Downloads
+            </button>
+            <!-- Right: Reset buttons -->
+            <button
+                id="buttonResetUI"
+                name="buttonResetUI"
+                type="button"
+                class="btn btn-outline-secondary btn-sm float-right dropdown-toggle mediaDupes_btnSmallWidth"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false">
+                <i class="fas fa-redo-alt"></i>
+            </button>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="#" onclick="windowMainClickButtonLogReset();">Reset the log</a>
+                <div role="separator" class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#" onclick="windowMainClickButtonUIReset();">Reload media-dupes</a>
+            </div>
+
+        </div>
+        <!-- /extra buttons -->
+
+        <!-- state -->
+        <div id="applicationState" class="row-empty animated pulse infinite">&nbsp;</div>
+
+        <!-- empty line -->
+        <div class="row-fluid row-empty">&nbsp;</div>
+
+        </div>
+        <!-- /bottom -->
+
+    </div>
+    <!-- main ui container -->
+
+    <!-- You can also require other files to run in this process -->
+    <script src="js/renderer.js"></script>
+
+</body>
+
+<script>
+// execute on ready
+$( document ).ready(function()
+{
+    console.log( 'index.html ready' )
+
+    $('#myModalSplash').modal('show') // show splash
+
+    titlebarInit() // init titleBar
+    settingsLoadAllOnAppStart() // load user settings
+
+    // hide the modal splash
+    setTimeout(function(){
+        $('#myModalSplash').modal('hide')
+    }, 1000);
+
+
+    // #102
+    //
+    var table = $('#example').DataTable( {
+        "dom": '<t>',
+        // scroller
+        "scrollY": 150,
+        "scrollCollapse": true,
+        "scroller": true,
+        // Default text for empty table
+        "language": {
+            "emptyTable": "ToDo list is empty"
+        },
+        // Hide some cols
+        "columnDefs": [
+            {
+                "targets": [ 0, 5 ], // hiding column 0 and 5
+                "visible": false,
+                "searchable": false
+            }
+        ],
+        // column sizing and default content
+        "columns": [
+            {
+                'name': 'id', // hidden
+            },
+            {
+                'name': 'logo',
+                'width': '10px'
+            },
+            {
+                'name': 'preview',
+                'width': '10px'
+            },
+            {
+                'name': 'buttonPlay',
+                'width': '10px'
+            },
+            {
+                'name': 'url'
+            },
+            {
+                'name': 'url_long' //hidden
+            },
+            {
+                'name': 'status',
+                'data': 'status', // can be null or undefined
+                'defaultContent': '<i>queued</i>',
+                'width': '20px'
+            },
+            {
+                'name': 'buttonDelete',
+                'width': '10px'
+            }
+        ]
+    } );
+
+
+    // Delete a row
+    $('#example tbody').on( 'click', '#delete', function () {
+        rowData = table.row( $(this).parents('tr') ).data();
+        utils.writeConsoleMsg('info', 'index.html ::: Trying to remove the url ' + rowData[5] + ' from todo list')
+
+        // remove from array: arrayUserUrlsN
+        ui.toDoListSingleUrlRemove(rowData[5])
+
+        // remove from table
+        table
+            .row( $(this).parents('tr') )
+            .remove()
+            .draw();
+    });
+
+
+    // Play a row
+    $('#example tbody').on( 'click', '#play', function () {
+
+        //var cell = table.cell( this );
+        //cell.data( cell.data() + 1 ).draw();
+        //cell.data( "42").draw();
+
+        rowData = table.row( $(this).parents('tr') ).data();
+        //console.error(rowData)
+        utils.writeConsoleMsg('info', 'index.html ::: Trying to play the url ' + rowData[5] + ' from todo list')
+
+        //var playButtonCode = rowData[3]
+        // change icon from play to pause: <i class="fas fa-pause"></i>
+        //table.cell({ row: rowData, column: 3 }).data('<button type="button" id="play" onclick=ui.playAudio("' + urlAudio + '"); name="play" class="btn btn-sm btn-outline-secondary"><i class="fas fa-pause"></i></button>')
+
+    });
+
+});
+</script>
+
+</html>

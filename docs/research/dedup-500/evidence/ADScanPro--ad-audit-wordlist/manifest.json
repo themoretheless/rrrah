@@ -1,0 +1,62 @@
+{
+  "repository": "ADScanPro/ad-audit-wordlist",
+  "metadata": {
+    "name": "ADScanPro/ad-audit-wordlist",
+    "url": "https://github.com/ADScanPro/ad-audit-wordlist",
+    "description": "The Kerberoasting / AD password-audit wordlist I use on engagements: priority-merged HashMob large list + The-Viper-One's kerberoast_pws, order-preserving dedup via rling, paired with OneRuleToRuleThemStill for hashcat. MIT, rebuild-it-yourself recipe.",
+    "language": "Shell",
+    "stars": 13,
+    "license": "MIT",
+    "archived": false,
+    "pushed_at": "2026-10-02T14:24:53Z",
+    "default_branch": "main",
+    "queries": [
+      "dedup in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/ADScanPro/ad-audit-wordlist/blob/8da3d5f6fab1185390410746d60463df31ba1b4e/README.md",
+      "sha256": "06569119f13d3613696e7ef4b937db4a37ce6c7d02550e8f72a4d47f3feb2b32",
+      "truncated": false,
+      "lines": 67,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/ADScanPro/ad-audit-wordlist/blob/8da3d5f6fab1185390410746d60463df31ba1b4e/LICENSE",
+      "sha256": "e7828d42f2f56fab58162d211f8d4cbd57f8cad6e8bc54e529c77b537d8f662c",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "build-ad-audit-wordlist.sh",
+      "local": "02-build-ad-audit-wordlist.sh",
+      "url": "https://github.com/ADScanPro/ad-audit-wordlist/blob/8da3d5f6fab1185390410746d60463df31ba1b4e/build-ad-audit-wordlist.sh",
+      "sha256": "664d27416323b02871fd0a0fa133f74ce91cfc738ccef4e7507fd682135ac489",
+      "truncated": false,
+      "lines": 41,
+      "source": true,
+      "test": false
+    }
+  ],
+  "errors": [],
+  "commit": "8da3d5f6fab1185390410746d60463df31ba1b4e",
+  "tree_truncated": false,
+  "source_file_count": 1,
+  "test_file_count": 0,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "build-ad-audit-wordlist.sh"
+  ]
+}

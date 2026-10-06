@@ -1,0 +1,48 @@
+{
+  "format": "XCF",
+  "specification": "https://developer.gimp.org/core/standards/xcf/",
+  "candidate": {
+    "crate": "xcf",
+    "version": "0.4.0",
+    "repository": "https://github.com/shivshank/xcf-rs",
+    "lib_sha256": "0153dcec200033669bcfc15d5375b0e071b81b711ed9553293b272d7be314212"
+  },
+  "findings": [
+    {
+      "lines": [
+        120,
+        134
+      ],
+      "issue": "Rejects version above 11; non-RGB input panics via unimplemented! instead of returning an error."
+    },
+    {
+      "lines": [
+        427,
+        442
+      ],
+      "issue": "Layer mask pointer is TODO; public parser is not a qualified compositor."
+    },
+    {
+      "lines": [
+        511,
+        511
+      ],
+      "issue": "Width times height is multiplied as u32 and Vec allocated without checked dimensions or managed reservation."
+    },
+    {
+      "lines": [
+        71,
+        71
+      ],
+      "issue": "Channel parsing remains TODO."
+    }
+  ],
+  "decision": "Do not integrate this crate directly into the viewer. Native bounded parsing and composition or another verified implementation are required. XCF remains Pending.",
+  "next_requirements": [
+    "Checked version-specific offsets and geometry before allocations",
+    "Bounded uncompressed/RLE/zlib tile decoding into managed buffers",
+    "Visible layer composition with offsets, alpha, masks, groups and color/precision policy",
+    "GIMP-produced corpus with independent exported pixel oracle and RAM/swap/Metal qualification"
+  ],
+  "scope": "Source audit only; no XCF decoder implemented and no new format counted."
+}

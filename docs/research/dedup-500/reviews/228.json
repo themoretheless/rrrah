@@ -1,0 +1,78 @@
+{
+  "index": 228,
+  "repository": "vxst/dedup",
+  "commit": "0a29fe43fc2236c88cbb5cdb95e0f65081b4b617",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "C++ file-level hash_data deduplicator; need collision verification and resource tests before selecting.",
+  "available_source_evidence": [
+    {
+      "path": "deduplicator.cpp",
+      "local": "02-deduplicator.cpp",
+      "url": "https://github.com/vxst/dedup/blob/0a29fe43fc2236c88cbb5cdb95e0f65081b4b617/deduplicator.cpp",
+      "sha256": "5c19852036d01166f1094c711e2e4c5d363160d32a30b45bb2e312c74a373d55",
+      "truncated": false,
+      "lines": 197,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "deduplicator.h",
+      "local": "03-deduplicator.h",
+      "url": "https://github.com/vxst/dedup/blob/0a29fe43fc2236c88cbb5cdb95e0f65081b4b617/deduplicator.h",
+      "sha256": "115cb8b772f8ed44364b36ba7eb1acd4c097f0d91c1bf05fde1ef1bf98acc26d",
+      "truncated": false,
+      "lines": 57,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "hash.cpp",
+      "local": "04-hash.cpp",
+      "url": "https://github.com/vxst/dedup/blob/0a29fe43fc2236c88cbb5cdb95e0f65081b4b617/hash.cpp",
+      "sha256": "8c80599dba8dfcba3ee249d62da691c6ffc1a2ad103a35517a9b4b4c1be7adf1",
+      "truncated": false,
+      "lines": 52,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "hash.h",
+      "local": "05-hash.h",
+      "url": "https://github.com/vxst/dedup/blob/0a29fe43fc2236c88cbb5cdb95e0f65081b4b617/hash.h",
+      "sha256": "40a39104be22daf2f349587bb5486f2b88d45e94191f0abd5e9805c080c379fa",
+      "truncated": false,
+      "lines": 19,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "Apache-2.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/vxst/dedup/blob/0a29fe43fc2236c88cbb5cdb95e0f65081b4b617/README.md",
+      "sha256": "be6871cececcc5d4f7fbb09378839db2ac7e697a8a89f9b65a64c620b4f4b3db",
+      "truncated": false,
+      "lines": 42,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/vxst/dedup/blob/0a29fe43fc2236c88cbb5cdb95e0f65081b4b617/LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "truncated": false,
+      "lines": 201,
+      "source": false,
+      "test": false
+    }
+  ]
+}

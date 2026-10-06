@@ -1,0 +1,51 @@
+{
+  "scope": "Current native exact.rs in standalone no-decode rrrah-dedup wrapper; Linux non-root tmpfs qualification",
+  "platform": {
+    "kernel": "Linux 6.8.0-117-generic aarch64",
+    "rust": "1.98.0",
+    "uid": 1000,
+    "filesystem": "tmpfs with executable build directory"
+  },
+  "validation": {
+    "unit": 2,
+    "content_snapshot": 1,
+    "exact_files": 12,
+    "failed": 0,
+    "ignored": 0,
+    "filtered": 0,
+    "exit_code": 0
+  },
+  "source_sha256": {
+    "crates/rrrah-dedup/src/exact.rs": "1b630858baf08341af261835043078bd87bb78679c3892ecc755fcc014d46e7e",
+    "crates/rrrah-dedup/tests/exact_files.rs": "2350d133e1120b46b929dd7d986039d7557cce1bdf36f9f8cf12bf1f35c3cc26",
+    "crates/rrrah-dedup/tests/content_snapshot.rs": "84ae6d3c3d3231f25ac6afc8b41937394136731fb4210aa4fb2242319aa4b38a"
+  },
+  "log_sha256": "b47d52447c21986ca03efb3bf4ae202cc91b6c23ddb18b11c7494a209ed0a014",
+  "direct_dependencies": {
+    "blake3": "1.8.5",
+    "libc": "0.2.190",
+    "tempfile": "3.27.0",
+    "thiserror": "2.0.19"
+  },
+  "setup": "Rust 1-bookworm image; tar input via stdin into fresh tmpfs; user 1000:1000, executable /work, private /tmp. No host source writes. Transitive dependencies resolved by the standalone wrapper.",
+  "command": "cargo test --lib --test exact_files --test content_snapshot",
+  "qualified": [
+    "Full byte-confirmed collision partitioning and final content validation unit fixtures",
+    "Content snapshot digest and same-size mutation checks",
+    "Non-UTF8 paths and diagnostics",
+    "Real non-root unreadable-file handling",
+    "Hardlinks and followed symlink cycles",
+    "FIFO replacement and cancellation",
+    "Existing positive/negative exact-file fixtures and metadata-observable mutation recovery"
+  ],
+  "remaining": [
+    "Linux native decoder and pixel/local collection integration",
+    "Windows filesystem and physical identity",
+    "Metadata-invisible mutations in sample/size-pruned negative branches",
+    "Large filesystem collections and latency measurements"
+  ],
+  "initial_setup_failures": [
+    "Bind source input was empty; switched to stdin tar transfer.",
+    "Default tmpfs prohibited build-script execution; explicitly enabled exec for private build directory."
+  ]
+}

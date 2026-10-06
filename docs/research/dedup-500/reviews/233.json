@@ -1,0 +1,88 @@
+{
+  "index": 233,
+  "repository": "fredo-dedup/HeadlessChromium.jl",
+  "commit": "89d01e0a0f6aedd122198904af1fa631b2c59f2e",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Chromium Julia wrapper matched repository owner name; no duplicate algorithm.",
+  "available_source_evidence": [
+    {
+      "path": "src/HeadlessChromium.jl",
+      "local": "02-HeadlessChromium.jl",
+      "url": "https://github.com/fredo-dedup/HeadlessChromium.jl/blob/89d01e0a0f6aedd122198904af1fa631b2c59f2e/src/HeadlessChromium.jl",
+      "sha256": "e684299d05f822b07bd150eff025d9740510d05c62a4374315296b96197701bc",
+      "truncated": false,
+      "lines": 32,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/communication.jl",
+      "local": "03-communication.jl",
+      "url": "https://github.com/fredo-dedup/HeadlessChromium.jl/blob/89d01e0a0f6aedd122198904af1fa631b2c59f2e/src/communication.jl",
+      "sha256": "0074589824135952fcc94d9b1ec578ad68a498124671a57951efd74282678867",
+      "truncated": false,
+      "lines": 164,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/misc.jl",
+      "local": "04-misc.jl",
+      "url": "https://github.com/fredo-dedup/HeadlessChromium.jl/blob/89d01e0a0f6aedd122198904af1fa631b2c59f2e/src/misc.jl",
+      "sha256": "18596480d1a55382fd74237d091cbdd3126b4cc7ff8b06d515813a654b85f557",
+      "truncated": false,
+      "lines": 83,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "test/runtests.jl",
+      "local": "05-runtests.jl",
+      "url": "https://github.com/fredo-dedup/HeadlessChromium.jl/blob/89d01e0a0f6aedd122198904af1fa631b2c59f2e/test/runtests.jl",
+      "sha256": "ae002187558b28a800c81086fa5bac15cdfa544b4fe705709e18beefa6660745",
+      "truncated": false,
+      "lines": 46,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "test/example.html",
+      "local": "06-example.html",
+      "url": "https://github.com/fredo-dedup/HeadlessChromium.jl/blob/89d01e0a0f6aedd122198904af1fa631b2c59f2e/test/example.html",
+      "sha256": "c3d47a0c8c628d546a3b81f820ff3f698051836d7f83612e75eff30bdde0b92e",
+      "truncated": false,
+      "lines": 51,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 2,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/fredo-dedup/HeadlessChromium.jl/blob/89d01e0a0f6aedd122198904af1fa631b2c59f2e/README.md",
+      "sha256": "1c02090bfc74f95b41b1f40361273d0c59a49aa19c5bcad77e86070730a7d79d",
+      "truncated": false,
+      "lines": 74,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/fredo-dedup/HeadlessChromium.jl/blob/89d01e0a0f6aedd122198904af1fa631b2c59f2e/LICENSE",
+      "sha256": "4a6926f4da1ce54a49ca733ece7f1aa55ce649eec38a7956dc8b19db483c4410",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

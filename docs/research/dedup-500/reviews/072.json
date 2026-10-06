@@ -1,0 +1,58 @@
+{
+  "index": 72,
+  "repository": "ultralytics/source-trace",
+  "commit": "843f8907baf511491b54abd701209126e936d04f",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Repository line-copy statistics; not photo similarity.",
+  "license_metadata": "AGPL-3.0",
+  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "available_source_evidence": [
+    {
+      "path": "source/__init__.py",
+      "local": "02-__init__.py",
+      "url": "https://github.com/ultralytics/source-trace/blob/843f8907baf511491b54abd701209126e936d04f/source/__init__.py",
+      "sha256": "3f737feb49d68f85e521441655b7494dfb1938d1420fb01a9e222b16c8df147f",
+      "truncated": false,
+      "lines": 7,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "source/run_repo.py",
+      "local": "03-run_repo.py",
+      "url": "https://github.com/ultralytics/source-trace/blob/843f8907baf511491b54abd701209126e936d04f/source/run_repo.py",
+      "sha256": "a8e4321b72751b5da99d170ae706ccca7b1b889e757d1e4109d39323fd4d2e57",
+      "truncated": false,
+      "lines": 133,
+      "source": true,
+      "test": false
+    }
+  ],
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/ultralytics/source-trace/blob/843f8907baf511491b54abd701209126e936d04f/README.md",
+      "sha256": "0b533dfdf6ac23b9c45cf40fa5b8170f18c67777276f6ffe4ee38dae688ed93d",
+      "truncated": false,
+      "lines": 69,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/ultralytics/source-trace/blob/843f8907baf511491b54abd701209126e936d04f/LICENSE",
+      "sha256": "8486a10c4393cee1c25392769ddd3b2d6c242d6ec7928e1414efff7dfb2f07ef",
+      "truncated": false,
+      "lines": 661,
+      "source": false,
+      "test": false
+    }
+  ]
+}

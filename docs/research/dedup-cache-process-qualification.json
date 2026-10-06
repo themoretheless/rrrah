@@ -1,0 +1,36 @@
+{
+  "qualification": "Cross-process cache publication and abrupt pre-publication exit on macOS",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/cache.rs": "e439c6f3a89f01a3100bbf7254028458ac060526e02166ba5e682884bb8417d0",
+    "crates/rrrah-dedup/tests/cache.rs": "c27b29e3294c2bd8d595e55f6d2abb9a2d293bfe06b6268dc894d7903a153dba"
+  },
+  "validation": {
+    "cache_test_suite": 6,
+    "substantive_process_scenarios": 2,
+    "child_helper_test": 1,
+    "failed": 0,
+    "clippy_cache_tests": "passed"
+  },
+  "concurrent_writers": {
+    "processes": 4,
+    "publications_per_process": 20,
+    "records_per_cache": 64,
+    "reader": "Parent repeatedly loads destination while child writers run; each decoded cache must contain all 64 records of exactly one writer.",
+    "result": "All publications and reader validations pass; final cache belongs to a child writer; no leftover temporary files after successful writers."
+  },
+  "abrupt_exit": {
+    "code": 37,
+    "checkpoints": [
+      "During record write, callback 8",
+      "After complete-file flush/sync, before replacement, callback 67"
+    ],
+    "result": "Both exits preserve previous destination bytes and decoded contents. Partial orphan is rejected; complete synchronized orphan is valid but is not published. A subsequent save publishes a valid new cache."
+  },
+  "limits": [
+    "macOS local filesystem only; no Linux/Windows cache process qualification.",
+    "Process exit bypasses Rust destructors; this is not power loss or kernel/filesystem crash.",
+    "Directory-entry durability and orphan reclamation are not implemented or proved.",
+    "Last-publication semantics do not merge concurrent writer contents.",
+    "Automatic complete decoder/recipe identity remains an independent requirement."
+  ]
+}

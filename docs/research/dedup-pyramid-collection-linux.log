@@ -1,0 +1,28 @@
+   Compiling rrrah-decode v0.1.0 (/workspace/crates/rrrah-decode)
+   Compiling rrrah-dedup v0.1.0 (/workspace/crates/rrrah-dedup)
+warning: linker stderr: /validation/sysroot/usr/bin/ld: /validation/target/debug/deps/libjpegxr-8d01a0594e000fc4.rlib(2e643c6506a180d9-strenc.o): in function `StrIOEncInit':
+         /validation/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/jpegxr-0.3.1/jxrlib/image/encode/strenc.c:485:(.text.StrIOEncInit+0xf0): the use of `tmpnam' is dangerous, better use `mkstemp'
+  |
+  = note: `#[warn(linker_messages)]` on by default
+
+warning: linker stdout: /validation/sysroot/usr/bin/ld: /validation/target/debug/deps/libjpegxr-8d01a0594e000fc4.rlib(2e643c6506a180d9-strenc.o): note: the message above does not take linker garbage collection into account
+
+warning: `rrrah-dedup` (test "pyramid") generated 2 warnings
+warning: `rrrah-dedup` (test "projective_files") generated 2 warnings (2 duplicates)
+    Finished `test` profile [optimized + debuginfo] target(s) in 5m 50s
+     Running tests/projective_files.rs (/validation/target/debug/deps/projective_files-9eb7536df2e30f44)
+
+running 2 tests
+test pyramid_photometric_files_preserve_identity_refusals_and_cancel_retry ... ok
+     Running tests/pyramid.rs (/validation/target/debug/deps/pyramid-2f81049ffde9ea35)
+test pyramid_collection_and_nested_roots_match_direct_pairs_and_refusals ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 24 filtered out; finished in 10.05s
+
+
+running 2 tests
+test managed_oriented_pyramid_admission_cancel_retry_and_last_owner_release ... ok
+test oriented_pyramid_keeps_recipe_source_coordinates_and_admission ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.03s
+

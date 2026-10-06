@@ -1,0 +1,40 @@
+{
+  "status": "macos_and_linux_passed",
+  "session": 12073,
+  "source_sha256": {
+    "crates/rrrah-dedup/tests/exact_files.rs": "abc2273b0112700d953be5deaee1d6519cdd4a2f5f2376486dd646559500f4c9"
+  },
+  "files": 192,
+  "expected_groups": 48,
+  "copies_per_group": 3,
+  "unique_same_size_negatives": 48,
+  "checks": [
+    "Overlapping directory and file roots",
+    "Reversed root order",
+    "Entry and depth limit diagnostics",
+    "Cancellation followed by full retry"
+  ],
+  "scope": "Authored nested corpus; not native Windows or concurrent filesystem ABA qualification",
+  "log": "docs/research/dedup-nested-partition-macos.log",
+  "macos_exit_code": 0,
+  "macos_tests_passed": 1,
+  "post_macos_source_drift": {},
+  "linux_session": 70736,
+  "linux_log": "docs/research/dedup-nested-partition-linux.log",
+  "linux_mode": "exact-policy",
+  "linux_start_source_sha256": {
+    "Cargo.lock": "d0999b2b9095148aed051790d4b6deb2820e45b22a479fffe832227dcbf891cb",
+    "crates/rrrah-dedup/src/exact.rs": "7bec3889306e8cc3c8a72a47e8b64bec12a12e9f70dbdb0bf08cfd2e621040c6",
+    "crates/rrrah-dedup/tests/exact_files.rs": "abc2273b0112700d953be5deaee1d6519cdd4a2f5f2376486dd646559500f4c9",
+    "scripts/run-dedup-linux-native.sh": "733f342e2161e711dc0c5e70221a84b50fabe07fe7a7d250009c21c0a2dced43"
+  },
+  "macos_full_exact_session": 46184,
+  "macos_full_exact_exit_code": 0,
+  "macos_full_exact_tests_passed": 16,
+  "macos_full_exact_log": "docs/research/dedup-nested-partition-exact-macos.log",
+  "linux_exit_code": 0,
+  "linux_test_groups": 2,
+  "linux_tests_passed": 30,
+  "linux_tests_failed": 0,
+  "linux_post_source_drift": {}
+}

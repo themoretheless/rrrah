@@ -1,0 +1,58 @@
+{
+  "status": "primitive_gates_both_platforms_and_three_captured_regressions_passed",
+  "macos": {
+    "initial_suite_exit": 0,
+    "initial_tests": 11,
+    "clippy_exit": 0,
+    "strengthened_offset_test_exit": 0,
+    "offset_tolerance_pixels": 0.05
+  },
+  "scope": "Explicit corner-control trust region, not continuous displacement certificate; does not establish visual candidates",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/warp.rs": "fa6749b042933b486d1532872e8616b509a3e5cac4d9821e861e3fd75458e6b2",
+    "crates/rrrah-dedup/tests/projective_geometry.rs": "2d49607c309035c8278d156f9d244fd372505015530f8ab49017785de0cb458d"
+  },
+  "remaining": [
+    "Complete all-580 independent anchored evaluation",
+    "Broad positive/negative calibration",
+    "Remaining full library contract requirements"
+  ],
+  "captured_case_session": 29653,
+  "linux_session": 32229,
+  "captured_case_report": "docs/research/dedup-registration-drift-anchored-macos.json",
+  "captured_case_maximum_corner_shift": 1.0,
+  "probe_build_exit": 0,
+  "captured_cases": {
+    "exit": 0,
+    "count": 3,
+    "median_pixels": [
+      0.6607933274797181,
+      0.6304457929018316,
+      0.7825228248547428
+    ],
+    "maximum_pixels": [
+      0.996799017800565,
+      1.6249677389652835,
+      1.2598661856852238
+    ],
+    "scope": "Existing development/regression cases, >=4 finite known-grid samples; no candidate or general transform guarantee"
+  },
+  "linux_primitives": {
+    "exit": 0,
+    "passed": 15,
+    "ignored": 0,
+    "scope": "11 projective geometry and 4 warp checks"
+  },
+  "linux": {
+    "exit": 0,
+    "passed": 15,
+    "ignored": 0,
+    "log": "docs/research/dedup-registration-anchor-linux.log",
+    "log_sha256": "a09df85e6863b9fef3d87de9d5eddd9921007abdcbe312f70f31e1234903a738"
+  },
+  "integration_evidence": [
+    "docs/research/dedup-registration-anchor-collection-state.json",
+    "docs/research/dedup-registration-anchor-exhaustive-state.json",
+    "docs/research/dedup-registration-anchor-lifecycle-state.json"
+  ]
+}

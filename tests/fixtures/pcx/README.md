@@ -1,0 +1,1 @@
+Synthetic 3x2 PCX fixtures authored for Rrrah; CC0. Generated with Pillow 12.3.0. RGB and indexed files have row-major RGB pixels: (11,22,33), (192,193,255), (1,2,3), (44,55,66), (77,88,99), (0,255,127). These fixtures have no third-party image content.

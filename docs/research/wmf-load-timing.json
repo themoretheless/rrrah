@@ -1,0 +1,92 @@
+{
+  "date": "2026-10-06",
+  "profile": "Cargo dev local opt-level 1 dependency opt-level 3; Apple M4 Max",
+  "scope": "authored 10x10 simple fill WMF only; warm filesystem/process CPU-ready load and linear display preparation; 3 warmups 100 measured repeats; digest verified each repeat; excludes GPU, caches, display and complex external files",
+  "percentiles": "nearest rank",
+  "results": [
+    {
+      "path": "tests/fixtures/wmf/blue.wmf",
+      "index": 0,
+      "iterations": 100,
+      "load_p50_ms": 0.013958,
+      "load_p95_ms": 0.018625,
+      "prepare_p50_ms": 0.000458,
+      "prepare_p95_ms": 0.000542,
+      "cpu_ready_p50_ms": 0.014457999999999999,
+      "cpu_ready_p95_ms": 0.019125,
+      "display_blake3": "1f8538a74e885f27e25bb8c97f6c0bf43789527735f597b21e092197dec52685",
+      "cache": "warm filesystem; process warm; no decoded image cache",
+      "source_sha256": "71801f26f4821226261c2161b32b1494938e9fa36b933f45933ba065a6131833"
+    },
+    {
+      "path": "tests/fixtures/wmf/green.wmf",
+      "index": 0,
+      "iterations": 100,
+      "load_p50_ms": 0.015291999999999998,
+      "load_p95_ms": 0.023542,
+      "prepare_p50_ms": 0.00045900000000000004,
+      "prepare_p95_ms": 0.000625,
+      "cpu_ready_p50_ms": 0.015917,
+      "cpu_ready_p95_ms": 0.024583,
+      "display_blake3": "7095cabc2d91727f014b0cb7ae7b8555dba2757e95127475fb4182e57808ade9",
+      "cache": "warm filesystem; process warm; no decoded image cache",
+      "source_sha256": "e819ba95ea387683d532fc8fe6c77f936ee5f888415e01db6f0122f2958bcdb1"
+    },
+    {
+      "path": "tests/fixtures/wmf/object-reuse.wmf",
+      "index": 0,
+      "iterations": 100,
+      "load_p50_ms": 0.014042,
+      "load_p95_ms": 0.01975,
+      "prepare_p50_ms": 0.000458,
+      "prepare_p95_ms": 0.000542,
+      "cpu_ready_p50_ms": 0.0145,
+      "cpu_ready_p95_ms": 0.020208999999999998,
+      "display_blake3": "1c8976eda77444dbd8b7fc3ee16ac87240d1b2fce16692acc221a6527e1a3738",
+      "cache": "warm filesystem; process warm; no decoded image cache",
+      "source_sha256": "7ce60feddb2d9fce86ae0e0609fbd77ac7de2d853d88cec21e3ba93f2695d889"
+    },
+    {
+      "path": "tests/fixtures/wmf/polygon.wmf",
+      "index": 0,
+      "iterations": 100,
+      "load_p50_ms": 0.013458000000000001,
+      "load_p95_ms": 0.016792,
+      "prepare_p50_ms": 0.000458,
+      "prepare_p95_ms": 0.000542,
+      "cpu_ready_p50_ms": 0.013917,
+      "cpu_ready_p95_ms": 0.017292,
+      "display_blake3": "1c8976eda77444dbd8b7fc3ee16ac87240d1b2fce16692acc221a6527e1a3738",
+      "cache": "warm filesystem; process warm; no decoded image cache",
+      "source_sha256": "3dee4e9749ef093c14eab3f078cf67342011ceb26e7761ade08474222acac141"
+    },
+    {
+      "path": "tests/fixtures/wmf/red.wmf",
+      "index": 0,
+      "iterations": 100,
+      "load_p50_ms": 0.014083,
+      "load_p95_ms": 0.017667,
+      "prepare_p50_ms": 0.000458,
+      "prepare_p95_ms": 0.000542,
+      "cpu_ready_p50_ms": 0.014542000000000001,
+      "cpu_ready_p95_ms": 0.018208,
+      "display_blake3": "1c8976eda77444dbd8b7fc3ee16ac87240d1b2fce16692acc221a6527e1a3738",
+      "cache": "warm filesystem; process warm; no decoded image cache",
+      "source_sha256": "2cc7d6be6b16e6eab4adadd44ad12435068de4c17c2fb9785a002ccd9575f16b"
+    },
+    {
+      "path": "tests/fixtures/wmf/saved-context.wmf",
+      "index": 0,
+      "iterations": 100,
+      "load_p50_ms": 0.013834,
+      "load_p95_ms": 0.017750000000000002,
+      "prepare_p50_ms": 0.000458,
+      "prepare_p95_ms": 0.000542,
+      "cpu_ready_p50_ms": 0.014292,
+      "cpu_ready_p95_ms": 0.01825,
+      "display_blake3": "1c8976eda77444dbd8b7fc3ee16ac87240d1b2fce16692acc221a6527e1a3738",
+      "cache": "warm filesystem; process warm; no decoded image cache",
+      "source_sha256": "f5140e84eccac2dd2909212440e62b915dbdbec2dbb73903baa3e0843e5c3118"
+    }
+  ]
+}

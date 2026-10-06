@@ -1,0 +1,51 @@
+{
+  "status": "passed",
+  "platform": "Linux ARM64, uid/gid 65534",
+  "readonly": "read-only Docker bind of isolated persistent ext4 folder",
+  "full": "isolated 64 KiB tmpfs, filler guard at 2 MiB",
+  "checks": [
+    "read-only cache save returns pre-publication Io(ReadOnlyFilesystem), raw errno wrapped by tempfile",
+    "full tmpfs save returns StorageFull, raw errno ENOSPC 28",
+    "prior cache bytes unchanged and fingerprint independently reloaded",
+    "no surviving temporary cache files",
+    "read-only remount writable retry succeeds",
+    "removing filler restores successful cache publication"
+  ],
+  "probe": "crates/rrrah-dedup/examples/cache_storage_probe.rs",
+  "runner": "scripts/run-dedup-linux-cache-storage.sh",
+  "source_hashes": {
+    "crates/rrrah-dedup/examples/cache_storage_probe.rs": "83d1ab437784367dfebcca592e4ce5b0869807e2c48e1bbdc986979c8a86657c",
+    "scripts/run-dedup-linux-cache-storage.sh": "f0e37e4df986d574cd3de8edba2af6521e03005f44f50eef51d53ba2bd16f760"
+  },
+  "hash_timing": "post-validation; Clippy annotation and runner path resolution added after functional runs",
+  "logs": {
+    "prepare": {
+      "path": "docs/research/dedup-cache-storage-prepare.log",
+      "sha256": "375037ff1d1f8c40a72eebed95b8b1913cb5fbfc11a9dbb6716f7656492a59ca"
+    },
+    "readonly": {
+      "path": "docs/research/dedup-cache-storage-readonly.log",
+      "sha256": "8bade31473dc242659f7686a95f7b8574f923816d040fce8a3a9cc610d2e8dff"
+    },
+    "retry": {
+      "path": "docs/research/dedup-cache-storage-retry.log",
+      "sha256": "21a80d5854e12adae4a8fa4a9457329a441219ba06d6722fdd1626166b337469"
+    },
+    "full": {
+      "path": "docs/research/dedup-cache-storage-full.log",
+      "sha256": "4caf25f49cd8cced9ab7e5ee311e451f3fa3518bd40ee13ff51e6b7161bb6179"
+    },
+    "clippy": {
+      "path": "docs/research/dedup-cache-storage-clippy.log",
+      "sha256": "45eafbca45dc3cba35aa195164a134af9b9f878ff44568a9d9df373a471d8a02"
+    }
+  },
+  "clippy": "passed",
+  "limits": [
+    "full-filesystem proof uses tmpfs, not a full physical disk or quota",
+    "read-only remount is between separate processes, not concurrent mount change",
+    "no actual power-loss/kernel-crash simulation",
+    "production cache source unchanged in this step",
+    "full acceptance remains incomplete"
+  ]
+}

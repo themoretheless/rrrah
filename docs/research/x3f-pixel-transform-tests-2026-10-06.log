@@ -1,0 +1,32 @@
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `test` profile [optimized + debuginfo] target(s) in 13.10s
+     Running unittests src/lib.rs (/tmp/rrrah-required-corpus-target/debug/deps/rrrah_decode-fef1cf096a77eef0)
+
+running 24 tests
+test x3f::tests::camf_float_access_refuses_nonfinite_wrong_type_and_bad_indices ... ok
+test x3f::tests::highlights_threshold_transition_saturation_and_invalid_calibration ... ok
+test x3f::tests::black_smoothing_constant_outlier_invalid_and_cancel ... ok
+test x3f::tests::image_header_refuses_truncation_and_reports_reserved_sensor_encoding ... ok
+test x3f::tests::invalid_ranges_versions_dimensions_and_cancellation ... ok
+test x3f::tests::bad_pixels_neighbor_mask_origin_edges_signed_means_and_cancel ... ok
+test x3f::tests::dark_drift_interpolates_all_channels_and_rejects_bad_rows ... ok
+test x3f::tests::camf_property_links_refuse_truncation_offsets_and_cancel ... ok
+test x3f::tests::pixel_transform_rounding_clamps_validation_and_cancel ... ok
+test x3f::tests::camf_type2_budget_cancellation_and_round_trip ... ok
+test x3f::tests::legacy_tables_refuse_prefix_collisions_row_aliasing_and_cancel ... ok
+test x3f::tests::noise_curve_domain_symmetry_finite_budget_and_cancellation ... ok
+test x3f::tests::borrowed_unknown_section_and_all_truncated_prefixes ... ok
+test x3f::tests::camf_matrix_rejects_corrupt_dimensions_ranges_and_overflow ... ok
+test x3f::tests::post_polynomial_fixed_point_terms_and_overflow ... ok
+test x3f::tests::properties_validate_offsets_unicode_and_cancellation ... ok
+test x3f::tests::black_scene_adjustment_sample_stride_signed_values_and_refusal ... ok
+test x3f::tests::shield_columns_filter_trim_and_invalid_ranges ... ok
+test x3f::tests::sigma_sd10_inventory_distinguishes_sensor_from_previews ... ignored, requires pinned Sigma SD10 X3F and independent LibRaw channel dump
+test x3f::tests::hue_smoothing_constant_impulse_edges_budget_and_cancel ... ok
+test x3f::tests::red_sharpen_constant_impulse_edges_other_channels_budget_and_cancel ... ok
+test x3f::tests::shield_mean_signed_samples_bounds_and_cancellation ... ok
+test x3f::tests::spatial_gain_bilinear_grid_boundaries_and_invalid_values ... ok
+test x3f::tests::wide_hue_smoothing_constant_impulse_border_and_release ... ok
+
+test result: ok. 23 passed; 0 failed; 1 ignored; 0 measured; 788 filtered out; finished in 0.00s
+

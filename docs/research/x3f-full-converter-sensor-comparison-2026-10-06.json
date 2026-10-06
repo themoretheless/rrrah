@@ -1,0 +1,49 @@
+{
+  "scope": "dcraw sensor input vs independently unpacked LibRaw sensor",
+  "values": 10582272,
+  "mismatches": 10582272,
+  "max_difference": 65334,
+  "difference_histogram": {
+    "-202": 10464018,
+    "65334": 118254
+  },
+  "first_differences": [
+    [
+      0,
+      156,
+      358
+    ],
+    [
+      1,
+      135,
+      337
+    ],
+    [
+      2,
+      45,
+      247
+    ],
+    [
+      3,
+      84,
+      286
+    ],
+    [
+      4,
+      69,
+      271
+    ],
+    [
+      5,
+      24,
+      226
+    ]
+  ],
+  "sha256": {
+    "rrrah-sd10-dcraw-sensor.u16le": "7b0900703d9808bf7ba643e8d786ab62e40b43278bb55539ee5214958d4f9ba9",
+    "rrrah-sd10-libraw-channels.u16le": "44a331ab98772b5c41c5670963d73975cbedf962ac752feeaaacaaede86c7b35"
+  },
+  "after_modular_offset_removal_mismatches": 0,
+  "legacy_offset": 202,
+  "conclusion": "All sensor values match exactly after modular removal of LibRaw legacy offset. Calibration must consume unshifted signed predictor samples."
+}

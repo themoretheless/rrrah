@@ -1,0 +1,105 @@
+{
+  "repository": "fritshermans/deduplipy",
+  "metadata": {
+    "name": "fritshermans/deduplipy",
+    "url": "https://github.com/fritshermans/deduplipy",
+    "description": "Python package for deduplication/entity resolution using active learning",
+    "language": "Python",
+    "stars": 83,
+    "license": "MIT",
+    "archived": false,
+    "pushed_at": "2024-08-24T09:19:21Z",
+    "default_branch": "main",
+    "queries": [
+      "dedup in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/fritshermans/deduplipy/blob/3ee8e5d56930d0f46890a2dc20c3a7dcd2d553c3/README.md",
+      "sha256": "c4f3b29d0bfd39f48b3c829240fbf291b0fc41b4f9ffe72549dbb3c670189210",
+      "truncated": false,
+      "lines": 82,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/fritshermans/deduplipy/blob/3ee8e5d56930d0f46890a2dc20c3a7dcd2d553c3/LICENSE",
+      "sha256": "e4e23554cbbcd057c5d43c8d12b2421a47bb2dc4054345705e3df9d5fd5b232f",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "deduplipy/deduplicator/deduplicator.py",
+      "local": "02-deduplicator.py",
+      "url": "https://github.com/fritshermans/deduplipy/blob/3ee8e5d56930d0f46890a2dc20c3a7dcd2d553c3/deduplipy/deduplicator/deduplicator.py",
+      "sha256": "d8c67edb09bffbc70cc7bd4294e1752b1af03da621d518a0112f104e53546f99",
+      "truncated": false,
+      "lines": 213,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "deduplipy/sampling/minhash_sampling.py",
+      "local": "03-minhash_sampling.py",
+      "url": "https://github.com/fritshermans/deduplipy/blob/3ee8e5d56930d0f46890a2dc20c3a7dcd2d553c3/deduplipy/sampling/minhash_sampling.py",
+      "sha256": "77c002dfe1b446d39abed3cb059f57a0fec0321721cf1ba1816a1c3b5dcb1079",
+      "truncated": false,
+      "lines": 137,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "deduplipy/__init__.py",
+      "local": "04-__init__.py",
+      "url": "https://github.com/fritshermans/deduplipy/blob/3ee8e5d56930d0f46890a2dc20c3a7dcd2d553c3/deduplipy/__init__.py",
+      "sha256": "598f476e4828c4995409f11a300488028df01538772b75171edcba2ec8e894c8",
+      "truncated": false,
+      "lines": 1,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/test_sampling/test_minhash_sampling.py",
+      "local": "05-test_minhash_sampling.py",
+      "url": "https://github.com/fritshermans/deduplipy/blob/3ee8e5d56930d0f46890a2dc20c3a7dcd2d553c3/tests/test_sampling/test_minhash_sampling.py",
+      "sha256": "820879e8c8c7025cba215ad4e93d26a631c782d45bf5601b04af726e0f2f4c1c",
+      "truncated": false,
+      "lines": 18,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "deduplipy/datasets.py",
+      "local": "06-datasets.py",
+      "url": "https://github.com/fritshermans/deduplipy/blob/3ee8e5d56930d0f46890a2dc20c3a7dcd2d553c3/deduplipy/datasets.py",
+      "sha256": "87ca864e0eb732b591d70ef1276010a5cc4fbd79f30e9b9483d01e24eda685e1",
+      "truncated": false,
+      "lines": 38,
+      "source": true,
+      "test": false
+    }
+  ],
+  "errors": [],
+  "commit": "3ee8e5d56930d0f46890a2dc20c3a7dcd2d553c3",
+  "tree_truncated": false,
+  "source_file_count": 35,
+  "test_file_count": 9,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "deduplipy/deduplicator/deduplicator.py",
+    "deduplipy/sampling/minhash_sampling.py",
+    "deduplipy/datasets.py",
+    "tests/test_sampling/test_minhash_sampling.py"
+  ]
+}

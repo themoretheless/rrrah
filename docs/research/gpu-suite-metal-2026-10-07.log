@@ -1,0 +1,169 @@
+   Compiling rrrah-gpu v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu)
+    Finished `test` profile [optimized + debuginfo] target(s) in 3.13s
+     Running unittests src/lib.rs (/tmp/rrrah-required-corpus-target/debug/deps/rrrah_gpu-3fc6e742f2070fc2)
+
+running 47 tests
+test filmstrip::tests::scroll_to_reveal_moves_only_when_needed ... ok
+test backend::vendor_tests::hardware_vendor_filter_rejects_other_ids_and_incompatible_surfaces ... ok
+test backend::tests::explicit_backend_masks_and_unavailable_requests_never_fallback ... ok
+test filmstrip::tests::max_scroll_is_zero_when_everything_fits ... ok
+test filmstrip::tests::hit_testing_finds_tiles_and_rejects_gaps_and_padding ... ok
+test filmstrip::tests::strip_band_hit_region ... ok
+test rgbe_plan::tests::full_srf_plan_and_small_limit_segments_cover_without_overlap ... ok
+test rgbe_plan::tests::invalid_geometry_planes_and_device_admission_fail_before_allocating_pixels ... ok
+test tests::card_layout_scales_for_a_retina_surface ... ok
+test tests::card_layout_is_safe_for_empty_and_tiny_viewports ... ok
+test tests::card_description_wraps_and_clips_by_line_count ... ok
+test tests::compact_card_metrics_keep_dense_descriptions_readable ... ok
+test tests::default_tiling_avoids_the_4096_frame_regression ... ok
+test tests::default_tiling_keeps_aligned_tiles_when_one_layer_is_not_smaller ... ok
+test tests::default_tiling_errors_when_layer_limit_cannot_be_met ... ok
+test tests::default_tiling_rejects_tiny_adapters ... ok
+test tests::default_tiling_shrinks_for_small_adapters ... ok
+test tests::default_tiling_uses_c2_optimum_with_aligned_extent ... ok
+test tests::default_tiling_uses_one_frame_tile_when_layer_growth_would_waste_atlas_space ... ok
+test tests::default_tiling_uses_one_small_frame_tile_when_atlas_is_materially_smaller ... ok
+test tests::dense_card_grid_scales_for_a_retina_surface ... ok
+test tests::direct_white_balance_preserves_backend_neutral_contract ... ok
+test tests::display_keeps_decoder_white_balance_gains_bit_exact ... ok
+test tests::edge_tiles_clamp_without_out_of_bounds_reads ... ok
+test tests::eleven_cards_use_three_columns_for_the_total_block ... ok
+test tests::five_column_dashboard_scales_exactly_for_a_retina_surface ... ok
+test tests::five_column_metrics_preserve_timing_title_and_description_capacity ... ok
+test tests::forty_one_cards_keep_algorithm_descriptions_readable ... ok
+test tests::four_cards_fill_the_nominal_telemetry_dashboard ... ok
+test tests::hud_space_is_blank_instead_of_unknown_glyph ... ok
+test tests::malformed_dimensions_do_not_panic_helper_paths ... ok
+test tests::odd_dense_card_count_keeps_row_major_order ... ok
+test tests::ten_cards_fill_a_two_column_five_row_grid ... ok
+test tests::thirty_eight_cards_fill_a_five_column_eight_row_dashboard ... ok
+test tests::tiling_override_below_minimum_is_rejected ... ok
+test tests::tile_halo_matches_full_frame_at_internal_boundary ... ok
+test tests::tiling_override_exceeding_texture_limit_is_rejected ... ok
+test tests::tiling_override_is_applied_verbatim ... ok
+test tests::hud_shader_parses_and_validates_with_naga ... ok
+test model::tests::model_shader_validates ... ok
+test tests::tiling_override_respects_array_layer_limit ... ok
+test tests::twenty_eight_cards_fill_a_five_column_six_row_dashboard ... ok
+test tests::twenty_four_cards_fill_a_four_column_six_row_dashboard ... ok
+test tests::uniform_layout_remains_wgsl_compatible ... ok
+test tests::upload_rows_are_padded_to_webgpu_alignment ... ok
+test tests::viewport_shader_parses_and_validates_with_naga ... ok
+test tests::rowwise_tile_halo_matches_scalar_oracle_across_randomized_geometry ... ok
+
+test result: ok. 47 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/camera_color_readback.rs (/tmp/rrrah-required-corpus-target/debug/deps/camera_color_readback-4692fa6fd663bc99)
+
+running 6 tests
+test real_camera_profiles_match_independent_linear_transforms ... ok
+test color_thumbnail_uses_crop_and_oriented_dimensions ... ok
+test minification_integrates_all_sensor_cells_instead_of_aliasing_the_stride ... ok
+test sensor_clipped_near_white_is_neutral_but_chromatic_highlights_keep_color ... ok
+test distinct_green_wb_is_applied_before_demosaic ... ok
+test real_camera_colors_match_gpu_readback ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.21s
+
+     Running tests/compute_readback.rs (/tmp/rrrah-required-corpus-target/debug/deps/compute_readback-0f0df8525b3523e2)
+
+running 5 tests
+test full_sensor_linear_exposure_chunked_readback ... ignored, allocates about 0.8 GB of GPU buffers; full-resolution local qualification
+test full_sensor_managed_exposure_budgets_and_checks_every_pixel ... ignored, full-resolution managed compute uses about 2 GB of tracked buffers
+test interleaved_exposure_preserves_bits_and_managed_raster_ownership ... ok
+test exposure_readback_cancellation_releases_mapping_and_allows_retry ... ok
+test linear_exposure_compute_preserves_hdr_alpha_and_dispatch_tail ... ok
+
+test result: ok. 3 passed; 0 failed; 2 ignored; 0 measured; 0 filtered out; finished in 0.14s
+
+     Running tests/filmstrip_readback.rs (/tmp/rrrah-required-corpus-target/debug/deps/filmstrip_readback-846abeeec2a0d920)
+
+running 2 tests
+test thumbnail_queue_refusal_validation_slot_reuse_and_completion ... ok
+test thumbnail_texture_credit_competes_with_raster_and_releases_on_slot_removal ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+     Running tests/model_readback.rs (/tmp/rrrah-required-corpus-target/debug/deps/model_readback-cb73a0cd6a7f5d18)
+
+running 5 tests
+test model_budget_admits_vertices_and_depth_transactionally ... ok
+test raster_and_model_resources_share_parent_admission ... ok
+test depth_resolves_overlapping_facets_independent_of_submission_order ... ok
+test model_has_coverage_orbits_and_fits_extreme_coordinates ... ok
+test float64_translation_and_scale_preserve_small_geometry ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+
+     Running tests/raster_readback.rs (/tmp/rrrah-required-corpus-target/debug/deps/raster_readback-96fa399a25885f6d)
+
+running 8 tests
+test qualified_sd10_linear_raster_full_frame_display_readback ... ignored, requires qualified X3F linear sRGB PPM and a physical GPU
+test raster_queue_admission_accounts_alignment_and_completion_ownership ... ok
+test texture_budget_preserves_loaded_image_on_refusal_and_releases_owners ... ok
+test uploaded_rows_and_rgb_channels_keep_their_positions ... ok
+test linear_hdr_attachment_preserves_bright_negative_and_exposed_channels ... ok
+test transparent_rgb_is_removed_before_bilinear_interpolation ... ok
+test linear_gray_and_straight_alpha_composite_match_display_reference ... ok
+test developed_raw_exposure_precedes_tone_and_monotone_curve ... ok
+
+test result: ok. 7 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.13s
+
+     Running tests/raw_linear_readback.rs (/tmp/rrrah-required-corpus-target/debug/deps/raw_linear_readback-9fd8b6185e48ed18)
+
+running 2 tests
+test binary16_reference_covers_signed_hdr_and_subnormals ... ok
+test raw_linear_float_target_preserves_hdr_and_negative_rgbe_color ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+
+     Running tests/raw_orientation_readback.rs (/tmp/rrrah-required-corpus-target/debug/deps/raw_orientation_readback-2f509afec3477bdf)
+
+running 1 test
+test all_exif_orientations_preserve_the_documented_corner_order ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+
+     Running tests/readback.rs (/tmp/rrrah-required-corpus-target/debug/deps/readback-381870146e3bac04)
+
+running 10 tests
+test raw_atlas_budget_accounts_halos_and_preserves_image_on_refusal ... ok
+test exposure_shift_raises_midtones_without_replot ... ok
+test black_and_white_endpoints_match_aces_contract ... ok
+test readback_is_bit_identical_across_rerenders ... ok
+test out_of_gamut_camera_colors_desaturate_matching_cpu_reference ... ok
+test uniform_gray_renders_neutral_and_spatially_uniform ... ok
+test decoder_white_balance_scale_is_preserved_through_real_camera_profile ... ok
+test known_gray_points_match_cpu_reference_curve ... ok
+test tone_curve_is_monotonic_across_input_levels ... ok
+test saturated_colors_preserve_hue_through_tone_map ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.29s
+
+     Running tests/resource_lease.rs (/tmp/rrrah-required-corpus-target/debug/deps/resource_lease-8129f30d5856efe2)
+
+running 3 tests
+test texture_upload_holds_credit_without_frame_or_explicit_resource_snapshot ... ok
+test raster_replacement_accounts_for_old_texture_and_queued_upload ... ok
+test submitted_resources_keep_credit_after_renderer_destruction_until_completion ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+     Running tests/rgbe_compute_readback.rs (/tmp/rrrah-required-corpus-target/debug/deps/rgbe_compute_readback-5d310ff784bafb7a)
+
+running 4 tests
+test full_f828_managed_rgbe_matches_cpu_reference ... ignored, requires independent DSC-F828 full-sensor dump; authored four-channel normalization, not as-shot color qualification
+test cancelled_large_rgbe_validation_does_not_admit_output_resources ... ok
+test managed_rgbe_admission_completion_and_output_owner ... ok
+test four_plane_compute_matches_cpu_lattices_edges_hdr_and_tail ... ok
+
+test result: ok. 3 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.11s
+
+     Running tests/rgbe_view_readback.rs (/tmp/rrrah-required-corpus-target/debug/deps/rgbe_view_readback-e71f7d8542d54b99)
+
+running 2 tests
+test four_plane_color_edges_and_downscale_match_cpu ... ok
+test odd_crop_orientations_and_tile_seams_preserve_rgbe_frame ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.31s
+

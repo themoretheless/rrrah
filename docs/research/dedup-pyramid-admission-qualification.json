@@ -1,0 +1,24 @@
+{
+  "change": "Fallible exact reservation before combining pyramid feature levels; cancellation checked during source-coordinate remapping.",
+  "validation": {
+    "oriented_tests": 3,
+    "pyramid_tests": 3,
+    "failed": 0,
+    "dedup_lib_no_deps_clippy": "passed",
+    "dependency_inclusive_clippy": "failed with 8 existing rrrah-memory diagnostics"
+  },
+  "checks": [
+    "Second-level aggregate feature limit refuses without partial result.",
+    "One-shot final cancellation refuses completed-looking output.",
+    "Retry after failures reproduces feature count, positions and descriptors.",
+    "Existing rotation and non-dyadic geometry tests still pass."
+  ],
+  "source_sha256": {
+    "crates/rrrah-dedup/src/pyramid.rs": "fe1be3e4ee9e656149962a5f6c7cf4a8ea475a825be8528d89830234b737c786",
+    "crates/rrrah-dedup/tests/pyramid.rs": "47a3672e54b8c13801e511dc061f9c7bc9be1a5852d9b3bf3bd0c4677da92df3"
+  },
+  "limits": [
+    "Allocator exhaustion not injected; fallible allocation mapping inspected.",
+    "No shared byte-budget admission for all pyramid intermediates or RSS proof."
+  ]
+}

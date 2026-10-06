@@ -1,0 +1,78 @@
+{
+  "index": 150,
+  "repository": "binwiederhier/fsdup",
+  "commit": "beec68f05f916d05881a19a11cfb89366c4d728b",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Disk chunker and NTFS block-store experiment; scope is storage dedup rather than duplicate-file report.",
+  "available_source_evidence": [
+    {
+      "path": "chunker.go",
+      "local": "02-chunker.go",
+      "url": "https://github.com/binwiederhier/fsdup/blob/beec68f05f916d05881a19a11cfb89366c4d728b/chunker.go",
+      "sha256": "f51c46f33f6211927eb10744794dc08e8ef6bd80b6c1c75851722ec0c0eebd29",
+      "truncated": false,
+      "lines": 74,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "chunker_fixed.go",
+      "local": "03-chunker_fixed.go",
+      "url": "https://github.com/binwiederhier/fsdup/blob/beec68f05f916d05881a19a11cfb89366c4d728b/chunker_fixed.go",
+      "sha256": "e1180ee0218afeada9c7107aa36b7e9c8fe901d4a8e5f0f5bbcc2a381d403e37",
+      "truncated": false,
+      "lines": 224,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "chunker_gpt.go",
+      "local": "04-chunker_gpt.go",
+      "url": "https://github.com/binwiederhier/fsdup/blob/beec68f05f916d05881a19a11cfb89366c4d728b/chunker_gpt.go",
+      "sha256": "030a3cc5049c21e24d536238edf2c5e763c9995820bf58c86f1593e853e9ed27",
+      "truncated": false,
+      "lines": 129,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "cmd/fsdup/main.go",
+      "local": "05-main.go",
+      "url": "https://github.com/binwiederhier/fsdup/blob/beec68f05f916d05881a19a11cfb89366c4d728b/cmd/fsdup/main.go",
+      "sha256": "7ed5724dacacb4b8c94ad7e373176619036bac21cc64d27b3016721e09cdf2f3",
+      "truncated": false,
+      "lines": 551,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "Apache-2.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/binwiederhier/fsdup/blob/beec68f05f916d05881a19a11cfb89366c4d728b/README.md",
+      "sha256": "bc6d31a1324b1fdd3a01e39f318e9f53b3c89a024445fc9b4ebc677f037db697",
+      "truncated": false,
+      "lines": 66,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/binwiederhier/fsdup/blob/beec68f05f916d05881a19a11cfb89366c4d728b/LICENSE",
+      "sha256": "d5f965a7a9260fb5c2b163d00cc4901f62c5d29423dfe0447763624c86e99aa1",
+      "truncated": false,
+      "lines": 201,
+      "source": false,
+      "test": false
+    }
+  ]
+}

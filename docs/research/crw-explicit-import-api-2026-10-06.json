@@ -1,0 +1,17 @@
+{
+  "scope": "Explicit public CRW 10D import API with caller-owned external table data",
+  "api": "decode_crw_10d_with_tables",
+  "contracts": [
+    "Explicit RAM root charges source plus sensor allocation",
+    "Input drops before returned mosaic; last pixel owner retains output credit",
+    "Full sensor equals independent 10D oracle"
+  ],
+  "logs": {
+    "/tmp/rrrah-crw-explicit-api.log": "04a131be1096abbbd91bcf8c7f15e7413c9a4d635c74c141547d16f15346ec3c",
+    "/tmp/rrrah-crw-explicit-full.log": "715c5ce83b78676d890765dd36591fd050a573adf00a310d31b9c0e1b879cdea"
+  },
+  "limitations": [
+    "Table identity/provenance must be enforced by caller; API validates canonical shape only.",
+    "No automatic CRW routing or shipped table data; catalog CRW stays Pending."
+  ]
+}

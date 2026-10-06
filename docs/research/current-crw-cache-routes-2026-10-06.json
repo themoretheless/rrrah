@@ -1,0 +1,88 @@
+{
+  "source": "Canon EOS 10D CRW",
+  "source_sha256": "b0730eb3a67cc2281a32e0b2ee104199246928d954a68b7e5b72366514c73d02",
+  "command": "cargo run -p rrrah --example raw_view_timing --locked --target-dir /tmp/rrrah-required-corpus-target -- --cache-only /tmp/rrrah-10d.crw",
+  "profile": "dev optimized + debuginfo",
+  "method": "Four warmups, 16 retained samples, four tiers rotate execution order. Every decode/disk/swap result compares complete sensor pixels and metadata. RAM sample is average over 1000 shared-buffer hits. Nearest-rank percentiles.",
+  "limitations": [
+    "Warm OS file cache; not cold storage or startup.",
+    "CPU-only; no GPU, display preparation, swapchain or physical presentation.",
+    "RAM p95 is percentile of batch means, not individual lookup tail latency.",
+    "One real camera source; not all RAW formats or memory-pressure navigation.",
+    "Managed budget excludes other process allocations and OS page cache."
+  ],
+  "runs": [
+    {
+      "csv": "docs/research/rrrah-current-crw-cache-timing-2026-10-06.csv",
+      "csv_sha256": "36a5b5f41e930875cba9e0672fc916e79d5109448fe953e10c4a73e2f7222710",
+      "log": "docs/research/rrrah-current-crw-cache-timing-2026-10-06.log",
+      "log_sha256": "e09c6f723c2699e395df223fe424a36aae33a88779a33fdc7e42ea32425b1b1a",
+      "root_final_bytes": 0,
+      "root_peak_bytes": 33860674,
+      "root_limit_bytes": 536870912,
+      "restore_final_bytes": 0,
+      "restore_peak_bytes": 13036672,
+      "restore_limit_bytes": 26073344,
+      "pixel_bytes": 13036672,
+      "timings": {
+        "decode": {
+          "samples": 16,
+          "p50_ms": 124.646416,
+          "p95_ms": 129.345666
+        },
+        "disk": {
+          "samples": 16,
+          "p50_ms": 8.198834,
+          "p95_ms": 8.800208
+        },
+        "swap": {
+          "samples": 16,
+          "p50_ms": 8.114625,
+          "p95_ms": 8.406625
+        },
+        "ram": {
+          "samples": 16,
+          "p50_ms": 0.000167,
+          "p95_ms": 0.000206
+        }
+      },
+      "decode_to_swap_p50_ratio": 15.3607118012231
+    },
+    {
+      "csv": "docs/research/rrrah-current-crw-cache-64mb-2026-10-06.csv",
+      "csv_sha256": "a7b4a6036f0f409d6eff13f571900876fa5a7886d9e136a03e61af18fa1cddeb",
+      "log": "docs/research/rrrah-current-crw-cache-64mb-2026-10-06.log",
+      "log_sha256": "27f82599c721ac1b05d4fe1689f4bcc642543a3a24eed991c86aaff5127ffacc",
+      "root_final_bytes": 0,
+      "root_peak_bytes": 33860674,
+      "root_limit_bytes": 67108864,
+      "restore_final_bytes": 0,
+      "restore_peak_bytes": 13036672,
+      "restore_limit_bytes": 26073344,
+      "pixel_bytes": 13036672,
+      "timings": {
+        "decode": {
+          "samples": 16,
+          "p50_ms": 123.993375,
+          "p95_ms": 125.899291
+        },
+        "disk": {
+          "samples": 16,
+          "p50_ms": 8.35225,
+          "p95_ms": 9.111042
+        },
+        "swap": {
+          "samples": 16,
+          "p50_ms": 8.0945,
+          "p95_ms": 8.381625
+        },
+        "ram": {
+          "samples": 16,
+          "p50_ms": 0.000173,
+          "p95_ms": 0.000199
+        }
+      },
+      "decode_to_swap_p50_ratio": 15.3182253381926
+    }
+  ]
+}

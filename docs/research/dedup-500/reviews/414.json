@@ -1,0 +1,88 @@
+{
+  "index": 414,
+  "repository": "iocium/domhash",
+  "commit": "f4bcf38cff67403dc40dd52f4e213da967e6a29c",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "DOM structure/layout hashes and shape cosine; HTML semantics rather than decoded image pixels.",
+  "available_source_evidence": [
+    {
+      "path": "src/core/hasher.ts",
+      "local": "02-hasher.ts",
+      "url": "https://github.com/iocium/domhash/blob/f4bcf38cff67403dc40dd52f4e213da967e6a29c/src/core/hasher.ts",
+      "sha256": "4dfea517dd001a9c4192190f89371be8537cd65b49bb45a4e11baec54d57f2f1",
+      "truncated": false,
+      "lines": 78,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/compare/metrics.ts",
+      "local": "03-metrics.ts",
+      "url": "https://github.com/iocium/domhash/blob/f4bcf38cff67403dc40dd52f4e213da967e6a29c/src/compare/metrics.ts",
+      "sha256": "be63221c34c39192022f0e00647654eea81e124bf7be7c12f2e21a0c081a9b98",
+      "truncated": false,
+      "lines": 106,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/cli.ts",
+      "local": "04-cli.ts",
+      "url": "https://github.com/iocium/domhash/blob/f4bcf38cff67403dc40dd52f4e213da967e6a29c/src/cli.ts",
+      "sha256": "5fd76ad0e24732ccd2407866c37116d20a35ec9e18ffa7e946cd2abe2bd169d4",
+      "truncated": false,
+      "lines": 312,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "test/core/hasher.test.ts",
+      "local": "05-hasher.test.ts",
+      "url": "https://github.com/iocium/domhash/blob/f4bcf38cff67403dc40dd52f4e213da967e6a29c/test/core/hasher.test.ts",
+      "sha256": "72efea39fadf81800bdcefa0f9181def95ec39b74536916efec4ecb85a54583b",
+      "truncated": false,
+      "lines": 126,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "src/core/canonicalizer.ts",
+      "local": "06-canonicalizer.ts",
+      "url": "https://github.com/iocium/domhash/blob/f4bcf38cff67403dc40dd52f4e213da967e6a29c/src/core/canonicalizer.ts",
+      "sha256": "ab3d7df3c79527b7e4ca15059f141f13b490e45db3e995d339afd4261701e1ea",
+      "truncated": false,
+      "lines": 80,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 17,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/iocium/domhash/blob/f4bcf38cff67403dc40dd52f4e213da967e6a29c/README.md",
+      "sha256": "04507aea825f01fb564df7a9177908249898dc92b9abf92cbd2f2fcb49218079",
+      "truncated": false,
+      "lines": 110,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/iocium/domhash/blob/f4bcf38cff67403dc40dd52f4e213da967e6a29c/LICENSE",
+      "sha256": "816d443a48722ebc7f96e0d3166821573865f12344c8c19c14bdfb57681603a8",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

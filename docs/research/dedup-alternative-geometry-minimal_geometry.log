@@ -1,0 +1,18 @@
+    Blocking waiting for file lock on build directory
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+    Finished `test` profile [optimized + debuginfo] target(s) in 23.78s
+     Running tests/geometry.rs (/tmp/rrrah-dedup-target/debug/deps/geometry-52eaaaaf9b778296)
+
+running 9 tests
+test degenerate_least_squares_refinement_preserves_prior_hypothesis ... ok
+test scaled_rotated_crop_translation_rejects_watermark_outliers ... ok
+test noisy_corners_refine_to_independently_known_least_squares_solution ... ok
+test duplicate_and_collinear_support_cannot_inflate_evidence ... ok
+test alternative_geometry_keeps_degeneracy_guards_and_deduplicates_identical_models ... ok
+test one_shot_cancel_never_publishes_partial_geometry_and_retry_recovers_support ... ok
+test capped_residual_candidate_preserves_exact_majority_beside_count_winner ... ok
+test reflected_geometry_keeps_support_original_coordinates_and_cancel_atomicity ... ok
+test alternative_geometry_budget_and_cancellation_never_publish_partial_models ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

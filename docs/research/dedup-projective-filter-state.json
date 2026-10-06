@@ -1,0 +1,173 @@
+{
+  "status": "primitive_checks_passed_file_model_gate_incomplete",
+  "scope": "Six Pillow-authored perspective derivatives with independently known generator mapping; not estimated-model or captured-pair qualification",
+  "unit_tests_passed": 11,
+  "diagnostic_tests_passed": 1,
+  "measurements": [
+    {
+      "id": 2414,
+      "radius": 1,
+      "forward_matched": 61632,
+      "forward_compared": 63690,
+      "reverse_matched": 66125,
+      "reverse_compared": 66234
+    },
+    {
+      "id": 2414,
+      "radius": 2,
+      "forward_matched": 62260,
+      "forward_compared": 62650,
+      "reverse_matched": 65134,
+      "reverse_compared": 65178
+    },
+    {
+      "id": 2414,
+      "radius": 3,
+      "forward_matched": 61542,
+      "forward_compared": 61618,
+      "reverse_matched": 64104,
+      "reverse_compared": 64130
+    },
+    {
+      "id": 2418,
+      "radius": 1,
+      "forward_matched": 60818,
+      "forward_compared": 63690,
+      "reverse_matched": 65911,
+      "reverse_compared": 66234
+    },
+    {
+      "id": 2418,
+      "radius": 2,
+      "forward_matched": 61727,
+      "forward_compared": 62650,
+      "reverse_matched": 65058,
+      "reverse_compared": 65178
+    },
+    {
+      "id": 2418,
+      "radius": 3,
+      "forward_matched": 61316,
+      "forward_compared": 61618,
+      "reverse_matched": 64081,
+      "reverse_compared": 64130
+    },
+    {
+      "id": 2883,
+      "radius": 1,
+      "forward_matched": 17129,
+      "forward_compared": 17680,
+      "reverse_matched": 17771,
+      "reverse_compared": 18040
+    },
+    {
+      "id": 2883,
+      "radius": 2,
+      "forward_matched": 16997,
+      "forward_compared": 17141,
+      "reverse_matched": 17496,
+      "reverse_compared": 17496
+    },
+    {
+      "id": 2883,
+      "radius": 3,
+      "forward_matched": 16552,
+      "forward_compared": 16611,
+      "reverse_matched": 16960,
+      "reverse_compared": 16960
+    },
+    {
+      "id": 5025,
+      "radius": 1,
+      "forward_matched": 68874,
+      "forward_compared": 71781,
+      "reverse_matched": 73915,
+      "reverse_compared": 74365
+    },
+    {
+      "id": 5025,
+      "radius": 2,
+      "forward_matched": 69850,
+      "forward_compared": 70685,
+      "reverse_matched": 73181,
+      "reverse_compared": 73257
+    },
+    {
+      "id": 5025,
+      "radius": 3,
+      "forward_matched": 69383,
+      "forward_compared": 69597,
+      "reverse_matched": 72126,
+      "reverse_compared": 72157
+    },
+    {
+      "id": 1425,
+      "radius": 1,
+      "forward_matched": 68461,
+      "forward_compared": 71781,
+      "reverse_matched": 73191,
+      "reverse_compared": 74365
+    },
+    {
+      "id": 1425,
+      "radius": 2,
+      "forward_matched": 69609,
+      "forward_compared": 70685,
+      "reverse_matched": 73248,
+      "reverse_compared": 73257
+    },
+    {
+      "id": 1425,
+      "radius": 3,
+      "forward_matched": 69354,
+      "forward_compared": 69597,
+      "reverse_matched": 72157,
+      "reverse_compared": 72157
+    },
+    {
+      "id": 5495,
+      "radius": 1,
+      "forward_matched": 69146,
+      "forward_compared": 71781,
+      "reverse_matched": 74104,
+      "reverse_compared": 74365
+    },
+    {
+      "id": 5495,
+      "radius": 2,
+      "forward_matched": 70094,
+      "forward_compared": 70685,
+      "reverse_matched": 73181,
+      "reverse_compared": 73257
+    },
+    {
+      "id": 5495,
+      "radius": 3,
+      "forward_matched": 69474,
+      "forward_compared": 69597,
+      "reverse_matched": 72141,
+      "reverse_compared": 72157
+    }
+  ],
+  "source_sha256": {
+    "crates/rrrah-dedup/src/warp.rs": "177d82838d8686c89c92206b92a7041a3c1fba29a43e12b7d7f28853e9aaa846",
+    "crates/rrrah-dedup/tests/projective_geometry.rs": "9cbd0240cc76ed7ffa2d59c82c0dfb83f964bc113e6b7bf8fa055e416a523d37",
+    "crates/rrrah-dedup/tests/projective_files.rs": "6f4cdce8e791157859aa955ae4a95eb8bb5d25d003775d68b4f143c382fb1fbd",
+    "crates/rrrah-dedup/src/local_scan.rs": "16c293429ccb66869b7e17b69906f83550463c40b12d72d606b6bc25e80c779a"
+  },
+  "remaining": "Explicit filtered file comparison, estimated model pixel gates, unrelated negatives, Linux and regression checks",
+  "file_mode": {
+    "positive_passed": 2,
+    "positive_total": 6,
+    "positive_rejected": [
+      2414,
+      2418,
+      5025,
+      5495
+    ],
+    "unrelated_pairs_rejected": 14,
+    "lifecycle_test_passed": true,
+    "scope": "Explicit low-pass file comparison; strict residuals retained; estimated geometry is still insufficient on four positives",
+    "next": "Bounded subpixel projective registration and its negative/cancellation qualification; Linux verification"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-06",
+  "fixture": "tests/fixtures/pdf/rotate90.pdf",
+  "source_sha256": "038b6f5fb7bf97b57bb873d139b86d6a82fd82f304d31418b3d20bb9b80e2db0",
+  "license": "CC0-1.0 authored",
+  "media_box": [
+    0,
+    0,
+    10,
+    20
+  ],
+  "rotation": 90,
+  "render_dimensions": [
+    20,
+    10
+  ],
+  "reference": "opaque red left half, green right half; mathematical and full-plane Poppler RGB agree",
+  "oracle_command": "pdftoppm -r 72 tests/fixtures/pdf/rotate90.pdf /tmp/rrrah-pdf-rotate90",
+  "native_test": "pdf::tests::page_rotation_preserves_extent_and_matches_poppler",
+  "focused_pdf_passed": 4,
+  "failed": 0,
+  "log": "/tmp/rrrah-pdf-rotation.log",
+  "limits": "only Rotate90, no crop/user-unit/arbitrary transforms or physical presentation qualification",
+  "gpu_preservation": {
+    "adapter": "Metal Apple M4 Max",
+    "log": "/tmp/rrrah-pdf-rotated-metal.log",
+    "test_suite_passed": 2,
+    "ignored": 0,
+    "rotated_native_prepared_swap_roundtrips": 2,
+    "assertions": [
+      "native samples match full Poppler RGBA reference",
+      "prepared GPU frame equals mathematical primary-color reference",
+      "RAM lease blocks shrink",
+      "native/prepared swap samples bit-exact and restore pressure preserves retry",
+      "restored GPU frame matches rotated reference",
+      "managed budget zero after last owners drop"
+    ]
+  }
+}

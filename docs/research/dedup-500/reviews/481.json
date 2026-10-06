@@ -1,0 +1,68 @@
+{
+  "index": 481,
+  "repository": "A5M1/imgphash",
+  "commit": "89061afa98da7ec11b885afe786aed6e56f62f3c",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Rust image hash count_ones comparison; no detected tests, bounds and preprocessing pending.",
+  "available_source_evidence": [
+    {
+      "path": "src/lib.rs",
+      "local": "02-lib.rs",
+      "url": "https://github.com/A5M1/imgphash/blob/89061afa98da7ec11b885afe786aed6e56f62f3c/src/lib.rs",
+      "sha256": "e6a807851a9b2c6aeef5a0db542d66ce4a0e2d0ea13c55d17a66ee881edfd0a2",
+      "truncated": false,
+      "lines": 1201,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "example/capi_phash2.h",
+      "local": "03-capi_phash2.h",
+      "url": "https://github.com/A5M1/imgphash/blob/89061afa98da7ec11b885afe786aed6e56f62f3c/example/capi_phash2.h",
+      "sha256": "63fe373efc3035e2441dcfd326e5d5b5db19e92a819dcdae1d899eaa57a7196d",
+      "truncated": false,
+      "lines": 116,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "example/main.c",
+      "local": "04-main.c",
+      "url": "https://github.com/A5M1/imgphash/blob/89061afa98da7ec11b885afe786aed6e56f62f3c/example/main.c",
+      "sha256": "538ce597ca90c9ad00f25669453b9069d7e96195297feda67af83079a21e2ec7",
+      "truncated": false,
+      "lines": 74,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/A5M1/imgphash/blob/89061afa98da7ec11b885afe786aed6e56f62f3c/README.md",
+      "sha256": "5f67ee00c7dd3e0685c69e347d47505b5295b2229c6886936ce1484b22cb90ec",
+      "truncated": false,
+      "lines": 71,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/A5M1/imgphash/blob/89061afa98da7ec11b885afe786aed6e56f62f3c/LICENSE",
+      "sha256": "a95e530c7e7373df974796a239cc240651d7e1cfe8b99ff70cfd33dd773234cd",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

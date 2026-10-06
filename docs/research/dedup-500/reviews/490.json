@@ -1,0 +1,98 @@
+{
+  "index": 490,
+  "repository": "Query-farm/vgi-image",
+  "commit": "91dcb7ffc11e1eb92f641361cc1bc60ab2730874",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Rust DuckDB image-worker pHash/EXIF/GPS/Arrow pipeline; useful metadata handling but source-library and budget behavior unqualified.",
+  "available_source_evidence": [
+    {
+      "path": "crates/image-worker/src/scalar/hash.rs",
+      "local": "02-hash.rs",
+      "url": "https://github.com/Query-farm/vgi-image/blob/91dcb7ffc11e1eb92f641361cc1bc60ab2730874/crates/image-worker/src/scalar/hash.rs",
+      "sha256": "b84a8d8d761f46b49aacd2fdb7436b480ea162ad51ed3cca47b705bb478f7905",
+      "truncated": false,
+      "lines": 436,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "docker-entrypoint.sh",
+      "local": "03-docker-entrypoint.sh",
+      "url": "https://github.com/Query-farm/vgi-image/blob/91dcb7ffc11e1eb92f641361cc1bc60ab2730874/docker-entrypoint.sh",
+      "sha256": "c22de4b180171353a2380ffd420b8e900dba090f446b4ef85eb4c6348e4eeba5",
+      "truncated": false,
+      "lines": 37,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "ci/check-version.sh",
+      "local": "04-check-version.sh",
+      "url": "https://github.com/Query-farm/vgi-image/blob/91dcb7ffc11e1eb92f641361cc1bc60ab2730874/ci/check-version.sh",
+      "sha256": "43c3db187a37223f6d4ffdcb529d35525343dd4d981b204713ae9285598bde63",
+      "truncated": false,
+      "lines": 8,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "crates/image-worker/tests/exif_gps.rs",
+      "local": "05-exif_gps.rs",
+      "url": "https://github.com/Query-farm/vgi-image/blob/91dcb7ffc11e1eb92f641361cc1bc60ab2730874/crates/image-worker/tests/exif_gps.rs",
+      "sha256": "c798b1ddcdf0052584c64b9bcd3c6e57efd5e46967f0414b480d71392f894065",
+      "truncated": false,
+      "lines": 153,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "crates/image-wasm/src/lib.rs",
+      "local": "06-lib.rs",
+      "url": "https://github.com/Query-farm/vgi-image/blob/91dcb7ffc11e1eb92f641361cc1bc60ab2730874/crates/image-wasm/src/lib.rs",
+      "sha256": "aef589dc85decb134de3d483e137d5a185b2367e98e59e8ae284e6f7c36679ab",
+      "truncated": false,
+      "lines": 28,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "crates/image-worker/src/arrow_io.rs",
+      "local": "07-arrow_io.rs",
+      "url": "https://github.com/Query-farm/vgi-image/blob/91dcb7ffc11e1eb92f641361cc1bc60ab2730874/crates/image-worker/src/arrow_io.rs",
+      "sha256": "6bda19bdbc9d9edd5ff1f593a92267cbbbb6d866af1616a2eb9015579a16c199",
+      "truncated": false,
+      "lines": 194,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 1,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/Query-farm/vgi-image/blob/91dcb7ffc11e1eb92f641361cc1bc60ab2730874/README.md",
+      "sha256": "9d078fc3ba1881cb66d8789e0a9f5620a4ed35c10fa2504be53554765dfb957b",
+      "truncated": false,
+      "lines": 235,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/Query-farm/vgi-image/blob/91dcb7ffc11e1eb92f641361cc1bc60ab2730874/LICENSE",
+      "sha256": "ba79bf2f5744098357fd6f51ecc78ea5f556c25c435697e36cc2204bafb17dc8",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

@@ -1,0 +1,105 @@
+{
+  "repository": "crackruckles/MediaDash",
+  "metadata": {
+    "name": "crackruckles/MediaDash",
+    "url": "https://github.com/crackruckles/MediaDash",
+    "description": "Jellyfin plugin that keeps your library lean and playable: finds duplicates, broken files, oversized encodes and unwanted language tracks, then fixes them safely.",
+    "language": "C#",
+    "stars": 68,
+    "license": "GPL-3.0",
+    "archived": false,
+    "pushed_at": "2026-10-01T05:38:39Z",
+    "default_branch": "main",
+    "queries": [
+      "duplicate in:name,description",
+      "duplicates in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/crackruckles/MediaDash/blob/97fbd6085312baa74df48a7bf7752244f2c1e73c/README.md",
+      "sha256": "5d2123c28b9962ed1442d9b29b940f70ac17afabe9cb2417b8c669c6815ca998",
+      "truncated": false,
+      "lines": 173,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/crackruckles/MediaDash/blob/97fbd6085312baa74df48a7bf7752244f2c1e73c/LICENSE",
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "truncated": false,
+      "lines": 674,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "Jellyfin.Plugin.MediaDash/Fixers/DuplicateFixer.cs",
+      "local": "02-DuplicateFixer.cs",
+      "url": "https://github.com/crackruckles/MediaDash/blob/97fbd6085312baa74df48a7bf7752244f2c1e73c/Jellyfin.Plugin.MediaDash/Fixers/DuplicateFixer.cs",
+      "sha256": "0dc4ec0d4892d606409a2afca912504a5b65a4b4c65375ccbd04129a6a889a10",
+      "truncated": false,
+      "lines": 280,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "Jellyfin.Plugin.MediaDash/Probing/FileHasher.cs",
+      "local": "03-FileHasher.cs",
+      "url": "https://github.com/crackruckles/MediaDash/blob/97fbd6085312baa74df48a7bf7752244f2c1e73c/Jellyfin.Plugin.MediaDash/Probing/FileHasher.cs",
+      "sha256": "c6a86389da5bbe35b7c30ddafe81535712b3381c0bd3a09b30680d4bdb348e1b",
+      "truncated": false,
+      "lines": 123,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "Jellyfin.Plugin.MediaDash/Scanners/ArtworkScanner.cs",
+      "local": "04-ArtworkScanner.cs",
+      "url": "https://github.com/crackruckles/MediaDash/blob/97fbd6085312baa74df48a7bf7752244f2c1e73c/Jellyfin.Plugin.MediaDash/Scanners/ArtworkScanner.cs",
+      "sha256": "48443c343e6eb053da847a5cfcdb59da856b23bb04f129177ca7167f7b659506",
+      "truncated": false,
+      "lines": 170,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "Jellyfin.Plugin.MediaDash.Tests/ArtworkScannerTests.cs",
+      "local": "05-ArtworkScannerTests.cs",
+      "url": "https://github.com/crackruckles/MediaDash/blob/97fbd6085312baa74df48a7bf7752244f2c1e73c/Jellyfin.Plugin.MediaDash.Tests/ArtworkScannerTests.cs",
+      "sha256": "db95aa1d6deb3900b3ac2d351a6fd0311f2cdb2002fafd76feeabcd86933318f",
+      "truncated": false,
+      "lines": 106,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "Jellyfin.Plugin.MediaDash/Scanners/DuplicateScanner.cs",
+      "local": "06-DuplicateScanner.cs",
+      "url": "https://github.com/crackruckles/MediaDash/blob/97fbd6085312baa74df48a7bf7752244f2c1e73c/Jellyfin.Plugin.MediaDash/Scanners/DuplicateScanner.cs",
+      "sha256": "97bb9866ab811913a0ce7f8b4ca11e1aa7f9f34e9eb0ba5b9ac826c4f65bdce1",
+      "truncated": false,
+      "lines": 672,
+      "source": true,
+      "test": false
+    }
+  ],
+  "errors": [],
+  "commit": "97fbd6085312baa74df48a7bf7752244f2c1e73c",
+  "tree_truncated": false,
+  "source_file_count": 242,
+  "test_file_count": 0,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "Jellyfin.Plugin.MediaDash/Probing/FileHasher.cs",
+    "Jellyfin.Plugin.MediaDash/Scanners/DuplicateScanner.cs",
+    "Jellyfin.Plugin.MediaDash.Tests/ArtworkScannerTests.cs"
+  ]
+}

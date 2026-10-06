@@ -1,0 +1,95 @@
+{
+  "repository": "thlorenz/dynamic-dedupe",
+  "metadata": {
+    "name": "thlorenz/dynamic-dedupe",
+    "url": "https://github.com/thlorenz/dynamic-dedupe",
+    "description": "Dedupes node modules as they are being required which works even when dependencies are linked via ln -s or npm link.",
+    "language": "JavaScript",
+    "stars": 11,
+    "license": "MIT",
+    "archived": false,
+    "pushed_at": "2020-12-05T21:33:41Z",
+    "default_branch": "master",
+    "queries": [
+      "dedup in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/thlorenz/dynamic-dedupe/blob/d9d4b196c46ea3e5ac3d16ed08ca407eea603841/README.md",
+      "sha256": "5ae759c396acf535f6530fe8d4422007f2c58475c3b7d98d2fb6b7085c0cb47c",
+      "truncated": false,
+      "lines": 110,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/thlorenz/dynamic-dedupe/blob/d9d4b196c46ea3e5ac3d16ed08ca407eea603841/LICENSE",
+      "sha256": "1fa6ee8bb95a81ae3d73a5bd074a3ac380ffec13697051063ca1a601921b91db",
+      "truncated": false,
+      "lines": 23,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "index.js",
+      "local": "02-index.js",
+      "url": "https://github.com/thlorenz/dynamic-dedupe/blob/d9d4b196c46ea3e5ac3d16ed08ca407eea603841/index.js",
+      "sha256": "a31d8fd10759a37cbad42795ae17952a2920663a281a7863e2dd3e9a67ca59bb",
+      "truncated": false,
+      "lines": 80,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "test/dedupe.js",
+      "local": "03-dedupe.js",
+      "url": "https://github.com/thlorenz/dynamic-dedupe/blob/d9d4b196c46ea3e5ac3d16ed08ca407eea603841/test/dedupe.js",
+      "sha256": "213948235903ef38200166a3b5f3737ac9156ba37a29544e6e39af91aa4755a2",
+      "truncated": false,
+      "lines": 101,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "example/deduped.js",
+      "local": "04-deduped.js",
+      "url": "https://github.com/thlorenz/dynamic-dedupe/blob/d9d4b196c46ea3e5ac3d16ed08ca407eea603841/example/deduped.js",
+      "sha256": "53714d26d554f72bc2dd66a3548c518548b77bc51731d899ab937619896e80a0",
+      "truncated": false,
+      "lines": 10,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "example/not-deduped.js",
+      "local": "05-not-deduped.js",
+      "url": "https://github.com/thlorenz/dynamic-dedupe/blob/d9d4b196c46ea3e5ac3d16ed08ca407eea603841/example/not-deduped.js",
+      "sha256": "c27aaf2ed628b34a5b1107ae933b757f99e40d4f19ae2961ae0541a2ee1e8f84",
+      "truncated": false,
+      "lines": 7,
+      "source": true,
+      "test": false
+    }
+  ],
+  "errors": [],
+  "commit": "d9d4b196c46ea3e5ac3d16ed08ca407eea603841",
+  "tree_truncated": false,
+  "source_file_count": 12,
+  "test_file_count": 7,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "example/deduped.js",
+    "example/not-deduped.js",
+    "index.js",
+    "test/dedupe.js"
+  ]
+}

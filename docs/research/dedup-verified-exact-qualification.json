@@ -1,0 +1,32 @@
+{
+  "feature": "exact::scan_verified",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/exact.rs": "63d2c3a1a26918d0f693810c7583a9430185f6b674e3ffd33b5f88fc47204f17",
+    "crates/rrrah-dedup/tests/exact_files.rs": "0a34c25f7c67dc09f93d5ba9ce4cb9621421465579f28680fd66b7838cfe4441",
+    "crates/rrrah-dedup/tests/content_snapshot.rs": "84ae6d3c3d3231f25ac6afc8b41937394136731fb4210aa4fb2242319aa4b38a"
+  },
+  "validation": {
+    "macos_minimal_library": 8,
+    "macos_content_snapshot": 1,
+    "macos_exact_files": 12,
+    "linux_exact_unit": 3,
+    "linux_content_snapshot": 1,
+    "linux_exact_files": 13,
+    "failed": 0
+  },
+  "linux_environment": "Linux 6.8 aarch64 / Rust 1.98 / UID 1000 / private tmpfs; unchanged native exact source in standalone wrapper",
+  "evidence": [
+    "Full-content baselines and final checks cover every admitted physical file, including size/sample-pruned negatives.",
+    "Injected metadata-indistinguishable middle edit leaves sampled hash unchanged but full observation check reports Changed.",
+    "Injected same-size rewrite in singleton size group reports Changed.",
+    "Stable public verified scan preserves ordinary exact groups and aliases and accounts for extra full reads.",
+    "Cancelled verified scan discards groups."
+  ],
+  "limits": [
+    "Baseline/final observations are not atomic; intermediate changes restored before revalidation may escape.",
+    "Ordinary scan retains staged behavior; use scan_verified for all-file content observation.",
+    "At least two extra full reads per observed file, without current scale timing qualification.",
+    "No complete memory admission or Windows/native Linux decoder qualification.",
+    "Metadata-indistinguishable negatives are qualified by private stamp injection, not ability to reset Unix ctime."
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "index": 299,
+  "repository": "agentscope-ai-java/bundle-dupe-check",
+  "commit": "80f3b433f89030622262735a56340a59390bf95d",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Vite/Rollup package-version duplicate analyzer; build graphs rather than files.",
+  "available_source_evidence": [
+    {
+      "path": "src/analyze.ts",
+      "local": "02-analyze.ts",
+      "url": "https://github.com/agentscope-ai-java/bundle-dupe-check/blob/80f3b433f89030622262735a56340a59390bf95d/src/analyze.ts",
+      "sha256": "d2470505683de6d5672130d98b639d53f363848bf367a1b282ae2b37211d107d",
+      "truncated": false,
+      "lines": 236,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/cli.ts",
+      "local": "03-cli.ts",
+      "url": "https://github.com/agentscope-ai-java/bundle-dupe-check/blob/80f3b433f89030622262735a56340a59390bf95d/src/cli.ts",
+      "sha256": "cd93d6d226811e8671b63d9cc4319cef47ad9a74a634cb12359f51565d9bb95e",
+      "truncated": false,
+      "lines": 115,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/errors.ts",
+      "local": "04-errors.ts",
+      "url": "https://github.com/agentscope-ai-java/bundle-dupe-check/blob/80f3b433f89030622262735a56340a59390bf95d/src/errors.ts",
+      "sha256": "980b0adea18e1a14e19e15ec6727ae92a96660b5584aebdf0b199cda11335468",
+      "truncated": false,
+      "lines": 32,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "test/fixtures/dup-project/src/main.js",
+      "local": "05-main.js",
+      "url": "https://github.com/agentscope-ai-java/bundle-dupe-check/blob/80f3b433f89030622262735a56340a59390bf95d/test/fixtures/dup-project/src/main.js",
+      "sha256": "9ebdb49f9afcbf354b3dc0acd9bcab8f339ecd4a4927d9b3b4fc28df9edd5e23",
+      "truncated": false,
+      "lines": 1,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 15,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/agentscope-ai-java/bundle-dupe-check/blob/80f3b433f89030622262735a56340a59390bf95d/README.md",
+      "sha256": "9864d4e53c2c9f2872e204075fa72ff557c07ae65418daee57ff8d966cb698c7",
+      "truncated": false,
+      "lines": 250,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/agentscope-ai-java/bundle-dupe-check/blob/80f3b433f89030622262735a56340a59390bf95d/LICENSE",
+      "sha256": "9244dbf9cc8a9d1b1b6e04eb785f7debe33c60fab8f800804e7efffee13b57c3",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

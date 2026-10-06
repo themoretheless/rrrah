@@ -1,0 +1,107 @@
+{
+  "repository": "ttkb-oss/dedup",
+  "metadata": {
+    "name": "ttkb-oss/dedup",
+    "url": "https://github.com/ttkb-oss/dedup",
+    "description": "dedup finds and clones duplicate files",
+    "language": "C",
+    "stars": 241,
+    "license": "BSD-2-Clause",
+    "archived": false,
+    "pushed_at": "2026-04-25T19:30:50Z",
+    "default_branch": "master",
+    "queries": [
+      "duplicate in:name,description",
+      "duplicates in:name,description",
+      "dedup in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/ttkb-oss/dedup/blob/a8e82b5aa7c14fbad203b8018cb440dc0560917a/README.md",
+      "sha256": "8b91622f357e9e37f7c410f4b36d4cca3396c32f6ddad4150006828e9ee4b29f",
+      "truncated": false,
+      "lines": 361,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/ttkb-oss/dedup/blob/a8e82b5aa7c14fbad203b8018cb440dc0560917a/LICENSE",
+      "sha256": "1b68443758a73fd0367c986529661e474d2994cf66287f92157c621b8546c642",
+      "truncated": false,
+      "lines": 23,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "dedup.c",
+      "local": "02-dedup.c",
+      "url": "https://github.com/ttkb-oss/dedup/blob/a8e82b5aa7c14fbad203b8018cb440dc0560917a/dedup.c",
+      "sha256": "e974dae8013919540b8f0f46563d9a79b50b9d4998f8e1f4a44b2cfd36674590",
+      "truncated": false,
+      "lines": 800,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "alist.c",
+      "local": "03-alist.c",
+      "url": "https://github.com/ttkb-oss/dedup/blob/a8e82b5aa7c14fbad203b8018cb440dc0560917a/alist.c",
+      "sha256": "9b3a5e7dbde2d966baa8821f15d6b8e4b7b4960d8186ee0d2aad1de582608c9c",
+      "truncated": false,
+      "lines": 103,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "alist.h",
+      "local": "04-alist.h",
+      "url": "https://github.com/ttkb-oss/dedup/blob/a8e82b5aa7c14fbad203b8018cb440dc0560917a/alist.h",
+      "sha256": "07a3e03902228604033f45b5698b2686b8bfaf354f1f2242bba132fee9ade671",
+      "truncated": false,
+      "lines": 98,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "test/dedup_check.c",
+      "local": "05-dedup_check.c",
+      "url": "https://github.com/ttkb-oss/dedup/blob/a8e82b5aa7c14fbad203b8018cb440dc0560917a/test/dedup_check.c",
+      "sha256": "beb691d863a0961281effe5f850dad6f6e3f30dd0736c7ab3cc07f93727c7e39",
+      "truncated": false,
+      "lines": 47,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "clone.c",
+      "local": "06-clone.c",
+      "url": "https://github.com/ttkb-oss/dedup/blob/a8e82b5aa7c14fbad203b8018cb440dc0560917a/clone.c",
+      "sha256": "6abbb22d4ba36ee52f97240f345be5d4ccf08f56d542c169cdea6407d4844e54",
+      "truncated": false,
+      "lines": 383,
+      "source": true,
+      "test": false
+    }
+  ],
+  "errors": [],
+  "commit": "a8e82b5aa7c14fbad203b8018cb440dc0560917a",
+  "tree_truncated": false,
+  "source_file_count": 21,
+  "test_file_count": 7,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "dedup.c",
+    "alist.c",
+    "clone.c",
+    "test/dedup_check.c"
+  ]
+}

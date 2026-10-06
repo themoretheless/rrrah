@@ -1,0 +1,114 @@
+{
+  "repository": "UWASL/dedup-bench",
+  "metadata": {
+    "name": "UWASL/dedup-bench",
+    "url": "https://github.com/UWASL/dedup-bench",
+    "description": "DedupBench is a benchmarking tool for content-defined chunking techniques used in data deduplication.  It currently supports eleven unique CDC techniques and five different vector instruction sets.",
+    "language": "C++",
+    "stars": 29,
+    "license": "Apache-2.0",
+    "archived": false,
+    "pushed_at": "2026-06-22T11:58:25Z",
+    "default_branch": "main",
+    "queries": [
+      "dedup in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/UWASL/dedup-bench/blob/8e2697cbf6332ac5da6dc615bfab82a720e820e4/README.md",
+      "sha256": "9ede1075fad94250060c4a5f21ca3621c78b65a216f89f23f312897bd06385d3",
+      "truncated": false,
+      "lines": 247,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/UWASL/dedup-bench/blob/8e2697cbf6332ac5da6dc615bfab82a720e820e4/LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "truncated": false,
+      "lines": 201,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "supporting_tools/calculate_file_similarities.py",
+      "local": "02-calculate_file_similarities.py",
+      "url": "https://github.com/UWASL/dedup-bench/blob/8e2697cbf6332ac5da6dc615bfab82a720e820e4/supporting_tools/calculate_file_similarities.py",
+      "sha256": "32ae0ffe5b5986c000ad8c578390c1c5de92608f10921adf6266e6d1181c3b2a",
+      "truncated": false,
+      "lines": 83,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "supporting_tools/dedup_script.sh",
+      "local": "03-dedup_script.sh",
+      "url": "https://github.com/UWASL/dedup-bench/blob/8e2697cbf6332ac5da6dc615bfab82a720e820e4/supporting_tools/dedup_script.sh",
+      "sha256": "8283c9e6c072230d4d5f3e39663e529c970489f16c62f6c901e1431ebf6f7e88",
+      "truncated": false,
+      "lines": 63,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "supporting_tools/dedup_script_parallel.sh",
+      "local": "04-dedup_script_parallel.sh",
+      "url": "https://github.com/UWASL/dedup-bench/blob/8e2697cbf6332ac5da6dc615bfab82a720e820e4/supporting_tools/dedup_script_parallel.sh",
+      "sha256": "9b11efc2c0132ba0bb5f226e32d70476631cb434b0c14d8e4dac8aef84a9b603",
+      "truncated": false,
+      "lines": 83,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "dedup/src/hashing/hash.cpp",
+      "local": "05-hash.cpp",
+      "url": "https://github.com/UWASL/dedup-bench/blob/8e2697cbf6332ac5da6dc615bfab82a720e820e4/dedup/src/hashing/hash.cpp",
+      "sha256": "1e67fbae848f34d3a87f48074d7ce7cd8b39f26c3a76b57fce7200134d34d083",
+      "truncated": false,
+      "lines": 46,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "dedup/src/hashing/hashing_common.cpp",
+      "local": "06-hashing_common.cpp",
+      "url": "https://github.com/UWASL/dedup-bench/blob/8e2697cbf6332ac5da6dc615bfab82a720e820e4/dedup/src/hashing/hashing_common.cpp",
+      "sha256": "53c43eefe7f39cd6b929ff83bc6d5032e6df37332d785ff2863098dbf118804e",
+      "truncated": false,
+      "lines": 20,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "dedup/src/hashing/md5_hashing.cpp",
+      "local": "07-md5_hashing.cpp",
+      "url": "https://github.com/UWASL/dedup-bench/blob/8e2697cbf6332ac5da6dc615bfab82a720e820e4/dedup/src/hashing/md5_hashing.cpp",
+      "sha256": "db0ce4f1b06990ec8fe0afb2418b7683999c866f569ac67422fe10104d122d89",
+      "truncated": false,
+      "lines": 14,
+      "source": true,
+      "test": false
+    }
+  ],
+  "errors": [],
+  "commit": "8e2697cbf6332ac5da6dc615bfab82a720e820e4",
+  "tree_truncated": false,
+  "source_file_count": 72,
+  "test_file_count": 0,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "dedup/src/hashing/hash.cpp",
+    "dedup/src/hashing/hashing_common.cpp",
+    "dedup/src/hashing/md5_hashing.cpp"
+  ]
+}

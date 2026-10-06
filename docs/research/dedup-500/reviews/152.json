@@ -1,0 +1,88 @@
+{
+  "index": 152,
+  "repository": "nmante/image_deduplication",
+  "commit": "7e5d1c9687f33a7a5184fc205987024670309850",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Separate exact-MD5 and near-image stages; tests present, hash collision and decoder policy still need checks.",
+  "available_source_evidence": [
+    {
+      "path": "dedup/exact_duplicate.py",
+      "local": "02-exact_duplicate.py",
+      "url": "https://github.com/nmante/image_deduplication/blob/7e5d1c9687f33a7a5184fc205987024670309850/dedup/exact_duplicate.py",
+      "sha256": "d658140f045ce19d28961428f95192ba97d880e89bac5f6f85b7b6e80b412374",
+      "truncated": false,
+      "lines": 45,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "dedup/near_duplicate.py",
+      "local": "03-near_duplicate.py",
+      "url": "https://github.com/nmante/image_deduplication/blob/7e5d1c9687f33a7a5184fc205987024670309850/dedup/near_duplicate.py",
+      "sha256": "6527dc3dc97989f9d20fdfd3d90048ba61ed62d6b22d3b86aa0b4303e7d81be4",
+      "truncated": false,
+      "lines": 254,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "dedup/__init__.py",
+      "local": "04-__init__.py",
+      "url": "https://github.com/nmante/image_deduplication/blob/7e5d1c9687f33a7a5184fc205987024670309850/dedup/__init__.py",
+      "sha256": "160074a54a5ab0a6b0d5b577d13535d66f6278113b0f36340aa896f190ff47f6",
+      "truncated": false,
+      "lines": 8,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "dedup/test.sh",
+      "local": "05-test.sh",
+      "url": "https://github.com/nmante/image_deduplication/blob/7e5d1c9687f33a7a5184fc205987024670309850/dedup/test.sh",
+      "sha256": "9284b0680ab70048be496a32e7f76a9d4129c40c5437a7aa4bd0ae3a265d4344",
+      "truncated": false,
+      "lines": 53,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "dedup/__main__.py",
+      "local": "06-__main__.py",
+      "url": "https://github.com/nmante/image_deduplication/blob/7e5d1c9687f33a7a5184fc205987024670309850/dedup/__main__.py",
+      "sha256": "3b51ac2b41d7d1047afee1745867435d04e90416246c09db5045b7d6fd1de6c6",
+      "truncated": false,
+      "lines": 366,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 3,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/nmante/image_deduplication/blob/7e5d1c9687f33a7a5184fc205987024670309850/README.md",
+      "sha256": "d4244d7146f87a529b66162aa7c62bd74253e6739af17d8ac8c9a315775ba700",
+      "truncated": false,
+      "lines": 125,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE.txt",
+      "local": "01-LICENSE.txt",
+      "url": "https://github.com/nmante/image_deduplication/blob/7e5d1c9687f33a7a5184fc205987024670309850/LICENSE.txt",
+      "sha256": "9be6bed7b539c31236bf06b27a5ca4cd00db55225c876eb24e543a47e547e3e8",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

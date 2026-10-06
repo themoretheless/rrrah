@@ -1,0 +1,35 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: function `error` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:4:4
+  |
+4 | fn error(message: &str) -> DecodeError {
+  |    ^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `packed_12` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:9:4
+  |
+9 | fn packed_12(
+  |    ^^^^^^^^^
+
+warning: function `decode_zd` is never used
+  --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:48:15
+   |
+48 | pub(super) fn decode_zd(
+   |               ^^^^^^^^^
+
+warning: `rrrah-decode` (lib) generated 3 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 8.77s
+     Running tests/wal_dependency.rs (target/debug/deps/wal_dependency-ba30a6999b17d260)
+
+running 4 tests
+WAL cancellation checkpoints: warm=false, count=48
+test wal_external_palette_obeys_source_byte_limit_even_with_warm_cache ... ok
+test selected_presentation_rejects_external_palette_mutation_and_recovers ... ok
+WAL cancellation checkpoints: warm=true, count=22
+test presentation_groups_remove_external_palette_stale_edges_and_retry ... ok
+test wal_fingerprint_one_shot_cancellation_never_admits_partial_cache_and_retries ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+

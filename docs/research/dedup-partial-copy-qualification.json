@@ -1,0 +1,492 @@
+{
+  "scope": "Authored partial-copy collages, not captured bursts or held-out camera scenes. Expected no whole-frame match under 90% bidirectional residual matching; their shared region is genuinely copied.",
+  "source_sha256": {
+    "scripts/generate-dedup-photo-collages.py": "84a09b9708b15a0c41a8344b2b4e91851ea079d1ae9875bde633af0335f7aa29",
+    "crates/rrrah-dedup/tests/fixtures/photo-collages/manifest.json": "21356e506e51e16cc0d3b6ac7094f3fef6e1de038822664b412d6e8d4456fa6a",
+    "crates/rrrah-dedup/src/warp.rs": "854d99389383be2204e34a4f73ab73efaf90e2e3d3698e32dd9f19db473de324",
+    "crates/rrrah-dedup/src/local_scan.rs": "147e17f941d32ebfcc0934a12fadf6e7a0513a6c59e52aed6605808f47763136",
+    "crates/rrrah-dedup/tests/photometric.rs": "e257f0143cf3deaad7407dc0a060cca5fabc8d96b7aa3a6f2ce43f1adadc9c91",
+    "crates/rrrah-dedup/tests/filtered.rs": "1b4e4031b56e1b0dd91961f997745bcabd65eab0d6890f7146ad3f0b6fb909b3",
+    "crates/rrrah-dedup/tests/photo_collages.rs": "c3724527f3b5407b07886e8a933c5436623d1a662c5152cdbd3f08edd903a02c",
+    "crates/rrrah-dedup/examples/photo_probe.rs": "2a531a959f9a0f423ca78782ad2d4e695bd2b0448b1a646461cc740b8079ed2d"
+  },
+  "commands": [
+    "cargo run -p rrrah-dedup --features decode --example photo_probe -- --partial-copies --encoded-srgb --radius 3",
+    "cargo run -p rrrah-dedup --features decode --example photo_probe -- --partial-copies --encoded-srgb --radius 3 --relaxed-fit",
+    "cargo test -p rrrah-dedup --features decode --test photo_collages",
+    "cargo test -p rrrah-dedup --all-features",
+    "cargo clippy -p rrrah-dedup --all-features --tests --examples --no-deps -- -D warnings"
+  ],
+  "common_policy": {
+    "space": "EncodedSrgb",
+    "radius": 3,
+    "minimum_samples": 1000,
+    "minimum_variance": 1e-05,
+    "residual_tolerance": 0.03,
+    "minimum_matched_fraction": 0.9,
+    "minimum_coverage_fraction": 0.3,
+    "max_sample_pairs": 20000000
+  },
+  "experiments": [
+    {
+      "name": "default",
+      "fit_bounds": {
+        "minimum_gain": 0.2,
+        "maximum_gain": 5,
+        "maximum_offset": 0.1
+      },
+      "counts": {
+        "fit_inconclusive": 20,
+        "no_geometry": 4
+      },
+      "results": [
+        {
+          "left_scene": 830,
+          "replacement_scene": 898,
+          "common_percent": 40,
+          "detail": "collage 830 898 40: INCONCLUSIVE Pixels(Fit(OutsidePolicy { channel: 0 }))",
+          "outcome": "fit_inconclusive"
+        },
+        {
+          "left_scene": 830,
+          "replacement_scene": 898,
+          "common_percent": 70,
+          "detail": "collage 830 898 70: INCONCLUSIVE Pixels(Fit(OutsidePolicy { channel: 0 }))",
+          "outcome": "fit_inconclusive"
+        },
+        {
+          "left_scene": 830,
+          "replacement_scene": 1084,
+          "common_percent": 40,
+          "detail": "collage 830 1084 40: INCONCLUSIVE Pixels(Fit(OutsidePolicy { channel: 0 }))",
+          "outcome": "fit_inconclusive"
+        },
+        {
+          "left_scene": 830,
+          "replacement_scene": 1084,
+          "common_percent": 70,
+          "detail": "collage 830 1084 70: INCONCLUSIVE Pixels(Fit(OutsidePolicy { channel: 0 }))",
+          "outcome": "fit_inconclusive"
+        },
+        {
+          "left_scene": 830,
+          "replacement_scene": 1294,
+          "common_percent": 40,
+          "detail": "collage 830 1294 40: candidate=false matches=0 inliers=0 auxiliary_failure=None filtered=None",
+          "candidate": false,
+          "matches": 0,
+          "inliers": 0,
+          "outcome": "no_geometry"
+        },
+        {
+          "left_scene": 830,
+          "replacement_scene": 1294,
+          "common_percent": 70,
+          "detail": "collage 830 1294 70: INCONCLUSIVE Pixels(Fit(OutsidePolicy { channel: 1 }))",
+          "outcome": "fit_inconclusive"
+        },
+        {
+          "left_scene": 898,
+          "replacement_scene": 830,
+          "common_percent": 40,
+          "detail": "collage 898 830 40: candidate=false matches=6 inliers=0 auxiliary_failure=None filtered=None",
+          "candidate": false,
+          "matches": 6,
+          "inliers": 0,
+          "outcome": "no_geometry"
+        },
+        {
+          "left_scene": 898,
+          "replacement_scene": 830,
+          "common_percent": 70,
+          "detail": "collage 898 830 70: INCONCLUSIVE Pixels(Fit(OutsidePolicy { channel: 0 }))",
+          "outcome": "fit_inconclusive"
+        },
+        {
+          "left_scene": 898,
+          "replacement_scene": 1084,
+          "common_percent": 40,
+          "detail": "collage 898 1084 40: candidate=false matches=2 inliers=0 auxiliary_failure=None filtered=None",
+          "candidate": false,
+          "matches": 2,
+          "inliers": 0,
+          "outcome": "no_geometry"
+        },
+        {
+          "left_scene": 898,
+          "replacement_scene": 1084,
+          "common_percent": 70,
+          "detail": "collage 898 1084 70: INCONCLUSIVE Pixels(Fit(OutsidePolicy { channel: 0 }))",
+          "outcome": "fit_inconclusive"
+        },
+        {
+          "left_scene": 898,
+          "replacement_scene": 1294,
+          "common_percent": 40,
+          "detail": "collage 898 1294 40: candidate=false matches=0 inliers=0 auxiliary_failure=None filtered=None",
+          "candidate": false,
+          "matches": 0,
+          "inliers": 0,
+          "outcome": "no_geometry"
+        },
+        {
+          "left_scene": 898,
+          "replacement_scene": 1294,
+          "common_percent": 70,
+          "detail": "collage 898 1294 70: INCONCLUSIVE Pixels(Fit(OutsidePolicy { channel: 0 }))",
+          "outcome": "fit_inconclusive"
+        },
+        {
+          "left_scene": 1084,
+          "replacement_scene": 830,
+          "common_percent": 40,
+          "detail": "collage 1084 830 40: INCONCLUSIVE Pixels(Fit(OutsidePolicy { channel: 0 }))",
+          "outcome": "fit_inconclusive"
+        },
+        {
+          "left_scene": 1084,
+          "replacement_scene": 830,
+          "common_percent": 70,
+          "detail": "collage 1084 830 70: INCONCLUSIVE Pixels(Fit(OutsidePolicy { channel: 0 }))",
+          "outcome": "fit_inconclusive"
+        },
+        {
+          "left_scene": 1084,
+          "replacement_scene": 898,
+          "common_percent": 40,
+          "detail": "collage 1084 898 40: INCONCLUSIVE Pixels(Fit(OutsidePolicy { channel: 0 }))",
+          "outcome": "fit_inconclusive"
+        },
+        {
+          "left_scene": 1084,
+          "replacement_scene": 898,
+          "common_percent": 70,
+          "detail": "collage 1084 898 70: INCONCLUSIVE Pixels(Fit(OutsidePolicy { channel: 1 }))",
+          "outcome": "fit_inconclusive"
+        },
+        {
+          "left_scene": 1084,
+          "replacement_scene": 1294,
+          "common_percent": 40,
+          "detail": "collage 1084 1294 40: INCONCLUSIVE Pixels(Fit(OutsidePolicy { channel: 0 }))",
+          "outcome": "fit_inconclusive"
+        },
+        {
+          "left_scene": 1084,
+          "replacement_scene": 1294,
+          "common_percent": 70,
+          "detail": "collage 1084 1294 70: INCONCLUSIVE Pixels(Fit(OutsidePolicy { channel: 0 }))",
+          "outcome": "fit_inconclusive"
+        },
+        {
+          "left_scene": 1294,
+          "replacement_scene": 830,
+          "common_percent": 40,
+          "detail": "collage 1294 830 40: INCONCLUSIVE Pixels(Fit(OutsidePolicy { channel: 0 }))",
+          "outcome": "fit_inconclusive"
+        },
+        {
+          "left_scene": 1294,
+          "replacement_scene": 830,
+          "common_percent": 70,
+          "detail": "collage 1294 830 70: INCONCLUSIVE Pixels(Fit(OutsidePolicy { channel: 0 }))",
+          "outcome": "fit_inconclusive"
+        },
+        {
+          "left_scene": 1294,
+          "replacement_scene": 898,
+          "common_percent": 40,
+          "detail": "collage 1294 898 40: INCONCLUSIVE Pixels(Fit(OutsidePolicy { channel: 0 }))",
+          "outcome": "fit_inconclusive"
+        },
+        {
+          "left_scene": 1294,
+          "replacement_scene": 898,
+          "common_percent": 70,
+          "detail": "collage 1294 898 70: INCONCLUSIVE Pixels(Fit(OutsidePolicy { channel: 0 }))",
+          "outcome": "fit_inconclusive"
+        },
+        {
+          "left_scene": 1294,
+          "replacement_scene": 1084,
+          "common_percent": 40,
+          "detail": "collage 1294 1084 40: INCONCLUSIVE Pixels(Fit(OutsidePolicy { channel: 0 }))",
+          "outcome": "fit_inconclusive"
+        },
+        {
+          "left_scene": 1294,
+          "replacement_scene": 1084,
+          "common_percent": 70,
+          "detail": "collage 1294 1084 70: INCONCLUSIVE Pixels(Fit(OutsidePolicy { channel: 0 }))",
+          "outcome": "fit_inconclusive"
+        }
+      ]
+    },
+    {
+      "name": "relaxed",
+      "fit_bounds": {
+        "minimum_gain": 0.01,
+        "maximum_gain": 100,
+        "maximum_offset": 1
+      },
+      "counts": {
+        "residual_rejected": 16,
+        "fit_inconclusive": 4,
+        "no_geometry": 4
+      },
+      "results": [
+        {
+          "left_scene": 830,
+          "replacement_scene": 898,
+          "common_percent": 40,
+          "detail": "collage 830 898 40: candidate=false matches=195 inliers=195 auxiliary_failure=None filtered=Some(FilteredPhotometricEvidence { filter: FilterPolicy { radius: 3, max_sample_pairs: 20000000 }, color_space: EncodedSrgb, evidence: BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.7635852479009246, 0.5722219574123, 0.8679064739975335], offset: [-0.06268604306738446, -0.01717970750916925, -0.0925293564809827], fitted_samples: 64998, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 64998, matched_pixels: 188, maximum_channel_error: 0.5696126264858264, squared_error: 5607.639823733234 } }, reverse: PhotometricEvidence { gain: [0.030467347819817126, 0.027086060678601094, 0.06597068759052013], offset: [0.5469373163731686, 0.43245015656498853, 0.3258597498912802], fitted_samples: 64998, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 64998, matched_pixels: 31314, maximum_channel_error: 0.2842338516557917, squared_error: 283.87964784842035 } } } })",
+          "candidate": false,
+          "matches": 195,
+          "inliers": 195,
+          "outcome": "residual_rejected"
+        },
+        {
+          "left_scene": 830,
+          "replacement_scene": 898,
+          "common_percent": 70,
+          "detail": "collage 830 898 70: INCONCLUSIVE Pixels(Fit(OutsidePolicy { channel: 0 }))",
+          "outcome": "fit_inconclusive"
+        },
+        {
+          "left_scene": 830,
+          "replacement_scene": 1084,
+          "common_percent": 40,
+          "detail": "collage 830 1084 40: candidate=false matches=39 inliers=39 auxiliary_failure=None filtered=Some(FilteredPhotometricEvidence { filter: FilterPolicy { radius: 3, max_sample_pairs: 20000000 }, color_space: EncodedSrgb, evidence: BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.24260885589256248, 0.6052557329505367, 0.40579790344878713], offset: [0.41276233771407517, 0.19298476243716967, 0.23762271788252207], fitted_samples: 64998, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 64998, matched_pixels: 5472, maximum_channel_error: 0.5485721354982052, squared_error: 3987.8786607645825 } }, reverse: PhotometricEvidence { gain: [0.017659955874657823, 0.06102706902094684, 0.02226951868903569], offset: [0.5483290640493228, 0.41080095636775243, 0.330818640889637], fitted_samples: 64998, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 64998, matched_pixels: 30336, maximum_channel_error: 0.2894849952043032, squared_error: 287.9051320975694 } } } })",
+          "candidate": false,
+          "matches": 39,
+          "inliers": 39,
+          "outcome": "residual_rejected"
+        },
+        {
+          "left_scene": 830,
+          "replacement_scene": 1084,
+          "common_percent": 70,
+          "detail": "collage 830 1084 70: INCONCLUSIVE Pixels(Fit(OutsidePolicy { channel: 2 }))",
+          "outcome": "fit_inconclusive"
+        },
+        {
+          "left_scene": 830,
+          "replacement_scene": 1294,
+          "common_percent": 40,
+          "detail": "collage 830 1294 40: candidate=false matches=0 inliers=0 auxiliary_failure=None filtered=None",
+          "candidate": false,
+          "matches": 0,
+          "inliers": 0,
+          "outcome": "no_geometry"
+        },
+        {
+          "left_scene": 830,
+          "replacement_scene": 1294,
+          "common_percent": 70,
+          "detail": "collage 830 1294 70: INCONCLUSIVE Pixels(Fit(OutsidePolicy { channel: 2 }))",
+          "outcome": "fit_inconclusive"
+        },
+        {
+          "left_scene": 898,
+          "replacement_scene": 830,
+          "common_percent": 40,
+          "detail": "collage 898 830 40: candidate=false matches=6 inliers=0 auxiliary_failure=None filtered=None",
+          "candidate": false,
+          "matches": 6,
+          "inliers": 0,
+          "outcome": "no_geometry"
+        },
+        {
+          "left_scene": 898,
+          "replacement_scene": 830,
+          "common_percent": 70,
+          "detail": "collage 898 830 70: candidate=false matches=271 inliers=271 auxiliary_failure=None filtered=Some(FilteredPhotometricEvidence { filter: FilterPolicy { radius: 3, max_sample_pairs: 20000000 }, color_space: EncodedSrgb, evidence: BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.3365194115026706, 0.45857773977065974, 0.5291756829713706], offset: [0.27697086709399693, 0.17187698077526337, 0.13674502547941725], fitted_samples: 65312, pixels: WarpEvidence { source_pixels: 68480, compared_pixels: 65312, matched_pixels: 794, maximum_channel_error: 0.32518699476896124, squared_error: 4784.461977163091 } }, reverse: PhotometricEvidence { gain: [0.18658046618339685, 0.1861276168466877, 0.315073785900407], offset: [0.16916197299137287, 0.05810215374449854, 0.047059142102626426], fitted_samples: 65312, pixels: WarpEvidence { source_pixels: 68480, compared_pixels: 65312, matched_pixels: 5420, maximum_channel_error: 0.6166400956484561, squared_error: 2406.1548682586917 } } } })",
+          "candidate": false,
+          "matches": 271,
+          "inliers": 271,
+          "outcome": "residual_rejected"
+        },
+        {
+          "left_scene": 898,
+          "replacement_scene": 1084,
+          "common_percent": 40,
+          "detail": "collage 898 1084 40: candidate=false matches=2 inliers=0 auxiliary_failure=None filtered=None",
+          "candidate": false,
+          "matches": 2,
+          "inliers": 0,
+          "outcome": "no_geometry"
+        },
+        {
+          "left_scene": 898,
+          "replacement_scene": 1084,
+          "common_percent": 70,
+          "detail": "collage 898 1084 70: candidate=false matches=199 inliers=199 auxiliary_failure=None filtered=Some(FilteredPhotometricEvidence { filter: FilterPolicy { radius: 3, max_sample_pairs: 20000000 }, color_space: EncodedSrgb, evidence: BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.4195713082198544, 0.4276453057407706, 0.42785697540817996], offset: [0.2525605089454923, 0.18483861247050326, 0.16519553852972188], fitted_samples: 65312, pixels: WarpEvidence { source_pixels: 68480, compared_pixels: 65312, matched_pixels: 588, maximum_channel_error: 0.7194867881036098, squared_error: 6984.716149670266 } }, reverse: PhotometricEvidence { gain: [0.19661752585132067, 0.12955035227790243, 0.13384912374680344], offset: [0.16653782932207195, 0.06909762760733182, 0.07987423114609615], fitted_samples: 65312, pixels: WarpEvidence { source_pixels: 68480, compared_pixels: 65312, matched_pixels: 4130, maximum_channel_error: 0.6525500968328715, squared_error: 2489.611743255488 } } } })",
+          "candidate": false,
+          "matches": 199,
+          "inliers": 199,
+          "outcome": "residual_rejected"
+        },
+        {
+          "left_scene": 898,
+          "replacement_scene": 1294,
+          "common_percent": 40,
+          "detail": "collage 898 1294 40: candidate=false matches=0 inliers=0 auxiliary_failure=None filtered=None",
+          "candidate": false,
+          "matches": 0,
+          "inliers": 0,
+          "outcome": "no_geometry"
+        },
+        {
+          "left_scene": 898,
+          "replacement_scene": 1294,
+          "common_percent": 70,
+          "detail": "collage 898 1294 70: candidate=false matches=190 inliers=190 auxiliary_failure=None filtered=Some(FilteredPhotometricEvidence { filter: FilterPolicy { radius: 3, max_sample_pairs: 20000000 }, color_space: EncodedSrgb, evidence: BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.5533768344377634, 0.4933864699649611, 0.4901457425244076], offset: [0.18797337058080327, 0.16181057341904226, 0.14949413365123848], fitted_samples: 65312, pixels: WarpEvidence { source_pixels: 68480, compared_pixels: 65312, matched_pixels: 1151, maximum_channel_error: 0.7878752636870294, squared_error: 5246.10425785954 } }, reverse: PhotometricEvidence { gain: [0.3706514781971028, 0.175983999846593, 0.18355789300734549], offset: [0.11763077246594625, 0.06147193066718597, 0.07100696867503506], fitted_samples: 65312, pixels: WarpEvidence { source_pixels: 68480, compared_pixels: 65312, matched_pixels: 5395, maximum_channel_error: 0.6216799012270282, squared_error: 2305.8511357211464 } } } })",
+          "candidate": false,
+          "matches": 190,
+          "inliers": 190,
+          "outcome": "residual_rejected"
+        },
+        {
+          "left_scene": 1084,
+          "replacement_scene": 830,
+          "common_percent": 40,
+          "detail": "collage 1084 830 40: candidate=false matches=110 inliers=109 auxiliary_failure=None filtered=Some(FilteredPhotometricEvidence { filter: FilterPolicy { radius: 3, max_sample_pairs: 20000000 }, color_space: EncodedSrgb, evidence: BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.2874092991609059, 0.4089847012151938, 0.40535016758402176], offset: [0.40733941525770234, 0.26081181101692497, 0.17760930761502283], fitted_samples: 73476, pixels: WarpEvidence { source_pixels: 76800, compared_pixels: 73476, matched_pixels: 631, maximum_channel_error: 0.3865804702647662, squared_error: 2010.5311237133021 } }, reverse: PhotometricEvidence { gain: [0.8375193412398998, 0.9398779090735838, 1.0524392412413552], offset: [0.0715873510231812, 0.04574356541242597, 0.040902955371767136], fitted_samples: 73476, pixels: WarpEvidence { source_pixels: 76800, compared_pixels: 73476, matched_pixels: 21, maximum_channel_error: 0.5428256336836055, squared_error: 5250.9784450183215 } } } })",
+          "candidate": false,
+          "matches": 110,
+          "inliers": 109,
+          "outcome": "residual_rejected"
+        },
+        {
+          "left_scene": 1084,
+          "replacement_scene": 830,
+          "common_percent": 70,
+          "detail": "collage 1084 830 70: candidate=false matches=357 inliers=355 auxiliary_failure=None filtered=Some(FilteredPhotometricEvidence { filter: FilterPolicy { radius: 3, max_sample_pairs: 20000000 }, color_space: EncodedSrgb, evidence: BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.7691563482122832, 0.8464403511008628, 0.8421636377492893], offset: [0.14023169904680355, 0.07717067416514128, 0.06358063616265774], fitted_samples: 73476, pixels: WarpEvidence { source_pixels: 76800, compared_pixels: 73476, matched_pixels: 9828, maximum_channel_error: 0.3927628681948247, squared_error: 1212.5081142943973 } }, reverse: PhotometricEvidence { gain: [0.9884452108976829, 0.9955490625082506, 1.003804789778993], offset: [-0.008295927795782587, -0.002489680043264497, -0.002382709640114722], fitted_samples: 73476, pixels: WarpEvidence { source_pixels: 76800, compared_pixels: 73476, matched_pixels: 51133, maximum_channel_error: 0.4971919452713058, squared_error: 1483.5789250905107 } } } })",
+          "candidate": false,
+          "matches": 357,
+          "inliers": 355,
+          "outcome": "residual_rejected"
+        },
+        {
+          "left_scene": 1084,
+          "replacement_scene": 898,
+          "common_percent": 40,
+          "detail": "collage 1084 898 40: candidate=false matches=109 inliers=108 auxiliary_failure=None filtered=Some(FilteredPhotometricEvidence { filter: FilterPolicy { radius: 3, max_sample_pairs: 20000000 }, color_space: EncodedSrgb, evidence: BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.4079807576806181, 0.4271817867076236, 0.32905217130399367], offset: [0.1480219514867418, 0.047318677624382854, 0.06892101459533137], fitted_samples: 73476, pixels: WarpEvidence { source_pixels: 76800, compared_pixels: 73476, matched_pixels: 217, maximum_channel_error: 0.5689645900678839, squared_error: 8789.390941514797 } }, reverse: PhotometricEvidence { gain: [0.29215334122241454, 0.2398312960703638, 0.4391513223464265], offset: [0.4355528000826124, 0.41274574217964105, 0.3096468312313454], fitted_samples: 73476, pixels: WarpEvidence { source_pixels: 76800, compared_pixels: 73476, matched_pixels: 74, maximum_channel_error: 0.5968222213303922, squared_error: 7166.368234969481 } } } })",
+          "candidate": false,
+          "matches": 109,
+          "inliers": 108,
+          "outcome": "residual_rejected"
+        },
+        {
+          "left_scene": 1084,
+          "replacement_scene": 898,
+          "common_percent": 70,
+          "detail": "collage 1084 898 70: candidate=false matches=355 inliers=355 auxiliary_failure=None filtered=Some(FilteredPhotometricEvidence { filter: FilterPolicy { radius: 3, max_sample_pairs: 20000000 }, color_space: EncodedSrgb, evidence: BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.8528590232393185, 1.0375434562545716, 0.9461239330980993], offset: [-0.0004243435152592734, -0.11392521475404488, -0.04613085873424627], fitted_samples: 73476, pixels: WarpEvidence { source_pixels: 76800, compared_pixels: 73476, matched_pixels: 79, maximum_channel_error: 0.6461823849382906, squared_error: 5355.087472934131 } }, reverse: PhotometricEvidence { gain: [0.5572591233682996, 0.5171620812924742, 0.7417845006767025], offset: [0.28547799806329643, 0.2778859781148789, 0.15269472281777804], fitted_samples: 73476, pixels: WarpEvidence { source_pixels: 76800, compared_pixels: 73476, matched_pixels: 1189, maximum_channel_error: 0.5954378062057717, squared_error: 3362.7132124201435 } } } })",
+          "candidate": false,
+          "matches": 355,
+          "inliers": 355,
+          "outcome": "residual_rejected"
+        },
+        {
+          "left_scene": 1084,
+          "replacement_scene": 1294,
+          "common_percent": 40,
+          "detail": "collage 1084 1294 40: candidate=false matches=60 inliers=60 auxiliary_failure=None filtered=Some(FilteredPhotometricEvidence { filter: FilterPolicy { radius: 3, max_sample_pairs: 20000000 }, color_space: EncodedSrgb, evidence: BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.48921650186861987, 0.3992315684633538, 0.2704054609202806], offset: [0.22275839549779836, 0.2545261755028495, 0.2513477126797417], fitted_samples: 73476, pixels: WarpEvidence { source_pixels: 76800, compared_pixels: 73476, matched_pixels: 456, maximum_channel_error: 0.675378759050346, squared_error: 6318.017572924078 } }, reverse: PhotometricEvidence { gain: [0.5078393126022424, 0.3830480679510493, 0.33469998258086575], offset: [0.295413195983185, 0.30274969229613147, 0.27724288279527043], fitted_samples: 73476, pixels: WarpEvidence { source_pixels: 76800, compared_pixels: 73476, matched_pixels: 161, maximum_channel_error: 0.6005361233193229, squared_error: 6929.43480796603 } } } })",
+          "candidate": false,
+          "matches": 60,
+          "inliers": 60,
+          "outcome": "residual_rejected"
+        },
+        {
+          "left_scene": 1084,
+          "replacement_scene": 1294,
+          "common_percent": 70,
+          "detail": "collage 1084 1294 70: candidate=false matches=282 inliers=282 auxiliary_failure=None filtered=Some(FilteredPhotometricEvidence { filter: FilterPolicy { radius: 3, max_sample_pairs: 20000000 }, color_space: EncodedSrgb, evidence: BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.8728434532816273, 0.874195267067043, 0.7854824318804831], offset: [0.046042465285867584, 0.057516988539312974, 0.09475609026786314], fitted_samples: 73476, pixels: WarpEvidence { source_pixels: 76800, compared_pixels: 73476, matched_pixels: 6654, maximum_channel_error: 0.6549050770939379, squared_error: 2875.3102465917505 } }, reverse: PhotometricEvidence { gain: [0.8110126720414834, 0.7840391573054186, 0.790981444943946], offset: [0.12144862741647217, 0.10355227283334567, 0.07551741900327541], fitted_samples: 73476, pixels: WarpEvidence { source_pixels: 76800, compared_pixels: 73476, matched_pixels: 7721, maximum_channel_error: 0.6104154409987516, squared_error: 2751.085663614617 } } } })",
+          "candidate": false,
+          "matches": 282,
+          "inliers": 282,
+          "outcome": "residual_rejected"
+        },
+        {
+          "left_scene": 1294,
+          "replacement_scene": 830,
+          "common_percent": 40,
+          "detail": "collage 1294 830 40: candidate=false matches=29 inliers=29 auxiliary_failure=None filtered=Some(FilteredPhotometricEvidence { filter: FilterPolicy { radius: 3, max_sample_pairs: 20000000 }, color_space: EncodedSrgb, evidence: BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.22990884724505156, 0.1745324353174152, 0.11845465326685008], offset: [0.38762420776799567, 0.3316820226167109, 0.27963900438825995], fitted_samples: 64998, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 64998, matched_pixels: 4141, maximum_channel_error: 0.4482444623851857, squared_error: 1388.9790633198022 } }, reverse: PhotometricEvidence { gain: [0.5941651058027735, 0.8314484197424649, 0.8161893090550041], offset: [0.1452694793734408, 0.08557164995565925, 0.11026348084350673], fitted_samples: 64998, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 64998, matched_pixels: 1218, maximum_channel_error: 0.6490559722073114, squared_error: 5835.650407269685 } } } })",
+          "candidate": false,
+          "matches": 29,
+          "inliers": 29,
+          "outcome": "residual_rejected"
+        },
+        {
+          "left_scene": 1294,
+          "replacement_scene": 830,
+          "common_percent": 70,
+          "detail": "collage 1294 830 70: candidate=false matches=122 inliers=122 auxiliary_failure=None filtered=Some(FilteredPhotometricEvidence { filter: FilterPolicy { radius: 3, max_sample_pairs: 20000000 }, color_space: EncodedSrgb, evidence: BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.6037715502933199, 0.5099459532597237, 0.42367838811908715], offset: [0.1798758770369447, 0.17769180853620356, 0.16857401013104842], fitted_samples: 64998, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 64998, matched_pixels: 10143, maximum_channel_error: 0.4073324863647444, squared_error: 1688.9431576330805 } }, reverse: PhotometricEvidence { gain: [0.9217296428803167, 1.0381665316825088, 1.0037985051121596], offset: [0.027121948876075108, 0.014438670946194831, 0.046148400230644426], fitted_samples: 64998, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 64998, matched_pixels: 152, maximum_channel_error: 0.6429997954283383, squared_error: 3339.5942108509166 } } } })",
+          "candidate": false,
+          "matches": 122,
+          "inliers": 122,
+          "outcome": "residual_rejected"
+        },
+        {
+          "left_scene": 1294,
+          "replacement_scene": 898,
+          "common_percent": 40,
+          "detail": "collage 1294 898 40: INCONCLUSIVE Pixels(Fit(OutsidePolicy { channel: 0 }))",
+          "outcome": "fit_inconclusive"
+        },
+        {
+          "left_scene": 1294,
+          "replacement_scene": 898,
+          "common_percent": 70,
+          "detail": "collage 1294 898 70: candidate=false matches=121 inliers=121 auxiliary_failure=None filtered=Some(FilteredPhotometricEvidence { filter: FilterPolicy { radius: 3, max_sample_pairs: 20000000 }, color_space: EncodedSrgb, evidence: BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.3191764532272354, 0.15884712369407886, 0.20250597964927908], offset: [0.2085118628429723, 0.2253086604916509, 0.18304556865744448], fitted_samples: 64998, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 64998, matched_pixels: 2913, maximum_channel_error: 0.6151710287366738, squared_error: 5083.644383790405 } }, reverse: PhotometricEvidence { gain: [0.42875341121514887, 0.15938025096732916, 0.28210939176556116], offset: [0.2860758662599736, 0.3760751852158869, 0.3016845678137401], fitted_samples: 64998, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 64998, matched_pixels: 1334, maximum_channel_error: 0.6746880588118203, squared_error: 6193.575145801859 } } } })",
+          "candidate": false,
+          "matches": 121,
+          "inliers": 121,
+          "outcome": "residual_rejected"
+        },
+        {
+          "left_scene": 1294,
+          "replacement_scene": 1084,
+          "common_percent": 40,
+          "detail": "collage 1294 1084 40: candidate=false matches=30 inliers=30 auxiliary_failure=None filtered=Some(FilteredPhotometricEvidence { filter: FilterPolicy { radius: 3, max_sample_pairs: 20000000 }, color_space: EncodedSrgb, evidence: BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.3989832890186083, 0.23433201246389587, 0.21105166498770458], offset: [0.3050036920876187, 0.3261776050770636, 0.2793475141867958], fitted_samples: 64998, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 64998, matched_pixels: 1849, maximum_channel_error: 0.6469649598884428, squared_error: 4952.891682072885 } }, reverse: PhotometricEvidence { gain: [0.4378863734983531, 0.3323939041805385, 0.24483240648398286], offset: [0.2254491741767965, 0.281343425888373, 0.28697485904024406], fitted_samples: 64998, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 64998, matched_pixels: 926, maximum_channel_error: 0.7111439566242738, squared_error: 6016.216407969912 } } } })",
+          "candidate": false,
+          "matches": 30,
+          "inliers": 30,
+          "outcome": "residual_rejected"
+        },
+        {
+          "left_scene": 1294,
+          "replacement_scene": 1084,
+          "common_percent": 70,
+          "detail": "collage 1294 1084 70: candidate=false matches=121 inliers=121 auxiliary_failure=None filtered=Some(FilteredPhotometricEvidence { filter: FilterPolicy { radius: 3, max_sample_pairs: 20000000 }, color_space: EncodedSrgb, evidence: BidirectionalPhotometricEvidence { forward: PhotometricEvidence { gain: [0.631790136092256, 0.546614064073303, 0.42440165098067006], offset: [0.16284626871050928, 0.1721103198792618, 0.18579639433288395], fitted_samples: 64998, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 64998, matched_pixels: 12534, maximum_channel_error: 0.6109993954118575, squared_error: 3178.8807910864125 } }, reverse: PhotometricEvidence { gain: [0.7345546250633992, 0.7712947612094521, 0.5821976267698592], offset: [0.11350687279095578, 0.11173362562022876, 0.17397044385391752], fitted_samples: 64998, pixels: WarpEvidence { source_pixels: 68160, compared_pixels: 64998, matched_pixels: 6501, maximum_channel_error: 0.6778253485019835, squared_error: 4201.160624474387 } } } })",
+          "candidate": false,
+          "matches": 121,
+          "inliers": 121,
+          "outcome": "residual_rejected"
+        }
+      ]
+    }
+  ],
+  "full_feature_tests_passed": 121,
+  "clippy_passed": true,
+  "dependency_warnings": 3,
+  "dark_signal_regression": {
+    "fixture": {
+      "source": "../rotation/base.png",
+      "source_sha256": "9166225bcbd8c74aca7d1ce153b8e5bfbdbe39bd4c29a795cf25133d1e54a525",
+      "file": "shadow.png",
+      "sha256": "de090ebfae8d04a413c49731b274f363e47f84b6d69bda9bac16dcc9a3f4f924",
+      "operation": "Pillow encoded brightness factor .1; independent same-frame dark-signal test, not a collage negative"
+    },
+    "minimum_corner_score": 0,
+    "max_features": 100,
+    "unfiltered_result": "Fit(LowVariance {channel:0})",
+    "selected_encoded_result": "candidate true; strict pixels available; auxiliary LowVariance retained; both filtered grids fully matched; memory reservations released"
+  },
+  "runtime_fix": "An auxiliary linear photometric Fit failure no longer blocks explicitly selected filtered verification. It is retained in LocalFileEvidence.photometric_failure. Selected filtered failures, invalid policies, budgets, source changes and cancellations still abort.",
+  "diagnostics": "PhotometricFitFailure exposes insufficient opaque sample counts, low-variance RGB channel, or fitted change outside policy; these are not invalid pixel/source errors or proven unrelated images.",
+  "remaining": [
+    "Twenty default-policy pairs and four relaxed-policy pairs remain fitting-inconclusive; they are not successful negative classifications.",
+    "Captured look-alike/burst/repeated-pattern negatives and held-out calibration remain.",
+    "Batch/directory filtered search, RAW/raster, large-collection/platform/cache and other open acceptance rows remain."
+  ]
+}

@@ -1,0 +1,105 @@
+{
+  "repository": "deduparr-dev/deduparr",
+  "metadata": {
+    "name": "deduparr-dev/deduparr",
+    "url": "https://github.com/deduparr-dev/deduparr",
+    "description": "deduplication for the *arr stack!",
+    "language": "Python",
+    "stars": 8,
+    "license": "MIT",
+    "archived": false,
+    "pushed_at": "2026-10-05T17:38:34Z",
+    "default_branch": "main",
+    "queries": [
+      "dedup in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/deduparr-dev/deduparr/blob/a4af65e3a8dc8280c764164bbafe62cf411403d4/README.md",
+      "sha256": "c002dfaa97fb3b93dd31aafb5dfb8edbab840d144839f4b2588c247d4e9b6d38",
+      "truncated": false,
+      "lines": 196,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/deduparr-dev/deduparr/blob/a4af65e3a8dc8280c764164bbafe62cf411403d4/LICENSE",
+      "sha256": "cc3d4c58ca7bce0681d11dd60c5c77575e488da73df65e2a47efa10d5a38f53c",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "backend/app/models/duplicate.py",
+      "local": "02-duplicate.py",
+      "url": "https://github.com/deduparr-dev/deduparr/blob/a4af65e3a8dc8280c764164bbafe62cf411403d4/backend/app/models/duplicate.py",
+      "sha256": "78d9330a215c0f16077c63c790bee1125aa8797ed09c66913332069ff2da12c2",
+      "truncated": false,
+      "lines": 129,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "backend/app/services/disk_scan_service.py",
+      "local": "03-disk_scan_service.py",
+      "url": "https://github.com/deduparr-dev/deduparr/blob/a4af65e3a8dc8280c764164bbafe62cf411403d4/backend/app/services/disk_scan_service.py",
+      "sha256": "29e7852d8c362307fc25cf9c1c139a92e4069e0ae035511456292d888c78464b",
+      "truncated": false,
+      "lines": 1179,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "backend/app/services/scan_helpers.py",
+      "local": "04-scan_helpers.py",
+      "url": "https://github.com/deduparr-dev/deduparr/blob/a4af65e3a8dc8280c764164bbafe62cf411403d4/backend/app/services/scan_helpers.py",
+      "sha256": "2f8f82cbfedccaf75e09a4045d243607f479871734c2e03b5994de2e0e3e4045",
+      "truncated": false,
+      "lines": 467,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "backend/tests/test_deep_scan_integration.py",
+      "local": "05-test_deep_scan_integration.py",
+      "url": "https://github.com/deduparr-dev/deduparr/blob/a4af65e3a8dc8280c764164bbafe62cf411403d4/backend/tests/test_deep_scan_integration.py",
+      "sha256": "134f4671676ea386c445a5ee6c684ae5ac87cabe87973cfe20eb4bcdc14b954d",
+      "truncated": false,
+      "lines": 73,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "frontend/src/pages/Scan.tsx",
+      "local": "06-Scan.tsx",
+      "url": "https://github.com/deduparr-dev/deduparr/blob/a4af65e3a8dc8280c764164bbafe62cf411403d4/frontend/src/pages/Scan.tsx",
+      "sha256": "a483f093ef07d862168e6c9e50bd156b1ab50eeeb0d0cffd44697740a577041a",
+      "truncated": false,
+      "lines": 597,
+      "source": true,
+      "test": false
+    }
+  ],
+  "errors": [],
+  "commit": "a4af65e3a8dc8280c764164bbafe62cf411403d4",
+  "tree_truncated": false,
+  "source_file_count": 121,
+  "test_file_count": 37,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "frontend/src/pages/Scan.tsx",
+    "backend/app/models/duplicate.py",
+    "backend/app/services/scan_helpers.py",
+    "backend/tests/test_deep_scan_integration.py"
+  ]
+}

@@ -1,0 +1,134 @@
+import { Box, Chip, Stack, Tooltip } from '@mui/material';
+import StarIcon from '@mui/icons-material/Star';
+import { useTranslation } from 'react-i18next';
+import { useFormatters } from '../i18n/format';
+import type { ScanBadgeSettingsDto } from '../api/types';
+
+/**
+ * "The List" badge for MTG scans where the Planeswalker glyph was detected (a plst reprint — a distinct,
+ * cheaper printing). Renders nothing for non-List cards. When the plst printing couldn't be resolved the
+ * badge turns into a warning so the reviewer knows the shown printing/price may be the pricier original.
+ */
+export function ListReprintChip({
+  isListReprint,
+  unresolved,
+  size = 'small',
+}: {
+  isListReprint?: boolean;
+  unresolved?: boolean;
+  size?: 'small' | 'medium';
+}) {
+  const { t } = useTranslation();
+  if (!isListReprint) return null;
+  return unresolved ? (
+    <Tooltip title={t('scan.badges.listReprint.unresolvedTooltip')}>
+      <Chip size={size} color="warning" variant="outlined" label={t('scan.badges.listReprint.unresolvedLabel')} />
+    </Tooltip>
+  ) : (
+    <Tooltip title={t('scan.badges.listReprint.tooltip')}>
+      <Chip size={size} color="secondary" variant="outlined" label={t('scan.badges.listReprint.label')} />
+    </Tooltip>
+  );
+}
+
+/** The localized currency symbol (e.g. "$", "€", "£") for an ISO code, rendered per the browser's
+ * locale — falls back to the raw code if the runtime can't resolve a narrow symbol. */
+export function currencySymbol(currencyCode: string): string {
+  try {
+    const parts = new Intl.NumberFormat(undefined, {
+      style: 'currency',
+      currency: currencyCode,
+      currencyDisplay: 'narrowSymbol',
+    }).formatToParts(0);
+    return parts.find((p) => p.type === 'currency')?.value ?? currencyCode;
+  } catch {
+    return currencyCode;
+  }
+}
+
+/** The 1-based value tier for a price given the ascending threshold ladder: tier N ⇒ N currency
+ * signs. A price at or below `thresholds[i]` is tier `i+1`; above the last threshold is the top tier
+ * (`thresholds.length + 1`). */
+export function priceTier(price: number, thresholds: number[]): number {
+  for (let i = 0; i < thresholds.length; i++) {
+    if (price <= thresholds[i]) return i + 1;
+  }
+  return thresholds.length + 1;
+}
+
+/** A human-readable description of a tier's price range, for the badge tooltip. `m` formats a raw
+ * amount as localized currency. */
+function tierRange(tier: number, thresholds: number[], m: (n: number) => string): string {
+  if (tier === 1) return `≤ ${m(thresholds[0])}`;
+  if (tier > thresholds.length) return `> ${m(thresholds[thresholds.length - 1])}`;
+  return `${m(thresholds[tier - 2])} – ${m(thresholds[tier - 1])}`;
+}
+
+// Ascending emphasis: cheap cards are muted, high-value cards pop gold/green.
+const TIER_COLORS = ['text.secondary', 'info.main', 'primary.main', 'warning.main', 'success.main'];
+
+/**
+ * Scan-tile status badges: a gold star for a card not yet in the collection, and a run of localized
+ * currency signs indicating the card's value tier. Both are optional — nothing renders when the card
+ * is neither new nor priced.
+ */
+export function ScanValueBadges({
+  isNew,
+  price,
+  settings,
+  size = 'small',
+}: {
+  isNew?: boolean;
+  price?: number | null;
+  settings?: ScanBadgeSettingsDto;
+  /** 'small' for the compact master row, 'medium' for the detail panel. */
+  size?: 'small' | 'medium';
+}) {
+  const { t } = useTranslation();
+  const fmt = useFormatters();
+  const fontSize = size === 'medium' ? '1rem' : '0.8rem';
+  const starSize = size === 'medium' ? 22 : 18;
+
+  // A non-positive price means "no catalog data" (not a $0 card) — don't render a value tier for it.
+  const showTier = price != null && price > 0 && settings != null && settings.thresholds.length > 0;
+  const tier = showTier ? priceTier(price, settings.thresholds) : 0;
+  const symbol = settings ? currencySymbol(settings.currencyCode) : '$';
+
+  if (!isNew && !showTier) return null;
+
+  return (
+    <Stack direction="row" spacing={0.5} alignItems="center" component="span">
+      {isNew && (
+        <Tooltip title={t('scan.badges.value.newTooltip')}>
+          <StarIcon sx={{ color: '#f5b301', fontSize: starSize }} aria-label={t('scan.badges.value.newAria')} />
+        </Tooltip>
+      )}
+      {showTier && (
+        <Tooltip
+          title={t('scan.badges.value.valueTooltip', {
+            value: fmt.money(price as number, settings!.currencyCode),
+            range: tierRange(tier, settings!.thresholds, (n) => fmt.money(n, settings!.currencyCode)),
+          })}
+        >
+          <Box
+            component="span"
+            aria-label={t('scan.badges.value.tierAria', {
+              tier,
+              total: settings!.thresholds.length + 1,
+            })}
+            sx={{
+              fontWeight: 700,
+              fontSize,
+              letterSpacing: '-0.05em',
+              lineHeight: 1,
+              color: TIER_COLORS[Math.min(tier, TIER_COLORS.length) - 1],
+              whiteSpace: 'nowrap',
+            }}
+          >
+            {symbol.repeat(tier)}
+          </Box>
+        </Tooltip>
+      )}
+    </Stack>
+  );
+}

@@ -1,0 +1,78 @@
+{
+  "source": "Canon EOS 10D CRW",
+  "source_sha256": "b0730eb3a67cc2281a32e0b2ee104199246928d954a68b7e5b72366514c73d02",
+  "adapter": "Metal Apple M4 Max",
+  "profile": "dev optimized + debuginfo",
+  "command": "RRRAH_GPU_BACKEND=metal RRRAH_VIEW_CPU_MB=64 RRRAH_VIEW_GPU_MB=128 cargo run -p rrrah --example raw_view_timing --locked --target-dir /tmp/rrrah-required-corpus-target -- /tmp/rrrah-10d.crw",
+  "sensor_dimensions": [
+    3152,
+    2068
+  ],
+  "viewport": [
+    1920,
+    1080
+  ],
+  "samples": 15,
+  "warmups": 3,
+  "resident_frames": 60,
+  "percentile": "nearest rank",
+  "timings": {
+    "decode_ms": {
+      "p50": 125.702,
+      "p95": 128.892
+    },
+    "upload_enqueue_ms": {
+      "p50": 3.431,
+      "p95": 3.803
+    },
+    "halo_pack_ms": {
+      "p50": 0.789,
+      "p95": 0.871
+    },
+    "row_pack_ms": {
+      "p50": 0.709,
+      "p95": 0.878
+    },
+    "enqueue_write_ms": {
+      "p50": 1.828,
+      "p95": 2.01
+    },
+    "frame_complete_ms": {
+      "p50": 4.241,
+      "p95": 4.913
+    },
+    "total_ms": {
+      "p50": 133.628,
+      "p95": 136.86
+    },
+    "resident_pan_zoom_ms": {
+      "p50": 0.794,
+      "p95": 1.259
+    }
+  },
+  "managed_budgets": {
+    "cpu": {
+      "final_used_bytes": 0,
+      "peak_bytes": 66154376,
+      "limit_bytes": 67108864
+    },
+    "gpu": {
+      "final_used_bytes": 0,
+      "peak_bytes": 39790864,
+      "limit_bytes": 134217728
+    }
+  },
+  "evidence": {
+    "docs/research/rrrah-current-crw-metal-view-2026-10-06.csv": "83a178becf2216910815c9ac6093134132123ab0ec448bd1920c1f5d68771347",
+    "docs/research/rrrah-current-crw-metal-view-2026-10-06.log": "776664eaf9fea4423eabccaf37668439f33f4cf00fd998f7b32cb4d87c3bc398"
+  },
+  "limitations": [
+    "Warm OS cache; excludes process startup and initial shader compilation.",
+    "Offscreen completion waits for submitted GPU work; not swapchain or physical display latency.",
+    "Repeated complete sensor pixels are compared outside timed intervals; no independent rendered-color oracle in this timing run.",
+    "No RAM/swap route in this GPU timing run.",
+    "CPU peak includes retained oracle sensor allocation; not production viewer peak.",
+    "GPU budget covers renderer-owned atlas textures; excludes other wgpu allocations and offscreen target.",
+    "One camera source on Metal; no CUDA/NVIDIA or physical HDR proof."
+  ]
+}

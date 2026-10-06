@@ -1,0 +1,78 @@
+{
+  "index": 353,
+  "repository": "jenssegers/imagehash",
+  "commit": "87ba7051d2fca2edc718091f052424474dedfeae",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "PHP image-hash/average-hash strategy and tests; possible independent oracle, backend normalization needs checking.",
+  "available_source_evidence": [
+    {
+      "path": "src/Hash.php",
+      "local": "02-Hash.php",
+      "url": "https://github.com/jenssegers/imagehash/blob/87ba7051d2fca2edc718091f052424474dedfeae/src/Hash.php",
+      "sha256": "b7b648913b301e945b3d087c8de5ac0687f0be4a63af1caf009b558ccc09509f",
+      "truncated": false,
+      "lines": 151,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/ImageHash.php",
+      "local": "03-ImageHash.php",
+      "url": "https://github.com/jenssegers/imagehash/blob/87ba7051d2fca2edc718091f052424474dedfeae/src/ImageHash.php",
+      "sha256": "6aee3f800e72f5764a4fb220cd58fbb386769e64ed9942ecd6f5d78835c28547",
+      "truncated": false,
+      "lines": 77,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/Implementations/AverageHash.php",
+      "local": "04-AverageHash.php",
+      "url": "https://github.com/jenssegers/imagehash/blob/87ba7051d2fca2edc718091f052424474dedfeae/src/Implementations/AverageHash.php",
+      "sha256": "b05c717e0db721aefc345c948b7aa277361863164e807c219e6eb5f119f9277c",
+      "truncated": false,
+      "lines": 40,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/ImageHashTest.php",
+      "local": "05-ImageHashTest.php",
+      "url": "https://github.com/jenssegers/imagehash/blob/87ba7051d2fca2edc718091f052424474dedfeae/tests/ImageHashTest.php",
+      "sha256": "a07590394c756cfad4d8e478b1f83e1658670b14f5f10b0737758f03257747a0",
+      "truncated": false,
+      "lines": 22,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 4,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/jenssegers/imagehash/blob/87ba7051d2fca2edc718091f052424474dedfeae/README.md",
+      "sha256": "c3ff735ec13a4cbac36de24ec13c054f22ab8d009362a88d01df4c92566e9f83",
+      "truncated": false,
+      "lines": 110,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE.md",
+      "local": "01-LICENSE.md",
+      "url": "https://github.com/jenssegers/imagehash/blob/87ba7051d2fca2edc718091f052424474dedfeae/LICENSE.md",
+      "sha256": "7b2698414c24e503299c51d31157bd2974df448ce7c8502ca3d99c325774a7a3",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

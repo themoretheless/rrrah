@@ -1,0 +1,22 @@
+{
+  "change": "Bounded fallible frame admission maps allocation errors to existing pixel budget error.",
+  "validation": {
+    "sequence_animated_pages_container_tests": 29,
+    "failed": 0,
+    "dedup_lib_no_deps_clippy": "passed"
+  },
+  "checks": [
+    "One-shot cancellation at all five admission callbacks for four pages returns no sequence.",
+    "Healthy retry reconstructs complete ordered equality.",
+    "Coverage, timing and animation timeline/container tests preserved."
+  ],
+  "source_sha256": {
+    "crates/rrrah-dedup/src/sequence.rs": "0a56a6fb8fbed7040078700378c0f831bdc8b59e8827b1f6d572e42f59e3eecd",
+    "crates/rrrah-dedup/tests/sequence.rs": "a95d7c8269cef17b82b6305982822210975ef667009145c8dbc44a18cd2ae5ed"
+  },
+  "limits": [
+    "Actual allocator failure not injected.",
+    "Decoded frame storage and all native decoder allocations remain separately unqualified.",
+    "No full shared byte-budget/RSS proof."
+  ]
+}

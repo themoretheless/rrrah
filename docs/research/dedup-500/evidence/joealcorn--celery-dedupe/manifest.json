@@ -1,0 +1,125 @@
+{
+  "repository": "joealcorn/celery-dedupe",
+  "metadata": {
+    "name": "joealcorn/celery-dedupe",
+    "url": "https://github.com/joealcorn/celery-dedupe",
+    "description": "Deduplication of Celery tasks",
+    "language": "Python",
+    "stars": 6,
+    "license": "MIT",
+    "archived": false,
+    "pushed_at": "2023-10-25T16:45:11Z",
+    "default_branch": "master",
+    "queries": [
+      "dedup in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/joealcorn/celery-dedupe/blob/307329a412638e1024fb3dd59381459e9f255303/README.md",
+      "sha256": "f639c82c4aa0530ffa5dabbf53619a4737724e93d42ea320eb0ef8a4046bfc3b",
+      "truncated": false,
+      "lines": 55,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENCE",
+      "local": "01-LICENCE",
+      "url": "https://github.com/joealcorn/celery-dedupe/blob/307329a412638e1024fb3dd59381459e9f255303/LICENCE",
+      "sha256": "da3cd5a8d8e16f8a109582f22b2d501670fc0cf648efcd290c3d617cc002ddc2",
+      "truncated": false,
+      "lines": 19,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "celery_dedupe/__init__.py",
+      "local": "02-__init__.py",
+      "url": "https://github.com/joealcorn/celery-dedupe/blob/307329a412638e1024fb3dd59381459e9f255303/celery_dedupe/__init__.py",
+      "sha256": "baa62c1572ffe088f56f4a9617465b162d9d24a9eb5bfaee7eb66c91fb3e5a9e",
+      "truncated": false,
+      "lines": 1,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "celery_dedupe/tasks.py",
+      "local": "03-tasks.py",
+      "url": "https://github.com/joealcorn/celery-dedupe/blob/307329a412638e1024fb3dd59381459e9f255303/celery_dedupe/tasks.py",
+      "sha256": "a5cd7575134b32ea6141808372a94a6d4e6566a0d8100cddd4b428dac472a17a",
+      "truncated": false,
+      "lines": 53,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "celery_dedupe/storage/__init__.py",
+      "local": "04-__init__.py",
+      "url": "https://github.com/joealcorn/celery-dedupe/blob/307329a412638e1024fb3dd59381459e9f255303/celery_dedupe/storage/__init__.py",
+      "sha256": "c91cbff6bbed944b4eafe7bfc557f11e45d96831d595c33dfbcd99ef2a1fcd61",
+      "truncated": false,
+      "lines": 3,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/__init__.py",
+      "local": "05-__init__.py",
+      "url": "https://github.com/joealcorn/celery-dedupe/blob/307329a412638e1024fb3dd59381459e9f255303/tests/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "truncated": false,
+      "lines": 0,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "celery_dedupe/storage/base.py",
+      "local": "06-base.py",
+      "url": "https://github.com/joealcorn/celery-dedupe/blob/307329a412638e1024fb3dd59381459e9f255303/celery_dedupe/storage/base.py",
+      "sha256": "59676be1c6085c39865d3bc50b9f356df75e71af1e7a72daee57d00231c95d9f",
+      "truncated": false,
+      "lines": 31,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "celery_dedupe/storage/redis.py",
+      "local": "07-redis.py",
+      "url": "https://github.com/joealcorn/celery-dedupe/blob/307329a412638e1024fb3dd59381459e9f255303/celery_dedupe/storage/redis.py",
+      "sha256": "b9565a71cf49f242f41747c8e05b03e32cbead5af6a5de3125ebd1aa92c49420",
+      "truncated": false,
+      "lines": 26,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/settings.py",
+      "local": "08-settings.py",
+      "url": "https://github.com/joealcorn/celery-dedupe/blob/307329a412638e1024fb3dd59381459e9f255303/tests/settings.py",
+      "sha256": "a3ee137b581c00c5b4060509e05c6858c9ef76057593671e27e2212fe1dc7569",
+      "truncated": false,
+      "lines": 4,
+      "source": true,
+      "test": true
+    }
+  ],
+  "errors": [],
+  "commit": "307329a412638e1024fb3dd59381459e9f255303",
+  "tree_truncated": false,
+  "source_file_count": 10,
+  "test_file_count": 4,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENCE",
+    "celery_dedupe/tasks.py",
+    "celery_dedupe/storage/base.py",
+    "celery_dedupe/storage/redis.py",
+    "tests/settings.py"
+  ]
+}

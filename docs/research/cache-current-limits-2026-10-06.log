@@ -1,0 +1,156 @@
+   Compiling rrrah-swap v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-swap)
+   Compiling rrrah-core v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-core)
+   Compiling rrrah-cache v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-cache)
+warning: unused import: `Read`
+   --> crates/rrrah-cache/src/container_v1.rs:478:19
+    |
+478 |     use std::io::{Read as _, Write as _};
+    |                   ^^^^
+    |
+    = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `Write`
+   --> crates/rrrah-cache/src/container_v1.rs:478:30
+    |
+478 |     use std::io::{Read as _, Write as _};
+    |                              ^^^^^
+
+warning: `rrrah-cache` (lib test) generated 2 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 5.21s
+     Running unittests src/lib.rs (/tmp/rrrah-required-corpus-target/debug/deps/rrrah_cache-227ea06b48b7809f)
+
+running 114 tests
+test container_v1::tests::fixed_header_round_trips_and_covers_descriptor_and_payload ... ok
+test container_v1::tests::every_fixed_header_guard_has_an_exact_regression_case ... ok
+test container_v1::tests::corruption_and_unsupported_versions_are_distinct ... ok
+test container_v1::tests::writer_completion_distinguishes_flush_from_digest_finalization ... ok
+test container_v1::tests::lengths_are_checked_before_descriptor_or_payload_allocation ... ok
+test disk::tests::cache_keys_are_domain_separated_by_image_index ... ok
+test disk::tests::disk_pressure_errors_are_classified_for_prefetch_backoff ... ok
+test disk::tests::legacy_v2_key_derivation_remains_frozen ... ok
+test container_v1::tests::streaming_payload_digest_is_independent_of_chunk_boundaries ... ok
+test disk::tests::cancelled_disk_reads_do_not_allocate_or_publish_and_allow_retry ... ok
+test disk::tests::oversized_payload_is_rejected_before_allocation ... ok
+test disk::tests::payload_byte_arithmetic_is_checked_before_allocation ... ok
+test disk::tests::disk_cache_round_trip ... ok
+test disk::tests::corrupt_payload_is_rejected_without_panicking ... ok
+test disk::tests::oversized_header_is_rejected_before_json_parse ... ok
+test disk::tests::malformed_header_lengths_are_bounded_and_never_panic ... ok
+test disk::tests::declared_pixel_count_is_checked_before_payload_allocation ... ok
+test disk::tests::cancelled_protected_write_keeps_residents_and_releases_write_lock ... ok
+test disk::tests::invalid_dimensions_are_rejected_before_payload_allocation ... ok
+test disk::tests::checked_in_legacy_v2_object_remains_byte_exact_and_readable ... ok
+test disk::tests::budgeted_disk_reads_preserve_owners_and_release_corrupt_allocations ... ok
+test disk::tests::oversized_entry_is_rejected_without_evicting_resident_data ... ok
+test disk::tests::recipe_aware_keys_separate_independent_backends ... ok
+test key::tests::canonical_golden_vectors_are_stable ... ok
+test key::tests::artifact_key_is_domain_separated_by_source_recipe_and_frame ... ok
+test disk::tests::streaming_payload_encoding_matches_canonical_little_endian_bytes ... ok
+test key::tests::canonical_preimage_has_fixed_width_and_little_endian_index ... ok
+test disk::tests::cancelled_stores_preserve_existing_entry_and_remove_partial_files ... ok
+test disk::tests::disk_ttl_uses_write_age_and_prunes_expired_entries_under_lock ... ok
+test key::tests::derive_key_contexts_are_independently_domain_separated ... ok
+test key::tests::digest_hex_format_and_parse_are_strict ... ok
+test key::tests::endian_sensitive_recipe_and_artifact_vectors_are_stable ... ok
+test disk::tests::waiting_write_lock_can_cancel_without_releasing_current_writer ... ok
+test key::tests::every_byte_value_round_trips_through_canonical_hex ... ok
+test key::tests::every_manifest_identity_field_bit_changes_the_recipe_id ... ok
+test key::tests::every_structured_field_bit_changes_the_artifact_key ... ok
+test disk::tests::disk_count_is_independent_and_replacement_does_not_count_twice ... ok
+test key::tests::invalid_hex_reports_every_nibble_position_exactly ... ok
+test disk::tests::disk_budget_prunes_an_old_complete_entry_before_publish ... ok
+test key::tests::mosaic_descriptor_rejects_unknown_kind_and_variant ... ok
+test disk::tests::source_fingerprint_is_deterministic_and_changes_when_sample_changes ... ok
+test mosaic_object_v1::tests::semantic_descriptor_is_bound_to_header_key ... ok
+test key::tests::streaming_source_id_is_independent_of_chunk_boundaries ... ok
+test mosaic_payload_v1::tests::binary_payload_round_trip_is_canonical_and_streaming ... ok
+test mosaic_payload_v1::tests::budgeted_decode_reserves_pixels_and_releases_failed_reads ... ok
+test mosaic_payload_v1::tests::invalid_lengths_and_noncanonical_float_are_rejected_before_pixels ... ok
+test mosaic_payload_v1::tests::invalid_metadata_is_rejected_before_any_pixel_read ... ok
+test mosaic_payload_v1::tests::invalid_utf8_and_unknown_registry_codes_fail_before_pixels ... ok
+test mosaic_payload_v1::tests::every_truncation_and_one_trailing_byte_are_rejected ... ok
+test mosaic_payload_v1::tests::maximum_cfa_vector_uses_bounded_io_and_round_trips_codes ... ok
+test mosaic_payload_v1::tests::maximum_f32_vector_uses_bounded_io_and_preserves_canonical_bytes ... ok
+test mosaic_payload_v1::tests::operation_budget_rejects_before_variable_sections_are_read ... ok
+test mosaic_payload_v1::tests::registries_and_float_bit_rules_are_closed_and_canonical ... ok
+test mosaic_payload_v1::tests::rgbe_binary_payload_preserves_fourth_plane_and_matrix ... ok
+test ram::tests::allocation_pressure_releases_only_unpinned_entries_and_respects_external_owners ... ok
+test ram::tests::admission_is_rejected_when_all_resident_bytes_are_pinned ... ok
+test disk::tests::trailing_bytes_are_rejected_by_file_length ... ok
+test mosaic_payload_v1::tests::writer_and_reader_enforce_identical_metadata_limits ... ok
+test disk::tests::truncated_large_frame_is_rejected_by_file_length_before_reserving_pixels ... ok
+test ram::tests::foreground_count_one_replaces_current_and_failure_restores_its_pin ... ok
+test ram::tests::hit_returns_shared_pixels_and_promotes_recency ... ok
+test ram::tests::oversized_entry_is_rejected ... ok
+test ram::tests::pin_prevents_eviction_of_visible_frame ... ok
+test ram::tests::raw_adapter_enforces_count_and_expired_pins ... ok
+test ram::tests::visible_intent_before_admission_pins_the_later_value ... ok
+test raster_payload::block_boundary_tests::direct_io_preserves_wire_bits_across_blocks_and_partial_tail ... ok
+test raster_payload::tests::all_precisions_roundtrip_bits_color_and_selection_without_output_copy ... ok
+test raster_payload::tests::every_color_declaration_roundtrips_default_metadata ... ok
+test disk::tests::usage_counts_published_entries_and_ignores_other_files ... ok
+test raster_payload::tests::icc_profile_is_admitted_before_read_and_shared_until_last_owner ... ok
+test raster_payload::tests::malformed_truncated_trailing_and_admission_errors_release_reservations ... ok
+test raster_ram::managed_policy_tests::byte_and_count_eviction_preserve_external_managed_owners ... ok
+test raster_ram::managed_policy_tests::expired_visible_buffer_keeps_reservation_until_unpinned_and_last_owner_drops ... ok
+test raster_ram::tests::expired_icc_entry_releases_cache_owner_but_keeps_external_credit ... ok
+test disk::tests::protected_keys_do_not_override_ttl_expiration ... ok
+test raster_ram::tests::failed_visible_admission_restores_pin_and_zero_limits_refuse_hits ... ok
+test ram::tests::background_raw_restore_preserves_visible_pin_and_refuses_pressure_eviction ... ok
+test ram::tests::expired_raw_is_offered_to_swap_before_new_admission ... ok
+test raster_ram::tests::icc_weighted_admission_preserves_visible_and_external_owners ... ok
+test raster_ram::tests::visible_transition_preserves_hdr_bits_and_external_owners ... ok
+test ram::tests::consumer_lease_survives_navigation_and_blocks_spill_until_last_release ... ok
+test ram::tests::spare_pixel_capacity_is_charged_by_ram_and_swap_queue ... ok
+test ram::tests::restored_external_owner_holds_budget_and_pressure_preserves_swap_for_retry ... ok
+test ram::tests::evicted_raw_is_restored_exactly_and_readmitted_without_a_decoder ... ok
+test swap::raster_tests::idle_ttl_maintenance_releases_files_and_quota_but_keeps_live_handles ... ok
+test ram::tests::shrinking_limits_spills_only_background_raw_and_restores_exact_samples ... ok
+test ram::tests::swap_restore_pressure_releases_unpinned_ram_and_preserves_impossible_admission ... ok
+test swap::write_cancellation_tests::cancelled_generation_cleanup_preserves_new_generation_marker ... ok
+test raster_ram::tests::expired_hdr_raster_spills_before_new_admission ... ok
+test raster_ram::tests::hdr_icc_leases_preserve_capacity_and_spill_after_last_release ... ok
+test swap::raster_tests::cancelled_stream_restore_retains_disk_entry_and_releases_partial_allocation ... ok
+test disk::tests::protected_admission_evicts_only_unprotected_residents_and_allows_replacement ... ok
+test swap::raster_tests::raster_swap_preserves_hdr_metadata_and_retries_memory_pressure ... ok
+test ram::tests::swap_queue_limits_cancelled_restore_and_disk_count_are_bounded ... ok
+test swap::write_cancellation_tests::admission_reports_oversize_busy_and_completed_duplicate_without_leaking ... ok
+test swap::write_cancellation_tests::oversized_queue_is_rejected_before_store_creation ... ok
+test swap::raster_tests::corrupt_old_restore_cannot_remove_replacement_for_same_key ... ok
+test swap::raster_tests::raster_ram_eviction_spills_and_pressure_restore_preserves_visible_frame ... ok
+test v3_contract_tests::complete_v3_object_has_one_canonical_cross_layer_layout ... ok
+test disk::tests::protected_admission_rejects_without_evicting_any_live_entry ... ok
+test swap::write_cancellation_tests::external_budgets_cannot_bypass_local_queue_or_restore_caps ... ok
+test swap::write_cancellation_tests::cancelled_payload_preparation_does_not_evict_completed_disk_object ... ok
+test swap::write_cancellation_tests::failed_queue_admission_releases_key_for_retry ... ok
+test swap::write_cancellation_tests::codec_failure_after_write_rolls_back_disk_memory_and_pending_key ... ok
+test swap::write_cancellation_tests::cancelling_active_and_queued_spills_releases_owners_and_allows_new_writes ... ok
+test swap::write_cancellation_tests::zero_queue_count_disables_spills_without_retaining_memory ... ok
+test swap::write_cancellation_tests::cancelled_restore_waiter_returns_before_active_admission_releases ... ok
+test swap::write_cancellation_tests::restore_rebinding_preserves_aggregate_cap_until_last_old_owner_releases ... ok
+test swap::raster_tests::corrupt_and_truncated_raster_restore_release_memory_and_remove_entry ... ok
+test swap::write_cancellation_tests::concurrent_restores_cannot_double_spend_retired_generation_allowance ... ok
+test swap::raster_tests::raster_disk_byte_count_ttl_and_queue_limits_are_independent ... ok
+test swap::write_cancellation_tests::full_channel_releases_rejected_payload_and_accepts_same_key_later ... ok
+test disk::tests::concurrent_replacement_never_exposes_a_partial_entry ... ok
+test swap::raster_tests::ttl_worker_reclaims_idle_swap_without_foreground_calls ... ok
+
+test result: ok. 114 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.32s
+
+     Running tests/cache_stress.rs (/tmp/rrrah-required-corpus-target/debug/deps/cache_stress-b352dc620353a79b)
+
+running 5 tests
+test weighted_lru_replacement_never_underflows_byte_accounting ... ok
+test reservation_accounting_rejects_overflow_and_double_release ... ok
+test stale_generation_is_dropped_before_publish ... ok
+test cache_key_domain_is_separated_for_sources_and_image_indices ... ok
+test weighted_lru_has_bounded_resident_bytes_under_deterministic_stress ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+   Doc-tests rrrah_cache
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

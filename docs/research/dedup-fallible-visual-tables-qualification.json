@@ -1,0 +1,27 @@
+{
+  "qualification": "Fallible visual-index tables and descriptor search results",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/visual.rs": "caa51927940fb7b4e32993b19cb3f1e4d78540572521447014ad8f16be3239db",
+    "crates/rrrah-dedup/src/local_index.rs": "ba37690a86fc1fbd138766591f4eb3cc79b5c37825e9f8f6686a230dd0952fbc"
+  },
+  "validation": {
+    "all_features_library": 10,
+    "local_collection": 8,
+    "local_index": 6,
+    "visual": 6,
+    "failed": 0,
+    "library_clippy": "passed"
+  },
+  "evidence": [
+    "VisualIndex fingerprint storage and candidate union use HashMap/HashSet try_reserve before insertion.",
+    "Candidate IDs are copied into fallibly reserved storage and sorted, preserving the prior comparison order.",
+    "Accepted visual results and descriptor-search output storage are fallibly reserved.",
+    "Descriptor candidate union checks result limits before admitting new IDs; repeated hits update minimum distance without consuming another result slot.",
+    "Exhaustive visual/descriptor metrics, collection positives, mutation and cancellation tests remain passing."
+  ],
+  "limits": [
+    "Collection pair counters/documents/target sets and other higher-level maps remain infallible.",
+    "No automatic full memory-budget admission, actual OS-OOM injection, RSS or timing qualification.",
+    "Hash-table allocation failure mapping is established by source inspection and use of standard fallible reservation, not forced allocator-failure tests."
+  ]
+}

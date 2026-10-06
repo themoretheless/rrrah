@@ -1,0 +1,45 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.37s
+     Running tests/photometric.rs (target/debug/deps/photometric-c57ebc62e91340e5)
+
+running 7 tests
+test incomplete_fits_have_specific_reasons_instead_of_invalid_pixel_errors ... ok
+test known_channel_gains_offsets_and_spatial_edit_are_separate_evidence ... ok
+test bounded_fit_excludes_saturation_from_model_but_never_from_residuals ... ok
+test explicit_display_projection_retains_hdr_disagreement_and_alpha_edits ... ok
+test flat_content_alpha_edits_limits_and_cancellation_do_not_disappear ... ok
+test reflected_gain_offset_preserves_strict_evidence_and_cancel_atomicity ... ok
+test reflected_range_and_display_keep_hdr_alpha_inverse_and_cancellation_evidence ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/projective_geometry.rs (target/debug/deps/projective_geometry-d0822d8b1e5e6358)
+
+running 14 tests
+test perspective_mapping_and_permutations ... ok
+test perspective_inverse_grid_catches_unsampled_edit ... ok
+test perspective_pixels_hdr_edits_horizon_and_cancel ... ok
+test invalid_horizon_and_cancel_checkpoints ... ok
+test full_support_refinement_beats_minimal_hypotheses_on_noisy_points ... ok
+test robust_perspective_outliers_budget_and_cancellation ... ok
+test sampled_projective_cancellation_discards_models_and_retry_is_deterministic ... ok
+test projective_filter_preserves_strict_edits_and_terminal_cancellation ... ok
+test sampled_projective_recovers_large_outlier_set_with_fixed_work ... ok
+test registration_candidates_keep_independent_full_grid_evidence_and_shared_limits ... ok
+test registration_portfolio_admits_shared_work_and_discards_partial_models_on_cancel ... ok
+test perspective_photometric_fit_preserves_unfitted_errors_and_limits ... ok
+test photometric_registration_keeps_geometry_under_affine_encoded_light_change ... ok
+test pixel_registration_reduces_known_offset_and_obeys_terminal_limits ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+     Running tests/warp.rs (target/debug/deps/warp-acb13520d69adec6)
+
+running 4 tests
+test bilinear_sampling_keeps_alpha_and_invisible_rgb_separate ... ok
+test reverse_verification_catches_edits_between_scaled_sample_centers ... ok
+test crop_overlap_and_single_pixel_edits_are_explicit ... ok
+test reflected_grids_preserve_hdr_alpha_and_inverse_with_atomic_cancel ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

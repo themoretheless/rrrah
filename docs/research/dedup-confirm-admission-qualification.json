@@ -1,0 +1,21 @@
+{
+  "change": "confirm_pixels uses fallible request and candidate hash admission, sorted pair vector and bounded fallible result/diagnostic vectors.",
+  "validation": {
+    "pixel_search_raster_equality_scan_tests": 24,
+    "failed": 0,
+    "dedup_lib_no_deps_clippy": "passed"
+  },
+  "checks": [
+    "Two pixel-key groups preserve results across input permutations.",
+    "Changed source and cancellation/generation cases still reject stale evidence.",
+    "Cross-encoding/profile/HDR equality tests preserve explicit color behavior."
+  ],
+  "source_sha256": {
+    "crates/rrrah-dedup/src/scan.rs": "fcf2b168efce64cd19643d7a43afe24de3130052b0a792ea00a470b6edb66189"
+  },
+  "limits": [
+    "confirm_pixel_groups and other scan APIs still have allocation gaps.",
+    "Request clones, sorting, decoder allocations and actual allocator-exhaustion injection remain unqualified.",
+    "No full shared byte-budget or RSS proof."
+  ]
+}

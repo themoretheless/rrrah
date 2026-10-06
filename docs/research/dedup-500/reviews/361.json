@@ -1,0 +1,88 @@
+{
+  "index": 361,
+  "repository": "thorn-oss/perception",
+  "commit": "23faec2e703349c921bbbc8341bdabab6e880b77",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "shortlist",
+  "finding": "Local-descriptor dedup explicitly calls findHomography; strongest inspected crop/geometric verification reference, Apache-2.0.",
+  "available_source_evidence": [
+    {
+      "path": "perception/local_descriptor_deduplication.py",
+      "local": "02-local_descriptor_deduplication.py",
+      "url": "https://github.com/thorn-oss/perception/blob/23faec2e703349c921bbbc8341bdabab6e880b77/perception/local_descriptor_deduplication.py",
+      "sha256": "c2750d14e3a20961b6f1f3b6578e92a4d6119e5991bd09fc437049e070294495",
+      "truncated": false,
+      "lines": 714,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "perception/hashers/hasher.py",
+      "local": "03-hasher.py",
+      "url": "https://github.com/thorn-oss/perception/blob/23faec2e703349c921bbbc8341bdabab6e880b77/perception/hashers/hasher.py",
+      "sha256": "18faa3627fabe588bc8081740dc8d22f8fecedc6f6c773967f43134279486396",
+      "truncated": false,
+      "lines": 385,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "perception/hashers/image/dhash.py",
+      "local": "04-dhash.py",
+      "url": "https://github.com/thorn-oss/perception/blob/23faec2e703349c921bbbc8341bdabab6e880b77/perception/hashers/image/dhash.py",
+      "sha256": "ad22e1e30a896a27ed972b60b61a4a2b99afceadb81a8f5c8eab0e73a646371e",
+      "truncated": false,
+      "lines": 30,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/test_approximate_deduplication.py",
+      "local": "05-test_approximate_deduplication.py",
+      "url": "https://github.com/thorn-oss/perception/blob/23faec2e703349c921bbbc8341bdabab6e880b77/tests/test_approximate_deduplication.py",
+      "sha256": "ee9bd04388054c479ad31c9109df6318fbbb251c8df020a533fc1c1cc25d10b8",
+      "truncated": false,
+      "lines": 38,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "perception/hashers/image/phash.py",
+      "local": "06-phash.py",
+      "url": "https://github.com/thorn-oss/perception/blob/23faec2e703349c921bbbc8341bdabab6e880b77/perception/hashers/image/phash.py",
+      "sha256": "fbeb1aed684e414e2599872e0f72772d8f61b9b5252237c02813118ee498d755",
+      "truncated": false,
+      "lines": 129,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "Apache-2.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 6,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/thorn-oss/perception/blob/23faec2e703349c921bbbc8341bdabab6e880b77/README.md",
+      "sha256": "2750c06957350d672575b6165402f67b5211d37419bd29ef4de15861f6f43e2a",
+      "truncated": false,
+      "lines": 106,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/thorn-oss/perception/blob/23faec2e703349c921bbbc8341bdabab6e880b77/LICENSE",
+      "sha256": "9e1a94652aa56e9ae160c681e7e423a95972369c5420b572ad8ccc20175e9da7",
+      "truncated": false,
+      "lines": 191,
+      "source": false,
+      "test": false
+    }
+  ]
+}

@@ -4,18 +4,28 @@
 //! API, cache implementation, or windowing toolkit.
 #![allow(clippy::missing_errors_doc)]
 
+pub use rrrah_memory::{BufferError, MemoryBudget, MutableBuffer, PixelBuffer, Reservation, SharedBuffer};
+
 mod color;
+pub mod develop;
 mod frame;
 mod geometry;
+mod raster;
 mod recipe;
+pub mod rgbe;
+mod thumbnail;
+pub use thumbnail::ThumbnailError;
+
+pub use raster::{DecodedRaster, RasterColorSpace, RasterError, RasterPixels};
 
 pub use color::{
     BRADFORD, CameraProfileError, DNG_ILLUMINANT_D65, DngColorMatrix, GREEN_PLANE_RELATIVE_TOLERANCE,
     GreenPlane, SRGB_TO_XYZ_D65, SRGB_TO_XYZ_D65_F64, WB_LUMINANCE_WEIGHTS, XYZ_WHITE_D65, aces_fitted,
     aces_tone_map_rgb, apply_3x3, apply_exposure, bradford_adaptation, bradford_adaptation_f64,
-    camera_to_linear_srgb, camera_to_linear_srgb_precise, diagnose_green_planes, display_wb_gains,
-    dng_illuminant_white, green_relative_wb_gains, invert_3x3, invert_3x3_f64, luminance_normalize_wb_gains,
-    multiply_3x3, multiply_3x3_f64, select_dng_xyz_to_camera, xy_chromaticity_to_xyz,
+    camera_to_linear_srgb, camera_to_linear_srgb_precise, camera4_to_linear_srgb_precise,
+    diagnose_green_planes, display_wb_gains, dng_illuminant_white, green_relative_wb_gains, invert_3x3,
+    invert_3x3_f64, luminance_normalize_wb_gains, multiply_3x3, multiply_3x3_f64,
+    reconstruct_clipped_camera_highlight, select_dng_xyz_to_camera, xy_chromaticity_to_xyz,
 };
 pub use frame::{
     CfaColor, CfaPattern, DecodedMosaic, FrameError, LevelGrid, Orientation, Photometric, RawMetadata,

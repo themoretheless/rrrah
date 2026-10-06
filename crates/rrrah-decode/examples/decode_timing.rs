@@ -186,8 +186,9 @@ fn pack_msb_rows(samples: &[u16], width: usize, bits_per_sample: u8) -> Vec<u8> 
 }
 
 fn percentile(sorted: &[Duration], percentile_rank: usize) -> Duration {
-    let index = (sorted.len() - 1) * percentile_rank / 100;
-    sorted[index]
+    assert!(!sorted.is_empty() && (1..=100).contains(&percentile_rank));
+    let rank = sorted.len().checked_mul(percentile_rank).unwrap().div_ceil(100);
+    sorted[rank - 1]
 }
 
 trait TapSort {

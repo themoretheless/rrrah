@@ -1,0 +1,98 @@
+{
+  "index": 409,
+  "repository": "NiciusB/node-image-hash",
+  "commit": "094c36f75773f6344d93af7e6b03467005ee9868",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "wrapper",
+  "finding": "Node worker blockhash calculator with useSha256Fallback option; fallback could mix exact and visual evidence unless tagged explicitly.",
+  "available_source_evidence": [
+    {
+      "path": "src/calculateHash.js",
+      "local": "02-calculateHash.js",
+      "url": "https://github.com/NiciusB/node-image-hash/blob/094c36f75773f6344d93af7e6b03467005ee9868/src/calculateHash.js",
+      "sha256": "5620d050438c5533c18525fa1e01ff4e1ae47f4f575babe5245250fa8fed44dd",
+      "truncated": false,
+      "lines": 53,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/worker.js",
+      "local": "03-worker.js",
+      "url": "https://github.com/NiciusB/node-image-hash/blob/094c36f75773f6344d93af7e6b03467005ee9868/src/worker.js",
+      "sha256": "433ba16b2fa7c0ad9973dc02c9fe7375332eb3d2244aef14c806a2015d81ca42",
+      "truncated": false,
+      "lines": 16,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/workersManager.js",
+      "local": "04-workersManager.js",
+      "url": "https://github.com/NiciusB/node-image-hash/blob/094c36f75773f6344d93af7e6b03467005ee9868/src/workersManager.js",
+      "sha256": "b101aee6ab05159e8b6004d38d22c8d4008cb459521869fd71a51c8b5cdf5c85",
+      "truncated": false,
+      "lines": 76,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "test/main.test.js",
+      "local": "05-main.test.js",
+      "url": "https://github.com/NiciusB/node-image-hash/blob/094c36f75773f6344d93af7e6b03467005ee9868/test/main.test.js",
+      "sha256": "fa003b8cedebfe2317191a95e15e01dfdbde8dd102ea50ffa061c12961180680",
+      "truncated": false,
+      "lines": 142,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": ".eslintrc.js",
+      "local": "06-.eslintrc.js",
+      "url": "https://github.com/NiciusB/node-image-hash/blob/094c36f75773f6344d93af7e6b03467005ee9868/.eslintrc.js",
+      "sha256": "9c28846e339fa29c81ccfd102114a229f478825ebb02e0d3eb3f1bbb779bc00d",
+      "truncated": false,
+      "lines": 17,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "cli.js",
+      "local": "07-cli.js",
+      "url": "https://github.com/NiciusB/node-image-hash/blob/094c36f75773f6344d93af7e6b03467005ee9868/cli.js",
+      "sha256": "6fa65c6b144a106156a56616af6d5d619d415ea9b0eb173398b129ed450fa4b5",
+      "truncated": false,
+      "lines": 12,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 2,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/NiciusB/node-image-hash/blob/094c36f75773f6344d93af7e6b03467005ee9868/README.md",
+      "sha256": "ee4c1ae65759096c92086f3553de4025159dfb5fbb842da52ca53c3e8c65f3d8",
+      "truncated": false,
+      "lines": 44,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/NiciusB/node-image-hash/blob/094c36f75773f6344d93af7e6b03467005ee9868/LICENSE",
+      "sha256": "8a75d8248fdf94f6a99d073feb27fb65996fddf4354f9897087c8eb5680c1efb",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

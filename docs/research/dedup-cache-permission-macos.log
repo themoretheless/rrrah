@@ -1,0 +1,15 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+    Finished `test` profile [optimized + debuginfo] target(s) in 2.97s
+     Running tests/cache.rs (/tmp/rrrah-dedup-target/debug/deps/cache-150e189b5c8624a0)
+
+running 7 tests
+test cache_publication_child ... ok
+test roundtrip_requires_content_recipe_and_frame_identity ... ok
+test disk_persistence_is_deterministic_and_rejects_invalid_values ... ok
+test atomic_replacement_and_cancel_preserve_previous_cache ... ok
+test unwritable_parent_refuses_before_publication_and_preserves_retry ... ok
+test process_exit_during_temp_write_preserves_previous_publication_and_retry ... ok
+test concurrent_process_writers_publish_only_complete_single_writer_caches ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.81s
+

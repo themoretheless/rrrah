@@ -1,0 +1,160 @@
+{
+  "status": "macOS and native Linux direct-pixel probes passed",
+  "macos_measurements": [
+    {
+      "side": 1024,
+      "pixels": 1048576,
+      "file_bytes": 3145782,
+      "decode_ns": 21516542,
+      "managed_used_after": 0
+    },
+    {
+      "side": 1024,
+      "exact_pixels_equal": true,
+      "one_byte_change_rejected": true
+    },
+    {
+      "format": "png",
+      "side": 1024,
+      "decode_ns": 22877375,
+      "cross_format_equal": true
+    },
+    {
+      "side": 2048,
+      "pixels": 4194304,
+      "file_bytes": 12582966,
+      "decode_ns": 82948958,
+      "managed_used_after": 0
+    },
+    {
+      "side": 2048,
+      "exact_pixels_equal": true,
+      "one_byte_change_rejected": true
+    },
+    {
+      "format": "png",
+      "side": 2048,
+      "decode_ns": 82020625,
+      "cross_format_equal": true
+    },
+    {
+      "side": 4096,
+      "pixels": 16777216,
+      "file_bytes": 50331702,
+      "decode_ns": 337217000,
+      "managed_used_after": 0
+    },
+    {
+      "side": 4096,
+      "exact_pixels_equal": true,
+      "one_byte_change_rejected": true
+    },
+    {
+      "format": "png",
+      "side": 4096,
+      "decode_ns": 324039000,
+      "cross_format_equal": true
+    }
+  ],
+  "whole_process_peak_rss_bytes": 806387712,
+  "scope": [
+    "Direct normalized selected-frame BMP/PNG equality at three sizes",
+    "One byte modified in BMP middle pixel rejected at every size",
+    "Managed reservations released after paired decodes"
+  ],
+  "linux_stdout": "/tmp/dedup-large-pixel-linux.jsonl",
+  "linux_stderr": "/tmp/dedup-large-pixel-linux-stderr.log",
+  "source_sha256": "14a6e61d03c54090abada43fa635e367407e5dd85946768ad4765e8a3e738d5c",
+  "limits": [
+    "Authored gradient BMP/PNG",
+    "Whole-process RSS includes paired decodes and fixture generation",
+    "Full acceptance incomplete"
+  ],
+  "linux_session": 68252,
+  "linux_exit_code": 0,
+  "linux": {
+    "measurements": [
+      {
+        "side": 1024,
+        "pixels": 1048576,
+        "file_bytes": 3145782,
+        "decode_ns": 26810107,
+        "managed_used_after": 0
+      },
+      {
+        "side": 1024,
+        "exact_pixels_equal": true,
+        "one_byte_change_rejected": true
+      },
+      {
+        "format": "png",
+        "side": 1024,
+        "decode_ns": 30158135,
+        "cross_format_equal": true
+      },
+      {
+        "side": 2048,
+        "pixels": 4194304,
+        "file_bytes": 12582966,
+        "decode_ns": 105729350,
+        "managed_used_after": 0
+      },
+      {
+        "side": 2048,
+        "exact_pixels_equal": true,
+        "one_byte_change_rejected": true
+      },
+      {
+        "format": "png",
+        "side": 2048,
+        "decode_ns": 135374908,
+        "cross_format_equal": true
+      },
+      {
+        "side": 4096,
+        "pixels": 16777216,
+        "file_bytes": 50331702,
+        "decode_ns": 420880470,
+        "managed_used_after": 0
+      },
+      {
+        "side": 4096,
+        "exact_pixels_equal": true,
+        "one_byte_change_rejected": true
+      },
+      {
+        "format": "png",
+        "side": 4096,
+        "decode_ns": 439865114,
+        "cross_format_equal": true
+      }
+    ],
+    "whole_process_peak_rss_bytes": 616992768,
+    "rss_after_bytes": 13086720
+  },
+  "logs": {
+    "macos-results": {
+      "path": "docs/research/dedup-large-pixel-macos-results.log",
+      "sha256": "ecdd1882b8fc46338a2e6294efb47d3ef2c023494b62ea841820536ca7493b07"
+    },
+    "macos-time": {
+      "path": "docs/research/dedup-large-pixel-macos-time.log",
+      "sha256": "3469a6ecfdac8b9f3faf95d65afe1a6b11a8cbf4c2398dfa0f2763b48444581f"
+    },
+    "linux-results": {
+      "path": "docs/research/dedup-large-pixel-linux-results.log",
+      "sha256": "f8a5457f1f079df08c74c72b9bac9102f7a4beee2c0368035a6b30bcafb29c1d"
+    },
+    "linux-stderr": {
+      "path": "docs/research/dedup-large-pixel-linux-stderr.log",
+      "sha256": "924150606f34e4cd313583058eebfa729055da1b377b99ce7fb337b61dcf145a"
+    },
+    "clippy": {
+      "path": "docs/research/dedup-large-pixel-final-clippy.log",
+      "sha256": "10784179dafb81fcbfa1a585a517b305bd74a11b1ff50fc8b2580db7fc81d145"
+    }
+  },
+  "post_run_change": "Clippy annotation only, no behavioral changes",
+  "snapshot_timing": "post-run capture; not atomic prelaunch",
+  "clippy": "Scoped exited zero; existing decoder warnings"
+}

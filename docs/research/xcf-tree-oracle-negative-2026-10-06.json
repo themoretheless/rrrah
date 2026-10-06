@@ -1,0 +1,58 @@
+{
+  "scope": "Injected diagnostic parent errors with unchanged exact pixel exports; independent Python walkTree comparison rejects each error. Not a corrupted source fixture or composition qualification.",
+  "exit_code": 1,
+  "pixel_planes_exact": 22,
+  "rejected_tree_comparisons": [
+    {
+      "file": "single-masked-group.xcf",
+      "index": 1,
+      "selector": "tree_node",
+      "expected": {
+        "parent": 0,
+        "sibling": 0,
+        "is_group": false
+      },
+      "actual": {
+        "tree_node": 1,
+        "parent": 999,
+        "sibling": 0,
+        "is_group": false
+      },
+      "exact": false
+    },
+    {
+      "file": "multiple-masked-groups.xcf",
+      "index": 1,
+      "selector": "tree_node",
+      "expected": {
+        "parent": 0,
+        "sibling": 0,
+        "is_group": false
+      },
+      "actual": {
+        "tree_node": 1,
+        "parent": 999,
+        "sibling": 0,
+        "is_group": false
+      },
+      "exact": false
+    },
+    {
+      "file": "multiple-offset-masked-groups.xcf",
+      "index": 1,
+      "selector": "tree_node",
+      "expected": {
+        "parent": null,
+        "sibling": 1,
+        "is_group": true
+      },
+      "actual": {
+        "tree_node": 1,
+        "parent": 999,
+        "sibling": 1,
+        "is_group": true
+      },
+      "exact": false
+    }
+  ]
+}

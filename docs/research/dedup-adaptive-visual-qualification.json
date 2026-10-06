@@ -1,0 +1,173 @@
+{
+  "scope": "Bounded metric traversal with complete visual fallback",
+  "checks": {
+    "lib_tests": 13,
+    "visual_tests": 8,
+    "clippy_library_no_deps": "passed",
+    "exhaustive_oracle_queries": 60
+  },
+  "scale": [
+    {
+      "entries": 1000,
+      "radius": 0,
+      "queries": 4,
+      "build_seconds": 0.003735083,
+      "index_seconds": 2.5416000000000002e-05,
+      "exhaustive_seconds": 3.4418e-05,
+      "hits": 4,
+      "oracle_equal": true
+    },
+    {
+      "entries": 1000,
+      "radius": 8,
+      "queries": 4,
+      "build_seconds": 0.003735083,
+      "index_seconds": 4.5707e-05,
+      "exhaustive_seconds": 2.3959e-05,
+      "hits": 4,
+      "oracle_equal": true
+    },
+    {
+      "entries": 1000,
+      "radius": 32,
+      "queries": 4,
+      "build_seconds": 0.003735083,
+      "index_seconds": 8.712499999999999e-05,
+      "exhaustive_seconds": 2.3874e-05,
+      "hits": 4,
+      "oracle_equal": true
+    },
+    {
+      "entries": 1000,
+      "radius": 128,
+      "queries": 4,
+      "build_seconds": 0.003735083,
+      "index_seconds": 0.000192958,
+      "exhaustive_seconds": 9.5166e-05,
+      "hits": 3983,
+      "oracle_equal": true
+    },
+    {
+      "entries": 1000,
+      "radius": 256,
+      "queries": 4,
+      "build_seconds": 0.003735083,
+      "index_seconds": 0.00010991700000000001,
+      "exhaustive_seconds": 9.162599999999999e-05,
+      "hits": 4000,
+      "oracle_equal": true
+    },
+    {
+      "entries": 10000,
+      "radius": 0,
+      "queries": 4,
+      "build_seconds": 0.071011208,
+      "index_seconds": 1.3876e-05,
+      "exhaustive_seconds": 0.000261209,
+      "hits": 4,
+      "oracle_equal": true
+    },
+    {
+      "entries": 10000,
+      "radius": 8,
+      "queries": 4,
+      "build_seconds": 0.071011208,
+      "index_seconds": 0.000267334,
+      "exhaustive_seconds": 0.00023595799999999998,
+      "hits": 4,
+      "oracle_equal": true
+    },
+    {
+      "entries": 10000,
+      "radius": 32,
+      "queries": 4,
+      "build_seconds": 0.071011208,
+      "index_seconds": 0.001430709,
+      "exhaustive_seconds": 0.00024133300000000002,
+      "hits": 4,
+      "oracle_equal": true
+    },
+    {
+      "entries": 10000,
+      "radius": 128,
+      "queries": 4,
+      "build_seconds": 0.071011208,
+      "index_seconds": 0.0023945,
+      "exhaustive_seconds": 0.0009692069999999999,
+      "hits": 39882,
+      "oracle_equal": true
+    },
+    {
+      "entries": 10000,
+      "radius": 256,
+      "queries": 4,
+      "build_seconds": 0.071011208,
+      "index_seconds": 0.001021542,
+      "exhaustive_seconds": 0.000975999,
+      "hits": 40000,
+      "oracle_equal": true
+    },
+    {
+      "entries": 50000,
+      "radius": 0,
+      "queries": 4,
+      "build_seconds": 0.625226166,
+      "index_seconds": 1.5958000000000002e-05,
+      "exhaustive_seconds": 0.0011922500000000002,
+      "hits": 4,
+      "oracle_equal": true
+    },
+    {
+      "entries": 50000,
+      "radius": 8,
+      "queries": 4,
+      "build_seconds": 0.625226166,
+      "index_seconds": 0.0008809590000000001,
+      "exhaustive_seconds": 0.001196626,
+      "hits": 4,
+      "oracle_equal": true
+    },
+    {
+      "entries": 50000,
+      "radius": 32,
+      "queries": 4,
+      "build_seconds": 0.625226166,
+      "index_seconds": 0.010568209,
+      "exhaustive_seconds": 0.001174959,
+      "hits": 4,
+      "oracle_equal": true
+    },
+    {
+      "entries": 50000,
+      "radius": 128,
+      "queries": 4,
+      "build_seconds": 0.625226166,
+      "index_seconds": 0.019117042,
+      "exhaustive_seconds": 0.005380875,
+      "hits": 199469,
+      "oracle_equal": true
+    },
+    {
+      "entries": 50000,
+      "radius": 256,
+      "queries": 4,
+      "build_seconds": 0.625226166,
+      "index_seconds": 0.005622375000000001,
+      "exhaustive_seconds": 0.005260541,
+      "hits": 200000,
+      "oracle_equal": true
+    }
+  ],
+  "source_sha256": {
+    "crates/rrrah-dedup/src/lib.rs": "a785a636a1488da69a8998f4d3cc361972a81c8ae22c126f9174ae26b8f95e98",
+    "crates/rrrah-dedup/src/visual.rs": "755c8718ed19c9388d9f6f8078b0823208b24d8dd46f5feca53029e3d0794715",
+    "crates/rrrah-dedup/tests/visual.rs": "1e76aab7aa163bc0e3e26d15eeff81066561b1acfca629f0501fcd4211329971",
+    "crates/rrrah-dedup/examples/visual_scale_probe.rs": "da3529cdbe1aff9c84f9b50698eecf97b84b1c423f7422e1a87e045f6bddbbc6"
+  },
+  "limits": [
+    "single synthetic timing run; no statistical speed guarantee",
+    "not real photographic or decoder throughput",
+    "4 operations per entry fallback threshold is a heuristic, not calibrated optimum",
+    "global byte budget, RSS and full contract remain incomplete"
+  ]
+}

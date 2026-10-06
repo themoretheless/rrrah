@@ -1,0 +1,338 @@
+{
+  "date": "2026-10-06",
+  "scope": "eight authored Basis LDR files: white, non-aligned colored-alpha blocks and two-image red/green mip chains; not independent codec or universal format qualification",
+  "fixtures": [
+    {
+      "codec": "basis-universal 0.3.1",
+      "declared_linear": false,
+      "dimensions": [
+        8,
+        8
+      ],
+      "file": "etc1s-srgb.basis",
+      "linear_metrics": false,
+      "mips": [
+        [
+          8,
+          8
+        ],
+        [
+          4,
+          4
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          1,
+          1
+        ]
+      ],
+      "reference": "mathematical opaque white, RGBA all 255; independent codec oracle pending",
+      "source_blake3": "5faff9a6b626600425f01952625202e297c7cd0eb4d5e37d031927971b20b04e"
+    },
+    {
+      "codec": "basis-universal 0.3.1",
+      "declared_linear": true,
+      "dimensions": [
+        8,
+        8
+      ],
+      "file": "etc1s-linear.basis",
+      "linear_metrics": true,
+      "mips": [
+        [
+          8,
+          8
+        ],
+        [
+          4,
+          4
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          1,
+          1
+        ]
+      ],
+      "reference": "mathematical opaque white, RGBA all 255; independent codec oracle pending",
+      "source_blake3": "07848a9b74b27cc22c704545e1f344b09accbc8f32b04d0a04d42d7c7feb23d4"
+    },
+    {
+      "codec": "basis-universal 0.3.1",
+      "declared_linear": false,
+      "dimensions": [
+        8,
+        8
+      ],
+      "file": "uastc-srgb.basis",
+      "linear_metrics": false,
+      "mips": [
+        [
+          8,
+          8
+        ],
+        [
+          4,
+          4
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          1,
+          1
+        ]
+      ],
+      "reference": "mathematical opaque white, RGBA all 255; independent codec oracle pending",
+      "source_blake3": "380db5c528145ae4037d14b084138f880f676d933c5512aa595ce32e44aead9c"
+    },
+    {
+      "codec": "basis-universal 0.3.1",
+      "declared_linear": false,
+      "dimensions": [
+        8,
+        8
+      ],
+      "file": "uastc-linear.basis",
+      "linear_metrics": true,
+      "mips": [
+        [
+          8,
+          8
+        ],
+        [
+          4,
+          4
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          1,
+          1
+        ]
+      ],
+      "reference": "mathematical opaque white, RGBA all 255; independent codec oracle pending",
+      "source_blake3": "380db5c528145ae4037d14b084138f880f676d933c5512aa595ce32e44aead9c"
+    },
+    {
+      "codec": "basis-universal 0.3.1",
+      "declared_linear": false,
+      "dimensions": [
+        7,
+        5
+      ],
+      "file": "etc1s-colored-alpha.basis",
+      "mips": [
+        [
+          7,
+          5
+        ]
+      ],
+      "reference": "colored-alpha.rgba authored block colors; per-channel absolute error <=8; independent codec oracle pending",
+      "source_blake3": "69bc2819d4240c00080c422fdb2e4267881c8735f0640175d90d9d469bd54aed"
+    },
+    {
+      "codec": "basis-universal 0.3.1",
+      "declared_linear": false,
+      "dimensions": [
+        7,
+        5
+      ],
+      "file": "uastc-colored-alpha.basis",
+      "mips": [
+        [
+          7,
+          5
+        ]
+      ],
+      "reference": "colored-alpha.rgba authored block colors; per-channel absolute error <=8; independent codec oracle pending",
+      "source_blake3": "fa6f0794af9c5242fb7a71cccc7812e9a44b035ea445adac9c688564fbc32c48"
+    },
+    {
+      "codec": "basis-universal 0.3.1",
+      "declared_linear": false,
+      "file": "etc1s-multi.basis",
+      "images": [
+        {
+          "color": [
+            255,
+            0,
+            0,
+            255
+          ],
+          "dimensions": [
+            8,
+            8
+          ],
+          "mips": [
+            [
+              8,
+              8
+            ],
+            [
+              4,
+              4
+            ],
+            [
+              2,
+              2
+            ],
+            [
+              1,
+              1
+            ]
+          ]
+        },
+        {
+          "color": [
+            0,
+            255,
+            0,
+            255
+          ],
+          "dimensions": [
+            4,
+            4
+          ],
+          "mips": [
+            [
+              4,
+              4
+            ],
+            [
+              2,
+              2
+            ],
+            [
+              1,
+              1
+            ]
+          ]
+        }
+      ],
+      "reference": "authored red then green mip chains, image-first selection; per-channel error <=8; independent codec oracle pending",
+      "source_blake3": "bf0cd4a2955825ba8a761a7172e6d8a445b1f7beb831d2668a5367f4df6cc265"
+    },
+    {
+      "codec": "basis-universal 0.3.1",
+      "declared_linear": false,
+      "file": "uastc-multi.basis",
+      "images": [
+        {
+          "color": [
+            255,
+            0,
+            0,
+            255
+          ],
+          "dimensions": [
+            8,
+            8
+          ],
+          "mips": [
+            [
+              8,
+              8
+            ],
+            [
+              4,
+              4
+            ],
+            [
+              2,
+              2
+            ],
+            [
+              1,
+              1
+            ]
+          ]
+        },
+        {
+          "color": [
+            0,
+            255,
+            0,
+            255
+          ],
+          "dimensions": [
+            4,
+            4
+          ],
+          "mips": [
+            [
+              4,
+              4
+            ],
+            [
+              2,
+              2
+            ],
+            [
+              1,
+              1
+            ]
+          ]
+        }
+      ],
+      "reference": "authored red then green mip chains, image-first selection; per-channel error <=8; independent codec oracle pending",
+      "source_blake3": "927242afce6249d38bebada896346e62b7687eed279732904ebc3db8e3de9a02"
+    }
+  ],
+  "selected_mips": 32,
+  "native_and_prepared_swap_roundtrips": 64,
+  "gpu": {
+    "backend": "Metal",
+    "adapter": "Apple M4 Max",
+    "offscreen_readback": true,
+    "physical_presentation_verified": false,
+    "direct_compressed_upload": false
+  },
+  "results": {
+    "decoder": {
+      "passed": 637,
+      "ignored": 34,
+      "failed": 0
+    },
+    "app_binary": {
+      "passed": 116,
+      "ignored": 10,
+      "failed": 0
+    },
+    "basis_readback": {
+      "passed": 1,
+      "ignored": 0,
+      "failed": 0
+    }
+  },
+  "logs": [
+    "/tmp/rrrah-basis-multi-tests.log",
+    "/tmp/rrrah-basis-app-regression.log",
+    "/tmp/rrrah-basis-multi-metal.log"
+  ],
+  "command": "cargo test -p rrrah --test basis_readback --target-dir /tmp/rrrah-required-corpus-target -- --nocapture",
+  "limits": [
+    "same pinned encoder/transcoder; mathematical white reference only",
+    "complex spatial textures, independent producers, arrays, cubes and Y-flip unqualified; alpha has authored constant-block coverage only",
+    "KTX2 Basis not integrated",
+    "native codec scratch outside managed output budget",
+    "UASTC linear_metrics fixture still declares sRGB; decoder follows file flag"
+  ],
+  "assertions": [
+    "white fixtures: exact mathematical reference",
+    "colored-alpha 7x5 fixtures: every RGBA channel absolute error <=8 against authored four-block source",
+    "native RGBA8 and prepared RGBA32Float swap restoration bit-exact",
+    "RAM-held frames and restored frames exact against admitted initial offscreen frame",
+    "managed memory released after last owner",
+    "exhausted restore budget preserves swap copy for successful retry",
+    "two-image files flatten image-first red 8/4/2/1 then green 4/2/1 without sample or metadata aliasing; index 7 refused"
+  ]
+}

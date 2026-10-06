@@ -1,0 +1,78 @@
+{
+  "index": 129,
+  "repository": "Silv3rHorn/evtx2json",
+  "commit": "5508294355be1939dd84f419be8911bdc5824074",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Windows event log XML record deduplication; record extraction rather than file content.",
+  "available_source_evidence": [
+    {
+      "path": "evtl_selector.py",
+      "local": "02-evtl_selector.py",
+      "url": "https://github.com/Silv3rHorn/evtx2json/blob/5508294355be1939dd84f419be8911bdc5824074/evtl_selector.py",
+      "sha256": "a9c6ca7eb9b48b0ddc6ae1e0e7763b1a63cd8fda30a2c442a3d4357ed1d669c2",
+      "truncated": false,
+      "lines": 191,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "evtx2json.py",
+      "local": "03-evtx2json.py",
+      "url": "https://github.com/Silv3rHorn/evtx2json/blob/5508294355be1939dd84f419be8911bdc5824074/evtx2json.py",
+      "sha256": "4d402ffcd07d63629eef8a98efa61d8f336000b1f24459928bd28e29d05a1813",
+      "truncated": false,
+      "lines": 328,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "evtxtract_formatter.py",
+      "local": "04-evtxtract_formatter.py",
+      "url": "https://github.com/Silv3rHorn/evtx2json/blob/5508294355be1939dd84f419be8911bdc5824074/evtxtract_formatter.py",
+      "sha256": "47a11f0a7820833b2d08def8c7b5a78500db119a1d2c3181f1af8199aa145741",
+      "truncated": false,
+      "lines": 48,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "resources/events.py",
+      "local": "05-events.py",
+      "url": "https://github.com/Silv3rHorn/evtx2json/blob/5508294355be1939dd84f419be8911bdc5824074/resources/events.py",
+      "sha256": "786738dbd75b786964a0b76b595f0b2548a9603fb68a500f832657360b15c21f",
+      "truncated": false,
+      "lines": 2660,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "Apache-2.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/Silv3rHorn/evtx2json/blob/5508294355be1939dd84f419be8911bdc5824074/README.md",
+      "sha256": "f663191d0b44882a50e4e09f59ee05e33d25d42030953fabebb73d1f661c4f26",
+      "truncated": false,
+      "lines": 91,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/Silv3rHorn/evtx2json/blob/5508294355be1939dd84f419be8911bdc5824074/LICENSE",
+      "sha256": "283ea6cc2997a1a70da0049e09adf9317bb60ca1b51279b65196b83a69e1996b",
+      "truncated": false,
+      "lines": 201,
+      "source": false,
+      "test": false
+    }
+  ]
+}

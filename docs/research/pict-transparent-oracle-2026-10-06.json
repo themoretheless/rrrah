@@ -1,0 +1,16 @@
+{
+  "scope": "authored v2 rectangle/clip fixture, full RGBA equality",
+  "decoder": "TwelveMonkeys imageio-pict 3.13.0",
+  "source_sha256": "eca313f4e31cdee5cb051153df25b61d221f03c577f0843c87acc8a498e7fa8b",
+  "oracle_rgba_sha256": "cc37f8d5f007a19280f5bc637eed9680e3440a68dea203cb0367eac6107de451",
+  "rgba_matches": true,
+  "native_test": "pict::render_tests::authored_file_fixture_renders_full_rgba_and_releases_budget",
+  "suite_log": "/tmp/rrrah-pict-transparent-final.log",
+  "suite_log_sha256": "6251959466fda3ab3d3e0a6c0ec2c27278aa8872c41e9cba2adddd42d6005f3e",
+  "canvas_contract": "Untouched pixels transparent; white hidden RGB; painted pixels opaque",
+  "limitations": [
+    "one authored fixture only",
+    "no independent camera/graphics producer corpus",
+    "public route/cache/swap/Metal still pending"
+  ]
+}

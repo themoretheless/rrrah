@@ -1,0 +1,68 @@
+{
+  "index": 79,
+  "repository": "ScriptTiger/Hosts-BL",
+  "commit": "bc0ab8a3838c5d67d892c248d4ee9d7d0ecfcee9",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Hosts blacklist line/domain compression and maphash; no file/image comparison.",
+  "license_metadata": "MIT",
+  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "available_source_evidence": [
+    {
+      "path": "Build.sh",
+      "local": "02-Build.sh",
+      "url": "https://github.com/ScriptTiger/Hosts-BL/blob/bc0ab8a3838c5d67d892c248d4ee9d7d0ecfcee9/Build.sh",
+      "sha256": "8a99870110e73c1d10e8f0f2974f1175f3fb709ae8a1a32f3009a042ac13031e",
+      "truncated": false,
+      "lines": 1,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "hosts-bl.go",
+      "local": "03-hosts-bl.go",
+      "url": "https://github.com/ScriptTiger/Hosts-BL/blob/bc0ab8a3838c5d67d892c248d4ee9d7d0ecfcee9/hosts-bl.go",
+      "sha256": "724b6209c27eec1da4e2a46b5b136e452f623b3d971ba7b9478ffe5d560b9f9a",
+      "truncated": false,
+      "lines": 588,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "include_other.go",
+      "local": "04-include_other.go",
+      "url": "https://github.com/ScriptTiger/Hosts-BL/blob/bc0ab8a3838c5d67d892c248d4ee9d7d0ecfcee9/include_other.go",
+      "sha256": "bfcee065c301775fef801b53fd466797299be348c279df3bcbca1ed8bbd9e0a7",
+      "truncated": false,
+      "lines": 6,
+      "source": true,
+      "test": false
+    }
+  ],
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/ScriptTiger/Hosts-BL/blob/bc0ab8a3838c5d67d892c248d4ee9d7d0ecfcee9/README.md",
+      "sha256": "4555bd97deb38dbd94c583dd17d911ef23209f59c30ec91812d08c888da8f0eb",
+      "truncated": false,
+      "lines": 36,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/ScriptTiger/Hosts-BL/blob/bc0ab8a3838c5d67d892c248d4ee9d7d0ecfcee9/LICENSE",
+      "sha256": "0208cc8fd56442bc96d2a48f725ffd0abfea67b376163274938d3de39df734c8",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

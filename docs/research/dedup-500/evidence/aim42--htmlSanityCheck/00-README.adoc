@@ -1,0 +1,183 @@
+= image:htmlsanitycheck-logo.png[HSC] HTML Sanity Check (HSC)
+:doctype: book
+include::src/docs/asciidoctor-config.ad[]
+
+ifndef::xrefToCli[:xrefToCli: htmlSanityCheck-cli/README.adoc]
+ifndef::xrefToGradlePlugin[:xrefToGradlePlugin: htmlSanityCheck-gradle-plugin/README.adoc]
+ifndef::xrefToMavenPlugin[:xrefToMavenPlugin: htmlSanityCheck-maven-plugin/README.adoc]
+
+ifdef::env-github[]
+TIP: Use the https://hsc.aim42.org/manual/10_manual.html[HSC Site] for a nicely rendered version of this manual.
+endif::env-github[]
+
+[.lead]
+====
+https://hsc.aim42.org[HTML Sanity Check] (HSC) provides some basic sanity checking on HTML files.
+
+It can be helpful in case of HTML generated from, e.g., {asciidoc-url}[Asciidoctor], Markdown, or other formats -- as converters usually don't check for missing images
+or broken links.
+====
+
+image:https://img.shields.io/badge/License-Apache%202.0-blue.svg[link="https://www.apache.org/licenses/LICENSE-2.0"]
+image:https://img.shields.io/badge/License-ccsa4-green.svg[link="https://creativecommons.org/licenses/by-sa/4.0/"]
+image:https://github.com/aim42/htmlSanityCheck/actions/workflows/gradle-build.yml/badge.svg[link=https://github.com/aim42/htmlSanityCheck/actions]
+image:https://sonarcloud.io/api/project_badges/measure?project=aim42_htmlSanityCheck&metric=alert_status[alt='Quality Gate Status',link=https://sonarcloud.io/project/overview?id=aim42_htmlSanityCheck]
+image:https://jitpack.io/v/org.aim42.htmlSanityCheck/htmlSanityCheck.svg[alt='JitPack Build',link=https://jitpack.io/#org.aim42/htmlSanityCheck]
+image:https://img.shields.io/maven-central/v/org.aim42.htmlSanityCheck/org.aim42.htmlSanityCheck.gradle.plugin[link=https://central.sonatype.com/search?q=org.aim42.htmlSanityCheck]
+image:https://img.shields.io/github/issues/aim42/htmlSanityCheck.svg[link="https://github.com/aim42/htmlSanityCheck/issues"]
+
+[[sec:usage,usage]]
+== Usage
+
+HSC can be currently used
+
+* As a xref:{xrefToGradlePlugin}#sec:usage[Gradle plugin], or
+* As a xref:{xrefToCli}#sec:usage[Command Line Interface tool] (CLI), or
+* As a xref:{xrefToMavenPlugin}#sec:usage[Maven Plugin], or
+* Programmatically from Java or other JVM languages (TBD).
+
+[[sec:installation]]
+== Installation
+
+Depending on your <<sec:usage>> you have to
+
+* Install the xref:{xrefToGradlePlugin}#sec:installation[Gradle Plugin], or
+* Install the xref:{xrefToCli}#sec:installation[Command Line Interface tool] (CLI), or
+* Install the xref:{xrefToMavenPlugin}#sec:installation[Maven Plugin], or
+* Install the core library for programmatic use (TBD).
+
+[[sec:examples]]
+== Examples
+
+Depending on your <<sec:usage>> find respective
+
+* xref:{xrefToGradlePlugin}#sec:examples[Gradle Plugin] examples, and
+* Core library examples (TBD).
+
+== Typical Output
+
+[cols="1,1",width="50%"]
+|===
+| The overall goal is to create neat and clear reports,
+showing eventual errors within HTML files — as shown in the adjoining figure.
+| image:sample-hsc-report.jpg[width="200",link="{imagesdir}/sample-hsc-report.jpg"
+(click on thumbnail for details)]
+|===
+
+== Types of Sanity Checks
+
+=== Broken Cross References (aka Broken Internal Links)
+
+Find all '<a href="XYZ">' where XYZ is not defined.
+
+.src/broken.html
+[source,html]
+----
+<a href="#missing">internal anchor</a>
+...
+<h2 id="missinG">Bookmark-Header</h2>
+----
+
+In this example, the bookmark is _misspelled_.
+
+Use checkerClass _BrokenCrossReferencesChecker_.
+
+=== Missing Images Files
+
+Images, referenced in `<img src="XYZ"...` tags, refer to external files.
+The plugin checks the existence of these files.
+
+Use checkerClass _MissingImageFilesChecker_.
+
+=== Multiple Definitions of Bookmarks or ID's
+
+If any is defined more than once, any anchor linking to it will be confused.
+
+Use checkerClass _DuplicateIdChecker_.
+
+=== Missing Local Resources
+
+All files, (e.g., download) referenced from HTML.
+
+Use checkerClass _MissingLocalResourcesChecker_.
+
+=== Missing Alt-tags in Images
+
+Image-tags should contain an alt-attribute that the browser displays when the original image file cannot be found or cannot be rendered.
+Having alt-attributes is a good and defensive style.
+
+Use checkerClass _MissingAltInImageTagsChecker_.
+
+=== Broken HTTP Links
+
+The current version (derived from branch 1.0.0-RC-2) contains a simple implementation that identifies errors (status >400) and warnings (status `1xx` or `3xx`).
+
+StatusCodes are configurable ranges (as some people might want some content behind paywalls NOT to result in errors...)
+
+Localhost or numerical IP addresses are currently NOT marked as suspicious.
+
+Please comment in case you have additional requirements.
+
+Use checkerClass _BrokenHttpLinksChecker_.
+
+=== Other types of external links
+
+`ftp`, `ntp` or other protocols are currently not checked, but should...
+
+== Technical Documentation
+
+In addition to checking HTML, this project serves as an example for https://arc42.de[arc42].
+
+Please see our https://hsc.aim42.org/arc42/About-This-Docu.html[software architecture documentation].
+
+== Fundamentals
+
+This tiny piece rests on incredible groundwork:
+
+* https://jsoup.org[Jsoup HTML parser] and analysis toolkit — robust and easy-to-use.
+
+* IntelliJ IDEA — my (Gernot) best (programming) friend.
+
+* Of course, Groovy, Gradle, JUnit, and Spock framework.
+
+== Ideas and Origin
+
+* The plugin heavily relies on code provided by {gradle-url}[Gradle].
+
+* Inspiration on code organization, implementation, and testing of the plugin came from the {asciidoctor-gradle-plugin-url}[Asciidoctor-Gradle-Plugin] by https://github.com/aalmiray[Andres Almiray].
+
+* Code for string similarity calculation by
+https://github.com/rrice/java-string-similarity[Ralph Rice].
+
+* Implementation, maintenance and documentation by
+** Initially: {gernotstarke}[Gernot Starke],
+** Currently: {gerdaschemann}[Gerd Aschemann] and several other contributors.
+
+== Similar Projects
+
+* Once upon a time the https://github.com/rackerlabs/[racketeers] hosted `gradle-linkchecker-plugin` which was an (open source) Gradle plugin.
+It validated that all links in a local HTML file tree go out to other existing local files or remote web locations, creating a simple text file report.
++
+CAUTION: However, as of 2024-08-14 they have deleted the repository (there seems to be a fork in https://github.com/leonard84/gradle-linkchecker-plugin[]).
+* It was perhaps based on a similar approach (https://github.com/JamaSoftwareEngineering/linkchecker-maven-plugin[linkchecker-maven-plugin]) for https://maven.apache.org[Maven].
+* Benjamin Muschko has created a (Go-based) command-line tool to check links, called https://github.com/bmuschko/link-verifier[link verifier].
+* https://github.com/gjtorikian/html-proofer[html-proofer] is written in Ruby and provides different usage scenarios (programmatically, CLI, and Docker).
+* https://github.com/wjdp/htmltest[htmltest] is also written in Go(Lang) and claims to be rapid compared to `html-proofer` (stay tuned; we have plans for HSC to run with Graal quickly).
+
+== Development & Contributing
+
+* Please report {project-issues}[issues or suggestions].
+
+* In case you want to check out, build, fork and/or contribute, take a look into our https://hsc.aim42.org/development/development-intro.html[Development Information]
+
+== Licence
+
+Currently, code is published under the Apache-2.0 license, documentation under Creative-Commons-Sharealike-4.0.
+Some day we'll unify that 😬.
+
+== Kudos
+
+Big thanx to image:structure101-logo.png[alt='Structure-101',link="https://web.archive.org/web/20250206232548/https://structure101.com/"] for helping us analyze and restructure our code.
+The product was acquired by SonarSource; the link above points to a Wayback snapshot of the original site.
+
+

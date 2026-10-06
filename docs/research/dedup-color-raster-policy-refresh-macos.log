@@ -1,0 +1,14 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `test` profile [optimized + debuginfo] target(s) in 52.28s
+     Running tests/raster_equality.rs (target/debug/deps/raster_equality-ea252da97797e76c)
+
+running 5 tests
+test malformed_associated_alpha_refuses_releases_memory_and_retries ... ok
+test untagged_policy_is_explicit_cached_and_does_not_override_declared_linear_color ... ok
+test independent_lossless_encodings_preserve_pixels_alpha_and_one_code_negatives ... ok
+test associated_tiff_alpha_matches_independent_straight_png ... ok
+test cross_encoding_batch_confirms_every_pair_and_rejects_single_pixel_edits ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+

@@ -1,0 +1,88 @@
+{
+  "index": 124,
+  "repository": "spyweb-app/spyweb",
+  "commit": "1502dfbec0b68d0238bb967d47e07856fb3686f6",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Browser monitor and scrape engine; selected sources contain no image duplicate math.",
+  "available_source_evidence": [
+    {
+      "path": "src/color.rs",
+      "local": "03-color.rs",
+      "url": "https://github.com/spyweb-app/spyweb/blob/1502dfbec0b68d0238bb967d47e07856fb3686f6/src/color.rs",
+      "sha256": "4933f13064f60dcf0407fc20a868a7a5a58c4ee8691d7ca23f7957af5352ef0b",
+      "truncated": false,
+      "lines": 92,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/entry.rs",
+      "local": "04-entry.rs",
+      "url": "https://github.com/spyweb-app/spyweb/blob/1502dfbec0b68d0238bb967d47e07856fb3686f6/src/entry.rs",
+      "sha256": "b64938085250380b0541a96f7b695d13fb53abbfc391ce42bb805a339347eba1",
+      "truncated": false,
+      "lines": 384,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/lib.rs",
+      "local": "05-lib.rs",
+      "url": "https://github.com/spyweb-app/spyweb/blob/1502dfbec0b68d0238bb967d47e07856fb3686f6/src/lib.rs",
+      "sha256": "5cf2ef46f5436823224084411d053715b1668abf989dda4316ad91746830bcdd",
+      "truncated": false,
+      "lines": 10,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/cdp/tests.rs",
+      "local": "06-tests.rs",
+      "url": "https://github.com/spyweb-app/spyweb/blob/1502dfbec0b68d0238bb967d47e07856fb3686f6/src/cdp/tests.rs",
+      "sha256": "71a367793772b4fd1424d696b0e41f28a8b4bca68a0e34f5c6e4055640c9f46f",
+      "truncated": false,
+      "lines": 144,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "Apache-2.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 31,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/spyweb-app/spyweb/blob/1502dfbec0b68d0238bb967d47e07856fb3686f6/README.md",
+      "sha256": "59fe1b5bfef87e13da5f0f4643152d638a94db85d9b0ba6a0fa42b520d63c311",
+      "truncated": false,
+      "lines": 241,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE-APACHE",
+      "local": "01-LICENSE-APACHE",
+      "url": "https://github.com/spyweb-app/spyweb/blob/1502dfbec0b68d0238bb967d47e07856fb3686f6/LICENSE-APACHE",
+      "sha256": "bc0e0fc07dfc0b6e482070f615ea97bae511f812ad0b177d557ff158ff0e4159",
+      "truncated": false,
+      "lines": 202,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE-MIT",
+      "local": "02-LICENSE-MIT",
+      "url": "https://github.com/spyweb-app/spyweb/blob/1502dfbec0b68d0238bb967d47e07856fb3686f6/LICENSE-MIT",
+      "sha256": "6b738b20bd99e0be4dcba4ebc9d4333a26133214531c6cb79116d22572910e99",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

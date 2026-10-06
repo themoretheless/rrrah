@@ -1,0 +1,528 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+warning: function `error` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:4:4
+  |
+4 | fn error(message: &str) -> DecodeError {
+  |    ^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `packed_12` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:9:4
+  |
+9 | fn packed_12(
+  |    ^^^^^^^^^
+
+warning: function `decode_zd` is never used
+  --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:48:15
+   |
+48 | pub(super) fn decode_zd(
+   |               ^^^^^^^^^
+
+warning: `rrrah-decode` (lib) generated 3 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 1m 33s
+     Running unittests src/lib.rs (/tmp/rrrah-dedup-target/debug/deps/rrrah_dedup-454c8ffc9a750145)
+
+running 36 tests
+test exact::collision_tests::read_buffer_capacity_failure_is_explicit_and_retry_succeeds ... ok
+test animated::timeline_key_tests::rational_sum_overflow_is_inconclusive_despite_direct_timeline_equality ... ok
+test local_scan::feature_memory_tests::grayscale_admission_accounts_for_other_owners_and_releases_on_cancel ... ok
+test animated::timeline_key_tests::zero_duration_timelines_ignore_pixels_but_retain_repetition ... ok
+test local_scan::feature_memory_tests::retained_feature_storage_keeps_credit_until_last_owner ... ok
+test exact::collision_tests::final_content_validation_rejects_change_even_when_metadata_matches ... ok
+test local_scan::reflected_model_confirmation_tests::a_rejected_second_model_does_not_convert_first_fit_failure_to_a_negative ... ok
+test local_scan::reflected_model_confirmation_tests::exhausted_model_fits_preserve_first_inconclusive_reason ... ok
+test container::reuse_tests::stale_different_signatures_are_errors_and_equal_signatures_require_confirmation ... ok
+test local_scan::reflected_model_confirmation_tests::insufficient_fit_support_in_first_model_does_not_hide_second_verified_model ... ok
+test exact::collision_tests::verified_observations_detect_metadata_invisible_pruned_mutations ... ok
+test local_scan::reflected_model_confirmation_tests::coefficient_bounds_and_low_variance_failures_are_also_model_specific ... ok
+test local_scan::reflected_model_confirmation_tests::alternative_confirmation_cancel_and_work_limits_remain_terminal ... ok
+test local_scan::reflected_model_confirmation_tests::reflected_ranged_models_recover_fit_and_preserve_selected_domain ... ok
+test container::reuse_tests::retained_left_reuses_pixels_and_rejects_changed_source_and_cancellation ... ok
+test tests::collision_membership_keeps_arbitrary_order_and_pair_identity ... ok
+test tests::empty_and_duplicate_fingerprints ... ok
+test tests::traversal_work_exhaustion_is_distinct_from_failure ... ok
+test local_scan::reflected_model_confirmation_tests::ordinary_alternative_models_recover_photometric_range_and_display_fits ... ok
+test warp::bounded_fit_tests::boundary_fit_matches_exhaustive_rectangle_and_beats_independent_clipping ... ok
+test warp::encoded_signal_tests::extended_srgb_landmarks_match_independent_decimal_oracle_without_clipping ... ok
+test container::reuse_tests::retained_left_survives_memory_refusal_and_releases_before_row_change ... ok
+test warp::encoded_signal_tests::transfer_precedes_premultiplication_and_bilinear_sampling ... ok
+test tests::indexed_search_matches_independent_exhaustive_scan ... ok
+test local_scan::reflected_model_confirmation_tests::selected_encoded_filter_retains_auxiliary_linear_failure ... ok
+test container::reuse_tests::signature_preparation_errors_remain_pair_issues_without_unique_classification ... ok
+test pages::page_key_tests::key_retains_page_order_and_count_independently_of_first_page ... ok
+test container::reuse_tests::indexed_groups_remove_changed_sources_without_losing_healthy_edges ... ok
+test exact::collision_tests::colliding_samples_and_full_hashes_still_partition_by_bytes ... ok
+test pixel_index::tests::injected_constant_keys_still_require_direct_pixel_confirmation ... ok
+test container::reuse_tests::candidate_collisions_and_signature_failures_cannot_replace_direct_evidence ... ok
+test container::reuse_tests::indexed_groups_keep_labels_under_collisions_failure_and_candidate_caps ... ok
+test container::reuse_tests::reused_pair_latches_every_cancellation_checkpoint_and_generation_token ... ok
+test container::reuse_tests::indexed_groups_keep_selected_pages_and_animation_scopes_separate ... ok
+test container::reuse_tests::indexed_groups_cancel_without_partial_output_at_every_normal_checkpoint ... ok
+test container::reuse_tests::whole_signature_pipeline_cancels_at_every_checkpoint_without_report_or_leaks ... ok
+
+test result: ok. 36 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.29s
+
+     Running tests/animated.rs (/tmp/rrrah-dedup-target/debug/deps/animated-f7c32f10868277bd)
+
+running 3 tests
+test changed_gif_timing_prevents_whole_animation_equality ... ok
+test complete_existing_composition_fixtures_decode_and_compare ... ok
+test independent_cross_container_timeline_splits_and_negatives ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/cache.rs (/tmp/rrrah-dedup-target/debug/deps/cache-65d0d2e38a90c302)
+
+running 6 tests
+test cache_publication_child ... ok
+test roundtrip_requires_content_recipe_and_frame_identity ... ok
+test disk_persistence_is_deterministic_and_rejects_invalid_values ... ok
+test atomic_replacement_and_cancel_preserve_previous_cache ... ok
+test process_exit_during_temp_write_preserves_previous_publication_and_retry ... ok
+test concurrent_process_writers_publish_only_complete_single_writer_caches ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.41s
+
+     Running tests/container.rs (/tmp/rrrah-dedup-target/debug/deps/container-9cc69093f9b2b030)
+
+running 11 tests
+test exhaustive_scan_does_not_filter_on_zero_duration_first_frame ... ok
+test selected_frame_does_not_establish_whole_animation_identity ... ok
+test dcx_icon_and_cursor_page_modes_use_existing_full_decoders ... ok
+test recursive_complete_animation_groups_preserve_paths_aliases_and_errors ... ok
+test generation_change_at_final_group_admission_returns_no_result ... ok
+test batch_full_presentations_preserve_negative_and_error_evidence ... ok
+test automatic_directory_search_groups_renamed_containers_and_retains_detection_failures ... ok
+test complete_animation_groups_remove_stale_edges_and_keep_healthy_group ... ok
+test complete_page_comparison_rejects_last_page_changes_and_limits ... ok
+test indexed_recursive_corrupt_animation_is_inconclusive_and_preserves_healthy_edges ... ok
+test indexed_recursive_modes_retain_labelled_groups_with_candidate_only_budget ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.58s
+
+     Running tests/content_snapshot.rs (/tmp/rrrah-dedup-target/debug/deps/content_snapshot-df4871eabb902d25)
+
+running 1 test
+test full_digest_rejects_equal_length_mutation_and_budget_excess ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/crop.rs (/tmp/rrrah-dedup-target/debug/deps/crop-d8ffed6be98489d6)
+
+running 3 tests
+test work_budget_and_mid_search_cancel_are_inconclusive ... ok
+test bordered_hdr_image_matches_only_the_full_crop ... ok
+test uniform_transparent_matches_expose_ambiguity_and_result_limits ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/decode.rs (/tmp/rrrah-dedup-target/debug/deps/decode-5a0200c3e292c20e)
+
+running 9 tests
+test corrupt_missing_cancelled_and_frame_out_of_range_are_errors ... ok
+test public_selected_decode_rejects_a_source_changed_after_output_admission ... ok
+test mutation_during_processing_never_admits_cached_evidence ... ok
+test actual_files_ignore_comments_but_not_changed_pixels ... ok
+test tiff_shaped_raw_never_uses_generic_page_fallback ... ok
+test layered_xcf_duplicates_preserve_color_errors_and_managed_ownership ... ok
+test icc_conversion_cancellation_releases_partial_output ... ok
+test pre_icc_fix_persisted_recipe_cannot_reuse_current_fingerprint ... ok
+test cached_file_fingerprints_reuse_only_current_content_and_recipe ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/encoded_srgb.rs (/tmp/rrrah-dedup-target/debug/deps/encoded_srgb-178290f130ccf512)
+
+running 2 tests
+test encoded_affine_changes_match_independent_decimal_fixtures_and_preserve_linear_identity ... ok
+test seven_by_seven_encoded_windows_retain_broad_color_and_alpha_edits ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/exact_files.rs (/tmp/rrrah-dedup-target/debug/deps/exact_files-8832db3b0f5e814e)
+
+running 13 tests
+test unavailable_non_utf8_path_preserves_diagnostic_bytes ... ok
+test size_depth_and_entry_limits_are_visible ... ok
+test same_length_mutation_during_sample_is_detected ... ok
+test hardlink_aliases_and_followed_symlink_cycles ... ok
+test cancellation_during_full_hash_is_bounded ... ok
+test same_samples_different_middle_are_not_duplicates ... ok
+test missing_input_and_overlap_do_not_lose_valid_results ... ok
+test copies_empty_files_and_equal_size_negatives ... ok
+test verified_scan_preserves_groups_and_observes_every_admitted_file ... ok
+test unreadable_file_is_explicit_and_does_not_hide_healthy_copies ... ok
+test fifo_replacement_does_not_block_or_hide_healthy_copies ... ok
+test verified_scan_discards_groups_for_one_shot_cancel_at_every_checkpoint ... ok
+test changing_any_member_does_not_hide_healthy_duplicates ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.32s
+
+     Running tests/filtered.rs (/tmp/rrrah-dedup-target/debug/deps/filtered-b167955e5378718f)
+
+running 4 tests
+test complete_work_is_admitted_before_sampling_and_cancellation_has_no_partial_evidence ... ok
+test independently_known_box_mean_retains_strict_high_frequency_differences ... ok
+test broad_content_edits_and_alpha_changes_remain_visible_after_filtering ... ok
+test reflected_filter_retains_color_space_alpha_work_and_cancel_policy ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/geometry.rs (/tmp/rrrah-dedup-target/debug/deps/geometry-e83c94614da54a1b)
+
+running 9 tests
+test duplicate_and_collinear_support_cannot_inflate_evidence ... ok
+test noisy_corners_refine_to_independently_known_least_squares_solution ... ok
+test scaled_rotated_crop_translation_rejects_watermark_outliers ... ok
+test degenerate_least_squares_refinement_preserves_prior_hypothesis ... ok
+test alternative_geometry_keeps_degeneracy_guards_and_deduplicates_identical_models ... ok
+test one_shot_cancel_never_publishes_partial_geometry_and_retry_recovers_support ... ok
+test reflected_geometry_keeps_support_original_coordinates_and_cancel_atomicity ... ok
+test capped_residual_candidate_preserves_exact_majority_beside_count_winner ... ok
+test alternative_geometry_budget_and_cancellation_never_publish_partial_models ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/groups.rs (/tmp/rrrah-dedup-target/debug/deps/groups-8d7551a0dd15d267)
+
+running 5 tests
+test invalid_input_budget_and_cancellation_are_explicit ... ok
+test nontransitive_chain_preserves_edge_without_inventing_pair ... ok
+test every_emitted_group_has_all_pairs_for_all_small_graphs ... ok
+test isolated_and_sparse_entries_avoid_unrelated_group_checks ... ok
+test sparse_selection_matches_independent_exhaustive_reference_for_all_six_node_graphs ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+     Running tests/icc_oracle.rs (/tmp/rrrah-dedup-target/debug/deps/icc_oracle-0d36b218b756f2f9)
+
+running 3 tests
+test camera_gamma_profile_preserves_exact_black_and_unfitted_alpha ... ok
+test independent_lcms_boundary_samples_preserve_black_channel_endpoints ... ok
+test independent_lcms_camera_render_grid_preserves_profiled_linear_samples ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/information.rs (/tmp/rrrah-dedup-target/debug/deps/information-258103301ddc5871)
+
+running 5 tests
+test informative_hash_collision_remains_candidate_and_fails_full_resolution_confirmation ... ok
+test uniform_candidates_and_invisible_rgb_never_invent_visible_pixel_equality ... ok
+test standalone_pixel_search_recovers_equal_transparent_files_without_visual_candidates ... ok
+test indexed_candidates_match_exhaustive_pixel_equality_and_avoid_unrelated_pairs ... ok
+test uniform_local_search_cannot_invent_geometry_or_color_fit ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+
+     Running tests/linear.rs (/tmp/rrrah-dedup-target/debug/deps/linear-2426362e8a10404b)
+
+running 4 tests
+test invalid_samples_budget_and_cancel_are_explicit ... ok
+test hdr_and_sub_byte_differences_are_retained ... ok
+test hdr_fingerprints_keep_highlight_structure_without_quantization ... ok
+test invisible_rgb_and_signed_zero_are_canonical ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/local.rs (/tmp/rrrah-dedup-target/debug/deps/local-19552dfeb3f97f5c)
+
+running 4 tests
+test one_shot_matching_cancellation_discards_every_partial_result_and_retries ... ok
+test flat_images_ambiguous_descriptors_budgets_and_cancel_are_explicit ... ok
+test quarter_turn_crops_are_found_without_manual_correspondences ... ok
+test extracted_crop_matches_drive_geometry_and_pixel_verification ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/local_collection.rs (/tmp/rrrah-dedup-target/debug/deps/local_collection-836142ca90df3a74)
+
+running 17 tests
+test reflected_ranged_modes_validate_before_consuming_sources ... ok
+test recursive_collection_preserves_aliases_errors_and_request_settings ... ok
+test reflected_collection_discards_changed_sources_batch_wide ... ok
+test indexed_collection_changed_before_decode_is_invalidated_without_losing_healthy_pair ... ok
+test recursive_spatial_collection_preserves_requests_and_rejects_substitution ... ok
+test indexed_collection_reports_bad_and_insufficient_sources_and_admission_errors ... ok
+test reflected_file_pair_confirms_pixels_and_releases_managed_features ... ok
+test spatial_collection_matches_exhaustive_spatial_pair_acceptance ... ok
+test reflected_spatial_collection_matches_spatial_file_oracle ... ok
+test ranged_fit_collection_matches_pair_results_and_exposes_selected_domain ... ok
+test display_projection_collection_matches_pairs_and_preserves_strict_evidence ... ok
+test indexed_collection_retains_every_exhaustively_verified_crop_scale_rotation_pair ... ok
+test indexed_watermark_and_large_edit_preserve_pixel_policy ... ok
+test reflected_recursive_collection_keeps_aliases_paths_and_request_policy ... ok
+test indexed_arbitrary_angles_and_intermediate_scales_keep_labelled_pairs ... ok
+test indexed_collection_final_generation_and_one_shot_cancel_discard_report ... ok
+test reflected_collection_retrieves_labelled_pairs_and_cancels_without_report ... ok
+
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 12.24s
+
+     Running tests/local_index.rs (/tmp/rrrah-dedup-target/debug/deps/local_index-6fddb0a4fc74ed6e)
+
+running 7 tests
+test collision_buckets_recipes_and_limits_never_return_partial_results ... ok
+test reverse_matching_preserves_asymmetric_variant_metric_and_hit_limits ... ok
+test file_pair_storage_limits_preserve_sorted_complete_results ... ok
+test descriptor_index_equals_independent_exhaustive_variant_search ... ok
+test file_pair_retrieval_equals_exhaustive_distinct_query_feature_counts ... ok
+test indexed_mutual_matching_equals_exhaustive_ratios_for_every_recipe ... ok
+test extracted_rotation_and_scale_features_keep_exhaustive_correspondences ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+
+     Running tests/local_scan.rs (/tmp/rrrah-dedup-target/debug/deps/local_scan-6ca78a88d5d9843f)
+
+running 11 tests
+test fitted_scan_validates_policy_before_consuming_input ... ok
+test file_pair_limits_cancel_and_invalid_acceptance_are_inconclusive ... ok
+test recursive_local_search_preserves_paths_aliases_and_decode_errors ... ok
+test spatial_file_policy_preserves_pixel_proof_errors_and_source_guards ... ok
+test full_file_search_finds_crop_scale_rotation_and_rejects_unrelated_and_corrupt_sources ... ok
+test unfiltered_photometric_batch_uses_fitted_residuals_and_retains_strict_pixels ... ok
+test batch_source_mutation_discards_all_stale_pairs_and_keeps_healthy_evidence ... ok
+test constrained_batch_mutation_discards_stale_pairs ... ok
+test final_generation_change_and_one_shot_cancellation_return_no_partial_report ... ok
+test constrained_batch_final_generation_and_cancellation_discard_report ... ok
+test fitted_batch_and_roots_preserve_signal_selection_and_corrupt_file_diagnostics ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 11.38s
+
+     Running tests/ordinal.rs (/tmp/rrrah-dedup-target/debug/deps/ordinal-a89518535633a78c)
+
+running 1 test
+test monotone_neutral_transfers_preserve_features_and_indexed_correspondences ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/oriented.rs (/tmp/rrrah-dedup-target/debug/deps/oriented-3db41cd5e0fd6bfc)
+
+running 4 tests
+test oriented_extraction_cancels_inside_descriptor_work_and_enforces_budgets ... ok
+test independent_arbitrary_rotations_recover_geometry_and_reject_unrelated_texture ... ok
+test independently_resized_images_estimate_non_dyadic_scale_and_rotation ... ok
+test reflected_descriptors_reach_original_geometry_and_pixel_proof ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.24s
+
+     Running tests/pages.rs (/tmp/rrrah-dedup-target/debug/deps/pages-d48a1e9593483bae)
+
+running 11 tests
+test untagged_tiff_requires_explicit_color_transform ... ok
+test all_dcx_pages_and_changed_second_page_are_compared ... ok
+test cursor_hotspot_and_invalid_resource_offsets_are_not_ignored ... ok
+test every_icon_resource_is_compared_including_the_last ... ok
+test complete_tiff_pages_with_icc_detect_last_page_changes_and_cycles ... ok
+test selected_tiff_pages_use_their_own_profile_and_keep_complete_count ... ok
+test identical_tiff_samples_with_different_page_profiles_produce_distinct_colors ... ok
+test selected_tiff_budget_refusals_release_metadata_and_allow_retry ... ok
+test independent_tiff_precision_and_orientation_are_preserved ... ok
+test public_selected_frame_honors_tiff_page_profiles_metadata_and_explicit_limits ... ok
+test independently_encoded_tiff_endian_bigtiff_and_compression_matrix ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+
+     Running tests/photo_collages.rs (/tmp/rrrah-dedup-target/debug/deps/photo_collages-86d5d12820c66496)
+
+running 3 tests
+test dark_signal_can_pass_selected_encoded_metric_with_auxiliary_linear_failure_retained ... ok
+test partial_copy_challenges_distinguish_residual_rejections_from_inconclusive_fits ... ok
+test constrained_partial_copies_reject_residuals_without_relaxing_model_bounds has been running for over 60 seconds
+test constrained_partial_copies_reject_residuals_without_relaxing_model_bounds ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 92.82s
+
+     Running tests/photo_files.rs (/tmp/rrrah-dedup-target/debug/deps/photo_files-4e5b78f1f6fb0410)
+
+running 27 tests
+test invalid_fitting_policy_is_rejected_before_source_access ... ok
+test recursive_filtered_reflection_keeps_frame_selection_and_factory_guards ... ok
+test recursive_ranged_reflection_keeps_frame_selection_and_factory_guards ... ok
+test reflected_brightness_1084_known_fixture_geometry_passes_unchanged_pixel_policy ... ok
+test ordinary_spatial_brightness_keeps_all_four_labelled_camera_scenes ... ok
+test filtered_file_evidence_is_discarded_on_late_cancellation_generation_or_mutation ... ok
+test reflected_filtered_invalid_policy_precedes_source_and_collection_access ... ok
+test reflected_filtered_file_guards_discard_late_results ... ok
+test filtered_natural_photo_jpegs_are_candidates_and_other_scenes_remain_rejected ... ok
+test recursive_spatial_reflected_brightness_shares_pair_and_frame_policy ... ok
+test real_camera_preview_brightness_is_a_visual_candidate_with_strict_residuals_retained ... ok
+test ordinary_spatial_brightness_collection_matches_complete_spatial_oracle ... ok
+test reflected_natural_brightness_fitting_keeps_original_pixel_evidence ... ok
+test strict_reflected_natural_files_keep_scene_pairs_and_reject_cross_scene_negatives ... ok
+test real_photo_resize_crop_rotation_and_brightness_have_filtered_evidence ... ok
+test recursive_reflected_brightness_keeps_fitted_mode_paths_and_frame_settings ... ok
+test spatial_reflected_brightness_collection_matches_complete_spatial_oracle ... ok
+test indexed_natural_photo_collection_matches_exhaustive_filtered_candidates ... ok
+test reflected_filtered_jpegs_preserve_original_evidence_in_both_spaces_and_fit_modes ... ok
+test reflected_range_and_display_collection_match_all_labelled_pairs ... ok
+test recursive_ranged_reflections_preserve_oracle_aliases_errors_and_modes ... ok
+test reflected_filtered_collection_matches_spatial_file_oracle_in_both_spaces_and_fit_modes ... ok
+test indexed_reflected_brightness_collection_preserves_fitted_and_strict_evidence ... ok
+test indexed_reflected_natural_collection_matches_complete_pair_oracle ... ok
+test explicit_seven_by_seven_windows_cover_all_twenty_photo_derivatives_in_both_spaces has been running for over 60 seconds
+test indexed_natural_rotations_and_resizes_preserve_labelled_scene_pairs has been running for over 60 seconds
+test recursive_filtered_reflections_preserve_oracle_aliases_errors_and_modes has been running for over 60 seconds
+test indexed_natural_rotations_and_resizes_preserve_labelled_scene_pairs ... ok
+test explicit_seven_by_seven_windows_cover_all_twenty_photo_derivatives_in_both_spaces ... ok
+test recursive_filtered_reflections_preserve_oracle_aliases_errors_and_modes ... ok
+
+test result: ok. 27 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 93.47s
+
+     Running tests/photo_jpeg_oracle.rs (/tmp/rrrah-dedup-target/debug/deps/photo_jpeg_oracle-b30cf96a14006b45)
+
+running 1 test
+test native_jpeg_pixels_are_qualified_against_independent_libjpeg_readback ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/photometric.rs (/tmp/rrrah-dedup-target/debug/deps/photometric-116ef11ffde0bf10)
+
+running 7 tests
+test known_channel_gains_offsets_and_spatial_edit_are_separate_evidence ... ok
+test incomplete_fits_have_specific_reasons_instead_of_invalid_pixel_errors ... ok
+test flat_content_alpha_edits_limits_and_cancellation_do_not_disappear ... ok
+test bounded_fit_excludes_saturation_from_model_but_never_from_residuals ... ok
+test explicit_display_projection_retains_hdr_disagreement_and_alpha_edits ... ok
+test reflected_gain_offset_preserves_strict_evidence_and_cancel_atomicity ... ok
+test reflected_range_and_display_keep_hdr_alpha_inverse_and_cancellation_evidence ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/pixel_search.rs (/tmp/rrrah-dedup-target/debug/deps/pixel_search-e8535cb037a13475)
+
+running 15 tests
+test opaque_uniform_png_and_independently_encoded_bmp_are_discovered_as_equal ... ok
+test indexed_source_changed_before_its_decode_is_not_admitted_as_fresh ... ok
+test untagged_hdr_requires_color_qualification_even_with_encoded_srgb_assumption ... ok
+test recursive_request_factory_preserves_explicit_hdr_color_and_discovered_paths ... ok
+test changed_source_discards_every_stale_decision_and_preserves_healthy_pairs ... ok
+test indexed_roots_preserve_non_utf8_diagnostics_without_losing_healthy_equality ... ok
+test indexed_changed_source_discards_stale_pairs ... ok
+test explicitly_qualified_linear_hdr_matches_endianness_without_losing_precision_or_scale ... ok
+test indexed_pixel_permission_error_preserves_healthy_pairs_and_recovers ... ok
+test recursive_pixel_search_keeps_corrupt_and_missing_sources_as_diagnostics ... ok
+test final_generation_change_and_transient_user_cancel_return_no_report ... ok
+test indexed_recursive_search_isolates_corruption_and_preserves_overlapping_roots ... ok
+test indexed_final_generation_and_transient_cancel_return_no_report ... ok
+test indexed_two_key_groups_are_deterministic_across_request_orders ... ok
+test indexed_unique_collection_fits_zero_pair_budget_and_decodes_once_per_key ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+     Running tests/pixels.rs (/tmp/rrrah-dedup-target/debug/deps/pixels-32d3375de02ae94e)
+
+running 4 tests
+test validates_layout_budget_and_cancellation ... ok
+test invisible_rgb_is_canonical_but_visible_pixels_are_exact ... ok
+test uniform_hash_collision_is_not_informative ... ok
+test gradient_has_independently_known_difference_bits ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/presentation_digest.rs (/tmp/rrrah-dedup-target/debug/deps/presentation_digest-54a1b4b71dbf62dd)
+
+running 2 tests
+test timeline_keys_preserve_cross_encoding_splits_zero_prefix_and_labelled_negatives ... ok
+test page_keys_cover_every_page_across_compression_and_byte_order ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/presentation_kind.rs (/tmp/rrrah-dedup-target/debug/deps/presentation_kind-f4b9dd9168be17be)
+
+running 1 test
+test content_detection_ignores_extensions_and_preserves_sensor_routing ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/pyramid.rs (/tmp/rrrah-dedup-target/debug/deps/pyramid-83fb0e2756503e2b)
+
+running 3 tests
+test enlarged_quarter_turn_recovers_scale_and_rotation_together ... ok
+test scale_is_estimated_from_extracted_multiresolution_features ... ok
+test oriented_pyramid_keeps_recipe_source_coordinates_and_admission ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/raster.rs (/tmp/rrrah-dedup-target/debug/deps/raster-5a53b8c6b83844f8)
+
+running 5 tests
+test unqualified_color_and_insufficient_budget_fail ... ok
+test selected_frame_key_tracks_equality_metadata_but_excludes_container_selection ... ok
+test storage_precision_and_frame_metadata_are_preserved ... ok
+test normalized_keys_and_direct_equality_agree_with_independent_hdr_alpha_precision_labels ... ok
+test cancellation_interrupts_each_pixel_representation ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/raster_equality.rs (/tmp/rrrah-dedup-target/debug/deps/raster_equality-ea252da97797e76c)
+
+running 3 tests
+test untagged_policy_is_explicit_cached_and_does_not_override_declared_linear_color ... ok
+test independent_lossless_encodings_preserve_pixels_alpha_and_one_code_negatives ... ok
+test cross_encoding_batch_confirms_every_pair_and_rejects_single_pixel_edits ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/scan.rs (/tmp/rrrah-dedup-target/debug/deps/scan-191c9d95467ecbab)
+
+running 6 tests
+test confirmation_mutation_generation_and_memory_are_inconclusive ... ok
+test recursive_visual_discovery_keeps_aliases_and_errors_visible ... ok
+test pixel_group_final_checks_observe_generation_cancellation ... ok
+test group_admission_invalidates_edges_from_changed_source ... ok
+test batch_errors_cache_and_pair_evidence_are_integrated ... ok
+test tiff_page_fingerprints_and_confirmation_share_profile_and_limits ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/sequence.rs (/tmp/rrrah-dedup-target/debug/deps/sequence-950adb0973288b28)
+
+running 7 tests
+test admission_cancel_at_every_checkpoint_returns_no_partial_sequence_and_retry_succeeds ... ok
+test animation_requires_timing_and_compares_repetitions ... ok
+test complete_coverage_is_required ... ok
+test equivalent_timelines_ignore_frame_splits_but_keep_time_and_pixels ... ok
+test first_frame_match_does_not_hide_changed_last_frame ... ok
+test rational_extremes_fail_explicitly_without_wrapping ... ok
+test timeline_comparison_matches_independent_discrete_presentation_oracle ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/spatial.rs (/tmp/rrrah-dedup-target/debug/deps/spatial-ecace04c96e10240)
+
+running 1 test
+test spatial_quotas_keep_self_geometry_and_reject_unrelated_texture ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/visual.rs (/tmp/rrrah-dedup-target/debug/deps/visual-357263cc598dcf1c)
+
+running 8 tests
+test cancellation_inside_large_collision_bucket_is_observed ... ok
+test cancelled_insertions_preserve_collision_buckets_and_deep_trees ... ok
+test duplicate_ids_budgets_and_cancel_do_not_return_partial_indexes ... ok
+test dense_adaptive_search_keeps_oracle_and_cancellation ... ok
+test fallible_insert_enforces_total_ids_without_partial_mutation ... ok
+test fallible_search_result_caps_are_inconclusive_and_leave_index_unchanged ... ok
+test full_radius_direct_search_cancellation_never_returns_partial_matches ... ok
+test complete_recipe_index_matches_exhaustive_oracle ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/warp.rs (/tmp/rrrah-dedup-target/debug/deps/warp-ffab8e269c18517c)
+
+running 4 tests
+test bilinear_sampling_keeps_alpha_and_invisible_rgb_separate ... ok
+test reverse_verification_catches_edits_between_scaled_sample_centers ... ok
+test crop_overlap_and_single_pixel_edits_are_explicit ... ok
+test reflected_grids_preserve_hdr_alpha_and_inverse_with_atomic_cancel ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests rrrah_dedup
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

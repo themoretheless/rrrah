@@ -1,0 +1,35 @@
+warning: function `error` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:4:4
+  |
+4 | fn error(message: &str) -> DecodeError {
+  |    ^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `packed_12` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:9:4
+  |
+9 | fn packed_12(
+  |    ^^^^^^^^^
+
+warning: function `decode_zd` is never used
+  --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:48:15
+   |
+48 | pub(super) fn decode_zd(
+   |               ^^^^^^^^^
+
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: `rrrah-decode` (lib) generated 3 warnings
+error[E0282]: type annotations needed for `LocalFileReport<_>`
+   --> crates/rrrah-dedup/src/local_collection.rs:626:9
+    |
+626 |     let mut observations = LocalFileReport::default();
+    |         ^^^^^^^^^^^^^^^^   -------------------------- type must be known at this point
+    |
+help: consider giving `observations` an explicit type, where the type for type parameter `E` is specified
+    |
+626 |     let mut observations: LocalFileReport<E> = LocalFileReport::default();
+    |                         ++++++++++++++++++++
+
+For more information about this error, try `rustc --explain E0282`.
+error: could not compile `rrrah-dedup` (lib) due to 1 previous error

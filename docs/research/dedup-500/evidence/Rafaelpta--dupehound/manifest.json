@@ -1,0 +1,97 @@
+{
+  "repository": "Rafaelpta/dupehound",
+  "metadata": {
+    "name": "Rafaelpta/dupehound",
+    "url": "https://github.com/Rafaelpta/dupehound",
+    "description": "Finds the code your AI wrote twice. Fast, offline duplicate-code detector: scan, history chart, CI gate. No AI required.",
+    "language": "Rust",
+    "stars": 95,
+    "license": "MIT",
+    "archived": false,
+    "pushed_at": "2026-09-21T13:14:19Z",
+    "default_branch": "main",
+    "queries": [
+      "duplicate in:name,description",
+      "duplicates in:name,description",
+      "dupe in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/Rafaelpta/dupehound/blob/35ea7c3743a8fb2205aaef973e67b1c6c5e41474/README.md",
+      "sha256": "aae944667167bf6c0b82afb5b127b6710b6bfaca9374502281feeb33f9ec51ae",
+      "truncated": false,
+      "lines": 159,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/Rafaelpta/dupehound/blob/35ea7c3743a8fb2205aaef973e67b1c6c5e41474/LICENSE",
+      "sha256": "28ede1e7bf2097f76b17f52e306f13730da02b3ba529cf7711b3bd026a1a29d7",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "src/fingerprint.rs",
+      "local": "02-fingerprint.rs",
+      "url": "https://github.com/Rafaelpta/dupehound/blob/35ea7c3743a8fb2205aaef973e67b1c6c5e41474/src/fingerprint.rs",
+      "sha256": "e4f1545281d810b7b04eaff02dc43622052a42b2c0f29dff4cabc6ed98d0944b",
+      "truncated": false,
+      "lines": 191,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/scan.rs",
+      "local": "03-scan.rs",
+      "url": "https://github.com/Rafaelpta/dupehound/blob/35ea7c3743a8fb2205aaef973e67b1c6c5e41474/src/scan.rs",
+      "sha256": "8128a669ac0063cef735e508334add80b752acd1b9b5a95ca64df3d0d5669e50",
+      "truncated": false,
+      "lines": 665,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "benchmarks/harness/systems/dupehound.py",
+      "local": "04-dupehound.py",
+      "url": "https://github.com/Rafaelpta/dupehound/blob/35ea7c3743a8fb2205aaef973e67b1c6c5e41474/benchmarks/harness/systems/dupehound.py",
+      "sha256": "5ceec734c2d2aa8a94f13282de1289cd83c143c03ababed734186578fc06b26a",
+      "truncated": false,
+      "lines": 89,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/check.rs",
+      "local": "05-check.rs",
+      "url": "https://github.com/Rafaelpta/dupehound/blob/35ea7c3743a8fb2205aaef973e67b1c6c5e41474/tests/check.rs",
+      "sha256": "5c117525cba9b4fb28b8b236ee5dd2974ce6c545f850a2385c335a52f10bc492",
+      "truncated": false,
+      "lines": 190,
+      "source": true,
+      "test": true
+    }
+  ],
+  "errors": [],
+  "commit": "35ea7c3743a8fb2205aaef973e67b1c6c5e41474",
+  "tree_truncated": false,
+  "source_file_count": 46,
+  "test_file_count": 3,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "src/fingerprint.rs",
+    "src/scan.rs",
+    "benchmarks/harness/systems/dupehound.py",
+    "tests/check.rs"
+  ]
+}

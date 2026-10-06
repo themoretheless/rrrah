@@ -1,0 +1,290 @@
+{
+  "status": "macOS and native Linux BMP/PNG/TIFF probes passed; scoped Clippy exited zero",
+  "linux_session": 95477,
+  "linux_stdout": "/tmp/dedup-large-tiff-linux.jsonl",
+  "linux_stderr": "/tmp/dedup-large-tiff-linux-stderr.log",
+  "clippy_session": 23158,
+  "clippy_log": "/tmp/dedup-large-tiff-clippy.log",
+  "macos": {
+    "measurements": [
+      {
+        "side": 1024,
+        "pixels": 1048576,
+        "file_bytes": 3145782,
+        "decode_ns": 22243458,
+        "managed_used_after": 0
+      },
+      {
+        "format": "png",
+        "side": 1024,
+        "exact_pixels_equal": true,
+        "one_byte_change_rejected": true
+      },
+      {
+        "format": "png",
+        "side": 1024,
+        "decode_ns": 22040542,
+        "cross_format_equal": true
+      },
+      {
+        "format": "tiff",
+        "side": 1024,
+        "exact_pixels_equal": true,
+        "one_byte_change_rejected": true
+      },
+      {
+        "format": "tiff",
+        "side": 1024,
+        "decode_ns": 22574792,
+        "cross_format_equal": true
+      },
+      {
+        "side": 2048,
+        "pixels": 4194304,
+        "file_bytes": 12582966,
+        "decode_ns": 87344833,
+        "managed_used_after": 0
+      },
+      {
+        "format": "png",
+        "side": 2048,
+        "exact_pixels_equal": true,
+        "one_byte_change_rejected": true
+      },
+      {
+        "format": "png",
+        "side": 2048,
+        "decode_ns": 86356333,
+        "cross_format_equal": true
+      },
+      {
+        "format": "tiff",
+        "side": 2048,
+        "exact_pixels_equal": true,
+        "one_byte_change_rejected": true
+      },
+      {
+        "format": "tiff",
+        "side": 2048,
+        "decode_ns": 86169500,
+        "cross_format_equal": true
+      },
+      {
+        "side": 4096,
+        "pixels": 16777216,
+        "file_bytes": 50331702,
+        "decode_ns": 350981834,
+        "managed_used_after": 0
+      },
+      {
+        "format": "png",
+        "side": 4096,
+        "exact_pixels_equal": true,
+        "one_byte_change_rejected": true
+      },
+      {
+        "format": "png",
+        "side": 4096,
+        "decode_ns": 329686167,
+        "cross_format_equal": true
+      },
+      {
+        "format": "tiff",
+        "side": 4096,
+        "exact_pixels_equal": true,
+        "one_byte_change_rejected": true
+      },
+      {
+        "format": "tiff",
+        "side": 4096,
+        "decode_ns": 342636666,
+        "cross_format_equal": true
+      }
+    ],
+    "whole_process_peak_rss_bytes": 807272448
+  },
+  "scope": [
+    "Independently authored uncompressed RGB TIFF and sRGB PNG",
+    "Explicit untagged-sRGB assumption on TIFF",
+    "Exact normalized pixels equal BMP at 1024/2048/4096 square sizes",
+    "One-byte BMP middle-pixel edit rejected, restored before next encoding",
+    "Zero/one-byte decode budget refusals; clean retry and cache hit"
+  ],
+  "fixture_manifest": [
+    {
+      "name": "1024.tiff",
+      "side": 1024,
+      "sha256": "34666397345a77485f761b69456e16c217c4b22470bbe4c1e000deddc6f64bfb",
+      "bytes": 3145880
+    },
+    {
+      "name": "1024.png",
+      "side": 1024,
+      "sha256": "da8b140c40680f2506818154b65f8e79a0b8574a2c4cdbccc8f629fe221ea6b5",
+      "bytes": 2768782
+    },
+    {
+      "name": "2048.tiff",
+      "side": 2048,
+      "sha256": "303cf8dc2074f5a349f05888a8039280e8eb88fae37f0b91b16be8f5d8d5c7f1",
+      "bytes": 12583064
+    },
+    {
+      "name": "2048.png",
+      "side": 2048,
+      "sha256": "be69dcd56369e2459f2b4b3a667e23d83817a19314dec50d61fa2587bcf5d63c",
+      "bytes": 10697674
+    },
+    {
+      "name": "4096.tiff",
+      "side": 4096,
+      "sha256": "b892d10ac7d0af96eb207a727dbc8dd1ffc03e8766bc7421dfaf8adfd4d0c4ef",
+      "bytes": 50331800
+    },
+    {
+      "name": "4096.png",
+      "side": 4096,
+      "sha256": "8d93d75099887fd8f1e7696a2652a50c6d2f5c8f5e506ed5793511d3774191dd",
+      "bytes": 41417625
+    }
+  ],
+  "source_snapshot": {
+    "scripts/generate-dedup-raster-scale-png.py": "85a20a93c4f1df1bbdfa0296ea359480a1cba5aab5425c3d9d3234e324c6d98d",
+    "crates/rrrah-dedup/examples/raster_memory_scale_probe.rs": "4232f734dfb8f40b7bf0c0b7d22a4677ea6458fdea309d58ce26d1addafd2684"
+  },
+  "snapshot_timing": "post-macOS run, not atomic prelaunch",
+  "limits": [
+    "Authored opaque gradient; no RAW/ICC/HDR claim",
+    "Single decode per size, not statistical benchmark",
+    "Whole-process RSS includes all operations",
+    "Full acceptance incomplete"
+  ],
+  "clippy": "Scoped completed with exit zero and existing decoder warnings",
+  "clippy_evidence": {
+    "path": "docs/research/dedup-large-tiff-clippy.log",
+    "sha256": "44c5e4b399827f15d99e4fc02992edfb5a59abfc89e5d755e9dd6945d4e8e2cb"
+  },
+  "linux_exit_code": 0,
+  "linux": {
+    "measurements": [
+      {
+        "side": 1024,
+        "pixels": 1048576,
+        "file_bytes": 3145782,
+        "decode_ns": 29585971,
+        "managed_used_after": 0
+      },
+      {
+        "format": "png",
+        "side": 1024,
+        "exact_pixels_equal": true,
+        "one_byte_change_rejected": true
+      },
+      {
+        "format": "png",
+        "side": 1024,
+        "decode_ns": 32255478,
+        "cross_format_equal": true
+      },
+      {
+        "format": "tiff",
+        "side": 1024,
+        "exact_pixels_equal": true,
+        "one_byte_change_rejected": true
+      },
+      {
+        "format": "tiff",
+        "side": 1024,
+        "decode_ns": 34482689,
+        "cross_format_equal": true
+      },
+      {
+        "side": 2048,
+        "pixels": 4194304,
+        "file_bytes": 12582966,
+        "decode_ns": 112012307,
+        "managed_used_after": 0
+      },
+      {
+        "format": "png",
+        "side": 2048,
+        "exact_pixels_equal": true,
+        "one_byte_change_rejected": true
+      },
+      {
+        "format": "png",
+        "side": 2048,
+        "decode_ns": 123805899,
+        "cross_format_equal": true
+      },
+      {
+        "format": "tiff",
+        "side": 2048,
+        "exact_pixels_equal": true,
+        "one_byte_change_rejected": true
+      },
+      {
+        "format": "tiff",
+        "side": 2048,
+        "decode_ns": 144791040,
+        "cross_format_equal": true
+      },
+      {
+        "side": 4096,
+        "pixels": 16777216,
+        "file_bytes": 50331702,
+        "decode_ns": 444345085,
+        "managed_used_after": 0
+      },
+      {
+        "format": "png",
+        "side": 4096,
+        "exact_pixels_equal": true,
+        "one_byte_change_rejected": true
+      },
+      {
+        "format": "png",
+        "side": 4096,
+        "decode_ns": 485220473,
+        "cross_format_equal": true
+      },
+      {
+        "format": "tiff",
+        "side": 4096,
+        "exact_pixels_equal": true,
+        "one_byte_change_rejected": true
+      },
+      {
+        "format": "tiff",
+        "side": 4096,
+        "decode_ns": 540891122,
+        "cross_format_equal": true
+      }
+    ],
+    "whole_process_peak_rss_bytes": 617648128,
+    "rss_after_bytes": 13893632,
+    "storage": "isolated 2 GiB tmpfs"
+  },
+  "logs": {
+    "macos-results": {
+      "path": "docs/research/dedup-large-tiff-macos-results.log",
+      "sha256": "b11a98c2324c46f8b6a76d68a914e89a810f212b4d8eea6dbbffb4acbcbd3e9c"
+    },
+    "macos-time": {
+      "path": "docs/research/dedup-large-tiff-macos-time.log",
+      "sha256": "283415d1f4e3c7fe661c9859565c09e6fbf79b8b299b2b571650292a03a7ae08"
+    },
+    "linux-results": {
+      "path": "docs/research/dedup-large-tiff-linux-results.log",
+      "sha256": "e4bdf4e81ef4bb77e29b7a035cb24ef33551127ad5b2672904785be0b9783106"
+    },
+    "linux-stderr": {
+      "path": "docs/research/dedup-large-tiff-linux-stderr.log",
+      "sha256": "ad3fef92c6dbc2706c5777a6b9bcc74a2ca7480202e3dbed12f9f1dd01bce419"
+    },
+    "clippy": {
+      "path": "docs/research/dedup-large-tiff-clippy.log",
+      "sha256": "44c5e4b399827f15d99e4fc02992edfb5a59abfc89e5d755e9dd6945d4e8e2cb"
+    }
+  }
+}

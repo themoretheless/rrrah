@@ -1,0 +1,88 @@
+{
+  "index": 241,
+  "repository": "Bobby-cell-commits/open-brain-server",
+  "commit": "a352b548d380b5c3dac73f9ec438ad79bfc3ecc3",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Assistant thought/vector memory dedup; semantic text matches.",
+  "available_source_evidence": [
+    {
+      "path": "pipeline/dedup.py",
+      "local": "02-dedup.py",
+      "url": "https://github.com/Bobby-cell-commits/open-brain-server/blob/a352b548d380b5c3dac73f9ec438ad79bfc3ecc3/pipeline/dedup.py",
+      "sha256": "04a401152832e8c77de2c46c2892cd7dd8b841f1748e378c482eeaa6fce430e3",
+      "truncated": false,
+      "lines": 69,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "supabase/migrations/20260306080001_match_thoughts_similarity.sql",
+      "local": "03-20260306080001_match_thoughts_similarity.sql",
+      "url": "https://github.com/Bobby-cell-commits/open-brain-server/blob/a352b548d380b5c3dac73f9ec438ad79bfc3ecc3/supabase/migrations/20260306080001_match_thoughts_similarity.sql",
+      "sha256": "b38171230814c1a2dd6bbc08e1f13a2efce79dcd43686304f2ac1b1f0b929599",
+      "truncated": false,
+      "lines": 42,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "supabase/migrations/20260322000003_fix_get_thought_connections_dedup.sql",
+      "local": "04-20260322000003_fix_get_thought_connections_dedup.sql",
+      "url": "https://github.com/Bobby-cell-commits/open-brain-server/blob/a352b548d380b5c3dac73f9ec438ad79bfc3ecc3/supabase/migrations/20260322000003_fix_get_thought_connections_dedup.sql",
+      "sha256": "975f96d01b5d7709fafefc33633e68f80e00d27a29337369ba5e9f2d89e64a01",
+      "truncated": false,
+      "lines": 24,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "benchmark/tests/test_retrieve.py",
+      "local": "05-test_retrieve.py",
+      "url": "https://github.com/Bobby-cell-commits/open-brain-server/blob/a352b548d380b5c3dac73f9ec438ad79bfc3ecc3/benchmark/tests/test_retrieve.py",
+      "sha256": "62d7a9cfbec76245fb23bed3d367eb7b64cb08a10a5a3b9d3ab1d25306606edc",
+      "truncated": false,
+      "lines": 196,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "benchmark/longmemeval/retrieve.py",
+      "local": "06-retrieve.py",
+      "url": "https://github.com/Bobby-cell-commits/open-brain-server/blob/a352b548d380b5c3dac73f9ec438ad79bfc3ecc3/benchmark/longmemeval/retrieve.py",
+      "sha256": "f00fcc7af53b04d73d98ad06559b7397e2f581e6bb8a4b173d91912999ae9b49",
+      "truncated": false,
+      "lines": 150,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 52,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/Bobby-cell-commits/open-brain-server/blob/a352b548d380b5c3dac73f9ec438ad79bfc3ecc3/README.md",
+      "sha256": "be1da51f6bf384d1399c3f2ced3f80eb15fd02cad5253635a97a98c2acac68ec",
+      "truncated": false,
+      "lines": 312,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/Bobby-cell-commits/open-brain-server/blob/a352b548d380b5c3dac73f9ec438ad79bfc3ecc3/LICENSE",
+      "sha256": "e48d949261af2d33ce2c0401e88c560fa69c69de87fa2441006db496e4958de8",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

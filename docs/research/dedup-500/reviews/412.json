@@ -1,0 +1,98 @@
+{
+  "index": 412,
+  "repository": "andrewmm511/Cuda-pHash",
+  "commit": "afe4e2a97777ac0c678d82fa0b6bb60dee4b4847",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "CUDA pHash commands and kernel tests; GPU implementation/parity/performance unverified and not portable to Metal.",
+  "available_source_evidence": [
+    {
+      "path": "App/src/hash_command.cpp",
+      "local": "02-hash_command.cpp",
+      "url": "https://github.com/andrewmm511/Cuda-pHash/blob/afe4e2a97777ac0c678d82fa0b6bb60dee4b4847/App/src/hash_command.cpp",
+      "sha256": "d8a3b41b0cfde989fceb3d087a194045cd1461e0eb9c4d806d61dcefb91fa262",
+      "truncated": false,
+      "lines": 83,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "App/src/similar_command.cpp",
+      "local": "03-similar_command.cpp",
+      "url": "https://github.com/andrewmm511/Cuda-pHash/blob/afe4e2a97777ac0c678d82fa0b6bb60dee4b4847/App/src/similar_command.cpp",
+      "sha256": "8562b9078fa6b562e8a2fcac08e52309690cec75d2090cc2feed6091d41ffd61",
+      "truncated": false,
+      "lines": 174,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "App/include/hash_command.hpp",
+      "local": "04-hash_command.hpp",
+      "url": "https://github.com/andrewmm511/Cuda-pHash/blob/afe4e2a97777ac0c678d82fa0b6bb60dee4b4847/App/include/hash_command.hpp",
+      "sha256": "fd3cefe72fa6a44af83e568b596ea58c27017b450fbd23f67d2255c378bfb765",
+      "truncated": false,
+      "lines": 14,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "Test/main.cpp",
+      "local": "05-main.cpp",
+      "url": "https://github.com/andrewmm511/Cuda-pHash/blob/afe4e2a97777ac0c678d82fa0b6bb60dee4b4847/Test/main.cpp",
+      "sha256": "08d743224ab40ece5a6bda4a228d104c25b16c251e0c8a12e2874097cd46a707",
+      "truncated": false,
+      "lines": 6,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "CudapHash/src/progress_tracker.cpp",
+      "local": "06-progress_tracker.cpp",
+      "url": "https://github.com/andrewmm511/Cuda-pHash/blob/afe4e2a97777ac0c678d82fa0b6bb60dee4b4847/CudapHash/src/progress_tracker.cpp",
+      "sha256": "5bcfb7c8139e5402541c71f40cb5314411fff9fb6d13db688a6bdcde3df4602c",
+      "truncated": false,
+      "lines": 80,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "Test/unit/CudapHash/kernels_test.cpp",
+      "local": "07-kernels_test.cpp",
+      "url": "https://github.com/andrewmm511/Cuda-pHash/blob/afe4e2a97777ac0c678d82fa0b6bb60dee4b4847/Test/unit/CudapHash/kernels_test.cpp",
+      "sha256": "56a10a9d08df825d9c7f5498ed3970b18df3fcfdc9e3707afe7c5fea3c12429e",
+      "truncated": false,
+      "lines": 828,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "GPL-3.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 7,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/andrewmm511/Cuda-pHash/blob/afe4e2a97777ac0c678d82fa0b6bb60dee4b4847/README.md",
+      "sha256": "f9dada6aa27d615b7f7881c6284a3967548c68ff1be848a15a74cf3d529118df",
+      "truncated": false,
+      "lines": 182,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/andrewmm511/Cuda-pHash/blob/afe4e2a97777ac0c678d82fa0b6bb60dee4b4847/LICENSE",
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "truncated": false,
+      "lines": 674,
+      "source": false,
+      "test": false
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "camera": "Sigma SD10",
+  "source_url": "https://raw.pixls.us/getfile.php/571/nice/Sigma%20-%20Sigma%20SD10.X3F",
+  "source_sha256": "ea436ba459a7478d7b338428656fae905469de269f928749f3388db2b7b0d53f",
+  "source_bytes": 8103008,
+  "license": "CC-BY-NC-SA-4.0; imported by raw.pixls.us from rawsamples.ch; binary not redistributed in repo",
+  "container_version": 131074,
+  "expected_output_dimensions": [
+    2268,
+    1512
+  ],
+  "directory_offset": 8102932,
+  "entries": [
+    {
+      "kind": "IMAG",
+      "offset": 232,
+      "length": 7564688,
+      "magic": "SECi",
+      "image": {
+        "version": 131072,
+        "type": 3,
+        "encoding": 6,
+        "width": 2304,
+        "height": 1531,
+        "row_bytes": 0
+      }
+    },
+    {
+      "kind": "IMA2",
+      "offset": 7564920,
+      "length": 412916,
+      "magic": "SECi",
+      "image": {
+        "version": 131072,
+        "type": 2,
+        "encoding": 11,
+        "width": 567,
+        "height": 378,
+        "row_bytes": 0
+      }
+    },
+    {
+      "kind": "IMAG",
+      "offset": 7977836,
+      "length": 71596,
+      "magic": "SECi",
+      "image": {
+        "version": 131072,
+        "type": 2,
+        "encoding": 3,
+        "width": 189,
+        "height": 126,
+        "row_bytes": 568
+      }
+    },
+    {
+      "kind": "CAMF",
+      "offset": 8049432,
+      "length": 52548,
+      "magic": "SECc"
+    },
+    {
+      "kind": "PROP",
+      "offset": 8101980,
+      "length": 952,
+      "magic": "SECp"
+    }
+  ],
+  "status": "native borrowed container/header inventory; sensor decompression and color pending",
+  "limitations": [
+    "Directory fields independently inspected using Python struct; not an independent rendered-pixel oracle.",
+    "No preview substituted for failed sensor decode.",
+    "Public Foveon specification omits sensor encoding 6; source-level decoder investigation required."
+  ],
+  "native_test_command": "RRRAH_X3F_SOURCE=/tmp/rrrah-sigma-sd10.x3f cargo test -p rrrah-decode --lib x3f:: --locked --target-dir /tmp/rrrah-required-corpus-target -- --include-ignored"
+}

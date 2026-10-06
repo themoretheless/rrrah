@@ -1,0 +1,253 @@
+//! Resolve color properties through primary-item ipma associations, never byte searching.
+use crate::raster::RasterDecodeError;
+use rrrah_core::RasterColorSpace;
+fn invalid(s: &'static str) -> RasterDecodeError {
+    RasterDecodeError::InvalidAvif(s)
+}
+fn boxes(mut b: &[u8]) -> Result<Vec<([u8; 4], &[u8])>, RasterDecodeError> {
+    let mut out = Vec::new();
+    while !b.is_empty() {
+        if b.len() < 8 {
+            return Err(invalid("truncated box header"));
+        }
+        let short = u32::from_be_bytes(b[..4].try_into().unwrap());
+        let kind = b[4..8].try_into().unwrap();
+        let (size, head) = match short {
+            0 => (b.len(), 8),
+            1 => {
+                if b.len() < 16 {
+                    return Err(invalid("truncated extended box"));
+                }
+                (
+                    usize::try_from(u64::from_be_bytes(b[8..16].try_into().unwrap()))
+                        .map_err(|_| invalid("box size overflow"))?,
+                    16,
+                )
+            }
+            _ => (short as usize, 8),
+        };
+        if size < head || size > b.len() {
+            return Err(invalid("box outside parent"));
+        }
+        if out.len() >= 65536 {
+            return Err(invalid("too many boxes"));
+        }
+        out.push((kind, &b[head..size]));
+        b = &b[size..];
+    }
+    Ok(out)
+}
+fn take<'a>(b: &mut &'a [u8], n: usize) -> Result<&'a [u8], RasterDecodeError> {
+    if b.len() < n {
+        return Err(invalid("truncated item association"));
+    }
+    let (v, rest) = b.split_at(n);
+    *b = rest;
+    Ok(v)
+}
+fn number(b: &mut &[u8], n: usize) -> Result<u32, RasterDecodeError> {
+    Ok(take(b, n)?.iter().fold(0, |a, &v| a * 256 + u32::from(v)))
+}
+#[derive(Default)]
+pub(crate) struct Properties {
+    pub color: Option<RasterColorSpace>,
+    pub rotation: u8,
+    pub mirror: Option<u8>,
+}
+
+#[cfg(test)]
+fn declaration(bytes: &[u8]) -> Result<Option<RasterColorSpace>, RasterDecodeError> {
+    Ok(properties(bytes)?.color)
+}
+
+pub(crate) fn properties(bytes: &[u8]) -> Result<Properties, RasterDecodeError> {
+    if image::guess_format(bytes).ok() != Some(image::ImageFormat::Avif) {
+        return Ok(Properties::default());
+    }
+    let top = boxes(bytes)?;
+    let metas: Vec<_> = top.iter().filter(|(k, _)| k == b"meta").collect();
+    if metas.len() != 1 {
+        return Err(invalid("missing or duplicate meta box"));
+    }
+    let mut meta = metas[0].1;
+    let full = take(&mut meta, 4)?;
+    if full != [0; 4] {
+        return Err(invalid("unsupported meta version"));
+    }
+    let children = boxes(meta)?;
+    let mut primary = None;
+    let mut iprp = None;
+    for (kind, data) in children {
+        match &kind {
+            b"pitm" => {
+                if primary.is_some() {
+                    return Err(invalid("duplicate primary item"));
+                }
+                let mut b = data;
+                let full = take(&mut b, 4)?;
+                primary = Some(number(
+                    &mut b,
+                    match full[0] {
+                        0 => 2,
+                        1 => 4,
+                        _ => return Err(invalid("unsupported primary-item version")),
+                    },
+                )?);
+            }
+            b"iprp" => {
+                if iprp.replace(data).is_some() {
+                    return Err(invalid("duplicate item properties"));
+                }
+            }
+            _ => {}
+        }
+    }
+    let primary = primary.ok_or_else(|| invalid("missing primary item"))?;
+    let iprp = iprp.ok_or_else(|| invalid("missing item properties"))?;
+    let children = boxes(iprp)?;
+    let mut properties = None;
+    let mut associations = Vec::new();
+    for (kind, data) in children {
+        match &kind {
+            b"ipco" => {
+                if properties.replace(boxes(data)?).is_some() {
+                    return Err(invalid("duplicate property container"));
+                }
+            }
+            b"ipma" => associations.push(data),
+            _ => {}
+        }
+    }
+    let properties = properties.ok_or_else(|| invalid("missing property container"))?;
+    let mut selected = Vec::new();
+    for mut b in associations {
+        let full = take(&mut b, 4)?;
+        if full[0] > 1 || full[1] != 0 || full[2] != 0 || full[3] > 1 {
+            return Err(invalid("unsupported association version or flags"));
+        }
+        let entries = number(&mut b, 4)?;
+        if entries > 65536 {
+            return Err(invalid("too many item associations"));
+        }
+        for _ in 0..entries {
+            let id = number(&mut b, if full[0] == 0 { 2 } else { 4 })?;
+            let count = number(&mut b, 1)?;
+            for _ in 0..count {
+                let index = number(&mut b, if full[3] & 1 == 0 { 1 } else { 2 })?
+                    & if full[3] & 1 == 0 { 127 } else { 32767 };
+                if index > properties.len() as u32 {
+                    return Err(invalid("property index outside container"));
+                }
+                if id == primary && index != 0 {
+                    selected.push(index as usize - 1);
+                }
+            }
+        }
+        if !b.is_empty() {
+            return Err(invalid("trailing association bytes"));
+        }
+    }
+    let mut rotation = None;
+    let mut mirror = None;
+    let mut color = None;
+    let mut icc = None;
+    for index in selected {
+        let (kind, data) = properties[index];
+        match &kind {
+            b"irot" => {
+                if data.len() != 1 || data[0] > 3 || rotation.replace(data[0]).is_some() {
+                    return Err(invalid("invalid or duplicate rotation"));
+                }
+            }
+            b"imir" => {
+                if data.len() != 1 || data[0] > 1 || mirror.replace(data[0]).is_some() {
+                    return Err(invalid("invalid or duplicate mirror"));
+                }
+            }
+            b"clap" => return Err(invalid("clean-aperture crop is not yet supported")),
+            _ => {}
+        }
+        if &kind != b"colr" {
+            continue;
+        }
+        if data.starts_with(b"prof") || data.starts_with(b"rICC") {
+            if icc.replace(RasterColorSpace::Icc(data[4..].to_vec())).is_some() {
+                return Err(invalid("multiple primary ICC properties"));
+            }
+            continue;
+        }
+        if color.is_some() {
+            return Err(invalid("multiple primary NCLX properties"));
+        }
+        color = Some(if data.starts_with(b"nclx") {
+            if data.len() != 11 || data[10] & 127 != 0 {
+                return Err(invalid("invalid NCLX property"));
+            }
+            let primaries = u16::from_be_bytes([data[4], data[5]]);
+            let transfer = u16::from_be_bytes([data[6], data[7]]);
+            match (primaries, transfer) {
+                (1, 13) => RasterColorSpace::Srgb,
+                (1, 8) => RasterColorSpace::LinearSrgb,
+                _ => RasterColorSpace::Unspecified,
+            }
+        } else if data.starts_with(b"prof") || data.starts_with(b"rICC") {
+            RasterColorSpace::Icc(data[4..].to_vec())
+        } else {
+            RasterColorSpace::Unspecified
+        });
+    }
+    Ok(Properties {
+        color: icc.or(color),
+        rotation: rotation.unwrap_or(0),
+        mirror,
+    })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn primary_color_association_and_icc_precedence() {
+        assert_eq!(
+            declaration(include_bytes!("../../../tests/fixtures/raster/avif-rgb.avif")).unwrap(),
+            Some(RasterColorSpace::Srgb)
+        );
+        assert!(matches!(
+            declaration(include_bytes!(
+                "../../../tests/fixtures/raster/avif-alpha-icc.avif"
+            ))
+            .unwrap(),
+            Some(RasterColorSpace::Icc(_))
+        ));
+    }
+    #[test]
+    fn invalid_nclx_and_unknown_transfer() {
+        let original = include_bytes!("../../../tests/fixtures/raster/avif-rgb.avif");
+        let at = original.windows(4).position(|v| v == b"nclx").unwrap();
+        let mut b = original.to_vec();
+        b[at + 10] |= 1;
+        assert!(declaration(&b).is_err());
+        let mut b = original.to_vec();
+        b[at + 6..at + 8].copy_from_slice(&16u16.to_be_bytes());
+        assert_eq!(declaration(&b).unwrap(), Some(RasterColorSpace::Unspecified));
+        let mut b = original.to_vec();
+        b[at + 6..at + 8].copy_from_slice(&8u16.to_be_bytes());
+        assert_eq!(declaration(&b).unwrap(), Some(RasterColorSpace::LinearSrgb));
+    }
+    #[test]
+    fn truncated_and_overflowing_boxes_are_errors() {
+        assert!(boxes(&[0; 7]).is_err());
+        assert!(boxes(&[0, 0, 0, 1, 0, 0, 0, 0]).is_err());
+        assert!(boxes(&[255; 8]).is_err());
+    }
+    #[test]
+    fn invalid_transform_reserved_bits_are_rejected() {
+        let original = include_bytes!("../../../tests/fixtures/raster/avif-orientation-5.avif");
+        for tag in [b"irot", b"imir"] {
+            let offset = original.windows(4).position(|v| v == tag).unwrap() + 4;
+            let mut b = original.to_vec();
+            b[offset] |= 128;
+            assert!(properties(&b).is_err());
+        }
+    }
+}

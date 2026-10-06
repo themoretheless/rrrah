@@ -1,0 +1,105 @@
+{
+  "repository": "wkdhkr/dedupper",
+  "metadata": {
+    "name": "wkdhkr/dedupper",
+    "url": "https://github.com/wkdhkr/dedupper",
+    "description": "import various files, detect duplicates with sqlite, reject image file by deep learning.",
+    "language": "JavaScript",
+    "stars": 8,
+    "license": "MIT",
+    "archived": false,
+    "pushed_at": "2023-03-04T02:35:41Z",
+    "default_branch": "master",
+    "queries": [
+      "dedup in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/wkdhkr/dedupper/blob/747bdd499ac8243e3bf7273c6e4930d52493a4f2/README.md",
+      "sha256": "ba3bcbe2c085216b990e048e676c2a7fae7f005968ca9b9d7096af9eff45aabc",
+      "truncated": false,
+      "lines": 392,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/wkdhkr/dedupper/blob/747bdd499ac8243e3bf7273c6e4930d52493a4f2/LICENSE",
+      "sha256": "a165ab2c84da0db300cacc36174752d58a40964c1d30cf4f456b7e988e7762d4",
+      "truncated": false,
+      "lines": 7,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "bin/dedupper.js",
+      "local": "02-dedupper.js",
+      "url": "https://github.com/wkdhkr/dedupper/blob/747bdd499ac8243e3bf7273c6e4930d52493a4f2/bin/dedupper.js",
+      "sha256": "d0f544bcabd93e9549cc3a25790a5fe47c403c0c35678106cdbed4a3399d4064",
+      "truncated": false,
+      "lines": 8,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/services/judgment/HashLogic.js",
+      "local": "03-HashLogic.js",
+      "url": "https://github.com/wkdhkr/dedupper/blob/747bdd499ac8243e3bf7273c6e4930d52493a4f2/src/services/judgment/HashLogic.js",
+      "sha256": "359c157c4c1428be1d2e65fe94fab8d2d61f18c062f4ad361258ea9556c8c7f4",
+      "truncated": false,
+      "lines": 114,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/services/judgment/PHashLogic.js",
+      "local": "04-PHashLogic.js",
+      "url": "https://github.com/wkdhkr/dedupper/blob/747bdd499ac8243e3bf7273c6e4930d52493a4f2/src/services/judgment/PHashLogic.js",
+      "sha256": "d781ee48f3bd193f4c39426ff8863d6660dcf37225998cc8cfdc7c26af56405c",
+      "truncated": false,
+      "lines": 318,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "__tests__/services/fs/contents/DHashService.test.js",
+      "local": "05-DHashService.test.js",
+      "url": "https://github.com/wkdhkr/dedupper/blob/747bdd499ac8243e3bf7273c6e4930d52493a4f2/__tests__/services/fs/contents/DHashService.test.js",
+      "sha256": "9ec0e0bf8be44bd8abf4da8ae993629648e9f59427469638844dcbb2a335aee1",
+      "truncated": false,
+      "lines": 39,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "__tests__/App.test.js",
+      "local": "06-App.test.js",
+      "url": "https://github.com/wkdhkr/dedupper/blob/747bdd499ac8243e3bf7273c6e4930d52493a4f2/__tests__/App.test.js",
+      "sha256": "9977cb6b68faf759737edaddf06c94148d0ddbbf47ca88d7a2c50c3f8ca72984",
+      "truncated": false,
+      "lines": 191,
+      "source": true,
+      "test": true
+    }
+  ],
+  "errors": [],
+  "commit": "747bdd499ac8243e3bf7273c6e4930d52493a4f2",
+  "tree_truncated": false,
+  "source_file_count": 151,
+  "test_file_count": 34,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "src/services/judgment/HashLogic.js",
+    "src/services/judgment/PHashLogic.js",
+    "bin/dedupper.js",
+    "__tests__/App.test.js"
+  ]
+}

@@ -1,0 +1,108 @@
+{
+  "index": 92,
+  "repository": "kdeldycke/mail-deduplicate",
+  "commit": "dfa4053fe9f39974cc5527eadbcf26c2362f9980",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Mailbox header/body/actions equivalence; mail-specific domain and GPL, not image processing.",
+  "license_metadata": "GPL-2.0",
+  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "tests_detected": 11,
+  "upstream_tests_run": false,
+  "available_source_evidence": [
+    {
+      "path": "mail_deduplicate/deduplicate.py",
+      "local": "03-deduplicate.py",
+      "url": "https://github.com/kdeldycke/mail-deduplicate/blob/dfa4053fe9f39974cc5527eadbcf26c2362f9980/mail_deduplicate/deduplicate.py",
+      "sha256": "a9fbd6a414b1796213756227ba006bd4eec1640a09ab85b3dba9e7eaf0d890ce",
+      "truncated": false,
+      "lines": 1429,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "mail_deduplicate/__init__.py",
+      "local": "04-__init__.py",
+      "url": "https://github.com/kdeldycke/mail-deduplicate/blob/dfa4053fe9f39974cc5527eadbcf26c2362f9980/mail_deduplicate/__init__.py",
+      "sha256": "27fc8d49a5ebea0fac412d556971ca6a714b7b9d517f773e6674c6df9a60557b",
+      "truncated": false,
+      "lines": 31,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "mail_deduplicate/__main__.py",
+      "local": "05-__main__.py",
+      "url": "https://github.com/kdeldycke/mail-deduplicate/blob/dfa4053fe9f39974cc5527eadbcf26c2362f9980/mail_deduplicate/__main__.py",
+      "sha256": "3c0c2fa0b91cd670a7dc2f084e74aa433b9c1ab8b14c35b9b138abc50552f8d2",
+      "truncated": false,
+      "lines": 57,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/__init__.py",
+      "local": "06-__init__.py",
+      "url": "https://github.com/kdeldycke/mail-deduplicate/blob/dfa4053fe9f39974cc5527eadbcf26c2362f9980/tests/__init__.py",
+      "sha256": "4fe05adb6a7c29b2543d80c4cc94db312af9b5382a55ad0f3ead824e4de6be7a",
+      "truncated": false,
+      "lines": 17,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "mail_deduplicate/action.py",
+      "local": "07-action.py",
+      "url": "https://github.com/kdeldycke/mail-deduplicate/blob/dfa4053fe9f39974cc5527eadbcf26c2362f9980/mail_deduplicate/action.py",
+      "sha256": "86d91f3cfef63bb5d1f1befb53fbbee447ede3e2fbc9d9cc460a51238855024d",
+      "truncated": false,
+      "lines": 369,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/conftest.py",
+      "local": "08-conftest.py",
+      "url": "https://github.com/kdeldycke/mail-deduplicate/blob/dfa4053fe9f39974cc5527eadbcf26c2362f9980/tests/conftest.py",
+      "sha256": "85651bb15c8f46283c0b26f81e5c4899cc7ef7929160ab9f08bb8d9c464ace92",
+      "truncated": false,
+      "lines": 251,
+      "source": true,
+      "test": true
+    }
+  ],
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "readme.md",
+      "local": "00-readme.md",
+      "url": "https://github.com/kdeldycke/mail-deduplicate/blob/dfa4053fe9f39974cc5527eadbcf26c2362f9980/readme.md",
+      "sha256": "33d690095d8e9fe33ad973bdbd78d674a933aeb853e37278781d452d7b12c0e6",
+      "truncated": false,
+      "lines": 98,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "license",
+      "local": "01-license",
+      "url": "https://github.com/kdeldycke/mail-deduplicate/blob/dfa4053fe9f39974cc5527eadbcf26c2362f9980/license",
+      "sha256": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643",
+      "truncated": false,
+      "lines": 339,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "docs/license.md",
+      "local": "02-license.md",
+      "url": "https://github.com/kdeldycke/mail-deduplicate/blob/dfa4053fe9f39974cc5527eadbcf26c2362f9980/docs/license.md",
+      "sha256": "b8a200317bfc9e1ab63c2f758cfc27ab0cd1a18a6e1e50d2fcfdedf6a36a7951",
+      "truncated": false,
+      "lines": 18,
+      "source": false,
+      "test": false
+    }
+  ]
+}

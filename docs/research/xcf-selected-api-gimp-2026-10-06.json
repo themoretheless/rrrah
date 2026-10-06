@@ -1,0 +1,249 @@
+{
+  "source_sha256": "a1557a22fd7ba5d8185447c932a708bd2369910203081590e45e3a3cabe46636",
+  "commit": "025352c5745884086d7095969bc5942bc6fbff49",
+  "source_url": "https://raw.githubusercontent.com/GNOME/gimp/025352c5745884086d7095969bc5942bc6fbff49/app/tests/files/gimp-2-6-file.xcf",
+  "oracle_source_url": "https://github.com/GNOME/gimp/blob/025352c5745884086d7095969bc5942bc6fbff49/app/tests/test-xcf.c",
+  "oracle": "GIMP_ADD_MASK_BLACK and unfeathered rectangle selection x=5,y=6,w=7,h=8 from GIMP test construction",
+  "decoder_sha256": "4699fbd1234b29e4c0459d72c3cf648bc5d70673fc0688804afbe3508dd3dfc0",
+  "records": [
+    {
+      "icc_profile_bytes": 0
+    },
+    {
+      "tree_node": 0,
+      "parent": null,
+      "sibling": 0,
+      "is_group": false
+    },
+    {
+      "tree_node": 1,
+      "parent": null,
+      "sibling": 1,
+      "is_group": false
+    },
+    {
+      "version": 0,
+      "width": 100,
+      "height": 90,
+      "compression": 1,
+      "channels": 2
+    },
+    {
+      "layer_property_count": 0,
+      "count": 10
+    },
+    {
+      "layer_group": 0,
+      "is_group": false,
+      "item_path": []
+    },
+    {
+      "layer_composition": 0,
+      "blend_mode": 3,
+      "composite_mode": null,
+      "composite_space": null,
+      "blend_space": null
+    },
+    {
+      "layer_attributes": 0,
+      "visible": true,
+      "opacity": 0,
+      "offset_x": 0,
+      "offset_y": 0,
+      "apply_mask": true
+    },
+    {
+      "layer": 0,
+      "width": 25,
+      "height": 251,
+      "kind": 0,
+      "mask": 1082,
+      "effects": 0,
+      "pixel_blake3": "dc8d0573babb0fab740e39e5730721b87fe29a940062d2d9e6bb430f9812da90"
+    },
+    {
+      "mask": 0,
+      "width": 25,
+      "height": 251,
+      "pixel_blake3": "4119d2bfb7940da3478c65a4ac63611ebd33f43beef599eeb2355adf42517115"
+    },
+    {
+      "layer_property_count": 1,
+      "count": 10
+    },
+    {
+      "layer_group": 1,
+      "is_group": false,
+      "item_path": []
+    },
+    {
+      "layer_composition": 1,
+      "blend_mode": 0,
+      "composite_mode": null,
+      "composite_space": null,
+      "blend_space": null
+    },
+    {
+      "layer_attributes": 1,
+      "visible": true,
+      "opacity": 1,
+      "offset_x": 0,
+      "offset_y": 0,
+      "apply_mask": false
+    },
+    {
+      "layer": 1,
+      "width": 50,
+      "height": 51,
+      "kind": 1,
+      "mask": 0,
+      "effects": 0,
+      "pixel_blake3": "5b1499da296a03fa061e2955d3cdf14891a981a74d7cdfa471bb18ecd14d8353"
+    },
+    {
+      "channel": 0,
+      "width": 100,
+      "height": 90,
+      "pixel_blake3": "e659ff0e970ccbbe71e7abca2ce4fd0dce4bf35c95796270c93a9ee21cca6935"
+    },
+    {
+      "channel": 1,
+      "width": 100,
+      "height": 90,
+      "pixel_blake3": "a0d589e1f3424df1648283f30e2b49ce10029069bac59fcefec52d57d4277a2e"
+    },
+    {
+      "managed_peak": 28572,
+      "managed_used": 0
+    }
+  ],
+  "comparisons": [
+    {
+      "plane": "mask-0.bin",
+      "expected_bytes": 6275,
+      "actual_bytes": 6275,
+      "exact": true,
+      "different_bytes": 0,
+      "actual_sha256": "1700433d2ae49a05fab52b274fced716baa1e6f233866c06b7c77116863a61c8"
+    },
+    {
+      "plane": "channel-1.bin",
+      "expected_bytes": 9000,
+      "actual_bytes": 9000,
+      "exact": true,
+      "different_bytes": 0,
+      "actual_sha256": "4d332e058472a4997c5d5ed7abd5c9cba48896e653fd30f972b81324079c746b"
+    }
+  ],
+  "metadata_comparisons": [
+    {
+      "selector": "layer_attributes",
+      "index": 0,
+      "expected": {
+        "visible": true,
+        "opacity": 0,
+        "offset_x": 0,
+        "offset_y": 0,
+        "apply_mask": true
+      },
+      "actual": {
+        "layer_attributes": 0,
+        "visible": true,
+        "opacity": 0,
+        "offset_x": 0,
+        "offset_y": 0,
+        "apply_mask": true
+      },
+      "exact": true
+    },
+    {
+      "selector": "layer_attributes",
+      "index": 1,
+      "expected": {
+        "visible": true,
+        "opacity": 1,
+        "offset_x": 0,
+        "offset_y": 0,
+        "apply_mask": false
+      },
+      "actual": {
+        "layer_attributes": 1,
+        "visible": true,
+        "opacity": 1,
+        "offset_x": 0,
+        "offset_y": 0,
+        "apply_mask": false
+      },
+      "exact": true
+    },
+    {
+      "selector": "layer_composition",
+      "index": 0,
+      "expected": {
+        "blend_mode": 3
+      },
+      "actual": {
+        "layer_composition": 0,
+        "blend_mode": 3,
+        "composite_mode": null,
+        "composite_space": null,
+        "blend_space": null
+      },
+      "exact": true
+    },
+    {
+      "selector": "layer_composition",
+      "index": 1,
+      "expected": {
+        "blend_mode": 0
+      },
+      "actual": {
+        "layer_composition": 1,
+        "blend_mode": 0,
+        "composite_mode": null,
+        "composite_space": null,
+        "blend_space": null
+      },
+      "exact": true
+    },
+    {
+      "selector": "layer",
+      "index": 0,
+      "expected": {
+        "width": 25,
+        "height": 251,
+        "kind": 0
+      },
+      "actual": {
+        "layer": 0,
+        "width": 25,
+        "height": 251,
+        "kind": 0,
+        "mask": 1082,
+        "effects": 0,
+        "pixel_blake3": "dc8d0573babb0fab740e39e5730721b87fe29a940062d2d9e6bb430f9812da90"
+      },
+      "exact": true
+    },
+    {
+      "selector": "layer",
+      "index": 1,
+      "expected": {
+        "width": 50,
+        "height": 51,
+        "kind": 1
+      },
+      "actual": {
+        "layer": 1,
+        "width": 50,
+        "height": 51,
+        "kind": 1,
+        "mask": 0,
+        "effects": 0,
+        "pixel_blake3": "5b1499da296a03fa061e2955d3cdf14891a981a74d7cdfa471bb18ecd14d8353"
+      },
+      "exact": true
+    }
+  ],
+  "scope": "Full native byte planes of one black layer mask and one selection channel; no flattened rendering, blend, color, precision or other XCF qualification."
+}

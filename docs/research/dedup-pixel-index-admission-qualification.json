@@ -1,0 +1,21 @@
+{
+  "change": "Fallible bucket/diagnostic/analysed/directory-request vectors and invalid-source hash membership.",
+  "validation": {
+    "pixel_search_raster_equality_scan_tests": 23,
+    "pixel_search_after_final_storage_change": 14,
+    "failed": 0,
+    "dedup_lib_no_deps_clippy": "passed"
+  },
+  "checks": [
+    "Indexed exact pixels preserve corruption, missing sources and unreadable/non-UTF8 diagnostics.",
+    "Changed sources invalidate stale pairs; transient cancellation returns no report.",
+    "Uniform encoded-image equality and qualified HDR behavior preserved."
+  ],
+  "source_sha256": {
+    "crates/rrrah-dedup/src/pixel_index.rs": "5a7c51de47c0c021d0adabc4ea3b40ff96e8f18fa09d5cda2ac5d6d34a2fd8ac"
+  },
+  "limits": [
+    "Snapshot/request/bucket BTreeMaps still allocate without fallible admission.",
+    "No actual allocator failure injection or complete shared-budget/RSS proof."
+  ]
+}

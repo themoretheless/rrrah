@@ -1,0 +1,47 @@
+{
+  "status": "passed",
+  "source_sha256": "c32f247eb372c3e66ad3b433518ec11f898fdc317c8432ebe025b46d4917bcf3",
+  "scope": "SD14 sensor only, paired retained prior two-pass Rust traversal versus production one-pass; full sensor exact against enabled independent LibRaw on every iteration",
+  "warmup_pairs": 2,
+  "measured_pairs": 9,
+  "order": "alternates before/after by iteration",
+  "measurements": {
+    "two-pass": {
+      "p50_ms": 476.188,
+      "p95_ms": 504.508,
+      "n": 9,
+      "samples_ms": [
+        470.185375,
+        471.128791,
+        472.601334,
+        473.74770900000004,
+        476.188167,
+        483.03212499999995,
+        486.276709,
+        491.73012500000004,
+        504.50787500000007
+      ]
+    },
+    "one-pass": {
+      "p50_ms": 247.275,
+      "p95_ms": 261.501,
+      "n": 9,
+      "samples_ms": [
+        242.146583,
+        242.53775,
+        243.027583,
+        244.44150000000002,
+        247.27450000000002,
+        252.892958,
+        253.633708,
+        259.21608299999997,
+        261.500583
+      ]
+    }
+  },
+  "median_ratio": 1.925742594277626,
+  "profile": "optimized development test, Apple M4 Max",
+  "final_managed_used": 0,
+  "full_Sunlight_output_exact": true,
+  "whole_view_limit": "separate whole Metal before run was noisy; no causal whole-view ratio claimed"
+}

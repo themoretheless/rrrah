@@ -1,0 +1,78 @@
+{
+  "index": 251,
+  "repository": "reescalder/agent-memory-supabase",
+  "commit": "b711e6d76009d0713c5d5c211c2ab5c83d01ca53",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Supabase assistant-memory embeddings/HNSW; no image normalizer or exact file comparer.",
+  "available_source_evidence": [
+    {
+      "path": "src/client.js",
+      "local": "02-client.js",
+      "url": "https://github.com/reescalder/agent-memory-supabase/blob/b711e6d76009d0713c5d5c211c2ab5c83d01ca53/src/client.js",
+      "sha256": "7d4fc585b22b4444a863d08eca97c471fd84ef227f0d90522983da94ef731992",
+      "truncated": false,
+      "lines": 257,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "sql/rls.sql",
+      "local": "03-rls.sql",
+      "url": "https://github.com/reescalder/agent-memory-supabase/blob/b711e6d76009d0713c5d5c211c2ab5c83d01ca53/sql/rls.sql",
+      "sha256": "728db25b3b3bbd5bd226942f3a763376de0a7f7aad37dfcc6154b0d47e0e0dfb",
+      "truncated": false,
+      "lines": 36,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "sql/schema.sql",
+      "local": "04-schema.sql",
+      "url": "https://github.com/reescalder/agent-memory-supabase/blob/b711e6d76009d0713c5d5c211c2ab5c83d01ca53/sql/schema.sql",
+      "sha256": "3338997551df022d56460b0ce6931ff22917404b9d94576234dbe2f9100bd971",
+      "truncated": false,
+      "lines": 551,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "examples/quickstart.js",
+      "local": "05-quickstart.js",
+      "url": "https://github.com/reescalder/agent-memory-supabase/blob/b711e6d76009d0713c5d5c211c2ab5c83d01ca53/examples/quickstart.js",
+      "sha256": "c5b0eb017332b5e3dc8ed6e17d0ae363767ccb8107e6017e663ae5b2ee6dafd0",
+      "truncated": false,
+      "lines": 54,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/reescalder/agent-memory-supabase/blob/b711e6d76009d0713c5d5c211c2ab5c83d01ca53/README.md",
+      "sha256": "ee508703eb4ec1b00f56b9b31552276241fdcba13b722055293889007e980ff3",
+      "truncated": false,
+      "lines": 230,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/reescalder/agent-memory-supabase/blob/b711e6d76009d0713c5d5c211c2ab5c83d01ca53/LICENSE",
+      "sha256": "ec9906a3023215322a5c75d9b97e383115401a47dcb814bd7a10bf01e29ccc35",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

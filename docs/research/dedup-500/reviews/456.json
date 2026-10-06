@@ -1,0 +1,88 @@
+{
+  "index": 456,
+  "repository": "xykong36/cutmap",
+  "commit": "4743a1ece5234e4bd733dd334e7fe34f04e73d3b",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Storyboard B-roll dHash with is_flat gating; useful low-information false-positive rejection policy.",
+  "available_source_evidence": [
+    {
+      "path": "src/cutmap/__init__.py",
+      "local": "02-__init__.py",
+      "url": "https://github.com/xykong36/cutmap/blob/4743a1ece5234e4bd733dd334e7fe34f04e73d3b/src/cutmap/__init__.py",
+      "sha256": "26f7fd00d7201c479e4e64c910f053ccfe2903e20ef21b12183fce877c846b88",
+      "truncated": false,
+      "lines": 2,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/cutmap/_assets.py",
+      "local": "03-_assets.py",
+      "url": "https://github.com/xykong36/cutmap/blob/4743a1ece5234e4bd733dd334e7fe34f04e73d3b/src/cutmap/_assets.py",
+      "sha256": "739915ba9debb0debac01690c760944ac8e9c3222d678717d60a683ae9d9ef48",
+      "truncated": false,
+      "lines": 149,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/cutmap/broll.py",
+      "local": "04-broll.py",
+      "url": "https://github.com/xykong36/cutmap/blob/4743a1ece5234e4bd733dd334e7fe34f04e73d3b/src/cutmap/broll.py",
+      "sha256": "5f038bf4a365f984c5a80dd8a923dd7ee7c4a3062ac471bab3ae6e49541c9429",
+      "truncated": false,
+      "lines": 148,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/test_broll.py",
+      "local": "05-test_broll.py",
+      "url": "https://github.com/xykong36/cutmap/blob/4743a1ece5234e4bd733dd334e7fe34f04e73d3b/tests/test_broll.py",
+      "sha256": "712fbb7379069816bcb9b3b38c2dc73bb8ceaad2b15333d90a4e9c4c7d7ee1e6",
+      "truncated": false,
+      "lines": 87,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "src/cutmap/cli.py",
+      "local": "06-cli.py",
+      "url": "https://github.com/xykong36/cutmap/blob/4743a1ece5234e4bd733dd334e7fe34f04e73d3b/src/cutmap/cli.py",
+      "sha256": "02de48e494f6ec30e77f8b2d393266b7da7913420784d9f633250ab39339f3ab",
+      "truncated": false,
+      "lines": 140,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 3,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/xykong36/cutmap/blob/4743a1ece5234e4bd733dd334e7fe34f04e73d3b/README.md",
+      "sha256": "93b90938300869fa54f078a95c83d7e743833bb672de286ec7c6dcb9df161fff",
+      "truncated": false,
+      "lines": 317,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/xykong36/cutmap/blob/4743a1ece5234e4bd733dd334e7fe34f04e73d3b/LICENSE",
+      "sha256": "900be6fa362caaaeb750c43911a8f751b38e4bb7420006d5067b81f73a06ded8",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

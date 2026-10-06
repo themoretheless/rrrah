@@ -1,0 +1,29 @@
+{
+  "source": "libwmf 0.2.16 release examples/arrow01.wmf",
+  "sha256": "efd4f04b73d59bad9402725bb8f285c83ad76d315fb82411f238b2c394311beb",
+  "decode_success": true,
+  "measurement": {
+    "path": "/tmp/libwmf-0.2.16/examples/arrow01.wmf",
+    "index": 0,
+    "iterations": 3,
+    "load_p50_ms": 0.18241700000000002,
+    "load_p95_ms": 0.18241700000000002,
+    "prepare_p50_ms": 0.090292,
+    "prepare_p95_ms": 0.090292,
+    "cpu_ready_p50_ms": 0.272709,
+    "cpu_ready_p95_ms": 0.272709,
+    "display_blake3": "eb16a059d16efafa4ee88d41662740824769d213c24ab72d341ce3e0cba5c939",
+    "cache": "warm filesystem; process warm; no decoded image cache"
+  },
+  "scope": "external producer smoke only; repeated decoded/prepared digest stable; independent renderer pixel comparison for this file not yet performed",
+  "independent_comparison": {
+    "renderer": "libwmf 0.2.16 bundled GD, PNG decoded by FFmpeg",
+    "width": 170,
+    "height": 159,
+    "pixels": 27030,
+    "raw_differing_pixels": 14266,
+    "white_matte_differing_pixels": 1181,
+    "exact": false,
+    "notes": "libwmf white opaque background vs native transparent background; remaining differences after explicit white matte include rasterization and mapping/stroke fidelity, not yet causally isolated"
+  }
+}

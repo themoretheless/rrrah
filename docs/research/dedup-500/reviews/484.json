@@ -1,0 +1,58 @@
+{
+  "index": 484,
+  "repository": "avicorpRu/pHashCalc",
+  "commit": "f87bdd3c323e36c38fb22f0f832a8b9012a410ce",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "needs-deeper-source",
+  "finding": "Android pHash library repo selected sample/instrumentation only; actual library implementation not established.",
+  "available_source_evidence": [
+    {
+      "path": "sample/src/main/java/ru/avicorp/checkphashcalc/MainActivity.kt",
+      "local": "02-MainActivity.kt",
+      "url": "https://github.com/avicorpRu/pHashCalc/blob/f87bdd3c323e36c38fb22f0f832a8b9012a410ce/sample/src/main/java/ru/avicorp/checkphashcalc/MainActivity.kt",
+      "sha256": "93abaf03aa3d5b268b4ec4fead49bb285ea676001c72a913f1c60f276c067a8f",
+      "truncated": false,
+      "lines": 71,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "sample/src/androidTest/java/ru/avicorp/checkphashcalc/ExampleInstrumentedTest.kt",
+      "local": "03-ExampleInstrumentedTest.kt",
+      "url": "https://github.com/avicorpRu/pHashCalc/blob/f87bdd3c323e36c38fb22f0f832a8b9012a410ce/sample/src/androidTest/java/ru/avicorp/checkphashcalc/ExampleInstrumentedTest.kt",
+      "sha256": "c8568ea35b928bc91f13b30c78b4c4244ac4fe22381241a52cf146d1f637f324",
+      "truncated": false,
+      "lines": 49,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "Apache-2.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/avicorpRu/pHashCalc/blob/f87bdd3c323e36c38fb22f0f832a8b9012a410ce/README.md",
+      "sha256": "fcef26670e68761140437c814f35846b379da150a2274b8cedecd01a59e6bc09",
+      "truncated": false,
+      "lines": 124,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/avicorpRu/pHashCalc/blob/f87bdd3c323e36c38fb22f0f832a8b9012a410ce/LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "truncated": false,
+      "lines": 201,
+      "source": false,
+      "test": false
+    }
+  ]
+}

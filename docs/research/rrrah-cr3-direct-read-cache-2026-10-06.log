@@ -1,0 +1,31 @@
+   Compiling rrrah-swap v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-swap)
+warning: function `error` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:4:4
+  |
+4 | fn error(message: &str) -> DecodeError {
+  |    ^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `packed_12` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:9:4
+  |
+9 | fn packed_12(
+  |    ^^^^^^^^^
+
+warning: function `decode_zd` is never used
+  --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:48:15
+   |
+48 | pub(super) fn decode_zd(
+   |               ^^^^^^^^^
+
+warning: `rrrah-decode` (lib) generated 3 warnings
+   Compiling rrrah-cache v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-cache)
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `dev` profile [optimized + debuginfo] target(s) in 2.46s
+     Running `/tmp/rrrah-required-corpus-target/debug/examples/raw_view_timing --cache-only tests/IMG_9074.CR3`
+IMG_9074.CR3 decode p50=44.422791ms p95=45.098916ms
+IMG_9074.CR3 disk p50=34.241917ms p95=36.818792ms
+IMG_9074.CR3 swap p50=32.922292ms p95=34.178583ms
+IMG_9074.CR3 ram p50=0.000176ms p95=0.000199ms
+IMG_9074.CR3 managed root used=0 peak=123346706 limit=268435456; restore used=0 peak=50989120 limit=101978240

@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-06",
+  "status": "isolated renderer feasibility, ordinary PDF viewer still Pending",
+  "renderer": "hayro 0.7.1",
+  "fixture": "tests/fixtures/pdf/red-green-pages.pdf",
+  "source_sha256": "096a762595336e7509ad23e0ea462c353713706fb35d6ffab33db72052e33f3f",
+  "license": "CC0-1.0 authored",
+  "native_result": "two 10x10 pages; exact opaque red then green RGBA",
+  "oracle": {
+    "tool": "pdftoppm version 26.10.0",
+    "command": "pdftoppm -r 72 tests/fixtures/pdf/red-green-pages.pdf /tmp/rrrah-pdf-oracle",
+    "result": "both full 10x10 RGB planes exact against authored colors"
+  },
+  "native_command": "cargo run --manifest-path scripts/pdf-render-feasibility/Cargo.toml -- tests/fixtures/pdf/red-green-pages.pdf",
+  "native_log": "/tmp/rrrah-pdf-feasibility-render.log",
+  "remaining": [
+    "managed admission before pixmap and scratch allocation",
+    "premultiplied-alpha conversion",
+    "page selection, geometry, cancellation and invalid input handling",
+    "ordinary routing and RAM/swap/Metal integration",
+    "fonts, color, transparency and wider independent producers"
+  ],
+  "ordinary_decoder": {
+    "status": "implemented bounded selected-page subset",
+    "tests_passed": 642,
+    "tests_ignored": 35,
+    "tests_failed": 0,
+    "log": "/tmp/rrrah-pdf-decoder-regression.log",
+    "major_buffers_reserved_before_allocation": true,
+    "limitations": [
+      "internal parser/interpreter scratch outside budget",
+      "native render not interruptible mid-call",
+      "alpha conversion not yet independently qualified",
+      "RAM/swap/Metal integration not tested"
+    ]
+  }
+}

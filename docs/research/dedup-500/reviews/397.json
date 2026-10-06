@@ -1,0 +1,78 @@
+{
+  "index": 397,
+  "repository": "warricksothr/Perceptual-Image-Hashing",
+  "commit": "c08bf42ca42fa41892d2319d30b604ca7753ff2a",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Rust aHash/dHash/pHash with optional cache and FFI tests; verify algorithm/cache version invariants.",
+  "available_source_evidence": [
+    {
+      "path": "src/hash/ahash.rs",
+      "local": "02-ahash.rs",
+      "url": "https://github.com/warricksothr/Perceptual-Image-Hashing/blob/c08bf42ca42fa41892d2319d30b604ca7753ff2a/src/hash/ahash.rs",
+      "sha256": "722dcf33a223cbbe0e44aa292ca882f1475845f4fdd7cff9c7993543749cdc8c",
+      "truncated": false,
+      "lines": 67,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/hash/dhash.rs",
+      "local": "03-dhash.rs",
+      "url": "https://github.com/warricksothr/Perceptual-Image-Hashing/blob/c08bf42ca42fa41892d2319d30b604ca7753ff2a/src/hash/dhash.rs",
+      "sha256": "0dbf81e9295c031e37c0522b0f6d69721e7d8651aa52e0a6da70191f709c8703",
+      "truncated": false,
+      "lines": 73,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/hash/phash.rs",
+      "local": "04-phash.rs",
+      "url": "https://github.com/warricksothr/Perceptual-Image-Hashing/blob/c08bf42ca42fa41892d2319d30b604ca7753ff2a/src/hash/phash.rs",
+      "sha256": "bd049bc594cc15c3864dca9decd56be84d094489c1c7848b008897e3f8374886",
+      "truncated": false,
+      "lines": 239,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "FFI-tests/ffi_test.c",
+      "local": "05-ffi_test.c",
+      "url": "https://github.com/warricksothr/Perceptual-Image-Hashing/blob/c08bf42ca42fa41892d2319d30b604ca7753ff2a/FFI-tests/ffi_test.c",
+      "sha256": "00053eb0eceb02f5bb48d90b854ec5854f139a952f74712182a6a90933bbaecc",
+      "truncated": false,
+      "lines": 103,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 2,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/warricksothr/Perceptual-Image-Hashing/blob/c08bf42ca42fa41892d2319d30b604ca7753ff2a/README.md",
+      "sha256": "143c11ef887ef0576c99b091a2876ec61ac64f946cd07f8b44c88f3901d72698",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/warricksothr/Perceptual-Image-Hashing/blob/c08bf42ca42fa41892d2319d30b604ca7753ff2a/LICENSE",
+      "sha256": "671b375a5677fdc36839d0bc6875ce3e48e8cf75cfc1c833874c4d223bdf40b8",
+      "truncated": false,
+      "lines": 22,
+      "source": false,
+      "test": false
+    }
+  ]
+}

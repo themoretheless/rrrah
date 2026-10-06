@@ -1,0 +1,88 @@
+{
+  "index": 207,
+  "repository": "mahsumaktas/treliq",
+  "commit": "754d487cc4fbaa2ed41a59abd416938904133a10",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "PR/issue embedding cosine triage; issue-domain semantics.",
+  "available_source_evidence": [
+    {
+      "path": "src/core/dedup.ts",
+      "local": "02-dedup.ts",
+      "url": "https://github.com/mahsumaktas/treliq/blob/754d487cc4fbaa2ed41a59abd416938904133a10/src/core/dedup.ts",
+      "sha256": "c80cfb6898bab6d907f12a0d107cea0bb60d9398a8a9af50407fdcf91f62c4a5",
+      "truncated": false,
+      "lines": 335,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/core/issue-scanner.ts",
+      "local": "03-issue-scanner.ts",
+      "url": "https://github.com/mahsumaktas/treliq/blob/754d487cc4fbaa2ed41a59abd416938904133a10/src/core/issue-scanner.ts",
+      "sha256": "af0bde1b5145f4fa7cf2d5cc28df9cea07bc9f99bd73f8432db4870800f2a1f1",
+      "truncated": false,
+      "lines": 161,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/core/scanner.ts",
+      "local": "04-scanner.ts",
+      "url": "https://github.com/mahsumaktas/treliq/blob/754d487cc4fbaa2ed41a59abd416938904133a10/src/core/scanner.ts",
+      "sha256": "81ccbf070045b67adf3e805b108c346a17d8d7abc4064115827aa1f270c73ffd",
+      "truncated": false,
+      "lines": 874,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "test/unit/dedup-verification.test.ts",
+      "local": "05-dedup-verification.test.ts",
+      "url": "https://github.com/mahsumaktas/treliq/blob/754d487cc4fbaa2ed41a59abd416938904133a10/test/unit/dedup-verification.test.ts",
+      "sha256": "57cba86f07d981729e3c093c46342f29c9346d0bbe8989dd0bddff92c2e0a67a",
+      "truncated": false,
+      "lines": 141,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "test/unit/dedup.test.ts",
+      "local": "06-dedup.test.ts",
+      "url": "https://github.com/mahsumaktas/treliq/blob/754d487cc4fbaa2ed41a59abd416938904133a10/test/unit/dedup.test.ts",
+      "sha256": "a3ca1a554c645759066568dd025a0002366bd871a59a5486af370da8541e0fde",
+      "truncated": false,
+      "lines": 224,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 30,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/mahsumaktas/treliq/blob/754d487cc4fbaa2ed41a59abd416938904133a10/README.md",
+      "sha256": "6f12101c60a72d0a99e1f0f8fb7f3ad3b458446a29fc0cace9533e5008021461",
+      "truncated": false,
+      "lines": 221,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/mahsumaktas/treliq/blob/754d487cc4fbaa2ed41a59abd416938904133a10/LICENSE",
+      "sha256": "3337c2942a49e95c0e3c21453e3da305b9256a9f576830293028f4578229b2a9",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

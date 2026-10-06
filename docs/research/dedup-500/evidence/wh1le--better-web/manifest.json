@@ -1,0 +1,115 @@
+{
+  "repository": "wh1le/better-web",
+  "metadata": {
+    "name": "wh1le/better-web",
+    "url": "https://github.com/wh1le/better-web",
+    "description": "Searches the web, scrapes, and turns noisy results into cleanmarkdown ready for LLMs. (AI detection, MinHash, dedup, semantic relevance scoring)",
+    "language": "Python",
+    "stars": 9,
+    "license": "MIT",
+    "archived": false,
+    "pushed_at": "2026-05-07T13:07:24Z",
+    "default_branch": "main",
+    "queries": [
+      "dedup in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/wh1le/better-web/blob/7ec8505c13971ee34e133d3b6922f96ab931cd45/README.md",
+      "sha256": "c52d48ad8892e151bbf71ef4f3972a2bb979b6a69596c1ab06a1669eac8258c4",
+      "truncated": false,
+      "lines": 94,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/wh1le/better-web/blob/7ec8505c13971ee34e133d3b6922f96ab931cd45/LICENSE",
+      "sha256": "514ae8a7bffed2565e8688c6d8ef13c21a15c692404136fd8be7411470a7a59f",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "lib/dedup.py",
+      "local": "02-dedup.py",
+      "url": "https://github.com/wh1le/better-web/blob/7ec8505c13971ee34e133d3b6922f96ab931cd45/lib/dedup.py",
+      "sha256": "1a2a08d9d6638cec871e38956b3728232132c6bec3215d5e4f48373ed7f4749c",
+      "truncated": false,
+      "lines": 57,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "lib/__init__.py",
+      "local": "03-__init__.py",
+      "url": "https://github.com/wh1le/better-web/blob/7ec8505c13971ee34e133d3b6922f96ab931cd45/lib/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "truncated": false,
+      "lines": 0,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "lib/ai_detect.py",
+      "local": "04-ai_detect.py",
+      "url": "https://github.com/wh1le/better-web/blob/7ec8505c13971ee34e133d3b6922f96ab931cd45/lib/ai_detect.py",
+      "sha256": "10723654a13821a50b773d0b02659500871fcd5e89439a56023a975acfc7f656",
+      "truncated": false,
+      "lines": 16,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/__init__.py",
+      "local": "05-__init__.py",
+      "url": "https://github.com/wh1le/better-web/blob/7ec8505c13971ee34e133d3b6922f96ab931cd45/tests/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "truncated": false,
+      "lines": 0,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "lib/cli.py",
+      "local": "06-cli.py",
+      "url": "https://github.com/wh1le/better-web/blob/7ec8505c13971ee34e133d3b6922f96ab931cd45/lib/cli.py",
+      "sha256": "8de6250c82fc80ebe1c282e85f2f7204ad718a1c6821fb8f47c4e7cb489dd410",
+      "truncated": false,
+      "lines": 218,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/conftest.py",
+      "local": "07-conftest.py",
+      "url": "https://github.com/wh1le/better-web/blob/7ec8505c13971ee34e133d3b6922f96ab931cd45/tests/conftest.py",
+      "sha256": "60ff68e7738b00d36456f97f947ba8f7ca5962a11aa0619550574bba810447c5",
+      "truncated": false,
+      "lines": 90,
+      "source": true,
+      "test": true
+    }
+  ],
+  "errors": [],
+  "commit": "7ec8505c13971ee34e133d3b6922f96ab931cd45",
+  "tree_truncated": false,
+  "source_file_count": 27,
+  "test_file_count": 7,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "lib/dedup.py",
+    "lib/ai_detect.py",
+    "lib/cli.py",
+    "tests/conftest.py"
+  ]
+}

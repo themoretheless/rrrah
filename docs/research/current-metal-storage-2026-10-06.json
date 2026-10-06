@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-06",
+  "command": "RRRAH_GPU_BACKEND=metal cargo test -p rrrah --test hdr_raster_swap --test ttl_swap_metal --locked --target-dir /tmp/rrrah-required-corpus-target -- --nocapture",
+  "adapter": "Metal Apple M4 Max",
+  "passed": [
+    "corrupt_raster_swap_entries_release_memory_and_allow_replacement",
+    "hdr_raster_swap_preserves_samples_and_linear_metal_output",
+    "profiled_png_and_archives_keep_color_through_swap_and_metal",
+    "expired_hdr_lease_and_swap_restore_preserve_metal_frame_and_float_bits",
+    "expired_real_cr3_lease_and_swap_restore_preserve_metal_frame"
+  ],
+  "ignored": 0,
+  "source_sha256": {
+    "crates/rrrah-app/tests/hdr_raster_swap.rs": "87be6bcaf17675ac58d7df8381dfd3beefa90d38b8effc8434fe78b82cb96190",
+    "crates/rrrah-app/tests/ttl_swap_metal.rs": "364a9f340f68e26ae3969106615f5d6a33ac87586cd2d85afb2cc4d85359f1b8",
+    "crates/rrrah-decode/src/raster.rs": "e5f5b9db2629af49fecdb939e7c1ab4c1331413c0082f9dcde4aca377e5ace22",
+    "crates/rrrah-decode/src/raster_color.rs": "2d49064e5a0d85629cef6c22f6d7aab842ab8d36df9e986757cfbb7d7f3eee89"
+  },
+  "log_sha256": "a4f9b0e7b67e8c126a03bb167c00bcddff7f1ff013ddefe543f58bad922a5619",
+  "log": "warning: function `error` is never used\n --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:4:4\n  |\n4 | fn error(message: &str) -> DecodeError {\n  |    ^^^^^\n  |\n  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default\n\nwarning: function `packed_12` is never used\n --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:9:4\n  |\n9 | fn packed_12(\n  |    ^^^^^^^^^\n\nwarning: function `decode_zd` is never used\n  --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:48:15\n   |\n48 | pub(super) fn decode_zd(\n   |               ^^^^^^^^^\n\nwarning: `rrrah-decode` (lib) generated 3 warnings\n   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)\n    Finished `test` profile [optimized + debuginfo] target(s) in 2.87s\n     Running tests/hdr_raster_swap.rs (/tmp/rrrah-required-corpus-target/debug/deps/hdr_raster_swap-eb06de8f57128bfc)\n\nrunning 3 tests\ntest corrupt_raster_swap_entries_release_memory_and_allow_replacement ... ok\nHDR raster adapter: AdapterInfo { name: \"Apple M4 Max\", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: \"\", driver: \"\", driver_info: \"\", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }\nICC raster swap adapter: Metal Apple M4 Max\ntest hdr_raster_swap_preserves_samples_and_linear_metal_output ... ok\ntest profiled_png_and_archives_keep_color_through_swap_and_metal ... ok\n\ntest result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.87s\n\n     Running tests/ttl_swap_metal.rs (/tmp/rrrah-required-corpus-target/debug/deps/ttl_swap_metal-cb0f875468190bd7)\n\nrunning 2 tests\nTTL RAW adapter: Metal Apple M4 Max\nTTL HDR adapter: Metal Apple M4 Max\ntest expired_hdr_lease_and_swap_restore_preserve_metal_frame_and_float_bits ... ok\ntest expired_real_cr3_lease_and_swap_restore_preserve_metal_frame ... ok\n\ntest result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.21s\n\n",
+  "scope": "SDR offscreen readback preservation for tested ICC rasters, CR3 and synthetic HDR with TTL, leases, corruption and memory-pressure retry",
+  "limitations": [
+    "No physical presentation or HDR display proof",
+    "No CUDA or NVIDIA device run",
+    "No universal format/color-profile qualification",
+    "No navigation latency measurement"
+  ]
+}

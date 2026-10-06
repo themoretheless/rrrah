@@ -1,0 +1,68 @@
+{
+  "index": 151,
+  "repository": "chanzuckerberg/czid-dedup",
+  "commit": "65f04c4cce9518e6f93837a700bd843f6745fb55",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Rust FASTA/FASTQ sequence hashing; biological record identity.",
+  "available_source_evidence": [
+    {
+      "path": "src/clusters.rs",
+      "local": "02-clusters.rs",
+      "url": "https://github.com/chanzuckerberg/czid-dedup/blob/65f04c4cce9518e6f93837a700bd843f6745fb55/src/clusters.rs",
+      "sha256": "878ceed0765249dc3441c1ee8b471c7f7309f41b7422cee877fa511b75e1f8b9",
+      "truncated": false,
+      "lines": 246,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/fastx.rs",
+      "local": "03-fastx.rs",
+      "url": "https://github.com/chanzuckerberg/czid-dedup/blob/65f04c4cce9518e6f93837a700bd843f6745fb55/src/fastx.rs",
+      "sha256": "94f60954d06a5116fdb0d7cc4a2d21808b10420ecb5c1c7aa11a8c87d86bb1b3",
+      "truncated": false,
+      "lines": 89,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/main.rs",
+      "local": "04-main.rs",
+      "url": "https://github.com/chanzuckerberg/czid-dedup/blob/65f04c4cce9518e6f93837a700bd843f6745fb55/src/main.rs",
+      "sha256": "8e3a55995dc733738c8330c4d80c02f1780032047da3fd373c69ed3edbe3d8ee",
+      "truncated": false,
+      "lines": 390,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "Readme.md",
+      "local": "00-Readme.md",
+      "url": "https://github.com/chanzuckerberg/czid-dedup/blob/65f04c4cce9518e6f93837a700bd843f6745fb55/Readme.md",
+      "sha256": "1a4efb52ac0043dde7a552c95b529fd9cd4e7e5485cfe58e75700471863d293c",
+      "truncated": false,
+      "lines": 85,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/chanzuckerberg/czid-dedup/blob/65f04c4cce9518e6f93837a700bd843f6745fb55/LICENSE",
+      "sha256": "bbbfed056c7cad403d4d722ebd57a4c6ff16f6f9331dc1c11dae09b7dc37aad8",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

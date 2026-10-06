@@ -1,0 +1,105 @@
+{
+  "repository": "lindameng-0/laconic",
+  "metadata": {
+    "name": "lindameng-0/laconic",
+    "url": "https://github.com/lindameng-0/laconic",
+    "description": "Token-efficient middleware for multi-agent LLM workflows: structure-preserving compression, dedup, and profiling for inter-agent messages.",
+    "language": "Python",
+    "stars": 21,
+    "license": "MIT",
+    "archived": false,
+    "pushed_at": "2026-09-29T20:14:00Z",
+    "default_branch": "main",
+    "queries": [
+      "dedup in:name,description"
+    ],
+    "review_status": "metadata-only"
+  },
+  "review_status": "awaiting-source-review",
+  "files": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/lindameng-0/laconic/blob/832ff90fd63a8659483f66a2f0bb3348fcda7990/README.md",
+      "sha256": "67b051cf18d1a02f74cf116d9022cb73b445b1edc378156b27ea8a9f34b096ef",
+      "truncated": false,
+      "lines": 180,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/lindameng-0/laconic/blob/832ff90fd63a8659483f66a2f0bb3348fcda7990/LICENSE",
+      "sha256": "134a63b1ad60aa00749b9fbc872a8193bcdccafc87d99d4168fa842b1a73b1c2",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "laconic/dedup/__init__.py",
+      "local": "02-__init__.py",
+      "url": "https://github.com/lindameng-0/laconic/blob/832ff90fd63a8659483f66a2f0bb3348fcda7990/laconic/dedup/__init__.py",
+      "sha256": "67d6cfcac9245e8f0f60e5e3584665c1869d210e1dd43daa37cead1ff096d223",
+      "truncated": false,
+      "lines": 12,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "laconic/dedup/session.py",
+      "local": "03-session.py",
+      "url": "https://github.com/lindameng-0/laconic/blob/832ff90fd63a8659483f66a2f0bb3348fcda7990/laconic/dedup/session.py",
+      "sha256": "161c1b4e4a2bd2f2626f48cdd0c3be82552145b228170e70bec4493f9cedc923",
+      "truncated": false,
+      "lines": 162,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "laconic/dedup/store.py",
+      "local": "04-store.py",
+      "url": "https://github.com/lindameng-0/laconic/blob/832ff90fd63a8659483f66a2f0bb3348fcda7990/laconic/dedup/store.py",
+      "sha256": "a24ee6390b11ed29095723d4d7b27b3b6948b7ac5eee63422042fe9767360805",
+      "truncated": false,
+      "lines": 56,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/test_dedup.py",
+      "local": "05-test_dedup.py",
+      "url": "https://github.com/lindameng-0/laconic/blob/832ff90fd63a8659483f66a2f0bb3348fcda7990/tests/test_dedup.py",
+      "sha256": "521e524672e45dccf9c4e610ed838c02bd4dded9124c29f60a65d13cf2d704cf",
+      "truncated": false,
+      "lines": 133,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "laconic/cli.py",
+      "local": "06-cli.py",
+      "url": "https://github.com/lindameng-0/laconic/blob/832ff90fd63a8659483f66a2f0bb3348fcda7990/laconic/cli.py",
+      "sha256": "d58d28ad6995e456c97a5e3fc21e69cc8bf290d8ea944b887cecb204f4b8f4f2",
+      "truncated": false,
+      "lines": 239,
+      "source": true,
+      "test": false
+    }
+  ],
+  "errors": [],
+  "commit": "832ff90fd63a8659483f66a2f0bb3348fcda7990",
+  "tree_truncated": false,
+  "source_file_count": 64,
+  "test_file_count": 14,
+  "acquisition_status": "ready",
+  "selected_paths_v2": [
+    "README.md",
+    "LICENSE",
+    "laconic/dedup/session.py",
+    "laconic/dedup/store.py",
+    "laconic/cli.py",
+    "tests/test_dedup.py"
+  ]
+}

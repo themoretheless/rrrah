@@ -1,0 +1,36 @@
+ply
+format ascii 1.0
+comment CC0 authored geometry
+obj_info native type oracle
+element vertex 3
+property uchar red
+property double z
+property double x
+property double y
+property uchar green
+property uchar blue
+property uchar alpha
+property float nx
+property float ny
+property float nz
+property char signed8
+property short signed16
+property ushort unsigned16
+property int signed32
+property uint unsigned32
+property double temperature
+property float unused_nan
+property list ushort float samples
+element face 1
+property list uchar int vertex_indices
+property ushort material_id
+element edge 1
+property int vertex1
+property int vertex2
+property float confidence
+end_header
+17 0 -1 -1 91 211 200 0 0 1 -128 -32768 65535 -2147483648 4294967295 3.14159265358979312 nan 0
+17 0 1 -1 91 211 200 0 0 1 -128 -32768 65535 -2147483648 4294967295 3.14159265358979312 nan 1 0.125
+17 0 0 1 91 211 200 0 0 1 -128 -32768 65535 -2147483648 4294967295 3.14159265358979312 nan 2 0.125 1.125
+3 0 1 2 7
+0 1 0.625

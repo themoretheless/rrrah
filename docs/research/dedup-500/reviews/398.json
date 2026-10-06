@@ -1,0 +1,78 @@
+{
+  "index": 398,
+  "repository": "anvilsecure/hominoid",
+  "commit": "8ca23842e6166dbd7a1604c0b583d650610d502a",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Screenshot anti-phishing signatures; layout-specific tolerance, not general photo equality.",
+  "available_source_evidence": [
+    {
+      "path": "src/backgroundScript.ts",
+      "local": "02-backgroundScript.ts",
+      "url": "https://github.com/anvilsecure/hominoid/blob/8ca23842e6166dbd7a1604c0b583d650610d502a/src/backgroundScript.ts",
+      "sha256": "33b2fc58d85c0af5fbb9d330728888d5fe2af0de0c992003882a388cbecfc277",
+      "truncated": false,
+      "lines": 59,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/browserUtils.ts",
+      "local": "03-browserUtils.ts",
+      "url": "https://github.com/anvilsecure/hominoid/blob/8ca23842e6166dbd7a1604c0b583d650610d502a/src/browserUtils.ts",
+      "sha256": "0298b07a70f58244fabb1cf804999405e9f13cabc8b271cd193f7bc3022180f8",
+      "truncated": false,
+      "lines": 59,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/model.ts",
+      "local": "04-model.ts",
+      "url": "https://github.com/anvilsecure/hominoid/blob/8ca23842e6166dbd7a1604c0b583d650610d502a/src/model.ts",
+      "sha256": "a4c79fcffc93a4d65c4a3030e911747915bc8798391f926df2facde3eb9bcac7",
+      "truncated": false,
+      "lines": 38,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "test/Gmail.html",
+      "local": "05-Gmail.html",
+      "url": "https://github.com/anvilsecure/hominoid/blob/8ca23842e6166dbd7a1604c0b583d650610d502a/test/Gmail.html",
+      "sha256": "d620c32d4f10cfdb1bd63f041a3e64c78528c94b4c99bc49f54c17b9ff844da4",
+      "truncated": true,
+      "lines": 3,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "LGPL-2.1",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 4,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/anvilsecure/hominoid/blob/8ca23842e6166dbd7a1604c0b583d650610d502a/README.md",
+      "sha256": "45d663bc5eccfaed25fc0c8515b25f5f153938307aae8b49a3fb0947d57c4e29",
+      "truncated": false,
+      "lines": 50,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/anvilsecure/hominoid/blob/8ca23842e6166dbd7a1604c0b583d650610d502a/LICENSE",
+      "sha256": "20c17d8b8c48a600800dfd14f95d5cb9ff47066a9641ddeab48dc54aec96e331",
+      "truncated": false,
+      "lines": 504,
+      "source": false,
+      "test": false
+    }
+  ]
+}

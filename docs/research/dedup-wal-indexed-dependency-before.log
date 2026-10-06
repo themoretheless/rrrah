@@ -1,0 +1,43 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: function `error` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:4:4
+  |
+4 | fn error(message: &str) -> DecodeError {
+  |    ^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `packed_12` is never used
+ --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:9:4
+  |
+9 | fn packed_12(
+  |    ^^^^^^^^^
+
+warning: function `decode_zd` is never used
+  --> crates/rrrah-decode/src/camtiff/mef_sensor.rs:48:15
+   |
+48 | pub(super) fn decode_zd(
+   |               ^^^^^^^^^
+
+warning: `rrrah-decode` (lib) generated 3 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 19.28s
+     Running tests/pixel_search.rs (target/debug/deps/pixel_search-e8535cb037a13475)
+
+running 1 test
+test indexed_wal_palette_mutation_discards_stale_source_decisions ... FAILED
+
+failures:
+
+---- indexed_wal_palette_mutation_discards_stale_source_decisions stdout ----
+
+thread 'indexed_wal_palette_mutation_discards_stale_source_decisions' (2166532) panicked at crates/rrrah-dedup/tests/pixel_search.rs:731:5:
+assertion failed: report.pixels.different.is_empty()
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    indexed_wal_palette_mutation_discards_stale_source_decisions
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 15 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p rrrah-dedup --test pixel_search`

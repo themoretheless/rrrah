@@ -1,0 +1,31 @@
+{
+  "status": "macos_and_linux_passed",
+  "session": 62674,
+  "source_sha256": {
+    "crates/rrrah-dedup/tests/scan.rs": "2215b70662ea9c460d4c10940023450932107d741db2869ad83a8b748b8bb2b7",
+    "crates/rrrah-dedup/src/scan.rs": "9df094468fffc87c0a643b05cb2966b6824888566b47553616e3d7ecaca2189c",
+    "Cargo.lock": "d0999b2b9095148aed051790d4b6deb2820e45b22a479fffe832227dcbf891cb"
+  },
+  "scope": "18 image files from six existing sources plus one corrupt file, 18 authored copy edges, overlapping nested roots, reversed order and repeated cache-backed scan; candidate evidence, not exact pixel or broad semantic qualification",
+  "log": "docs/research/dedup-nested-visual-macos.log",
+  "macos_exit_code": 0,
+  "macos_tests_passed": 1,
+  "post_macos_source_drift": {},
+  "linux_session": 87187,
+  "linux_log": "docs/research/dedup-nested-visual-linux.log",
+  "linux_start_source_sha256": {
+    "crates/rrrah-dedup/tests/scan.rs": "2215b70662ea9c460d4c10940023450932107d741db2869ad83a8b748b8bb2b7",
+    "crates/rrrah-dedup/src/scan.rs": "9df094468fffc87c0a643b05cb2966b6824888566b47553616e3d7ecaca2189c",
+    "Cargo.lock": "d0999b2b9095148aed051790d4b6deb2820e45b22a479fffe832227dcbf891cb",
+    "scripts/run-dedup-linux-native.sh": "f1fbac4c68d73cc5b5beed13b3ca983d0f1badcfd57097994f088d6e26012bdd"
+  },
+  "macos_scan_suite_session": 61385,
+  "macos_scan_suite_exit_code": 0,
+  "macos_scan_suite_tests_passed": 7,
+  "macos_scan_suite_source_drift": {},
+  "macos_scan_suite_log": "docs/research/dedup-nested-visual-scan-macos.log",
+  "linux_exit_code": 0,
+  "linux_tests_passed": 1,
+  "linux_post_tracked_source_drift": {},
+  "source_audit_scope": "Tracked scan test/module, lock and runner only; not whole decoder source audit."
+}

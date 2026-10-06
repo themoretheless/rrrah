@@ -1,0 +1,14 @@
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.12s
+     Running tests/compute_readback.rs (/tmp/rrrah-required-corpus-target/debug/deps/compute_readback-0f0df8525b3523e2)
+
+running 2 tests
+full-resolution compute adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+managed full-resolution compute adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+full-resolution compute: 25494560 pixels, 407912960 bytes per buffer, samples_ms=[2.289917, 2.290041, 2.594208, 2.6861659999999996, 3.557584], p50_ms=2.594, max_ms=3.558
+test full_sensor_linear_exposure_chunked_readback ... ok
+interleaved full-resolution exposure: pixels=25494560, end_to_end_ms=171.115, all pixels exact
+managed full-resolution exposure: pixels=25494560, end_to_end_ms=144.418, gpu_peak=1223738992, cpu_peak=815825920, all pixels exact, final used=0
+test full_sensor_managed_exposure_budgets_and_checks_every_pixel ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.57s
+

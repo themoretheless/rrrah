@@ -1,0 +1,78 @@
+{
+  "index": 247,
+  "repository": "Zephyr3311/Tauri-Deduper",
+  "commit": "aac9b638e0846b9c61025fb99323d42b6b9e5ada",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Rust Tauri duplicate files chooses Blake3 and separate music scanner; likely wrapper, test gaps remain.",
+  "available_source_evidence": [
+    {
+      "path": "tauri/src/duplicate_files.rs",
+      "local": "03-duplicate_files.rs",
+      "url": "https://github.com/Zephyr3311/Tauri-Deduper/blob/aac9b638e0846b9c61025fb99323d42b6b9e5ada/tauri/src/duplicate_files.rs",
+      "sha256": "a8dc1b1ccb07ce7f33128d294ec7acbb5b24515f1f5e305a7ea02b132bab2ba2",
+      "truncated": false,
+      "lines": 173,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tauri/src/music_duplicates.rs",
+      "local": "04-music_duplicates.rs",
+      "url": "https://github.com/Zephyr3311/Tauri-Deduper/blob/aac9b638e0846b9c61025fb99323d42b6b9e5ada/tauri/src/music_duplicates.rs",
+      "sha256": "7eb5c715818fa75e64fef975411019698d4a359b9d3372bc6072a426bbda4519",
+      "truncated": false,
+      "lines": 160,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tauri/src/scaner.rs",
+      "local": "05-scaner.rs",
+      "url": "https://github.com/Zephyr3311/Tauri-Deduper/blob/aac9b638e0846b9c61025fb99323d42b6b9e5ada/tauri/src/scaner.rs",
+      "sha256": "b82526a0393c9c96e8df31306479071a5ec10c4fd9bd2b6a3ffdd3bd4282346e",
+      "truncated": false,
+      "lines": 41,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/Zephyr3311/Tauri-Deduper/blob/aac9b638e0846b9c61025fb99323d42b6b9e5ada/README.md",
+      "sha256": "f2ae1e0578ddfcb1b277b054b42eee7368ee60c9159f37989818ad7dfaa407e4",
+      "truncated": false,
+      "lines": 79,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/Zephyr3311/Tauri-Deduper/blob/aac9b638e0846b9c61025fb99323d42b6b9e5ada/LICENSE",
+      "sha256": "9223068593775ec02ef6c1e373e2850c6506e7c605282ce2c0158c1df6855b16",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE-CZKAWKA",
+      "local": "02-LICENSE-CZKAWKA",
+      "url": "https://github.com/Zephyr3311/Tauri-Deduper/blob/aac9b638e0846b9c61025fb99323d42b6b9e5ada/LICENSE-CZKAWKA",
+      "sha256": "61c5c8c04ddc3108ba5d7bdc059d90c0d69067bf490f52f25a957f008e9debb1",
+      "truncated": false,
+      "lines": 320,
+      "source": false,
+      "test": false
+    }
+  ]
+}

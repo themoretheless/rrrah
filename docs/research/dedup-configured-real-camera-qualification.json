@@ -1,0 +1,47 @@
+{
+  "scope": "Existing configured-camera regressions actually receive seven pinned real sources; routing, metadata, managed source/output ownership, last-owner release, insufficient-budget refusal. Internal consistency, not independent color/sample oracle. These are optional-input tests, not removal of ignored-test attributes.",
+  "sources": [
+    {
+      "filename": "1294.cr2",
+      "sha256": "8f28465cee09844ffad95dbd3ec91923717a329c5ec4f3f405f5b4fce83aaea3"
+    },
+    {
+      "filename": "898.nef",
+      "sha256": "f90deb2819863f5a6ca9913c255fdd83a94963f4284eb88df9d389da7a6c7665"
+    },
+    {
+      "filename": "2414.arw",
+      "sha256": "250784580ea527442c09004417bb0eead484f2bf3ee8f9121a776ac65bb50d0f"
+    },
+    {
+      "filename": "1084.orf",
+      "sha256": "b2221977cbc6eba0d3b363351072092e5647eaa0d02a5d8432b5d985b29f669f"
+    },
+    {
+      "filename": "831.pef",
+      "sha256": "51a3f22d702353b246684dca79f83c79cfdbdf9892702ae5ac55dd469e239bb6"
+    },
+    {
+      "filename": "5025.rw2",
+      "sha256": "87516d28f8594dcfd20b0577883ad0d35662efc503674b1e3688aa894d32a2c0"
+    },
+    {
+      "filename": "2883.raf",
+      "sha256": "58ad687b23138c3c49ebeb6c1f80daf13185349be364b947e2bf27e39a462d2f"
+    }
+  ],
+  "platforms": {
+    "macos": {
+      "exit_code": 0,
+      "passed": 7,
+      "skipped": 0,
+      "log": "dedup-configured-real-camera-macos.log"
+    },
+    "linux": {
+      "exit_code": 0,
+      "passed": 7,
+      "skipped": 0,
+      "log": "dedup-configured-real-camera-linux.log"
+    }
+  }
+}

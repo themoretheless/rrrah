@@ -1,0 +1,61 @@
+{
+  "scope": "Natural camera-preview base/crop collection; exact agreement with exhaustive selected filtered policy",
+  "source_sha256": {
+    "crates/rrrah-dedup/tests/photo_files.rs": "2d90d2eb5a2f7199f399e3ef580e3a24f4ccd104a0676ea8cc7786823dcda05a",
+    "crates/rrrah-dedup/src/local_collection.rs": "b4917a01d3ec61d0028ea7852796c04f637320ffa50d20f3c90992a0b8494542",
+    "crates/rrrah-dedup/tests/fixtures/photos/manifest.json": "0842a3f329c469d2aa95521ae73f8e188de480dd47c149d5c281dd775321c9ad"
+  },
+  "collection": {
+    "source_scenes": [
+      830,
+      898,
+      1084,
+      1294
+    ],
+    "variants": [
+      "base",
+      "crop"
+    ],
+    "files": 8,
+    "features": 3381,
+    "descriptor_hits": 581291,
+    "proposed_pairs": 28,
+    "pixel_verification_pairs": 4,
+    "exhaustive_pairs": 28,
+    "accepted_pairs": [
+      [
+        0,
+        1
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        4,
+        5
+      ],
+      [
+        6,
+        7
+      ]
+    ],
+    "indexed_matches_exhaustive": true,
+    "file_and_pair_issues": 0
+  },
+  "comparison": "Encoded sRGB radius 3, strict residual retained, bidirectional photometric RejectOutsidePolicy; existing thresholds unchanged",
+  "validation": {
+    "test_exit_code": 0,
+    "tests_passed": 1,
+    "clippy_exit_code": 0,
+    "diff_check": "passed"
+  },
+  "limits": [
+    "Existing four scenes are not a held-out calibration corpus",
+    "Embedded camera JPEG previews and authored crops, not full RAW development",
+    "Different scenes are negatives; captured bursts/look-alikes remain unqualified",
+    "All 28 descriptor proposals survive; geometry reduces fresh pixel checks to four",
+    "81.30 second whole test includes exhaustive and indexed runs; not a comparative benchmark",
+    "Whole animation transformations and physical allocation completeness remain open"
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "scope": "Synthetic end-to-end information gates and perceptual-hash collision qualification; not real burst calibration",
+  "fixture_count": 6,
+  "source_sha256": {
+    "scripts/generate-dedup-information-fixtures.py": "cef6edeb75b732daa3877df87c785dad46b7dead3c311bc0a5eceb1c858302e1",
+    "crates/rrrah-dedup/tests/information.rs": "892345cf8870f7c98a6f726aa3c0835ef0de51375029e276e364b7db8c5170fb"
+  },
+  "observations": {
+    "informative_gradient_checker_pair": {
+      "hash_distance": 0,
+      "candidate_count": 1,
+      "pixel_equal": 0,
+      "pixel_different": 1
+    },
+    "uniform_four_files": {
+      "gated_candidates": 0,
+      "ungated_candidates": 6,
+      "pixel_equal": [
+        [
+          3,
+          4
+        ]
+      ],
+      "pixel_different": 5
+    },
+    "local_uniform_pairs": {
+      "modes": 4,
+      "pairs_per_mode": 6,
+      "geometric_candidates": 0,
+      "geometry_support": "absent for every pair; not proof that files are unique",
+      "exact_transparent_pair": "qualified separately by full-resolution pixel confirmation"
+    }
+  },
+  "validation": {
+    "targeted_tests_passed": 3,
+    "failed": 0,
+    "ignored": 0,
+    "clippy": "passed tests/examples all features no-deps -D warnings; existing decoder warnings remain",
+    "fixture_checksums": "passed"
+  },
+  "commands": [
+    "python scripts/generate-dedup-information-fixtures.py",
+    "cargo test -p rrrah-dedup --all-features --test information",
+    "cargo clippy -p rrrah-dedup --all-features --tests --examples --no-deps -- -D warnings"
+  ],
+  "limitations": [
+    "Authored synthetic fixtures only",
+    "Filter policies may intentionally suppress high-frequency differences; this test qualifies exact-pixel confirmation, not universal visual rejection",
+    "Local insufficient-support results are not exact-identity decisions",
+    "Uniform perceptual gating omits even equal-pixel pairs; callers need the separate exact/pixel evidence path"
+  ]
+}

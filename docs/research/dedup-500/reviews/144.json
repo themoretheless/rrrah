@@ -1,0 +1,88 @@
+{
+  "index": 144,
+  "repository": "mann1x/claude-hooks",
+  "commit": "d3cc728bcdf74a99adef3719ecce0ddbd1f78c3a",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Normalized text content hash and memory near-duplicate checks; useful normalization-version lesson, no pixel pipeline.",
+  "available_source_evidence": [
+    {
+      "path": "claude_hooks/dedup.py",
+      "local": "03-dedup.py",
+      "url": "https://github.com/mann1x/claude-hooks/blob/d3cc728bcdf74a99adef3719ecce0ddbd1f78c3a/claude_hooks/dedup.py",
+      "sha256": "d2b432fcc62e8e55a3d72ba7cc1e6fa7e962771b0c326a4234209f7ef2ed2fe1",
+      "truncated": false,
+      "lines": 70,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "claude_hooks/safety_scan.py",
+      "local": "04-safety_scan.py",
+      "url": "https://github.com/mann1x/claude-hooks/blob/d3cc728bcdf74a99adef3719ecce0ddbd1f78c3a/claude_hooks/safety_scan.py",
+      "sha256": "1d19686f76eaf7623603ad30b0fdf181c0b49826e44888cc8cbccc72bf456619",
+      "truncated": false,
+      "lines": 176,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "claude_hooks/providers/_content_hash.py",
+      "local": "05-_content_hash.py",
+      "url": "https://github.com/mann1x/claude-hooks/blob/d3cc728bcdf74a99adef3719ecce0ddbd1f78c3a/claude_hooks/providers/_content_hash.py",
+      "sha256": "1a74740c845460631d854d6b5da7f1c3c9c24f06f25fff7b8fb94d25ce8f5509",
+      "truncated": false,
+      "lines": 99,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/test_content_hash.py",
+      "local": "06-test_content_hash.py",
+      "url": "https://github.com/mann1x/claude-hooks/blob/d3cc728bcdf74a99adef3719ecce0ddbd1f78c3a/tests/test_content_hash.py",
+      "sha256": "221a52e099c9a992c133998492ad042f61f2fa919f2ca1ba4f2d241e529813a3",
+      "truncated": false,
+      "lines": 98,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 379,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/mann1x/claude-hooks/blob/d3cc728bcdf74a99adef3719ecce0ddbd1f78c3a/README.md",
+      "sha256": "ea879e22b9aa51b9d6b3f4d000c0afbe82d1812eda7fdcba577d0d582989a05e",
+      "truncated": false,
+      "lines": 1396,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/mann1x/claude-hooks/blob/d3cc728bcdf74a99adef3719ecce0ddbd1f78c3a/LICENSE",
+      "sha256": "7827d35d0b25fa9d9fe8fc0d2fbf24e6cf714a31f25d27bda4a28e2be70b0f5b",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "episodic-memory/LICENSE",
+      "local": "02-LICENSE",
+      "url": "https://github.com/mann1x/claude-hooks/blob/d3cc728bcdf74a99adef3719ecce0ddbd1f78c3a/episodic-memory/LICENSE",
+      "sha256": "a37e0e9697144819e1d965176ac4ae5bc3fa02d11e7812036bbcadf6dafe2400",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}
