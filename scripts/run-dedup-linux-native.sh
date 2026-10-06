@@ -22,6 +22,7 @@ case "$mode" in
   minimal-full) set -- --all-targets; feature_flag=--no-default-features ;;
   projective-files) set -- --test projective_files --test local_scan ;;
   pyramid-files) set -- --test pyramid --test projective_files pyramid ;;
+  complementary-files) set -- --test projective_files complementary_files ;;
   projective-collection) set -- --test projective_files indexed_projective_collection ;;
   projective-phase) set -- --test projective_files registration_phase_cancel ;;
   projective-collection-lifecycle) set -- --test projective_files indexed_projective_collection_mutation_cancel_and_limits ;;

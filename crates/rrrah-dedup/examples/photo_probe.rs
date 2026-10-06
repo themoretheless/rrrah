@@ -49,6 +49,9 @@ fn policy() -> LocalFilePolicy {
 }
 fn main() {
     let arguments:Vec<String>=std::env::args().collect();
+    if arguments.get(1).is_some_and(|a|a=="--complementary-file-pair") {
+        complementary_file_pair(&arguments[2..]);return;
+    }
     if arguments.get(1).is_some_and(|a|a=="--pyramid-file-pair" || a=="--pyramid-collection-pair") {
         pyramid_file_pair(&arguments[2..],arguments[1]=="--pyramid-collection-pair");return;
     }
@@ -511,4 +514,31 @@ fn projective_phases(args:&[String]) {
   let phase=match result {Ok(h)=>format!("registered={:?}; pixels={:?}",h.matrix,verify_projective_filtered(&av,&bv,h,p.pixels,filter,||false)),Err(error)=>format!("registration_error={error:?}")};stages.push(format!("\"{mode}\":{phase:?}"));
  }
  println!("{{\"correspondences\":{},\"inliers\":{},\"geometry\":{:?},{}}}",matches.len(),g.inliers.len(),g.transform.matrix,stages.join(","));
+}
+
+fn complementary_file_pair(args:&[String]) {
+    use rrrah_dedup::{geometry::ProjectiveSamplingPolicy,local_scan::{compare_local_files_projective_complementary,ProjectiveComplementaryFilePolicy,ProjectivePortfolioFilePolicy,ProjectivePyramidPhotometricFilePolicy},warp::{PhotometricFitMode,ProjectiveRegistrationPolicy,ProjectiveRegistrationTrustPolicy,ProjectiveRegistrationPortfolioPolicy}};
+    assert_eq!(args.len(),2);
+    let mut local=policy();local.geometry.max_hypotheses=2048;local.pixels.max_source_pixels=409_600;
+    let sampling=ProjectiveSamplingPolicy{trials:2048,seed:0x1234abcd};
+    let filter=ColorFilterPolicy{filter:FilterPolicy{radius:1,max_sample_pairs:4_000_000},color_space:FilterColorSpace::LinearSrgb};
+    let mut photometric=photometric_policy();photometric.residual=local.pixels;photometric.minimum_samples=16;
+    let registration=ProjectiveRegistrationPolicy{radius:1,stride:8,rounds:128,max_sample_pairs:64_000_000};
+    let mut registration_photometric=photometric_policy();registration_photometric.minimum_samples=16;
+    let r=ProjectivePortfolioFilePolicy{local,filter,registration:ProjectiveRegistrationPortfolioPolicy{anchored:ProjectiveRegistrationTrustPolicy{registration,photometric:registration_photometric,maximum_corner_shift:1.},unanchored:registration,max_sample_pairs:128_000_000},spatial:None,sampling:Some(sampling)};
+    let mut multiscale=local;multiscale.matching.max_comparisons=2_250_000;multiscale.geometry.max_points=1500;
+    let p=ProjectivePyramidPhotometricFilePolicy{local:multiscale,max_levels:3,max_total_pixels:400_000,max_total_features:1500,sampling,photometric,filter:ColorFilterPolicy{filter:FilterPolicy{max_sample_pairs:12_000_000,..filter.filter},..filter},fit_mode:PhotometricFitMode::ConstrainedLeastSquares};
+    let policy=ProjectiveComplementaryFilePolicy{registration:r,pyramid:p,max_total_comparisons:2_500_000,max_total_hypotheses:4096,max_total_sample_pairs:144_000_000};
+    let budget=MemoryBudget::new(64*1024*1024);
+    let counts=|e:&rrrah_dedup::warp::BidirectionalEvidence|format!("[{:?},{:?}]",[e.forward.matched_pixels,e.forward.compared_pixels,e.forward.source_pixels],[e.reverse.matched_pixels,e.reverse.compared_pixels,e.reverse.source_pixels]);
+    match compare_local_files_projective_complementary(&DecodeRequest::new(&args[0]),&DecodeRequest::new(&args[1]),policy,&budget,||false) {
+        Ok(e)=>{
+            let registration_counts=e.registration.pixels.as_ref().map_or_else(||"null".into(),|p|format!("[{},{}]",counts(&p.anchored.filtered),counts(&p.unanchored.filtered)));
+            let pyramid_counts=e.pyramid.pixels.as_ref().map_or_else(||"null".into(),|p|format!("[{:?},{:?}]",[p.fitted.forward.pixels.matched_pixels,p.fitted.forward.pixels.compared_pixels,p.fitted.forward.pixels.source_pixels],[p.fitted.reverse.pixels.matched_pixels,p.fitted.reverse.pixels.compared_pixels,p.fitted.reverse.pixels.source_pixels]));
+            let rg=e.registration.geometry.as_ref().map_or_else(||"null".into(),|g|format!("{:?}",g.transform.matrix));
+            let pg=e.pyramid.geometry.as_ref().map_or_else(||"null".into(),|g|format!("{:?}",g.transform.matrix));
+            println!("{{\"status\":\"ok\",\"candidate\":{},\"accepted_searches\":{:?},\"registration_accepted_lanes\":{:?},\"registration_counts\":{},\"pyramid_counts\":{},\"registration_geometry\":{},\"pyramid_geometry\":{},\"correspondence_counts\":{:?},\"inlier_counts\":{:?},\"fit_failure\":{:?},\"managed_used\":{},\"managed_peak\":{}}}",e.candidate,e.accepted_searches,e.registration.accepted_lanes,registration_counts,pyramid_counts,rg,pg,[e.registration.correspondences.len(),e.pyramid.correspondences.len()],[e.registration.geometry.as_ref().map_or(0,|g|g.inliers.len()),e.pyramid.geometry.as_ref().map_or(0,|g|g.inliers.len())],format!("{:?}",e.pyramid.fit_failure),budget.used(),budget.peak());
+        }
+        Err(error)=>println!("{{\"status\":\"error\",\"error\":{:?},\"managed_used\":{},\"managed_peak\":{}}}",error.to_string(),budget.used(),budget.peak()),
+    }
 }

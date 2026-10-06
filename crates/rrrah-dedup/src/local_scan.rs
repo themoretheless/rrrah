@@ -2122,7 +2122,14 @@ pub fn compare_local_files_projective_pyramid_photometric(
         max_total_pixels:policy.max_total_pixels,max_total_features:policy.max_total_features};
     compare_local_file_views_with_extractor(left,right,p,(None,None,None,false),budget,cancel,
         |view,cancel|crate::pyramid::extract_oriented_pyramid_managed(view,pyramid,budget,cancel),
-        |a,b,correspondences,cancel| {
+        |a,b,correspondences,cancel|verify_projective_pyramid_views(a,b,correspondences,policy,cancel))
+}
+fn verify_projective_pyramid_views(
+    a:&crate::linear::LinearRgbaView<'_>,b:&crate::linear::LinearRgbaView<'_>,
+    correspondences:Vec<Correspondence>,policy:ProjectivePyramidPhotometricFilePolicy,
+    cancel:&dyn Fn()->bool,
+)->Result<ProjectivePhotometricFileEvidence,LocalFileError>{
+            let p=policy.local;
             let geometry=crate::geometry::verify_projective_sampled(&correspondences,p.geometry,policy.sampling,cancel)?;
             let mut pixels=None;let mut unfitted=None;let mut fit_failure=None;
             if let Some(g)=&geometry {
@@ -2136,7 +2143,6 @@ pub fn compare_local_files_projective_pyramid_photometric(
             let candidate=pixels.as_ref().is_some_and(|e|accepted_photometric(&e.fitted,p));
             Ok(ProjectivePhotometricFileEvidence{correspondences,geometry,registered_transform:None,
                 pixels,fit_failure,unfitted,candidate})
-        })
 }
 
 pub(crate) fn validate_projective_pyramid_file_policy(
@@ -2187,7 +2193,13 @@ pub fn compare_local_files_projective_portfolio(
     budget: &MemoryBudget, cancel: impl Fn()->bool,
 ) -> Result<ProjectivePortfolioFileEvidence,LocalFileError> {
     validate_projective_portfolio_file_policy(&policy)?;
-    compare_local_file_views(left,right,policy.local,(None,None,None,false),policy.spatial,budget,cancel,|a,b,correspondences,cancel| {
+    compare_local_file_views(left,right,policy.local,(None,None,None,false),policy.spatial,budget,cancel,
+        |a,b,correspondences,cancel|verify_projective_portfolio_views(a,b,correspondences,policy,cancel))
+}
+fn verify_projective_portfolio_views(
+    a:&crate::linear::LinearRgbaView<'_>,b:&crate::linear::LinearRgbaView<'_>,
+    correspondences:Vec<Correspondence>,policy:ProjectivePortfolioFilePolicy,cancel:&dyn Fn()->bool,
+)->Result<ProjectivePortfolioFileEvidence,LocalFileError>{
         let geometry=match policy.sampling {
             Some(sample)=>crate::geometry::verify_projective_sampled(&correspondences,policy.local.geometry,sample,cancel)?,
             None=>crate::geometry::verify_projective(&correspondences,policy.local.geometry,cancel)?,
@@ -2200,7 +2212,6 @@ pub fn compare_local_files_projective_portfolio(
             [accepted(&e.anchored.filtered,policy.local),accepted(&e.unanchored.filtered,policy.local)]);
         let candidate=accepted_lanes.into_iter().any(|accepted|accepted);
         Ok(ProjectivePortfolioFileEvidence{correspondences,geometry,pixels,accepted_lanes,candidate})
-    })
 }
 
 pub(crate) fn validate_projective_portfolio_file_policy(policy: &ProjectivePortfolioFilePolicy) -> Result<(),LocalFileError> {
@@ -2213,5 +2224,77 @@ pub(crate) fn validate_projective_portfolio_file_policy(policy: &ProjectivePortf
         if sample.trials>policy.local.geometry.max_hypotheses {return Err(GeometryError::Budget.into());}
     }
     validate_selected_policy(policy.local,(None,None,None,false))?;
+    Ok(())
+}
+
+/// Fixed complementary searches on the same selected decoded frames.
+#[derive(Debug, Clone, Copy)]
+pub struct ProjectiveComplementaryFilePolicy {
+    pub registration: ProjectivePortfolioFilePolicy,
+    pub pyramid: ProjectivePyramidPhotometricFilePolicy,
+    /// Sum of both admitted feature-pair comparison caps.
+    pub max_total_comparisons: u64,
+    /// Sum of both admitted model trial caps.
+    pub max_total_hypotheses: u64,
+    /// Registration objectives plus both searches' filtered-pixel work caps.
+    pub max_total_sample_pairs: u64,
+}
+#[derive(Debug)]
+pub struct ProjectiveComplementaryFileEvidence {
+    pub registration: ProjectivePortfolioFileEvidence,
+    pub pyramid: ProjectivePhotometricFileEvidence,
+    /// Registration portfolio, then pyramid/color confirmation.
+    pub accepted_searches: [bool; 2],
+    pub candidate: bool,
+}
+/// Compare two independently specified searches against the same decoded views.
+/// Both searches must finish before the shared source/dependency/cancellation
+/// lifecycle admits the result. Every residual and refusal remains in evidence;
+/// a successful search cannot hide another search's work or cancellation error.
+/// Pixel-grid and extraction limits remain separately enforced by each search.
+///
+/// # Errors
+/// Invalid/incompatible policies, cumulative or phase work/memory limits,
+/// decode/source changes or cancellation discard the entire result.
+pub fn compare_local_files_projective_complementary(
+    left:&DecodeRequest,right:&DecodeRequest,policy:ProjectiveComplementaryFilePolicy,
+    budget:&MemoryBudget,cancel:impl Fn()->bool,
+)->Result<ProjectiveComplementaryFileEvidence,LocalFileError>{
+    validate_projective_complementary_file_policy(&policy)?;
+    let p=policy.pyramid;
+    let pyramid=crate::pyramid::PyramidPolicy{local:p.local.extract,max_levels:p.max_levels,
+        max_total_pixels:p.max_total_pixels,max_total_features:p.max_total_features};
+    compare_local_file_views_with_extractor(left,right,p.local,(None,None,None,false),budget,cancel,
+        |view,cancel|crate::pyramid::extract_oriented_pyramid_managed(view,pyramid,budget,cancel),
+        |a,b,correspondences,cancel|{
+            let pyramid=verify_projective_pyramid_views(a,b,correspondences,p,cancel)?;
+            let r=policy.registration;
+            let af=extract_search_features(a,r.local.extract,r.spatial,budget,cancel)?;
+            let bf=extract_search_features(b,r.local.extract,r.spatial,budget,cancel)?;
+            let matches=match_features(&af,&bf,r.local.matching,cancel)?;
+            let registration=verify_projective_portfolio_views(a,b,matches,r,cancel)?;
+            let accepted_searches=[registration.candidate,pyramid.candidate];
+            let candidate=accepted_searches.into_iter().any(|accepted|accepted);
+            Ok(ProjectiveComplementaryFileEvidence{registration,pyramid,accepted_searches,candidate})
+        })
+}
+pub(crate) fn validate_projective_complementary_file_policy(
+    policy:&ProjectiveComplementaryFilePolicy,
+)->Result<(),LocalFileError>{
+    validate_projective_portfolio_file_policy(&policy.registration)?;
+    validate_projective_pyramid_file_policy(&policy.pyramid)?;
+    let a=policy.registration.local.decode;let b=policy.pyramid.local.decode;
+    if a.max_frames!=b.max_frames || a.max_pixels!=b.max_pixels || a.max_file_bytes!=b.max_file_bytes {
+        return Err(LocalFileError::InvalidPolicy);
+    }
+    let r=policy.registration;let p=policy.pyramid;
+    let comparisons=r.local.matching.max_comparisons.checked_add(p.local.matching.max_comparisons).ok_or(LocalError::Budget)?;
+    let hypotheses=r.sampling.map_or(r.local.geometry.max_hypotheses,|s|s.trials)
+        .checked_add(p.sampling.trials).ok_or(GeometryError::Budget)?;
+    let sample_pairs=r.registration.max_sample_pairs.checked_add(r.filter.filter.max_sample_pairs)
+        .and_then(|n|n.checked_add(p.filter.filter.max_sample_pairs)).ok_or(WarpError::Budget)?;
+    if comparisons>policy.max_total_comparisons {return Err(LocalError::Budget.into());}
+    if hypotheses>policy.max_total_hypotheses {return Err(GeometryError::Budget.into());}
+    if sample_pairs>policy.max_total_sample_pairs {return Err(WarpError::Budget.into());}
     Ok(())
 }

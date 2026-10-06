@@ -14,10 +14,12 @@ p.add_argument('probe', type=pathlib.Path)
 p.add_argument('report', type=pathlib.Path)
 p.add_argument('--pyramid-file', action='store_true', help='Use the managed public pyramid file API with fixed three-level policy.')
 p.add_argument('--pyramid-collection', action='store_true', help='Use the managed indexed pyramid collection API with the same file policy.')
+p.add_argument('--complementary-file', action='store_true', help='Use both native searches on shared decoded views with cumulative work admission.')
 p.add_argument('--negative-query', help='Compare this strong query against every different original-origin group.')
 a = p.parse_args()
-assert not (a.pyramid_file and a.pyramid_collection), 'Select one pyramid API mode.'
+assert sum([a.pyramid_file,a.pyramid_collection,a.complementary_file])<=1, 'Select one public API mode.'
 use_pyramid=a.pyramid_file or a.pyramid_collection
+use_native=use_pyramid or a.complementary_file
 m = json.loads(a.manifest.read_text())
 assert len(m['positive_pairs']) == m['required_positive_pairs'] == 229
 probe_hash = hashlib.sha256(a.probe.read_bytes()).hexdigest()
@@ -33,18 +35,21 @@ if use_pyramid:
                       'No oracle geometry. This is copy-origin recovery measurement, not '
                       'full-library qualification or an independent negative precision gate.')
 state['mode'] = 'pyramid_collection' if a.pyramid_collection else 'pyramid_file' if a.pyramid_file else 'portfolio'
+if a.complementary_file:
+    state['mode']='complementary_file'
+    state['scope']='All229 strong-subset publisher-origin pairs through shared-view complementary native file searches with fixed individual acceptance and cumulative work admission. No oracle geometry, no semantic/burst precision or full-copy certificate.'
 if a.pyramid_collection:
     state['scope'] += ' Indexed collection proposal followed by fresh file confirmation.'
 pairs=m['positive_pairs']
 if a.negative_query:
-    assert use_pyramid, 'Negative query mode requires a public pyramid API.'
+    assert use_native, 'Negative query mode requires a public native API mode.'
     query=next(pair['right'] for pair in pairs if pair['query_id']==a.negative_query)
     pairs=[{'query_id':query['filename']+'/'+original['filename'],
             'left':original,'right':query,'label':'different_publisher_origin'}
            for original in m['images']['original'] if original['group_id']!=query['group_id']]
     assert len(pairs)==156
     state['required_pairs']=156
-    state['scope']='One strong query against all 156 different publisher-origin groups through the fixed public pyramid file API. Not a general semantic/burst or all-query precision certificate.'
+    state['scope']=f'One strong query against all156 different publisher-origin groups through fixed public mode {state["mode"]}. Not a general semantic/burst or all-query precision certificate.'
 for pair in pairs:
     row = {'query_id': pair['query_id'], 'label': pair['label']}
     started = time.monotonic()
@@ -59,11 +64,14 @@ for pair in pairs:
         if use_pyramid:
             command = [str(a.probe.resolve()), '--pyramid-collection-pair' if a.pyramid_collection else '--pyramid-file-pair',
                        pair['left']['normalized_path'], pair['right']['normalized_path']]
+        if a.complementary_file:
+            command=[str(a.probe.resolve()),'--complementary-file-pair',
+                     pair['left']['normalized_path'],pair['right']['normalized_path']]
         result = subprocess.run(command, capture_output=True, text=True, timeout=180)
         row.update(returncode=result.returncode, stderr=result.stderr)
         if result.returncode == 0:
             evidence = json.loads(result.stdout)
-            if not use_pyramid:
+            if not use_native:
                 evidence['identity_diagnostic_counts'] = evidence.pop('oracle_filtered_counts')
             row.update(evidence=evidence, status=evidence['status'])
         else:

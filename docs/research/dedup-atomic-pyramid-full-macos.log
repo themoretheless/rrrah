@@ -373,3 +373,312 @@ test indexed_reflected_brightness_collection_preserves_fitted_and_strict_evidenc
 test indexed_reflected_natural_collection_matches_complete_pair_oracle ... ok
 test indexed_natural_rotations_and_resizes_preserve_labelled_scene_pairs ... ok
 test explicit_seven_by_seven_windows_cover_all_twenty_photo_derivatives_in_both_spaces ... ok
+test recursive_filtered_reflections_preserve_oracle_aliases_errors_and_modes ... ok
+
+test result: ok. 27 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 131.83s
+
+     Running tests/photo_jpeg_oracle.rs (/Users/themoretheless/.codex/tmp/rrrah-dedup-atomic-20261006/target/debug/deps/photo_jpeg_oracle-b30cf96a14006b45)
+
+running 1 test
+test native_jpeg_pixels_are_qualified_against_independent_libjpeg_readback ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/photometric.rs (/Users/themoretheless/.codex/tmp/rrrah-dedup-atomic-20261006/target/debug/deps/photometric-116ef11ffde0bf10)
+
+running 7 tests
+test flat_content_alpha_edits_limits_and_cancellation_do_not_disappear ... ok
+test incomplete_fits_have_specific_reasons_instead_of_invalid_pixel_errors ... ok
+test bounded_fit_excludes_saturation_from_model_but_never_from_residuals ... ok
+test explicit_display_projection_retains_hdr_disagreement_and_alpha_edits ... ok
+test known_channel_gains_offsets_and_spatial_edit_are_separate_evidence ... ok
+test reflected_gain_offset_preserves_strict_evidence_and_cancel_atomicity ... ok
+test reflected_range_and_display_keep_hdr_alpha_inverse_and_cancellation_evidence ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/photos_heldout.rs (/Users/themoretheless/.codex/tmp/rrrah-dedup-atomic-20261006/target/debug/deps/photos_heldout-9e5858c4f50eef5a)
+
+running 5 tests
+test exact_pixels_keep_related_captures_and_other_scenes_distinct ... ok
+test related_garden_views_keep_exact_pixel_evidence_separate_from_visual_candidate ... ok
+test unchanged_filter_policy_rejects_unrelated_heldout_scenes ... ok
+test unchanged_filter_policy_accepts_heldout_derivatives ... ok
+test heldout_indexed_crop_collection_matches_complete_pair_oracle ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 26.10s
+
+     Running tests/pixel_search.rs (/Users/themoretheless/.codex/tmp/rrrah-dedup-atomic-20261006/target/debug/deps/pixel_search-e8535cb037a13475)
+
+running 16 tests
+test opaque_uniform_png_and_independently_encoded_bmp_are_discovered_as_equal ... ok
+test changed_source_discards_every_stale_decision_and_preserves_healthy_pairs ... ok
+test indexed_source_changed_before_its_decode_is_not_admitted_as_fresh ... ok
+test indexed_wal_palette_mutation_discards_stale_source_decisions ... ok
+test indexed_roots_preserve_non_utf8_diagnostics_without_losing_healthy_equality ... ok
+test recursive_request_factory_preserves_explicit_hdr_color_and_discovered_paths ... ok
+test untagged_hdr_requires_color_qualification_even_with_encoded_srgb_assumption ... ok
+test indexed_changed_source_discards_stale_pairs ... ok
+test indexed_pixel_permission_error_preserves_healthy_pairs_and_recovers ... ok
+test explicitly_qualified_linear_hdr_matches_endianness_without_losing_precision_or_scale ... ok
+test recursive_pixel_search_keeps_corrupt_and_missing_sources_as_diagnostics ... ok
+test final_generation_change_and_transient_user_cancel_return_no_report ... ok
+test indexed_recursive_search_isolates_corruption_and_preserves_overlapping_roots ... ok
+test indexed_final_generation_and_transient_cancel_return_no_report ... ok
+test indexed_two_key_groups_are_deterministic_across_request_orders ... ok
+test indexed_unique_collection_fits_zero_pair_budget_and_decodes_once_per_key ... ok
+
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+
+     Running tests/pixels.rs (/Users/themoretheless/.codex/tmp/rrrah-dedup-atomic-20261006/target/debug/deps/pixels-32d3375de02ae94e)
+
+running 4 tests
+test invisible_rgb_is_canonical_but_visible_pixels_are_exact ... ok
+test gradient_has_independently_known_difference_bits ... ok
+test validates_layout_budget_and_cancellation ... ok
+test uniform_hash_collision_is_not_informative ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/presentation_digest.rs (/Users/themoretheless/.codex/tmp/rrrah-dedup-atomic-20261006/target/debug/deps/presentation_digest-54a1b4b71dbf62dd)
+
+running 2 tests
+test timeline_keys_preserve_cross_encoding_splits_zero_prefix_and_labelled_negatives ... ok
+test page_keys_cover_every_page_across_compression_and_byte_order ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/presentation_kind.rs (/Users/themoretheless/.codex/tmp/rrrah-dedup-atomic-20261006/target/debug/deps/presentation_kind-f4b9dd9168be17be)
+
+running 1 test
+test content_detection_ignores_extensions_and_preserves_sensor_routing ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/projective_files.rs (/Users/themoretheless/.codex/tmp/rrrah-dedup-atomic-20261006/target/debug/deps/projective_files-af2b447668e34079)
+
+running 26 tests
+test real_file_projective_identity_and_terminal_refusals ... ok
+test indexed_spatial_projective_matches_direct_pairs ... ok
+test filtered_projective_unrelated_pairs_and_lifecycle ... ok
+test registration_policy_is_validated_before_source_io ... ok
+test registration_phase_cancel_and_budget_return_no_partial_file_candidate ... ok
+test recursive_projective_collection_preserves_aliases_errors_and_requests ... ok
+test pyramid_photometric_files_preserve_identity_refusals_and_cancel_retry ... ok
+test pyramid_collection_and_nested_roots_match_direct_pairs_and_refusals ... ok
+test anchored_projective_collection_mutation_cancel_and_limits ... ok
+test perspective_generator_geometry_diagnostic ... ok
+test spatial_projective_registration_preserves_identity_and_admission ... ok
+test sampled_projective_files_preserve_pixels_and_terminal_refusals ... ok
+test indexed_projective_collection_mutation_cancel_and_limits ... ok
+test sampled_projective_collection_mutation_cancel_and_limits ... ok
+test projective_photometric_collection_mutation_cancel_and_limits ... ok
+test registration_portfolio_collection_mutation_cancel_and_limits ... ok
+test anchored_projective_file_objective_never_bypasses_pixel_acceptance ... ok
+test registration_portfolio_files_preserve_both_residuals_and_atomic_refusals ... ok
+test indexed_projective_collection_finds_derivative_and_rejects_other_scene ... ok
+test projective_photometric_file_fit_keeps_strict_errors_and_refusals ... ok
+test real_preview_perspective_derivatives ... ok
+test combined_perspective_light_photos_require_all_six_positives_and_unrelated_rejection ... ok
+test anchored_projective_collection_matches_all_pairs_on_six_source_corpus has been running for over 60 seconds
+test indexed_projective_collection_matches_all_pairs_on_six_source_corpus has been running for over 60 seconds
+test registration_portfolio_collection_matches_all_pairs_on_six_source_corpus has been running for over 60 seconds
+test sampled_projective_collection_matches_all_pairs_on_six_source_corpus has been running for over 60 seconds
+test indexed_projective_collection_matches_all_pairs_on_six_source_corpus ... ok
+test anchored_projective_collection_matches_all_pairs_on_six_source_corpus ... ok
+test sampled_projective_collection_matches_all_pairs_on_six_source_corpus ... ok
+test registration_portfolio_collection_matches_all_pairs_on_six_source_corpus ... ok
+
+test result: ok. 26 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 153.99s
+
+     Running tests/projective_geometry.rs (/Users/themoretheless/.codex/tmp/rrrah-dedup-atomic-20261006/target/debug/deps/projective_geometry-e86151375a9e02ff)
+
+running 14 tests
+test perspective_mapping_and_permutations ... ok
+test invalid_horizon_and_cancel_checkpoints ... ok
+test perspective_pixels_hdr_edits_horizon_and_cancel ... ok
+test perspective_inverse_grid_catches_unsampled_edit ... ok
+test full_support_refinement_beats_minimal_hypotheses_on_noisy_points ... ok
+test sampled_projective_cancellation_discards_models_and_retry_is_deterministic ... ok
+test robust_perspective_outliers_budget_and_cancellation ... ok
+test sampled_projective_recovers_large_outlier_set_with_fixed_work ... ok
+test projective_filter_preserves_strict_edits_and_terminal_cancellation ... ok
+test registration_candidates_keep_independent_full_grid_evidence_and_shared_limits ... ok
+test registration_portfolio_admits_shared_work_and_discards_partial_models_on_cancel ... ok
+test perspective_photometric_fit_preserves_unfitted_errors_and_limits ... ok
+test photometric_registration_keeps_geometry_under_affine_encoded_light_change ... ok
+test pixel_registration_reduces_known_offset_and_obeys_terminal_limits ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+     Running tests/pyramid.rs (/Users/themoretheless/.codex/tmp/rrrah-dedup-atomic-20261006/target/debug/deps/pyramid-83fb0e2756503e2b)
+
+running 4 tests
+test scale_is_estimated_from_extracted_multiresolution_features ... ok
+test enlarged_quarter_turn_recovers_scale_and_rotation_together ... ok
+test managed_oriented_pyramid_admission_cancel_retry_and_last_owner_release ... ok
+test oriented_pyramid_keeps_recipe_source_coordinates_and_admission ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/raster.rs (/Users/themoretheless/.codex/tmp/rrrah-dedup-atomic-20261006/target/debug/deps/raster-5a53b8c6b83844f8)
+
+running 5 tests
+test unqualified_color_and_insufficient_budget_fail ... ok
+test selected_frame_key_tracks_equality_metadata_but_excludes_container_selection ... ok
+test storage_precision_and_frame_metadata_are_preserved ... ok
+test normalized_keys_and_direct_equality_agree_with_independent_hdr_alpha_precision_labels ... ok
+test cancellation_interrupts_each_pixel_representation ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/raster_equality.rs (/Users/themoretheless/.codex/tmp/rrrah-dedup-atomic-20261006/target/debug/deps/raster_equality-ea252da97797e76c)
+
+running 5 tests
+test untagged_policy_is_explicit_cached_and_does_not_override_declared_linear_color ... ok
+test malformed_associated_alpha_refuses_releases_memory_and_retries ... ok
+test independent_lossless_encodings_preserve_pixels_alpha_and_one_code_negatives ... ok
+test associated_tiff_alpha_matches_independent_straight_png ... ok
+test cross_encoding_batch_confirms_every_pair_and_rejects_single_pixel_edits ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/scan.rs (/Users/themoretheless/.codex/tmp/rrrah-dedup-atomic-20261006/target/debug/deps/scan-191c9d95467ecbab)
+
+running 7 tests
+test confirmation_mutation_generation_and_memory_are_inconclusive ... ok
+test pixel_group_final_checks_observe_generation_cancellation ... ok
+test group_admission_invalidates_edges_from_changed_source ... ok
+test recursive_visual_discovery_keeps_aliases_and_errors_visible ... ok
+test batch_errors_cache_and_pair_evidence_are_integrated ... ok
+test tiff_page_fingerprints_and_confirmation_share_profile_and_limits ... ok
+test nested_visual_roots_preserve_all_copy_edges_and_corrupt_file_attribution ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/sequence.rs (/Users/themoretheless/.codex/tmp/rrrah-dedup-atomic-20261006/target/debug/deps/sequence-950adb0973288b28)
+
+running 7 tests
+test animation_requires_timing_and_compares_repetitions ... ok
+test complete_coverage_is_required ... ok
+test admission_cancel_at_every_checkpoint_returns_no_partial_sequence_and_retry_succeeds ... ok
+test first_frame_match_does_not_hide_changed_last_frame ... ok
+test equivalent_timelines_ignore_frame_splits_but_keep_time_and_pixels ... ok
+test rational_extremes_fail_explicitly_without_wrapping ... ok
+test timeline_comparison_matches_independent_discrete_presentation_oracle ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/spatial.rs (/Users/themoretheless/.codex/tmp/rrrah-dedup-atomic-20261006/target/debug/deps/spatial-ecace04c96e10240)
+
+running 1 test
+test spatial_quotas_keep_self_geometry_and_reject_unrelated_texture ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/visual.rs (/Users/themoretheless/.codex/tmp/rrrah-dedup-atomic-20261006/target/debug/deps/visual-357263cc598dcf1c)
+
+running 8 tests
+test fallible_insert_enforces_total_ids_without_partial_mutation ... ok
+test fallible_search_result_caps_are_inconclusive_and_leave_index_unchanged ... ok
+test cancellation_inside_large_collision_bucket_is_observed ... ok
+test duplicate_ids_budgets_and_cancel_do_not_return_partial_indexes ... ok
+test full_radius_direct_search_cancellation_never_returns_partial_matches ... ok
+test cancelled_insertions_preserve_collision_buckets_and_deep_trees ... ok
+test dense_adaptive_search_keeps_oracle_and_cancellation ... ok
+test complete_recipe_index_matches_exhaustive_oracle ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/wal_dependency.rs (/Users/themoretheless/.codex/tmp/rrrah-dedup-atomic-20261006/target/debug/deps/wal_dependency-ba30a6999b17d260)
+
+running 4 tests
+test wal_external_palette_obeys_source_byte_limit_even_with_warm_cache ... ok
+test selected_presentation_rejects_external_palette_mutation_and_recovers ... ok
+test wal_fingerprint_one_shot_cancellation_never_admits_partial_cache_and_retries ... ok
+test presentation_groups_remove_external_palette_stale_edges_and_retry ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+     Running tests/warp.rs (/Users/themoretheless/.codex/tmp/rrrah-dedup-atomic-20261006/target/debug/deps/warp-ffab8e269c18517c)
+
+running 4 tests
+test bilinear_sampling_keeps_alpha_and_invisible_rgb_separate ... ok
+test reverse_verification_catches_edits_between_scaled_sample_centers ... ok
+test crop_overlap_and_single_pixel_edits_are_explicit ... ok
+test reflected_grids_preserve_hdr_alpha_and_inverse_with_atomic_cancel ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests examples/alpha_memory_scale_probe.rs (/Users/themoretheless/.codex/tmp/rrrah-dedup-atomic-20261006/target/debug/examples/alpha_memory_scale_probe-4a7009682b65c30d)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests examples/cache_hit_scale_probe.rs (/Users/themoretheless/.codex/tmp/rrrah-dedup-atomic-20261006/target/debug/examples/cache_hit_scale_probe-3f11361e10942f8d)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests examples/cache_storage_probe.rs (/Users/themoretheless/.codex/tmp/rrrah-dedup-atomic-20261006/target/debug/examples/cache_storage_probe-606559fb8f54e1a9)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests examples/exact_cancel_scale_probe.rs (/Users/themoretheless/.codex/tmp/rrrah-dedup-atomic-20261006/target/debug/examples/exact_cancel_scale_probe-7d9dbd72b376c8fc)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests examples/exact_scale_probe.rs (/Users/themoretheless/.codex/tmp/rrrah-dedup-atomic-20261006/target/debug/examples/exact_scale_probe-a117626a8f99a1d4)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests examples/font_cache_probe.rs (/Users/themoretheless/.codex/tmp/rrrah-dedup-atomic-20261006/target/debug/examples/font_cache_probe-b9e82c2d865d877d)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests examples/photo_probe.rs (/Users/themoretheless/.codex/tmp/rrrah-dedup-atomic-20261006/target/debug/examples/photo_probe-57c01cc11e20d084)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests examples/presentation_scale_probe.rs (/Users/themoretheless/.codex/tmp/rrrah-dedup-atomic-20261006/target/debug/examples/presentation_scale_probe-33264abc77c7e126)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests examples/raster_memory_scale_probe.rs (/Users/themoretheless/.codex/tmp/rrrah-dedup-atomic-20261006/target/debug/examples/raster_memory_scale_probe-cd521727364a32d8)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests examples/raw_probe.rs (/Users/themoretheless/.codex/tmp/rrrah-dedup-atomic-20261006/target/debug/examples/raw_probe-67e4a6e3efdd3c62)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests examples/raw_raster_probe.rs (/Users/themoretheless/.codex/tmp/rrrah-dedup-atomic-20261006/target/debug/examples/raw_raster_probe-9d3a147f2b11f6ec)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests examples/visual_scale_probe.rs (/Users/themoretheless/.codex/tmp/rrrah-dedup-atomic-20261006/target/debug/examples/visual_scale_probe-22678c9d1c70f690)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

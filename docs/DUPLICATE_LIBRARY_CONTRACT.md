@@ -35,14 +35,19 @@ Color-policy fixture corrections pass all 14 `decode` and five
 `raster_equality` integration tests on native Linux with tracked sources
 unchanged at terminal audit. Standard PPM is qualified as BT.709; strict
 unknown-color refusals use genuinely untagged formats. This resolves the two
-stale-fixture failures preserved in older isolated snapshots. Current isolated
-full-suite qualification is still in progress; the targeted passes do not
-replace that gate. Evidence: `research/dedup-color-policy-refresh-linux-state.json`.
+stale-fixture failures preserved in older isolated snapshots. A new isolated
+all-feature/all-target macOS run passes all 340 tests across 55 groups, with
+zero failures/ignored tests and all 2345 snapshot files unchanged at terminal
+audit. That snapshot includes pyramid file/index/root integration and the color
+fixture corrections; it precedes the probe's nine-million hit cap and the newer
+complementary file API. Evidence:
+`research/dedup-color-policy-refresh-linux-state.json` and
+`research/dedup-atomic-pyramid-full-state.json`.
 
 The managed oriented scale-pyramid primitive and its public photometric file
 API now pass macOS targeted gates for retained feature ownership, admission,
 cancellation, retry, identity and an unrelated-scene refusal. The public API
-also passes all 25 current macOS `projective_files` integration tests, including
+also passed an earlier 25-test macOS `projective_files` regression, including
 existing collection and registration regression gates. This run uses the live
 workspace with a private target directory, not an atomic source snapshot. It
 also recovers Copydays strong query `200001.jpg` against its independent origin
@@ -62,8 +67,8 @@ unrelated rejection, overlapping nested roots, reversed order, cancellation,
 retry, invalid policy and pair limits. The same gate passes on native Linux.
 All 54 current macOS `local_collection`, `local_scan` and `projective_files`
 integration tests pass after the shared extractor change; all tracked sources
-remain unchanged since dispatch. Independent all-229 collection recovery and
-an isolated full-library snapshot run are pending.
+were unchanged at terminal audit. The isolated full regression snapshot also
+passes as described above; independent all-229 collection results follow below.
 Evidence: `research/dedup-copydays-public-pyramid-first-pair.json` and
 `research/dedup-pyramid-file-api-state.json`,
 `research/dedup-copydays-public-pyramid-state.json`.
@@ -74,10 +79,14 @@ cost. With at most 3000 total features, accumulated distinct-ID hits are bounded
 by 3000 squared (nine million). The probe cap is corrected with acceptance
 unchanged. The original all-229 run is preserved: 228 successful outcomes match
 direct candidate decisions and one is an explicit budget refusal. Corrected
-targeted recovery of `207502.jpg` passes with identical native geometry/pixels;
-a corrected all-229 run is pending. Evidence:
+targeted recovery of `207502.jpg` passes with identical native geometry/pixels.
+The corrected all-229 indexed run completes without errors: all 229 candidate
+decisions and all 152 geometry-bearing native results equal direct comparison,
+with 20 copies recovered. All 386 normalized inputs pass integrity checks.
+Evidence:
 `research/dedup-pyramid-collection-budget-diagnosis.json` and
-`research/dedup-copydays-pyramid-collection-original-comparison.json`.
+`research/dedup-copydays-pyramid-collection-original-comparison.json`,
+`research/dedup-copydays-pyramid-collection-budget-state.json`.
 
 The ordinary anchored/unanchored registration portfolio has also completed all
 229 Copydays strong pairs: 23 are accepted. Paired fixed-policy comparison with
@@ -87,6 +96,18 @@ manifests and all 386 normalized images are verified. This is evidence for
 complementary searches, not an already-qualified combined file/index API or
 full copy coverage. Evidence:
 `research/dedup-copydays-pyramid-portfolio-comparison.json`.
+
+A new public complementary file API executes both searches on shared decoded
+views under explicit cumulative comparison, hypothesis and sample-pair caps.
+Its macOS authored gate passes identity with both search results, unrelated
+rejection, all cumulative refusals before I/O, incompatible decode policy,
+overflow, phase work refusal after a successful pyramid search, memory refusal,
+cancellation, source mutation and retry. Independent print/scan query `200001`
+retains the same pyramid geometry/pixels with registration rejected. The new
+API's all-229 independent run, one-query negative gate and Linux/regression
+qualification are pending; combined collection/root integration remains absent.
+Evidence: `research/dedup-complementary-files-macos.log` and
+`research/dedup-copydays-complementary-first-pair.json`.
 
 Nested recursive visual discovery now has a six-source, 19-file authored gate:
 three copies of each source in separate nested branches plus one corrupt file.

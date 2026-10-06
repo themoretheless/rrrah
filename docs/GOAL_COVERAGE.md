@@ -5010,3 +5010,22 @@ version and SHA256: research/rla-float-byte-order-2026-10-07.json.
 Native float support remains pending an explicit byte-order interpretation
 contract and independent tests; do not add automatic native-platform guessing
 or claim HDR RLA support from this fixture alone.
+
+Native explicit-endian float RLA (2026-10-07): added public
+RlaFloatByteOrder and decode_rla_float_with_interpretation. Supports gray/RGB
+float32, optional float32 matte, contained full/active windows, managed final
+float pixels and cancellation checkpoints. Mixed integer/float groups remain
+refused. Finite negative/HDR RGB values retained; finite alpha in [0,1]
+required; premultiplied unassociation rejects zero-alpha emission and overflow.
+Native output matches the committed OpenImageIO-produced/read-back [4,2,-0.5,1]
+fixture exactly. An authored byte-swapped version verifies explicit Big;
+alpha 0.5 verifies [8,4,-1,0.5] unassociation. NaN, invalid alpha, zero-alpha
+emission and one-byte-short output budget fail without retained pixel credit.
+Public file API retains only the final output reservation, then releases it.
+Six focused tests passed. Full decoder regression: 780 passed, 47 external
+tests ignored, zero failures. Evidence: research/rla-float-native-2026-10-07.log,
+research/rla-float-full-2026-10-07.log and
+research/rla-float-oiio-readback-2026-10-07.log.
+The default route refuses float input without a byte-order contract. Common
+request/CLI/cache-key wiring and float-RLA-specific RAM/swap/Metal/HDR display
+qualification remain unfinished. This does not complete the broader goal.

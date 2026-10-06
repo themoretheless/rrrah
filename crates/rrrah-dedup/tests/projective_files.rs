@@ -840,3 +840,50 @@ fn pyramid_collection_and_nested_roots_match_direct_pairs_and_refusals() {
  let recursive=scan_projective_local_collection_roots_pyramid(&roots,&rrrah_dedup::exact::Options::default(),config,&budget,||false).unwrap();
  assert_eq!(recursive.files.len(),3);assert_eq!(recursive.indexed.local.pairs.iter().filter(|p|p.evidence.candidate).count(),1);assert_eq!(budget.used(),0);
 }
+
+#[test]
+fn complementary_files_preserve_both_searches_and_atomic_refusals() {
+ use rrrah_dedup::{local_scan::{compare_local_files_projective_complementary,ProjectiveComplementaryFilePolicy,ProjectivePortfolioFilePolicy,ProjectivePyramidPhotometricFilePolicy,LocalFileError},warp::{PhotometricPolicy,ColorFilterPolicy,FilterPolicy,FilterColorSpace,PhotometricFitMode,ProjectiveRegistrationPolicy,ProjectiveRegistrationTrustPolicy,ProjectiveRegistrationPortfolioPolicy,WarpError},geometry::ProjectiveSamplingPolicy,local::LocalError};
+ use std::{cell::Cell,io::Write};
+ let source=std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/photos-heldout");
+ let dir=tempfile::tempdir().unwrap();let a_path=dir.path().join("a.png");let b_path=dir.path().join("b.png");
+ std::fs::copy(source.join("2414-base.png"),&a_path).unwrap();std::fs::copy(&a_path,&b_path).unwrap();
+ let a=DecodeRequest::new(&a_path);let b=DecodeRequest::new(&b_path);let unrelated=DecodeRequest::new(source.join("5495-base.png"));
+ let mut local=policy();local.extract.max_features=128;local.matching.max_comparisons=128*128;local.matching.max_distance=64;
+ local.geometry.max_points=128;local.geometry.max_hypotheses=2048;local.geometry.min_inliers=10;local.geometry.tolerance=2.;
+ local.pixels.tolerance=0.03;local.pixels.max_source_pixels=409_600;local.minimum_coverage_fraction=0.3;local.minimum_matched_fraction=0.9;
+ let photometric=PhotometricPolicy{residual:local.pixels,minimum_samples:16,minimum_variance:1e-5,minimum_gain:0.2,maximum_gain:5.,maximum_offset:0.1};
+ let filter=ColorFilterPolicy{filter:FilterPolicy{radius:1,max_sample_pairs:4_000_000},color_space:FilterColorSpace::LinearSrgb};
+ let registration=ProjectiveRegistrationPolicy{radius:1,stride:8,rounds:128,max_sample_pairs:64_000_000};
+ let sampling=ProjectiveSamplingPolicy{trials:2048,seed:0x1234abcd};
+ let r=ProjectivePortfolioFilePolicy{local,filter,registration:ProjectiveRegistrationPortfolioPolicy{anchored:ProjectiveRegistrationTrustPolicy{registration,photometric,maximum_corner_shift:1.},unanchored:registration,max_sample_pairs:128_000_000},spatial:None,sampling:Some(sampling)};
+ let mut multiscale=local;multiscale.matching.max_comparisons=384*384;multiscale.geometry.max_points=384;
+ let p=ProjectivePyramidPhotometricFilePolicy{local:multiscale,max_levels:3,max_total_pixels:400_000,max_total_features:384,sampling,photometric,filter:ColorFilterPolicy{filter:FilterPolicy{max_sample_pairs:12_000_000,..filter.filter},..filter},fit_mode:PhotometricFitMode::ConstrainedLeastSquares};
+ let policy=ProjectiveComplementaryFilePolicy{registration:r,pyramid:p,max_total_comparisons:128*128+384*384,max_total_hypotheses:4096,max_total_sample_pairs:144_000_000};
+ let budget=MemoryBudget::new(64*1024*1024);let calls=Cell::new(0);
+ let evidence=compare_local_files_projective_complementary(&a,&b,policy,&budget,||{calls.set(calls.get()+1);false}).unwrap();let checkpoints=calls.get();
+ assert_eq!(evidence.accepted_searches,[true,true]);assert!(evidence.candidate);assert!(evidence.pyramid.pixels.is_some() && evidence.pyramid.unfitted.is_some());assert!(evidence.registration.pixels.is_some());assert_eq!(budget.used(),0);
+ assert!(!compare_local_files_projective_complementary(&a,&unrelated,policy,&budget,||false).unwrap().candidate);assert_eq!(budget.used(),0);
+ let missing=DecodeRequest::new(dir.path().join("missing.png"));let fresh=MemoryBudget::new(64*1024*1024);
+ let mut insufficient=policy;insufficient.max_total_comparisons-=1;
+ assert!(matches!(compare_local_files_projective_complementary(&missing,&missing,insufficient,&fresh,||false),Err(LocalFileError::Features(LocalError::Budget))));assert_eq!(fresh.peak(),0);
+ insufficient=policy;insufficient.max_total_hypotheses-=1;
+ assert!(matches!(compare_local_files_projective_complementary(&missing,&missing,insufficient,&fresh,||false),Err(LocalFileError::Geometry(rrrah_dedup::geometry::GeometryError::Budget))));assert_eq!(fresh.peak(),0);
+ insufficient=policy;insufficient.max_total_sample_pairs-=1;
+ assert!(matches!(compare_local_files_projective_complementary(&missing,&missing,insufficient,&fresh,||false),Err(LocalFileError::Pixels(WarpError::Budget))));assert_eq!(fresh.peak(),0);
+ let mut incompatible=policy;incompatible.registration.local.decode.max_frames+=1;
+ assert!(matches!(compare_local_files_projective_complementary(&missing,&missing,incompatible,&fresh,||false),Err(LocalFileError::InvalidPolicy)));assert_eq!(fresh.peak(),0);
+ let mut overflow=policy;overflow.registration.local.matching.max_comparisons=u64::MAX;
+ assert!(matches!(compare_local_files_projective_complementary(&missing,&missing,overflow,&fresh,||false),Err(LocalFileError::Features(LocalError::Budget))));assert_eq!(fresh.peak(),0);
+ let mut no_work=policy;no_work.registration.filter.filter.max_sample_pairs=0;
+ assert!(matches!(compare_local_files_projective_complementary(&a,&b,no_work,&budget,||false),Err(LocalFileError::Pixels(WarpError::Budget))));assert_eq!(budget.used(),0);
+ let zero=MemoryBudget::new(0);assert!(compare_local_files_projective_complementary(&a,&b,policy,&zero,||false).is_err());assert_eq!(zero.used(),0);
+ for stop in [1,checkpoints/2,checkpoints] {
+  calls.set(0);assert!(matches!(compare_local_files_projective_complementary(&a,&b,policy,&budget,||{calls.set(calls.get()+1);calls.get()>=stop}),Err(LocalFileError::Cancelled)),"stop={stop}");assert_eq!(budget.used(),0);
+ }
+ let changed=Cell::new(false);
+ let result=compare_local_files_projective_complementary(&a,&b,policy,&budget,||{
+  if budget.used()>0 && !changed.replace(true){std::fs::OpenOptions::new().append(true).open(&b_path).unwrap().write_all(&[0]).unwrap();}false
+ });assert!(changed.get() && result.is_err(),"{result:?}");assert_eq!(budget.used(),0);
+ std::fs::copy(&a_path,&b_path).unwrap();assert!(compare_local_files_projective_complementary(&a,&b,policy,&budget,||false).unwrap().candidate);assert_eq!(budget.used(),0);
+}
