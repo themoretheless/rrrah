@@ -1,5 +1,7 @@
 //! Selected PDF pages at one pixel per point; managed major buffers, not parser scratch.
 //! DeviceCMYK currently uses Hayro's fixed CGATS001Compat-v2-micro ICC profile.
+//! Hayro 0.7.0 quantizes DeviceCMYK float operands to u8 before its ICC transform;
+//! the independent float-CMYK diagnostic records the resulting precision loss.
 //! Marking the rendered buffer sRGB describes the output encoding; it does not
 //! qualify source color conversion. The external AI and CMYK patch comparisons
 //! in docs/research record remaining color differences against Poppler.

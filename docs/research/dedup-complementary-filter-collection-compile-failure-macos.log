@@ -1,0 +1,28 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+error[E0609]: no field `path` on type `&&(u64, PathBuf)`
+    --> crates/rrrah-dedup/tests/projective_files.rs:4555:67
+     |
+4555 |         let id_for = |suffix: &str| roots.files.iter().find(|f| f.path.ends_with(suffix)).unwrap().id;
+     |                                                                   ^^^^ unknown field
+     |
+     = note: available fields are: `0`, `1`
+
+error[E0609]: no field `id` on type `&(u64, PathBuf)`
+    --> crates/rrrah-dedup/tests/projective_files.rs:4555:100
+     |
+4555 |         let id_for = |suffix: &str| roots.files.iter().find(|f| f.path.ends_with(suffix)).unwrap().id;
+     |                                                                                                    ^^ unknown field
+     |
+     = note: available fields are: `0`, `1`
+
+error[E0609]: no field `collection` on type `DirectoryLocalCollectionReport<ProjectiveComplementaryFilterPortfolioEvidence>`
+    --> crates/rrrah-dedup/tests/projective_files.rs:4558:14
+     |
+4558 |             .collection
+     |              ^^^^^^^^^^ unknown field
+     |
+     = note: available fields are: `files`, `aliases`, `traversal_issues`, `indexed`
+
+For more information about this error, try `rustc --explain E0609`.
+error: could not compile `rrrah-dedup` (test "projective_files") due to 3 previous errors

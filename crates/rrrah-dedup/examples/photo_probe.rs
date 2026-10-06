@@ -49,17 +49,31 @@ fn policy() -> LocalFilePolicy {
 }
 fn main() {
     let arguments: Vec<String> = std::env::args().collect();
-    if arguments.get(1).is_some_and(|a| a == "--complementary-file-pair") {
-        complementary_file_pair(&arguments[2..]);
+    if arguments.get(1).is_some_and(|a| {
+        a == "--complementary-file-pair"
+            || a == "--complementary-filter-portfolio-pair"
+            || a == "--complementary-filter-collection-pair"
+    }) {
+        complementary_file_pair(
+            &arguments[2..],
+            arguments[1] != "--complementary-file-pair",
+            arguments[1] == "--complementary-filter-collection-pair",
+        );
         return;
     }
     if arguments.get(1).is_some_and(|a| {
-        a == "--pyramid-file-pair" || a == "--pyramid-collection-pair" || a == "--pyramid-blur-pair"
+        a == "--pyramid-file-pair"
+            || a == "--pyramid-collection-pair"
+            || a == "--pyramid-blur-pair"
+            || a == "--pyramid-encoded-blur-pair"
+            || a == "--pyramid-filter-portfolio-pair"
     }) {
         pyramid_file_pair(
             &arguments[2..],
             arguments[1] == "--pyramid-collection-pair",
-            arguments[1] == "--pyramid-blur-pair",
+            arguments[1] == "--pyramid-blur-pair" || arguments[1] == "--pyramid-encoded-blur-pair",
+            arguments[1] == "--pyramid-filter-portfolio-pair",
+            arguments[1] == "--pyramid-encoded-blur-pair",
         );
         return;
     }
@@ -616,7 +630,7 @@ fn projective_correspondences(args: &[String]) {
     );
 }
 
-fn pyramid_file_pair(args: &[String], collection: bool, blur: bool) {
+fn pyramid_file_pair(args: &[String], collection: bool, blur: bool, portfolio: bool, encoded: bool) {
     use rrrah_dedup::{
         geometry::ProjectiveSamplingPolicy,
         local_scan::{
@@ -648,12 +662,38 @@ fn pyramid_file_pair(args: &[String], collection: bool, blur: bool) {
                 radius: if blur { 3 } else { 1 },
                 max_sample_pairs: if blur { 32_000_000 } else { 12_000_000 },
             },
-            color_space: FilterColorSpace::LinearSrgb,
+            color_space: if encoded {
+                FilterColorSpace::EncodedSrgb
+            } else {
+                FilterColorSpace::LinearSrgb
+            },
         },
         fit_mode: PhotometricFitMode::ConstrainedLeastSquares,
     };
     let budget = MemoryBudget::new(64 * 1024 * 1024);
-    let result = if collection {
+    let mut extra = String::new();
+    let result = if portfolio {
+        use rrrah_dedup::local_scan::{
+            ProjectivePyramidFilterPortfolioPolicy, compare_local_files_projective_pyramid_filter_portfolio,
+        };
+        compare_local_files_projective_pyramid_filter_portfolio(
+            &DecodeRequest::new(&args[0]), &DecodeRequest::new(&args[1]),
+            ProjectivePyramidFilterPortfolioPolicy {
+                primary: p,
+                secondary: ColorFilterPolicy {filter: FilterPolicy {radius: 3, max_sample_pairs: 32_000_000}, color_space: FilterColorSpace::LinearSrgb},
+                max_total_sample_pairs: 44_000_000,
+            }, &budget, || false,
+        ).map(|e| {
+            let secondary_counts = e.secondary_pixels.as_ref().map_or_else(|| "null".into(), |p| format!("[{:?},{:?}]",
+                [p.fitted.forward.pixels.matched_pixels, p.fitted.forward.pixels.compared_pixels, p.fitted.forward.pixels.source_pixels],
+                [p.fitted.reverse.pixels.matched_pixels, p.fitted.reverse.pixels.compared_pixels, p.fitted.reverse.pixels.source_pixels]));
+            extra = format!(",\"accepted_filters\":{:?},\"secondary_counts\":{},\"secondary_fit_failure\":{:?},\"primary_candidate\":{}",
+                e.accepted_filters, secondary_counts, format!("{:?}", e.secondary_fit_failure), e.primary.candidate);
+            let mut primary = e.primary;
+            primary.candidate = e.candidate;
+            primary
+        })
+    } else if collection {
         use rrrah_dedup::{
             local_collection::{ProjectivePyramidCollectionPolicy, scan_projective_local_collection_pyramid},
             local_index::FileFeatureBudgets,
@@ -744,12 +784,18 @@ fn pyramid_file_pair(args: &[String], collection: bool, blur: bool) {
                     )
                 },
             );
+            let fit_parameters = e.pixels.as_ref().map_or_else(|| "null".into(), |p| {
+                format!("[{{\"gain\":{:?},\"offset\":{:?},\"constrained\":{:?},\"samples\":{}}},{{\"gain\":{:?},\"offset\":{:?},\"constrained\":{:?},\"samples\":{}}}]",
+                    p.fitted.forward.gain,p.fitted.forward.offset,p.fitted.forward.constrained_channels,p.fitted.forward.fitted_samples,
+                    p.fitted.reverse.gain,p.fitted.reverse.offset,p.fitted.reverse.constrained_channels,p.fitted.reverse.fitted_samples)
+            });
+            extra += &format!(",\"fit_parameters\":{}", fit_parameters);
             let geometry = e
                 .geometry
                 .as_ref()
                 .map_or_else(|| "null".into(), |g| format!("{:?}", g.transform.matrix));
             println!(
-                "{{\"status\":\"ok\",\"candidate\":{},\"correspondences\":{},\"inliers\":{},\"geometry\":{},\"fitted_counts\":{},\"fit_failure\":{:?},\"managed_used\":{},\"managed_peak\":{}}}",
+                "{{\"status\":\"ok\",\"candidate\":{},\"correspondences\":{},\"inliers\":{},\"geometry\":{},\"fitted_counts\":{},\"fit_failure\":{:?},\"managed_used\":{},\"managed_peak\":{}{} }}",
                 e.candidate,
                 e.correspondences.len(),
                 e.geometry.as_ref().map_or(0, |g| g.inliers.len()),
@@ -757,7 +803,8 @@ fn pyramid_file_pair(args: &[String], collection: bool, blur: bool) {
                 counts,
                 format!("{:?}", e.fit_failure),
                 budget.used(),
-                budget.peak()
+                budget.peak(),
+                extra
             );
         }
         Err(error) => println!(
@@ -1135,7 +1182,7 @@ fn projective_phases(args: &[String]) {
     );
 }
 
-fn complementary_file_pair(args: &[String]) {
+fn complementary_file_pair(args: &[String], portfolio: bool, collection: bool) {
     use rrrah_dedup::{
         geometry::ProjectiveSamplingPolicy,
         local_scan::{
@@ -1230,13 +1277,118 @@ fn complementary_file_pair(args: &[String]) {
             ]
         )
     };
-    match compare_local_files_projective_complementary(
-        &DecodeRequest::new(&args[0]),
-        &DecodeRequest::new(&args[1]),
-        policy,
-        &budget,
-        || false,
-    ) {
+    let mut extra = String::new();
+    let result = if portfolio {
+        use rrrah_dedup::local_scan::{
+            ProjectiveComplementaryFilterPortfolioPolicy,
+            compare_local_files_projective_complementary_filter_portfolio,
+        };
+        let q = ProjectiveComplementaryFilterPortfolioPolicy {
+            searches: policy,
+            secondary: ColorFilterPolicy {
+                filter: FilterPolicy {
+                    radius: 3,
+                    max_sample_pairs: 32_000_000,
+                },
+                color_space: FilterColorSpace::LinearSrgb,
+            },
+            max_total_sample_pairs: 176_000_000,
+        };
+        let result = if collection {
+            use rrrah_dedup::{
+                local_collection::{
+                    ProjectiveComplementaryFilterPortfolioCollectionPolicy,
+                    scan_projective_local_collection_complementary_filter_portfolio,
+                },
+                local_index::FileFeatureBudgets,
+            };
+            let config = ProjectiveComplementaryFilterPortfolioCollectionPolicy {
+                search: q,
+                // Both feature families, both files; retrieval also visits same-file hits.
+                budgets: FileFeatureBudgets {
+                    max_files: 2,
+                    max_features: 4000,
+                    max_hits: 16_000_000,
+                    max_pair_counts: 1,
+                    max_pairs: 1,
+                },
+            };
+            match scan_projective_local_collection_complementary_filter_portfolio(
+                [
+                    (1, DecodeRequest::new(&args[0])),
+                    (2, DecodeRequest::new(&args[1])),
+                ],
+                config,
+                &budget,
+                || false,
+            ) {
+                Ok(report) => {
+                    if !report.file_issues.is_empty()
+                        || !report.local.issues.is_empty()
+                        || !report.local.source_issues.is_empty()
+                    {
+                        println!(
+                            "{{\"status\":\"error\",\"error\":{:?},\"managed_used\":{},\"managed_peak\":{}}}",
+                            format!(
+                                "file={:?};pair={:?};source={:?}",
+                                report.file_issues, report.local.issues, report.local.source_issues
+                            ),
+                            budget.used(),
+                            budget.peak()
+                        );
+                        return;
+                    }
+                    if let Some(pair) = report.local.pairs.into_iter().next() {
+                        extra = ",\"retrieved_pairs\":1".into();
+                        Ok(pair.evidence)
+                    } else {
+                        println!(
+                            "{{\"status\":\"ok\",\"candidate\":false,\"retrieved_pairs\":0,\"managed_used\":{},\"managed_peak\":{}}}",
+                            budget.used(),
+                            budget.peak()
+                        );
+                        return;
+                    }
+                }
+                Err(error) => {
+                    println!(
+                        "{{\"status\":\"error\",\"error\":{:?},\"managed_used\":{},\"managed_peak\":{}}}",
+                        error.to_string(),
+                        budget.used(),
+                        budget.peak()
+                    );
+                    return;
+                }
+            }
+        } else {
+            compare_local_files_projective_complementary_filter_portfolio(
+                &DecodeRequest::new(&args[0]),
+                &DecodeRequest::new(&args[1]),
+                q,
+                &budget,
+                || false,
+            )
+        };
+        result.map(|e| {
+            let secondary_counts = e.secondary_pixels.as_ref().map_or_else(|| "null".into(), |p| format!("[{:?},{:?}]",
+                [p.fitted.forward.pixels.matched_pixels, p.fitted.forward.pixels.compared_pixels, p.fitted.forward.pixels.source_pixels],
+                [p.fitted.reverse.pixels.matched_pixels, p.fitted.reverse.pixels.compared_pixels, p.fitted.reverse.pixels.source_pixels]));
+            extra += &format!(",\"joined_accepted_searches\":{:?},\"secondary_counts\":{},\"secondary_fit_failure\":{:?},\"base_candidate\":{}",
+                e.accepted_searches, secondary_counts, format!("{:?}", e.secondary_fit_failure), e.searches.candidate);
+            let mut searches = e.searches;
+            searches.candidate = e.candidate;
+            searches
+        })
+    } else {
+        compare_local_files_projective_complementary(
+            &DecodeRequest::new(&args[0]),
+            &DecodeRequest::new(&args[1]),
+            policy,
+            &budget,
+            || false,
+        )
+    };
+    match result {
         Ok(e) => {
             let registration_counts = e.registration.pixels.as_ref().map_or_else(
                 || "null".into(),
@@ -1277,7 +1429,7 @@ fn complementary_file_pair(args: &[String]) {
                 .as_ref()
                 .map_or_else(|| "null".into(), |g| format!("{:?}", g.transform.matrix));
             println!(
-                "{{\"status\":\"ok\",\"candidate\":{},\"accepted_searches\":{:?},\"registration_accepted_lanes\":{:?},\"registration_counts\":{},\"pyramid_counts\":{},\"registration_geometry\":{},\"pyramid_geometry\":{},\"correspondence_counts\":{:?},\"inlier_counts\":{:?},\"fit_failure\":{:?},\"managed_used\":{},\"managed_peak\":{}}}",
+                "{{\"status\":\"ok\",\"candidate\":{},\"accepted_searches\":{:?},\"registration_accepted_lanes\":{:?},\"registration_counts\":{},\"pyramid_counts\":{},\"registration_geometry\":{},\"pyramid_geometry\":{},\"correspondence_counts\":{:?},\"inlier_counts\":{:?},\"fit_failure\":{:?},\"managed_used\":{},\"managed_peak\":{}{} }}",
                 e.candidate,
                 e.accepted_searches,
                 e.registration.accepted_lanes,
@@ -1295,7 +1447,8 @@ fn complementary_file_pair(args: &[String]) {
                 ],
                 format!("{:?}", e.pyramid.fit_failure),
                 budget.used(),
-                budget.peak()
+                budget.peak(),
+                extra
             );
         }
         Err(error) => println!(

@@ -188,6 +188,10 @@ pub struct DecodeRequest {
     pub rla_float_byte_order: Option<RlaFloatByteOrder>,
     /// Explicit producer color interpretation for RLA, independent of alpha/storage.
     pub rla_color_space: Option<RlaColorSpace>,
+    /// Explicit reference-white luminance for PQ BT.2020 conversion.
+    pub pq_reference_white_nits: Option<f32>,
+    /// HLG zero-black display: reference white, peak luminance, system gamma.
+    pub hlg_display: Option<(f32, f32, f32)>,
     /// Explicit conventional interpretation for untagged TIFF, PNM, TGA and RLA.
     /// Defaults to false. Embedded ICC and declared color metadata take priority;
     /// unspecified linear/HDR primaries are never overridden by this setting.
@@ -209,6 +213,8 @@ impl DecodeRequest {
             rla_alpha_mode: None,
             rla_float_byte_order: None,
             rla_color_space: None,
+            pq_reference_white_nits: None,
+            hlg_display: None,
             assume_untagged_srgb: false,
             assume_untagged_linear_srgb: false,
             cancellation: None,
@@ -431,6 +437,8 @@ mod tests {
             rla_alpha_mode: None,
             rla_float_byte_order: None,
             rla_color_space: None,
+            pq_reference_white_nits: None,
+            hlg_display: None,
             path: "does-not-exist.CR3".into(),
             image_index: 0,
             assume_untagged_srgb: false,

@@ -610,3 +610,34 @@ rrrah --rla-float-byte-order little --rla-alpha straight --rla-color linear-srgb
 `--rla-color srgb` declares encoded sRGB instead. The RLA-specific color choice
 overrides the generic untagged-color policy for RLA and is part of cache identity;
 choose it from the producing pipeline, since float storage does not identify color.
+
+## PQ HDR interpretation
+
+PQ/BT.2020 AVIF can be viewed with an explicit reference-white luminance:
+
+```sh
+rrrah --pq-reference-white-nits 100 image.avif
+```
+
+The value is in cd/m², must be finite and between 1 and 10000, and sets which
+absolute PQ luminance maps to linear RGB 1.0. The same interpretation reaches
+foreground viewing, neighbour preloading and thumbnails. Different white values
+use separate display-cache entries. Omitting it retains strict color handling;
+HLG and other declarations still require their own interpretation. This enables
+PQ source conversion, not verified physical HDR monitor output.
+
+## HLG HDR interpretation
+
+HLG/BT.2020 AVIF uses three explicit settings for a zero-black reference display:
+
+```sh
+rrrah --hlg-reference-white-nits 100 --hlg-peak-nits 1000 --hlg-system-gamma 1.2 image.avif
+```
+
+White and peak are in cd/m² (supported range 1–10000); system gamma supports
+0.1–4. All three are required together. The example describes a 1000-nit peak
+and gamma 1.2; choose settings for the intended viewing conditions. These
+parameters reach viewing, neighbour preloading and thumbnails and form separate
+cache identities. PQ settings may also be supplied for folders containing both
+transfer types; each policy applies only to its declared source transfer.
+This controls source interpretation; physical HDR monitor output is not yet qualified.

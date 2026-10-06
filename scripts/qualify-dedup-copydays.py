@@ -13,15 +13,19 @@ p.add_argument('manifest', type=pathlib.Path)
 p.add_argument('probe', type=pathlib.Path)
 p.add_argument('report', type=pathlib.Path)
 p.add_argument('--pyramid-file', action='store_true', help='Use the managed public pyramid file API with fixed three-level policy.')
+p.add_argument('--pyramid-filter-portfolio', action='store_true', help='Two explicit filters share one native pyramid geometry;44m cumulative work.')
+p.add_argument('--pyramid-encoded-blur', action='store_true', help='Explicit radius3 encoded-sRGB comparison;32m work, unchanged native geometry and acceptance thresholds.')
 p.add_argument('--pyramid-blur', action='store_true', help='Use explicit radius3 linear filtering with32m window-work admission; acceptance thresholds unchanged.')
 p.add_argument('--pyramid-collection', action='store_true', help='Use the managed indexed pyramid collection API with the same file policy.')
+p.add_argument('--complementary-filter-portfolio', action='store_true', help='Registration and two explicit pyramid filters on shared decoded views;176m cumulative admission.')
+p.add_argument('--complementary-filter-collection', action='store_true', help='Indexed union proposals followed by all three native confirmation policies;4000 features/16m hit cap.')
 p.add_argument('--complementary-file', action='store_true', help='Use both native searches on shared decoded views with cumulative work admission.')
 p.add_argument('--negative-query', help='Compare this strong query against every different original-origin group.')
 p.add_argument('--resume', action='store_true', help='Validate and continue an interrupted checkpoint without discarding executed pairs.')
 a = p.parse_args()
-assert sum([a.pyramid_file,a.pyramid_collection,a.complementary_file,a.pyramid_blur])<=1, 'Select one public API mode.'
-use_pyramid=a.pyramid_file or a.pyramid_collection or a.pyramid_blur
-use_native=use_pyramid or a.complementary_file
+assert sum([a.pyramid_file,a.pyramid_collection,a.complementary_file,a.pyramid_blur,a.pyramid_filter_portfolio,a.complementary_filter_portfolio,a.complementary_filter_collection,a.pyramid_encoded_blur])<=1, 'Select one public API mode.'
+use_pyramid=a.pyramid_file or a.pyramid_collection or a.pyramid_blur or a.pyramid_filter_portfolio or a.pyramid_encoded_blur
+use_native=use_pyramid or a.complementary_file or a.complementary_filter_portfolio or a.complementary_filter_collection
 m = json.loads(a.manifest.read_text())
 assert len(m['positive_pairs']) == m['required_positive_pairs'] == 229
 probe_hash = hashlib.sha256(a.probe.read_bytes()).hexdigest()
@@ -37,12 +41,24 @@ if use_pyramid:
                       'No oracle geometry. This is copy-origin recovery measurement, not '
                       'full-library qualification or an independent negative precision gate.')
 state['mode'] = 'pyramid_collection' if a.pyramid_collection else 'pyramid_file' if a.pyramid_file else 'portfolio'
+if a.pyramid_filter_portfolio:
+    state['mode']='pyramid_filter_portfolio'
+    state['scope']+=' Two explicit radius1/radius3 filters with44m cumulative admission; matching and geometry run once. Both phases must complete.'
+if a.pyramid_encoded_blur:
+    state['mode']='pyramid_encoded_blur_radius3'
+    state['scope']+=' Explicit radius3 encoded-sRGB windows with32m work; same native geometry and numerical acceptance thresholds, separately declared comparison space. Diagnostic not promoted default.'
 if a.pyramid_blur:
     state['mode']='pyramid_blur_radius3'
     state['scope']+=' Explicit radius3 linear windows,32m work cap; same geometry, gain/offset bounds, coverage and residual thresholds. Experimental diagnostic, not a promoted default.'
 if a.complementary_file:
     state['mode']='complementary_file'
     state['scope']='All229 strong-subset publisher-origin pairs through shared-view complementary native file searches with fixed individual acceptance and cumulative work admission. No oracle geometry, no semantic/burst precision or full-copy certificate.'
+if a.complementary_filter_portfolio:
+    state['mode']='complementary_filter_portfolio'
+    state['scope']='All229 strong pairs through shared decoded views; original fixed registration and pyramid searches plus explicit radius3 pixel verification on unchanged pyramid geometry. All phases complete;176m cumulative work. Not broad coverage or semantic/burst precision.'
+if a.complementary_filter_collection:
+    state['mode']='complementary_filter_collection'
+    state['scope']='All229 strong pairs through indexed union proposals and shared-view three-phase confirmation. Fixed native policies;4000 features,16m retrieval hits including same-file hits. No oracle geometry; not all-query semantic/burst precision or broad full-library qualification.'
 if a.pyramid_collection:
     state['scope'] += ' Indexed collection proposal followed by fresh file confirmation.'
 pairs=m['positive_pairs']
@@ -89,10 +105,16 @@ for pair in pairs:
                    pair['left']['normalized_path'], pair['right']['normalized_path'],
                    '1', '0', '0', '0', '1', '0', '0', '0', '1']
         if use_pyramid:
-            command = [str(a.probe.resolve()), '--pyramid-collection-pair' if a.pyramid_collection else '--pyramid-blur-pair' if a.pyramid_blur else '--pyramid-file-pair',
+            command = [str(a.probe.resolve()), '--pyramid-collection-pair' if a.pyramid_collection else '--pyramid-filter-portfolio-pair' if a.pyramid_filter_portfolio else '--pyramid-encoded-blur-pair' if a.pyramid_encoded_blur else '--pyramid-blur-pair' if a.pyramid_blur else '--pyramid-file-pair',
                        pair['left']['normalized_path'], pair['right']['normalized_path']]
         if a.complementary_file:
             command=[str(a.probe.resolve()),'--complementary-file-pair',
+                     pair['left']['normalized_path'],pair['right']['normalized_path']]
+        if a.complementary_filter_portfolio:
+            command=[str(a.probe.resolve()),'--complementary-filter-portfolio-pair',
+                     pair['left']['normalized_path'],pair['right']['normalized_path']]
+        if a.complementary_filter_collection:
+            command=[str(a.probe.resolve()),'--complementary-filter-collection-pair',
                      pair['left']['normalized_path'],pair['right']['normalized_path']]
         result = subprocess.run(command, capture_output=True, text=True, timeout=180)
         row.update(returncode=result.returncode, stderr=result.stderr)

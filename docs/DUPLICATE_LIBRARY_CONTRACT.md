@@ -3665,3 +3665,158 @@ The explicit one-pixel corner-control registration mode passes the 12-file devel
 ## Two-lane registration evidence
 
 The explicit portfolio keeps anchored bounded-color and unanchored absolute-color registration models separately, reserves the sum of both work caps before processing, and requires complete strict/window verification on both bidirectional grids. Selected-frame files, metric-index collections and recursive root APIs share source/dependency validation and atomic cancellation. On the independent `v_bees/4` regression, the anchored lane rejects while the unanchored lane passes unchanged final admission, recovering the prior candidate. This is one recovery diagnostic, not duplicate accuracy. Lifecycle development gates pass on macOS and Linux; macOS direct/index and recursive gates pass. The all-66 development corpus and complete all-580 independent portfolio measurement remain running. Integrity verification checks both lane matrices/counts, fixed admission flags, selected primary evidence and explicit error coverage. Native Windows, captured burst/look-alike calibration, broader color/RAW/resource qualification and the other contract rows remain open. Evidence: `research/dedup-registration-portfolio-lifecycle-state.json`, `research/dedup-registration-portfolio-files-state.json`, `research/dedup-hpatches-v-bees-portfolio-macos.json`, `research/dedup-hpatches-portfolio-state.json`.
+
+### Explicit shared-geometry filter portfolio (2026-10-07)
+
+`compare_local_files_projective_pyramid_filter_portfolio` retains the primary
+radius-1 photometric evidence and separately records an explicit secondary
+filter's residual counts, fit refusal and acceptance. It extracts/matches once
+and estimates geometry once. Both filters run inside the existing shared
+source/dependency and sticky cancellation lifecycle. Checked cumulative window
+work admission precedes decoding; runtime refusal of the secondary phase
+invalidates the whole result even if the primary accepted.
+
+The native macOS identity/unrelated gate passes, including cumulative cap
+one-short rejection before managed allocation, secondary zero-work refusal,
+first/middle/final one-shot cancellation and reservation release. The independent
+Copydays `203102.jpg` pair, lost by radius-3-only smoothing, is retained with
+accepted filters `[true, false]`. These gates do not establish broad edited-image,
+burst/semantic, native Windows, collection or whole-process memory coverage.
+The immutable-probe full run completes all 229 pairs without errors: 28 are
+accepted and 201 remain omitted. Both filters' reported native geometry, counts,
+fit refusals and decisions equal the respective standalone measurements on
+all 229 pairs; all 386 normalized images were rehashed. Two query-specific
+different-origin runs complete all 312 comparisons with zero candidates. An
+offline union with the previously measured registration API recovers 30 pairs,
+but this is not an integrated three-policy API or a collection qualification.
+Evidence:
+`research/dedup-pyramid-filter-portfolio-state.json`,
+`research/dedup-pyramid-filter-portfolio-loss-recovery.json` and
+`research/dedup-pyramid-filter-portfolio-cancel-macos.log`.
+
+### Integrated registration and both pyramid filters (2026-10-07)
+
+`compare_local_files_projective_complementary_filter_portfolio` runs the fixed
+registration portfolio and both explicit pyramid pixel filters on shared selected
+views. Original two-search evidence/acceptance remains available unchanged;
+secondary residuals/refusals and the three acceptance flags remain separate.
+Feature matching and native geometry are not repeated for the second filter.
+The checked outer cap admits the existing portfolio's work cap plus the secondary
+filter cap. Decode, source/dependency checks and sticky cancellation still own
+the entire result. All phases complete before acceptance is returned.
+
+The authored native macOS gate passes: identity accepts all three, unrelated
+images reject, primary geometry and decisions are retained, cap one-short refuses
+before managed allocation, and final-phase zero work invalidates earlier success.
+All existing complementary cancellation/source-mutation adversaries also pass.
+An independent Copydays `201101.jpg` gain is observed with acceptance flags
+`[false, false, true]`. Full229 recovery and negative qualification of this new
+integrated API remain pending. This does not resolve the original acceptance
+matrix's remaining edited-image, burst/semantic, RAW-rendering, whole-process
+memory, platform or collection requirements. Evidence:
+`research/dedup-complementary-filter-portfolio-state.json`,
+`research/dedup-complementary-filter-portfolio-first-gain.json`.
+
+The corresponding explicit collection/root APIs now use the existing shared
+union-descriptor proposal extractor with the integrated three-phase verifier.
+No matching or geometry is applied to merged ambiguous descriptors to reject
+pairs. The native authored three-file gate passes against exhaustive direct
+comparisons, including identical proposal feature counts, nested overlapping
+roots, first/middle/final cancellation, preallocation cumulative admission and
+attributed final-filter work refusal. Production Copydays indexed retrieval,
+native Linux for these integrated APIs and broad semantic/burst negatives remain
+pending. Evidence: `research/dedup-complementary-filter-collection-macos.log`.
+The integrated file API also completes two finite query-specific different-origin
+negative gates (312 comparisons, no accepted pair):
+`research/dedup-complementary-filter-portfolio-negative-state.json`.
+
+The fixed production collection probe now admits both feature families for two
+files (4000 total features, at most 16 million distinct-ID retrieval hits including
+same-file hits). Three independent strong Copydays pairs pass indexed retrieval
+and fresh integrated verification: `201101.jpg` (secondary-filter gain),
+`203102.jpg` (primary-filter preservation), and `207502.jpg` (prior hit-budget
+adversary). All reported constituent native geometry, counts, fit refusals and
+decisions match their fixed standalone measurements. This is a three-pair gate;
+full229 collection measurement is running and has not yet been qualified.
+Evidence: `research/dedup-complementary-filter-collection-three-cases.json`.
+
+The integrated complementary file and collection gates now both pass native
+Linux (two tests, terminal exit0); selected implementation/test hashes are
+checked before/after separately from a whole-tree snapshot. Evidence:
+`research/dedup-complementary-filter-portfolio-linux.log` and
+`research/dedup-complementary-filter-linux-source-tracking.json`.
+Remaining fixed-policy Copydays omissions are separated explicitly: 76 have no
+geometry from either feature family and 123 have geometry but fail pixel
+confirmation (30 accepted in the previously measured constituent union). These
+are not resource/decode failures. Diagnostic encoded-sRGB radius3 verification
+rejects the first eight geometry-bearing omissions with unchanged native
+geometry; changing the declared color space alone does not recover those eight.
+No default is promoted and no acceptance threshold is relaxed. Evidence:
+`research/dedup-copydays-remaining-case-diagnosis.json` and
+`research/dedup-pyramid-encoded-blur-eight-omissions.json`.
+
+### Explicit projective regional color evidence (2026-10-07)
+
+`verify_projective_regions_photometric_filtered` confirms two caller-declared
+pixel-center rectangles under a fixed projective transform, retaining whole-frame
+unfitted evidence separately. Fit/residual centers must map inside both domains;
+filter windows still use original pixels and may extend beyond those domains.
+Regional source-pixel counts describe the explicit rectangles. No whole-image
+candidate or identity flag is produced. Cumulative work admits a whole-frame
+unfitted pass plus two regional fit/residual passes before work; model/horizon
+and cancellation guards still apply. Invalid/empty/overflow/outside rectangles
+are explicit errors, and disjoint mapped domains refuse insufficient fitting.
+
+Authored edited-half evidence passes: the remaining region confirms while the
+whole image remains discrepant. Full-domain fitted and unfitted evidence equals
+the existing API. First/middle/final cancellation and work cap one-short tests
+pass. All four native macOS photometric/filtered/projective/warp groups pass.
+Initial fixture radius0 was invalid under existing filtering admission; after
+using radius1, a new domain/window test exposed incorrect guarding of window
+samples rather than centers. That implementation was corrected; failed logs are
+retained separately. Real edited/cropped Copydays regional admission, native
+file/index/source integration and broad negative qualification remain pending.
+Evidence: `research/dedup-projective-regions-state.json` and
+`research/dedup-projective-regions-macos.log`.
+
+Regional primitive regressions pass all30 tests across four groups on native
+Linux with no default features and unchanged selected source/test hashes,
+matching the all-feature macOS gate. This validates the primitive, not automatic
+edited-region selection or whole-library qualification. Color-fit parameter
+diagnostics on eight omissions retain exact original geometry, pixel counts and
+acceptance. `200801`, `200901` and `201501` have no constrained channel in either
+direction, so changing parameter bounds alone cannot change those least-squares
+optima. This does not prove correct geometry or identify the full cause of their
+rejection. Evidence:
+`research/dedup-projective-regions-linux-source-tracking.json` and
+`research/dedup-pyramid-fit-parameters-eight-omissions.json`.
+
+### Regional selected-file lifecycle integration (2026-10-07)
+
+`compare_local_files_projective_pyramid_regions` now verifies caller-declared
+region pairs under one native pyramid model inside shared decoded views and the
+existing source/dependency/cancellation lifecycle. Whole-image candidate evidence
+is retained unchanged. Empty, excessive, overflowing or out-of-frame domains
+refuse explicitly; rectangle validation is independent of geometry availability.
+Cumulative admission counts the primary verification and every region's complete
+verification cap before decoding. Per-region fitting refusals remain explicit;
+work, memory, source or cancellation failures discard the whole result.
+
+Returned region records use managed shared storage, with the reservation held
+until the last owner drops. Evidence records contain only scalar/array fields and
+are Copy, satisfying managed buffer admission without untracked nested heap
+allocations. The native macOS gate passes primary geometry/acceptance preservation,
+an informative region and a tiny-region fit refusal, shared-owner memory release,
+first/middle/final cancellation, cap one-short refusal before allocation, region
+count, checked overflow and domain validation. Native Linux is running. This
+is not automatic region selection or real edited-copy recall/precision evidence.
+Evidence: `research/dedup-pyramid-regions-files-state.json` and
+`research/dedup-pyramid-regions-files-macos.log`.
+
+The integrated registration/two-filter file API now completes all229 Copydays
+strong pairs without errors: 30 accepted, 199 omitted. All reported constituent
+geometry, pixel counts, fit refusals and decisions equal fixed independent
+measurements, and all386 normalized images are verified. This resolves the
+previous offline-union limitation for the file API; it does not complete copy
+coverage or the independently running indexed collection measurement. Evidence:
+`research/dedup-complementary-filter-portfolio-full-state.json`.

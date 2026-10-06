@@ -100,6 +100,8 @@ struct RasterInterpretation {
     alpha: Option<rrrah_decode::RlaAlphaMode>,
     float_order: Option<rrrah_decode::RlaFloatByteOrder>,
     rla_color: Option<rrrah_decode::RlaColorSpace>,
+    pq_white: Option<f32>,
+    hlg_display: Option<(f32, f32, f32)>,
 }
 impl From<UntaggedColor> for RasterInterpretation {
     fn from(color: UntaggedColor) -> Self {
@@ -108,6 +110,8 @@ impl From<UntaggedColor> for RasterInterpretation {
             alpha: None,
             float_order: None,
             rla_color: None,
+            pq_white: None,
+            hlg_display: None,
         }
     }
 }
@@ -117,12 +121,20 @@ impl RasterInterpretation {
         request.rla_alpha_mode = self.alpha;
         request.rla_float_byte_order = self.float_order;
         request.rla_color_space = self.rla_color;
+        request.pq_reference_white_nits = self.pq_white;
+        request.hlg_display = self.hlg_display;
     }
 }
 impl Cli {
     fn raster_interpretation(&self) -> RasterInterpretation {
         RasterInterpretation {
             color: self.untagged_color,
+            pq_white: self.pq_reference_white_nits,
+            hlg_display: self
+                .hlg_reference_white_nits
+                .zip(self.hlg_peak_nits)
+                .zip(self.hlg_system_gamma)
+                .map(|((white, peak), gamma)| (white, peak, gamma)),
             rla_color: self.rla_color.map(|color| match color {
                 RlaColorChoice::Srgb => rrrah_decode::RlaColorSpace::Srgb,
                 RlaColorChoice::LinearSrgb => rrrah_decode::RlaColorSpace::LinearSrgb,
@@ -139,6 +151,24 @@ impl Cli {
     }
 }
 
+fn parse_pq_white(value: &str) -> Result<f32, String> {
+    let white: f32 = value
+        .parse()
+        .map_err(|_| "Expected a luminance number".to_owned())?;
+    if !white.is_finite() || !(1.0..=10000.0).contains(&white) {
+        return Err("Reference white must be between 1 and 10000 cd/m²".to_owned());
+    }
+    Ok(white)
+}
+
+fn parse_hlg_gamma(value: &str) -> Result<f32, String> {
+    let gamma: f32 = value.parse().map_err(|_| "Expected a gamma number".to_owned())?;
+    if !gamma.is_finite() || !(0.1..=4.0).contains(&gamma) {
+        return Err("HLG gamma must be between 0.1 and 4".to_owned());
+    }
+    Ok(gamma)
+}
+
 #[derive(Debug, Parser)]
 #[command(name = "rrrah", about = "Native RAW and raster image viewer")]
 struct Cli {
@@ -151,6 +181,18 @@ struct Cli {
     /// Producer-declared RLA color space; overrides the generic untagged-color setting for RLA.
     #[arg(long, value_enum, conflicts_with = "inspect")]
     rla_color: Option<RlaColorChoice>,
+    /// PQ reference white in cd/m² (1–10000); enables explicit HDR interpretation.
+    #[arg(long, value_parser = parse_pq_white, conflicts_with = "inspect")]
+    pq_reference_white_nits: Option<f32>,
+    /// HLG reference white in cd/m², for a zero-black display.
+    #[arg(long, value_parser = parse_pq_white, requires_all = ["hlg_peak_nits", "hlg_system_gamma"], conflicts_with = "inspect")]
+    hlg_reference_white_nits: Option<f32>,
+    /// HLG display peak in cd/m² (1–10000).
+    #[arg(long, value_parser = parse_pq_white, requires = "hlg_reference_white_nits", conflicts_with = "inspect")]
+    hlg_peak_nits: Option<f32>,
+    /// HLG system gamma (0.1–4); depends on display and viewing conditions.
+    #[arg(long, value_parser = parse_hlg_gamma, requires = "hlg_reference_white_nits", conflicts_with = "inspect")]
+    hlg_system_gamma: Option<f32>,
     /// Explicit interpretation of raster images without a color profile (viewer only).
     #[arg(long, value_enum, default_value = "strict", conflicts_with = "inspect")]
     untagged_color: UntaggedColor,
@@ -1716,7 +1758,11 @@ type RasterDisplayKey = (
     bool,
     Option<rrrah_decode::RlaAlphaMode>,
     Option<rrrah_decode::RlaFloatByteOrder>,
-    Option<rrrah_decode::RlaColorSpace>,
+    (
+        Option<rrrah_decode::RlaColorSpace>,
+        Option<u32>,
+        Option<(u32, u32, u32)>,
+    ),
 );
 type RasterDisplayCache = rrrah_cache::RasterRamCache<RasterDisplayKey>;
 fn raster_cache_with_swap(
@@ -1801,7 +1847,13 @@ fn load_cached_raster_mode(
             request.assume_untagged_linear_srgb,
             request.rla_alpha_mode,
             request.rla_float_byte_order,
-            request.rla_color_space,
+            (
+                request.rla_color_space,
+                request.pq_reference_white_nits.map(f32::to_bits),
+                request
+                    .hlg_display
+                    .map(|(white, peak, gamma)| (white.to_bits(), peak.to_bits(), gamma.to_bits())),
+            ),
         )
     });
     if let Some(key) = &key {
@@ -4408,6 +4460,173 @@ mod foreground_loader_tests {
         assert_eq!(short.used(), 0);
     }
     #[test]
+    fn hlg_display_cli_separates_all_policy_fields_and_reaches_thumbnail() {
+        let path = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+            .join("../../tests/fixtures/raster/avif-hlg10-color-svt.avif");
+        let cli = Cli::try_parse_from([
+            "rrrah",
+            "--hlg-reference-white-nits",
+            "100",
+            "--hlg-peak-nits",
+            "1000",
+            "--hlg-system-gamma",
+            "1.2",
+        ])
+        .unwrap();
+        let policy = cli.raster_interpretation();
+        let budget = rrrah_cache::MemoryBudget::new(1024 * 1024);
+        let mut request = DecodeRequest::new(&path);
+        request.memory_budget = Some(budget.clone());
+        policy.apply(&mut request);
+        assert_eq!(request.hlg_display, Some((100., 1000., 1.2)));
+        let mut cache = RasterDisplayCache::new(rrrah_cache::CacheLimits::bytes(budget.limit()));
+        let (first, _) = load_cached_raster_for_display(&request, None, &mut cache).unwrap();
+        request.hlg_display = Some((100., 2000., 1.2));
+        let (second, _) = load_cached_raster_for_display(&request, None, &mut cache).unwrap();
+        let rrrah_core::RasterPixels::Rgba32Float(a) = first.pixels() else {
+            panic!()
+        };
+        let rrrah_core::RasterPixels::Rgba32Float(b) = second.pixels() else {
+            panic!()
+        };
+        assert!(
+            a.iter()
+                .zip(b.iter())
+                .enumerate()
+                .all(|(i, (a, b))| if i % 4 == 3 {
+                    a == b
+                } else {
+                    (*a * 2. - b).abs() < 0.00001
+                })
+        );
+        request.hlg_display = Some((100., 2000., 1.4));
+        let (third, _) = load_cached_raster_for_display(&request, None, &mut cache).unwrap();
+        let rrrah_core::RasterPixels::Rgba32Float(c) = third.pixels() else {
+            panic!()
+        };
+        assert!(b.iter().zip(c.iter()).any(|(b, c)| b.to_bits() != c.to_bits()));
+        request.hlg_display = Some((200., 2000., 1.4));
+        let (fourth, _) = load_cached_raster_for_display(&request, None, &mut cache).unwrap();
+        assert_eq!(cache.len(), 4);
+        policy.apply(&mut request);
+        let (hit, _) = load_cached_raster_with(&request, None, &mut cache, || {
+            panic!("HLG policy must reuse its own entry")
+        })
+        .unwrap();
+        let rrrah_core::RasterPixels::Rgba32Float(h) = hit.pixels() else {
+            panic!()
+        };
+        assert!(a.ptr_eq(h));
+        request.hlg_display = None;
+        assert!(load_cached_raster_for_display(&request, None, &mut cache).is_err());
+        drop((first, second, third, fourth, hit, cache));
+        assert_eq!(budget.used(), 0);
+        let loader = thumbnail_loader_with_cancel(Arc::new(DecodeGate::new()), Some(budget.clone()), policy);
+        let thumbnail = loader(
+            gallery::ThumbnailJob {
+                index: 0,
+                source: path,
+                edge: 32,
+            },
+            GenerationToken::new(Arc::new(AtomicU64::new(1)), 1),
+        )
+        .unwrap();
+        assert_eq!((thumbnail.width, thumbnail.height), (32, 16));
+        drop(thumbnail);
+        assert_eq!(budget.used(), 0);
+        policy.apply(&mut request);
+        Cli::try_parse_from(["rrrah"])
+            .unwrap()
+            .raster_interpretation()
+            .apply(&mut request);
+        assert_eq!(request.hlg_display, None);
+        for flag in [
+            "--hlg-reference-white-nits",
+            "--hlg-peak-nits",
+            "--hlg-system-gamma",
+        ] {
+            assert!(Cli::try_parse_from(["rrrah", flag, "100"]).is_err());
+        }
+        for gamma in ["0", "NaN", "inf", "4.1"] {
+            assert!(
+                Cli::try_parse_from([
+                    "rrrah",
+                    "--hlg-reference-white-nits",
+                    "100",
+                    "--hlg-peak-nits",
+                    "1000",
+                    "--hlg-system-gamma",
+                    gamma
+                ])
+                .is_err()
+            );
+        }
+    }
+    #[test]
+    fn pq_white_cli_separates_cache_and_reaches_thumbnail() {
+        let path =
+            PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster/avif-pq10-svt.avif");
+        let cli = Cli::try_parse_from(["rrrah", "--pq-reference-white-nits", "100"]).unwrap();
+        let policy = cli.raster_interpretation();
+        let budget = rrrah_cache::MemoryBudget::new(512 * 1024);
+        let mut request = DecodeRequest::new(&path);
+        request.memory_budget = Some(budget.clone());
+        policy.apply(&mut request);
+        let mut cache = RasterDisplayCache::new(rrrah_cache::CacheLimits::bytes(budget.limit()));
+        let (first, _) = load_cached_raster_for_display(&request, None, &mut cache).unwrap();
+        request.pq_reference_white_nits = Some(200.);
+        let (second, _) = load_cached_raster_for_display(&request, None, &mut cache).unwrap();
+        let rrrah_core::RasterPixels::Rgba32Float(a) = first.pixels() else {
+            panic!()
+        };
+        let rrrah_core::RasterPixels::Rgba32Float(b) = second.pixels() else {
+            panic!()
+        };
+        assert_eq!(cache.len(), 2);
+        assert!(
+            a.iter()
+                .zip(b.iter())
+                .enumerate()
+                .all(|(i, (a, b))| if i % 4 == 3 {
+                    a == b
+                } else {
+                    (a / 2. - b).abs() < 0.00001
+                })
+        );
+        request.pq_reference_white_nits = Some(100.);
+        let (hit, _) = load_cached_raster_with(&request, None, &mut cache, || {
+            panic!("PQ white must hit its own cache entry")
+        })
+        .unwrap();
+        let rrrah_core::RasterPixels::Rgba32Float(h) = hit.pixels() else {
+            panic!()
+        };
+        assert!(a.ptr_eq(h));
+        drop((first, second, hit, cache));
+        assert_eq!(budget.used(), 0);
+        let loader = thumbnail_loader_with_cancel(Arc::new(DecodeGate::new()), Some(budget.clone()), policy);
+        let thumbnail = loader(
+            gallery::ThumbnailJob {
+                index: 0,
+                source: path,
+                edge: 32,
+            },
+            GenerationToken::new(Arc::new(AtomicU64::new(1)), 1),
+        )
+        .unwrap();
+        assert_eq!((thumbnail.width, thumbnail.height), (32, 16));
+        drop(thumbnail);
+        assert_eq!(budget.used(), 0);
+        Cli::try_parse_from(["rrrah"])
+            .unwrap()
+            .raster_interpretation()
+            .apply(&mut request);
+        assert_eq!(request.pq_reference_white_nits, None);
+        for value in ["0", "NaN", "inf", "10001"] {
+            assert!(Cli::try_parse_from(["rrrah", "--pq-reference-white-nits", value]).is_err());
+        }
+    }
+    #[test]
     fn rla_linear_color_cli_preserves_hdr_and_separates_cached_transfer() {
         let path = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
             .join("../../tests/fixtures/raster/rla-float32-le-hdr-oiio.rla");
@@ -6617,7 +6836,7 @@ mod raster_budget_pressure_tests {
             false,
             None,
             None,
-            None,
+            (None, None, None),
         );
         let neighbour = (
             PathBuf::from("neighbour"),
@@ -6631,7 +6850,7 @@ mod raster_budget_pressure_tests {
             false,
             None,
             None,
-            None,
+            (None, None, None),
         );
         let mut cache = RasterDisplayCache::new(rrrah_cache::CacheLimits::bytes(1024));
         assert!(cache.insert_visible(old.clone(), make()));
@@ -6701,7 +6920,7 @@ mod raster_source_pressure_tests {
             false,
             None,
             None,
-            None,
+            (None, None, None),
         );
         let neighbour = (
             PathBuf::from("neighbour"),
@@ -6715,7 +6934,7 @@ mod raster_source_pressure_tests {
             false,
             None,
             None,
-            None,
+            (None, None, None),
         );
         let mut cache = RasterDisplayCache::new(rrrah_cache::CacheLimits::bytes(budget.limit()));
         cache.insert_visible(visible.clone(), make(1));

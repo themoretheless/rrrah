@@ -8,7 +8,7 @@ pub struct WarpPolicy {
     pub tolerance: f64,
     pub max_source_pixels: u64,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub struct WarpEvidence {
     pub source_pixels: u64,
     pub compared_pixels: u64,
@@ -282,7 +282,7 @@ fn interpolate_in_space(
     Some(result)
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub struct BidirectionalEvidence {
     pub forward: WarpEvidence,
     pub reverse: WarpEvidence,
@@ -323,7 +323,7 @@ pub fn verify_bidirectional(
 /// Valid pixel data can still lack a qualified global photometric model.
 /// These reasons are inconclusive fitting outcomes, not source/decode failures
 /// and not evidence of unrelated images.
-#[derive(Debug, Clone, PartialEq, Eq, thiserror::Error)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, thiserror::Error)]
 pub enum PhotometricFitFailure {
     #[error("only {observed} opaque samples; fitting requires {required}")]
     InsufficientSamples { observed: u64, required: u64 },
@@ -346,7 +346,7 @@ pub struct PhotometricPolicy {
     pub maximum_gain: f64,
     pub maximum_offset: f64,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub struct PhotometricEvidence {
     pub gain: [f64; 3],
     pub offset: [f64; 3],
@@ -577,12 +577,42 @@ fn verify_photometric_grid_mapped(
     grid: GridPolicy,
     cancel: impl Fn() -> bool,
 ) -> Result<PhotometricEvidence, WarpError> {
+    let (width, height) = source.dimensions();
+    verify_photometric_rectangle_mapped(
+        source,
+        target,
+        mapping,
+        grid,
+        PixelRectangle {
+            x: 0,
+            y: 0,
+            width,
+            height,
+        },
+        None,
+        cancel,
+    )
+}
+#[allow(
+    clippy::cast_precision_loss,
+    clippy::too_many_lines,
+    clippy::too_many_arguments
+)]
+fn verify_photometric_rectangle_mapped(
+    source: &LinearRgbaView<'_>,
+    target: &LinearRgbaView<'_>,
+    mapping: &impl Fn([f64; 2]) -> Option<[f64; 2]>,
+    grid: GridPolicy,
+    region: PixelRectangle,
+    target_region: Option<PixelRectangle>,
+    cancel: impl Fn() -> bool,
+) -> Result<PhotometricEvidence, WarpError> {
+    validate_rectangle(region, source.dimensions())?;
     let policy = grid.photometric;
     let radius = grid.radius;
     let space = grid.space;
     validate_photometric_policy(policy)?;
-    let (width, height) = source.dimensions();
-    let total = u64::from(width) * u64::from(height);
+    let total = u64::from(region.width) * u64::from(region.height);
     if total > policy.residual.max_source_pixels {
         return Err(WarpError::Budget);
     }
@@ -591,10 +621,16 @@ fn verify_photometric_grid_mapped(
     let mut mean_target = [0.0; 3];
     let mut variance = [0.0; 3];
     let mut covariance = [0.0; 3];
-    for y in 0..height {
-        for x in 0..width {
+    for y in region.y..region.y + region.height {
+        for x in region.x..region.x + region.width {
             if cancel() {
                 return Err(WarpError::Cancelled);
+            }
+            if let Some(domain) = target_region {
+                let center = mapping([f64::from(x), f64::from(y)]).ok_or(WarpError::Invalid)?;
+                if !rectangle_contains(domain, center) {
+                    continue;
+                }
             }
             let Some((expected, actual)) =
                 sample_pair_mapped(source, target, mapping, [x, y], radius, space, &cancel)?
@@ -660,10 +696,16 @@ fn verify_photometric_grid_mapped(
         maximum_channel_error: 0.0,
         squared_error: 0.0,
     };
-    for y in 0..height {
-        for x in 0..width {
+    for y in region.y..region.y + region.height {
+        for x in region.x..region.x + region.width {
             if cancel() {
                 return Err(WarpError::Cancelled);
+            }
+            if let Some(domain) = target_region {
+                let center = mapping([f64::from(x), f64::from(y)]).ok_or(WarpError::Invalid)?;
+                if !rectangle_contains(domain, center) {
+                    continue;
+                }
             }
             let Some((mut expected, mut actual)) =
                 sample_pair_mapped(source, target, mapping, [x, y], radius, space, &cancel)?
@@ -708,7 +750,7 @@ fn verify_photometric_grid_mapped(
     })
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub struct BidirectionalPhotometricEvidence {
     pub forward: PhotometricEvidence,
     pub reverse: PhotometricEvidence,
@@ -920,7 +962,7 @@ fn verify_filtered_impl(
 type SamplePair = ([f64; 4], [f64; 4]);
 /// Filtered planar evidence retains strict residuals separately. Averages can
 /// suppress small edits, so these are visual candidates rather than pixel identity.
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub struct ProjectiveFilteredEvidence {
     pub filter: ColorFilterPolicy,
     pub strict: BidirectionalEvidence,
@@ -1028,6 +1070,123 @@ pub fn verify_projective_photometric_filtered(
         unfitted,
         fit_mode,
         fitted: BidirectionalPhotometricEvidence { forward, reverse },
+    })
+}
+
+/// Explicit pixel-center domain; coordinates remain in the original image.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct PixelRectangle {
+    pub x: u32,
+    pub y: u32,
+    pub width: u32,
+    pub height: u32,
+}
+pub(crate) fn validate_rectangle(r: PixelRectangle, dimensions: (u32, u32)) -> Result<(), WarpError> {
+    if r.width == 0
+        || r.height == 0
+        || r.x.checked_add(r.width).is_none_or(|end| end > dimensions.0)
+        || r.y.checked_add(r.height).is_none_or(|end| end > dimensions.1)
+    {
+        return Err(WarpError::Invalid);
+    }
+    Ok(())
+}
+fn rectangle_contains(r: PixelRectangle, p: [f64; 2]) -> bool {
+    p[0] >= f64::from(r.x)
+        && p[1] >= f64::from(r.y)
+        && p[0] <= f64::from(r.x + r.width - 1)
+        && p[1] <= f64::from(r.y + r.height - 1)
+}
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct ProjectiveRegionPhotometricEvidence {
+    pub source_region: PixelRectangle,
+    pub target_region: PixelRectangle,
+    /// Whole-frame unfitted evidence is retained, separate from regional fits.
+    pub whole_unfitted: ProjectiveFilteredEvidence,
+    pub fitted: BidirectionalPhotometricEvidence,
+    pub fit_mode: PhotometricFitMode,
+}
+/// Verify caller-declared corresponding regions under a fixed projective model.
+/// Fits and residuals inspect only centers inside both explicit domains. Filter
+/// windows use the original images; pixels outside the domains may contribute to
+/// a window. Regional source-pixel counts describe each declared rectangle,
+/// never the whole frame. This provides no whole-image identity/candidate flag.
+/// The whole-frame unfitted pass retains singularity/horizon guards and evidence.
+///
+/// # Errors
+/// Invalid domain/model/policy, fit refusal, cumulative work/pixel budget or cancellation.
+#[allow(clippy::too_many_arguments)]
+pub fn verify_projective_regions_photometric_filtered(
+    source: &LinearRgbaView<'_>,
+    target: &LinearRgbaView<'_>,
+    transform: crate::geometry::ProjectiveTransform,
+    regions: [PixelRectangle; 2],
+    photometric: PhotometricPolicy,
+    filter: ColorFilterPolicy,
+    fit_mode: PhotometricFitMode,
+    cancel: impl Fn() -> bool,
+) -> Result<ProjectiveRegionPhotometricEvidence, WarpError> {
+    validate_photometric_policy(photometric)?;
+    validate_filter_policy(filter.filter)?;
+    let [sr, tr] = regions;
+    validate_rectangle(sr, source.dimensions())?;
+    validate_rectangle(tr, target.dimensions())?;
+    let (sw, sh) = source.dimensions();
+    let (tw, th) = target.dimensions();
+    let full = (u64::from(sw) * u64::from(sh))
+        .checked_add(u64::from(tw) * u64::from(th))
+        .ok_or(WarpError::Budget)?;
+    let regional = (u64::from(sr.width) * u64::from(sr.height))
+        .checked_add(u64::from(tr.width) * u64::from(tr.height))
+        .ok_or(WarpError::Budget)?;
+    let side = u64::from(filter.filter.radius) * 2 + 1;
+    let work = regional
+        .checked_mul(2)
+        .and_then(|n| n.checked_add(full))
+        .and_then(|n| n.checked_mul(side * side))
+        .ok_or(WarpError::Budget)?;
+    if full > photometric.residual.max_source_pixels || work > filter.filter.max_sample_pairs {
+        return Err(WarpError::Budget);
+    }
+    let whole_unfitted =
+        verify_projective_filtered(source, target, transform, photometric.residual, filter, &cancel)?;
+    let inverse = transform.inverse().map_err(|_| WarpError::Invalid)?;
+    let grid = GridPolicy {
+        reflected: false,
+        photometric,
+        radius: filter.filter.radius,
+        space: filter.color_space,
+        fit: fit_mode,
+        fit_range: None,
+        projection: None,
+    };
+    let forward = verify_photometric_rectangle_mapped(
+        source,
+        target,
+        &|p| transform.apply(p),
+        grid,
+        sr,
+        Some(tr),
+        &cancel,
+    )?;
+    let reverse = verify_photometric_rectangle_mapped(
+        target,
+        source,
+        &|p| inverse.apply(p),
+        grid,
+        tr,
+        Some(sr),
+        &cancel,
+    )?;
+    if cancel() {
+        return Err(WarpError::Cancelled);
+    }
+    Ok(ProjectiveRegionPhotometricEvidence {
+        source_region: sr,
+        target_region: tr,
+        whole_unfitted,
+        fitted: BidirectionalPhotometricEvidence { forward, reverse },
+        fit_mode,
     })
 }
 

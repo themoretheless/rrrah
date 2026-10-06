@@ -30,6 +30,7 @@ fn descriptor(frame: &DecodedRaster) -> Result<([u8; HEADER], &[u8], u64), Raste
         RasterColorSpace::Icc(p) => (4, p),
         RasterColorSpace::Unspecified => (5, &[]),
         RasterColorSpace::Bt709 => (6, &[]),
+        RasterColorSpace::Cicp { .. } => (7, &[]),
     };
     let pixel_bytes = u64::from(frame.width())
         .checked_mul(u64::from(frame.height()))
@@ -45,6 +46,18 @@ fn descriptor(frame: &DecodedRaster) -> Result<([u8; HEADER], &[u8], u64), Raste
     h[12..16].copy_from_slice(&frame.height().to_le_bytes());
     h[16] = kind;
     h[17] = color;
+    if let RasterColorSpace::Cicp {
+        primaries,
+        transfer,
+        matrix,
+        full_range,
+    } = frame.color_space()
+    {
+        h[52..54].copy_from_slice(&primaries.to_le_bytes());
+        h[54..56].copy_from_slice(&transfer.to_le_bytes());
+        h[56..58].copy_from_slice(&matrix.to_le_bytes());
+        h[58] = u8::from(*full_range);
+    }
     h[20..24].copy_from_slice(&frame.sample_scale().to_bits().to_le_bytes());
     if let Some((x, y)) = frame.hotspot() {
         h[18] = 1;
@@ -130,7 +143,12 @@ pub fn read_raster_payload(
 ) -> Result<DecodedRaster, RasterPayloadError> {
     let mut h = [0u8; HEADER];
     reader.read_exact(&mut h)?;
-    if &h[..8] != b"RRRAST1\0" || h[19] != 0 || h[52..].iter().any(|&b| b != 0) || h[18] > 1 {
+    let invalid_color_extension = if h[17] == 7 {
+        h[58] > 1 || h[59..].iter().any(|&b| b != 0)
+    } else {
+        h[52..].iter().any(|&b| b != 0)
+    };
+    if &h[..8] != b"RRRAST1\0" || h[19] != 0 || invalid_color_extension || h[18] > 1 {
         return Err(RasterPayloadError::Invalid("header"));
     }
     let u32_at = |i| u32::from_le_bytes(h[i..i + 4].try_into().unwrap());
@@ -155,7 +173,7 @@ pub fn read_raster_payload(
         || height == 0
         || count > MAX_PIXELS / size
         || profile_len > MAX_PROFILE
-        || h[17] > 6
+        || h[17] > 7
         || (h[17] != 4 && profile_len != 0)
         || !scale.is_finite()
         || scale <= 0.
@@ -191,6 +209,12 @@ pub fn read_raster_payload(
         3 => RasterColorSpace::LinearRgbUnspecified,
         4 => RasterColorSpace::Icc(profile),
         6 => RasterColorSpace::Bt709,
+        7 => RasterColorSpace::Cicp {
+            primaries: u16::from_le_bytes(h[52..54].try_into().unwrap()),
+            transfer: u16::from_le_bytes(h[54..56].try_into().unwrap()),
+            matrix: u16::from_le_bytes(h[56..58].try_into().unwrap()),
+            full_range: h[58] != 0,
+        },
         _ => RasterColorSpace::Unspecified,
     };
     let count = usize::try_from(count).map_err(|_| RasterPayloadError::Invalid("sample count"))?;
@@ -318,6 +342,38 @@ mod tests {
         }
     }
     #[test]
+    fn cicp_extension_rejects_invalid_range_reserved_bytes_and_color_aliasing() {
+        let frame = DecodedRaster::new(
+            1,
+            1,
+            RasterPixels::Rgba16(Arc::new(vec![123, 456, 789, 65535]).into()),
+            RasterColorSpace::Cicp {
+                primaries: 9,
+                transfer: 16,
+                matrix: 9,
+                full_range: true,
+            },
+        )
+        .unwrap();
+        assert!(frame.to_linear_srgb().is_err());
+        let mut bytes = Vec::new();
+        write_raster_payload(&mut bytes, &frame).unwrap();
+        for (offset, value) in [(58, 2), (59, 1), (17, 0)] {
+            let mut malformed = bytes.clone();
+            malformed[offset] = value;
+            let budget = MemoryBudget::new(8);
+            assert!(read_raster_payload(&mut Cursor::new(malformed), &budget).is_err());
+            assert_eq!(budget.used(), 0);
+        }
+        let budget = MemoryBudget::new(8);
+        let restored = read_raster_payload(&mut Cursor::new(bytes), &budget).unwrap();
+        assert_eq!(restored.color_space(), frame.color_space());
+        assert!(restored.to_linear_srgb().is_err());
+        assert_eq!(budget.used(), 8);
+        drop(restored);
+        assert_eq!(budget.used(), 0);
+    }
+    #[test]
     fn every_color_declaration_roundtrips_default_metadata() {
         for color in [
             RasterColorSpace::Srgb,
@@ -327,6 +383,18 @@ mod tests {
             RasterColorSpace::Icc(vec![1, 2, 3]),
             RasterColorSpace::Unspecified,
             RasterColorSpace::Bt709,
+            RasterColorSpace::Cicp {
+                primaries: 9,
+                transfer: 16,
+                matrix: 9,
+                full_range: true,
+            },
+            RasterColorSpace::Cicp {
+                primaries: 9,
+                transfer: 18,
+                matrix: 9,
+                full_range: false,
+            },
         ] {
             let frame = DecodedRaster::new(
                 1,

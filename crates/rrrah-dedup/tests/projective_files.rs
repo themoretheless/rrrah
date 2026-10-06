@@ -100,6 +100,164 @@ fn pyramid_photometric_files_preserve_identity_refusals_and_cancel_retry() {
     })
     .unwrap();
     let checkpoints = calls.get();
+    {
+        use rrrah_dedup::local_scan::{
+            ProjectivePyramidFilterPortfolioPolicy, compare_local_files_projective_pyramid_filter_portfolio,
+        };
+        let q = ProjectivePyramidFilterPortfolioPolicy {
+            primary: p,
+            secondary: ColorFilterPolicy {
+                filter: FilterPolicy {
+                    radius: 3,
+                    max_sample_pairs: 32_000_000,
+                },
+                color_space: FilterColorSpace::LinearSrgb,
+            },
+            max_total_sample_pairs: 44_000_000,
+        };
+        let filter_calls = Cell::new(0);
+        let both = compare_local_files_projective_pyramid_filter_portfolio(&a, &a, q, &budget, || {
+            filter_calls.set(filter_calls.get() + 1);
+            false
+        })
+        .unwrap();
+        for checkpoint in [1, filter_calls.get() / 2, filter_calls.get()] {
+            let n = Cell::new(0);
+            assert!(matches!(
+                compare_local_files_projective_pyramid_filter_portfolio(&a, &a, q, &budget, || {
+                    n.set(n.get() + 1);
+                    n.get() == checkpoint
+                }),
+                Err(LocalFileError::Cancelled)
+            ));
+            assert_eq!(budget.used(), 0);
+        }
+        assert_eq!(both.accepted_filters, [true, true]);
+        assert!(both.candidate && both.secondary_pixels.is_some());
+        assert_eq!(
+            both.primary.geometry.as_ref().unwrap().transform,
+            e.geometry.as_ref().unwrap().transform
+        );
+        assert_eq!(budget.used(), 0);
+        let fresh = MemoryBudget::new(64 * 1024 * 1024);
+        let mut short = q;
+        short.max_total_sample_pairs -= 1;
+        assert!(matches!(
+            compare_local_files_projective_pyramid_filter_portfolio(&a, &a, short, &fresh, || false),
+            Err(LocalFileError::Pixels(rrrah_dedup::warp::WarpError::Budget))
+        ));
+        assert_eq!(fresh.peak(), 0);
+        let mut phase = q;
+        phase.secondary.filter.max_sample_pairs = 0;
+        assert!(matches!(
+            compare_local_files_projective_pyramid_filter_portfolio(&a, &a, phase, &budget, || false),
+            Err(LocalFileError::Pixels(rrrah_dedup::warp::WarpError::Budget))
+        ));
+        assert_eq!(budget.used(), 0);
+        assert!(
+            !compare_local_files_projective_pyramid_filter_portfolio(&a, &b, q, &budget, || false)
+                .unwrap()
+                .candidate
+        );
+    }
+    {
+        use rrrah_dedup::{
+            local_scan::{
+                ProjectivePyramidRegionsFilePolicy, compare_local_files_projective_pyramid_regions,
+            },
+            warp::PixelRectangle,
+        };
+        let region = PixelRectangle {
+            x: 32,
+            y: 32,
+            width: 192,
+            height: 128,
+        };
+        let tiny = PixelRectangle {
+            x: 10,
+            y: 10,
+            width: 1,
+            height: 1,
+        };
+        let domains = [[region, region], [tiny, tiny]];
+        let q = ProjectivePyramidRegionsFilePolicy {
+            search: p,
+            max_regions: 2,
+            max_total_sample_pairs: 36_000_000,
+        };
+        let n = Cell::new(0);
+        let regional = compare_local_files_projective_pyramid_regions(&a, &a, q, &domains, &budget, || {
+            n.set(n.get() + 1);
+            false
+        })
+        .unwrap();
+        assert_eq!(regional.whole.candidate, e.candidate);
+        assert_eq!(
+            regional.whole.geometry.as_ref().unwrap().transform,
+            e.geometry.as_ref().unwrap().transform
+        );
+        let pixels = regional.regions[0].pixels.as_ref().unwrap();
+        assert_eq!(pixels.fitted.forward.pixels.source_pixels, 192 * 128);
+        assert_eq!(
+            pixels.fitted.forward.pixels.matched_pixels,
+            pixels.fitted.forward.pixels.compared_pixels
+        );
+        assert!(regional.regions[1].fit_failure.is_some() && regional.regions[1].pixels.is_none());
+        assert!(budget.used() > 0);
+        let held = regional.regions.clone();
+        drop(regional);
+        assert!(budget.used() > 0);
+        drop(held);
+        assert_eq!(budget.used(), 0);
+        let checkpoints = n.get();
+        for stop in [1, checkpoints / 2, checkpoints] {
+            n.set(0);
+            assert!(matches!(
+                compare_local_files_projective_pyramid_regions(&a, &a, q, &domains, &budget, || {
+                    n.set(n.get() + 1);
+                    n.get() == stop
+                }),
+                Err(LocalFileError::Cancelled)
+            ));
+            assert_eq!(budget.used(), 0);
+        }
+        let fresh = MemoryBudget::new(64 * 1024 * 1024);
+        let mut short = q;
+        short.max_total_sample_pairs -= 1;
+        assert!(matches!(
+            compare_local_files_projective_pyramid_regions(&a, &a, short, &domains, &fresh, || false),
+            Err(LocalFileError::Pixels(rrrah_dedup::warp::WarpError::Budget))
+        ));
+        assert_eq!(fresh.peak(), 0);
+        let mut too_many = q;
+        too_many.max_regions = 1;
+        assert!(
+            compare_local_files_projective_pyramid_regions(&a, &a, too_many, &domains, &fresh, || false)
+                .is_err()
+        );
+        assert_eq!(fresh.peak(), 0);
+        let mut overflow = q;
+        overflow.search.filter.filter.max_sample_pairs = u64::MAX;
+        overflow.max_total_sample_pairs = u64::MAX;
+        assert!(matches!(
+            compare_local_files_projective_pyramid_regions(&a, &a, overflow, &domains, &fresh, || false),
+            Err(LocalFileError::Pixels(rrrah_dedup::warp::WarpError::Budget))
+        ));
+        assert_eq!(fresh.peak(), 0);
+        let outside = PixelRectangle {
+            x: 319,
+            y: 0,
+            width: 2,
+            height: 32,
+        };
+        assert!(matches!(
+            compare_local_files_projective_pyramid_regions(&a, &b, q, &[[outside, region]], &budget, || {
+                false
+            }),
+            Err(LocalFileError::Pixels(rrrah_dedup::warp::WarpError::Invalid))
+        ));
+        assert_eq!(budget.used(), 0);
+    }
     assert!(e.candidate, "{e:?}");
     assert!(e.pixels.is_some() && e.unfitted.is_some());
     assert!(e.registered_transform.is_none());
@@ -4038,6 +4196,61 @@ fn complementary_files_preserve_both_searches_and_atomic_refusals() {
         false
     })
     .unwrap();
+    {
+        use rrrah_dedup::local_scan::{
+            ProjectiveComplementaryFilterPortfolioPolicy,
+            compare_local_files_projective_complementary_filter_portfolio,
+        };
+        let q = ProjectiveComplementaryFilterPortfolioPolicy {
+            searches: policy,
+            secondary: ColorFilterPolicy {
+                filter: FilterPolicy {
+                    radius: 3,
+                    max_sample_pairs: 32_000_000,
+                },
+                color_space: FilterColorSpace::LinearSrgb,
+            },
+            max_total_sample_pairs: 176_000_000,
+        };
+        let joined =
+            compare_local_files_projective_complementary_filter_portfolio(&a, &b, q, &budget, || false)
+                .unwrap();
+        assert_eq!(joined.accepted_searches, [true, true, true]);
+        assert!(joined.candidate && joined.secondary_pixels.is_some());
+        assert_eq!(joined.searches.accepted_searches, evidence.accepted_searches);
+        assert_eq!(
+            joined.searches.pyramid.geometry.as_ref().unwrap().transform,
+            evidence.pyramid.geometry.as_ref().unwrap().transform
+        );
+        assert_eq!(budget.used(), 0);
+        let mut short = q;
+        short.max_total_sample_pairs -= 1;
+        let fresh = MemoryBudget::new(64 * 1024 * 1024);
+        assert!(matches!(
+            compare_local_files_projective_complementary_filter_portfolio(&a, &b, short, &fresh, || false),
+            Err(LocalFileError::Pixels(WarpError::Budget))
+        ));
+        assert_eq!(fresh.peak(), 0);
+        let mut phase = q;
+        phase.secondary.filter.max_sample_pairs = 0;
+        assert!(matches!(
+            compare_local_files_projective_complementary_filter_portfolio(&a, &b, phase, &budget, || false),
+            Err(LocalFileError::Pixels(WarpError::Budget))
+        ));
+        assert_eq!(budget.used(), 0);
+        assert!(
+            !compare_local_files_projective_complementary_filter_portfolio(
+                &a,
+                &unrelated,
+                q,
+                &budget,
+                || false
+            )
+            .unwrap()
+            .candidate
+        );
+    }
+
     let checkpoints = calls.get();
     assert_eq!(evidence.accepted_searches, [true, true]);
     assert!(evidence.candidate);
@@ -4309,6 +4522,150 @@ fn complementary_collection_keeps_separate_matching_and_nested_source_lifecycle(
             .filter(|p| p.evidence.candidate)
             .all(|p| p.evidence.accepted_searches == [true, true])
     );
+    {
+        use rrrah_dedup::{
+            local_collection::{
+                ProjectiveComplementaryFilterPortfolioCollectionPolicy,
+                scan_projective_local_collection_complementary_filter_portfolio,
+                scan_projective_local_collection_roots_complementary_filter_portfolio,
+            },
+            local_scan::{
+                ProjectiveComplementaryFilterPortfolioPolicy,
+                compare_local_files_projective_complementary_filter_portfolio,
+            },
+        };
+        let q = ProjectiveComplementaryFilterPortfolioCollectionPolicy {
+            search: ProjectiveComplementaryFilterPortfolioPolicy {
+                searches: search,
+                secondary: ColorFilterPolicy {
+                    filter: FilterPolicy {
+                        radius: 3,
+                        max_sample_pairs: 32_000_000,
+                    },
+                    color_space: FilterColorSpace::LinearSrgb,
+                },
+                max_total_sample_pairs: 176_000_000,
+            },
+            budgets: config.budgets,
+        };
+        let mut expected = BTreeSet::new();
+        for i in 0..3 {
+            for j in i + 1..3 {
+                if compare_local_files_projective_complementary_filter_portfolio(
+                    &files[i].1,
+                    &files[j].1,
+                    q.search,
+                    &budget,
+                    || false,
+                )
+                .unwrap()
+                .candidate
+                {
+                    expected.insert((files[i].0, files[j].0));
+                }
+            }
+        }
+        assert_eq!(expected, direct);
+        let n = Cell::new(0);
+        let joined = scan_projective_local_collection_complementary_filter_portfolio(
+            files.clone(),
+            q,
+            &budget,
+            || {
+                n.set(n.get() + 1);
+                false
+            },
+        )
+        .unwrap();
+        let edges = joined
+            .local
+            .pairs
+            .iter()
+            .filter(|p| p.evidence.candidate)
+            .map(|p| (p.left, p.right))
+            .collect::<BTreeSet<_>>();
+        assert_eq!(edges, expected);
+        assert_eq!(joined.indexed_features, report.indexed_features);
+        assert!(
+            joined
+                .local
+                .pairs
+                .iter()
+                .filter(|p| p.evidence.candidate)
+                .all(|p| p.evidence.accepted_searches == [true, true, true])
+        );
+        assert!(
+            joined.file_issues.is_empty()
+                && joined.local.issues.is_empty()
+                && joined.local.source_issues.is_empty()
+        );
+        assert_eq!(budget.used(), 0);
+        let total = n.get();
+        for stop in [1, total / 2, total] {
+            n.set(0);
+            assert!(matches!(
+                scan_projective_local_collection_complementary_filter_portfolio(
+                    files.clone(),
+                    q,
+                    &budget,
+                    || {
+                        n.set(n.get() + 1);
+                        n.get() == stop
+                    }
+                ),
+                Err(ScanError::Cancelled)
+            ));
+            assert_eq!(budget.used(), 0);
+        }
+        let mut short = q;
+        short.search.max_total_sample_pairs -= 1;
+        let fresh = MemoryBudget::new(64 * 1024 * 1024);
+        assert!(matches!(
+            scan_projective_local_collection_complementary_filter_portfolio(
+                files.clone(),
+                short,
+                &fresh,
+                || false
+            ),
+            Err(ScanError::Budget)
+        ));
+        assert_eq!(fresh.peak(), 0);
+        let mut phase = q;
+        phase.search.secondary.filter.max_sample_pairs = 0;
+        let failed = scan_projective_local_collection_complementary_filter_portfolio(
+            files.clone(),
+            phase,
+            &budget,
+            || false,
+        )
+        .unwrap();
+        assert!(!failed.local.issues.is_empty());
+        assert!(failed.local.pairs.iter().all(|p| !p.evidence.candidate));
+        assert_eq!(budget.used(), 0);
+        let roots = scan_projective_local_collection_roots_complementary_filter_portfolio(
+            &[dir.path().to_path_buf(), dir.path().join("a")],
+            &rrrah_dedup::exact::Options::default(),
+            q,
+            &budget,
+            || false,
+        )
+        .unwrap();
+        let id_for = |suffix: &str| roots.files.iter().find(|f| f.1.ends_with(suffix)).unwrap().0;
+        let ids = [id_for("a/deep/a.png"), id_for("b/deep/b.png")];
+        let root_edges = roots
+            .indexed
+            .local
+            .pairs
+            .iter()
+            .filter(|p| p.evidence.candidate)
+            .map(|p| (p.left, p.right))
+            .collect::<BTreeSet<_>>();
+        assert_eq!(
+            root_edges,
+            BTreeSet::from([(ids[0].min(ids[1]), ids[0].max(ids[1]))])
+        );
+        assert_eq!(budget.used(), 0);
+    }
     for stop in [1, checkpoints / 2, checkpoints] {
         calls.set(0);
         assert!(

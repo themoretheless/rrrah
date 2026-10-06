@@ -19,6 +19,7 @@ case "$mode" in
   raw-camera) set -- --lib camtiff -- --nocapture; package=rrrah-decode ;;
   raw-core) set -- --all-targets; package=rrrah-core ;;
   projective) set -- --test projective_geometry --test warp; feature_flag=--no-default-features ;;
+  projective-regions) set -- --test projective_geometry --test warp --test photometric --test filtered; feature_flag=--no-default-features ;;
   minimal-full) set -- --all-targets; feature_flag=--no-default-features ;;
   projective-files) set -- --test projective_files --test local_scan ;;
   pyramid-files) set -- --test pyramid --test projective_files pyramid ;;

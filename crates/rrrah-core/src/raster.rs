@@ -54,6 +54,14 @@ pub enum RasterColorSpace {
     /// Linear samples with unqualified primaries/white point (e.g. Radiance).
     LinearRgbUnspecified,
     Icc(Vec<u8>),
+    /// Container CICP declaration. Requires a qualified display transform;
+    /// retain HDR and unfamiliar declarations rather than erase them.
+    Cicp {
+        primaries: u16,
+        transfer: u16,
+        matrix: u16,
+        full_range: bool,
+    },
     Unspecified,
 }
 
@@ -91,6 +99,148 @@ fn srgb_linear(value: f32) -> f32 {
     }
 }
 impl DecodedRaster {
+    /// Convert PQ/BT.2020 RGB to linear sRGB, with 1.0 equal to the declared
+    /// reference white in cd/m². No tone mapping or gamut clipping is applied.
+    pub fn pq_to_linear_srgb_with_budget_and_cancel(
+        &self,
+        reference_white_nits: f32,
+        budget: Option<&rrrah_memory::MemoryBudget>,
+        cancel: impl Fn() -> bool,
+    ) -> Result<Self, RasterError> {
+        self.hdr_to_linear_srgb(reference_white_nits, None, budget, cancel)
+    }
+
+    /// HLG BT.2020 display conversion for a zero-black reference display.
+    /// Peak luminance, reference white and system gamma are explicit; no clipping.
+    pub fn hlg_to_linear_srgb_with_budget_and_cancel(
+        &self,
+        reference_white_nits: f32,
+        peak_nits: f32,
+        system_gamma: f32,
+        budget: Option<&rrrah_memory::MemoryBudget>,
+        cancel: impl Fn() -> bool,
+    ) -> Result<Self, RasterError> {
+        self.hdr_to_linear_srgb(
+            reference_white_nits,
+            Some((peak_nits, system_gamma)),
+            budget,
+            cancel,
+        )
+    }
+
+    fn hdr_to_linear_srgb(
+        &self,
+        reference_white_nits: f32,
+        hlg: Option<(f32, f32)>,
+        budget: Option<&rrrah_memory::MemoryBudget>,
+        cancel: impl Fn() -> bool,
+    ) -> Result<Self, RasterError> {
+        if cancel() {
+            return Err(RasterError::Cancelled);
+        }
+        if !reference_white_nits.is_finite() || !(1.0..=10000.0).contains(&reference_white_nits) {
+            return Err(RasterError::InvalidHdrReferenceWhite);
+        }
+        if let Some((peak, gamma)) = hlg {
+            if !peak.is_finite()
+                || !(1.0..=10000.0).contains(&peak)
+                || !gamma.is_finite()
+                || !(0.1..=4.0).contains(&gamma)
+            {
+                return Err(RasterError::InvalidHlgDisplayPolicy);
+            }
+        }
+        let expected_transfer = if hlg.is_some() { 18 } else { 16 };
+        if !matches!(self.color_space.space, RasterColorSpace::Cicp { primaries: 9, transfer, .. } if transfer == expected_transfer)
+        {
+            return Err(RasterError::ColorTransformRequired);
+        }
+        let count = self.pixels.len();
+        let reservation = budget
+            .map(|b| {
+                b.try_reserve(
+                    (count as u64)
+                        .checked_mul(4)
+                        .ok_or(rrrah_memory::BufferError::Overflow)?,
+                )
+            })
+            .transpose()?;
+        let mut output = Vec::new();
+        output
+            .try_reserve_exact(count)
+            .map_err(|_| RasterError::Allocation)?;
+        for index in 0..count / 4 {
+            if index.is_multiple_of(4096) && cancel() {
+                return Err(RasterError::Cancelled);
+            }
+            let at = index * 4;
+            let rgba: [f64; 4] = std::array::from_fn(|channel| match &self.pixels {
+                RasterPixels::Rgba8(p) => f64::from(p[at + channel]) / 255.0,
+                RasterPixels::Rgba16(p) => f64::from(p[at + channel]) / 65535.0,
+                RasterPixels::Rgba32Float(p) => f64::from(p[at + channel]),
+            });
+            if rgba.iter().any(|v| !v.is_finite()) {
+                return Err(RasterError::NonFiniteSample);
+            }
+            if !(0.0..=1.0).contains(&rgba[3]) {
+                return Err(RasterError::InvalidAlpha);
+            }
+            if rgba[..3].iter().any(|v| !(0.0..=1.0).contains(v)) {
+                return Err(RasterError::InvalidPqSample);
+            }
+            let rgb: [f64; 3] = if let Some((peak, gamma)) = hlg {
+                // BT.2100 HLG inverse OETF and luminance-dependent reference OOTF.
+                let scene: [f64; 3] = std::array::from_fn(|c| {
+                    let value = rgba[c];
+                    if value <= 0.5 {
+                        value * value / 3.0
+                    } else {
+                        (((value - 0.55991073) / 0.17883277).exp() + 0.28466892) / 12.0
+                    }
+                });
+                let luminance = 0.2627 * scene[0] + 0.6780 * scene[1] + 0.0593 * scene[2];
+                let gain = if luminance == 0.0 {
+                    0.0
+                } else {
+                    luminance.powf(f64::from(gamma) - 1.0) * f64::from(peak) / f64::from(reference_white_nits)
+                };
+                scene.map(|value| value * gain)
+            } else {
+                // ST 2084 inverse transfer, absolute peak luminance 10000 cd/m².
+                std::array::from_fn(|c| {
+                    let p = rgba[c].powf(32.0 / 2523.0);
+                    let linear = ((p - 107.0 / 128.0).max(0.0) / (2413.0 / 128.0 - 2392.0 / 128.0 * p))
+                        .powf(8192.0 / 1305.0);
+                    linear * 10000.0 / f64::from(reference_white_nits)
+                })
+            };
+            // BT.2020 D65 -> BT.709/sRGB D65, derived from standard xy primaries.
+            for row in [
+                [1.6604910021084345, -0.5876411387885495, -0.07284986331988488],
+                [-0.12455047452159074, 1.1328998971259603, -0.008349422604369477],
+                [-0.018150763354905303, -0.10057889800800739, 1.1187296613629127],
+            ] {
+                output.push((row[0] * rgb[0] + row[1] * rgb[1] + row[2] * rgb[2]) as f32);
+            }
+            output.push(rgba[3] as f32);
+        }
+        if cancel() {
+            return Err(RasterError::Cancelled);
+        }
+        let pixels = match reservation {
+            Some(r) => r.try_adopt(output)?.into(),
+            None => Arc::new(output).into(),
+        };
+        Self::new(
+            self.width,
+            self.height,
+            RasterPixels::Rgba32Float(pixels),
+            RasterColorSpace::LinearSrgb,
+        )?
+        .with_sample_scale(self.sample_scale)?
+        .with_hotspot(self.hotspot)?
+        .with_image_selection(self.image_index, self.image_count)
+    }
     /// Mutates native samples only while this allocation has one owner.
     /// Slice length and the raster's metadata remain unchanged.
     pub fn rgba8_mut(&mut self) -> Option<&mut [u8]> {
@@ -403,6 +553,231 @@ impl DecodedRaster {
 mod fast_display_tests {
     use super::*;
     #[test]
+    fn hlg_policy_refusals_cancellation_and_black_release_credit() {
+        let source = DecodedRaster::new(
+            1,
+            1,
+            RasterPixels::Rgba32Float(Arc::new(vec![0., 0., 0., 0.5]).into()),
+            RasterColorSpace::Cicp {
+                primaries: 9,
+                transfer: 18,
+                matrix: 9,
+                full_range: true,
+            },
+        )
+        .unwrap();
+        let budget = rrrah_memory::MemoryBudget::new(16);
+        for (peak, gamma) in [
+            (0., 1.2),
+            (f32::NAN, 1.2),
+            (10001., 1.2),
+            (1000., 0.),
+            (1000., f32::INFINITY),
+            (1000., 4.1),
+        ] {
+            assert!(
+                source
+                    .hlg_to_linear_srgb_with_budget_and_cancel(100., peak, gamma, Some(&budget), || false)
+                    .is_err()
+            );
+            assert_eq!(budget.used(), 0);
+        }
+        let black = source
+            .hlg_to_linear_srgb_with_budget_and_cancel(100., 1000., 0.8, Some(&budget), || false)
+            .unwrap();
+        let RasterPixels::Rgba32Float(pixels) = black.pixels() else {
+            panic!()
+        };
+        assert_eq!(pixels.as_ref(), &[0., 0., 0., 0.5]);
+        drop(black);
+        assert_eq!(budget.used(), 0);
+        assert!(
+            source
+                .hlg_to_linear_srgb_with_budget_and_cancel(
+                    100.,
+                    1000.,
+                    1.2,
+                    Some(&rrrah_memory::MemoryBudget::new(15)),
+                    || false
+                )
+                .is_err()
+        );
+        let calls = std::cell::Cell::new(0);
+        assert!(matches!(
+            source.hlg_to_linear_srgb_with_budget_and_cancel(100., 1000., 1.2, Some(&budget), || {
+                calls.set(calls.get() + 1);
+                calls.get() >= 3
+            }),
+            Err(RasterError::Cancelled)
+        ));
+        assert_eq!(budget.used(), 0);
+    }
+    #[test]
+    fn hlg_colors_match_independent_decimal_display_oracle() {
+        let oracle = include_str!("../../../tests/fixtures/raster/hlg-color-decimal-oracle.tsv");
+        let budget = rrrah_memory::MemoryBudget::new(16);
+        let mut count = 0;
+        for line in oracle.lines() {
+            let fields: Vec<_> = line.split('\t').collect();
+            assert_eq!(fields.len(), 11);
+            let policy: Vec<f32> = fields[..3].iter().map(|v| v.parse().unwrap()).collect();
+            let input: Vec<u16> = fields[3..7].iter().map(|v| v.parse().unwrap()).collect();
+            let expected: Vec<f64> = fields[7..].iter().map(|v| v.parse().unwrap()).collect();
+            let source = DecodedRaster::new(
+                1,
+                1,
+                RasterPixels::Rgba16(Arc::new(input).into()),
+                RasterColorSpace::Cicp {
+                    primaries: 9,
+                    transfer: 18,
+                    matrix: 9,
+                    full_range: true,
+                },
+            )
+            .unwrap();
+            let converted = source
+                .hlg_to_linear_srgb_with_budget_and_cancel(
+                    policy[0],
+                    policy[1],
+                    policy[2],
+                    Some(&budget),
+                    || false,
+                )
+                .unwrap();
+            let RasterPixels::Rgba32Float(values) = converted.pixels() else {
+                panic!()
+            };
+            for channel in 0..4 {
+                let tolerance = 1e-7 + expected[channel].abs() * 1e-6;
+                assert!(
+                    (f64::from(values[channel]) - expected[channel]).abs() <= tolerance,
+                    "HLG vector {count}, channel {channel}: {} vs {}",
+                    values[channel],
+                    expected[channel]
+                );
+            }
+            drop(converted);
+            assert_eq!(budget.used(), 0);
+            assert!(
+                source
+                    .pq_to_linear_srgb_with_budget_and_cancel(policy[0], Some(&budget), || false)
+                    .is_err()
+            );
+            count += 1;
+        }
+        assert_eq!(count, 267);
+    }
+    #[test]
+    fn pq_colors_match_independent_decimal_and_chromaticity_oracle() {
+        let oracle = include_str!("../../../tests/fixtures/raster/pq-color-decimal-oracle.tsv");
+        let budget = rrrah_memory::MemoryBudget::new(16);
+        let mut count = 0;
+        for line in oracle.lines() {
+            let fields: Vec<_> = line.split('\t').collect();
+            assert_eq!(fields.len(), 9);
+            let white = fields[0].parse().unwrap();
+            let input: Vec<u16> = fields[1..5].iter().map(|v| v.parse().unwrap()).collect();
+            let expected: Vec<f64> = fields[5..].iter().map(|v| v.parse().unwrap()).collect();
+            let source = DecodedRaster::new(
+                1,
+                1,
+                RasterPixels::Rgba16(Arc::new(input).into()),
+                RasterColorSpace::Cicp {
+                    primaries: 9,
+                    transfer: 16,
+                    matrix: 9,
+                    full_range: true,
+                },
+            )
+            .unwrap();
+            let converted = source
+                .pq_to_linear_srgb_with_budget_and_cancel(white, Some(&budget), || false)
+                .unwrap();
+            let RasterPixels::Rgba32Float(values) = converted.pixels() else {
+                panic!()
+            };
+            for channel in 0..4 {
+                let tolerance = 1e-7 + expected[channel].abs() * 1e-6;
+                assert!(
+                    (f64::from(values[channel]) - expected[channel]).abs() <= tolerance,
+                    "vector {count}, channel {channel}: {} vs {}",
+                    values[channel],
+                    expected[channel]
+                );
+            }
+            drop(converted);
+            assert_eq!(budget.used(), 0);
+            count += 1;
+        }
+        assert_eq!(count, 445);
+    }
+    #[test]
+    fn pq_absolute_luminance_gamut_alpha_and_budget_contract() {
+        let color = RasterColorSpace::Cicp {
+            primaries: 9,
+            transfer: 16,
+            matrix: 9,
+            full_range: true,
+        };
+        let source = DecodedRaster::new(
+            5,
+            1,
+            RasterPixels::Rgba32Float(
+                Arc::new(vec![
+                    0., 0., 0., 0.25, 0.50807842, 0.50807842, 0.50807842, 0.5, 0.7518271, 0.7518271,
+                    0.7518271, 0.75, 1., 1., 1., 1., 1., 0., 0., 1.,
+                ])
+                .into(),
+            ),
+            color,
+        )
+        .unwrap();
+        let budget = rrrah_memory::MemoryBudget::new(80);
+        let output = source
+            .pq_to_linear_srgb_with_budget_and_cancel(100., Some(&budget), || false)
+            .unwrap();
+        let RasterPixels::Rgba32Float(p) = output.pixels() else {
+            panic!()
+        };
+        for (i, expected) in [0., 1., 10., 100.].into_iter().enumerate() {
+            for value in &p[i * 4..i * 4 + 3] {
+                assert!((*value - expected).abs() < 0.001);
+            }
+            assert_eq!(p[i * 4 + 3], [0.25, 0.5, 0.75, 1.][i]);
+        }
+        assert!(p[16] > 100. && p[17] < 0. && p[18] < 0.);
+        assert_eq!(output.color_space(), &RasterColorSpace::LinearSrgb);
+        assert_eq!(budget.used(), 80);
+        drop(output);
+        assert_eq!(budget.used(), 0);
+        assert!(
+            source
+                .pq_to_linear_srgb_with_budget_and_cancel(
+                    100.,
+                    Some(&rrrah_memory::MemoryBudget::new(79)),
+                    || false
+                )
+                .is_err()
+        );
+        let calls = std::cell::Cell::new(0);
+        assert!(matches!(
+            source.pq_to_linear_srgb_with_budget_and_cancel(100., Some(&budget), || {
+                calls.set(calls.get() + 1);
+                calls.get() >= 3
+            }),
+            Err(RasterError::Cancelled)
+        ));
+        assert_eq!(budget.used(), 0);
+        for white in [0., f32::NAN, f32::INFINITY, 10001.] {
+            assert!(
+                source
+                    .pq_to_linear_srgb_with_budget_and_cancel(white, Some(&budget), || false)
+                    .is_err()
+            );
+            assert_eq!(budget.used(), 0);
+        }
+    }
+    #[test]
     fn srgb8_table_matches_previous_formula_bit_for_bit() {
         let pixels: Vec<u8> = (0..=255u8).flat_map(|v| [v, 255 - v, v / 2, v]).collect();
         let source = DecodedRaster::new(
@@ -481,6 +856,12 @@ mod fast_display_tests {
 
 #[derive(Debug, Error)]
 pub enum RasterError {
+    #[error("HDR reference white must be finite and between 1 and 10000 cd/m²")]
+    InvalidHdrReferenceWhite,
+    #[error("HDR encoded RGB codes must be in the range zero to one")]
+    InvalidPqSample,
+    #[error("HLG peak must be finite and 1–10000 cd/m²; system gamma must be finite and 0.1–4")]
+    InvalidHlgDisplayPolicy,
     #[error("raster conversion cancelled")]
     Cancelled,
     #[error(transparent)]

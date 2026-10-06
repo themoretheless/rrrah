@@ -1,0 +1,180 @@
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.16s
+     Running unittests src/main.rs (/tmp/rrrah-required-corpus-target/debug/deps/rrrah-9f57a70452950339)
+
+running 173 tests
+test cache_maintenance::tests::disabled_and_idle_completion_do_not_create_extra_sweeps ... ok
+test cache_telemetry::tests::stale_foreground_generation_does_not_change_hit_rate ... ok
+test cache_telemetry::tests::disabled_hud_does_not_claim_cache_activity ... ok
+test cache_telemetry::tests::stale_prefetch_generation_cannot_overwrite_new_plan ... ok
+test cache_telemetry::tests::writer_snapshot_tracks_pending_active_and_result ... ok
+test cache_telemetry::tests::hit_rate_and_disk_bar_are_stable_at_boundaries ... ok
+test cache_telemetry::tests::cache_panel_fits_the_telemetry_window_contract ... ok
+test cache_writer::tests::enqueue_reuses_reference_counted_sensor_pixels ... ok
+test cache_maintenance::tests::continuous_neighbours_do_not_postpone_expiry_and_pins_survive ... ok
+test decode_gate::tests::granted_prefetch_token_is_invalidated_before_foreground_waits ... ok
+test decode_gate::tests::foreground_intent_is_nonblocking_and_invalidates_prefetch_generation ... ok
+test decode_gate::tests::foreground_jumps_a_waiting_prefetch_after_current_permit ... ok
+test cache_writer::tests::queued_write_is_latest_wins_while_active_store_finishes ... ok
+test decode_gate::tests::newer_foreground_releases_obsolete_waiter_before_active_decode_finishes ... ok
+test decode_gate::tests::cancelled_prefetch_waiter_returns_none_while_permit_is_busy ... ok
+test decode_gate::tests::production_prefetch_debounce_is_two_hundred_milliseconds ... ok
+test decode_gate::tests::dropping_current_ticket_unblocks_prefetch ... ok
+test decode_gate::tests::superseded_ticket_does_not_clear_newer_foreground_priority ... ok
+test decode_gate::tests::permits_serialize_foreground_and_prefetch_work ... ok
+test cache_writer::tests::writer_budget_covers_active_jobs_and_rejects_without_pixel_copy ... ok
+test filmstrip_ui::tests::pressure_eviction_promotes_recency_and_clears_source_inventory ... ok
+test filmstrip_ui::tests::strip_scroll_is_clamped_to_content ... ok
+test filmstrip_ui::tests::strip_frame_marks_current_and_applies_scroll ... ok
+test filmstrip_ui::tests::thumb_cache_evicts_least_recently_used_and_reports_handle ... ok
+test filmstrip_ui::tests::thumb_cache_replacement_returns_previous_handle_without_eviction ... ok
+test foreground_loader_tests::cancelled_thumbnail_viewport_does_not_open_source_or_allocate ... ok
+test foreground_loader_tests::dropping_foreground_loader_invalidates_an_unsuperseded_active_token ... ok
+test dicom_viewer_tests::native_dicom_selected_frames_prepare_cache_and_release_managed_pixels ... ok
+test foreground_loader_tests::metal_upload_retains_raw_lease_until_submission_completion ... ignored, requires Metal device and RRRAH_SONY_SR2_CORPUS pinned source
+test foreground_loader_tests::keyboard_windows_shift_center_and_resize_without_invalid_ranges ... ok
+test foreground_loader_tests::cli_prefetch_counts_support_defaults_aliases_and_disabled_sides ... ok
+test foreground_loader_tests::cli_ram_limits_are_independent_and_optional ... ok
+test foreground_loader_tests::model_cache_hit_shares_geometry_and_bypasses_decoder ... ok
+test foreground_loader_tests::navigation_stays_within_decoded_container_bounds ... ok
+test foreground_loader_tests::disk_cli_limits_are_independent_and_configure_real_cache ... ok
+test foreground_loader_tests::model_cache_policy_is_independent_and_expired_hits_decode_again ... ok
+test foreground_loader_tests::model_prefetch_headroom_skips_cold_load_but_keeps_ready_geometry ... ok
+test foreground_loader_tests::equivalent_foreground_requests_join_pending_and_active_generation ... ok
+test filmstrip_ui::tests::source_and_external_wal_palette_changes_invalidate_textures ... ok
+test foreground_loader_tests::pict_filmstrip_uses_explicit_viewer_policy_and_releases_last_owner ... ok
+test foreground_loader_tests::pict_neighbour_preload_recovers_from_pressure_and_reuses_managed_pixels ... ok
+test foreground_loader_tests::off_discovery_inspection_and_frame_boundary ... ok
+test foreground_loader_tests::obj_uses_common_model_discovery_and_inspection ... ok
+test foreground_loader_tests::queued_navigation_cancels_x3f_preload_and_decodes_latest_raster ... ignored, requires external SD10 source
+test foreground_loader_tests::rapid_submissions_keep_only_the_latest_pending_request ... ok
+test foreground_loader_tests::generation_superseded_after_decode_cancels_color_before_output_admission ... ok
+test foreground_loader_tests::invalid_float_icc_does_not_pollute_raster_cache_or_evict_visible_pixels ... ok
+test foreground_loader_tests::raster_cache_hit_does_not_call_decode_admission_closure ... ok
+test foreground_loader_tests::ply_discovery_and_float64_inspection_are_connected ... ok
+test foreground_loader_tests::raster_folder_thumbnail_applies_icc_and_composites_alpha ... ok
+test foreground_loader_tests::raster_cache_hits_share_pixels_and_separate_animation_indices ... ok
+test foreground_loader_tests::raw_thumbnail_source_and_preview_share_managed_root ... ignored, requires external Sony DSC-F828 SRF fixture
+test foreground_loader_tests::real_ai_pages_use_shared_ram_hits_and_independent_prefetch_keys ... ignored, requires pinned AI source corpus; set RRRAH_AI_CORPUS
+test foreground_loader_tests::raster_prefetch_headroom_preserves_ram_hits_and_recovers_after_pressure ... ok
+test foreground_loader_tests::raster_thumbnail_uses_shared_budget_and_last_owner_credit ... ok
+test foreground_loader_tests::pdf_selected_page_preload_keeps_distinct_cache_keys_and_visible_page ... ok
+test foreground_loader_tests::real_model_preload_is_available_without_foreground_decode ... ok
+test foreground_loader_tests::raster_limits_are_independent_of_raw_limits_and_accept_zero ... ok
+test foreground_loader_tests::real_x3f_generation_cancellation_after_sensor_allocation_recovers ... ignored, requires external SD10 source
+test foreground_loader_tests::incomplete_pdf_prefetch_is_not_cached_and_next_decode_can_run ... ok
+test foreground_loader_tests::real_x3f_neighbour_windows_preserve_visible_and_reuse_preload ... ignored, requires external SD10 source
+test foreground_loader_tests::rejected_model_transition_restores_the_visible_pin ... ok
+test foreground_loader_tests::real_raster_preload_preserves_original_pin_and_shares_warmed_storage ... ok
+test foreground_loader_tests::rla_cache_alpha_policy_cannot_bypass_strict_refusal ... ok
+test foreground_loader_tests::rla_float_byte_order_isolated_in_actual_display_cache ... ok
+test foreground_loader_tests::raster_cache_does_not_hide_replaced_source_or_merge_scalar_windows ... ok
+test foreground_loader_tests::scientific_preload_retains_window_key_and_bypasses_repeat_decode ... ok
+test foreground_loader_tests::rla_cli_policy_reaches_requests_and_thumbnail_loader ... ok
+test foreground_loader_tests::source_kind_pressure_preserves_visible_then_releases_unpinned_raw ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture
+test foreground_loader_tests::rla_linear_color_cli_preserves_hdr_and_separates_cached_transfer ... ok
+test foreground_loader_tests::rla_float_cli_reaches_decode_and_thumbnail_and_clears_defaults ... ok
+test foreground_loader_tests::rla_offset_canvas_thumbnail_preserves_extent_and_releases_budget ... ok
+test foreground_loader_tests::speculative_cache_paths_reject_cancelled_requests_and_stale_decode_results ... ok
+test foreground_loader_tests::speculative_model_admission_cannot_replace_visible_count_one ... ok
+test foreground_loader_tests::rla_straight_and_premultiplied_use_distinct_cached_pixels ... ok
+test foreground_loader_tests::swap_restore_budget_is_independent_and_accepts_zero ... ok
+test foreground_loader_tests::scientific_window_reaches_selected_plane_and_cli_bounds_are_validated ... ok
+test foreground_loader_tests::stl_discovery_inspection_and_thumbnail_boundary ... ok
+test foreground_loader_tests::tiff_neighbour_is_classified_and_reuses_preloaded_managed_pixels ... ok
+test gallery::tests::configured_raw_window_reaches_worker_and_is_clamped ... ok
+test gallery::tests::extension_filter_is_case_insensitive ... ok
+test gallery::tests::dropping_thumbnail_prefetcher_cancels_active_loader ... ok
+test gallery::tests::foreground_bit_prevents_new_store_admission_without_losing_state ... ok
+test gallery::tests::foreground_pause_invalidates_pending_then_resumes_fresh_generation ... ok
+test gallery::tests::jobs_are_bounded_around_selection ... ok
+test gallery::tests::mixed_gallery_submits_raw_neighbours_from_raster_or_model_selection ... ok
+test gallery::tests::prefetch_plan_handles_edges_without_duplicates ... ok
+test foreground_loader_tests::viewer_untagged_policy_is_explicit_and_preserves_strict_cache_boundary ... ok
+test gallery::tests::prefetch_plan_is_forward_biased_and_bounded ... ok
+test foreground_loader_tests::strict_raster_request_cannot_reuse_assumed_color_cache_entry ... ok
+test gallery::tests::raster_selection_warms_real_crw_neighbour ... ignored, requires pinned EOS 10D via RRRAH_CRW_SOURCE
+test gallery::tests::raster_selection_warms_real_raw_neighbour_without_nonraw_failures ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture
+test gallery::tests::raw_prefetch_byte_limit_preserves_present_priority_neighbour ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture
+test gallery::tests::raw_prefetch_count_limit_counts_retained_neighbours_after_missing_file ... ignored, requires external Sony DSC-F828 SRF fixture
+test gallery::tests::raw_prefetch_count_limit_preserves_highest_priority_neighbour ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture
+test gallery::tests::raw_prefetch_paths_are_two_back_then_five_ahead ... ok
+test gallery::tests::raw_prefetch_backward_window_is_bounded_at_gallery_edges ... ok
+test foreground_loader_tests::selected_raster_reaches_display_preparation ... ok
+test gallery::tests::raw_prefetch_paths_swap_window_when_travelling_backward ... ok
+test gallery::tests::raw_prefetch_respects_shared_budget_and_recovers_after_release ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture
+test gallery::tests::raw_prefetch_shutdown_cancels_only_its_own_lifetime ... ok
+test gallery::tests::raw_prefetch_window_is_bounded_at_both_gallery_edges ... ok
+test gallery::tests::raw_queue_is_latest_wins_and_bounded_to_one_command ... ok
+test foreground_loader_tests::pict_neighbour_windows_obey_count_bytes_and_ttl_without_losing_visible_frame ... ok
+test gallery::tests::sibling_folder_tiles_handles_missing_parent_and_filesystem_root ... ok
+test gallery::tests::new_camera_formats_enter_gallery_and_directional_prefetch_window ... ok
+test foreground_loader_tests::pq_white_cli_separates_cache_and_reaches_thumbnail ... ok
+test gallery::tests::thumbnail_queue_replaces_stale_pending_window_at_capacity ... ok
+test gallery::tests::thumbnail_submit_discards_already_ready_stale_generation ... ok
+test foreground_loader_tests::wal_thumbnail_rereads_palette_and_composites_transparency ... ok
+test gallery::tests::thumbnail_submit_never_consumes_beyond_window_capacity ... ok
+test gallery::tests::thumbnail_worker_drops_an_inflight_stale_generation ... ok
+test gallery::tests::sibling_folder_tiles_ignores_symlinked_dirs ... ok
+test gallery::tests::thumbnail_viewport_cancels_active_loader ... ok
+test hdr_surface_policy_tests::hdr_requires_matching_format_color_space_and_never_silently_falls_back ... ok
+test managed_model_ttl_tests::disabled_ttl_waits_for_request_without_maintenance ... ok
+test managed_model_ttl_tests::expired_model_entry_preserves_visible_and_external_geometry_owners ... ok
+test gpu_vendor_cli_tests::nvidia_vendor_request_is_distinct_from_api_selection ... ok
+test gpu_backend_cli_tests::backend_selection_is_explicit_and_cuda_is_not_a_wgpu_backend ... ok
+test model_retry_tests::real_stl_retry_releases_off_neighbour_and_preserves_visible_mesh ... ok
+test gallery::tests::sibling_folder_tiles_lists_only_dirs_with_supported_images ... ok
+test model_gpu_cli_tests::model_gpu_budget_is_opt_in_and_accepts_zero ... ok
+test model_source_pressure_tests::tiff_classification_releases_only_unpinned_model_storage ... ok
+test gallery::tests::raw_worker_skips_ordinary_tiff_without_decoding_failure ... ok
+test model_swap_viewer_tests::model_swap_cli_is_independent_and_no_cache_disables_it ... ok
+test gallery::tests::neighbour_windows_match_distance_contract_for_every_small_gallery ... ok
+test pipeline_telemetry::tests::cache_hit_route_has_twenty_two_cards_and_no_decoder_stages ... ok
+test pipeline_telemetry::tests::exact_decode_and_adapter_boundaries_map_to_separate_cards ... ok
+test pipeline_telemetry::tests::decode_route_has_forty_one_cards_and_ten_format_steps ... ok
+test foreground_loader_tests::hlg_display_cli_separates_all_policy_fields_and_reaches_thumbnail ... ok
+test pipeline_telemetry::tests::failure_preserves_finished_work_and_marks_downstream_not_reached ... ok
+test pipeline_telemetry::tests::format_routes_are_distinct_and_document_conditional_work ... ok
+test pipeline_telemetry::tests::frame_stages_and_end_to_end_total_latch_once ... ok
+test pipeline_telemetry::tests::frontend_progress_moves_explicitly_from_fingerprint_to_cache ... ok
+test pipeline_telemetry::tests::gpu_and_shader_stages_are_maximally_split_without_fake_gpu_time ... ok
+test pipeline_telemetry::tests::idle_route_is_one_waiting_card ... ok
+test pipeline_telemetry::tests::no_cache_skips_both_cache_frontend_stages_without_claiming_miss ... ok
+test pipeline_telemetry::tests::source_kind_is_case_insensitive ... ok
+test pipeline_telemetry::tests::sub_millisecond_timings_never_collapse_to_zero_ms ... ok
+test raster_budget_pressure_tests::raster_retry_releases_unpinned_storage_and_preserves_visible ... ok
+test raster_source_pressure_tests::tiff_classification_releases_raster_neighbour_and_preserves_visible ... ok
+test raster_gpu_cli_tests::raster_gpu_budget_is_opt_in_and_accepts_zero ... ok
+test managed_model_ttl_tests::idle_receive_expires_managed_model_and_accepts_next_request ... ok
+test model_swap_viewer_tests::impossible_restore_limit_does_not_evict_unpinned_models ... ok
+test raster_swap_viewer_tests::real_x3f_display_ram_hit_and_swap_restore_exact ... ignored, requires external SD10 source
+test raster_swap_viewer_tests::raster_swap_cli_limits_and_disabled_modes_are_independent ... ok
+test gallery::tests::rapid_navigation_never_accumulates_raw_commands ... ok
+test raw_gpu_cli_tests::raw_gpu_local_cap_is_independent_under_shared_parent ... ok
+test raw_load_policy::tests::confidence_hysteresis_and_probe_preserve_default ... ok
+test raw_load_policy::tests::pressure_deferral_is_retryable_and_not_a_failed_cost_sample ... ok
+test raw_load_policy::tests::measured_costs_hysteresis_and_bounded_identity ... ok
+test raw_load_policy::tests::real_3fr_decode_admission_refusal_recovers_disk_and_swap ... ignored, requires pinned Hasselblad X1D 3FR source
+test raw_ram_preload_tests::idle_timer_spills_real_raw_and_restores_sensor_values ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture
+test raster_swap_viewer_tests::swap_color_assumptions_cannot_satisfy_strict_request ... ok
+test raw_ram_preload_tests::native_raw_preload_hits_ram_and_disk_without_transferring_visible_pin ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture
+test shared_gpu_cli_tests::retained_write_queues_do_not_charge_managed_pixels_twice ... ok
+test raster_swap_viewer_tests::prepared_hdr_swap_hit_preserves_values_and_cancelled_generation_skips_restore ... ok
+test thumbnail_retry_tests::thumbnail_budget_callbacks_progress_without_surface_redraw ... ignored, requires actual Metal device
+test shared_gpu_cli_tests::viewer_gpu_caps_share_parent_and_preserve_local_limits ... ok
+test raster_swap_viewer_tests::real_animation_restores_prepared_pixels_without_decode_and_preserves_background_pin ... ok
+test speculative_pressure_tests::raster_preload_refuses_pressure_without_discarding_warmed_neighbour ... ok
+test thumbnail_retry_tests::retry_keeps_managed_pixels_and_rejects_expired_or_changed_source ... ok
+test decode_gate::tests::viewport_token_cancels_prefetch_waiter_while_foreground_permit_is_live ... ok
+test raster_swap_viewer_tests::idle_timer_spills_profiled_raster_and_restores_exact_payload ... ok
+test model_swap_viewer_tests::model_consumer_leases_block_background_eviction_then_allow_exact_swap ... ok
+test model_swap_viewer_tests::expired_models_spill_and_restore_without_redecoding ... ok
+test model_swap_viewer_tests::native_model_eviction_restores_before_decoder_and_preserves_managed_credit ... ok
+test gallery::tests::streaming_folder_limit_preserves_sorted_prefix_and_name_ties ... ok
+test decode_gate::tests::prefetch_waits_for_idle_debounce ... ok
+test cache_writer::tests::debounce_discards_generation_superseded_before_store ... ok
+test foreground_loader_tests::dropping_foreground_loader_cancels_active_and_drains_pending_work ... ok
+test foreground_loader_tests::queued_navigation_cancels_pict_preload_and_decodes_latest_raster ... ok
+test cache_writer::tests::generation_change_cancels_real_store_waiting_on_disk_lock ... ok
+
+test result: ok. 155 passed; 0 failed; 18 ignored; 0 measured; 0 filtered out; finished in 0.33s
+

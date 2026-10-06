@@ -42,13 +42,20 @@ Neither establishes the complete image-duplicate library by itself.
 
 Source-inspired local descriptors, projective geometry and bounded color
 confirmation now have independent implementation and explicit resource/refusal
-evidence. The latest managed three-level file API executes all 229 Copydays
-strong-subset pairs: 20 are recovered and 209 are omitted (77 without geometry,
-132 rejected by pixel confirmation). One recovered print/scan query rejects all
-156 different publisher-origin groups. These measured gaps prevent a claim
-that the source selection already covers every duplicate-search case. Full
-results: `../dedup-copydays-public-pyramid-macos.json` and
-`../dedup-copydays-public-pyramid-negative-macos.json`.
+evidence. The integrated registration/two-filter file API executes all 229 Copydays
+strong-subset pairs and recovers 30, leaving 199 omitted. Its reported per-family geometry,
+pixel counts and decisions match the fixed standalone measurements on all 229
+pairs; all 386 normalized input images were verified. Full measured evidence:
+`../dedup-complementary-filter-portfolio-full-state.json`.
+
+A separate explicit radius-3 smoothing diagnostic recovers 27 of 229, with eight
+gains and one loss compared with radius 1. It preserves the initial native
+geometry on all pairs, but is not promoted as a replacement default because it
+loses `203102.jpg`. Two queries each reject all 156 different publisher-origin
+groups; these finite negative gates do not establish all-query precision or
+burst-photo discrimination. Evidence: `../dedup-pyramid-blur-state.json`.
+These measured gaps prevent a claim that the source selection already covers
+every duplicate-search case.
 
 The full objective remains the acceptance matrix in
 `docs/DUPLICATE_LIBRARY_CONTRACT.md`: exact copies, decoded-pixel equality,

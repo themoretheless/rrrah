@@ -290,8 +290,8 @@ pub fn compare_local_files_with_constrained_filter(
 fn accepted_photometric(p: &BidirectionalPhotometricEvidence, policy: LocalFilePolicy) -> bool {
     accepted(
         &BidirectionalEvidence {
-            forward: p.forward.pixels.clone(),
-            reverse: p.reverse.pixels.clone(),
+            forward: p.forward.pixels,
+            reverse: p.reverse.pixels,
         },
         policy,
     )
@@ -2100,7 +2100,7 @@ fn compare_projective_registered_selected(
                     )
                 })
                 .transpose()?;
-            let pixels = filtered.as_ref().map(|e| e.strict.clone());
+            let pixels = filtered.as_ref().map(|e| e.strict);
             let candidate = filtered.as_ref().is_some_and(|e| accepted(&e.filtered, policy));
             Ok(ProjectiveFileEvidence {
                 registered_transform,
@@ -2307,7 +2307,7 @@ pub fn compare_local_files_projective_photometric(
                     cancel,
                 ) {
                     Ok(evidence) => {
-                        unfitted = Some(evidence.unfitted.clone());
+                        unfitted = Some(evidence.unfitted);
                         pixels = Some(evidence);
                     }
                     Err(WarpError::Fit(reason)) => {
@@ -2380,6 +2380,224 @@ pub fn compare_local_files_projective_pyramid_photometric(
         },
     )
 }
+/// Two explicit pixel filters share one feature search and one geometry estimate.
+#[derive(Debug, Clone, Copy)]
+pub struct ProjectivePyramidFilterPortfolioPolicy {
+    pub primary: ProjectivePyramidPhotometricFilePolicy,
+    pub secondary: ColorFilterPolicy,
+    /// Sum of both admitted filtered-pixel work caps.
+    pub max_total_sample_pairs: u64,
+}
+#[derive(Debug)]
+pub struct ProjectivePyramidFilterPortfolioEvidence {
+    pub primary: ProjectivePhotometricFileEvidence,
+    pub secondary_pixels: Option<crate::warp::ProjectivePhotometricEvidence>,
+    pub secondary_fit_failure: Option<PhotometricFitFailure>,
+    pub accepted_filters: [bool; 2],
+    pub candidate: bool,
+}
+/// Both filters finish inside the shared source/dependency lifecycle. No filter
+/// may hide another filter's cancellation or resource error. A fit refusal is
+/// retained as rejected evidence; it is never interpreted as successful work.
+///
+/// # Errors
+/// Invalid policy, cumulative/phase budget, decode, source changes or cancellation.
+pub fn compare_local_files_projective_pyramid_filter_portfolio(
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    policy: ProjectivePyramidFilterPortfolioPolicy,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<ProjectivePyramidFilterPortfolioEvidence, LocalFileError> {
+    let p = policy.primary;
+    validate_projective_pyramid_file_policy(&p)?;
+    crate::warp::validate_filter_policy(policy.secondary.filter)?;
+    let total = p
+        .filter
+        .filter
+        .max_sample_pairs
+        .checked_add(policy.secondary.filter.max_sample_pairs)
+        .ok_or(WarpError::Budget)?;
+    if total > policy.max_total_sample_pairs {
+        return Err(WarpError::Budget.into());
+    }
+    let pyramid = crate::pyramid::PyramidPolicy {
+        local: p.local.extract,
+        max_levels: p.max_levels,
+        max_total_pixels: p.max_total_pixels,
+        max_total_features: p.max_total_features,
+    };
+    compare_local_file_views_with_extractor(
+        left,
+        right,
+        p.local,
+        (None, None, None, false),
+        budget,
+        cancel,
+        |view, cancel| crate::pyramid::extract_oriented_pyramid_managed(view, pyramid, budget, cancel),
+        |a, b, correspondences, cancel| {
+            let primary = verify_projective_pyramid_views(a, b, correspondences, p, cancel)?;
+            let mut secondary_pixels = None;
+            let mut secondary_fit_failure = None;
+            if let Some(g) = &primary.geometry {
+                match crate::warp::verify_projective_photometric_filtered(
+                    a,
+                    b,
+                    g.transform,
+                    p.photometric,
+                    policy.secondary,
+                    p.fit_mode,
+                    cancel,
+                ) {
+                    Ok(e) => secondary_pixels = Some(e),
+                    Err(WarpError::Fit(reason)) => secondary_fit_failure = Some(reason),
+                    Err(error) => return Err(error.into()),
+                }
+            }
+            let accepted_filters = [
+                primary.candidate,
+                secondary_pixels
+                    .as_ref()
+                    .is_some_and(|e| accepted_photometric(&e.fitted, p.local)),
+            ];
+            Ok(ProjectivePyramidFilterPortfolioEvidence {
+                primary,
+                secondary_pixels,
+                secondary_fit_failure,
+                accepted_filters,
+                candidate: accepted_filters.into_iter().any(|x| x),
+            })
+        },
+    )
+}
+
+/// Explicit region confirmations under the same native pyramid geometry.
+#[derive(Debug, Clone, Copy)]
+pub struct ProjectivePyramidRegionsFilePolicy {
+    pub search: ProjectivePyramidPhotometricFilePolicy,
+    pub max_regions: usize,
+    /// Primary verification cap plus one complete region verification cap per domain pair.
+    pub max_total_sample_pairs: u64,
+}
+#[derive(Debug, Clone, Copy)]
+pub struct ProjectiveRegionFileEvidence {
+    pub domains: [crate::warp::PixelRectangle; 2],
+    pub pixels: Option<crate::warp::ProjectiveRegionPhotometricEvidence>,
+    pub fit_failure: Option<PhotometricFitFailure>,
+}
+#[derive(Debug)]
+pub struct ProjectivePyramidRegionsFileEvidence {
+    /// Whole-image evidence and candidate remain unchanged by regional matches.
+    pub whole: ProjectivePhotometricFileEvidence,
+    /// No geometry means no regional pixel verification was attempted.
+    /// The reservation follows shared ownership until the final owner is dropped.
+    pub regions: rrrah_core::SharedBuffer<ProjectiveRegionFileEvidence>,
+}
+/// Confirm declared regions inside the shared selected-frame source lifecycle.
+/// Regional fits never promote a whole-image candidate. Every domain is validated
+/// even when geometry is unavailable; fit refusals remain explicit per region.
+/// Work/cancellation/source failures discard all previously computed evidence.
+///
+/// # Errors
+/// Invalid region/policy, cumulative or phase work/memory, decode/source changes or cancellation.
+pub fn compare_local_files_projective_pyramid_regions(
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    policy: ProjectivePyramidRegionsFilePolicy,
+    domains: &[[crate::warp::PixelRectangle; 2]],
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<ProjectivePyramidRegionsFileEvidence, LocalFileError> {
+    let p = policy.search;
+    validate_projective_pyramid_file_policy(&p)?;
+    if domains.is_empty() || policy.max_regions == 0 {
+        return Err(LocalFileError::InvalidPolicy);
+    }
+    if domains.len() > policy.max_regions {
+        return Err(WarpError::Budget.into());
+    }
+    for pair in domains {
+        for region in pair {
+            crate::warp::validate_rectangle(*region, (u32::MAX, u32::MAX))?;
+        }
+    }
+    let phases = u64::try_from(domains.len())
+        .ok()
+        .and_then(|n| n.checked_add(1))
+        .ok_or(WarpError::Budget)?;
+    let work = p
+        .filter
+        .filter
+        .max_sample_pairs
+        .checked_mul(phases)
+        .ok_or(WarpError::Budget)?;
+    if work > policy.max_total_sample_pairs {
+        return Err(WarpError::Budget.into());
+    }
+    let bytes = domains
+        .len()
+        .checked_mul(std::mem::size_of::<ProjectiveRegionFileEvidence>())
+        .and_then(|n| u64::try_from(n).ok())
+        .ok_or(LocalError::Budget)?;
+    let pyramid = crate::pyramid::PyramidPolicy {
+        local: p.local.extract,
+        max_levels: p.max_levels,
+        max_total_pixels: p.max_total_pixels,
+        max_total_features: p.max_total_features,
+    };
+    compare_local_file_views_with_extractor(
+        left,
+        right,
+        p.local,
+        (None, None, None, false),
+        budget,
+        cancel,
+        |view, cancel| crate::pyramid::extract_oriented_pyramid_managed(view, pyramid, budget, cancel),
+        |a, b, correspondences, cancel| {
+            for pair in domains {
+                crate::warp::validate_rectangle(pair[0], a.dimensions())?;
+                crate::warp::validate_rectangle(pair[1], b.dimensions())?;
+            }
+            let retained = budget.try_reserve(bytes).map_err(|_| LocalError::Budget)?;
+            let whole = verify_projective_pyramid_views(a, b, correspondences, p, cancel)?;
+            let mut regions = Vec::new();
+            regions
+                .try_reserve_exact(domains.len())
+                .map_err(|_| LocalError::Budget)?;
+            for pair in domains {
+                if cancel() {
+                    return Err(LocalFileError::Cancelled);
+                }
+                let mut pixels = None;
+                let mut fit_failure = None;
+                if let Some(g) = &whole.geometry {
+                    match crate::warp::verify_projective_regions_photometric_filtered(
+                        a,
+                        b,
+                        g.transform,
+                        *pair,
+                        p.photometric,
+                        p.filter,
+                        p.fit_mode,
+                        cancel,
+                    ) {
+                        Ok(e) => pixels = Some(e),
+                        Err(WarpError::Fit(reason)) => fit_failure = Some(reason),
+                        Err(error) => return Err(error.into()),
+                    }
+                }
+                regions.push(ProjectiveRegionFileEvidence {
+                    domains: *pair,
+                    pixels,
+                    fit_failure,
+                });
+            }
+            let regions = retained.try_adopt(regions).map_err(|_| LocalError::Budget)?;
+            Ok(ProjectivePyramidRegionsFileEvidence { whole, regions })
+        },
+    )
+}
+
 fn verify_projective_pyramid_views(
     a: &crate::linear::LinearRgbaView<'_>,
     b: &crate::linear::LinearRgbaView<'_>,
@@ -2404,7 +2622,7 @@ fn verify_projective_pyramid_views(
             cancel,
         ) {
             Ok(e) => {
-                unfitted = Some(e.unfitted.clone());
+                unfitted = Some(e.unfitted);
                 pixels = Some(e);
             }
             Err(WarpError::Fit(reason)) => {
@@ -2605,6 +2823,73 @@ pub fn compare_local_files_projective_complementary(
     budget: &MemoryBudget,
     cancel: impl Fn() -> bool,
 ) -> Result<ProjectiveComplementaryFileEvidence, LocalFileError> {
+    compare_local_files_projective_complementary_inner(left, right, policy, None, budget, cancel)
+        .map(|e| e.searches)
+}
+
+/// Registration and two explicit pyramid filters, sharing selected decoded views.
+#[derive(Debug, Clone, Copy)]
+pub struct ProjectiveComplementaryFilterPortfolioPolicy {
+    pub searches: ProjectiveComplementaryFilePolicy,
+    pub secondary: ColorFilterPolicy,
+    /// Admitted base portfolio cap plus the secondary filtered-pixel work cap.
+    pub max_total_sample_pairs: u64,
+}
+#[derive(Debug)]
+pub struct ProjectiveComplementaryFilterPortfolioEvidence {
+    /// Original registration/pyramid evidence and its unchanged acceptance.
+    pub searches: ProjectiveComplementaryFileEvidence,
+    pub secondary_pixels: Option<crate::warp::ProjectivePhotometricEvidence>,
+    pub secondary_fit_failure: Option<PhotometricFitFailure>,
+    /// Registration, primary pyramid filter, secondary pyramid filter.
+    pub accepted_searches: [bool; 3],
+    pub candidate: bool,
+}
+/// Estimate each feature family's geometry once, then verify all explicit pixel
+/// hypotheses. Every phase must complete before any result is admitted.
+///
+/// # Errors
+/// Invalid policy, checked cumulative/phase limits, decode/source changes or cancellation.
+pub fn compare_local_files_projective_complementary_filter_portfolio(
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    policy: ProjectiveComplementaryFilterPortfolioPolicy,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<ProjectiveComplementaryFilterPortfolioEvidence, LocalFileError> {
+    validate_projective_complementary_filter_portfolio_policy(&policy)?;
+    compare_local_files_projective_complementary_inner(
+        left,
+        right,
+        policy.searches,
+        Some(policy.secondary),
+        budget,
+        cancel,
+    )
+}
+pub(crate) fn validate_projective_complementary_filter_portfolio_policy(
+    policy: &ProjectiveComplementaryFilterPortfolioPolicy,
+) -> Result<(), LocalFileError> {
+    validate_projective_complementary_file_policy(&policy.searches)?;
+    crate::warp::validate_filter_policy(policy.secondary.filter)?;
+    let total = policy
+        .searches
+        .max_total_sample_pairs
+        .checked_add(policy.secondary.filter.max_sample_pairs)
+        .ok_or(WarpError::Budget)?;
+    if total > policy.max_total_sample_pairs {
+        return Err(WarpError::Budget.into());
+    }
+    Ok(())
+}
+fn compare_local_files_projective_complementary_inner(
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    policy: ProjectiveComplementaryFilePolicy,
+    secondary: Option<ColorFilterPolicy>,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<ProjectiveComplementaryFilterPortfolioEvidence, LocalFileError> {
     validate_projective_complementary_file_policy(&policy)?;
     let p = policy.pyramid;
     let pyramid = crate::pyramid::PyramidPolicy {
@@ -2630,11 +2915,38 @@ pub fn compare_local_files_projective_complementary(
             let registration = verify_projective_portfolio_views(a, b, matches, r, cancel)?;
             let accepted_searches = [registration.candidate, pyramid.candidate];
             let candidate = accepted_searches.into_iter().any(|accepted| accepted);
-            Ok(ProjectiveComplementaryFileEvidence {
-                registration,
-                pyramid,
-                accepted_searches,
-                candidate,
+            let mut secondary_pixels = None;
+            let mut secondary_fit_failure = None;
+            if let (Some(filter), Some(g)) = (secondary, &pyramid.geometry) {
+                match crate::warp::verify_projective_photometric_filtered(
+                    a,
+                    b,
+                    g.transform,
+                    p.photometric,
+                    filter,
+                    p.fit_mode,
+                    cancel,
+                ) {
+                    Ok(e) => secondary_pixels = Some(e),
+                    Err(WarpError::Fit(reason)) => secondary_fit_failure = Some(reason),
+                    Err(error) => return Err(error.into()),
+                }
+            }
+            let secondary_accepted = secondary_pixels
+                .as_ref()
+                .is_some_and(|e| accepted_photometric(&e.fitted, p.local));
+            let all = [accepted_searches[0], accepted_searches[1], secondary_accepted];
+            Ok(ProjectiveComplementaryFilterPortfolioEvidence {
+                searches: ProjectiveComplementaryFileEvidence {
+                    registration,
+                    pyramid,
+                    accepted_searches,
+                    candidate,
+                },
+                secondary_pixels,
+                secondary_fit_failure,
+                accepted_searches: all,
+                candidate: all.into_iter().any(|x| x),
             })
         },
     )

@@ -1864,6 +1864,23 @@ pub fn scan_projective_local_collection_complementary(
     budget: &MemoryBudget,
     cancel: impl Fn() -> bool,
 ) -> Result<LocalCollectionReport<crate::local_scan::ProjectiveComplementaryFileEvidence>, ScanError> {
+    scan_complementary_with_verifier(files, config, budget, cancel, |left, right, cancel| {
+        crate::local_scan::compare_local_files_projective_complementary(
+            left,
+            right,
+            config.search,
+            budget,
+            cancel,
+        )
+    })
+}
+fn scan_complementary_with_verifier<E>(
+    files: impl IntoIterator<Item = (u64, DecodeRequest)>,
+    config: ProjectiveComplementaryCollectionPolicy,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+    verify: impl Fn(&DecodeRequest, &DecodeRequest, &dyn Fn() -> bool) -> Result<E, LocalFileError>,
+) -> Result<LocalCollectionReport<E>, ScanError> {
     validate_projective_complementary_collection(&config)?;
     let c = config.search;
     let p = c.pyramid;
@@ -1920,9 +1937,7 @@ pub fn scan_projective_local_collection_complementary(
             })
         },
         |_, _, _| Ok(None),
-        |left, right, cancel| {
-            crate::local_scan::compare_local_files_projective_complementary(left, right, c, budget, cancel)
-        },
+        verify,
     )
 }
 /// Recursive complementary search with caller-selected frame requests.
@@ -1961,6 +1976,110 @@ pub fn scan_projective_local_collection_roots_complementary(
 ) -> Result<DirectoryLocalCollectionReport<crate::local_scan::ProjectiveComplementaryFileEvidence>, ScanError>
 {
     scan_projective_local_collection_roots_complementary_with_requests(
+        roots,
+        traversal,
+        policy,
+        budget,
+        |path| DecodeRequest::new(path),
+        cancel,
+    )
+}
+
+/// Same descriptor proposal index; registration and both pyramid filters confirm
+/// each pair independently of merged descriptor ambiguity.
+#[derive(Debug, Clone, Copy)]
+pub struct ProjectiveComplementaryFilterPortfolioCollectionPolicy {
+    pub search: crate::local_scan::ProjectiveComplementaryFilterPortfolioPolicy,
+    pub budgets: FileFeatureBudgets,
+}
+fn validate_complementary_filter_collection(
+    policy: &ProjectiveComplementaryFilterPortfolioCollectionPolicy,
+) -> Result<(), ScanError> {
+    crate::local_scan::validate_projective_complementary_filter_portfolio_policy(&policy.search).map_err(
+        |e| match e {
+            LocalFileError::InvalidPolicy => ScanError::InvalidPolicy,
+            _ => ScanError::Budget,
+        },
+    )?;
+    validate_projective_complementary_collection(&ProjectiveComplementaryCollectionPolicy {
+        search: policy.search.searches,
+        budgets: policy.budgets,
+    })
+}
+/// Scan explicit requests with shared lifecycle and all three verification phases.
+///
+/// # Errors
+/// Invalid policy, index/work/memory limits or cancellation. Pair failures and
+/// changed sources retain their attribution and cannot produce partial success.
+pub fn scan_projective_local_collection_complementary_filter_portfolio(
+    files: impl IntoIterator<Item = (u64, DecodeRequest)>,
+    policy: ProjectiveComplementaryFilterPortfolioCollectionPolicy,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<LocalCollectionReport<crate::local_scan::ProjectiveComplementaryFilterPortfolioEvidence>, ScanError>
+{
+    validate_complementary_filter_collection(&policy)?;
+    scan_complementary_with_verifier(
+        files,
+        ProjectiveComplementaryCollectionPolicy {
+            search: policy.search.searches,
+            budgets: policy.budgets,
+        },
+        budget,
+        cancel,
+        |left, right, cancel| {
+            crate::local_scan::compare_local_files_projective_complementary_filter_portfolio(
+                left,
+                right,
+                policy.search,
+                budget,
+                cancel,
+            )
+        },
+    )
+}
+/// Recursive three-phase scan preserving caller-selected frames and path identity.
+///
+/// # Errors
+/// Invalid policy, traversal/index/work limits, cancellation or path substitution.
+pub fn scan_projective_local_collection_roots_complementary_filter_portfolio_with_requests(
+    roots: &[std::path::PathBuf],
+    traversal: &crate::exact::Options,
+    policy: ProjectiveComplementaryFilterPortfolioCollectionPolicy,
+    budget: &MemoryBudget,
+    request_for: impl Fn(&std::path::Path) -> DecodeRequest,
+    cancel: impl Fn() -> bool,
+) -> Result<
+    DirectoryLocalCollectionReport<crate::local_scan::ProjectiveComplementaryFilterPortfolioEvidence>,
+    ScanError,
+> {
+    validate_complementary_filter_collection(&policy)?;
+    scan_roots_with_collection(
+        roots,
+        traversal,
+        policy.budgets.max_files,
+        request_for,
+        cancel,
+        |requests, cancel| {
+            scan_projective_local_collection_complementary_filter_portfolio(requests, policy, budget, cancel)
+        },
+    )
+}
+/// Recursive three-phase scan with native default frame requests.
+///
+/// # Errors
+/// Invalid policy, traversal/index/work limits or cancellation.
+pub fn scan_projective_local_collection_roots_complementary_filter_portfolio(
+    roots: &[std::path::PathBuf],
+    traversal: &crate::exact::Options,
+    policy: ProjectiveComplementaryFilterPortfolioCollectionPolicy,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<
+    DirectoryLocalCollectionReport<crate::local_scan::ProjectiveComplementaryFilterPortfolioEvidence>,
+    ScanError,
+> {
+    scan_projective_local_collection_roots_complementary_filter_portfolio_with_requests(
         roots,
         traversal,
         policy,

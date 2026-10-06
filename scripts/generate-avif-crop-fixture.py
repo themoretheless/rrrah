@@ -1,7 +1,9 @@
-"""CC0 pixel-aligned AVIF crop fixtures, including seven orientations. Authored clap/ipma metadata on the
+"""CC0 pixel-aligned AVIF crop fixtures, including seven orientations.
+Both offset HEIF crops and AVIF top-left crops are generated. Authored clap/ipma metadata on the
 committed libavif RGB producer; Pillow/libavif supplies stored-pixel oracle,
 then Pillow crops (3,5)-(11,11), or crops the orientation sources
-at (2,1)-(6,3) before ImageOps.exif_transpose. Pillow itself does not apply clap on decode.
+at (2,1)-(6,3) before ImageOps.exif_transpose. Top-left variants instead use
+(0,0)-(8,6) and (0,0)-(4,2), meeting AVIF section 2.2.3 crop-origin restriction. Pillow itself does not apply clap on decode.
 This writer deliberately supports only the pinned fixture's simple iloc layout.
 """
 from pathlib import Path
@@ -20,9 +22,12 @@ def unpack(data):
 def box(k,d):return struct.pack('>I',len(d)+8)+k+d
 manifest=root/'manifest.tsv'
 lines=[line for line in manifest.read_text().splitlines() if not line.startswith('avif-clean-aperture-')]
-for name in ['avif-rgb.avif']+[f'avif-orientation-{i}.avif' for i in range(2,9)]:
+sources=['avif-rgb.avif']+[f'avif-orientation-{i}.avif' for i in range(2,9)]
+for name,top_left in [(name,mode) for mode in [False,True] for name in sources]:
  transformed=name!='avif-rgb.avif'
  aperture=(4,1,2,1,0,1,0,1) if transformed else (8,1,6,1,0xffffffff,1,0,1)
+ if top_left:
+  aperture=(4,1,2,1,0xfffffffe,1,0xffffffff,1) if transformed else (8,1,6,1,0xfffffffc,1,0xfffffffb,1)
  b=(root/name).read_bytes();out=[]
  for k,p in unpack(b):
   if k==b'meta':
@@ -57,6 +62,7 @@ for name in ['avif-rgb.avif']+[f'avif-orientation-{i}.avif' for i in range(2,9)]
    p=p[:4]+b''.join(adjusted)
   out.append(box(k,p))
  output=f'avif-clean-aperture-orientation-{name.split("-")[-1]}' if transformed else 'avif-clean-aperture-integer.avif'
+ if top_left: output=output.replace('avif-clean-aperture-', 'avif-clean-aperture-top-left-')
  cropped=root/output;cropped.write_bytes(b''.join(out))
  with Image.open(cropped) as im:
   print(name,'libavif dimensions:',im.size)
@@ -65,6 +71,7 @@ for name in ['avif-rgb.avif']+[f'avif-orientation-{i}.avif' for i in range(2,9)]
   baseline=im.convert('RGBA')
   assert actual==baseline.tobytes(), 'metadata rewrite changed stored pixels'
   rect=(2,1,6,3) if transformed else (3,5,11,11)
+  if top_left: rect=(0,0,4,2) if transformed else (0,0,8,6)
   expected_image=ImageOps.exif_transpose(baseline.crop(rect))
   expected=expected_image.tobytes()
  print('stored pixels unchanged; Pillow leaves clap unapplied; cropped oracle bytes', len(expected))

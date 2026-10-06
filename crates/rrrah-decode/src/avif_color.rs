@@ -50,6 +50,7 @@ fn number(b: &mut &[u8], n: usize) -> Result<u32, RasterDecodeError> {
 }
 #[derive(Default)]
 pub(crate) struct Properties {
+    pub bit_depth: Option<u8>,
     pub color: Option<RasterColorSpace>,
     pub rotation: u8,
     pub mirror: Option<u8>,
@@ -155,11 +156,30 @@ pub(crate) fn properties(bytes: &[u8]) -> Result<Properties, RasterDecodeError> 
     let mut rotation = None;
     let mut mirror = None;
     let mut color = None;
+    let mut bit_depth = None;
     let mut icc = None;
     for (index, association_offset) in selected {
         let (kind, data) = properties[index];
         match &kind {
+            b"av1C" => {
+                if data.len() < 4 || data[0] != 0x81 || data[2] & 0x60 == 0x20 {
+                    return Err(invalid("invalid AV1 configuration depth"));
+                }
+                let depth = if data[2] & 0x40 == 0 {
+                    8
+                } else if data[2] & 0x20 == 0 {
+                    10
+                } else {
+                    12
+                };
+                if bit_depth.replace(depth).is_some() {
+                    return Err(invalid("duplicate AV1 configuration"));
+                }
+            }
             b"irot" => {
+                if mirror.is_some() {
+                    return Err(invalid("rotation after mirroring"));
+                }
                 if data.len() != 1 || data[0] > 3 || rotation.replace(data[0]).is_some() {
                     return Err(invalid("invalid or duplicate rotation"));
                 }
@@ -170,6 +190,9 @@ pub(crate) fn properties(bytes: &[u8]) -> Result<Properties, RasterDecodeError> 
                 }
             }
             b"clap" => {
+                if rotation.is_some() || mirror.is_some() {
+                    return Err(invalid("clean aperture after rotation or mirroring"));
+                }
                 let aperture: [u8; 32] = data
                     .try_into()
                     .map_err(|_| invalid("invalid clean-aperture length"))?;
@@ -201,7 +224,12 @@ pub(crate) fn properties(bytes: &[u8]) -> Result<Properties, RasterDecodeError> 
             match (primaries, transfer) {
                 (1, 13) => RasterColorSpace::Srgb,
                 (1, 8) => RasterColorSpace::LinearSrgb,
-                _ => RasterColorSpace::Unspecified,
+                _ => RasterColorSpace::Cicp {
+                    primaries,
+                    transfer,
+                    matrix: u16::from_be_bytes([data[8], data[9]]),
+                    full_range: data[10] & 128 != 0,
+                },
             }
         } else if data.starts_with(b"prof") || data.starts_with(b"rICC") {
             RasterColorSpace::Icc(data[4..].to_vec())
@@ -210,6 +238,7 @@ pub(crate) fn properties(bytes: &[u8]) -> Result<Properties, RasterDecodeError> 
         });
     }
     Ok(Properties {
+        bit_depth,
         color: icc.or(color),
         rotation: rotation.unwrap_or(0),
         mirror,
@@ -251,6 +280,52 @@ pub(crate) fn crop_rect(data: &[u8; 32], width: u32, height: u32) -> Result<[u32
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn clean_aperture_and_orientation_match_independent_libavif_metadata() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster");
+        let oracle = include_str!("../../../tests/fixtures/raster/avif-crop-libavif-1.4.2.tsv");
+        let mut count = 0;
+        for line in oracle.lines() {
+            let fields: Vec<_> = line.split('\t').collect();
+            assert_eq!(fields.len(), 10);
+            let values: Vec<u32> = fields[1..].iter().map(|v| v.parse().unwrap()).collect();
+            let bytes = std::fs::read(root.join(fields[0])).unwrap();
+            let parsed = properties(&bytes).unwrap();
+            let rect = crop_rect(&parsed.clean_aperture.unwrap(), values[0], values[1]).unwrap();
+            assert_eq!(rect.as_slice(), &values[2..6], "{}", fields[0]);
+            assert_eq!(u32::from(parsed.rotation), values[7], "{}", fields[0]);
+            let mirror = (values[6] & 8 != 0).then_some(values[8] as u8);
+            assert_eq!(parsed.mirror, mirror, "{}", fields[0]);
+            if fields[0].contains("top-left") {
+                assert_eq!(&rect[..2], &[0, 0]);
+            }
+            count += 1;
+        }
+        assert_eq!(count, 24);
+    }
+    #[test]
+    fn primary_transform_order_is_validated_before_codec_decode() {
+        let original =
+            include_bytes!("../../../tests/fixtures/raster/avif-clean-aperture-orientation-5.avif");
+        let parsed = properties(original).unwrap();
+        let crop = parsed.handled_aperture_associations[0];
+        // This fixture associates clap, irot, imir consecutively. Reorder only
+        // those associations, preserving property payloads and coded extents.
+        let transforms = [original[crop], original[crop + 1], original[crop + 2]];
+        assert_eq!(transforms, [0x87, 0x85, 0x86]);
+        for order in [[0, 2, 1], [1, 0, 2], [1, 2, 0], [2, 0, 1], [2, 1, 0]] {
+            let mut malformed = original.to_vec();
+            for (slot, index) in order.into_iter().enumerate() {
+                malformed[crop + slot] = transforms[index];
+            }
+            assert!(matches!(
+                properties(&malformed),
+                Err(RasterDecodeError::InvalidAvif(_))
+            ));
+        }
+        assert!(parsed.clean_aperture.is_some());
+        assert!(parsed.mirror.is_some());
+    }
     #[test]
     fn clean_aperture_follows_primary_association_and_rejects_duplicates() {
         fn bx(tag: &[u8; 4], payload: &[u8]) -> Vec<u8> {
@@ -339,12 +414,35 @@ mod tests {
     fn invalid_nclx_and_unknown_transfer() {
         let original = include_bytes!("../../../tests/fixtures/raster/avif-rgb.avif");
         let at = original.windows(4).position(|v| v == b"nclx").unwrap();
+        for (transfer, full_range) in [(16u16, true), (18u16, false)] {
+            let mut hdr = original.to_vec();
+            hdr[at + 4..at + 6].copy_from_slice(&9u16.to_be_bytes());
+            hdr[at + 6..at + 8].copy_from_slice(&transfer.to_be_bytes());
+            hdr[at + 8..at + 10].copy_from_slice(&9u16.to_be_bytes());
+            hdr[at + 10] = if full_range { 128 } else { 0 };
+            assert_eq!(
+                declaration(&hdr).unwrap(),
+                Some(RasterColorSpace::Cicp {
+                    primaries: 9,
+                    transfer,
+                    matrix: 9,
+                    full_range,
+                })
+            );
+        }
         let mut b = original.to_vec();
         b[at + 10] |= 1;
         assert!(declaration(&b).is_err());
         let mut b = original.to_vec();
         b[at + 6..at + 8].copy_from_slice(&16u16.to_be_bytes());
-        assert_eq!(declaration(&b).unwrap(), Some(RasterColorSpace::Unspecified));
+        assert!(matches!(
+            declaration(&b).unwrap(),
+            Some(RasterColorSpace::Cicp {
+                primaries: 1,
+                transfer: 16,
+                ..
+            })
+        ));
         let mut b = original.to_vec();
         b[at + 6..at + 8].copy_from_slice(&8u16.to_be_bytes());
         assert_eq!(declaration(&b).unwrap(), Some(RasterColorSpace::LinearSrgb));

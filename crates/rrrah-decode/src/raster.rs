@@ -233,7 +233,40 @@ pub(crate) fn decode_raster_bytes(
     source: impl AsMut<[u8]>,
     request: &DecodeRequest,
 ) -> Result<DecodedRaster, RasterDecodeError> {
-    let raster = decode_raster_bytes_inner(source, request)?;
+    let mut raster = decode_raster_bytes_inner(source, request)?;
+    if let Some(white) = request.pq_reference_white_nits
+        && matches!(
+            raster.color_space(),
+            rrrah_core::RasterColorSpace::Cicp {
+                primaries: 9,
+                transfer: 16,
+                ..
+            }
+        )
+    {
+        raster =
+            raster.pq_to_linear_srgb_with_budget_and_cancel(white, request.memory_budget.as_ref(), || {
+                request.check_cancelled().is_err()
+            })?;
+    }
+    if let Some((white, peak, gamma)) = request.hlg_display
+        && matches!(
+            raster.color_space(),
+            rrrah_core::RasterColorSpace::Cicp {
+                primaries: 9,
+                transfer: 18,
+                ..
+            }
+        )
+    {
+        raster = raster.hlg_to_linear_srgb_with_budget_and_cancel(
+            white,
+            peak,
+            gamma,
+            request.memory_budget.as_ref(),
+            || request.check_cancelled().is_err(),
+        )?;
+    }
     request.check_cancelled()?;
     match &request.memory_budget {
         Some(budget) => raster
@@ -643,6 +676,12 @@ fn decode_raster_bytes_inner(
     let pixels = match sample_bytes {
         2 => {
             let mut pixels = image.into_rgba16().into_raw();
+            if format == ImageFormat::Avif {
+                let depth = avif_properties.bit_depth.ok_or(RasterDecodeError::InvalidAvif(
+                    "missing primary AV1 configuration",
+                ))?;
+                normalize_avif_u16(&mut pixels, depth, request)?;
+            }
             if associated_tiff {
                 tiff_alpha::u16_pixels(&mut pixels, request)?;
             }
@@ -697,6 +736,41 @@ fn decode_raster_bytes_inner(
     Ok(DecodedRaster::new(width, height, pixels, color_space)?.with_hotspot(hotspot)?)
 }
 
+// image 0.25.10 expands AVIF depth with a bit rotation, rather than scaling
+// the integer code range. Restore codes before normalizing into full u16.
+fn normalize_avif_u16(
+    pixels: &mut [u16],
+    depth: u8,
+    request: &DecodeRequest,
+) -> Result<(), RasterDecodeError> {
+    if !matches!(depth, 10 | 12) {
+        return Err(RasterDecodeError::InvalidAvif(
+            "16-bit output with invalid coded depth",
+        ));
+    }
+    let shift = 16 - depth;
+    let maximum = (1u32 << depth) - 1;
+    let mask = (1u16 << shift) - 1;
+    for (index, pixel) in pixels.chunks_exact_mut(4).enumerate() {
+        if index % 4096 == 0 {
+            request.check_cancelled()?;
+        }
+        for (channel, sample) in pixel.iter_mut().enumerate() {
+            if channel == 3 && *sample == u16::MAX {
+                continue;
+            }
+            if *sample & mask != 0 {
+                return Err(RasterDecodeError::InvalidAvif(
+                    "codec samples disagree with coded depth",
+                ));
+            }
+            let code = u32::from(*sample >> shift);
+            *sample = ((code * 65535 + maximum / 2) / maximum) as u16;
+        }
+    }
+    Ok(())
+}
+
 fn adopt_raster_output<T: Copy>(
     values: Vec<T>,
     reservation: Option<rrrah_core::Reservation>,
@@ -712,6 +786,26 @@ fn adopt_raster_output<T: Copy>(
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn avif_integer_normalization_covers_every_10_and_12_bit_code() {
+        let request = crate::DecodeRequest::new("unused.avif");
+        for depth in [10u8, 12] {
+            let maximum = (1u16 << depth) - 1;
+            let mut pixels = Vec::new();
+            for code in 0..=maximum {
+                pixels.extend([code << (16 - depth); 4]);
+            }
+            super::normalize_avif_u16(&mut pixels, depth, &request).unwrap();
+            for (code, rgba) in pixels.chunks_exact(4).enumerate() {
+                let expected = ((code as f64 / f64::from(maximum)) * 65535.0).round() as u16;
+                assert_eq!(rgba, [expected; 4]);
+            }
+            assert_eq!(pixels[0], 0);
+            assert_eq!(*pixels.last().unwrap(), 65535);
+            let mut invalid = [1, 0, 0, 0];
+            assert!(super::normalize_avif_u16(&mut invalid, depth, &request).is_err());
+        }
+    }
     #[test]
     fn tiny_tiff_retains_icc_and_applies_orientation_with_managed_output() {
         let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))

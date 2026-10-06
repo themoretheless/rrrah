@@ -191,3 +191,198 @@ fn reflected_grids_preserve_hdr_alpha_and_inverse_with_atomic_cancel() {
         );
     }
 }
+
+#[test]
+fn explicit_projective_regions_retain_edits_domains_and_atomic_refusals() {
+    use rrrah_dedup::{
+        geometry::ProjectiveTransform,
+        warp::{
+            ColorFilterPolicy, FilterColorSpace, FilterPolicy, PhotometricFitMode, PhotometricPolicy,
+            PixelRectangle, verify_projective_photometric_filtered,
+            verify_projective_regions_photometric_filtered,
+        },
+    };
+    use std::cell::Cell;
+    let source: Vec<f32> = (0..32)
+        .flat_map(|y| {
+            (0..32).flat_map(move |x| {
+                [
+                    x as f32 / 32.,
+                    y as f32 / 32.,
+                    ((x * 7 + y * 11) % 29) as f32 / 29.,
+                    1.,
+                ]
+            })
+        })
+        .collect();
+    let mut edited = source.clone();
+    for rgba in edited[..32 * 16 * 4].chunks_exact_mut(4) {
+        rgba.copy_from_slice(&[1., 1., 1., 1.]);
+    }
+    let a = LinearRgbaView::new(32, 32, &source, 1024, || false).unwrap();
+    let b = LinearRgbaView::new(32, 32, &edited, 1024, || false).unwrap();
+    let h = ProjectiveTransform {
+        matrix: [[1., 0., 0.], [0., 1., 0.], [0., 0., 1.]],
+    };
+    let p = PhotometricPolicy {
+        residual: WarpPolicy {
+            tolerance: 1e-6,
+            max_source_pixels: 2048,
+        },
+        minimum_samples: 4,
+        minimum_variance: 1e-6,
+        minimum_gain: 0.2,
+        maximum_gain: 5.,
+        maximum_offset: 0.1,
+    };
+    let f = ColorFilterPolicy {
+        filter: FilterPolicy {
+            radius: 1,
+            max_sample_pairs: 34560,
+        },
+        color_space: FilterColorSpace::LinearSrgb,
+    };
+    let r = PixelRectangle {
+        x: 0,
+        y: 17,
+        width: 32,
+        height: 14,
+    };
+    let n = Cell::new(0);
+    let e = verify_projective_regions_photometric_filtered(
+        &a,
+        &b,
+        h,
+        [r, r],
+        p,
+        f,
+        PhotometricFitMode::ConstrainedLeastSquares,
+        || {
+            n.set(n.get() + 1);
+            false
+        },
+    )
+    .unwrap();
+    assert_eq!(e.source_region, r);
+    assert_eq!(e.target_region, r);
+    for lane in [&e.fitted.forward, &e.fitted.reverse] {
+        assert_eq!(lane.pixels.source_pixels, 448);
+        assert_eq!(lane.pixels.matched_pixels, lane.pixels.compared_pixels);
+        assert!(lane.pixels.compared_pixels >= 400);
+    }
+    assert!(
+        e.whole_unfitted.filtered.forward.matched_pixels * 10
+            < e.whole_unfitted.filtered.forward.compared_pixels * 9
+    );
+    let mut short = f;
+    short.filter.max_sample_pairs -= 1;
+    let calls = Cell::new(0);
+    assert_eq!(
+        verify_projective_regions_photometric_filtered(
+            &a,
+            &b,
+            h,
+            [r, r],
+            p,
+            short,
+            PhotometricFitMode::ConstrainedLeastSquares,
+            || {
+                calls.set(calls.get() + 1);
+                false
+            }
+        ),
+        Err(WarpError::Budget)
+    );
+    assert_eq!(calls.get(), 0);
+    for stop in [1, n.get() / 2, n.get()] {
+        calls.set(0);
+        assert_eq!(
+            verify_projective_regions_photometric_filtered(
+                &a,
+                &b,
+                h,
+                [r, r],
+                p,
+                f,
+                PhotometricFitMode::ConstrainedLeastSquares,
+                || {
+                    calls.set(calls.get() + 1);
+                    calls.get() == stop
+                }
+            ),
+            Err(WarpError::Cancelled)
+        );
+    }
+    for invalid in [
+        PixelRectangle { width: 0, ..r },
+        PixelRectangle {
+            x: u32::MAX,
+            width: 2,
+            ..r
+        },
+        PixelRectangle {
+            y: 31,
+            height: 2,
+            ..r
+        },
+    ] {
+        assert_eq!(
+            verify_projective_regions_photometric_filtered(
+                &a,
+                &b,
+                h,
+                [invalid, r],
+                p,
+                f,
+                PhotometricFitMode::ConstrainedLeastSquares,
+                || false
+            ),
+            Err(WarpError::Invalid)
+        );
+    }
+    let top = PixelRectangle { y: 0, ..r };
+    assert!(matches!(
+        verify_projective_regions_photometric_filtered(
+            &a,
+            &b,
+            h,
+            [r, top],
+            p,
+            f,
+            PhotometricFitMode::ConstrainedLeastSquares,
+            || false
+        ),
+        Err(WarpError::Fit(_))
+    ));
+    let full = PixelRectangle {
+        x: 0,
+        y: 0,
+        width: 32,
+        height: 32,
+    };
+    let mut full_filter = f;
+    full_filter.filter.max_sample_pairs = 55296;
+    let regional = verify_projective_regions_photometric_filtered(
+        &a,
+        &b,
+        h,
+        [full, full],
+        p,
+        full_filter,
+        PhotometricFitMode::ConstrainedLeastSquares,
+        || false,
+    )
+    .unwrap();
+    let original = verify_projective_photometric_filtered(
+        &a,
+        &b,
+        h,
+        p,
+        full_filter,
+        PhotometricFitMode::ConstrainedLeastSquares,
+        || false,
+    )
+    .unwrap();
+    assert_eq!(regional.fitted, original.fitted);
+    assert_eq!(regional.whole_unfitted, original.unfitted);
+}

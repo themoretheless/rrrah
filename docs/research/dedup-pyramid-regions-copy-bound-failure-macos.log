@@ -1,0 +1,25 @@
+   Compiling rrrah-core v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-core)
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+error[E0277]: the trait bound `ProjectiveRegionFileEvidence: Copy` is not satisfied
+    --> crates/rrrah-dedup/src/local_scan.rs:2595:46
+     |
+2595 |             let regions = retained.try_adopt(regions).map_err(|_| LocalError::Budget)?;
+     |                                    --------- ^^^^^^^ unsatisfied trait bound
+     |                                    |
+     |                                    required by a bound introduced by this call
+     |
+help: the trait `Copy` is not implemented for `ProjectiveRegionFileEvidence`
+    --> crates/rrrah-dedup/src/local_scan.rs:2483:1
+     |
+2483 | pub struct ProjectiveRegionFileEvidence {
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+note: required by a bound in `Reservation::try_adopt`
+    --> crates/rrrah-memory/src/lib.rs:255:25
+     |
+ 255 |     pub fn try_adopt<T: Copy>(mut self, values: Vec<T>) -> Result<SharedBuffer<T>, BufferError> {
+     |                         ^^^^ required by this bound in `Reservation::try_adopt`
+
+For more information about this error, try `rustc --explain E0277`.
+error: could not compile `rrrah-dedup` (lib) due to 1 previous error
+warning: build failed, waiting for other jobs to finish...

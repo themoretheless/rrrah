@@ -54,7 +54,7 @@ fn independent_raster_corpus_matches_dimensions_alpha_and_pixels() {
         assert_eq!(budget.used(), 0, "{}", fields[0]);
         count += 1;
     }
-    assert_eq!(count, 158, "corpus coverage changed; inspect the manifest");
+    assert_eq!(count, 174, "corpus coverage changed; inspect the manifest");
 }
 
 #[test]
@@ -626,6 +626,92 @@ fn dcx_selection_under_camera_suffix_preserves_page_metadata() {
 }
 
 #[test]
+fn independent_pq10_avif_retains_precision_metadata_and_releases_credit() {
+    for name in ["avif-pq10-svt.avif", "avif-pq10-color-svt.avif"] {
+        qualify_hdr10_file(name);
+    }
+}
+
+#[test]
+fn independent_hlg10_avif_retains_precision_metadata_and_releases_credit() {
+    for name in ["avif-hlg10-svt.avif", "avif-hlg10-color-svt.avif"] {
+        qualify_hdr10_file(name);
+    }
+}
+
+fn qualify_hdr10_file(name: &str) {
+    let hlg = name.contains("hlg");
+    let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster");
+    let budget = rrrah_core::MemoryBudget::new(128 * 64 * 24 + 4096);
+    let mut request = crate::DecodeRequest::new(root.join(name));
+    request.memory_budget = Some(budget.clone());
+    let frame = crate::decode_raster(&request).unwrap();
+    assert_eq!((frame.width(), frame.height()), (128, 64));
+    assert_eq!(
+        frame.color_space(),
+        &rrrah_core::RasterColorSpace::Cicp {
+            primaries: 9,
+            transfer: if hlg { 18 } else { 16 },
+            matrix: 9,
+            full_range: true,
+        }
+    );
+    let rrrah_core::RasterPixels::Rgba16(pixels) = frame.pixels() else {
+        panic!("10-bit AVIF must retain 16-bit storage")
+    };
+    let oracle = std::fs::read(root.join(format!("{name}.rgba16le"))).unwrap();
+    assert_eq!(oracle.len(), pixels.len() * 2);
+    let max_error = pixels
+        .iter()
+        .zip(oracle.chunks_exact(2))
+        .map(|(a, b)| a.abs_diff(u16::from_le_bytes([b[0], b[1]])))
+        .max()
+        .unwrap();
+    assert!(max_error <= 128, "independent FFmpeg rescaling error {max_error}");
+    assert!(pixels.chunks_exact(4).all(|p| p[3] == 65535));
+    eprintln!("{name}: HDR10 independent RGBA16 maximum error: {max_error}");
+    assert!(pixels.chunks_exact(4).any(|p| p[0] > 0 && p[0] < 65535));
+    assert!(frame.to_linear_srgb().is_err());
+    assert_eq!(budget.used(), frame.capacity_bytes());
+    let linear = if hlg {
+        assert!(
+            frame
+                .pq_to_linear_srgb_with_budget_and_cancel(100., Some(&budget), || false)
+                .is_err()
+        );
+        frame
+            .hlg_to_linear_srgb_with_budget_and_cancel(100., 1000., 1.2, Some(&budget), || false)
+            .unwrap()
+    } else {
+        frame
+            .pq_to_linear_srgb_with_budget_and_cancel(100., Some(&budget), || false)
+            .unwrap()
+    };
+    let rrrah_core::RasterPixels::Rgba32Float(prepared) = linear.pixels() else {
+        panic!()
+    };
+    assert!(prepared.chunks_exact(4).all(|p| p[3] == 1.0));
+    assert!(
+        prepared
+            .chunks_exact(4)
+            .any(|p| p[0] > if hlg { 9.5 } else { 95.0 })
+    );
+    assert!(prepared.chunks_exact(4).any(|p| p[0] < 0.001));
+    if name.contains("color") {
+        assert!(
+            prepared
+                .chunks_exact(4)
+                .any(|p| p[..3].iter().any(|v| *v < if hlg { -0.1 } else { -1. }))
+        );
+    }
+    assert_eq!(budget.used(), frame.capacity_bytes() + linear.capacity_bytes());
+    drop(linear);
+    assert_eq!(budget.used(), frame.capacity_bytes());
+    drop(frame);
+    assert_eq!(budget.used(), 0);
+}
+
+#[test]
 fn avif_clean_aperture_file_refusals_release_managed_input_and_output() {
     use crate::{DecodeRequest, decode_raster, raster::RasterDecodeError};
     use rrrah_core::MemoryBudget;
@@ -650,6 +736,22 @@ fn avif_clean_aperture_file_refusals_release_managed_input_and_output() {
             invalid[at + 4..at + 8].copy_from_slice(&2u32.to_be_bytes());
         }
         invalid[at + offset..at + offset + 4].copy_from_slice(&value.to_be_bytes());
+        std::fs::write(&path, invalid).unwrap();
+        assert!(matches!(
+            decode_raster(&request),
+            Err(RasterDecodeError::InvalidAvif(_))
+        ));
+        assert_eq!(budget.used(), 0);
+    }
+    let transformed = include_bytes!("../../../tests/fixtures/raster/avif-clean-aperture-orientation-5.avif");
+    let crop = crate::avif_color::properties(transformed)
+        .unwrap()
+        .handled_aperture_associations[0];
+    for order in [[0, 2, 1], [1, 0, 2], [1, 2, 0], [2, 0, 1], [2, 1, 0]] {
+        let mut invalid = transformed.to_vec();
+        for (slot, index) in order.into_iter().enumerate() {
+            invalid[crop + slot] = transformed[crop + index];
+        }
         std::fs::write(&path, invalid).unwrap();
         assert!(matches!(
             decode_raster(&request),
