@@ -1,0 +1,162 @@
+{
+  "base_commit": "b43ffd2d4ab969559b677bbf4f1202c36061294e",
+  "algorithm": "Reverse painter-order integration: begin with uncovered unit pixel, split convex remaining polygons by each candidate triangle, integrate visible linear source components at polygon centroid and preserve only uncovered pieces. Uses conforming adaptive mesh (0.05 pixel, 1/512 component error).",
+  "status": "Rejected for production: bounded fragment storage fails on real VectorApple",
+  "first_256_cap_run": {
+    "build_exit_code": 0,
+    "binary_sha256": "98d73e63bfd88158045cb74624b6bb2ad316ec43a1b06357401c818a5a60b611",
+    "runs": [
+      {
+        "file": "VectorApple.ai",
+        "index": 0,
+        "exit_code": 101,
+        "seconds": 0.8359593329987547,
+        "stdout": "",
+        "stderr": "\nthread 'main' (3400445) panicked at vendor/hayro-interpret/src/encode.rs:325:13:\nfront-to-back fragments=264 pixel=(123,66) index=79883\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+        "output": "/tmp/rrrah-front-to-back-experiment/VectorApple-0.rgba"
+      },
+      {
+        "file": "one.ai",
+        "index": 0,
+        "exit_code": 0,
+        "seconds": 0.023142083002312575,
+        "stdout": "{\"width\":1366,\"height\":768,\"image_index\":0,\"image_count\":2}\n",
+        "stderr": "",
+        "output": "/tmp/rrrah-front-to-back-experiment/one-0.rgba"
+      },
+      {
+        "file": "one.ai",
+        "index": 1,
+        "exit_code": 0,
+        "seconds": 0.02326054200239014,
+        "stdout": "{\"width\":177,\"height\":175,\"image_index\":1,\"image_count\":2}\n",
+        "stderr": "",
+        "output": "/tmp/rrrah-front-to-back-experiment/one-1.rgba"
+      },
+      {
+        "file": "tensor-overlap-rgb.pdf",
+        "index": 0,
+        "exit_code": 0,
+        "seconds": 0.022020042000804096,
+        "stdout": "{\"width\":32,\"height\":32,\"image_index\":0,\"image_count\":1}\n",
+        "stderr": "",
+        "output": "/tmp/rrrah-front-to-back-experiment/tensor-overlap-rgb-0.rgba"
+      }
+    ],
+    "encoder_restored": true
+  },
+  "256_cap_area_diagnostic": {
+    "build_exit_code": 0,
+    "binary_sha256": "0df7e8f8ea7e2d89d6e4b0b262dab9e4e6523ff19d3ee707553574b392795b54",
+    "runs": [
+      {
+        "file": "VectorApple.ai",
+        "index": 0,
+        "exit_code": 101,
+        "seconds": 0.23815074999947683,
+        "stdout": "",
+        "stderr": "\nthread 'main' (3403244) panicked at vendor/hayro-interpret/src/encode.rs:325:13:\nfront-to-back fragments=264 pixel=(123,66) index=79883 candidates=112 area=0.26280202769486005 tiny_below_1e-9=1 max_area=0.10288382\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+        "output": "/tmp/rrrah-front-to-back-experiment/VectorApple-0.rgba"
+      },
+      {
+        "file": "one.ai",
+        "index": 0,
+        "exit_code": 0,
+        "seconds": 0.019523499999195337,
+        "stdout": "{\"width\":1366,\"height\":768,\"image_index\":0,\"image_count\":2}\n",
+        "stderr": "",
+        "output": "/tmp/rrrah-front-to-back-experiment/one-0.rgba"
+      },
+      {
+        "file": "one.ai",
+        "index": 1,
+        "exit_code": 0,
+        "seconds": 0.020999416999984533,
+        "stdout": "{\"width\":177,\"height\":175,\"image_index\":1,\"image_count\":2}\n",
+        "stderr": "",
+        "output": "/tmp/rrrah-front-to-back-experiment/one-1.rgba"
+      },
+      {
+        "file": "tensor-overlap-rgb.pdf",
+        "index": 0,
+        "exit_code": 0,
+        "seconds": 0.02078908299881732,
+        "stdout": "{\"width\":32,\"height\":32,\"image_index\":0,\"image_count\":1}\n",
+        "stderr": "",
+        "output": "/tmp/rrrah-front-to-back-experiment/tensor-overlap-rgb-0.rgba"
+      }
+    ],
+    "encoder_restored": true
+  },
+  "4096_cap_run": {
+    "build_exit_code": 0,
+    "binary_sha256": "a3d8eb4a848f9193886ce78724d4758a1c59d894e309ba74b48770c1795bd440",
+    "runs": [
+      {
+        "file": "VectorApple.ai",
+        "index": 0,
+        "exit_code": 101,
+        "seconds": 1.541439458997047,
+        "stdout": "",
+        "stderr": "\nthread 'main' (3405677) panicked at vendor/hayro-interpret/src/encode.rs:325:13:\nfront-to-back fragments=4112 pixel=(138,37) index=6413 candidates=444 area=0.5865032949809089 tiny_below_1e-9=30 max_area=0.012820215\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+        "output": "/tmp/rrrah-front-to-back-4096-experiment/VectorApple-0.rgba"
+      },
+      {
+        "file": "one.ai",
+        "index": 0,
+        "exit_code": 0,
+        "seconds": 0.026371624997409526,
+        "stdout": "{\"width\":1366,\"height\":768,\"image_index\":0,\"image_count\":2}\n",
+        "stderr": "",
+        "output": "/tmp/rrrah-front-to-back-4096-experiment/one-0.rgba"
+      },
+      {
+        "file": "one.ai",
+        "index": 1,
+        "exit_code": 0,
+        "seconds": 0.015634791998309083,
+        "stdout": "{\"width\":177,\"height\":175,\"image_index\":1,\"image_count\":2}\n",
+        "stderr": "",
+        "output": "/tmp/rrrah-front-to-back-4096-experiment/one-1.rgba"
+      },
+      {
+        "file": "tensor-overlap-rgb.pdf",
+        "index": 0,
+        "exit_code": 0,
+        "seconds": 0.02299483299793792,
+        "stdout": "{\"width\":32,\"height\":32,\"image_index\":0,\"image_count\":1}\n",
+        "stderr": "",
+        "output": "/tmp/rrrah-front-to-back-4096-experiment/tensor-overlap-rgb-0.rgba"
+      }
+    ],
+    "encoder_restored": true
+  },
+  "fragment_interpretation": "Growth is not merely microscopic floating residuals: 264 pieces retain ~0.2628 pixel area (only one below 1e-9); 4112 pieces retain ~0.5865 area (30 below 1e-9). Raising the cap is not a complete solution.",
+  "opaque_overlap_reference": {
+    "bytes": 4096,
+    "all_pixels_exact_opaque_blue": true,
+    "rgba_sha256": "590d140f13d7c4fac61d0745e2ece4e5afc4ce50af80f4a8470f5fcf00495101",
+    "source": "tests/fixtures/pdf/tensor-overlap-rgb.pdf",
+    "construction": "Later coincident blue tensor patch must cover earlier red patch"
+  },
+  "completed_one_ai_pages": [
+    {
+      "page": "one-0",
+      "rgba_matches_existing_renderer": true,
+      "rgba_sha256": "027fc9ed92a3b78452a61c4fafcaec04944eeaad3b1e753b809f7edc0cf4b417"
+    },
+    {
+      "page": "one-1",
+      "rgba_matches_existing_renderer": true,
+      "rgba_sha256": "155a1e78cb7d2dd3d3aaf2832e7591b61f9ec0cbf5b97bef36a7787a5907f38f"
+    }
+  ],
+  "limitations": [
+    "No completed VectorApple output; no fidelity or speed claim on that source",
+    "Prototype fragment cap uses assert and experimental tessellation uses expect; neither is a production error contract",
+    "Temporary polygons, candidate lists and transformed triangles not admitted through shared root byte budget",
+    "Tiny polygons with twice-area <=1e-15 are skipped, not interval arithmetic certification",
+    "Production renderer restored byte-for-byte; known production overlap defect remains"
+  ],
+  "next_action": "Use explicit source-patch triangle ranges to avoid treating every internal tessellation edge as a cross-patch overlap boundary; qualify patch-level coverage before selecting analytical or bounded subdivision integration."
+}

@@ -1,0 +1,30 @@
+{
+  "base_commit": "b43ffd2d4ab969559b677bbf4f1202c36061294e",
+  "api": "tessellate_patch_mesh_adaptive_with_ranges",
+  "change": "Append one absolute triangle range per source patch after successful emission, while retaining source order and conforming shared boundaries. Optional ranges use the same tessellation core as existing wrappers. On error both triangle output and patch range metadata truncate to their original lengths.",
+  "verified": [
+    "Mixed tensor/Coons source ownership is preserved throughout emitted triangle ranges",
+    "Ranges start after preexisting triangles and partition exactly all new triangles",
+    "Global triangle-cap failure retains both original vectors",
+    "Late cancellation retains both original vectors",
+    "Empty valid mesh appends no triangles or ranges"
+  ],
+  "tests": {
+    "command": "cargo test --locked --offline --target-dir /tmp/rrrah-required-corpus-target -p rrrah-decode --lib",
+    "passed": 868,
+    "failed": 0,
+    "ignored": 56,
+    "seconds": 0.37,
+    "log": "/tmp/rrrah-mesh-ranges-full.log",
+    "regression": "mixed_mesh_ranges_preserve_patch_ownership_and_roll_back_together"
+  },
+  "purpose": "Patch-level painter-order compositing must distinguish original source patches from internal adaptive mesh cells. Explicit source ownership avoids regrouping triangles by colors or inferred geometry.",
+  "limitations": [
+    "Opt-in API, not production renderer integration",
+    "Planning and range allocations are count-bounded but not admitted through shared byte budget",
+    "Both vectors may retain enlarged capacity after rollback",
+    "Source-patch ranges alone do not prove source patches have no self-overlap"
+  ],
+  "adaptive_source_sha256": "f839d3e0dce733c67ea0b71b21dcb39ebfe8579e033031b664bf41fddb647fda",
+  "delivery": "Local changes, not committed or pushed"
+}

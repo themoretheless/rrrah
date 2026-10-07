@@ -189,6 +189,355 @@ mod tests {
         }
     }
     #[test]
+    fn coons_conversion_preserves_source_boundary_bits() {
+        use hayro::hayro_interpret::shading::CoonsPatch;
+        let mut tensor = patch(false, false);
+        // Fractional coordinates expose cancellation in the general Coons formula.
+        for (index, point) in tensor.control_points.iter_mut().enumerate().take(12) {
+            point.x += (index as f64 + 1.) * 0.0135792468;
+            point.y += (index as f64 + 1.) * 0.0314159265;
+        }
+        tensor.colors =
+            [[0., 0.], [0., 1.], [1., 1.], [1., 0.]].map(|components| components.into_iter().collect());
+        let coons = CoonsPatch {
+            control_points: std::array::from_fn(|i| tensor.control_points[i]),
+            colors: tensor.colors.clone(),
+        };
+        let mut triangles = vec![];
+        coons
+            .to_triangles_adaptive(Affine::IDENTITY, limits(), &mut triangles, || false)
+            .unwrap();
+        let mut checked = 0;
+        for triangle in &triangles {
+            for vertex in [&triangle.p0, &triangle.p1, &triangle.p2] {
+                let u = f64::from(vertex.colors[0]);
+                let v = f64::from(vertex.colors[1]);
+                if u == 0. || u == 1. || v == 0. || v == 1. {
+                    let expected = tensor.map_coordinate((u, v).into());
+                    assert_eq!(vertex.point.x.to_bits(), expected.x.to_bits(), "x at {u},{v}");
+                    assert_eq!(vertex.point.y.to_bits(), expected.y.to_bits(), "y at {u},{v}");
+                    checked += 1;
+                }
+            }
+        }
+        assert!(checked > 8, "must cover subdivided source boundaries");
+    }
+    #[test]
+    fn mesh_stitches_unequal_depths_and_reversed_edges_without_blending_colors() {
+        use hayro::hayro_interpret::shading::tessellate_tensor_patch_mesh_adaptive;
+        use std::collections::BTreeSet;
+        let indices = [[0, 1, 2, 3], [11, 12, 13, 4], [10, 15, 14, 5], [9, 8, 7, 6]];
+        let edge_segments = |triangles: &[hayro::hayro_interpret::shading::Triangle], color: f32| {
+            let mut result = BTreeSet::new();
+            for triangle in triangles {
+                let vertices = [&triangle.p0, &triangle.p1, &triangle.p2];
+                if vertices[0].colors[0] != color {
+                    continue;
+                }
+                assert!(vertices.iter().all(|v| v.colors[0] == color));
+                for i in 0..3 {
+                    let (a, b) = (vertices[i], vertices[(i + 1) % 3]);
+                    if a.point.x == 100. && b.point.x == 100. {
+                        let mut ends = [a.point.y.to_bits(), b.point.y.to_bits()];
+                        ends.sort();
+                        result.insert(ends);
+                    }
+                }
+            }
+            result
+        };
+        for reversed in [false, true] {
+            let mut left = patch(false, false);
+            left.control_points[15].y += 30.;
+            left.control_points[8].y += 0.75;
+            left.control_points[7].y -= 0.375;
+            left.colors = std::array::from_fn(|_| std::iter::once(1.).collect());
+            let mut right = patch(false, false);
+            let original = right.control_points;
+            for i in 0..4 {
+                for j in 0..4 {
+                    let mut point = original[indices[i][if reversed { 3 - j } else { j }]];
+                    point.x += 100.;
+                    right.control_points[indices[i][j]] = point;
+                }
+            }
+            // Copy the source edge exactly, rather than constructing an approximate match.
+            for j in 0..4 {
+                right.control_points[indices[0][j]] =
+                    left.control_points[indices[3][if reversed { 3 - j } else { j }]];
+            }
+            right.colors = std::array::from_fn(|_| std::iter::once(2.).collect());
+            let patches = [left, right];
+            let mut independent = vec![];
+            for patch in &patches {
+                patch
+                    .to_triangles_adaptive(Affine::IDENTITY, limits(), &mut independent, || false)
+                    .unwrap();
+            }
+            assert_ne!(edge_segments(&independent, 1.), edge_segments(&independent, 2.));
+            let mut triangles = vec![];
+            let mut polls = 0;
+            let stats = tessellate_tensor_patch_mesh_adaptive(
+                &patches,
+                Affine::IDENTITY,
+                limits(),
+                &mut triangles,
+                || {
+                    polls += 1;
+                    false
+                },
+            )
+            .unwrap();
+            let a = edge_segments(&triangles, 1.);
+            assert!(a.len() > 1);
+            assert_eq!(a, edge_segments(&triangles, 2.), "reversed={reversed}");
+            // The converted Coons interior differs from the tensor source;
+            // matching only the boundary is sufficient for a conforming mesh.
+            use hayro::hayro_interpret::shading::{
+                AdaptivePatchRef, CoonsPatch, tessellate_patch_mesh_adaptive,
+            };
+            let coons = CoonsPatch {
+                control_points: std::array::from_fn(|i| patches[1].control_points[i]),
+                colors: patches[1].colors.clone(),
+            };
+            for refs in [
+                [
+                    AdaptivePatchRef::Tensor(&patches[0]),
+                    AdaptivePatchRef::Coons(&coons),
+                ],
+                [
+                    AdaptivePatchRef::Coons(&coons),
+                    AdaptivePatchRef::Tensor(&patches[0]),
+                ],
+            ] {
+                let first_color = match refs[0] {
+                    AdaptivePatchRef::Tensor(_) => 1.,
+                    _ => 2.,
+                };
+                let mut mixed = vec![];
+                let mut mixed_polls = 0;
+                let stats =
+                    tessellate_patch_mesh_adaptive(&refs, Affine::IDENTITY, limits(), &mut mixed, || {
+                        mixed_polls += 1;
+                        false
+                    })
+                    .unwrap();
+                assert_eq!(stats.triangles, mixed.len());
+                assert_eq!(mixed[0].p0.colors[0], first_color);
+                assert!(edge_segments(&mixed, 1.).len() > 1);
+                assert_eq!(
+                    edge_segments(&mixed, 1.),
+                    edge_segments(&mixed, 2.),
+                    "mixed reversed={reversed}"
+                );
+                assert!(stats.max_pixel_bound <= limits().pixel_error);
+                assert!(stats.max_component_bound <= limits().component_error);
+                let sentinel = mixed[0].clone();
+                let mut kept = vec![sentinel.clone()];
+                let mut short = limits();
+                short.max_triangles = stats.triangles - 1;
+                assert_eq!(
+                    tessellate_patch_mesh_adaptive(&refs, Affine::IDENTITY, short, &mut kept, || false)
+                        .unwrap_err(),
+                    AdaptivePatchError::TriangleLimit
+                );
+                assert_eq!(kept.len(), 1);
+                let mut seen = 0;
+                assert_eq!(
+                    tessellate_patch_mesh_adaptive(&refs, Affine::IDENTITY, limits(), &mut kept, || {
+                        seen += 1;
+                        seen == mixed_polls - 1
+                    })
+                    .unwrap_err(),
+                    AdaptivePatchError::Cancelled
+                );
+                assert_eq!(kept.len(), 1);
+                assert_eq!(kept[0].p0.point, sentinel.p0.point);
+            }
+            assert_eq!(stats.triangles, triangles.len());
+            assert!(stats.max_pixel_bound <= limits().pixel_error);
+            assert!(stats.max_component_bound <= limits().component_error);
+            let sentinel = triangles[0].clone();
+            let mut preserved = vec![sentinel.clone()];
+            let mut short = limits();
+            short.max_triangles = stats.triangles - 1;
+            assert_eq!(
+                tessellate_tensor_patch_mesh_adaptive(
+                    &patches,
+                    Affine::IDENTITY,
+                    short,
+                    &mut preserved,
+                    || false
+                )
+                .unwrap_err(),
+                AdaptivePatchError::TriangleLimit
+            );
+            assert_eq!(preserved.len(), 1);
+            assert_eq!(preserved[0].p0.point, sentinel.p0.point);
+            let mut seen = 0;
+            assert_eq!(
+                tessellate_tensor_patch_mesh_adaptive(
+                    &patches,
+                    Affine::IDENTITY,
+                    limits(),
+                    &mut preserved,
+                    || {
+                        seen += 1;
+                        seen == polls - 1
+                    }
+                )
+                .unwrap_err(),
+                AdaptivePatchError::Cancelled
+            );
+            assert_eq!(preserved.len(), 1);
+            assert_eq!(preserved[0].p0.point, sentinel.p0.point);
+        }
+    }
+    #[test]
+    fn mesh_does_not_weld_near_curves_and_validates_empty_requests() {
+        use hayro::hayro_interpret::shading::tessellate_tensor_patch_mesh_adaptive;
+        let mut left = patch(false, false);
+        left.control_points[15].y += 30.;
+        let mut right = patch(false, false);
+        for point in &mut right.control_points {
+            point.x += 100.;
+        }
+        right.control_points[1].x += 1e-9;
+        let patches = [left, right];
+        let mut independent = vec![];
+        for patch in &patches {
+            patch
+                .to_triangles_adaptive(Affine::IDENTITY, limits(), &mut independent, || false)
+                .unwrap();
+        }
+        let mut mesh = vec![];
+        tessellate_tensor_patch_mesh_adaptive(&patches, Affine::IDENTITY, limits(), &mut mesh, || false)
+            .unwrap();
+        assert_eq!(
+            mesh.len(),
+            independent.len(),
+            "distinct control curves must not share subdivision points"
+        );
+        assert_eq!(
+            tessellate_tensor_patch_mesh_adaptive(&[], Affine::IDENTITY, limits(), &mut mesh, || false)
+                .unwrap()
+                .triangles,
+            0
+        );
+        let mut invalid = limits();
+        invalid.pixel_error = f64::NAN;
+        assert_eq!(
+            tessellate_tensor_patch_mesh_adaptive(&[], Affine::IDENTITY, invalid, &mut mesh, || false)
+                .unwrap_err(),
+            AdaptivePatchError::Invalid
+        );
+        assert_eq!(
+            tessellate_tensor_patch_mesh_adaptive(&[], Affine::IDENTITY, invalid, &mut mesh, || true)
+                .unwrap_err(),
+            AdaptivePatchError::Cancelled
+        );
+        assert_eq!(mesh.len(), independent.len());
+    }
+    #[test]
+    fn mixed_mesh_ranges_preserve_patch_ownership_and_roll_back_together() {
+        use hayro::hayro_interpret::shading::{
+            AdaptivePatchRef, CoonsPatch, tessellate_patch_mesh_adaptive_with_ranges,
+        };
+        let mut tensor = patch(true, false);
+        tensor.colors = std::array::from_fn(|_| std::iter::once(1.).collect());
+        let coons = CoonsPatch {
+            control_points: std::array::from_fn(|i| tensor.control_points[i]),
+            colors: std::array::from_fn(|_| std::iter::once(2.).collect()),
+        };
+        let refs = [AdaptivePatchRef::Tensor(&tensor), AdaptivePatchRef::Coons(&coons)];
+        let mut prefix = vec![];
+        patch(false, false)
+            .to_triangles_adaptive(Affine::IDENTITY, limits(), &mut prefix, || false)
+            .unwrap();
+        let mut output = vec![prefix[0].clone()];
+        let mut ranges = vec![0..1];
+        let mut polls = 0;
+        let stats = tessellate_patch_mesh_adaptive_with_ranges(
+            &refs,
+            Affine::IDENTITY,
+            limits(),
+            &mut output,
+            &mut ranges,
+            || {
+                polls += 1;
+                false
+            },
+        )
+        .unwrap();
+        assert_eq!(ranges.len(), 3);
+        assert_eq!(ranges[0], 0..1);
+        assert_eq!(ranges[1].start, 1);
+        assert_eq!(ranges[1].end, ranges[2].start);
+        assert_eq!(ranges[2].end, output.len());
+        assert_eq!(stats.triangles, ranges[1].len() + ranges[2].len());
+        for (range, color) in ranges[1..].iter().zip([1., 2.]) {
+            assert!(!range.is_empty());
+            for triangle in &output[range.clone()] {
+                assert!(
+                    [&triangle.p0, &triangle.p1, &triangle.p2]
+                        .iter()
+                        .all(|v| v.colors[0] == color)
+                );
+            }
+        }
+        let original_ranges = ranges.clone();
+        let original_len = output.len();
+        let mut short = limits();
+        short.max_triangles = stats.triangles - 1;
+        assert_eq!(
+            tessellate_patch_mesh_adaptive_with_ranges(
+                &refs,
+                Affine::IDENTITY,
+                short,
+                &mut output,
+                &mut ranges,
+                || false
+            )
+            .unwrap_err(),
+            AdaptivePatchError::TriangleLimit
+        );
+        assert_eq!(output.len(), original_len);
+        assert_eq!(ranges, original_ranges);
+        let mut seen = 0;
+        assert_eq!(
+            tessellate_patch_mesh_adaptive_with_ranges(
+                &refs,
+                Affine::IDENTITY,
+                limits(),
+                &mut output,
+                &mut ranges,
+                || {
+                    seen += 1;
+                    seen == polls - 1
+                }
+            )
+            .unwrap_err(),
+            AdaptivePatchError::Cancelled
+        );
+        assert_eq!(output.len(), original_len);
+        assert_eq!(ranges, original_ranges);
+        assert_eq!(
+            tessellate_patch_mesh_adaptive_with_ranges(
+                &[],
+                Affine::IDENTITY,
+                limits(),
+                &mut output,
+                &mut ranges,
+                || false
+            )
+            .unwrap()
+            .triangles,
+            0
+        );
+        assert_eq!(output.len(), original_len);
+        assert_eq!(ranges, original_ranges);
+    }
+    #[test]
     fn adaptive_cells_share_complete_edges_without_t_junctions() {
         let mut patch = patch(false, false);
         patch.control_points[12].y += 30.;

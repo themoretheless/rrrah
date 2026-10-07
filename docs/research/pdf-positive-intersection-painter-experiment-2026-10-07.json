@@ -1,0 +1,417 @@
+{
+  "build_exit_code": 0,
+  "binary_sha256": "20fe75363736f905fa317eeec58e16b9b7d78dcc87d35563cae95f71272a07d8",
+  "runs": [
+    {
+      "file": "VectorApple.ai",
+      "index": 0,
+      "exit_code": 0,
+      "seconds": 1.135118665999471,
+      "stdout": "{\"width\":301,\"height\":246,\"image_index\":0,\"image_count\":1}\n",
+      "stderr": "",
+      "output": "/tmp/rrrah-front-to-back-intersection-experiment/VectorApple-0.rgba"
+    },
+    {
+      "file": "one.ai",
+      "index": 0,
+      "exit_code": 0,
+      "seconds": 0.019512667000526562,
+      "stdout": "{\"width\":1366,\"height\":768,\"image_index\":0,\"image_count\":2}\n",
+      "stderr": "",
+      "output": "/tmp/rrrah-front-to-back-intersection-experiment/one-0.rgba"
+    },
+    {
+      "file": "one.ai",
+      "index": 1,
+      "exit_code": 0,
+      "seconds": 0.016547332998015918,
+      "stdout": "{\"width\":177,\"height\":175,\"image_index\":1,\"image_count\":2}\n",
+      "stderr": "",
+      "output": "/tmp/rrrah-front-to-back-intersection-experiment/one-1.rgba"
+    },
+    {
+      "file": "tensor-overlap-rgb.pdf",
+      "index": 0,
+      "exit_code": 0,
+      "seconds": 0.015461457998753758,
+      "stdout": "{\"width\":32,\"height\":32,\"image_index\":0,\"image_count\":1}\n",
+      "stderr": "",
+      "output": "/tmp/rrrah-front-to-back-intersection-experiment/tensor-overlap-rgb-0.rgba"
+    }
+  ],
+  "encoder_restored": true,
+  "base_commit": "b43ffd2d4ab969559b677bbf4f1202c36061294e",
+  "algorithm": "Reverse painter-order polygon integration on adaptive conforming triangles. Before splitting uncovered fragments, compute positive-area triangle intersection; keep nonintersecting fragments intact. This avoids creating irrelevant fragments from triangle supporting half-planes.",
+  "pixel_comparison": {
+    "pages": [
+      {
+        "file": "VectorApple.ai",
+        "index": 0,
+        "source_sha256": "c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06",
+        "metadata": {
+          "width": 301,
+          "height": 246,
+          "image_index": 0,
+          "image_count": 1
+        },
+        "painter_vs_poppler": {
+          "different_pixels": 33167,
+          "max_channel_error": 214,
+          "mean_absolute_channel_error": 4.0104304531417405
+        },
+        "painter_vs_adaptive_averaging": {
+          "different_pixels": 139,
+          "max_channel_error": 7,
+          "mean_absolute_channel_error": 0.001706146629572608
+        },
+        "rgba_sha256": "77521d83ab4c23bd3e7a367a22965814fdfe3053fc31ae089006166b8287251f"
+      },
+      {
+        "file": "one.ai",
+        "index": 0,
+        "source_sha256": "97786949c268233a446e1738fb9c2f941e4d109811bd2f972948cdb7a45d64b4",
+        "metadata": {
+          "width": 1366,
+          "height": 768,
+          "image_index": 0,
+          "image_count": 2
+        },
+        "painter_vs_poppler": {
+          "different_pixels": 2790,
+          "max_channel_error": 115,
+          "mean_absolute_channel_error": 0.09860088000244022
+        },
+        "painter_vs_adaptive_averaging": {
+          "different_pixels": 0,
+          "max_channel_error": 0,
+          "mean_absolute_channel_error": 0.0
+        },
+        "rgba_sha256": "027fc9ed92a3b78452a61c4fafcaec04944eeaad3b1e753b809f7edc0cf4b417"
+      },
+      {
+        "file": "one.ai",
+        "index": 1,
+        "source_sha256": "97786949c268233a446e1738fb9c2f941e4d109811bd2f972948cdb7a45d64b4",
+        "metadata": {
+          "width": 177,
+          "height": 175,
+          "image_index": 1,
+          "image_count": 2
+        },
+        "painter_vs_poppler": {
+          "different_pixels": 0,
+          "max_channel_error": 0,
+          "mean_absolute_channel_error": 0.0
+        },
+        "painter_vs_adaptive_averaging": {
+          "different_pixels": 0,
+          "max_channel_error": 0,
+          "mean_absolute_channel_error": 0.0
+        },
+        "rgba_sha256": "155a1e78cb7d2dd3d3aaf2832e7591b61f9ec0cbf5b97bef36a7787a5907f38f"
+      },
+      {
+        "file": "tensor-background-context-direct-first.pdf",
+        "index": 0,
+        "source_sha256": "a5ced6bf71bab8211d3ed704e2a3fcbf79e41415f64c4aee07cba27134b592d6",
+        "metadata": {
+          "width": 32,
+          "height": 32,
+          "image_index": 0,
+          "image_count": 1
+        },
+        "painter_vs_poppler": {
+          "different_pixels": 124,
+          "max_channel_error": 239,
+          "mean_absolute_channel_error": 10.458984375
+        },
+        "painter_vs_adaptive_averaging": {
+          "different_pixels": 0,
+          "max_channel_error": 0,
+          "mean_absolute_channel_error": 0.0
+        },
+        "rgba_sha256": "3e468f8ae429630e9fff8f110125682dbcbadb891af9ed549e4495c17c97a3ba"
+      },
+      {
+        "file": "tensor-background-context-pattern-first.pdf",
+        "index": 0,
+        "source_sha256": "a8edeaabeb619c6a7bdcaedfada96dac9d6024d323bec14b8b8e4815b1f02539",
+        "metadata": {
+          "width": 32,
+          "height": 32,
+          "image_index": 0,
+          "image_count": 1
+        },
+        "painter_vs_poppler": {
+          "different_pixels": 124,
+          "max_channel_error": 239,
+          "mean_absolute_channel_error": 10.458984375
+        },
+        "painter_vs_adaptive_averaging": {
+          "different_pixels": 0,
+          "max_channel_error": 0,
+          "mean_absolute_channel_error": 0.0
+        },
+        "rgba_sha256": "3e468f8ae429630e9fff8f110125682dbcbadb891af9ed549e4495c17c97a3ba"
+      },
+      {
+        "file": "tensor-corners-rgb.pdf",
+        "index": 0,
+        "source_sha256": "178e40729bae30904a8f921d9901d2f3f2b5fbb968a5413165028c93282d8d49",
+        "metadata": {
+          "width": 32,
+          "height": 32,
+          "image_index": 0,
+          "image_count": 1
+        },
+        "painter_vs_poppler": {
+          "different_pixels": 993,
+          "max_channel_error": 4,
+          "mean_absolute_channel_error": 1.9244791666666667
+        },
+        "painter_vs_adaptive_averaging": {
+          "different_pixels": 0,
+          "max_channel_error": 0,
+          "mean_absolute_channel_error": 0.0
+        },
+        "rgba_sha256": "057435d51597b2228ef2c74ae3b3672f17b5c866ed9c4cf11ba7acfb12d8fd09"
+      },
+      {
+        "file": "tensor-fractional-background-rgb.pdf",
+        "index": 0,
+        "source_sha256": "7bf5f9a8bea17ff88f55832d807fa11fb2951e928e82fa9b26c2bd2ee6f2936b",
+        "metadata": {
+          "width": 32,
+          "height": 32,
+          "image_index": 0,
+          "image_count": 1
+        },
+        "painter_vs_poppler": {
+          "different_pixels": 124,
+          "max_channel_error": 239,
+          "mean_absolute_channel_error": 10.458984375
+        },
+        "painter_vs_adaptive_averaging": {
+          "different_pixels": 0,
+          "max_channel_error": 0,
+          "mean_absolute_channel_error": 0.0
+        },
+        "rgba_sha256": "b3fc88ab47ce74f89a5e675431de64f207befe2c05d3ae179d93a2b4b763775c"
+      },
+      {
+        "file": "tensor-fractional-direct-background-rgb.pdf",
+        "index": 0,
+        "source_sha256": "5ae565633aecdc321107dd46fe669934f3e378e929c7afdb7bafd34faf15410c",
+        "metadata": {
+          "width": 32,
+          "height": 32,
+          "image_index": 0,
+          "image_count": 1
+        },
+        "painter_vs_poppler": {
+          "different_pixels": 124,
+          "max_channel_error": 239,
+          "mean_absolute_channel_error": 10.458984375
+        },
+        "painter_vs_adaptive_averaging": {
+          "different_pixels": 0,
+          "max_channel_error": 0,
+          "mean_absolute_channel_error": 0.0
+        },
+        "rgba_sha256": "df1234c86f060d108c2075cd73f66f34cf0fa1382c022c74da5a5e14e99276dd"
+      },
+      {
+        "file": "tensor-fractional-rgb.pdf",
+        "index": 0,
+        "source_sha256": "1a5e7011f23942bc0751990d20b7f7ddeef4a6067eae7ed865c1a2b754c4919e",
+        "metadata": {
+          "width": 32,
+          "height": 32,
+          "image_index": 0,
+          "image_count": 1
+        },
+        "painter_vs_poppler": {
+          "different_pixels": 124,
+          "max_channel_error": 239,
+          "mean_absolute_channel_error": 10.458984375
+        },
+        "painter_vs_adaptive_averaging": {
+          "different_pixels": 0,
+          "max_channel_error": 0,
+          "mean_absolute_channel_error": 0.0
+        },
+        "rgba_sha256": "df1234c86f060d108c2075cd73f66f34cf0fa1382c022c74da5a5e14e99276dd"
+      },
+      {
+        "file": "tensor-overlap-rgb.pdf",
+        "index": 0,
+        "source_sha256": "8b45b6f071628c001ed9615ac55782b6c4991f9412523109562760c440a9b353",
+        "metadata": {
+          "width": 32,
+          "height": 32,
+          "image_index": 0,
+          "image_count": 1
+        },
+        "painter_vs_poppler": {
+          "different_pixels": 0,
+          "max_channel_error": 0,
+          "mean_absolute_channel_error": 0.0
+        },
+        "painter_vs_adaptive_averaging": {
+          "different_pixels": 1024,
+          "max_channel_error": 128,
+          "mean_absolute_channel_error": 85.0
+        },
+        "rgba_sha256": "590d140f13d7c4fac61d0745e2ece4e5afc4ce50af80f4a8470f5fcf00495101"
+      },
+      {
+        "file": "tensor-shared-edge-2bit.pdf",
+        "index": 0,
+        "source_sha256": "ca630f2012916a9f1bd6ba291902bb58b3c9d458f38023bf9a5154e5e8e0adee",
+        "metadata": {
+          "width": 64,
+          "height": 32,
+          "image_index": 0,
+          "image_count": 1
+        },
+        "painter_vs_poppler": {
+          "different_pixels": 640,
+          "max_channel_error": 4,
+          "mean_absolute_channel_error": 0.828125
+        },
+        "painter_vs_adaptive_averaging": {
+          "different_pixels": 0,
+          "max_channel_error": 0,
+          "mean_absolute_channel_error": 0.0
+        },
+        "rgba_sha256": "5ed233067fdd404888d1a404b867f07beb7b682107296891ff1790ff00236e2f"
+      },
+      {
+        "file": "tensor-shared-edge-4bit.pdf",
+        "index": 0,
+        "source_sha256": "e61c18d116bcffce33676a4bb7afaf5fea3e67d4c61287a3afbbe306e4a238e3",
+        "metadata": {
+          "width": 64,
+          "height": 32,
+          "image_index": 0,
+          "image_count": 1
+        },
+        "painter_vs_poppler": {
+          "different_pixels": 640,
+          "max_channel_error": 4,
+          "mean_absolute_channel_error": 0.828125
+        },
+        "painter_vs_adaptive_averaging": {
+          "different_pixels": 0,
+          "max_channel_error": 0,
+          "mean_absolute_channel_error": 0.0
+        },
+        "rgba_sha256": "5ed233067fdd404888d1a404b867f07beb7b682107296891ff1790ff00236e2f"
+      },
+      {
+        "file": "tensor-shared-edge-8bit.pdf",
+        "index": 0,
+        "source_sha256": "ca80b1e760599b0362c7d37b6f27bb08a1e81ef6e830cb2a2af96fa211c61a63",
+        "metadata": {
+          "width": 64,
+          "height": 32,
+          "image_index": 0,
+          "image_count": 1
+        },
+        "painter_vs_poppler": {
+          "different_pixels": 640,
+          "max_channel_error": 4,
+          "mean_absolute_channel_error": 0.828125
+        },
+        "painter_vs_adaptive_averaging": {
+          "different_pixels": 0,
+          "max_channel_error": 0,
+          "mean_absolute_channel_error": 0.0
+        },
+        "rgba_sha256": "5ed233067fdd404888d1a404b867f07beb7b682107296891ff1790ff00236e2f"
+      },
+      {
+        "file": "tensor-solid-cmyk.pdf",
+        "index": 0,
+        "source_sha256": "d74e155563e9795e7cd7460a97a885fa93b8bdc68950f920836daf31d2ccfc3a",
+        "metadata": {
+          "width": 32,
+          "height": 32,
+          "image_index": 0,
+          "image_count": 1
+        },
+        "painter_vs_poppler": {
+          "different_pixels": 0,
+          "max_channel_error": 0,
+          "mean_absolute_channel_error": 0.0
+        },
+        "painter_vs_adaptive_averaging": {
+          "different_pixels": 0,
+          "max_channel_error": 0,
+          "mean_absolute_channel_error": 0.0
+        },
+        "rgba_sha256": "6ac28a17de8908662c9e8f799f2bb9a5e8f1998ad42b0ea1e8eb6174c2b8b3e4"
+      },
+      {
+        "file": "tensor-solid-rgb.pdf",
+        "index": 0,
+        "source_sha256": "19fd0abde598c492cff2f31abe5e44753b57d461cd9387b939c04e52a9cc5b28",
+        "metadata": {
+          "width": 32,
+          "height": 32,
+          "image_index": 0,
+          "image_count": 1
+        },
+        "painter_vs_poppler": {
+          "different_pixels": 0,
+          "max_channel_error": 0,
+          "mean_absolute_channel_error": 0.0
+        },
+        "painter_vs_adaptive_averaging": {
+          "different_pixels": 0,
+          "max_channel_error": 0,
+          "mean_absolute_channel_error": 0.0
+        },
+        "rgba_sha256": "4ab589b8423c13f8f33994356d5b696d9b3b56d968e1939f2088c53b5149e6cf"
+      }
+    ],
+    "poppler_version": "pdftoppm version 26.10.0\nCopyright 2005-2026 The Poppler Developers - http://poppler.freedesktop.org\nCopyright 1996-2011, 2022 Glyph & Cog, LLC"
+  },
+  "pdf_tests": {
+    "passed": 28,
+    "failed": 0,
+    "ignored": 0,
+    "command": "cargo test --locked --offline --target-dir /tmp/rrrah-required-corpus-target -p rrrah-decode --lib pdf:: -- --include-ignored",
+    "log": "/tmp/rrrah-front-to-back-intersection-experiment/pdf-tests.log",
+    "includes": "previously ignored later_coincident_tensor_patch_covers_earlier_color"
+  },
+  "test_encoder_restored": true,
+  "status": "Experimental candidate completes real AI and passes overlap regression; not enabled in production",
+  "interpretation": "Positive-area pre-test eliminates excessive subdivision of nonintersecting remaining fragments. Painter-order fixes the synthetic overlap exactly, but only changes 139 VectorApple pixels relative to adaptive averaging; the large Poppler discrepancy remains and cannot be attributed solely to this averaging defect.",
+  "conclusion": "Retain prototype for subsequent bounded-error and memory-admission work. Source patch ranges are now available for efficient patch-level composition; full pixel-color discrepancy requires separate localization.",
+  "limitations": [
+    "Experimental assert cap of 4096 fragments per iteration; not a production admission/error contract",
+    "No shared-root accounting or cancellation for candidate sampling storage",
+    "Transient splitting may allocate beyond final iteration fragment cap before assertion",
+    "Finite precision polygon integration skips twice-area <=1e-15; not interval arithmetic",
+    "Global nonlinear shading function is still evaluated after source-component integration",
+    "One real-source timing run, shared host, no speed or universal format qualification claim",
+    "Production renderer restored byte-for-byte, so its known overlap defect is not yet fixed"
+  ],
+  "sources": [
+    {
+      "name": "VectorApple.ai",
+      "source": "https://media.githubusercontent.com/media/opendesigndev/illustrator-parser-pdfcpu/225c40c9f5d0ea3ff0e793ee1dacc386c198c3d4/__tests__/fixtures/VectorApple.ai",
+      "sha256": "c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06",
+      "bytes": 1062861
+    },
+    {
+      "name": "one.ai",
+      "source": "https://media.githubusercontent.com/media/opendesigndev/illustrator-parser-pdfcpu/225c40c9f5d0ea3ff0e793ee1dacc386c198c3d4/__tests__/fixtures/one.ai",
+      "sha256": "97786949c268233a446e1738fb9c2f941e4d109811bd2f972948cdb7a45d64b4",
+      "bytes": 204049
+    }
+  ],
+  "adaptive_source_sha256": "f839d3e0dce733c67ea0b71b21dcb39ebfe8579e033031b664bf41fddb647fda",
+  "delivery": "Local research artifact, not committed or pushed"
+}

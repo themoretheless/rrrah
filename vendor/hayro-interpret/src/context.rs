@@ -263,18 +263,23 @@ impl<'a> Context<'a> {
     }
 
     pub(crate) fn get_color_space(
-        &mut self,
+        &self,
         resources: &Resources<'_>,
         name: &Name<'_>,
     ) -> Option<ColorSpace> {
         let cs_object = resources.get_color_space(name)?;
-        self.interpreter_cache
-            .object_cache
-            .get_or_insert_with(cs_object.cache_key(), || {
-                ColorSpace::new(cs_object.clone(), &self.interpreter_cache.object_cache)
-            })
+        let cs: ColorSpace = self.interpreter_cache.object_cache.get_or_insert_with(cs_object.cache_key(), || {
+            ColorSpace::new(cs_object.clone(), &self.interpreter_cache.object_cache)
+        })?;
+        Some(cs.with_device_defaults(&self.device_color_defaults(resources)))
     }
 
+    pub(crate) fn device_color_defaults(&self, resources: &Resources<'_>) -> crate::color::DeviceColorDefaults {
+        crate::color::DeviceColorDefaults::new(resources, &self.interpreter_cache.object_cache)
+    }
+    pub(crate) fn device_color_space(&self, resources: &Resources<'_>, cs: ColorSpace) -> ColorSpace {
+        cs.with_device_defaults(&self.device_color_defaults(resources))
+    }
     pub(crate) fn stroke_props(&self) -> StrokeProps {
         self.get().graphics_state.stroke_props.clone()
     }

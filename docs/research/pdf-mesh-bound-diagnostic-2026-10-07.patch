@@ -1,0 +1,15 @@
+--- a/vendor/hayro-interpret/src/encode.rs
++++ b/vendor/hayro-interpret/src/encode.rs
+@@ -96,6 +96,12 @@
+                 }
+             }
+             ShadingType::TensorProductPatchMesh { patches, function } => {
++                let timing = std::time::Instant::now();
++                let mut adaptive = vec![];
++                let limits = crate::shading::AdaptivePatchLimits { pixel_error: 0.05, component_error: 1.0 / 512.0, max_depth: 12, max_triangles: 1_048_576 };
++                let stats = crate::shading::tessellate_tensor_patch_mesh_adaptive(patches, self.matrix, limits, &mut adaptive, || false);
++                eprintln!("mesh adaptive diagnostic: patches={} triangles={} stats={:?} seconds={}", patches.len(), adaptive.len(), stats, timing.elapsed().as_secs_f64());
++                drop(adaptive);
+                 let mut triangles = vec![];
+                 for patch in patches {
+                     patch.to_triangles(&mut triangles);

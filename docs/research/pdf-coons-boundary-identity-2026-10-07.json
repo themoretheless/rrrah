@@ -1,0 +1,33 @@
+{
+  "scope": "Opt-in adaptive Coons-to-tensor conversion; renderer still uses legacy tessellation",
+  "regression": {
+    "test": "pdf_patch_tests::tests::coons_conversion_preserves_source_boundary_bits",
+    "before": {
+      "exit_code": 101,
+      "parameter": [
+        0.25,
+        0.0
+      ],
+      "actual_x_bits": 4627757564293040892,
+      "source_tensor_x_bits": 4627757564293040890,
+      "log": "/tmp/rrrah-coons-boundary-before.log"
+    },
+    "after": "passes exact x/y bit comparisons at every emitted outer-boundary vertex on all four edges"
+  },
+  "change": "Copy all twelve original cubic boundary control points directly; retain general Coons formula for four interior controls",
+  "verification": {
+    "command": "cargo test --locked --offline --target-dir /tmp/rrrah-required-corpus-target -p rrrah-decode --lib",
+    "passed": 865,
+    "ignored": 56,
+    "failed": 0,
+    "log": "/tmp/rrrah-coons-boundary-after.log",
+    "diff_check": "passed",
+    "production_encoder_diff": "empty"
+  },
+  "remaining": [
+    "Mesh-level agreement on subdivision parameters across distinct patches",
+    "Canonical evaluation for reversed boundary orientation",
+    "Full rendered-pixel and resource/performance qualification before enabling adaptive tessellation in renderer"
+  ],
+  "delivery": "Local changes, not committed or pushed"
+}

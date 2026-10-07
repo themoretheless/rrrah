@@ -3,7 +3,11 @@
 #![allow(clippy::needless_range_loop)]
 
 mod adaptive;
-pub use adaptive::{AdaptivePatchError, AdaptivePatchLimits, AdaptivePatchStats};
+pub use adaptive::{
+    AdaptivePatchError, AdaptivePatchLimits, AdaptivePatchRef, AdaptivePatchStats,
+    tessellate_patch_mesh_adaptive, tessellate_patch_mesh_adaptive_with_ranges,
+    tessellate_tensor_patch_mesh_adaptive,
+};
 
 use crate::CacheKey;
 use crate::cache::Cache;
@@ -112,6 +116,7 @@ pub enum ShadingType {
 /// A PDF shading.
 #[derive(Clone, Debug)]
 pub struct Shading {
+    pub(crate) color_context_key: u128,
     cache_key: u128,
     /// The type of shading.
     pub shading_type: Arc<ShadingType>,
@@ -125,7 +130,7 @@ pub struct Shading {
 
 impl Shading {
     pub(crate) fn new(dict: &Dict<'_>, stream: Option<&Stream<'_>>, cache: &Cache) -> Option<Self> {
-        let cache_key = dict.cache_key();
+        let cache_key = stream.map_or_else(|| dict.cache_key(), CacheKey::cache_key);
 
         let shading_num = dict.get::<u8>(SHADING_TYPE)?;
 
@@ -263,6 +268,7 @@ impl Shading {
             .map(|a| a.iter::<f32>().collect::<SmallVec<_>>());
 
         Some(Self {
+            color_context_key: 0,
             cache_key,
             shading_type: Arc::new(shading_type),
             color_space,
@@ -274,7 +280,8 @@ impl Shading {
 
 impl CacheKey for Shading {
     fn cache_key(&self) -> u128 {
-        self.cache_key
+        if self.color_context_key == 0 { self.cache_key }
+        else { crate::util::hash128(&(self.cache_key, self.color_context_key)) }
     }
 }
 

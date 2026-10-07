@@ -1,0 +1,84 @@
+{
+  "base_commit": "b43ffd2d4ab969559b677bbf4f1202c36061294e",
+  "change": "Mesh-level canonical cubic boundaries union all planned dyadic samples. Neighboring cells include forced boundary samples; all patches use the same stored geometric points, preserving patch-specific color interpolation. Reversed parameter directions use the same curve registry.",
+  "api": "tessellate_tensor_patch_mesh_adaptive",
+  "scope": "Tensor-product patch mesh only; opt-in API, not production renderer integration",
+  "policy": {
+    "pixel_error": 0.05,
+    "component_error": 0.001953125,
+    "max_depth": 12,
+    "max_triangles": 1048576
+  },
+  "verified": [
+    "Unequal independently generated subdivisions become identical edge segments",
+    "Curved shared edges match geometry bits in both parameter directions",
+    "Discontinuous colors remain separate",
+    "Whole-mesh count cap and late cancellation roll back all appended triangles",
+    "Near but distinct cubic controls are not welded",
+    "Empty requests validate policies and cancellation precedence"
+  ],
+  "tests": {
+    "passed": 867,
+    "failed": 0,
+    "ignored": 56,
+    "log": "/tmp/rrrah-mesh-curved-full.log",
+    "command": "cargo test --locked --offline --target-dir /tmp/rrrah-required-corpus-target -p rrrah-decode --lib"
+  },
+  "real_VectorApple_geometry_sets": [
+    {
+      "patches": 1455,
+      "triangles": 104276,
+      "deepest": 6,
+      "max_pixel_bound": 0.04999964515562207,
+      "max_component_bound": 0.001746203750371933,
+      "preparation_seconds": 0.037491084
+    },
+    {
+      "patches": 323,
+      "triangles": 62225,
+      "deepest": 5,
+      "max_pixel_bound": 0.049996792956694215,
+      "max_component_bound": 0.0003368901088833809,
+      "preparation_seconds": 0.022661709
+    },
+    {
+      "patches": 245,
+      "triangles": 8604,
+      "deepest": 4,
+      "max_pixel_bound": 0.049939242208730625,
+      "max_component_bound": 0.001746203750371933,
+      "preparation_seconds": 0.002253541
+    },
+    {
+      "patches": 788,
+      "triangles": 24267,
+      "deepest": 4,
+      "max_pixel_bound": 0.049969649830284756,
+      "max_component_bound": 0.001746203750371933,
+      "preparation_seconds": 0.007123
+    }
+  ],
+  "total_triangles": 199372,
+  "legacy_total_triangles": 2029542,
+  "diagnostic_runtime": {
+    "build_exit_code": 0,
+    "exit_code": 0,
+    "stdout": "{\"width\":301,\"height\":246,\"image_index\":0,\"image_count\":1}\n",
+    "stderr": "mesh adaptive diagnostic: patches=1455 triangles=104276 stats=Ok(AdaptivePatchStats { triangles: 104276, deepest: 6, max_pixel_bound: 0.04999964515562207, max_component_bound: 0.001746203750371933 }) seconds=0.037491084\nmesh adaptive diagnostic: patches=323 triangles=62225 stats=Ok(AdaptivePatchStats { triangles: 62225, deepest: 5, max_pixel_bound: 0.049996792956694215, max_component_bound: 0.0003368901088833809 }) seconds=0.022661709\nmesh adaptive diagnostic: patches=245 triangles=8604 stats=Ok(AdaptivePatchStats { triangles: 8604, deepest: 4, max_pixel_bound: 0.049939242208730625, max_component_bound: 0.001746203750371933 }) seconds=0.002253541\nmesh adaptive diagnostic: patches=788 triangles=24267 stats=Ok(AdaptivePatchStats { triangles: 24267, deepest: 4, max_pixel_bound: 0.049969649830284756, max_component_bound: 0.001746203750371933 }) seconds=0.007123\n",
+    "seconds": 1.2413041250001697,
+    "encoder_restored": true,
+    "encoder_sha256": "2c4aadfa397e36e6a208003b19251c8c75a8b763c4deda1967f3c289692f8222"
+  },
+  "legacy_rgba_sha256": "e686d50c1a0a11774bb591eeaf2c7a93f5116a86b1a023378551bd69014f7410",
+  "legacy_rgba_matches_previous": true,
+  "limitations": [
+    "Full adaptive rendered-pixel qualification and overlap compositing remain unfinished",
+    "Mixed Coons/tensor mesh API remains unfinished",
+    "Planning allocations are count-bounded but not admitted through shared root memory budget",
+    "Output capacity may remain enlarged after rollback",
+    "One local diagnostic timing; not an isolated performance benchmark",
+    "Floating-point margins, not interval-arithmetic certificates"
+  ],
+  "adaptive_source_sha256": "6dc15034eb66a08bf2672e597880870bc5c67851072af91091847c08bab43dac",
+  "delivery": "Local changes; not committed or pushed"
+}

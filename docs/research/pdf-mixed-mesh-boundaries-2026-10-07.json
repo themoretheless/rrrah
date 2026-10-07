@@ -1,0 +1,39 @@
+{
+  "base_commit": "b43ffd2d4ab969559b677bbf4f1202c36061294e",
+  "api": [
+    "AdaptivePatchRef::Tensor",
+    "AdaptivePatchRef::Coons",
+    "tessellate_patch_mesh_adaptive"
+  ],
+  "change": "One mesh implementation accepts borrowed tensor patches and converted Coons patches, plans all cells, unions canonical boundary samples, and emits in source order with one global triangle cap. The existing tensor-only wrapper shares the same implementation without collecting a separate reference vector. Coons boundary controls are preserved directly.",
+  "verification": {
+    "command": "cargo test --locked --offline --target-dir /tmp/rrrah-required-corpus-target -p rrrah-decode --lib",
+    "log": "/tmp/rrrah-mixed-full.log",
+    "passed": 867,
+    "failed": 0,
+    "ignored": 56,
+    "seconds": 0.37,
+    "regression": "pdf_patch_tests::tests::mesh_stitches_unequal_depths_and_reversed_edges_without_blending_colors",
+    "cases": [
+      "Tensor/Coons curved shared boundary, forward orientation",
+      "Tensor/Coons curved shared boundary, reversed orientation",
+      "Both source orders preserve first emitted patch color",
+      "All shared physical edge segments match coordinate bits",
+      "Different colors remain owned by each patch",
+      "Global triangle limit rolls back the whole mixed mesh",
+      "Late observed cancellation rolls back the whole mixed mesh"
+    ],
+    "production_encoder_diff": "empty",
+    "diff_check": "passed"
+  },
+  "limitations": [
+    "Opt-in API, not wired into production renderer",
+    "No claim of qualified adaptive rendered pixels or fixed painter-order overlap compositing",
+    "Planning allocations count-bounded, not admitted through shared root byte budget",
+    "Coons conversion uses floating-point arithmetic for interior controls; safety margins are not interval arithmetic",
+    "Output capacity can remain grown after error rollback",
+    "No additional mixed-API timing benchmark this turn"
+  ],
+  "source_sha256": "bdc5ddee20eeb422c271f91e6dcaeae20a36c4304dd6b6228638ffcda984c0bf",
+  "delivery": "Local edits; not committed or pushed"
+}

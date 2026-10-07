@@ -223,18 +223,21 @@ pub fn interpret<'a>(
         match op {
             TypedInstruction::SaveState(_) => context.save_state(),
             TypedInstruction::StrokeColorDeviceRgb(s) => {
-                context.get_mut().graphics_state.stroke_cs = ColorSpace::device_rgb();
+                let cs = context.device_color_space(resources, ColorSpace::device_rgb());
+                context.get_mut().graphics_state.stroke_cs = cs;
                 context.get_mut().graphics_state.stroke_color =
                     smallvec![s.0.as_f32(), s.1.as_f32(), s.2.as_f32()];
                 context.get_mut().graphics_state.stroke_pattern = None;
             }
             TypedInstruction::StrokeColorDeviceGray(s) => {
-                context.get_mut().graphics_state.stroke_cs = ColorSpace::device_gray();
+                let cs = context.device_color_space(resources, ColorSpace::device_gray());
+                context.get_mut().graphics_state.stroke_cs = cs;
                 context.get_mut().graphics_state.stroke_color = smallvec![s.0.as_f32()];
                 context.get_mut().graphics_state.stroke_pattern = None;
             }
             TypedInstruction::StrokeColorCmyk(s) => {
-                context.get_mut().graphics_state.stroke_cs = ColorSpace::device_cmyk();
+                let cs = context.device_color_space(resources, ColorSpace::device_cmyk());
+                context.get_mut().graphics_state.stroke_cs = cs;
                 context.get_mut().graphics_state.stroke_color =
                     smallvec![s.0.as_f32(), s.1.as_f32(), s.2.as_f32(), s.3.as_f32()];
                 context.get_mut().graphics_state.stroke_pattern = None;
@@ -298,18 +301,21 @@ pub fn interpret<'a>(
                 fill_stroke_path(context, device, FillRule::NonZero);
             }
             TypedInstruction::NonStrokeColorDeviceGray(s) => {
-                context.get_mut().graphics_state.none_stroke_cs = ColorSpace::device_gray();
+                let cs = context.device_color_space(resources, ColorSpace::device_gray());
+                context.get_mut().graphics_state.none_stroke_cs = cs;
                 context.get_mut().graphics_state.non_stroke_color = smallvec![s.0.as_f32()];
                 context.get_mut().graphics_state.non_stroke_pattern = None;
             }
             TypedInstruction::NonStrokeColorDeviceRgb(s) => {
-                context.get_mut().graphics_state.none_stroke_cs = ColorSpace::device_rgb();
+                let cs = context.device_color_space(resources, ColorSpace::device_rgb());
+                context.get_mut().graphics_state.none_stroke_cs = cs;
                 context.get_mut().graphics_state.non_stroke_color =
                     smallvec![s.0.as_f32(), s.1.as_f32(), s.2.as_f32()];
                 context.get_mut().graphics_state.non_stroke_pattern = None;
             }
             TypedInstruction::NonStrokeColorCmyk(s) => {
-                context.get_mut().graphics_state.none_stroke_cs = ColorSpace::device_cmyk();
+                let cs = context.device_color_space(resources, ColorSpace::device_cmyk());
+                context.get_mut().graphics_state.none_stroke_cs = cs;
                 context.get_mut().graphics_state.non_stroke_color =
                     smallvec![s.0.as_f32(), s.1.as_f32(), s.2.as_f32(), s.3.as_f32()];
                 context.get_mut().graphics_state.non_stroke_pattern = None;
@@ -407,7 +413,7 @@ pub fn interpret<'a>(
             }
             TypedInstruction::ColorSpaceStroke(c) => {
                 let cs = if let Some(named) = ColorSpace::new_from_name(c.0) {
-                    named
+                    context.device_color_space(resources, named)
                 } else {
                     context
                         .get_color_space(resources, c.0)
@@ -422,7 +428,7 @@ pub fn interpret<'a>(
             }
             TypedInstruction::ColorSpaceNonStroke(c) => {
                 let cs = if let Some(named) = ColorSpace::new_from_name(c.0) {
-                    named
+                    context.device_color_space(resources, named)
                 } else {
                     context
                         .get_color_space(resources, c.0)
@@ -639,6 +645,8 @@ pub fn interpret<'a>(
                         &context.settings.warning_sink,
                         &cache,
                         transfer_function.clone(),
+                        &context.device_color_defaults(resources),
+                        |name| context.get_color_space(resources, name),
                     )
                 }) {
                     draw_xobject(&x_object, resources, context, device);
@@ -648,6 +656,7 @@ pub fn interpret<'a>(
                 let warning_sink = context.settings.warning_sink.clone();
                 let transfer_function = context.get().graphics_state.transfer_function.clone();
                 let cache = context.interpreter_cache.object_cache.clone();
+                let defaults = context.device_color_defaults(resources);
                 if let Some(x_object) = ImageXObject::new(
                     i.0,
                     |name| context.get_color_space(resources, name),
@@ -655,6 +664,7 @@ pub fn interpret<'a>(
                     &cache,
                     false,
                     transfer_function,
+                    &defaults,
                 ) {
                     draw_image_xobject(&x_object, context, device);
                 }
@@ -675,7 +685,10 @@ pub fn interpret<'a>(
                         let (dict, stream) = dict_or_stream(&o)?;
                         Shading::new(dict, stream, &context.interpreter_cache.object_cache)
                     })
-                    .map(|s| {
+                    .map(|mut s| {
+                        let defaults = context.device_color_defaults(resources);
+                        s.color_space = s.color_space.with_device_defaults(&defaults);
+                        s.color_context_key = defaults.cache_key();
                         Pattern::Shading(ShadingPattern {
                             paint_background: false,
                             shading: Arc::new(s),

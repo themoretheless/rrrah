@@ -35,16 +35,19 @@ impl<'a> XObject<'a> {
         warning_sink: &WarningSinkFn,
         cache: &Cache,
         transfer_function: Option<ActiveTransferFunction>,
+        defaults: &crate::color::DeviceColorDefaults,
+        resolve_cs: impl FnOnce(&Name<'_>) -> Option<ColorSpace>,
     ) -> Option<Self> {
         let dict = stream.dict();
         match dict.get::<Name<'_>>(SUBTYPE)?.deref() {
             IMAGE => Some(Self::ImageXObject(ImageXObject::new(
                 stream,
-                |_| None,
+                resolve_cs,
                 warning_sink,
                 cache,
                 false,
                 transfer_function,
+                defaults,
             )?)),
             FORM => Some(Self::FormXObject(FormXObject::new(stream)?)),
             _ => None,
@@ -274,6 +277,7 @@ pub(crate) struct ImageXObject<'a> {
     stream: Stream<'a>,
     transfer_function: Option<ActiveTransferFunction>,
     warning_sink: WarningSinkFn,
+    defaults: crate::color::DeviceColorDefaults,
 }
 
 impl<'a> ImageXObject<'a> {
@@ -284,6 +288,7 @@ impl<'a> ImageXObject<'a> {
         cache: &Cache,
         mut is_mask: bool,
         transfer_function: Option<ActiveTransferFunction>,
+        defaults: &crate::color::DeviceColorDefaults,
     ) -> Option<Self> {
         let dict = stream.dict();
 
@@ -328,7 +333,8 @@ impl<'a> ImageXObject<'a> {
             width,
             cache: cache.clone(),
             height,
-            color_space: image_cs,
+            color_space: image_cs.map(|cs| if is_mask { cs } else { cs.with_device_defaults(defaults) }),
+            defaults: if is_mask { Default::default() } else { defaults.clone() },
             warning_sink: warning_sink.clone(),
             transfer_function,
             interpolate,
@@ -449,7 +455,7 @@ fn decode_context<'a>(
                     })
                 })
         })
-        .unwrap_or(ColorSpace::device_gray());
+        .unwrap_or(ColorSpace::device_gray()).with_device_defaults(&obj.defaults);
 
     let fallback_bpc = if obj.is_stencil_mask { 1 } else { 8 };
 
@@ -746,7 +752,7 @@ fn resolve_alpha(
         .get::<Stream<'_>>(SMASK)
         .or_else(|| dict.get::<Stream<'_>>(MASK))
     {
-        let obj = ImageXObject::new(&s_mask, |_| None, &obj.warning_sink, &obj.cache, true, None)?;
+        let obj = ImageXObject::new(&s_mask, |_| None, &obj.warning_sink, &obj.cache, true, None, &Default::default())?;
 
         decode_mask(&obj, target_dimension).map(|decoded| decoded.luma)
     } else if let Some(color_key_mask) = dict.get::<SmallVec<[u16; 4]>>(MASK) {
@@ -806,7 +812,7 @@ fn resolve_matte(
     let mut matte_rgb = [0_u8; 3];
     color_space.convert_f32(&matte, &mut matte_rgb, false);
 
-    let mask_obj = ImageXObject::new(&s_mask, |_| None, &obj.warning_sink, &obj.cache, true, None)?;
+    let mask_obj = ImageXObject::new(&s_mask, |_| None, &obj.warning_sink, &obj.cache, true, None, &Default::default())?;
     let alpha = decode_mask(&mask_obj, target_dimension)?.luma;
 
     Some((alpha, matte_rgb))
@@ -866,7 +872,9 @@ fn get_rgb_data(
 
 impl CacheKey for ImageXObject<'_> {
     fn cache_key(&self) -> u128 {
-        self.stream.cache_key()
+        let defaults = self.defaults.cache_key();
+        let space = self.color_space.as_ref().map_or(0, ColorSpace::resource_key);
+        crate::util::hash128(&(self.stream.cache_key(), defaults, space))
     }
 }
 

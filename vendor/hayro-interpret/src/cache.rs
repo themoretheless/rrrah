@@ -70,7 +70,8 @@ impl CacheKey for Dict<'_> {
 
 impl CacheKey for Stream<'_> {
     fn cache_key(&self) -> u128 {
-        self.dict().cache_key()
+        // Equal dictionaries do not imply equal image, ICC, font or function data.
+        hash128(&(self.dict().cache_key(), self.raw_data().as_ref()))
     }
 }
 

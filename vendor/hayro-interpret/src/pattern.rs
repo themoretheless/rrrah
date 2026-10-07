@@ -36,11 +36,14 @@ pub enum Pattern<'a> {
 impl<'a> Pattern<'a> {
     pub(crate) fn new(object: Object<'a>, ctx: &Context<'a>, resources: &Resources<'a>) -> Option<Self> {
         match object {
-            Object::Dict(dict) => Some(Self::Shading(ShadingPattern::new(
-                &dict,
-                &ctx.interpreter_cache.object_cache,
-                ctx.get().graphics_state.non_stroke_alpha,
-            )?)),
+            Object::Dict(dict) => {
+                let mut pattern = ShadingPattern::new(&dict, &ctx.interpreter_cache.object_cache, ctx.get().graphics_state.non_stroke_alpha)?;
+                let defaults = ctx.device_color_defaults(resources);
+                let shading = Arc::make_mut(&mut pattern.shading);
+                shading.color_space = shading.color_space.with_device_defaults(&defaults);
+                shading.color_context_key = defaults.cache_key();
+                Some(Self::Shading(pattern))
+            },
             Object::Stream(stream) => Some(Self::Tiling(Box::new(TilingPattern::new(
                 stream, ctx, resources,
             )?))),
@@ -155,7 +158,8 @@ impl Debug for TilingPattern<'_> {
 
 impl<'a> TilingPattern<'a> {
     pub(crate) fn new(stream: Stream<'a>, ctx: &Context<'a>, resources: &Resources<'a>) -> Option<Self> {
-        let cache_key = stream.cache_key();
+        let defaults = ctx.device_color_defaults(resources).cache_key();
+        let cache_key = if defaults == 0 { stream.cache_key() } else { hash128(&(stream.cache_key(), defaults)) };
         let dict = stream.dict();
 
         let bbox = dict.get::<hayro_syntax::object::Rect>(BBOX)?.to_kurbo();

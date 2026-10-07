@@ -616,3 +616,6 @@ mod opcode_geometry_serde_compatibility_tests {
 
 #[cfg(test)]
 mod pdf_patch_tests;
+
+#[cfg(test)]
+mod pdf_device_default_tests;

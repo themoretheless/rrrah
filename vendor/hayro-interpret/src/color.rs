@@ -204,37 +204,39 @@ impl ColorSpaceType {
 
 /// A PDF color space.
 #[derive(Debug, Clone)]
-pub struct ColorSpace(Arc<ColorSpaceType>);
+pub struct ColorSpace(Arc<ColorSpaceType>, u128);
 
 impl ColorSpace {
+    pub(crate) fn resource_key(&self) -> u128 { self.1 }
     /// Create a new color space from the given object.
     pub(crate) fn new(object: Object<'_>, cache: &Cache) -> Option<Self> {
-        Some(Self(Arc::new(ColorSpaceType::new(object, cache)?)))
+        let key = object.cache_key();
+        Some(Self(Arc::new(ColorSpaceType::new(object, cache)?), key))
     }
 
     /// Create a new color space from the name.
     pub(crate) fn new_from_name(name: &Name<'_>) -> Option<Self> {
-        ColorSpaceType::new_from_name(name).map(|c| Self(Arc::new(c)))
+        ColorSpaceType::new_from_name(name).map(|c| Self(Arc::new(c), 0))
     }
 
     /// Return the device gray color space.
     pub(crate) fn device_gray() -> Self {
-        Self(Arc::new(ColorSpaceType::DeviceGray))
+        Self(Arc::new(ColorSpaceType::DeviceGray), 0)
     }
 
     /// Return the device RGB color space.
     pub(crate) fn device_rgb() -> Self {
-        Self(Arc::new(ColorSpaceType::DeviceRgb))
+        Self(Arc::new(ColorSpaceType::DeviceRgb), 0)
     }
 
     /// Return the device CMYK color space.
     pub(crate) fn device_cmyk() -> Self {
-        Self(Arc::new(ColorSpaceType::DeviceCmyk))
+        Self(Arc::new(ColorSpaceType::DeviceCmyk), 0)
     }
 
     /// Return the pattern color space.
     pub(crate) fn pattern() -> Self {
-        Self(Arc::new(ColorSpaceType::Pattern(Self::device_gray())))
+        Self(Arc::new(ColorSpaceType::Pattern(Self::device_gray())), 0)
     }
 
     pub(crate) fn pattern_cs(&self) -> Option<Self> {
@@ -1137,5 +1139,43 @@ pub(crate) trait ToRgb {
             output[2],
             (opacity * 255.0 + 0.5) as u8,
         ))
+    }
+}
+
+/// Device replacements are resolved from the current lexical resource scope.
+#[derive(Clone, Default)]
+pub(crate) struct DeviceColorDefaults {
+    spaces: [Option<ColorSpace>; 3],
+}
+impl DeviceColorDefaults {
+    pub(crate) fn new(resources: &hayro_syntax::page::Resources<'_>, cache: &Cache) -> Self {
+        let names: [&[u8]; 3] = [b"DefaultGray", b"DefaultRGB", b"DefaultCMYK"];
+        let components = [1, 3, 4];
+        Self { spaces: std::array::from_fn(|i| {
+            let object = resources.get_color_space(&Name::new_unescaped(names[i]))?;
+            let cs: ColorSpace = cache.get_or_insert_with(object.cache_key(), || ColorSpace::new(object.clone(), cache))?;
+            let calibrated = matches!(cs.0.as_ref(), ColorSpaceType::ICCBased(_) | ColorSpaceType::CalGray(_) | ColorSpaceType::CalRgb(_) | ColorSpaceType::Lab(_));
+            (calibrated && cs.num_components() == components[i]).then_some(cs)
+        }) }
+    }
+    pub(crate) fn cache_key(&self) -> u128 {
+        if self.spaces.iter().all(Option::is_none) { return 0; }
+        crate::util::hash128(&self.spaces.each_ref().map(|cs| cs.as_ref().map(|cs| cs.1)))
+    }
+}
+impl ColorSpace {
+    pub(crate) fn with_device_defaults(&self, defaults: &DeviceColorDefaults) -> Self {
+        if defaults.spaces.iter().all(Option::is_none) { return self.clone(); }
+        let replacement = match self.0.as_ref() {
+            ColorSpaceType::DeviceGray => return defaults.spaces[0].clone().unwrap_or_else(|| self.clone()),
+            ColorSpaceType::DeviceRgb => return defaults.spaces[1].clone().unwrap_or_else(|| self.clone()),
+            ColorSpaceType::DeviceCmyk => return defaults.spaces[2].clone().unwrap_or_else(|| self.clone()),
+            ColorSpaceType::Pattern(base) => ColorSpaceType::Pattern(base.with_device_defaults(defaults)),
+            ColorSpaceType::Indexed(indexed) => { let mut value = indexed.clone(); value.base = Box::new(value.base.with_device_defaults(defaults)); ColorSpaceType::Indexed(value) },
+            ColorSpaceType::Separation(separation) => { let mut value = separation.clone(); value.alternate_space = value.alternate_space.with_device_defaults(defaults); ColorSpaceType::Separation(value) },
+            ColorSpaceType::DeviceN(device) => { let mut value = device.clone(); value.alternate_space = value.alternate_space.with_device_defaults(defaults); ColorSpaceType::DeviceN(value) },
+            _ => return self.clone(),
+        };
+        Self(Arc::new(replacement), crate::util::hash128(&(self.1, defaults.cache_key())))
     }
 }

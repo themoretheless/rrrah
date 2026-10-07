@@ -1,0 +1,175 @@
+--- a/vendor/hayro-interpret/src/encode.rs
++++ b/vendor/hayro-interpret/src/encode.rs
+@@ -81,12 +81,10 @@
+             }
+             ShadingType::CoonsPatchMesh { patches, function } => {
+                 let mut triangles = vec![];
+-                for patch in patches {
+-                    patch.to_triangles(&mut triangles);
+-                }
+-
+-                let full_transform = self.matrix;
+-                let samples = sample_triangles(&triangles, full_transform);
++                let references: Vec<_> = patches.iter().map(crate::shading::AdaptivePatchRef::Coons).collect();
++                let limits = crate::shading::AdaptivePatchLimits { pixel_error: 0.05, component_error: 1.0 / 512.0, max_depth: 12, max_triangles: 1_048_576 };
++                crate::shading::tessellate_patch_mesh_adaptive(&references, self.matrix, limits, &mut triangles, || false).expect("experimental adaptive Coons tessellation");
++                let samples = sample_triangles(&triangles, Affine::IDENTITY);
+ 
+                 base_transform = Affine::IDENTITY;
+ 
+@@ -97,12 +95,9 @@
+             }
+             ShadingType::TensorProductPatchMesh { patches, function } => {
+                 let mut triangles = vec![];
+-                for patch in patches {
+-                    patch.to_triangles(&mut triangles);
+-                }
+-
+-                let full_transform = self.matrix;
+-                let samples = sample_triangles(&triangles, full_transform);
++                let limits = crate::shading::AdaptivePatchLimits { pixel_error: 0.05, component_error: 1.0 / 512.0, max_depth: 12, max_triangles: 1_048_576 };
++                crate::shading::tessellate_tensor_patch_mesh_adaptive(patches, self.matrix, limits, &mut triangles, || false).expect("experimental adaptive tensor tessellation");
++                let samples = sample_triangles(&triangles, Affine::IDENTITY);
+ 
+                 base_transform = Affine::IDENTITY;
+ 
+@@ -251,51 +246,96 @@
+     ))
+ }
+ 
+-fn sample_triangles(triangles: &[Triangle], transform: Affine) -> FxHashMap<(u16, u16), MeshSample> {
+-    let mut map: FxHashMap<(u16, u16), MeshSample> = FxHashMap::default();
+-
+-    for t in triangles {
+-        let t = {
+-            let p0 = transform * t.p0.point;
+-            let p1 = transform * t.p1.point;
+-            let p2 = transform * t.p2.point;
+-
+-            let mut v0 = t.p0.clone();
+-            v0.point = p0;
+-            let mut v1 = t.p1.clone();
+-            v1.point = p1;
+-            let mut v2 = t.p2.clone();
+-            v2.point = p2;
+-
+-            Triangle::new(v0, v1, v2)
+-        };
+-
+-        let bbox = t.bounding_box();
+-
++type PixelPolygon = smallvec::SmallVec<[Point; 8]>;
++fn split_pixel_polygon(polygon: &[Point], a: Point, b: Point) -> (PixelPolygon, PixelPolygon) {
++    let distance = |p: Point| (b.x-a.x)*(p.y-a.y)-(b.y-a.y)*(p.x-a.x);
++    let mut inside = PixelPolygon::new();
++    let mut outside = PixelPolygon::new();
++    for i in 0..polygon.len() {
++        let p = polygon[i];
++        let q = polygon[(i+1)%polygon.len()];
++        let dp = distance(p);
++        let dq = distance(q);
++        if dp >= 0. { inside.push(p); }
++        if dp <= 0. { outside.push(p); }
++        if (dp < 0. && dq > 0.) || (dp > 0. && dq < 0.) {
++            let crossing = p + (q-p) * (dp / (dp-dq));
++            inside.push(crossing);
++            outside.push(crossing);
++        }
++    }
++    (inside, outside)
++}
++fn pixel_polygon_area(polygon: &[Point]) -> Option<(f32, Point)> {
++    if polygon.len() < 3 { return None; }
++    let mut cross_sum = 0.;
++    let mut center = kurbo::Vec2::ZERO;
++    for i in 0..polygon.len() {
++        let a = polygon[i]; let b = polygon[(i+1)%polygon.len()];
++        let cross = a.x*b.y-b.x*a.y;
++        cross_sum += cross;
++        center += (a.to_vec2()+b.to_vec2())*cross;
++    }
++    if cross_sum.abs() <= 1e-15 { return None; }
++    Some(((cross_sum.abs()*0.5) as f32, (center/(3.*cross_sum)).to_point()))
++}
++fn sample_triangles(triangles: &[Triangle], transform: Affine) -> FxHashMap<(u16,u16),MeshSample> {
++    let transformed: Vec<_> = triangles.iter().map(|t| {
++        let mut a=t.p0.clone();a.point=transform*a.point;
++        let mut b=t.p1.clone();b.point=transform*b.point;
++        let mut c=t.p2.clone();c.point=transform*c.point;
++        Triangle::new(a,b,c)
++    }).collect();
++    let mut pixels: FxHashMap<(u16,u16),smallvec::SmallVec<[usize;8]>>=FxHashMap::default();
++    for (index,t) in transformed.iter().enumerate() {
++        let bbox=t.bounding_box();
+         for y in (bbox.y0.floor() as u16)..(bbox.y1.ceil() as u16) {
+             for x in (bbox.x0.floor() as u16)..(bbox.x1.ceil() as u16) {
+-                if let Some((area, point)) = triangle_pixel_area(&t, x, y) {
+-                    let colors = t.interpolate(point);
+-                    let sample = map.entry((x, y)).or_insert_with(|| MeshSample {
+-                        colors: colors.iter().map(|_| 0.0).collect(),
+-                        coverage: 0.0,
+-                    });
+-                    for (total, color) in sample.colors.iter_mut().zip(colors) {
+-                        *total += color * area;
+-                    }
+-                    sample.coverage += area;
+-                }
+-            }
+-        }
+-    }
+-
+-    for sample in map.values_mut() {
+-        for color in &mut sample.colors {
+-            *color /= sample.coverage;
+-        }
+-        sample.coverage = sample.coverage.min(1.0);
+-    }
+-    map
++                if triangle_pixel_area(t,x,y).is_some() { pixels.entry((x,y)).or_default().push(index); }
++            }
++        }
++    }
++    pixels.into_iter().filter_map(|((x,y),indices)| {
++        let origin=Point::new(f64::from(x),f64::from(y));
++        let mut remaining=vec![smallvec![Point::new(0.,0.),Point::new(1.,0.),Point::new(1.,1.),Point::new(0.,1.)]];
++        let mut sample=MeshSample { colors:smallvec![],coverage:0. };
++        for &index in indices.iter().rev() {
++            if remaining.is_empty() { break; }
++            let t=&transformed[index];
++            let mut points=[t.p0.point-origin,t.p1.point-origin,t.p2.point-origin].map(|p|p.to_point());
++            let orientation=(points[1]-points[0]).cross(points[2]-points[0]);
++            if orientation.abs() <= 1e-15 { continue; }
++            if orientation < 0. { points.swap(1,2); }
++            let mut uncovered=Vec::new();
++            for polygon in remaining {
++                let mut overlap=polygon.clone();
++                for edge in 0..3 {
++                    overlap=split_pixel_polygon(&overlap,points[edge],points[(edge+1)%3]).0;
++                    if overlap.len()<3 { break; }
++                }
++                if pixel_polygon_area(&overlap).is_none() { uncovered.push(polygon); continue; }
++                let mut visible=polygon;
++                for edge in 0..3 {
++                    let (inside,outside)=split_pixel_polygon(&visible,points[edge],points[(edge+1)%3]);
++                    if pixel_polygon_area(&outside).is_some() { uncovered.push(outside); }
++                    visible=inside;
++                    if visible.len()<3 { break; }
++                }
++                if let Some((area,center))=pixel_polygon_area(&visible) {
++                    let colors=t.interpolate(origin+center.to_vec2());
++                    if sample.colors.is_empty() { sample.colors=colors.iter().map(|_|0.).collect(); }
++                    for (total,color) in sample.colors.iter_mut().zip(colors) { *total+=color*area; }
++                    sample.coverage+=area;
++                }
++            }
++            assert!(uncovered.len() <= 4096, "front-to-back fragments={} pixel=({x},{y}) index={index} candidates={} area={} tiny_below_1e-9={} max_area={}",uncovered.len(),indices.len(),uncovered.iter().filter_map(|p|pixel_polygon_area(p).map(|v|f64::from(v.0))).sum::<f64>(),uncovered.iter().filter(|p|pixel_polygon_area(p).is_some_and(|v|v.0<1e-9)).count(),uncovered.iter().filter_map(|p|pixel_polygon_area(p).map(|v|v.0)).fold(0f32,f32::max));
++            remaining=uncovered;
++        }
++        if sample.coverage <= 0. { return None; }
++        for c in &mut sample.colors { *c/=sample.coverage; }
++        sample.coverage=sample.coverage.min(1.);
++        Some(((x,y),sample))
++    }).collect()
+ }
+ 
+ fn encode_function_shading(domain: &[f32; 4], function: &ShadingFunction) -> EncodedShadingType {

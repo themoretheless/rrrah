@@ -1,0 +1,35 @@
+--- a/vendor/hayro-interpret/src/encode.rs
++++ b/vendor/hayro-interpret/src/encode.rs
+@@ -81,12 +81,10 @@
+             }
+             ShadingType::CoonsPatchMesh { patches, function } => {
+                 let mut triangles = vec![];
+-                for patch in patches {
+-                    patch.to_triangles(&mut triangles);
+-                }
+-
+-                let full_transform = self.matrix;
+-                let samples = sample_triangles(&triangles, full_transform);
++                let references: Vec<_> = patches.iter().map(crate::shading::AdaptivePatchRef::Coons).collect();
++                let limits = crate::shading::AdaptivePatchLimits { pixel_error: 0.05, component_error: 1.0 / 512.0, max_depth: 12, max_triangles: 1_048_576 };
++                crate::shading::tessellate_patch_mesh_adaptive(&references, self.matrix, limits, &mut triangles, || false).expect("experimental adaptive Coons tessellation");
++                let samples = sample_triangles(&triangles, Affine::IDENTITY);
+ 
+                 base_transform = Affine::IDENTITY;
+ 
+@@ -97,12 +95,9 @@
+             }
+             ShadingType::TensorProductPatchMesh { patches, function } => {
+                 let mut triangles = vec![];
+-                for patch in patches {
+-                    patch.to_triangles(&mut triangles);
+-                }
+-
+-                let full_transform = self.matrix;
+-                let samples = sample_triangles(&triangles, full_transform);
++                let limits = crate::shading::AdaptivePatchLimits { pixel_error: 0.05, component_error: 1.0 / 512.0, max_depth: 12, max_triangles: 1_048_576 };
++                crate::shading::tessellate_tensor_patch_mesh_adaptive(patches, self.matrix, limits, &mut triangles, || false).expect("experimental adaptive tensor tessellation");
++                let samples = sample_triangles(&triangles, Affine::IDENTITY);
+ 
+                 base_transform = Affine::IDENTITY;
+ 

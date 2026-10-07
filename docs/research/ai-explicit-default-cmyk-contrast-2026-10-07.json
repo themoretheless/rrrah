@@ -1,0 +1,165 @@
+{
+  "base_commit": "b43ffd2d4ab969559b677bbf4f1202c36061294e",
+  "experiment": "Embed unchanged native CGATS001Compat ICC bytes as DefaultCMYK in all resource dictionaries of a controlled serialized copy. Compare both copies with the same native binary and Poppler. No source artwork coordinates, colors or painting operators are intentionally changed.",
+  "full_VectorApple": {
+    "source_sha256": "c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06",
+    "source_has_output_intent": false,
+    "profile_sha256": "73e1ba37d2bad5bab2a964f40a9eed96209666efc067c3322626214bbef234a0",
+    "profile_class": "scnr",
+    "native_binary_sha256": "34726bb17f39fc5295be5f6a23cdedf6972c8fb4629a03c2e711f987244ce701",
+    "cases": [
+      {
+        "case": "reserialized",
+        "pdf_sha256": "caffbd80d128c908768f94fea560869f549a8ed9fc8aec4652e2f09bd0404bee",
+        "resources_changed": 0,
+        "native_rgba_sha256": "e686d50c1a0a11774bb591eeaf2c7a93f5116a86b1a023378551bd69014f7410",
+        "oracle_rgb_sha256": "57b154a1760616b953cea6b8f5672ec413882128b1a8f9ecbe800e721b52b591",
+        "native_vs_oracle": {
+          "different_pixels": 33167,
+          "max_channel_error": 214,
+          "mean_absolute_channel_error": 4.00443418055443
+        },
+        "metadata": {
+          "width": 301,
+          "height": 246,
+          "image_index": 0,
+          "image_count": 1
+        }
+      },
+      {
+        "case": "explicit-default-cmyk",
+        "pdf_sha256": "035ce9f6ea0edcc948a5810d0fdb50d26734293c33f2d9a570ab6b120f0e849c",
+        "resources_changed": 165,
+        "native_rgba_sha256": "e686d50c1a0a11774bb591eeaf2c7a93f5116a86b1a023378551bd69014f7410",
+        "oracle_rgb_sha256": "a3ee5ffef4fb2bc552164b79f04db7d525b15a734487bfdb938b9fd3f0783bef",
+        "native_vs_oracle": {
+          "different_pixels": 28801,
+          "max_channel_error": 212,
+          "mean_absolute_channel_error": 1.8245820165842854
+        },
+        "metadata": {
+          "width": 301,
+          "height": 246,
+          "image_index": 0,
+          "image_count": 1
+        }
+      }
+    ],
+    "native_between_variants": {
+      "different_pixels": 0,
+      "max_channel_error": 0,
+      "mean_absolute_channel_error": 0.0
+    },
+    "poppler_between_variants": {
+      "different_pixels": 32606,
+      "max_channel_error": 40,
+      "mean_absolute_channel_error": 2.7999711890806616
+    },
+    "poppler_version": "pdftoppm version 26.10.0\nCopyright 2005-2026 The Poppler Developers - http://poppler.freedesktop.org\nCopyright 1996-2011, 2022 Glyph & Cog, LLC"
+  },
+  "isolated_largest_patch": {
+    "source_sha256": "c420718f5715d98ea3791aeee64e5d0e86de025c788f123bff16345cfc66c642",
+    "source_has_output_intent": false,
+    "profile_sha256": "73e1ba37d2bad5bab2a964f40a9eed96209666efc067c3322626214bbef234a0",
+    "profile_class": "scnr",
+    "native_binary_sha256": "34726bb17f39fc5295be5f6a23cdedf6972c8fb4629a03c2e711f987244ce701",
+    "cases": [
+      {
+        "native_alpha_histogram": {
+          "zero": 73428,
+          "opaque": 479,
+          "fractional": 139
+        },
+        "native_opaque_cross_interior_pixels": 368,
+        "opaque_cross_color_error": {
+          "different_pixels": 368,
+          "max_channel_error": 6,
+          "mean_absolute_channel_error": 2.6721014492753623
+        },
+        "case": "reserialized",
+        "pdf_sha256": "ee7e5d7b796eef6baf78aa585206d54e1e5c61f8e3cd45aa08b42b43461c65ee",
+        "resources_changed": 0,
+        "native_rgba_sha256": "3b83d3e67f98e615daac633128ba900015a26d4159b7823054da2ff7c7b0e4fa",
+        "oracle_rgb_sha256": "fb6eaea10c77757d3b40cfb872c8cd7ae5c1438db16d62ac8f8bab9a18320950",
+        "native_vs_oracle": {
+          "different_pixels": 620,
+          "max_channel_error": 224,
+          "mean_absolute_channel_error": 0.19660751424789996
+        },
+        "metadata": {
+          "width": 301,
+          "height": 246,
+          "image_index": 0,
+          "image_count": 1
+        }
+      },
+      {
+        "native_alpha_histogram": {
+          "zero": 73428,
+          "opaque": 479,
+          "fractional": 139
+        },
+        "native_opaque_cross_interior_pixels": 368,
+        "opaque_cross_color_error": {
+          "different_pixels": 344,
+          "max_channel_error": 3,
+          "mean_absolute_channel_error": 0.6277173913043478
+        },
+        "case": "explicit-default-cmyk",
+        "pdf_sha256": "660ae9ec4fc2ddf13d5ea4972287448b30d449a8d1fa1ff3e447a2fb16780b61",
+        "resources_changed": 1,
+        "native_rgba_sha256": "3b83d3e67f98e615daac633128ba900015a26d4159b7823054da2ff7c7b0e4fa",
+        "oracle_rgb_sha256": "d0d997c0300371dddba571ce91e609fb005d05b528ad4a6da3501fb21ce045ce",
+        "native_vs_oracle": {
+          "different_pixels": 583,
+          "max_channel_error": 220,
+          "mean_absolute_channel_error": 0.17855567259991537
+        },
+        "metadata": {
+          "width": 301,
+          "height": 246,
+          "image_index": 0,
+          "image_count": 1
+        }
+      }
+    ],
+    "native_between_variants": {
+      "different_pixels": 0,
+      "max_channel_error": 0,
+      "mean_absolute_channel_error": 0.0
+    },
+    "poppler_between_variants": {
+      "different_pixels": 620,
+      "max_channel_error": 6,
+      "mean_absolute_channel_error": 0.024678353095823318
+    },
+    "poppler_version": "pdftoppm version 26.10.0\nCopyright 2005-2026 The Poppler Developers - http://poppler.freedesktop.org\nCopyright 1996-2011, 2022 Glyph & Cog, LLC"
+  },
+  "profile_direct_cli_attempt": {
+    "command": "pdftoppm -r 72 -f 1 -l 1 -singlefile -defaultcmykprofile vendor/hayro-interpret/assets/CGATS001Compat-v2-micro.icc /tmp/rrrah-integrated-ai-corpus/VectorApple.ai /tmp/rrrah-vectorapple-matched-cmyk",
+    "exit_code": 99,
+    "stderr": "ICC profile \"vendor/hayro-interpret/assets/CGATS001Compat-v2-micro.icc\" is not an input profile.\n",
+    "interpretation": "CLI rejected profile; no inferred reason. Embedded DefaultCMYK variants were accepted and rendered."
+  },
+  "findings": [
+    "Original VectorApple has no OutputIntents and uses DeviceCMYK, Indexed/DeviceCMYK, and DeviceN with DeviceCMYK alternate",
+    "DefaultCMYK control changes 32606 Poppler pixels while native pixels stay bit-identical to the original native result",
+    "Full-page mean absolute channel error falls from 4.0044 to 1.8246 but maximum error remains 212; profile policy is a contributor, not complete root cause",
+    "Opaque-cross interior of one isolated patch has mean error 2.6721 without explicit ICC and 0.6277 with matching ICC; maximum interior error falls from 6 to 3",
+    "Current isolated native patch has 139 fractional-alpha pixels; older binary-only-alpha diagnostic no longer describes current behavior",
+    "Inspected Hayro render(): explicit viewport width and height do not rescale artwork; decoder unit scale is applied independently. No page-rescaling change was made."
+  ],
+  "limitations": [
+    "Counterfactual profile alignment, not qualification of original AI equality",
+    "Native ignoring an explicit DefaultCMYK which equals its own built-in profile does not prove general DefaultCMYK support",
+    "Opaque cross-neighborhood is defined from native coverage, not independent oracle coverage",
+    "Native binary source matches current production rendering path; adaptive helper APIs added later are not invoked by this binary",
+    "Device-default profiles, rendering intent, nonlinear color integration, geometry coverage and other operators still need separate verification",
+    "No production files edited this turn"
+  ],
+  "references": [
+    "https://pdfa.org/wp-content/uploads/2011/08/PDFA-in-a-Nutshell_1b.pdf",
+    "https://pdf-issues.pdfa.org/32000-2-2020/clause08.html"
+  ],
+  "next_action": "Qualify explicit resource DefaultCMYK on a deterministic independent-color fixture, including nested resources/shadings/images and cache context isolation; preserve strict original-file oracle gate and separately localize remaining edge/sampling discrepancies."
+}
