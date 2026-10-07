@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-07",
+  "new_case": "arctangent_rotation_numeric_conversion",
+  "operators": [
+    "atan",
+    "cvi",
+    "cvr",
+    "translate",
+    "rotate",
+    "rectfill"
+  ],
+  "fixture_sha256": "2a990f022efff9f440cd5e98cba8b30d73cfadabeddcf1babdf27f741ab923db",
+  "oracle": "tests/fixtures/eps/import-pixel-ghostscript-reference.json",
+  "import_cases_exact": 4,
+  "native_pixels_exact": 256,
+  "gpu_pixels_exact": 4096,
+  "adapter": "Metal Apple M4 Max",
+  "route": [
+    "decode_image",
+    "RAM eviction",
+    "async swap",
+    "budget exhaustion refusal",
+    "cancelled restore",
+    "retry",
+    "linear preparation",
+    "Metal offscreen render"
+  ],
+  "root_after_drop": 0,
+  "lifecycle_suite": {
+    "passed": 6,
+    "failed": 0,
+    "ignored": 0
+  },
+  "decoder_suite": {
+    "passed": 946,
+    "failed": 0,
+    "ignored": 62
+  },
+  "limitations": [
+    "right-angle rotation only in new pixel case; scalar atan separately qualified over 1094 cases",
+    "physical HDR and NVIDIA unverified"
+  ]
+}

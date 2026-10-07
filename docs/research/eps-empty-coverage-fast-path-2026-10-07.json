@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-07",
+  "change": "fully validated paths without non-horizontal edges return managed zero coverage without scanline traversal",
+  "verification": [
+    "empty and horizontal-only 1024x1024 paths succeed with 16 work units",
+    "all 1048576 coverage values zero",
+    "retained credit matches mask bytes and final drop releases all",
+    "one-byte-short budget refuses before allocation",
+    "post-allocation cancellation releases mask",
+    "nonfinite geometry refuses before allocation"
+  ],
+  "decoder_suite": {
+    "passed": 949,
+    "failed": 0,
+    "ignored": 63
+  },
+  "performance_scope": "algorithmic work reduction only; no wall-clock speedup measured",
+  "limitations": [
+    "other edges retain existing scan conversion",
+    "default reference bevel coverage parity still pending"
+  ]
+}

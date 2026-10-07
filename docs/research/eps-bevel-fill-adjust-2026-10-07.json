@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-07",
+  "oracle_fixture": "tests/fixtures/eps/bevel-outline-zero-adjust-ghostscript-reference.json",
+  "fixture_sha256": "876f5d11404211ff43f091a2ca385ab0ca0c24eef3937d9517119c8ebe20984d",
+  "ghostscript_version": "10.05.1",
+  "reference_fill_adjust": [
+    0,
+    0
+  ],
+  "reference_stroke_adjust": false,
+  "source_evidence": [
+    "https://raw.githubusercontent.com/ArtifexSoftware/ghostpdl/gs10.05.1/base/gsstate.c",
+    "https://raw.githubusercontent.com/ArtifexSoftware/ghostpdl/gs10.05.1/psi/zgstate.c"
+  ],
+  "native_strict_pixel_gate": {
+    "cases": 4,
+    "pixels": 256,
+    "result": "exact RGB comparison; zero retained root credit"
+  },
+  "remaining": "zero translation still differs at diagonal center pixel 53; default fill-adjust reference parity remains unresolved",
+  "production_change": "none; native sample-center rule preserved",
+  "decoder_suite": {
+    "passed": 948,
+    "failed": 0,
+    "ignored": 63
+  }
+}

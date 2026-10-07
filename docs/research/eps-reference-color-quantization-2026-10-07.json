@@ -1,0 +1,56 @@
+{
+  "date": "2026-10-07",
+  "fixture": "tests/fixtures/eps/color-ramp-ghostscript-reference.json",
+  "fixture_sha256": "571d1c4e4abf566bd81a27f28e7a5bed744c07b501d99991cae990f7fd774d15",
+  "ghostscript_version": "10.05.1",
+  "binary_sha256": "e522a84dc98345933621efba59577afe76d8f2d241ae103a92e6ccd37812b290",
+  "cases": 70,
+  "gray_cases": 35,
+  "rgb_cases": 35,
+  "direct_unorm8_disagreements": [
+    {
+      "case": "gray_0.5",
+      "direct_unorm8": 128,
+      "reference": 127
+    },
+    {
+      "case": "gray_0.500015258789",
+      "direct_unorm8": 128,
+      "reference": 127
+    },
+    {
+      "case": "rgb_0.5",
+      "direct_unorm8": 128,
+      "reference": 127
+    },
+    {
+      "case": "rgb_0.500015258789",
+      "direct_unorm8": 128,
+      "reference": 127
+    }
+  ],
+  "reference_intermediate_quantization_model_mismatches": [],
+  "reference_pipeline": "32760-step fractional representation, expansion to 16-bit device value, rounding to 8-bit",
+  "sources": [
+    "https://raw.githubusercontent.com/ArtifexSoftware/ghostpdl/gs10.05.1/base/gxfrac.h",
+    "https://raw.githubusercontent.com/ArtifexSoftware/ghostpdl/gs10.05.1/base/gxcvalue.h"
+  ],
+  "decision": "Preserve native direct UNORM8 color mapping; intermediate reference quantization is not a PostScript requirement. Maintain full strict parity gate as ignored and qualify other 66 cases exactly.",
+  "limitations": [
+    "selected gray/neutral RGB ramp only",
+    "no independent color-managed physical display proof",
+    "four reference parity cases remain unresolved as a compatibility decision"
+  ],
+  "native_pixel_qualification": {
+    "cases": 66,
+    "pixels": 4224,
+    "rgb_channels": 12672,
+    "comparison": "exact",
+    "root_budget_after_drop": 0
+  },
+  "decoder_suite": {
+    "passed": 943,
+    "failed": 0,
+    "ignored": 61
+  }
+}

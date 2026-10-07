@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-07",
+  "new_case": "logarithmic_rectangle_coordinates",
+  "oracle_fixture": "tests/fixtures/eps/import-pixel-ghostscript-reference.json",
+  "fixture_sha256": "992aa314605be79f14ef013929b96850b17e69b9649c01fe81ce9b3c0f6b748d",
+  "ghostscript_version": "10.05.1",
+  "import_cases": 3,
+  "native_pixels_exact": 192,
+  "gpu_pixels_exact": 3072,
+  "adapter": "Metal Apple M4 Max",
+  "route": [
+    "EPS file",
+    "decode_image",
+    "RAM eviction",
+    "async swap",
+    "forced restore budget exhaustion and cancellation",
+    "retry",
+    "linear preparation",
+    "Metal offscreen render"
+  ],
+  "root_used_after_drop": 0,
+  "suite": {
+    "passed": 6,
+    "failed": 0,
+    "ignored": 0
+  },
+  "limits": [
+    "integer rectangle coordinates calculated by ln/log; not arbitrary EPS graphics",
+    "no physical HDR or NVIDIA qualification",
+    "69 total oracle cases include 66 neutral color-ramp cases qualified previously"
+  ]
+}

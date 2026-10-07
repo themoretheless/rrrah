@@ -1,0 +1,53 @@
+{
+  "date": "2026-10-07",
+  "change": "Mamiya ZD sensor strip address comes from TIFF tag 273 instead of fixed 4383052",
+  "storage_scope": "single uncompressed 12-bit strip, 4016x5344, qualified exact Mamiya ZD identity",
+  "checks": [
+    "header overlap refusal",
+    "checked offset and length",
+    "out-of-bounds refusal before output allocation",
+    "camera-produced sensor block relocated to end of file; all 21461504 values equal original",
+    "original complete sensor stream equals pinned independent oracle digest",
+    "managed output and cancellation lifecycle"
+  ],
+  "available_mef_tests": {
+    "passed": 5,
+    "failed": 0
+  },
+  "unavailable_test": "real_zd_full_sensor_matches_oracle requires absent RRRAH_MEF_ORACLE file; attempted suite reports NotPresent. Pinned digest test passed.",
+  "limitations": [
+    "no camera WB qualification",
+    "no ordinary MEF viewer enablement",
+    "relocated file is authored from pinned source; no additional camera producer qualified"
+  ],
+  "directory_overlap_admission": {
+    "protected": "all parsed classic TIFF image-directory tables, including count and next-link fields",
+    "invalid_offsets_tested": [
+      0,
+      7,
+      8,
+      116919,
+      116920,
+      117140,
+      117164,
+      117372
+    ],
+    "refused_before_output_allocation": true,
+    "original_and_relocated_sensor_exact": true
+  },
+  "decoder_suite": {
+    "passed": 943,
+    "failed": 0,
+    "ignored": 62
+  },
+  "relocated_file_budget": {
+    "source_bytes": 68767564,
+    "output_bytes": 42923008,
+    "exact_budget": 111690572,
+    "exact_peak_verified": true,
+    "output_equal_original": true,
+    "one_byte_short": "memory refusal; only source admitted; final used zero",
+    "after_output_drop": 0,
+    "test_passed": true
+  }
+}

@@ -280,6 +280,22 @@ impl GpuReadback {
         let after = self.read_frame(size, |encoder, target| renderer.encode(encoder, target));
         (before, after)
     }
+    pub fn render_raster_frame_transition(
+        &self,
+        first: &rrrah_core::DecodedRaster,
+        second: &rrrah_core::DecodedRaster,
+        view: ViewParameters,
+        size: [u32; 2],
+    ) -> (RgbaFrame, RgbaFrame) {
+        let mut renderer = rrrah_gpu::RasterRenderer::new(&self.device, READBACK_FORMAT);
+        renderer.upload(&self.device, &self.queue, first).unwrap();
+        renderer.update_view(&self.queue, view);
+        let before = self.read_frame(size, |encoder, target| renderer.encode(encoder, target));
+        renderer.upload(&self.device, &self.queue, second).unwrap();
+        renderer.update_view(&self.queue, view);
+        let after = self.read_frame(size, |encoder, target| renderer.encode(encoder, target));
+        (before, after)
+    }
 
     pub fn render_developed_raw(
         &self,

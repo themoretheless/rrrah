@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-07",
+  "cases": [
+    "empty fill",
+    "zero-length butt stroke"
+  ],
+  "route": [
+    "common EPS decoder",
+    "bounded asynchronous swap write",
+    "managed restore",
+    "linear-sRGB preparation",
+    "same Metal renderer colored -> transparent upload transition"
+  ],
+  "verified": [
+    "all decoded RGBA bytes zero",
+    "one successful swap write per case",
+    "result differs from previous opaque red frame",
+    "result equals independent fully transparent raster render exactly",
+    "all root credit released"
+  ],
+  "adapter": "Metal Apple M4 Max",
+  "lifecycle_suite": {
+    "passed": 7,
+    "failed": 0,
+    "ignored": 0
+  },
+  "limits": [
+    "transparent reference is analytic, not producer corpus",
+    "offscreen SDR readback; physical HDR/NVIDIA unproven"
+  ]
+}

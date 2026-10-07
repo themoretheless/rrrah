@@ -12,6 +12,20 @@ from pathlib import Path
 def generate_binary_trigonometry():
     angles = [i * 0.5 for i in range(-720, 721)] + [1e-30, -1e-30, 1e-6, -1e-6, 360090, -360090]
     codes = [f'{angle:.9g} {op}' for angle in angles for op in ['sin', 'cos']]
+    logarithms = '--log-binary' in sys.argv
+    arctangents = '--atan-binary' in sys.argv
+    powers = '--exp-binary' in sys.argv
+    if logarithms:
+        values = [2.0 ** n for n in range(-120, 121)] + [0.1, 0.5, 1, 10, 100, 1e-30, 1e30]
+        codes = [f'{value:.9g} {op}' for value in values for op in ['ln', 'log']]
+    if arctangents:
+        vectors = [(y, x) for y in range(-16, 17) for x in range(-16, 17) if (y, x) != (0, 0)]
+        vectors += [(1e-30, 1), (-1e-30, 1), (1, 1e-30), (-1, 1e-30), (1e30, -1e30), (-1e30, -1e30)]
+        codes = [f'{y:.9g} {x:.9g} atan' for y, x in vectors]
+    if powers:
+        cases = [(base, exponent) for base in (-2, -0.5, 0, 0.5, 1, 2, 10) for exponent in range(-3, 4) if not (base == 0 and exponent < 0)]
+        cases += [(base, exponent) for base in (0.125, 0.5, 2, 4, 16) for exponent in (-0.5, 0.25, 0.5, 1.5)]
+        codes = [f'{base:.9g} {exponent:.9g} exp' for base, exponent in cases]
     source = ('2 setobjectformat (%stdout) (w) file /out exch def\n' +
               '\n'.join(f'out {code} 0 writeobject' for code in codes) +
               '\nout flushfile quit\n').encode()
@@ -28,13 +42,18 @@ def generate_binary_trigonometry():
     rows=result.stderr.decode().splitlines()
     version=next(r for r in rows if r.count('.')==2 and r.replace('.','').isdigit())
     binary_sha=next(r.split()[0] for r in rows if r.endswith('/usr/bin/gs'))
-    Path('tests/fixtures/eps/trig-binary-ghostscript-reference.json').write_text(json.dumps({
+    destination = 'tests/fixtures/eps/log-binary-ghostscript-reference.json' if logarithms else 'tests/fixtures/eps/trig-binary-ghostscript-reference.json'
+    if arctangents:
+        destination = 'tests/fixtures/eps/atan-binary-ghostscript-reference.json'
+    if powers:
+        destination = 'tests/fixtures/eps/exp-binary-ghostscript-reference.json'
+    Path(destination).write_text(json.dumps({
         'license':'CC0-1.0','ghostscript_version':version,'binary_sha256':binary_sha,
         'source_sha256':hashlib.sha256(source).hexdigest(),'encoding':'writeobject IEEE little-endian real; exact f32 bits',
         'cases':cases},indent=2)+'\n')
-    print(f'Generated {len(cases)} exact binary trigonometry reference values.')
+    print(f'Generated {len(cases)} exact binary {"power" if powers else "arctangent" if arctangents else "logarithm" if logarithms else "trigonometry"} reference values.')
 
-if '--trig-binary' in sys.argv:
+if any(flag in sys.argv for flag in ('--trig-binary', '--log-binary', '--atan-binary', '--exp-binary')):
     generate_binary_trigonometry()
     raise SystemExit(0)
 
@@ -75,6 +94,8 @@ codes = [
 
     '0 sin 90 sin 180 sin 270 sin -90 sin 360090 sin',
     '0 cos 90 cos 180 cos 270 cos 360090 cos',
+    '-47.8 cvi 520.9 cvi 2147483647 cvi -2147483648 cvi 0.9 cvi -0.9 cvi',
+    '1 cvr -1 cvr 3.5 cvr 16777217 cvr',
 
 ]
 lines=['/rrrahOracleDump {count {dup type == ==} repeat} bind def']

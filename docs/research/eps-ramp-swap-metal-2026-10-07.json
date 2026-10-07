@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-07",
+  "adapter": "Metal Apple M4 Max",
+  "test": "independent_eps_gray_rgb_ramp_survives_swap_and_metal",
+  "oracle_fixture": "tests/fixtures/eps/color-ramp-ghostscript-reference.json",
+  "fixture_sha256": "571d1c4e4abf566bd81a27f28e7a5bed744c07b501d99991cae990f7fd774d15",
+  "qualified_cases": 66,
+  "native_pixels": 4224,
+  "gpu_pixels": 67584,
+  "comparison": "exact byte equality against independently rendered oracle, no tolerance",
+  "route": [
+    "decode_image",
+    "RAM count eviction",
+    "async swap write",
+    "managed swap restore",
+    "linear-sRGB preparation",
+    "Metal offscreen rendering"
+  ],
+  "per_case_root_budget_after_drop": 0,
+  "swap_read_verified_each_case": true,
+  "lifecycle_suite": {
+    "passed": 6,
+    "failed": 0,
+    "ignored": 0
+  },
+  "limitations": [
+    "four known reference quantization disagreements excluded explicitly",
+    "selected neutral Gray/RGB ramp only",
+    "offscreen render does not prove physical HDR or NVIDIA"
+  ],
+  "restore_admission": {
+    "cases": 68,
+    "forced_root_exhaustion": "restore refused for every case",
+    "failed_restore_credit": "unchanged",
+    "cancelled_restore": "no frame and unchanged credit",
+    "retry_after_pressure_release": "successful; oracle byte equality before and after Metal"
+  }
+}

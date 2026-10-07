@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-07",
+  "test": "expired_eps_preload_redecodes_without_invalidating_external_frame",
+  "route": "actual application EPS preload and cached display loader",
+  "policies": [
+    {
+      "max_bytes": 256,
+      "max_entries": null,
+      "ttl_ns": 0
+    },
+    {
+      "max_bytes": 4096,
+      "max_entries": 1,
+      "ttl_ns": 0
+    }
+  ],
+  "verified": [
+    "expired preload invokes decoder exactly once",
+    "new frame uses a separate allocation with exact same pixels",
+    "expiration does not invalidate externally held old frame",
+    "after cache drop external memory credit transitions 512 -> 256 -> 0"
+  ],
+  "suite": {
+    "passed": 3,
+    "failed": 0
+  },
+  "limitations": [
+    "zero TTL deterministic boundary; not wall-clock scheduling latency",
+    "no new physical HDR/NVIDIA evidence"
+  ]
+}

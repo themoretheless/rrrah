@@ -1,0 +1,24 @@
+{
+  "date": "2026-10-07",
+  "fixture": "tests/fixtures/eps/bevel-boundary-ghostscript-reference.json",
+  "fixture_sha256": "fd841397eb2045137d7bbd1496dae73d2e76726b9778a6f5198ff4e724f27978",
+  "ghostscript_version": "10.05.1",
+  "cases": 4,
+  "shifts_x": [
+    -0.03125,
+    -0.015625,
+    0.015625,
+    0.03125
+  ],
+  "stroke_adjust": false,
+  "strict_gate": "independent_shifted_bevel_pixel_qualification",
+  "result": "fails; first mismatch bevel_shift_-0.03125 pixel 19, native white 255 versus reference black 0",
+  "new_evidence": "original mismatch is not confined to exact diagonal pixel-center tie; translated stroke exhibits another mismatch",
+  "hypothesis": "reference coverage/scan conversion differs from native sample-center fill; further isolation required",
+  "production_change": "none; strict comparison remains failing and ignored explicitly",
+  "next_action": "compare translated fill of explicit stroke outline to interpreter stroke, separating raster coverage from stroke geometry",
+  "limitations": [
+    "no bevel parity claim",
+    "no widened tolerance"
+  ]
+}

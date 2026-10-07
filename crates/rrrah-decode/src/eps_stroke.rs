@@ -631,6 +631,167 @@ mod tests {
         }
     }
     #[test]
+    #[ignore = "strict reference gate: shifted bevel also differs away from original diagonal tie; coverage rule unresolved"]
+    fn independent_shifted_bevel_pixel_qualification() {
+        let reference: serde_json::Value = serde_json::from_str(include_str!(
+            "../../../tests/fixtures/eps/bevel-boundary-ghostscript-reference.json"
+        ))
+        .unwrap();
+        let cases = reference["cases"].as_array().unwrap();
+        assert_eq!(cases.len(), 4);
+        compare_bevel_reference_cases(cases);
+    }
+    #[test]
+    fn independent_zero_adjust_bevel_pixels_match_away_from_exact_diagonal_tie() {
+        let reference: serde_json::Value = serde_json::from_str(include_str!(
+            "../../../tests/fixtures/eps/bevel-outline-zero-adjust-ghostscript-reference.json"
+        ))
+        .unwrap();
+        let cases = reference["cases"].as_array().unwrap();
+        assert_eq!(cases.len(), 10);
+        let cases: Vec<_> = cases
+            .iter()
+            .filter_map(|case| {
+                let shift = case["name"].as_str()?.strip_prefix("stroke_")?;
+                if shift == "0" {
+                    return None;
+                }
+                let mut case = case.clone();
+                case["name"] = serde_json::Value::String(format!("bevel_shift_{shift}"));
+                Some(case)
+            })
+            .collect();
+        assert_eq!(cases.len(), 4);
+        compare_bevel_reference_cases(&cases);
+    }
+    fn compare_bevel_reference_cases(cases: &[serde_json::Value]) {
+        let root = MemoryBudget::new(100_000);
+        for case in cases {
+            let name = case["name"].as_str().unwrap();
+            let dx: f64 = name.strip_prefix("bevel_shift_").unwrap().parse().unwrap();
+            let points = [[2. + dx, 2.], [5. + dx, 2.], [5. + dx, 6.]];
+            let path = outline_eps_polyline(
+                &points,
+                false,
+                EpsStrokeStyle {
+                    width: 2.,
+                    join: 2,
+                    ..EpsStrokeStyle::default()
+                },
+                [1., 0., 0., -1., 0., 8.],
+                0.001,
+                1000,
+                10000,
+                &root,
+                || false,
+            )
+            .unwrap();
+            let mask = crate::fill_eps_path(
+                &path,
+                8,
+                8,
+                false,
+                crate::EpsFillLimits {
+                    samples: 1,
+                    ..crate::EpsFillLimits::default()
+                },
+                &root,
+                || false,
+            )
+            .unwrap();
+            let rgb = case["rgb"].as_array().unwrap();
+            for (at, &coverage) in mask.iter().enumerate() {
+                for channel in 0..3 {
+                    assert_eq!(
+                        u64::from(255 - coverage),
+                        rgb[at * 3 + channel].as_u64().unwrap(),
+                        "{name} pixel {at}"
+                    );
+                }
+            }
+            drop(mask);
+            drop(path);
+            assert_eq!(root.used(), 0);
+        }
+    }
+    #[test]
+    fn native_bevel_stroke_equals_explicit_union_at_subpixel_translations() {
+        let reference: serde_json::Value = serde_json::from_str(include_str!(
+            "../../../tests/fixtures/eps/bevel-outline-ghostscript-reference.json"
+        ))
+        .unwrap();
+        let cases = reference["cases"].as_array().unwrap();
+        assert_eq!(cases.len(), 10);
+        let root = MemoryBudget::new(32 * 1024 * 1024);
+        for case in cases.iter().skip(1).step_by(2) {
+            let name = case["name"].as_str().unwrap();
+            let dx: f64 = name.strip_prefix("outline_").unwrap().parse().unwrap();
+            let source = format!(
+                "%!PS-Adobe-3.0 EPSF-3.0\n%%BoundingBox: 0 0 8 8\n%%EndComments\n{}\n",
+                case["source"]
+                    .as_str()
+                    .unwrap()
+                    .replace("false setstrokeadjust ", "")
+            );
+            let mut limits = crate::EpsDocumentLimits::default();
+            limits.raster.fill.samples = 1;
+            let raster = crate::decode_eps_document(
+                source.as_bytes(),
+                1.,
+                crate::EpsRasterColorPolicy::DeviceGrayRgbAsSrgb,
+                limits,
+                &root,
+                || false,
+            )
+            .unwrap();
+            let points = [[2. + dx, 2.], [5. + dx, 2.], [5. + dx, 6.]];
+            let path = outline_eps_polyline(
+                &points,
+                false,
+                EpsStrokeStyle {
+                    width: 2.,
+                    join: 2,
+                    ..EpsStrokeStyle::default()
+                },
+                [1., 0., 0., -1., 0., 8.],
+                0.001,
+                1000,
+                10000,
+                &root,
+                || false,
+            )
+            .unwrap();
+            let mask = crate::fill_eps_path(
+                &path,
+                8,
+                8,
+                false,
+                crate::EpsFillLimits {
+                    samples: 1,
+                    ..crate::EpsFillLimits::default()
+                },
+                &root,
+                || false,
+            )
+            .unwrap();
+            let rrrah_core::RasterPixels::Rgba8(pixels) = raster.pixels() else {
+                panic!()
+            };
+            for (at, &coverage) in mask.iter().enumerate() {
+                let gray = 255 - coverage;
+                assert_eq!(
+                    &pixels[at * 4..at * 4 + 4],
+                    &[gray, gray, gray, 255],
+                    "{name} pixel {at}"
+                );
+            }
+            drop(mask);
+            drop(path);
+            drop(raster);
+            assert_eq!(root.used(), 0);
+        }
+    }
+    #[test]
     fn joins_union_with_segment_outlines_and_miter_limit_bevels() {
         let root = MemoryBudget::new(100_000);
         let matrix = [1., 0., 0., 1., 0., 0.];

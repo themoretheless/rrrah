@@ -1,0 +1,54 @@
+{
+  "date": "2026-10-07",
+  "fixture": "tests/fixtures/eps/bevel-outline-ghostscript-reference.json",
+  "fixture_sha256": "a538ebb0814f5b1d347023f88047d0016b6c98d1ee39462e411a87b4b360c949",
+  "ghostscript_version": "10.05.1",
+  "stroke_adjust": false,
+  "comparison": "independent interpreter stroke versus authored explicit union of segment rectangles and bevel triangle",
+  "pairs": [
+    {
+      "stroke": "stroke_-0.03125",
+      "outline": "outline_-0.03125",
+      "differing_pixels": []
+    },
+    {
+      "stroke": "stroke_-0.015625",
+      "outline": "outline_-0.015625",
+      "differing_pixels": []
+    },
+    {
+      "stroke": "stroke_0",
+      "outline": "outline_0",
+      "differing_pixels": []
+    },
+    {
+      "stroke": "stroke_0.015625",
+      "outline": "outline_0.015625",
+      "differing_pixels": []
+    },
+    {
+      "stroke": "stroke_0.03125",
+      "outline": "outline_0.03125",
+      "differing_pixels": []
+    }
+  ],
+  "interpretation": "Both native and independent interpreter agree internally between stroke and explicit polygon union. Cross-interpreter mismatches persist for the same geometry, isolating scan-conversion coverage rather than bevel construction in these cases.",
+  "limitations": [
+    "no native production change",
+    "explicit axis-aligned corner only",
+    "native strict bevel gate remains unresolved"
+  ],
+  "native_union_test": {
+    "name": "native_bevel_stroke_equals_explicit_union_at_subpixel_translations",
+    "passed": true,
+    "cases": 5,
+    "coverage_samples_per_axis": 1,
+    "comparison": "all 320 native pixels exact between stroke outline and authored polygon union",
+    "root_after_each_case": 0
+  },
+  "decoder_suite": {
+    "passed": 947,
+    "failed": 0,
+    "ignored": 63
+  }
+}

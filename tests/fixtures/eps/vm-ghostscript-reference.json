@@ -6,7 +6,7 @@
   "image": "alpine:3.22.1",
   "image_id": "sha256:4bcff63911fcb4448bd4fdacec207030997caf25e9bea4045fa6c8c44de311d1",
   "numeric_model": "Ghostscript default 64-bit integers; these cases do not require integer-overflow promotion",
-  "source_sha256": "7341aa457b85b12a53e629409348d6010e13671772c9494c5e5f18613ff502d0",
+  "source_sha256": "1e234f966e610a703aa4f377fcac9a1128a0403d39b7adf29d4e12e4467b3998",
   "cases": [
     {
       "code": "/average {add 2 div} def 40 60 average",
@@ -554,6 +554,56 @@
         {
           "type": "real",
           "value": 0.0
+        }
+      ]
+    },
+    {
+      "code": "-47.8 cvi 520.9 cvi 2147483647 cvi -2147483648 cvi 0.9 cvi -0.9 cvi",
+      "values": [
+        {
+          "type": "integer",
+          "value": -47
+        },
+        {
+          "type": "integer",
+          "value": 520
+        },
+        {
+          "type": "integer",
+          "value": 2147483647
+        },
+        {
+          "type": "integer",
+          "value": -2147483648
+        },
+        {
+          "type": "integer",
+          "value": 0
+        },
+        {
+          "type": "integer",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "code": "1 cvr -1 cvr 3.5 cvr 16777217 cvr",
+      "values": [
+        {
+          "type": "real",
+          "value": 1.0
+        },
+        {
+          "type": "real",
+          "value": -1.0
+        },
+        {
+          "type": "real",
+          "value": 3.5
+        },
+        {
+          "type": "real",
+          "value": 16777216.0
         }
       ]
     }

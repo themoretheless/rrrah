@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-07",
+  "api": "decode_rpf_file_raster_with_budget",
+  "change": "parse image aspect and derive full-window pixel aspect in borrowed file before expanded channel allocation",
+  "shared_parser": "decoded-image and borrowed-file metadata use same text interpretation",
+  "invalid_cases": [
+    "zero",
+    "negative",
+    "NaN",
+    "infinity",
+    "garbage"
+  ],
+  "verified": "source-only root returns Aspect error; peak source bytes only and final used zero",
+  "decoder_suite": {
+    "passed": 949,
+    "failed": 0,
+    "ignored": 63
+  },
+  "gpu_suite": {
+    "passed": 2,
+    "failed": 0,
+    "adapter": "Metal Apple M4 Max"
+  },
+  "preserved": [
+    "non-square pixel geometry",
+    "HDR samples",
+    "alpha",
+    "RAM/swap"
+  ],
+  "limitations": [
+    "synthetic RPF layout qualification only",
+    "real producer corpus and ordinary gallery viewing remain pending"
+  ]
+}

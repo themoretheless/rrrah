@@ -136,6 +136,14 @@ pub fn fill_eps_path<F: FnMut() -> bool>(
         }
         Ok(())
     })?;
+    if count == 0 {
+        // Geometry has been fully validated and cancellation-polled above.
+        // Empty/move-only/horizontal paths cannot contribute coverage.
+        tick()?;
+        let output = budget.try_buffer(pixels, 0u8)?;
+        tick()?;
+        return Ok(output.freeze());
+    }
     let mut storage = budget.try_buffer(
         count,
         Edge {
@@ -290,6 +298,50 @@ fn sift<T, K: Fn(&T) -> f64, F: FnMut() -> Result<(), EpsFillError>>(
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn empty_coverage_skips_image_scan_and_preserves_admission_and_cancel() {
+        let root = MemoryBudget::new(1_048_576);
+        let limits = EpsFillLimits {
+            max_work: 16,
+            ..EpsFillLimits::default()
+        };
+        let horizontal = [
+            EpsPathSegment::Move([0., 2.]),
+            EpsPathSegment::Line {
+                start: [0., 2.],
+                end: [999., 2.],
+            },
+        ];
+        for path in [&[][..], &horizontal[..]] {
+            let mask = fill_eps_path(path, 1024, 1024, false, limits, &root, || false).unwrap();
+            assert!(mask.iter().all(|&value| value == 0));
+            assert_eq!(root.used(), 1_048_576);
+            drop(mask);
+            assert_eq!(root.used(), 0);
+        }
+        let short = MemoryBudget::new(1_048_575);
+        assert!(matches!(
+            fill_eps_path(&[], 1024, 1024, false, limits, &short, || false),
+            Err(EpsFillError::Memory(_))
+        ));
+        assert_eq!(short.peak(), 0);
+        let calls = std::cell::Cell::new(0);
+        assert!(matches!(
+            fill_eps_path(&[], 1024, 1024, false, limits, &root, || {
+                calls.set(calls.get() + 1);
+                calls.get() == 3
+            }),
+            Err(EpsFillError::Cancelled)
+        ));
+        assert_eq!(root.used(), 0);
+        let invalid = [EpsPathSegment::Move([f64::NAN, 0.])];
+        let clean = MemoryBudget::new(1_048_576);
+        assert!(matches!(
+            fill_eps_path(&invalid, 1024, 1024, false, limits, &clean, || false),
+            Err(EpsFillError::Range)
+        ));
+        assert_eq!(clean.peak(), 0);
+    }
     fn rect(x: f64, y: f64, w: f64, h: f64) -> [EpsPathSegment; 4] {
         [
             EpsPathSegment::Move([x, y]),

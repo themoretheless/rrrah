@@ -8902,6 +8902,38 @@ mod eps_preload_tests {
     use super::*;
     const EPS: &[u8] = b"%!PS-Adobe-3.0 EPSF-3.0\n%%BoundingBox: 0 0 4 4\n%%EndComments\n1 0 0 setrgbcolor 0 0 moveto 4 0 lineto 4 4 lineto 0 4 lineto closepath fill\n";
     #[test]
+    fn expired_eps_preload_redecodes_without_invalidating_external_frame() {
+        let dir = tempfile::tempdir().unwrap();
+        let path = dir.path().join("expired.eps");
+        std::fs::write(&path, EPS).unwrap();
+        for (max_bytes, max_entries) in [(256, None), (4096, Some(1))] {
+            let root = rrrah_core::MemoryBudget::new(32 * 1024 * 1024);
+            let mut request = DecodeRequest::new(&path);
+            request.memory_budget = Some(root.clone());
+            let mut cache = RasterDisplayCache::new(rrrah_cache::CacheLimits {
+                max_bytes, max_entries, ttl: Some(std::time::Duration::ZERO),
+            });
+            let gate = Arc::new(DecodeGate::new());
+            let (warmed, _) = preload_raster(&request, None, &mut cache, &gate).unwrap();
+            let mut loads = 0;
+            let (fresh, _) = load_cached_raster_mode(&request, None, &mut cache, false, || {
+                loads += 1;
+                load_raster_for_display_typed(&request, None)
+            }).unwrap();
+            assert_eq!(loads, 1, "expired preload must not produce a cache hit");
+            let (rrrah_core::RasterPixels::Rgba32Float(a), rrrah_core::RasterPixels::Rgba32Float(b)) =
+                (warmed.pixels(), fresh.pixels()) else { panic!() };
+            assert!(!a.ptr_eq(b));
+            assert_eq!(&a[..], &b[..]);
+            drop(cache);
+            assert_eq!(root.used(), 512, "both external frames retain their own credit");
+            drop(fresh);
+            assert_eq!(root.used(), 256);
+            drop(warmed);
+            assert_eq!(root.used(), 0);
+        }
+    }
+    #[test]
     fn eps_neighbour_windows_reuse_preload_preserve_visible_and_cancel_stale() {
         let dir=tempfile::tempdir().unwrap();
         let paths:Vec<_>=(0..5).map(|i| {let path=dir.path().join(format!("{i}.eps"));std::fs::write(&path,EPS).unwrap();path}).collect();

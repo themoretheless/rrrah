@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-07",
+  "operator": "atan",
+  "production": "native Rust f64 atan2 in degrees, quadrant normalization then f32 result",
+  "oracle_fixture": "tests/fixtures/eps/atan-binary-ghostscript-reference.json",
+  "fixture_sha256": "b5df26d319d4d2e305e30bd4ad46823e62809169a0a4599555f676e6711ac7de",
+  "ghostscript_version": "10.05.1",
+  "binary_cases_exact": 1094,
+  "coverage": [
+    "33x33 signed integer vector grid except zero",
+    "axes",
+    "four quadrants",
+    "tiny finite components",
+    "large finite components"
+  ],
+  "maximum_ulp": 0,
+  "error_checks": [
+    "zero vector",
+    "signed zero vector",
+    "wrong type in either position",
+    "missing operand"
+  ],
+  "root_after_errors": 0,
+  "decoder_suite": {
+    "passed": 946,
+    "failed": 0,
+    "ignored": 62
+  },
+  "limitations": [
+    "scalar numeric operator only; complete EPS graphics support remains pending"
+  ]
+}

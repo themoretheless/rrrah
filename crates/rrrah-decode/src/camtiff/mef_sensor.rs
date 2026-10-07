@@ -88,7 +88,7 @@ pub fn decode_mef_zd_sensor(
         }
     }
     let raw = sensor.ok_or_else(|| error("missing qualified sensor directory"))?;
-    for (tag, value) in [(259, 1), (273, 4383052), (278, 5344), (279, 32192256)] {
+    for (tag, value) in [(259, 1), (278, 5344), (279, 32192256)] {
         if super::required_scalar("MEF", raw, tag)? != value {
             return Err(error("unqualified packed storage"));
         }
@@ -101,8 +101,34 @@ pub fn decode_mef_zd_sensor(
     if bits != [12., 12., 12.] {
         return Err(error("unqualified declared bit depths"));
     }
+    let offset = usize::try_from(super::required_scalar("MEF", raw, 273)?)
+        .map_err(|_| DecodeError::DimensionOverflow)?;
+    if offset < 8 {
+        return Err(error("sensor strip overlaps TIFF header"));
+    }
+    let end = offset
+        .checked_add(32192256)
+        .ok_or(DecodeError::DimensionOverflow)?;
+    for directory in file.directories() {
+        // Only classic big-endian TIFF is admitted above. Include both the
+        // entry-count field and the next-directory field in each protected table.
+        let begin = usize::try_from(directory.offset()).map_err(|_| DecodeError::DimensionOverflow)?;
+        let table_bytes = directory
+            .ifd
+            .entries
+            .len()
+            .checked_mul(12)
+            .and_then(|length| length.checked_add(6))
+            .ok_or(DecodeError::DimensionOverflow)?;
+        let table_end = begin
+            .checked_add(table_bytes)
+            .ok_or(DecodeError::DimensionOverflow)?;
+        if offset < table_end && begin < end {
+            return Err(error("sensor strip overlaps TIFF directory"));
+        }
+    }
     let sensor = bytes
-        .get(4383052..4383052 + 32192256)
+        .get(offset..end)
         .ok_or_else(|| error("truncated packed sensor"))?;
     packed_12(sensor, 4016, 5344, budget, cancelled)
 }
@@ -132,6 +158,98 @@ pub fn decode_mef_zd_sensor_file(
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    #[ignore = "requires pinned RRRAH_MEF_SOURCE and shasum; full independent sensor hash, not color qualification"]
+    fn real_zd_all_sensor_values_match_pinned_independent_oracle() {
+        use std::io::Write;
+        use std::process::{Command, Stdio};
+        let path = std::env::var_os("RRRAH_MEF_SOURCE").expect("MEF source");
+        let hash = Command::new("shasum")
+            .args(["-a", "256"])
+            .arg(&path)
+            .output()
+            .unwrap();
+        assert!(hash.status.success());
+        assert!(
+            String::from_utf8(hash.stdout)
+                .unwrap()
+                .starts_with("bcd63507c3c4cc3ea1bad2945e3f88cb4677a1a3c762e1acc38df4445714eb7c ")
+        );
+        let budget = MemoryBudget::new(128 * 1024 * 1024);
+        let output = decode_mef_zd_sensor_file(&crate::DecodeRequest::new(path), &budget).unwrap();
+        assert_eq!(output.len(), 4016 * 5344);
+        assert_eq!(budget.used(), 42_923_008);
+        let mut hash = Command::new("shasum")
+            .args(["-a", "256"])
+            .stdin(Stdio::piped())
+            .stdout(Stdio::piped())
+            .spawn()
+            .unwrap();
+        let mut input = hash.stdin.take().unwrap();
+        let mut encoded = [0u8; 8192];
+        for samples in output.chunks(4096) {
+            for (sample, bytes) in samples.iter().zip(encoded.chunks_exact_mut(2)) {
+                bytes.copy_from_slice(&sample.to_le_bytes());
+            }
+            input.write_all(&encoded[..samples.len() * 2]).unwrap();
+        }
+        drop(input);
+        let hash = hash.wait_with_output().unwrap();
+        assert!(hash.status.success());
+        assert!(
+            String::from_utf8(hash.stdout)
+                .unwrap()
+                .starts_with("3daa5dcb996733310dc06971f75066c74ded92d2f645cc25fc61878dd574eb1b ")
+        );
+        // Relocate the camera-produced strip; storage addresses belong to metadata.
+        let mut relocated = std::fs::read(std::env::var_os("RRRAH_MEF_SOURCE").unwrap()).unwrap();
+        let new_offset = relocated.len();
+        let strip = relocated[4383052..4383052 + 32192256].to_vec();
+        relocated.extend_from_slice(&strip);
+        let count = usize::from(u16::from_be_bytes([relocated[116920], relocated[116921]]));
+        let entry = (0..count)
+            .map(|i| 116922 + i * 12)
+            .find(|&at| u16::from_be_bytes([relocated[at], relocated[at + 1]]) == 273)
+            .unwrap();
+        relocated[entry + 8..entry + 12].copy_from_slice(&(new_offset as u32).to_be_bytes());
+        let other = MemoryBudget::new(42_923_008);
+        let moved = decode_mef_zd_sensor(&relocated, &other, &|| false).unwrap();
+        assert_eq!(&moved[..], &output[..]);
+        drop(moved);
+        assert_eq!(other.used(), 0);
+        let path = std::env::temp_dir().join(format!("rrrah-mef-relocated-{}.mef", std::process::id()));
+        std::fs::write(&path, &relocated).unwrap();
+        let request = crate::DecodeRequest::new(&path);
+        let exact = MemoryBudget::new(relocated.len() as u64 + 42_923_008);
+        let moved = decode_mef_zd_sensor_file(&request, &exact).unwrap();
+        assert_eq!(&moved[..], &output[..]);
+        assert_eq!(exact.peak(), relocated.len() as u64 + 42_923_008);
+        assert_eq!(exact.used(), 42_923_008);
+        drop(moved);
+        assert_eq!(exact.used(), 0);
+        let short = MemoryBudget::new(exact.limit() - 1);
+        let refused = decode_mef_zd_sensor_file(&request, &short);
+        std::fs::remove_file(&path).unwrap();
+        assert!(matches!(refused, Err(DecodeError::Memory(_))));
+        assert_eq!(short.peak(), relocated.len() as u64);
+        assert_eq!(short.used(), 0);
+        for invalid in [0u32, 7, 8, 116919, 116920, 117140, 117164, 117372] {
+            relocated[entry + 8..entry + 12].copy_from_slice(&invalid.to_be_bytes());
+            let refused = MemoryBudget::new(42_923_008);
+            assert!(
+                decode_mef_zd_sensor(&relocated, &refused, &|| false).is_err(),
+                "offset {invalid}"
+            );
+            assert_eq!(refused.peak(), 0, "offset {invalid}");
+        }
+        relocated[entry + 8..entry + 12].copy_from_slice(&u32::MAX.to_be_bytes());
+        let peak = other.peak();
+        assert!(decode_mef_zd_sensor(&relocated, &other, &|| false).is_err());
+        assert_eq!(other.peak(), peak);
+        assert_eq!(other.used(), 0);
+        drop(output);
+        assert_eq!(budget.used(), 0);
+    }
     #[test]
     fn file_import_rejects_selection_and_stale_generation_before_reading() {
         let budget = MemoryBudget::new(1);

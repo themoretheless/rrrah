@@ -10,6 +10,8 @@ fn source(kind: &str) -> String {
     for i in 0..20 {
         let y = 10 + i * 24;
         match kind {
+            "degenerate" => writeln!(code, "10 {y} moveto 10 {y} lineto stroke").unwrap(),
+            "empty" => writeln!(code, "newpath fill").unwrap(),
             "fills" => writeln!(code, "10 {y} 480 12 rectfill").unwrap(),
             "strokes" => writeln!(code, "10 {y} 480 12 rectstroke").unwrap(),
             "curves" => writeln!(
@@ -30,7 +32,7 @@ fn main() {
     let directory = std::env::temp_dir().join(format!("rrrah-eps-pipeline-{}", std::process::id()));
     std::fs::create_dir(&directory).unwrap();
     let mut cases = Vec::new();
-    for kind in ["fills", "strokes", "curves"] {
+    for kind in ["fills", "strokes", "curves", "empty", "degenerate"] {
         let source = source(kind);
         let path = directory.join(format!("{kind}.eps"));
         std::fs::write(&path, &source).unwrap();
@@ -50,7 +52,8 @@ fn main() {
             let RasterPixels::Rgba8(pixels) = frame.pixels() else {
                 panic!("unexpected native pixels")
             };
-            assert!(pixels.chunks_exact(4).any(|p| p[3] != 0));
+            if kind == "empty" || kind == "degenerate" { assert!(pixels.iter().all(|&p| p == 0)); }
+            else { assert!(pixels.chunks_exact(4).any(|p| p[3] != 0)); }
             let hash = blake3::hash(pixels).to_hex().to_string();
             if let Some(expected) = &expected_hash {
                 assert_eq!(&hash, expected);

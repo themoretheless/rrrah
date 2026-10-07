@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-07",
+  "camera": "Mamiya ZD",
+  "source": "/tmp/rrrah-mamiya-zd.mef",
+  "source_sha256": "bcd63507c3c4cc3ea1bad2945e3f88cb4677a1a3c762e1acc38df4445714eb7c",
+  "oracle_reference": "tests/fixtures/mef-investigation.json",
+  "sensor_sha256_le_u16": "3daa5dcb996733310dc06971f75066c74ded92d2f645cc25fc61878dd574eb1b",
+  "sensor_values": 21461504,
+  "comparison": "complete canonical little-endian u16 stream hash",
+  "managed_output_bytes": 42923008,
+  "root_used_after_drop": 0,
+  "test_passed": true,
+  "container_investigation": {
+    "root_ifd": 8,
+    "subifds": [
+      116920,
+      117164,
+      117372
+    ],
+    "subifd_next_fields": [
+      29704,
+      29912,
+      0
+    ],
+    "data_at_first_subifd_next": "count 4084; not parsed as a valid TIFF image directory",
+    "interpretation": "generic linked-SubIFD classification enters data rejected as unsupported types; explicit qualified sensor reader ignores child next fields"
+  },
+  "limitations": [
+    "no new independent oracle generated; compares pinned LibRaw 0.22.2 reference digest",
+    "camera WB unresolved",
+    "normal viewer remains unqualified",
+    "no preview or unity-WB fallback"
+  ]
+}

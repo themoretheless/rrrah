@@ -2570,23 +2570,38 @@ pub enum RpfAspectError {
     InvalidText,
     InvalidValue,
 }
+fn parse_declared_rpf_aspect(raw: &[u8]) -> Result<Option<f64>, RpfAspectError> {
+    let raw = &raw[..raw.iter().position(|b| *b == 0).unwrap_or(raw.len())];
+    let text = std::str::from_utf8(raw)
+        .map_err(|_| RpfAspectError::InvalidText)?
+        .trim();
+    if text.is_empty() {
+        return Ok(None);
+    }
+    let value: f64 = text.parse().map_err(|_| RpfAspectError::InvalidText)?;
+    if !value.is_finite() || value <= 0.0 {
+        return Err(RpfAspectError::InvalidValue);
+    }
+    Ok(Some(value))
+}
+impl RpfFileView<'_> {
+    fn producer_pixel_aspect(&self) -> Result<Option<f64>, RpfAspectError> {
+        let Some(aspect) = parse_declared_rpf_aspect(&self.bytes[572..580])? else {
+            return Ok(None);
+        };
+        let window = self.inspection.header.window;
+        let value = aspect * f64::from(window.height()) / f64::from(window.width());
+        if !value.is_finite() || value <= 0. {
+            return Err(RpfAspectError::InvalidValue);
+        }
+        Ok(Some(value))
+    }
+}
 impl RpfDecodedImage {
     /// Autodesk's header stores whole-window image aspect, not pixel aspect.
     /// Missing producer metadata remains missing, without a square-pixel fallback.
     pub fn declared_image_aspect(&self) -> Result<Option<f64>, RpfAspectError> {
-        let raw = &self.metadata_bytes()[572..580];
-        let raw = &raw[..raw.iter().position(|b| *b == 0).unwrap_or(raw.len())];
-        let text = std::str::from_utf8(raw)
-            .map_err(|_| RpfAspectError::InvalidText)?
-            .trim();
-        if text.is_empty() {
-            return Ok(None);
-        }
-        let value: f64 = text.parse().map_err(|_| RpfAspectError::InvalidText)?;
-        if !value.is_finite() || value <= 0.0 {
-            return Err(RpfAspectError::InvalidValue);
-        }
-        Ok(Some(value))
+        parse_declared_rpf_aspect(&self.metadata_bytes()[572..580])
     }
     /// Reverses the documented Autodesk writer formula using the full window,
     /// so cropping the active region does not change the underlying pixel shape.
@@ -2793,10 +2808,51 @@ pub fn decode_rpf_file_raster_with_budget(
     limits: RpfDecodeLimits,
     interpretation: &RpfRasterInterpretation,
 ) -> Result<(rrrah_core::DecodedRaster, Option<f64>), RpfRasterReadError> {
-    let image = decode_rpf_file_with_budget(request, budget, limits).map_err(RpfRasterReadError::Read)?;
-    let aspect = image
-        .producer_pixel_aspect()
-        .map_err(RpfRasterReadError::Aspect)?;
+    let read_error = |error| RpfRasterReadError::Read(RpfReadError::Source(error));
+    request.check_cancelled().map_err(read_error)?;
+    if request.image_index != 0 {
+        return Err(read_error(crate::DecodeError::UnsupportedImageIndex {
+            index: request.image_index,
+        }));
+    }
+    let mut bounded = request.clone();
+    bounded.memory_budget = Some(budget.clone());
+    let source = crate::bounded_io::read_bounded(&bounded).map_err(read_error)?;
+    let cancelled = || {
+        request
+            .cancellation
+            .as_ref()
+            .is_some_and(crate::GenerationToken::is_cancelled)
+    };
+    let file = inspect_rpf_file(
+        &source,
+        limits.max_node_names,
+        limits.max_node_name_bytes,
+        cancelled,
+    )
+    .map_err(|error| RpfRasterReadError::Read(RpfReadError::File(error)))?;
+    let header = file.inspection.header;
+    if interpretation
+        .rgb
+        .iter()
+        .any(|&channel| channel >= header.color_channels)
+        || interpretation
+            .matte
+            .is_some_and(|channel| channel >= header.matte_channels)
+    {
+        return Err(RpfRasterReadError::Display(RpfDisplayError::ChannelSelection));
+    }
+    let aspect = file.producer_pixel_aspect().map_err(RpfRasterReadError::Aspect)?;
+    let image = file
+        .decode_with_budget(
+            budget,
+            limits.max_row_layers,
+            limits.max_total_layers,
+            limits.max_output_bytes,
+            cancelled,
+        )
+        .map_err(|error| RpfRasterReadError::Read(RpfReadError::Image(error)))?;
+    drop(source);
     let raster = image
         .to_raster_with_interpretation(
             interpretation.rgb,
@@ -2919,6 +2975,35 @@ mod file_raster_tests {
                 Err(RpfRasterReadError::Display(RpfDisplayError::ChannelSelection))
             ));
             assert_eq!(root.used(), 0);
+            let source_only = rrrah_core::MemoryBudget::new(bytes.len() as u64);
+            assert!(matches!(
+                decode_rpf_file_raster_with_budget(&request, &source_only, limits, &invalid),
+                Err(RpfRasterReadError::Display(RpfDisplayError::ChannelSelection))
+            ));
+            assert_eq!(source_only.peak(), bytes.len() as u64);
+            assert_eq!(source_only.used(), 0);
+        }
+        let interpretation = RpfRasterInterpretation {
+            rgb: [0, 1, 2],
+            matte: Some(0),
+            alpha_mode: crate::RlaAlphaMode::Straight,
+            color_space: rrrah_core::RasterColorSpace::LinearSrgb,
+        };
+        for text in [b"0".as_slice(), b"-1", b"NaN", b"inf", b"garbage"] {
+            let mut bad = bytes.clone();
+            bad[572..580].fill(0);
+            bad[572..572 + text.len()].copy_from_slice(text);
+            std::fs::write(&path, &bad).unwrap();
+            let source_only = rrrah_core::MemoryBudget::new(bytes.len() as u64);
+            assert!(
+                matches!(
+                    decode_rpf_file_raster_with_budget(&request, &source_only, limits, &interpretation),
+                    Err(RpfRasterReadError::Aspect(_))
+                ),
+                "{text:?}"
+            );
+            assert_eq!(source_only.peak(), bytes.len() as u64);
+            assert_eq!(source_only.used(), 0);
         }
     }
 }

@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-07",
+  "operators": [
+    "ln",
+    "log"
+  ],
+  "production": "native Rust numeric VM; f64 evaluation rounded once to f32",
+  "specification": "https://www.adobe.com/jp/print/postscript/pdfs/PLRM.pdf",
+  "oracle_fixture": "tests/fixtures/eps/log-binary-ghostscript-reference.json",
+  "fixture_sha256": "59d3cc85c29feaf1bec98c10d188a8a193e8298fbe00d18351c379fa2f8013d2",
+  "ghostscript_version": "10.05.1",
+  "binary_cases_exact": 496,
+  "maximum_ulp": 0,
+  "domain": "strictly positive numeric operand; result always real",
+  "error_cases": [
+    "zero",
+    "negative zero",
+    "negative value",
+    "boolean operand",
+    "missing operand"
+  ],
+  "budget_after_errors": 0,
+  "decoder_suite": {
+    "passed": 944,
+    "failed": 0,
+    "ignored": 62
+  },
+  "limitations": [
+    "selected finite scalar cases",
+    "EPS overall remains a subset; no fonts/images/clip qualification"
+  ]
+}

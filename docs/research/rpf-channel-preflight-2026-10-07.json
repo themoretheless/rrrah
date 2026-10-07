@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-07",
+  "api": "decode_rpf_file_raster_with_budget",
+  "change": "validate RGB and matte indices in borrowed header before expanded image admission",
+  "verified": "source-only budget returns ChannelSelection, not decoded-memory refusal; peak source bytes only; final used zero",
+  "correct_input": "HDR, alpha, pixel aspect, RAM/swap and Metal readback preserved",
+  "decoder_suite": {
+    "passed": 946,
+    "failed": 0,
+    "ignored": 62
+  },
+  "rpf_gpu_suite": {
+    "passed": 2,
+    "failed": 0,
+    "ignored": 0,
+    "backend": "Metal Apple M4 Max"
+  },
+  "limitations": [
+    "synthetic Autodesk-layout files",
+    "producer corpus and automatic gallery routing remain pending"
+  ]
+}

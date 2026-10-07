@@ -328,7 +328,7 @@ mod tests {
         ))
         .unwrap();
         let cases = reference["cases"].as_array().unwrap();
-        assert_eq!(cases.len(), 2);
+        assert_eq!(cases.len(), 5);
         let root = MemoryBudget::new(32 * 1024 * 1024);
         for case in cases {
             let source = format!(

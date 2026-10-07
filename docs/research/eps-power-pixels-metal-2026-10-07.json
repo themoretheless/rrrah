@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-07",
+  "case": "power_computed_rectangle",
+  "powers": [
+    "negative exponent",
+    "integer exponent",
+    "fractional exponent"
+  ],
+  "fixture_sha256": "8967b9b404c2af57c8c1516d356e4e10f6cf7c5207fa38297a5f2e48978af0e7",
+  "oracle_fixture": "tests/fixtures/eps/import-pixel-ghostscript-reference.json",
+  "adapter": "Metal Apple M4 Max",
+  "import_cases": 5,
+  "native_pixels_exact": 320,
+  "gpu_pixels_exact": 5120,
+  "route": [
+    "common decoder",
+    "RAM eviction",
+    "asynchronous swap",
+    "restore pressure/cancel/retry",
+    "linear preparation",
+    "Metal readback"
+  ],
+  "root_after_drop": 0,
+  "decoder_suite": {
+    "passed": 950,
+    "failed": 0,
+    "ignored": 63
+  },
+  "lifecycle_suite": {
+    "passed": 7,
+    "failed": 0,
+    "ignored": 0
+  },
+  "limitations": [
+    "selected authored EPS geometry; not complete format qualification",
+    "physical HDR/NVIDIA remain unverified"
+  ]
+}

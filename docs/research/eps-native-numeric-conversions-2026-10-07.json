@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-07",
+  "operators": [
+    "cvi",
+    "cvr"
+  ],
+  "scope": "numeric operands only; string conversion remains unsupported",
+  "specification": "https://www.adobe.com/jp/print/postscript/pdfs/PLRM.pdf",
+  "production": "native Rust; cvi truncates toward zero with checked i32 range; cvr yields f32 real",
+  "oracle": "Ghostscript scalar typed reference",
+  "reference_cases": 35,
+  "new_conversion_cases": 2,
+  "fixture_sha256": "2023abe699eba2e683b2e631c8b6a70bdd6883fccd11649aadfae0f3c51844da",
+  "ghostscript_version": "10.05.1",
+  "checks": [
+    "integer endpoints unchanged",
+    "largest f32 below i32 upper bound accepted",
+    "out-of-range reals refuse rather than saturate",
+    "real result type",
+    "int-to-f32 rounding at 16777217",
+    "type and stack-underflow errors",
+    "root credit zero after failures"
+  ],
+  "decoder_suite": {
+    "passed": 945,
+    "failed": 0,
+    "ignored": 62
+  }
+}

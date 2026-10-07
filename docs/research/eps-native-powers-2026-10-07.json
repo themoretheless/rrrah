@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-07",
+  "operator": "exp",
+  "production": "native Rust f64 power evaluated once then f32; nonfinite output refused",
+  "specification": "https://www.adobe.com/jp/print/postscript/pdfs/PLRM.pdf",
+  "oracle_fixture": "tests/fixtures/eps/exp-binary-ghostscript-reference.json",
+  "fixture_sha256": "27c2652de9c108a00b65c5e2538136ef44fb5ab215d3672b3ea2ec5128634d03",
+  "ghostscript_version": "10.05.1",
+  "binary_cases_exact": 66,
+  "checks": [
+    "positive/negative bases with signed integer powers",
+    "fractional powers for positive bases",
+    "zero base and zero exponent",
+    "fractional negative-base domain refusal",
+    "zero to negative power refusal",
+    "f32 overflow refusal",
+    "wrong types and underflow",
+    "memory released after errors"
+  ],
+  "maximum_ulp": 0,
+  "decoder_suite": {
+    "passed": 950,
+    "failed": 0,
+    "ignored": 63
+  },
+  "limitations": [
+    "selected finite scalar cases only; complete EPS remains pending"
+  ]
+}

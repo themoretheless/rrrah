@@ -15,8 +15,14 @@ pub enum EpsOperator {
     IntegerDiv,
     Remainder,
     Sqrt,
+    Ln,
+    Log,
+    ConvertInteger,
+    ConvertReal,
     Sin,
     Cos,
+    Atan,
+    Exp,
     Neg,
     Abs,
     Ceiling,
@@ -383,12 +389,63 @@ impl<'a> Machine<'a, '_> {
                 };
                 self.push(EpsValue::Number(EpsNumber::Real(value as f32)))?;
             }
+            O::Atan => {
+                let denominator = as_double(self.number()?);
+                let numerator = as_double(self.number()?);
+                if numerator == 0. && denominator == 0. {
+                    return Err(E::UndefinedResult);
+                }
+                let mut angle = numerator.atan2(denominator).to_degrees();
+                if angle < 0. {
+                    angle += 360.;
+                }
+                // PostScript angles have no signed-zero distinction.
+                if angle == 0. {
+                    angle = 0.;
+                }
+                self.push(EpsValue::Number(EpsNumber::Real(angle as f32)))?;
+            }
+            O::Exp => {
+                let exponent = as_double(self.number()?);
+                let base = as_double(self.number()?);
+                let result = base.powf(exponent) as f32;
+                if !result.is_finite() {
+                    return Err(E::UndefinedResult);
+                }
+                self.push(EpsValue::Number(EpsNumber::Real(result)))?;
+            }
             O::Sqrt => {
                 let value = as_double(self.number()?);
                 if value < 0. {
                     return Err(E::Range);
                 }
                 self.push(EpsValue::Number(EpsNumber::Real(value.sqrt() as f32)))?;
+            }
+            O::Ln | O::Log => {
+                let value = as_double(self.number()?);
+                if value <= 0. {
+                    return Err(E::Range);
+                }
+                let result = if op == O::Ln { value.ln() } else { value.log10() };
+                self.push(EpsValue::Number(EpsNumber::Real(result as f32)))?;
+            }
+            O::ConvertInteger | O::ConvertReal => {
+                let number = self.number()?;
+                let result = if op == O::ConvertReal {
+                    EpsNumber::Real(as_double(number) as f32)
+                } else {
+                    match number {
+                        EpsNumber::Integer(_) => number,
+                        EpsNumber::Real(value) => {
+                            let truncated = f64::from(value).trunc();
+                            if truncated < f64::from(i32::MIN) || truncated > f64::from(i32::MAX) {
+                                return Err(E::Range);
+                            }
+                            EpsNumber::Integer(truncated as i32)
+                        }
+                    }
+                };
+                self.push(EpsValue::Number(result))?;
             }
             O::Neg | O::Abs => {
                 let a = self.number()?;
@@ -801,8 +858,14 @@ fn operator(word: &[u8]) -> Option<EpsOperator> {
         b"idiv" => O::IntegerDiv,
         b"mod" => O::Remainder,
         b"sqrt" => O::Sqrt,
+        b"ln" => O::Ln,
+        b"log" => O::Log,
+        b"cvi" => O::ConvertInteger,
+        b"cvr" => O::ConvertReal,
         b"sin" => O::Sin,
         b"cos" => O::Cos,
+        b"atan" => O::Atan,
+        b"exp" => O::Exp,
         b"neg" => O::Neg,
         b"abs" => O::Abs,
         b"ceiling" => O::Ceiling,
@@ -1231,6 +1294,176 @@ mod tests {
         );
     }
     #[test]
+    fn logarithms_match_binary_oracle_and_reject_invalid_domains() {
+        let reference: serde_json::Value = serde_json::from_str(include_str!(
+            "../../../tests/fixtures/eps/log-binary-ghostscript-reference.json"
+        ))
+        .unwrap();
+        let cases = reference["cases"].as_array().unwrap();
+        assert_eq!(cases.len(), 496);
+        for case in cases {
+            let code = case["code"].as_str().unwrap();
+            let actual = run(code.as_bytes());
+            let EpsValue::Number(EpsNumber::Real(value)) = actual[0] else {
+                panic!()
+            };
+            assert_eq!(
+                value.to_bits(),
+                case["real_bits"].as_u64().unwrap() as u32,
+                "{code}"
+            );
+        }
+        let root = MemoryBudget::new(1_000_000);
+        for code in [
+            b"0 ln".as_slice(),
+            b"-1 ln",
+            b"0 log",
+            b"-0.0 log",
+            b"-1 log",
+            b"true log",
+            b"ln",
+        ] {
+            let program = compile(code, &root);
+            let error = evaluate_eps_program(&program, EpsVmLimits::default(), &root, || false).unwrap_err();
+            assert!(
+                if code == b"true log" {
+                    matches!(error, EpsVmError::Type)
+                } else if code == b"ln" {
+                    matches!(error, EpsVmError::StackUnderflow)
+                } else {
+                    matches!(error, EpsVmError::Range)
+                },
+                "{code:?}: {error}"
+            );
+            drop(program);
+            assert_eq!(root.used(), 0);
+        }
+    }
+    #[test]
+    fn arctangent_quadrants_match_binary_oracle_and_refuse_zero_vector() {
+        let reference: serde_json::Value = serde_json::from_str(include_str!(
+            "../../../tests/fixtures/eps/atan-binary-ghostscript-reference.json"
+        ))
+        .unwrap();
+        let cases = reference["cases"].as_array().unwrap();
+        assert_eq!(cases.len(), 1094);
+        for case in cases {
+            let code = case["code"].as_str().unwrap();
+            let actual = run(code.as_bytes());
+            let EpsValue::Number(EpsNumber::Real(value)) = actual[0] else {
+                panic!()
+            };
+            assert_eq!(
+                value.to_bits(),
+                case["real_bits"].as_u64().unwrap() as u32,
+                "{code}"
+            );
+        }
+        let root = MemoryBudget::new(1_000_000);
+        for code in [
+            b"0 0 atan".as_slice(),
+            b"-0.0 0 atan",
+            b"true 1 atan",
+            b"1 true atan",
+            b"1 atan",
+        ] {
+            let program = compile(code, &root);
+            let error = evaluate_eps_program(&program, EpsVmLimits::default(), &root, || false).unwrap_err();
+            assert!(
+                if code == b"1 atan" {
+                    matches!(error, EpsVmError::StackUnderflow)
+                } else if code.starts_with(b"true") || code == b"1 true atan" {
+                    matches!(error, EpsVmError::Type)
+                } else {
+                    matches!(error, EpsVmError::UndefinedResult)
+                },
+                "{code:?}: {error}"
+            );
+            drop(program);
+            assert_eq!(root.used(), 0);
+        }
+    }
+    #[test]
+    fn powers_match_binary_oracle_and_refuse_nonfinite_results() {
+        let reference: serde_json::Value = serde_json::from_str(include_str!(
+            "../../../tests/fixtures/eps/exp-binary-ghostscript-reference.json"
+        ))
+        .unwrap();
+        let cases = reference["cases"].as_array().unwrap();
+        assert_eq!(cases.len(), 66);
+        for case in cases {
+            let code = case["code"].as_str().unwrap();
+            let actual = run(code.as_bytes());
+            let EpsValue::Number(EpsNumber::Real(value)) = actual[0] else {
+                panic!()
+            };
+            assert_eq!(
+                value.to_bits(),
+                case["real_bits"].as_u64().unwrap() as u32,
+                "{code}"
+            );
+        }
+        let root = MemoryBudget::new(1_000_000);
+        for code in [
+            b"-2 0.5 exp".as_slice(),
+            b"0 -1 exp",
+            b"10 40 exp",
+            b"true 2 exp",
+            b"2 true exp",
+            b"2 exp",
+        ] {
+            let program = compile(code, &root);
+            let error = evaluate_eps_program(&program, EpsVmLimits::default(), &root, || false).unwrap_err();
+            assert!(
+                if code == b"2 exp" {
+                    matches!(error, EpsVmError::StackUnderflow)
+                } else if code.starts_with(b"true") || code == b"2 true exp" {
+                    matches!(error, EpsVmError::Type)
+                } else {
+                    matches!(error, EpsVmError::UndefinedResult)
+                },
+                "{code:?}: {error}"
+            );
+            drop(program);
+            assert_eq!(root.used(), 0);
+        }
+    }
+    #[test]
+    fn numeric_conversions_preserve_types_and_check_integer_range() {
+        assert_eq!(run(b"2147483647 cvi -2147483648 cvi 2147483520.0 cvi -2147483648.0 cvi -47.8 cvi 0.9 cvi -0.9 cvi"),
+            [i32::MAX, i32::MIN, 2147483520, i32::MIN, -47, 0, 0].map(int).to_vec());
+        assert_eq!(
+            run(b"1 cvr 3.5 cvr 16777217 cvr"),
+            [1., 3.5, 16777216.]
+                .map(|n| EpsValue::Number(EpsNumber::Real(n)))
+                .to_vec()
+        );
+        let root = MemoryBudget::new(1_000_000);
+        for code in [
+            b"2147483648.0 cvi".as_slice(),
+            b"-2147483904.0 cvi",
+            b"true cvi",
+            b"true cvr",
+            b"cvi",
+            b"cvr",
+        ] {
+            let program = compile(code, &root);
+            let error = evaluate_eps_program(&program, EpsVmLimits::default(), &root, || false).unwrap_err();
+            assert!(
+                if code.starts_with(b"true") {
+                    matches!(error, EpsVmError::Type)
+                } else if code == b"cvi" || code == b"cvr" {
+                    matches!(error, EpsVmError::StackUnderflow)
+                } else {
+                    matches!(error, EpsVmError::Range)
+                },
+                "{code:?}: {error}"
+            );
+            drop(program);
+            assert_eq!(root.used(), 0);
+        }
+    }
+    #[test]
     fn rounding_preserves_types_and_uses_positive_ties() {
         assert_eq!(
             run(b"99 ceiling -99 floor 99 round -99 truncate"),
@@ -1268,7 +1501,7 @@ mod tests {
         ))
         .unwrap();
         let cases = reference["cases"].as_array().unwrap();
-        assert_eq!(cases.len(), 33);
+        assert_eq!(cases.len(), 35);
         for case in cases {
             let code = case["code"].as_str().unwrap();
             let actual = run(code.as_bytes());
