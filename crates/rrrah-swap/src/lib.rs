@@ -227,7 +227,14 @@ impl SwapStore {
         mut cancelled: impl FnMut() -> bool,
         encode: impl FnOnce(&mut dyn Write) -> std::io::Result<()>,
     ) -> Result<SwapHandle> {
-        if cancelled() {
+        // Once observed, cancellation belongs to this whole operation even
+        // when the caller's callback reports a transient signal.
+        let mut observed = false;
+        let mut check_cancelled = || {
+            observed = observed || cancelled();
+            observed
+        };
+        if check_cancelled() {
             return Err(SwapError::Cancelled);
         }
         let reservation = self.reserve(bytes)?;
@@ -241,11 +248,11 @@ impl SwapStore {
                 file: file.as_file_mut(),
                 hasher: &mut hasher,
                 remaining: &mut remaining,
-                cancelled: &mut cancelled,
+                cancelled: &mut check_cancelled,
             };
             encode(&mut stream).and_then(|()| stream.flush())
         };
-        if cancelled() {
+        if check_cancelled() {
             return Err(SwapError::Cancelled);
         }
         result?;
@@ -270,10 +277,17 @@ impl SwapStore {
         mut cancelled: impl FnMut() -> bool,
         decode: impl FnOnce(&mut dyn Read) -> std::io::Result<T>,
     ) -> Result<T> {
+        // Once observed, cancellation belongs to this whole operation even
+        // when the caller's callback reports a transient signal.
+        let mut observed = false;
+        let mut check_cancelled = || {
+            observed = observed || cancelled();
+            observed
+        };
         if !Arc::ptr_eq(&self.0, &handle.0.reservation.state) {
             return Err(SwapError::ForeignHandle);
         }
-        if cancelled() {
+        if check_cancelled() {
             return Err(SwapError::Cancelled);
         }
         let mut file = handle.0.file.reopen()?;
@@ -287,11 +301,11 @@ impl SwapStore {
                 file: &mut file,
                 hasher: &mut hasher,
                 remaining: &mut remaining,
-                cancelled: &mut cancelled,
+                cancelled: &mut check_cancelled,
             };
             decode(&mut stream)
         };
-        if cancelled() {
+        if check_cancelled() {
             return Err(SwapError::Cancelled);
         }
         let value = result?;
@@ -462,6 +476,54 @@ mod tests {
             },
         )
         .unwrap()
+    }
+    #[test]
+    fn streaming_cancellation_stays_cancelled_after_a_single_signal() {
+        let store = make_store(8, Some(2));
+        for swallow in [false, true] {
+            let mut polls = 0;
+            let result = store.write_stream(
+                4,
+                || {
+                    polls += 1;
+                    polls == 2
+                },
+                |writer| {
+                    let result = writer.write_all(&[1, 2, 3, 4]);
+                    if swallow { Ok(()) } else { result }
+                },
+            );
+            assert!(matches!(result, Err(SwapError::Cancelled)));
+            assert_eq!(store.usage().unwrap(), SwapUsage { bytes: 0, objects: 0 });
+        }
+        let handle = store.write_chunks(4, [&[1, 2, 3, 4][..]], || false).unwrap();
+        for swallow in [false, true] {
+            let mut polls = 0;
+            let result = store.read_stream(
+                &handle,
+                || {
+                    polls += 1;
+                    polls == 2
+                },
+                |reader| {
+                    let mut output = [0; 4];
+                    let result = reader.read_exact(&mut output);
+                    if swallow {
+                        Ok(output)
+                    } else {
+                        result.map(|()| output)
+                    }
+                },
+            );
+            assert!(matches!(result, Err(SwapError::Cancelled)));
+            assert_eq!(store.usage().unwrap(), SwapUsage { bytes: 4, objects: 1 });
+        }
+        assert_eq!(
+            &*store.restore(&handle, &MemoryBudget::new(4), || false).unwrap(),
+            &[1, 2, 3, 4]
+        );
+        drop(handle);
+        assert_eq!(store.usage().unwrap(), SwapUsage { bytes: 0, objects: 0 });
     }
     #[test]
     fn roundtrip_shared_handles_and_buffers_retain_their_own_quotas() {

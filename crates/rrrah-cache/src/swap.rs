@@ -698,6 +698,42 @@ mod write_cancellation_tests {
         assert_eq!(&*swap.get(&1, || false).unwrap().buffer, &[41]);
     }
     #[test]
+    fn transient_restore_cancellation_retains_entry_and_releases_allocated_pixels() {
+        let directory = tempfile::tempdir().unwrap();
+        let root = MemoryBudget::new(1);
+        let swap = ImageSwapCache::<u8, Payload>::new_with_budgets(
+            directory.path(),
+            ImageSwapConfig {
+                limits: CacheLimits::bytes(1),
+                queue_bytes: 1,
+                queue_count: 1,
+                restore_bytes: 1,
+            },
+            MemoryBudget::new(1),
+            root.clone(),
+        )
+        .unwrap();
+        swap.enqueue(1, Payload { buffer: root.try_buffer(1, 41).unwrap().freeze(), pause: None });
+        swap.wait_idle().unwrap();
+        assert_eq!(root.used(), 0);
+        let mut polls = 0;
+        let mut allocation_seen = false;
+        assert!(swap.try_get(&1, || {
+            polls += 1;
+            if polls == 3 { allocation_seen = root.used() == 1; }
+            polls == 3
+        }).unwrap().is_none());
+        assert!(allocation_seen);
+        assert_eq!(root.used(), 0);
+        assert_eq!(swap.stats().errors, 0);
+        let retry = swap.try_get(&1, || false).unwrap().unwrap();
+        assert_eq!(&*retry.buffer, &[41]);
+        assert_eq!(root.used(), 1);
+        drop(retry);
+        assert_eq!(root.used(), 0);
+        assert_eq!(swap.stats().reads, 1);
+    }
+    #[test]
     fn cancelled_restore_waiter_returns_before_active_admission_releases() {
         let directory = tempfile::tempdir().unwrap();
         let root = MemoryBudget::new(4);

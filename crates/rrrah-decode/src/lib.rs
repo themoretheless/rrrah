@@ -4,6 +4,11 @@
 //! They read the full sensor mosaic and never substitute an embedded JPEG.
 #![allow(clippy::missing_errors_doc, clippy::cast_precision_loss)]
 
+mod optio_s4;
+pub use optio_s4::{
+    OPTIO_S4_SENSOR_SIZE, OptioS4SensorError, read_optio_s4_sensor_with_budget, unpack_optio_s4_sensor,
+};
+
 mod bay;
 mod jpeg_cmyk;
 pub use bay::{
@@ -474,11 +479,11 @@ pub use rpf::{
     RPF_GBUFFER_SAMPLE_BYTES, RpfAspectError, RpfDecodeLimits, RpfDecodedImage, RpfDecodedLayers,
     RpfDisplayError, RpfFileError, RpfFileView, RpfHeader, RpfImageAllocationPlan, RpfImageDecodeError,
     RpfImageSnapshot, RpfInspectError, RpfInspection, RpfLayerCoordinateError, RpfLayerDecodeError,
-    RpfLayerError, RpfLayerRecords, RpfNameError, RpfNodeNames, RpfPlanError, RpfPlaneError, RpfReadError,
-    RpfRenderInfo, RpfRenderInfoError, RpfRowError, RpfRowView, RpfSnapshotError, RpfWindow,
-    decode_rpf_byte_planes, decode_rpf_color_channel, decode_rpf_file_with_budget, inspect_rpf,
-    inspect_rpf_file, inspect_rpf_layer_records, inspect_rpf_node_names, inspect_rpf_render_info,
-    inspect_rpf_row,
+    RpfLayerError, RpfLayerRecords, RpfNameError, RpfNodeNames, RpfPlanError, RpfPlaneError,
+    RpfRasterInterpretation, RpfRasterReadError, RpfReadError, RpfRenderInfo, RpfRenderInfoError,
+    RpfRowError, RpfRowView, RpfSnapshotError, RpfWindow, decode_rpf_byte_planes, decode_rpf_color_channel,
+    decode_rpf_file_raster_with_budget, decode_rpf_file_with_budget, inspect_rpf, inspect_rpf_file,
+    inspect_rpf_layer_records, inspect_rpf_node_names, inspect_rpf_render_info, inspect_rpf_row,
 };
 pub use scientific::{ScalarWindow, decode_raster_with_window};
 pub use wal::{decode_wal_with_palette, wal_palette_path};
@@ -608,3 +613,6 @@ mod opcode_geometry_serde_compatibility_tests {
         assert_eq!(restored.pixel_aspect, Some(1.5));
     }
 }
+
+#[cfg(test)]
+mod pdf_patch_tests;

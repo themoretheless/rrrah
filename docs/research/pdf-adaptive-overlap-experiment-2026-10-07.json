@@ -1,0 +1,83 @@
+{
+  "date": "2026-10-07",
+  "status": "Both prototypes rejected; production restored byte-for-byte.",
+  "algorithm": "Bounded depth-8 quadtree, analytical integration for full cells and single triangles, reverse painter-order leaf sampling. Grouped variant keeps original integration inside one source patch.",
+  "synthetic_tests": {
+    "ungrouped": {
+      "passed": 28,
+      "seconds": 2.28
+    },
+    "grouped": {
+      "passed": 28,
+      "seconds": 0.51
+    },
+    "includes": "Previously ignored later-coincident-patch coverage regression passed in both prototypes."
+  },
+  "ungrouped_real_results": [
+    {
+      "file": "VectorApple.ai",
+      "page": 0,
+      "seconds": 10.020607040998584,
+      "status": "timeout_process_killed_and_waited"
+    },
+    {
+      "file": "one.ai",
+      "page": 0,
+      "seconds": 0.03610770900195348,
+      "exit_code": 0,
+      "stdout": "{\"width\":1366,\"height\":768,\"image_index\":0,\"image_count\":2}\n",
+      "stderr": ""
+    },
+    {
+      "file": "one.ai",
+      "page": 1,
+      "seconds": 0.035849874999257736,
+      "exit_code": 0,
+      "stdout": "{\"width\":177,\"height\":175,\"image_index\":1,\"image_count\":2}\n",
+      "stderr": ""
+    }
+  ],
+  "grouped_real_results": [
+    {
+      "file": "VectorApple.ai",
+      "page": 0,
+      "seconds": 10.015830958000151,
+      "status": "timeout_process_killed_and_waited"
+    },
+    {
+      "file": "one.ai",
+      "page": 0,
+      "seconds": 0.04422866700042505,
+      "exit_code": 0,
+      "stdout": "{\"width\":1366,\"height\":768,\"image_index\":0,\"image_count\":2}\n",
+      "stderr": ""
+    },
+    {
+      "file": "one.ai",
+      "page": 1,
+      "seconds": 0.024312208999617724,
+      "exit_code": 0,
+      "stdout": "{\"width\":177,\"height\":175,\"image_index\":1,\"image_count\":2}\n",
+      "stderr": ""
+    }
+  ],
+  "grouped_diagnostic": {
+    "status": "timeout_process_killed_and_waited",
+    "stderr": "mesh adaptive diagnostic: triangles=1050510 patches=Some(1455) pixels=25473 mixed=11022 max_candidates=2248\n",
+    "seconds": 5.034826332997909
+  },
+  "restored_production_sha256": "2c4aadfa397e36e6a208003b19251c8c75a8b763c4deda1967f3c289692f8222",
+  "limitations": [
+    "No VectorApple output was completed, so no fidelity claim for that document.",
+    "Quadtree leaf sampling is approximate; full coverage correctness is not proved.",
+    "Existing production overlap averaging defect remains unresolved."
+  ],
+  "next_action": "Qualify screen-space tessellation with geometric/color error bounds before attempting painter-order integration; fixed dense patch triangulation feeds excessive per-pixel candidates.",
+  "diagnostic_counts": {
+    "triangles": 1050510,
+    "source_patches": 1455,
+    "covered_pixels": 25473,
+    "mixed_patch_pixels": 11022,
+    "maximum_triangle_candidates_per_pixel": 2248
+  }
+}

@@ -154,3 +154,57 @@ fn texture_upload_holds_credit_without_frame_or_explicit_resource_snapshot() {
     device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
     assert_eq!(budget.used(), 0);
 }
+
+#[test]
+fn raster_shared_root_holds_upload_credit_through_clear_and_rejects_overlap() {
+    let instance = common::headless_instance();
+    let adapter = pollster::block_on(common::request_adapter(
+        &instance,
+        &wgpu::RequestAdapterOptions::default(),
+    ))
+    .expect("actual GPU required");
+    eprintln!("shared raster upload adapter: {:?}", adapter.get_info());
+    let (device, queue) =
+        pollster::block_on(adapter.request_device(&wgpu::DeviceDescriptor::default())).unwrap();
+    let errors = device.push_error_scope(wgpu::ErrorFilter::Validation);
+    // One RGBA32F pixel plus one aligned transfer row, sharing a single root.
+    let root = rrrah_core::MemoryBudget::new(16 + 256);
+    let mut renderer = rrrah_gpu::RasterRenderer::new_with_budget(
+        &device,
+        common::READBACK_FORMAT,
+        root.child(32),
+    )
+    .with_upload_queue_budget(root.child(256));
+    let image = rrrah_core::DecodedRaster::new(
+        1,
+        1,
+        rrrah_core::RasterPixels::Rgba32Float(std::sync::Arc::new(vec![-0., 4., -2., 0.5]).into()),
+        rrrah_core::RasterColorSpace::LinearSrgb,
+    )
+    .unwrap();
+    renderer.upload(&device, &queue, &image).unwrap();
+    assert_eq!(root.used(), 272);
+    assert!(renderer.upload(&device, &queue, &image).is_err());
+    assert!(renderer.has_image());
+    assert_eq!(root.used(), 272);
+    device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
+    assert_eq!(root.used(), 16);
+    // Replacement needs two textures and a transfer row. Queue admission must
+    // roll back the new texture credit without disturbing the resident image.
+    assert!(renderer.upload(&device, &queue, &image).is_err());
+    assert!(renderer.has_image());
+    assert_eq!(renderer.resident_bytes(), 16);
+    assert_eq!(root.used(), 16);
+    renderer.clear_image();
+    assert_eq!(root.used(), 0);
+    renderer.upload(&device, &queue, &image).unwrap();
+    renderer.clear_image();
+    assert!(!renderer.has_image());
+    drop(renderer);
+    assert_eq!(root.used(), 272);
+    assert!(root.try_reserve(1).is_err());
+    device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
+    assert_eq!(root.used(), 0);
+    assert_eq!(root.peak(), 272);
+    assert!(pollster::block_on(errors.pop()).is_none());
+}

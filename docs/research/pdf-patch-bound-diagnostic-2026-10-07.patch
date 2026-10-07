@@ -1,0 +1,27 @@
+--- a/vendor/hayro-interpret/src/encode.rs
++++ b/vendor/hayro-interpret/src/encode.rs
+@@ -96,6 +96,24 @@
+                 }
+             }
+             ShadingType::TensorProductPatchMesh { patches, function } => {
++                let timing = std::time::Instant::now();
++                let mut adaptive = vec![];
++                let mut max_geometry: f64 = 0.;
++                let mut max_color: f64 = 0.;
++                let mut depth = 0;
++                let mut failed = None;
++                for patch in patches {
++                    let limits = crate::shading::AdaptivePatchLimits {
++                        pixel_error: 0.05, component_error: 1.0 / 512.0,
++                        max_depth: 12, max_triangles: 1_048_576usize.saturating_sub(adaptive.len()),
++                    };
++                    match patch.to_triangles_adaptive(self.matrix, limits, &mut adaptive, || false) {
++                        Ok(stats) => { max_geometry = max_geometry.max(stats.max_pixel_bound); max_color=max_color.max(stats.max_component_bound); depth=depth.max(stats.deepest); }
++                        Err(error) => { failed=Some(error); break; }
++                    }
++                }
++                eprintln!("adaptive tensor diagnostic: patches={} triangles={} geometry_bound={} component_bound={} depth={} failure={:?} seconds={}", patches.len(),adaptive.len(),max_geometry,max_color,depth,failed,timing.elapsed().as_secs_f64());
++                drop(adaptive);
+                 let mut triangles = vec![];
+                 for patch in patches {
+                     patch.to_triangles(&mut triangles);

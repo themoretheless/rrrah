@@ -1,0 +1,146 @@
+--- a/vendor/hayro-interpret/src/encode.rs
++++ b/vendor/hayro-interpret/src/encode.rs
+@@ -192,13 +192,16 @@
+ // A triangle clipped against a rectangle has at most seven vertices.
+ // Coordinates are local to the pixel to avoid large-coordinate area cancellation.
+ fn triangle_pixel_area(t: &Triangle, x: u16, y: u16) -> Option<(f32, Point)> {
+-    let origin = Point::new(f64::from(x), f64::from(y));
++    triangle_cell_area(t, Point::new(f64::from(x), f64::from(y)), 1.0)
++}
++
++fn triangle_cell_area(t: &Triangle, origin: Point, extent: f64) -> Option<(f32, Point)> {
+     let mut points = [Point::ZERO; 8];
+     for (i, p) in [t.p0.point, t.p1.point, t.p2.point].into_iter().enumerate() {
+         points[i] = Point::new(p.x - origin.x, p.y - origin.y);
+     }
+     let mut len = 3;
+-    for (axis, bound, greater) in [(0, 0.0, true), (0, 1.0, false), (1, 0.0, true), (1, 1.0, false)] {
++    for (axis, bound, greater) in [(0, 0.0, true), (0, extent, false), (1, 0.0, true), (1, extent, false)] {
+         if len == 0 {
+             return None;
+         }
+@@ -251,51 +254,82 @@
+     ))
+ }
+ 
++// Bounded quadtree integration preserves painter order without accumulating
++// polygon fragments. Full cells and single-triangle cells integrate analytically.
++fn integrate_mesh_cell(
++    triangles: &[Triangle], candidates: &[usize], origin: Point, extent: f64,
++    depth: u8, sample: &mut MeshSample,
++) {
++    let mut active = smallvec::SmallVec::<[(usize, f32, Point); 8]>::new();
++    for &index in candidates.iter().rev() {
++        let t = &triangles[index];
++        let bounds = t.bounding_box();
++        if bounds.x1 <= origin.x || bounds.x0 >= origin.x + extent
++            || bounds.y1 <= origin.y || bounds.y0 >= origin.y + extent { continue; }
++        if let Some((area, center)) = triangle_cell_area(t, origin, extent) {
++            if active.is_empty() && f64::from(area) >= extent * extent * (1.0 - 1e-6) {
++                add_mesh_area(sample, t, area, center);
++                return;
++            }
++            active.push((index, area, center));
++        }
++    }
++    if active.is_empty() { return; }
++    if active.len() == 1 {
++        let (index, area, center) = active[0];
++        add_mesh_area(sample, &triangles[index], area, center);
++        return;
++    }
++    if depth == 8 {
++        let point = origin + kurbo::Vec2::new(extent * 0.5, extent * 0.5);
++        for (index, _, _) in active {
++            let t = &triangles[index];
++            let p = [t.p0.point, t.p1.point, t.p2.point];
++            let cross = |a: Point, b: Point| (b.x-a.x)*(point.y-a.y)-(b.y-a.y)*(point.x-a.x);
++            let edges = [cross(p[0],p[1]),cross(p[1],p[2]),cross(p[2],p[0])];
++            if edges.iter().all(|v| *v >= -1e-12) || edges.iter().all(|v| *v <= 1e-12) {
++                add_mesh_area(sample, t, (extent * extent) as f32, point);
++                return;
++            }
++        }
++        return;
++    }
++    let indices: smallvec::SmallVec<[usize; 8]> = active.iter().rev().map(|v| v.0).collect();
++    let half = extent * 0.5;
++    for (x,y) in [(0.,0.),(half,0.),(0.,half),(half,half)] {
++        integrate_mesh_cell(triangles, &indices, origin + kurbo::Vec2::new(x,y), half, depth+1, sample);
++    }
++}
++fn add_mesh_area(sample: &mut MeshSample, triangle: &Triangle, area: f32, center: Point) {
++    let colors = triangle.interpolate(center);
++    if sample.colors.is_empty() { sample.colors = colors.iter().map(|_| 0.0).collect(); }
++    for (total, color) in sample.colors.iter_mut().zip(colors) { *total += color * area; }
++    sample.coverage += area;
++}
+ fn sample_triangles(triangles: &[Triangle], transform: Affine) -> FxHashMap<(u16, u16), MeshSample> {
+-    let mut map: FxHashMap<(u16, u16), MeshSample> = FxHashMap::default();
+-
+-    for t in triangles {
+-        let t = {
+-            let p0 = transform * t.p0.point;
+-            let p1 = transform * t.p1.point;
+-            let p2 = transform * t.p2.point;
+-
+-            let mut v0 = t.p0.clone();
+-            v0.point = p0;
+-            let mut v1 = t.p1.clone();
+-            v1.point = p1;
+-            let mut v2 = t.p2.clone();
+-            v2.point = p2;
+-
+-            Triangle::new(v0, v1, v2)
+-        };
+-
+-        let bbox = t.bounding_box();
+-
++    let transformed: Vec<_> = triangles.iter().map(|t| {
++        let mut a=t.p0.clone(); a.point=transform*a.point;
++        let mut b=t.p1.clone(); b.point=transform*b.point;
++        let mut c=t.p2.clone(); c.point=transform*c.point;
++        Triangle::new(a,b,c)
++    }).collect();
++    let mut pixels: FxHashMap<(u16,u16), smallvec::SmallVec<[usize;8]>> = FxHashMap::default();
++    for (index, t) in transformed.iter().enumerate() {
++        let bbox=t.bounding_box();
+         for y in (bbox.y0.floor() as u16)..(bbox.y1.ceil() as u16) {
+             for x in (bbox.x0.floor() as u16)..(bbox.x1.ceil() as u16) {
+-                if let Some((area, point)) = triangle_pixel_area(&t, x, y) {
+-                    let colors = t.interpolate(point);
+-                    let sample = map.entry((x, y)).or_insert_with(|| MeshSample {
+-                        colors: colors.iter().map(|_| 0.0).collect(),
+-                        coverage: 0.0,
+-                    });
+-                    for (total, color) in sample.colors.iter_mut().zip(colors) {
+-                        *total += color * area;
+-                    }
+-                    sample.coverage += area;
+-                }
+-            }
+-        }
+-    }
+-
+-    for sample in map.values_mut() {
+-        for color in &mut sample.colors {
+-            *color /= sample.coverage;
+-        }
+-        sample.coverage = sample.coverage.min(1.0);
+-    }
+-    map
++                if triangle_pixel_area(t,x,y).is_some() { pixels.entry((x,y)).or_default().push(index); }
++            }
++        }
++    }
++    pixels.into_iter().filter_map(|((x,y), indices)| {
++        let mut sample=MeshSample { colors:smallvec![], coverage:0.0 };
++        integrate_mesh_cell(&transformed,&indices,Point::new(f64::from(x),f64::from(y)),1.0,0,&mut sample);
++        if sample.coverage <= 0.0 { return None; }
++        for color in &mut sample.colors { *color /= sample.coverage; }
++        sample.coverage=sample.coverage.min(1.0);
++        Some(((x,y),sample))
++    }).collect()
+ }
+ 
+ fn encode_function_shading(domain: &[f32; 4], function: &ShadingFunction) -> EncodedShadingType {

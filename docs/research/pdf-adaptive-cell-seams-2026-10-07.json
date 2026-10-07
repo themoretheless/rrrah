@@ -1,0 +1,81 @@
+{
+  "date": "2026-10-07",
+  "base_commit": "55b845368ab15985676b845a0d63072efb7e3d0d",
+  "working_tree_api_sha256": "c12dc92cdd631a2fd4111dcae7a6749dbe137e6e6b9e1a244e26b9f745d5fbc0",
+  "before": {
+    "regression": "adaptive_cells_share_complete_edges_without_t_junctions",
+    "exit_code": 101,
+    "failure": "T junction: edge (28672, 16384)--(32768, 16384), unmatched vertex (30720, 16384)"
+  },
+  "change": "Plan adaptive leaves, register all dyadic boundary coordinates, and emit matching boundary vertices. Cells with inserted vertices use fans in the original two parameter triangles. Vertex evaluation uses one canonical global parameter evaluation.",
+  "bounds": "For arbitrary triangles within a cell, geometric deviation is bounded by twice the bicubic-minus-bilinear control-hull deviation plus the corner cross-difference norm / 4. Bilinear source-component interpolation uses the covariance bound. Floating-point safety margins were increased.",
+  "verified": [
+    "No unmatched axis-aligned parameter edge vertices on a localized curved patch.",
+    "All interior geometric edges match bit-for-bit and have multiplicity two; outer edges have multiplicity one.",
+    "All parameter triangles have positive area and sum to the full unit-square area.",
+    "Dense curved geometry and bilinear color samples stay within reported bounds.",
+    "Coons conversion, transformed-space scaling and rollback/cancellation tests pass."
+  ],
+  "tests": {
+    "passed": 864,
+    "failed": 0,
+    "ignored": 56,
+    "seconds": 0.38,
+    "command": "cargo test --locked --offline --target-dir /tmp/rrrah-required-corpus-target -p rrrah-decode --lib"
+  },
+  "real_VectorApple_geometry_sets": [
+    {
+      "patches": 1455,
+      "triangles": 95606,
+      "max_pixel_bound": 0.04999964515562207,
+      "max_component_bound": 0.001746203750371933,
+      "deepest": 6,
+      "failure": "None",
+      "preparation_seconds": 0.023199875
+    },
+    {
+      "patches": 323,
+      "triangles": 56308,
+      "max_pixel_bound": 0.049996792956694215,
+      "max_component_bound": 0.0003368901088833809,
+      "deepest": 5,
+      "failure": "None",
+      "preparation_seconds": 0.01754375
+    },
+    {
+      "patches": 245,
+      "triangles": 7646,
+      "max_pixel_bound": 0.049939242208730625,
+      "max_component_bound": 0.001746203750371933,
+      "deepest": 4,
+      "failure": "None",
+      "preparation_seconds": 0.002148333
+    },
+    {
+      "patches": 788,
+      "triangles": 21491,
+      "max_pixel_bound": 0.049969649830284756,
+      "max_component_bound": 0.001746203750371933,
+      "deepest": 4,
+      "failure": "None",
+      "preparation_seconds": 0.007832042
+    }
+  ],
+  "real_total_triangles": 181051,
+  "legacy_total_triangles": 2029542,
+  "diagnostic_runtime": {
+    "status": "completed",
+    "exit_code": 0,
+    "stdout": "{\"width\":301,\"height\":246,\"image_index\":0,\"image_count\":1}\n",
+    "stderr": "adaptive tensor diagnostic: patches=1455 triangles=95606 geometry_bound=0.04999964515562207 component_bound=0.001746203750371933 depth=6 failure=None seconds=0.023199875\nadaptive tensor diagnostic: patches=323 triangles=56308 geometry_bound=0.049996792956694215 component_bound=0.0003368901088833809 depth=5 failure=None seconds=0.01754375\nadaptive tensor diagnostic: patches=245 triangles=7646 geometry_bound=0.049939242208730625 component_bound=0.001746203750371933 depth=4 failure=None seconds=0.002148333\nadaptive tensor diagnostic: patches=788 triangles=21491 geometry_bound=0.049969649830284756 component_bound=0.001746203750371933 depth=4 failure=None seconds=0.007832042\n",
+    "seconds": 1.4888597919998574
+  },
+  "limitations": [
+    "Only internal leaf conformance within each source patch is implemented. Shared boundaries between distinct patches still require mesh-level coordination.",
+    "Renderer integration and painter-order overlap correctness remain unqualified.",
+    "Source-component bounds do not qualify nonlinear color transforms or physical HDR.",
+    "Analytical bounds with floating-point margins are not interval-arithmetic certificates.",
+    "Geometry count caps do not provide shared-root accounting for all temporary metadata or caller-owned Vec capacity."
+  ],
+  "production_encoder_diagnostic_restored": true
+}

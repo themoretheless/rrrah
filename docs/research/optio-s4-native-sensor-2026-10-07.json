@@ -1,0 +1,225 @@
+{
+  "date": "2026-10-07",
+  "base_commit": "55b845368ab15985676b845a0d63072efb7e3d0d",
+  "source": {
+    "url": "https://rawsamples.ch/raws/pentax/optios4/RAW_PENTAX_OPTIOS4.RAW",
+    "camera": "Pentax Optio S4",
+    "bytes": 6114240,
+    "sha256": "1dd0b5c28574589d3a4543a7db8acd07424ff1f79b8f1fc9d2ebd67ccb08e212",
+    "license_page": "https://rawsamples.ch/index.php/en/legal-stuff",
+    "binary_not_redistributed": true,
+    "blake3": "d8c9d03d4f4a5b1adab596794505b15b00e381428d0d79c1ce90de6accbc5aa0"
+  },
+  "oracle": {
+    "libraw_version": "0.22.2-Release",
+    "processing_stage": "unpack",
+    "make": "Pentax",
+    "model": "Optio S4",
+    "width": 2346,
+    "height": 1737,
+    "orientation_flip": 0,
+    "crop": [
+      0,
+      0,
+      2324,
+      1737
+    ],
+    "wb": [
+      0,
+      1,
+      0,
+      0
+    ],
+    "black": 0,
+    "cblack": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "white": 3968,
+    "cfa": [
+      "R",
+      "G",
+      "G",
+      "B"
+    ],
+    "cfa_indices": [
+      0,
+      1,
+      3,
+      2
+    ],
+    "xyz_to_camera": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ]
+    ],
+    "camera_to_rgb": [
+      [
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        1
+      ]
+    ],
+    "camera_to_rgb4": [
+      [
+        1,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        0
+      ]
+    ],
+    "file_color_matrices": [
+      {
+        "parsedfields": 0,
+        "illuminant": 65535,
+        "xyz_to_camera": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "parsedfields": 0,
+        "illuminant": 65535,
+        "xyz_to_camera": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ]
+      }
+    ]
+  },
+  "sensor": {
+    "sha256": "fcb32db9890fac78d532546b58792f641dff94ef296190ee0697ffffc9b2673f",
+    "bytes": 8150004,
+    "samples": 4075002,
+    "width": 2346,
+    "height": 1737,
+    "row_bytes": 3520,
+    "padding_bytes_per_row": 1,
+    "packing": "12-bit MSB-first pairs",
+    "blake3": "fde158b5e8927a1dfbe10398bcabb09239f5aa72e9085d8cdec452766b55990d"
+  },
+  "qualification": {
+    "python_layout_all_samples_exact": true,
+    "rust_result": {
+      "focused_passed": 2,
+      "failed": 0,
+      "focused_seconds": 0.02,
+      "full_decoder_passed": 859,
+      "full_decoder_ignored": 56
+    },
+    "command": "RRRAH_OPTIO_S4_SOURCE=/tmp/rrrah-optios4.raw RRRAH_OPTIO_S4_ORACLE=/tmp/rrrah-optios4-oracle.u16le cargo test --locked --offline --target-dir /tmp/rrrah-required-corpus-target -p rrrah-decode optio_s4 --lib -- --include-ignored",
+    "manual_test_requires_exact_pinned_source_and_oracle": true,
+    "pinned_positive_passed": 2,
+    "wrong_corpus_adversaries": [
+      {
+        "modified_input": "RRRAH_OPTIO_S4_SOURCE",
+        "mutation": "first byte XOR 1",
+        "expected_test_rejection": true,
+        "exit_code": 101
+      },
+      {
+        "modified_input": "RRRAH_OPTIO_S4_ORACLE",
+        "mutation": "first byte XOR 1",
+        "expected_test_rejection": true,
+        "exit_code": 101
+      }
+    ]
+  },
+  "managed_memory": {
+    "file_api_root_required_bytes": 14264244,
+    "retained_sensor_bytes": 8150004,
+    "observed_peak_bytes": 14264244,
+    "observed_after_last_owner_bytes": 0
+  },
+  "limitations": [
+    "Explicit sensor API only; no camera detection by length or extension.",
+    "Oracle WB is unusable and color matrices are zero; no display color inference or fallback.",
+    "No viewer route or format-catalog promotion.",
+    "This qualifies one real camera file, not all Pentax headerless RAW layouts."
+  ],
+  "other_search": {
+    "rawsamples_pentax_page": "https://rawsamples.ch/index.php/en/pentax",
+    "no_ptx_links_found": true,
+    "rawzor_official": "https://rawzor.com/rawzor/",
+    "rawzor_current_page": "Coming Soon for Windows and macOS; no download or SDK link on inspected page."
+  }
+}

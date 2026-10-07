@@ -2764,3 +2764,161 @@ mod file_input_tests {
         assert_eq!(fresh.peak(), 0);
     }
 }
+
+/// Explicit display interpretation; RPF has no universally inferred RGB profile
+/// or alpha association. Channel indices address color and matte banks separately.
+#[derive(Debug, Clone)]
+pub struct RpfRasterInterpretation {
+    pub rgb: [u16; 3],
+    pub matte: Option<u16>,
+    pub alpha_mode: crate::RlaAlphaMode,
+    pub color_space: rrrah_core::RasterColorSpace,
+}
+
+#[derive(Debug)]
+pub enum RpfRasterReadError {
+    Read(RpfReadError),
+    Aspect(RpfAspectError),
+    Display(RpfDisplayError),
+}
+
+/// Imports one explicitly interpreted raster and its optional producer pixel
+/// aspect. Source, packed channels and output share one root; only output pixels
+/// remain retained on success. Use `decode_rpf_file_with_budget` to retain GB
+/// channels, layers and producer metadata instead. Does not apply display color
+/// conversion or infer a missing aspect ratio.
+pub fn decode_rpf_file_raster_with_budget(
+    request: &crate::DecodeRequest,
+    budget: &rrrah_core::MemoryBudget,
+    limits: RpfDecodeLimits,
+    interpretation: &RpfRasterInterpretation,
+) -> Result<(rrrah_core::DecodedRaster, Option<f64>), RpfRasterReadError> {
+    let image = decode_rpf_file_with_budget(request, budget, limits).map_err(RpfRasterReadError::Read)?;
+    let aspect = image
+        .producer_pixel_aspect()
+        .map_err(RpfRasterReadError::Aspect)?;
+    let raster = image
+        .to_raster_with_interpretation(
+            interpretation.rgb,
+            interpretation.matte,
+            interpretation.alpha_mode,
+            interpretation.color_space.clone(),
+            budget,
+            || {
+                request
+                    .cancellation
+                    .as_ref()
+                    .is_some_and(crate::GenerationToken::is_cancelled)
+            },
+        )
+        .map_err(RpfRasterReadError::Display)?;
+    Ok((raster, aspect))
+}
+
+#[cfg(test)]
+mod file_raster_tests {
+    use super::*;
+    #[test]
+    fn explicit_file_raster_preserves_hdr_alpha_aspect_and_releases_intermediates() {
+        let mut bytes = vec![0; 744];
+        for (at, value) in [
+            (2, 1u16),
+            (10, 1),
+            (20, 3),
+            (22, 1),
+            (26, 0xfffd),
+            (658, 32),
+            (662, 32),
+        ] {
+            bytes[at..at + 2].copy_from_slice(&value.to_be_bytes());
+        }
+        bytes[400..413].copy_from_slice(b"3ds max : ( )");
+        bytes[572..575].copy_from_slice(b"3.0");
+        bytes[740..744].copy_from_slice(&744u32.to_be_bytes());
+        for channel in [[0.125f32, 1.0], [0.25, 2.0], [0.5, 4.0], [0.25, 0.5]] {
+            bytes.extend(8u16.to_be_bytes());
+            for sample in channel {
+                bytes.extend(sample.to_bits().to_be_bytes());
+            }
+        }
+        let path = std::env::temp_dir().join(format!(
+            "rrrah-rpf-raster-{}-{}.rpf",
+            std::process::id(),
+            std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .unwrap()
+                .as_nanos()
+        ));
+        struct Cleanup(std::path::PathBuf);
+        impl Drop for Cleanup {
+            fn drop(&mut self) {
+                let _ = std::fs::remove_file(&self.0);
+            }
+        }
+        let _cleanup = Cleanup(path.clone());
+        std::fs::write(&path, &bytes).unwrap();
+        let request = crate::DecodeRequest::new(&path);
+        let packed = inspect_rpf_file(&bytes, 0, 0, || false)
+            .unwrap()
+            .allocation_plan(0, 0, 4096, || false)
+            .unwrap()
+            .total_bytes;
+        let root_limit = bytes.len() as u64 + packed;
+        let limits = RpfDecodeLimits {
+            max_node_names: 0,
+            max_node_name_bytes: 0,
+            max_row_layers: 0,
+            max_total_layers: 0,
+            max_output_bytes: packed,
+        };
+        for (alpha_mode, expected) in [
+            (
+                crate::RlaAlphaMode::Straight,
+                [0.125f32, 0.25, 0.5, 0.25, 1., 2., 4., 0.5],
+            ),
+            (
+                crate::RlaAlphaMode::Premultiplied,
+                [0.5, 1., 2., 0.25, 2., 4., 8., 0.5],
+            ),
+        ] {
+            let root = rrrah_core::MemoryBudget::new(root_limit);
+            let interpretation = RpfRasterInterpretation {
+                rgb: [0, 1, 2],
+                matte: Some(0),
+                alpha_mode,
+                color_space: rrrah_core::RasterColorSpace::LinearSrgb,
+            };
+            let (raster, aspect) =
+                decode_rpf_file_raster_with_budget(&request, &root, limits, &interpretation).unwrap();
+            assert_eq!(aspect, Some(1.5));
+            let rrrah_core::RasterPixels::Rgba32Float(samples) = raster.pixels() else {
+                panic!("float raster required")
+            };
+            assert!(
+                samples
+                    .iter()
+                    .zip(expected)
+                    .all(|(a, b)| a.to_bits() == b.to_bits())
+            );
+            assert_eq!(root.used(), 32);
+            assert_eq!(root.peak(), root_limit);
+            let clone = raster.clone();
+            drop(raster);
+            assert_eq!(root.used(), 32);
+            drop(clone);
+            assert_eq!(root.used(), 0);
+            let tiny = rrrah_core::MemoryBudget::new(root_limit - 1);
+            assert!(decode_rpf_file_raster_with_budget(&request, &tiny, limits, &interpretation).is_err());
+            assert_eq!(tiny.used(), 0);
+            let invalid = RpfRasterInterpretation {
+                rgb: [0, 1, 3],
+                ..interpretation
+            };
+            assert!(matches!(
+                decode_rpf_file_raster_with_budget(&request, &root, limits, &invalid),
+                Err(RpfRasterReadError::Display(RpfDisplayError::ChannelSelection))
+            ));
+            assert_eq!(root.used(), 0);
+        }
+    }
+}

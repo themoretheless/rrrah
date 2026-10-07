@@ -1,0 +1,1423 @@
+{
+  "date": "2026-10-07",
+  "base_commit": "55b845368ab15985676b845a0d63072efb7e3d0d",
+  "platform": "Apple M4 Max macOS ARM64",
+  "build_profile": "dev; local opt-level=1, dependency opt-level=3",
+  "source_sha256": "1dd0b5c28574589d3a4543a7db8acd07424ff1f79b8f1fc9d2ebd67ccb08e212",
+  "oracle_sha256": "fcb32db9890fac78d532546b58792f641dff94ef296190ee0697ffffc9b2673f",
+  "runs": 60,
+  "warmups_per_process": 2,
+  "processes": 3,
+  "metrics": {
+    "borrowed_unpack_ms": {
+      "median_ms": 7.0692085,
+      "p95_ms": 14.780792,
+      "min_ms": 5.432709,
+      "max_ms": 20.902834
+    },
+    "unmanaged_std_read_ms": {
+      "median_ms": 0.447625,
+      "p95_ms": 1.379958,
+      "min_ms": 0.37045900000000004,
+      "max_ms": 2.69
+    },
+    "bounded_file_import_ms": {
+      "median_ms": 2.999542,
+      "p95_ms": 8.105542,
+      "min_ms": 2.6915,
+      "max_ms": 17.131708
+    }
+  },
+  "verification": "All 4,075,002 sensor samples compared to independent oracle after every timed import/unpack; exact root peak and zero final occupancy asserted each iteration.",
+  "root_peak_bytes": 14264244,
+  "retained_sensor_bytes": 8150004,
+  "limitations": [
+    "Warm OS file cache only; no cold disk latency claim.",
+    "Sensor-only import; no color processing or GPU/display timings.",
+    "Oracle and borrowed benchmark fixture storage is unmanaged and excluded from production root.",
+    "Standard file read timing is explicitly unmanaged, reported separately from bounded production import.",
+    "No competing decoder throughput comparison; no universal speed claim.",
+    "Non-isolated local machine and dev build; high tail variance prevents optimization or release-performance claims."
+  ],
+  "initial_fixed_order_metrics": {
+    "borrowed_unpack_ms": {
+      "median_ms": 7.5702295,
+      "p95_ms": 37.346167,
+      "min_ms": 5.432625,
+      "max_ms": 108.013584
+    },
+    "unmanaged_std_read_ms": {
+      "median_ms": 0.45495850000000004,
+      "p95_ms": 1.338917,
+      "min_ms": 0.368708,
+      "max_ms": 2.657333
+    },
+    "bounded_file_import_ms": {
+      "median_ms": 2.919459,
+      "p95_ms": 17.792167000000003,
+      "min_ms": 2.623375,
+      "max_ms": 29.627958
+    }
+  },
+  "initial_fixed_order_rounds": [
+    {
+      "oracle_blake3": "fde158b5e8927a1dfbe10398bcabb09239f5aa72e9085d8cdec452766b55990d",
+      "runs": [
+        {
+          "borrowed_unpack_ms": 6.140375,
+          "bounded_file_import_ms": 4.006958,
+          "final_root_bytes": 0,
+          "iteration": 0,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 1.3075,
+          "warmup": true
+        },
+        {
+          "borrowed_unpack_ms": 6.315958,
+          "bounded_file_import_ms": 2.722833,
+          "final_root_bytes": 0,
+          "iteration": 1,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.45125,
+          "warmup": true
+        },
+        {
+          "borrowed_unpack_ms": 5.812458,
+          "bounded_file_import_ms": 2.719917,
+          "final_root_bytes": 0,
+          "iteration": 2,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.44975,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.43525,
+          "bounded_file_import_ms": 2.816416,
+          "final_root_bytes": 0,
+          "iteration": 3,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.454917,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.501207999999999,
+          "bounded_file_import_ms": 2.8822919999999996,
+          "final_root_bytes": 0,
+          "iteration": 4,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 1.611166,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 13.314375,
+          "bounded_file_import_ms": 3.6367499999999997,
+          "final_root_bytes": 0,
+          "iteration": 5,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 1.377666,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.43875,
+          "bounded_file_import_ms": 2.76475,
+          "final_root_bytes": 0,
+          "iteration": 6,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.44587499999999997,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 19.317458,
+          "bounded_file_import_ms": 2.814667,
+          "final_root_bytes": 0,
+          "iteration": 7,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.446542,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 108.013584,
+          "bounded_file_import_ms": 2.910084,
+          "final_root_bytes": 0,
+          "iteration": 8,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.61275,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.432625,
+          "bounded_file_import_ms": 2.879,
+          "final_root_bytes": 0,
+          "iteration": 9,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.789541,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 54.109375,
+          "bounded_file_import_ms": 2.623375,
+          "final_root_bytes": 0,
+          "iteration": 10,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.45191699999999996,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 10.58975,
+          "bounded_file_import_ms": 2.824417,
+          "final_root_bytes": 0,
+          "iteration": 11,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.45645800000000003,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 8.917207999999999,
+          "bounded_file_import_ms": 16.082834000000002,
+          "final_root_bytes": 0,
+          "iteration": 12,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.448291,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 6.0911669999999996,
+          "bounded_file_import_ms": 2.709833,
+          "final_root_bytes": 0,
+          "iteration": 13,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.442584,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 77.326209,
+          "bounded_file_import_ms": 12.794792,
+          "final_root_bytes": 0,
+          "iteration": 14,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.44212500000000005,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.458,
+          "bounded_file_import_ms": 13.865041,
+          "final_root_bytes": 0,
+          "iteration": 15,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 1.101875,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 8.144874999999999,
+          "bounded_file_import_ms": 16.856459,
+          "final_root_bytes": 0,
+          "iteration": 16,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.463333,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 14.181459,
+          "bounded_file_import_ms": 9.297375,
+          "final_root_bytes": 0,
+          "iteration": 17,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.9430000000000001,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 26.281208,
+          "bounded_file_import_ms": 2.7274170000000004,
+          "final_root_bytes": 0,
+          "iteration": 18,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.447584,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.999792,
+          "bounded_file_import_ms": 24.688000000000002,
+          "final_root_bytes": 0,
+          "iteration": 19,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.42575,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 12.100875,
+          "bounded_file_import_ms": 4.550292,
+          "final_root_bytes": 0,
+          "iteration": 20,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.462375,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 20.496625,
+          "bounded_file_import_ms": 2.718541,
+          "final_root_bytes": 0,
+          "iteration": 21,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.444667,
+          "warmup": false
+        }
+      ],
+      "source_blake3": "d8c9d03d4f4a5b1adab596794505b15b00e381428d0d79c1ce90de6accbc5aa0"
+    },
+    {
+      "oracle_blake3": "fde158b5e8927a1dfbe10398bcabb09239f5aa72e9085d8cdec452766b55990d",
+      "runs": [
+        {
+          "borrowed_unpack_ms": 5.858124999999999,
+          "bounded_file_import_ms": 3.1065,
+          "final_root_bytes": 0,
+          "iteration": 0,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.43645799999999996,
+          "warmup": true
+        },
+        {
+          "borrowed_unpack_ms": 5.706709,
+          "bounded_file_import_ms": 2.827833,
+          "final_root_bytes": 0,
+          "iteration": 1,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 1.321667,
+          "warmup": true
+        },
+        {
+          "borrowed_unpack_ms": 8.052125,
+          "bounded_file_import_ms": 2.7803329999999997,
+          "final_root_bytes": 0,
+          "iteration": 2,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.444375,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.776042,
+          "bounded_file_import_ms": 2.8485,
+          "final_root_bytes": 0,
+          "iteration": 3,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.465167,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.77725,
+          "bounded_file_import_ms": 4.713583000000001,
+          "final_root_bytes": 0,
+          "iteration": 4,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.446625,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 9.903749999999999,
+          "bounded_file_import_ms": 29.627958,
+          "final_root_bytes": 0,
+          "iteration": 5,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.472833,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 9.696084,
+          "bounded_file_import_ms": 2.999334,
+          "final_root_bytes": 0,
+          "iteration": 6,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.457959,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 6.821416999999999,
+          "bounded_file_import_ms": 17.792167000000003,
+          "final_root_bytes": 0,
+          "iteration": 7,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.8849170000000001,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 8.596292,
+          "bounded_file_import_ms": 3.18375,
+          "final_root_bytes": 0,
+          "iteration": 8,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.449625,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 8.821625,
+          "bounded_file_import_ms": 4.019833,
+          "final_root_bytes": 0,
+          "iteration": 9,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.49945899999999993,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 6.92275,
+          "bounded_file_import_ms": 3.182958,
+          "final_root_bytes": 0,
+          "iteration": 10,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.45387500000000003,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 37.346167,
+          "bounded_file_import_ms": 3.33875,
+          "final_root_bytes": 0,
+          "iteration": 11,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 1.200417,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.461708,
+          "bounded_file_import_ms": 6.21425,
+          "final_root_bytes": 0,
+          "iteration": 12,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 1.248,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 21.188208,
+          "bounded_file_import_ms": 2.837583,
+          "final_root_bytes": 0,
+          "iteration": 13,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.627208,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 30.62225,
+          "bounded_file_import_ms": 2.7109579999999998,
+          "final_root_bytes": 0,
+          "iteration": 14,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.44587499999999997,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 8.860667,
+          "bounded_file_import_ms": 5.621208,
+          "final_root_bytes": 0,
+          "iteration": 15,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.7272500000000001,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 36.143,
+          "bounded_file_import_ms": 2.725542,
+          "final_root_bytes": 0,
+          "iteration": 16,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.8107080000000001,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 21.143792,
+          "bounded_file_import_ms": 2.7200409999999997,
+          "final_root_bytes": 0,
+          "iteration": 17,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.45233300000000004,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 6.490125,
+          "bounded_file_import_ms": 16.001624999999997,
+          "final_root_bytes": 0,
+          "iteration": 18,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.444792,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 17.844625,
+          "bounded_file_import_ms": 2.928834,
+          "final_root_bytes": 0,
+          "iteration": 19,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 1.338917,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 17.282249999999998,
+          "bounded_file_import_ms": 2.7504999999999997,
+          "final_root_bytes": 0,
+          "iteration": 20,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.448333,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.9335830000000005,
+          "bounded_file_import_ms": 5.135917,
+          "final_root_bytes": 0,
+          "iteration": 21,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.658625,
+          "warmup": false
+        }
+      ],
+      "source_blake3": "d8c9d03d4f4a5b1adab596794505b15b00e381428d0d79c1ce90de6accbc5aa0"
+    },
+    {
+      "oracle_blake3": "fde158b5e8927a1dfbe10398bcabb09239f5aa72e9085d8cdec452766b55990d",
+      "runs": [
+        {
+          "borrowed_unpack_ms": 5.868791,
+          "bounded_file_import_ms": 3.3697079999999997,
+          "final_root_bytes": 0,
+          "iteration": 0,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.7080409999999999,
+          "warmup": true
+        },
+        {
+          "borrowed_unpack_ms": 5.467874999999999,
+          "bounded_file_import_ms": 5.4805410000000006,
+          "final_root_bytes": 0,
+          "iteration": 1,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 1.023875,
+          "warmup": true
+        },
+        {
+          "borrowed_unpack_ms": 5.453042,
+          "bounded_file_import_ms": 2.8803330000000003,
+          "final_root_bytes": 0,
+          "iteration": 2,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.45933399999999996,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.77225,
+          "bounded_file_import_ms": 2.834708,
+          "final_root_bytes": 0,
+          "iteration": 3,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.43574999999999997,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.846875,
+          "bounded_file_import_ms": 2.755167,
+          "final_root_bytes": 0,
+          "iteration": 4,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.44791600000000004,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.986333,
+          "bounded_file_import_ms": 2.744209,
+          "final_root_bytes": 0,
+          "iteration": 5,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.466958,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.497167,
+          "bounded_file_import_ms": 12.510375,
+          "final_root_bytes": 0,
+          "iteration": 6,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.46166700000000005,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 8.373292,
+          "bounded_file_import_ms": 2.758667,
+          "final_root_bytes": 0,
+          "iteration": 7,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.467,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 10.989666999999999,
+          "bounded_file_import_ms": 19.54575,
+          "final_root_bytes": 0,
+          "iteration": 8,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.446834,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 12.852333,
+          "bounded_file_import_ms": 4.028042,
+          "final_root_bytes": 0,
+          "iteration": 9,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 2.657333,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.566292,
+          "bounded_file_import_ms": 3.269125,
+          "final_root_bytes": 0,
+          "iteration": 10,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 1.3283340000000001,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.4492910000000006,
+          "bounded_file_import_ms": 2.8982080000000003,
+          "final_root_bytes": 0,
+          "iteration": 11,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.476875,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 6.8500000000000005,
+          "bounded_file_import_ms": 3.1792499999999997,
+          "final_root_bytes": 0,
+          "iteration": 12,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.455,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.726625,
+          "bounded_file_import_ms": 2.8376669999999997,
+          "final_root_bytes": 0,
+          "iteration": 13,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.411917,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 10.133084,
+          "bounded_file_import_ms": 2.8599580000000002,
+          "final_root_bytes": 0,
+          "iteration": 14,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.440709,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 7.088334,
+          "bounded_file_import_ms": 2.73375,
+          "final_root_bytes": 0,
+          "iteration": 15,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.433083,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.608707999999999,
+          "bounded_file_import_ms": 3.4416249999999997,
+          "final_root_bytes": 0,
+          "iteration": 16,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.368708,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.733750000000001,
+          "bounded_file_import_ms": 2.703834,
+          "final_root_bytes": 0,
+          "iteration": 17,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.413667,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.729375,
+          "bounded_file_import_ms": 2.8301659999999997,
+          "final_root_bytes": 0,
+          "iteration": 18,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.442375,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.448834,
+          "bounded_file_import_ms": 4.096917,
+          "final_root_bytes": 0,
+          "iteration": 19,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.423292,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 15.366166,
+          "bounded_file_import_ms": 5.582625,
+          "final_root_bytes": 0,
+          "iteration": 20,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.428,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.885708,
+          "bounded_file_import_ms": 6.693791999999999,
+          "final_root_bytes": 0,
+          "iteration": 21,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.855166,
+          "warmup": false
+        }
+      ],
+      "source_blake3": "d8c9d03d4f4a5b1adab596794505b15b00e381428d0d79c1ce90de6accbc5aa0"
+    }
+  ],
+  "rounds": [
+    {
+      "oracle_blake3": "fde158b5e8927a1dfbe10398bcabb09239f5aa72e9085d8cdec452766b55990d",
+      "runs": [
+        {
+          "borrowed_unpack_ms": 9.187792,
+          "bounded_file_import_ms": 3.2723750000000003,
+          "final_root_bytes": 0,
+          "iteration": 0,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.442375,
+          "warmup": true
+        },
+        {
+          "borrowed_unpack_ms": 5.948083,
+          "bounded_file_import_ms": 2.746416,
+          "final_root_bytes": 0,
+          "iteration": 1,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.472416,
+          "warmup": true
+        },
+        {
+          "borrowed_unpack_ms": 5.739333,
+          "bounded_file_import_ms": 5.678083,
+          "final_root_bytes": 0,
+          "iteration": 2,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 1.0573329999999999,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.618583,
+          "bounded_file_import_ms": 2.9034999999999997,
+          "final_root_bytes": 0,
+          "iteration": 3,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.464334,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.479292,
+          "bounded_file_import_ms": 3.1075,
+          "final_root_bytes": 0,
+          "iteration": 4,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.43062500000000004,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.4872499999999995,
+          "bounded_file_import_ms": 3.026959,
+          "final_root_bytes": 0,
+          "iteration": 5,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.41637500000000005,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.730125,
+          "bounded_file_import_ms": 2.822584,
+          "final_root_bytes": 0,
+          "iteration": 6,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.38091600000000003,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 8.133583,
+          "bounded_file_import_ms": 2.847833,
+          "final_root_bytes": 0,
+          "iteration": 7,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.377666,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 8.41775,
+          "bounded_file_import_ms": 2.875,
+          "final_root_bytes": 0,
+          "iteration": 8,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.421541,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 7.060708,
+          "bounded_file_import_ms": 2.8289999999999997,
+          "final_root_bytes": 0,
+          "iteration": 9,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.45125,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 8.165624999999999,
+          "bounded_file_import_ms": 2.869,
+          "final_root_bytes": 0,
+          "iteration": 10,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.461625,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.7185,
+          "bounded_file_import_ms": 2.997917,
+          "final_root_bytes": 0,
+          "iteration": 11,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.44595799999999997,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 6.168041,
+          "bounded_file_import_ms": 7.39675,
+          "final_root_bytes": 0,
+          "iteration": 12,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.454625,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 11.641709,
+          "bounded_file_import_ms": 2.8505409999999998,
+          "final_root_bytes": 0,
+          "iteration": 13,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.444542,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 12.803500000000001,
+          "bounded_file_import_ms": 6.648541,
+          "final_root_bytes": 0,
+          "iteration": 14,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.841458,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 9.278458,
+          "bounded_file_import_ms": 3.9099169999999996,
+          "final_root_bytes": 0,
+          "iteration": 15,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.4445,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 6.194666,
+          "bounded_file_import_ms": 4.407292,
+          "final_root_bytes": 0,
+          "iteration": 16,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.463125,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.647166,
+          "bounded_file_import_ms": 2.909291,
+          "final_root_bytes": 0,
+          "iteration": 17,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.410959,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.734791,
+          "bounded_file_import_ms": 2.96775,
+          "final_root_bytes": 0,
+          "iteration": 18,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.405667,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 10.505125000000001,
+          "bounded_file_import_ms": 5.195583,
+          "final_root_bytes": 0,
+          "iteration": 19,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 1.081208,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.577375,
+          "bounded_file_import_ms": 3.0782499999999997,
+          "final_root_bytes": 0,
+          "iteration": 20,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 1.379958,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 15.835042000000001,
+          "bounded_file_import_ms": 17.131708,
+          "final_root_bytes": 0,
+          "iteration": 21,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.449625,
+          "warmup": false
+        }
+      ],
+      "source_blake3": "d8c9d03d4f4a5b1adab596794505b15b00e381428d0d79c1ce90de6accbc5aa0"
+    },
+    {
+      "oracle_blake3": "fde158b5e8927a1dfbe10398bcabb09239f5aa72e9085d8cdec452766b55990d",
+      "runs": [
+        {
+          "borrowed_unpack_ms": 6.687125,
+          "bounded_file_import_ms": 3.494125,
+          "final_root_bytes": 0,
+          "iteration": 0,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.528667,
+          "warmup": true
+        },
+        {
+          "borrowed_unpack_ms": 5.719250000000001,
+          "bounded_file_import_ms": 2.729833,
+          "final_root_bytes": 0,
+          "iteration": 1,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.440084,
+          "warmup": true
+        },
+        {
+          "borrowed_unpack_ms": 5.437625,
+          "bounded_file_import_ms": 2.9684999999999997,
+          "final_root_bytes": 0,
+          "iteration": 2,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.459625,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.501875,
+          "bounded_file_import_ms": 2.900041,
+          "final_root_bytes": 0,
+          "iteration": 3,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.47425,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 6.0221670000000005,
+          "bounded_file_import_ms": 2.779041,
+          "final_root_bytes": 0,
+          "iteration": 4,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.9146249999999999,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.492334,
+          "bounded_file_import_ms": 2.891709,
+          "final_root_bytes": 0,
+          "iteration": 5,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.446875,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.4963750000000005,
+          "bounded_file_import_ms": 2.759042,
+          "final_root_bytes": 0,
+          "iteration": 6,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.39845800000000003,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.6267499999999995,
+          "bounded_file_import_ms": 2.6915,
+          "final_root_bytes": 0,
+          "iteration": 7,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.378708,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.732584,
+          "bounded_file_import_ms": 3.12225,
+          "final_root_bytes": 0,
+          "iteration": 8,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.392792,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 8.664791,
+          "bounded_file_import_ms": 3.0011669999999997,
+          "final_root_bytes": 0,
+          "iteration": 9,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.445625,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 14.240292,
+          "bounded_file_import_ms": 3.8400000000000003,
+          "final_root_bytes": 0,
+          "iteration": 10,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 2.001584,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 7.308,
+          "bounded_file_import_ms": 12.8245,
+          "final_root_bytes": 0,
+          "iteration": 11,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.44725,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 14.157791,
+          "bounded_file_import_ms": 6.026542,
+          "final_root_bytes": 0,
+          "iteration": 12,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.446333,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.668541,
+          "bounded_file_import_ms": 4.4085,
+          "final_root_bytes": 0,
+          "iteration": 13,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 1.025958,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.520625000000001,
+          "bounded_file_import_ms": 3.380875,
+          "final_root_bytes": 0,
+          "iteration": 14,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.451667,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 13.625208,
+          "bounded_file_import_ms": 3.248959,
+          "final_root_bytes": 0,
+          "iteration": 15,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 2.69,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 14.780792,
+          "bounded_file_import_ms": 2.715959,
+          "final_root_bytes": 0,
+          "iteration": 16,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.446542,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 20.902834,
+          "bounded_file_import_ms": 4.840709,
+          "final_root_bytes": 0,
+          "iteration": 17,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 1.2958749999999999,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 8.331334,
+          "bounded_file_import_ms": 2.731167,
+          "final_root_bytes": 0,
+          "iteration": 18,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.441625,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 13.720915999999999,
+          "bounded_file_import_ms": 2.706416,
+          "final_root_bytes": 0,
+          "iteration": 19,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.37045900000000004,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 18.612958,
+          "bounded_file_import_ms": 4.892208,
+          "final_root_bytes": 0,
+          "iteration": 20,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.456334,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.713666,
+          "bounded_file_import_ms": 2.713458,
+          "final_root_bytes": 0,
+          "iteration": 21,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.403041,
+          "warmup": false
+        }
+      ],
+      "source_blake3": "d8c9d03d4f4a5b1adab596794505b15b00e381428d0d79c1ce90de6accbc5aa0"
+    },
+    {
+      "oracle_blake3": "fde158b5e8927a1dfbe10398bcabb09239f5aa72e9085d8cdec452766b55990d",
+      "runs": [
+        {
+          "borrowed_unpack_ms": 6.250833,
+          "bounded_file_import_ms": 3.218709,
+          "final_root_bytes": 0,
+          "iteration": 0,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.57175,
+          "warmup": true
+        },
+        {
+          "borrowed_unpack_ms": 9.124542,
+          "bounded_file_import_ms": 2.734125,
+          "final_root_bytes": 0,
+          "iteration": 1,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.433959,
+          "warmup": true
+        },
+        {
+          "borrowed_unpack_ms": 7.077709,
+          "bounded_file_import_ms": 6.286709,
+          "final_root_bytes": 0,
+          "iteration": 2,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.442959,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 8.842792000000001,
+          "bounded_file_import_ms": 5.127709,
+          "final_root_bytes": 0,
+          "iteration": 3,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 1.080416,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 10.687375000000001,
+          "bounded_file_import_ms": 2.7237910000000003,
+          "final_root_bytes": 0,
+          "iteration": 4,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.429792,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 7.472916,
+          "bounded_file_import_ms": 4.343375,
+          "final_root_bytes": 0,
+          "iteration": 5,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.447042,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.434334,
+          "bounded_file_import_ms": 2.767084,
+          "final_root_bytes": 0,
+          "iteration": 6,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.491542,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.4905420000000005,
+          "bounded_file_import_ms": 2.779416,
+          "final_root_bytes": 0,
+          "iteration": 7,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.40841700000000003,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 8.034958999999999,
+          "bounded_file_import_ms": 4.009542,
+          "final_root_bytes": 0,
+          "iteration": 8,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.43558399999999997,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.432709,
+          "bounded_file_import_ms": 2.73,
+          "final_root_bytes": 0,
+          "iteration": 9,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.43270800000000004,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 10.726667,
+          "bounded_file_import_ms": 2.7015,
+          "final_root_bytes": 0,
+          "iteration": 10,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.37775,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 12.774875,
+          "bounded_file_import_ms": 2.8748340000000003,
+          "final_root_bytes": 0,
+          "iteration": 11,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.44116700000000003,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.471042,
+          "bounded_file_import_ms": 2.756083,
+          "final_root_bytes": 0,
+          "iteration": 12,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.446417,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 8.253042,
+          "bounded_file_import_ms": 2.7438330000000004,
+          "final_root_bytes": 0,
+          "iteration": 13,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.487125,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 13.114541000000001,
+          "bounded_file_import_ms": 3.031333,
+          "final_root_bytes": 0,
+          "iteration": 14,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.476375,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 6.537041,
+          "bounded_file_import_ms": 9.225875,
+          "final_root_bytes": 0,
+          "iteration": 15,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.44983399999999996,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.718,
+          "bounded_file_import_ms": 2.851375,
+          "final_root_bytes": 0,
+          "iteration": 16,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.46287500000000004,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 8.124667,
+          "bounded_file_import_ms": 4.03375,
+          "final_root_bytes": 0,
+          "iteration": 17,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 1.068875,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 5.7132499999999995,
+          "bounded_file_import_ms": 8.105542,
+          "final_root_bytes": 0,
+          "iteration": 18,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.465291,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 6.009208,
+          "bounded_file_import_ms": 4.038082999999999,
+          "final_root_bytes": 0,
+          "iteration": 19,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 1.430417,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 11.58425,
+          "bounded_file_import_ms": 3.9937920000000005,
+          "final_root_bytes": 0,
+          "iteration": 20,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.458,
+          "warmup": false
+        },
+        {
+          "borrowed_unpack_ms": 8.801916,
+          "bounded_file_import_ms": 2.852792,
+          "final_root_bytes": 0,
+          "iteration": 21,
+          "retained_sensor_bytes": 8150004,
+          "root_peak_bytes": 14264244,
+          "unmanaged_std_read_ms": 0.448,
+          "warmup": false
+        }
+      ],
+      "source_blake3": "d8c9d03d4f4a5b1adab596794505b15b00e381428d0d79c1ce90de6accbc5aa0"
+    }
+  ],
+  "stage_order": "Rotates unpack, standard read and bounded file import by iteration."
+}

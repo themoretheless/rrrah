@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-07",
+  "base_commit": "55b845368ab15985676b845a0d63072efb7e3d0d",
+  "defect": "A streaming cancellation signal seen once was lost by the final callback poll, causing an I/O error classification and removal of a valid cache entry on restore.",
+  "fix": "Latch the first observed cancellation for each write_stream/read_stream operation and stop polling its callback after cancellation.",
+  "before": {
+    "test": "streaming_cancellation_stays_cancelled_after_a_single_signal",
+    "exit_code": 101,
+    "failure": "Expected SwapError::Cancelled; assertion failed before production change."
+  },
+  "after": {
+    "command": "cargo test --locked --offline --target-dir /tmp/rrrah-required-corpus-target -p rrrah-swap -p rrrah-cache --lib",
+    "cache_passed": 121,
+    "swap_passed": 10,
+    "failed": 0
+  },
+  "coverage": [
+    "Single-signal write and read cancellation with propagating and swallowing codecs.",
+    "Failed write disk reservation releases fully.",
+    "Cancelled read preserves immutable disk handle and retry succeeds.",
+    "ImageSwapCache cancellation after restored allocation releases pixels, does not increment errors, retains entry for a successful retry."
+  ],
+  "limitations": [
+    "This does not make quota-driven eviction before an incoming swap write transactional.",
+    "Cancellation is observed at stream I/O checkpoints; arbitrary codec computation is not preempted."
+  ]
+}

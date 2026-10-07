@@ -44,18 +44,29 @@ fn hdr_rpf_alpha_ram_and_swap_match_explicit_reference_on_gpu() {
         let directory = tempfile::tempdir().unwrap();
         let root = MemoryBudget::new(16 * 1024 * 1024);
         let bytes = source();
-        let file = rrrah_decode::inspect_rpf_file(&bytes, 0, 0, || false).unwrap();
-        let image = file.decode_with_budget(&root, 0, 0, 776, || false).unwrap();
-        let native = image
-            .to_raster_with_interpretation(
-                [0, 1, 2],
-                Some(0),
-                mode,
-                RasterColorSpace::LinearSrgb,
-                &root,
-                || false,
-            )
-            .unwrap();
+        let path = directory.path().join("explicit.rpf");
+        std::fs::write(&path, &bytes).unwrap();
+        let request = rrrah_decode::DecodeRequest::new(&path);
+        let (native, aspect) = rrrah_decode::decode_rpf_file_raster_with_budget(
+            &request,
+            &root,
+            rrrah_decode::RpfDecodeLimits {
+                max_node_names: 0,
+                max_node_name_bytes: 0,
+                max_row_layers: 0,
+                max_total_layers: 0,
+                max_output_bytes: 776,
+            },
+            &rrrah_decode::RpfRasterInterpretation {
+                rgb: [0, 1, 2],
+                matte: Some(0),
+                alpha_mode: mode,
+                color_space: RasterColorSpace::LinearSrgb,
+            },
+        )
+        .unwrap();
+        assert_eq!(aspect, None);
+        assert_eq!(root.used(), 32);
         let mut reference = root.try_buffer(8, 0.0f32).unwrap();
         reference[..].copy_from_slice(&samples);
         let golden = DecodedRaster::new(
@@ -108,7 +119,6 @@ fn hdr_rpf_alpha_ram_and_swap_match_explicit_reference_on_gpu() {
         swap.wait_idle().unwrap();
         drop(display);
         drop(native);
-        drop(image);
         let pressure = root.try_reserve(root.available_bytes()).unwrap();
         assert!(swap.try_get(&1, || false).is_err());
         drop(pressure);

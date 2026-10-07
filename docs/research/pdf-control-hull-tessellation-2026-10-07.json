@@ -1,0 +1,90 @@
+{
+  "date": "2026-10-07",
+  "base_commit": "55b845368ab15985676b845a0d63072efb7e3d0d",
+  "api": "TensorProductPatch::to_triangles_adaptive and CoonsPatch::to_triangles_adaptive",
+  "method": "De Casteljau subdivision; bicubic-minus-bilinear control-hull norm plus one quarter of corner cross-difference bounds geometric triangle deviation. Bilinear component cross-difference supplies an independent component bound.",
+  "actual_source": {
+    "file": "VectorApple.ai",
+    "sha256": "c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06"
+  },
+  "real_tensor_sets": [
+    {
+      "source_patches": 1455,
+      "legacy_fixed_grid_triangles": 1050510,
+      "adaptive_triangles": 49500,
+      "max_pixel_bound": 0.04999987053062462,
+      "max_component_bound": 0.0017233164981007576,
+      "deepest": 5,
+      "failure": "None",
+      "geometry_preparation_seconds": 0.006125041
+    },
+    {
+      "source_patches": 323,
+      "legacy_fixed_grid_triangles": 233206,
+      "adaptive_triangles": 29650,
+      "max_pixel_bound": 0.049997501548015154,
+      "max_component_bound": 0.0004978259094059467,
+      "deepest": 4,
+      "failure": "None",
+      "geometry_preparation_seconds": 0.003458708
+    },
+    {
+      "source_patches": 245,
+      "legacy_fixed_grid_triangles": 176890,
+      "adaptive_triangles": 5308,
+      "max_pixel_bound": 0.04982909083498316,
+      "max_component_bound": 0.0017233160324394703,
+      "deepest": 4,
+      "failure": "None",
+      "geometry_preparation_seconds": 0.000542167
+    },
+    {
+      "source_patches": 788,
+      "legacy_fixed_grid_triangles": 568936,
+      "adaptive_triangles": 12502,
+      "max_pixel_bound": 0.04999929204739454,
+      "max_component_bound": 0.001723315566778183,
+      "deepest": 4,
+      "failure": "None",
+      "geometry_preparation_seconds": 0.001487334
+    }
+  ],
+  "total_legacy_triangles": 2029542,
+  "total_adaptive_triangles": 96960,
+  "diagnostic_runtime": {
+    "status": "completed",
+    "exit_code": 0,
+    "stdout": "{\"width\":301,\"height\":246,\"image_index\":0,\"image_count\":1}\n",
+    "stderr": "adaptive tensor diagnostic: patches=1455 triangles=49500 geometry_bound=0.04999987053062462 component_bound=0.0017233164981007576 depth=5 failure=None seconds=0.006125041\nadaptive tensor diagnostic: patches=323 triangles=29650 geometry_bound=0.049997501548015154 component_bound=0.0004978259094059467 depth=4 failure=None seconds=0.003458708\nadaptive tensor diagnostic: patches=245 triangles=5308 geometry_bound=0.04982909083498316 component_bound=0.0017233160324394703 depth=4 failure=None seconds=0.000542167\nadaptive tensor diagnostic: patches=788 triangles=12502 geometry_bound=0.04999929204739454 component_bound=0.001723315566778183 depth=4 failure=None seconds=0.001487334\n",
+    "seconds": 2.0683051249980053
+  },
+  "limits": {
+    "pixel_error": 0.05,
+    "component_error": 0.001953125,
+    "max_depth": 12,
+    "max_triangles_per_shading": 1048576
+  },
+  "verified_tests": [
+    "Affine geometry and linear components require two triangles.",
+    "Scaling increases subdivisions to maintain pixel-space bounds.",
+    "Dense parameter-space samples of curved geometry and bilinear colors fit reported bounds.",
+    "Depth, count and cancellation errors roll back appended triangles.",
+    "Coons control conversion is compared to equivalent tensor geometry and triangles."
+  ],
+  "test_result": {
+    "command": "cargo test --locked --offline --target-dir /tmp/rrrah-required-corpus-target -p rrrah-decode --lib",
+    "passed": 863,
+    "failed": 0,
+    "ignored": 56,
+    "seconds": 0.45
+  },
+  "limitations": [
+    "Opt-in tessellation API; ordinary rendering still uses legacy tessellation.",
+    "Diagnostic calls were removed from the production encoder.",
+    "Component bounds do not certify nonlinear shading functions or final display color.",
+    "Floating-point safety margins are not an interval-arithmetic certificate.",
+    "No cache/GPU/physical-HDR qualification of the new tessellation.",
+    "Adaptive grids may introduce edge conformity requirements across adjacent leaves and patches; renderer integration requires crack/seam tests."
+  ],
+  "next_action": "Qualify edge conformity and combine reduced geometry with painter-order integration, then compare full real AI pixels and rendering latency before enabling the renderer route."
+}

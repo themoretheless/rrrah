@@ -2,6 +2,9 @@
 
 #![allow(clippy::needless_range_loop)]
 
+mod adaptive;
+pub use adaptive::{AdaptivePatchError, AdaptivePatchLimits, AdaptivePatchStats};
+
 use crate::CacheKey;
 use crate::cache::Cache;
 use crate::color::{ColorComponents, ColorSpace};

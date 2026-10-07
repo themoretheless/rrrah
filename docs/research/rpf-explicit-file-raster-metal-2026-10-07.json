@@ -1,0 +1,54 @@
+{
+  "date": "2026-10-07",
+  "base_commit": "55b845368ab15985676b845a0d63072efb7e3d0d",
+  "api": "decode_rpf_file_raster_with_budget",
+  "interpretation": "Explicit RGB channel indices, optional matte channel, straight/premultiplied alpha, declared raster color space. Returns raster and optional producer pixel aspect.",
+  "unit_result": {
+    "passed": 858,
+    "failed": 0,
+    "ignored": 55
+  },
+  "fixture": {
+    "authorship": "synthetic Autodesk-layout float channel fixture",
+    "width": 2,
+    "height": 1,
+    "source_bytes": 784,
+    "packed_bytes": 776,
+    "root_limit_and_peak_bytes": 1560,
+    "retained_raster_bytes": 32,
+    "pixel_aspect": 1.5
+  },
+  "verified": [
+    "Exact float bits for straight and unassociated premultiplied HDR samples.",
+    "Source and packed intermediates released before returning raster.",
+    "Raster clones share retained memory credit; final clone drop releases it.",
+    "One-byte-short root admission and invalid channel selection release all allocations.",
+    "New file import route participates in existing RAM lease, swap pressure/retry and exact Metal frame comparisons."
+  ],
+  "metal_result": {
+    "adapter": "Apple M4 Max",
+    "backend": "Metal",
+    "passed": 2,
+    "failed": 0,
+    "seconds": 1.16
+  },
+  "corpus_search": {
+    "url": "https://raw.pixls.us/json/getrepository.php",
+    "sha256": "8dc5f5c74e20cc3a38f4548d53bba4bb516835e2a859e80bf86e7ac6283b3aa3",
+    "rows": 2016,
+    "missing_extensions": {
+      "cap": 0,
+      "rwz": 0,
+      "ptx": 0,
+      "bay": 0,
+      "eip": 0
+    },
+    "scope": "Current catalog only; no claim that producer files do not exist elsewhere."
+  },
+  "limitations": [
+    "No renderer-produced RPF corpus; catalog row remains Pending.",
+    "Explicit import only; ordinary viewer routing has not been enabled.",
+    "SDR offscreen rendering verifies HDR source handling, not physical HDR display.",
+    "NVIDIA/CUDA hardware remains unverified."
+  ]
+}
