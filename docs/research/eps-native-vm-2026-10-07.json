@@ -1,0 +1,98 @@
+{
+  "scope": "Owned native Rust scalar/procedure executor for lexical EPS code; not a full PostScript interpreter or EPS renderer",
+  "source": "crates/rrrah-decode/src/eps_vm.rs",
+  "operators": [
+    "add",
+    "sub",
+    "mul",
+    "div",
+    "neg",
+    "abs",
+    "dup",
+    "exch",
+    "pop",
+    "clear",
+    "count",
+    "index",
+    "copy",
+    "roll",
+    "def",
+    "load",
+    "exec",
+    "if",
+    "ifelse",
+    "repeat",
+    "eq",
+    "ne",
+    "lt",
+    "le",
+    "gt",
+    "ge",
+    "not",
+    "and",
+    "or",
+    "xor"
+  ],
+  "state": {
+    "dictionary": "one user dictionary plus supported system values/operators; bounded open-addressing table",
+    "operand_and_execution_stacks": "preallocated managed buffers; no recursive Rust calls",
+    "procedure_identity": "nonempty lexical literals retain identity; empty procedures share canonical identity, independently checked",
+    "integer_model": "signed32; arithmetic overflow promotes exact wide integer result to f32",
+    "comparison": "mixed equality uses real promotion; ordered comparisons preserve integer value, matching qualified independent cases",
+    "unsupported": "strings, arrays, full dictionary stack, bind, immediate names, stream/image data and graphics; never silently ignored"
+  },
+  "limits": [
+    "operand capacity",
+    "dictionary entries",
+    "execution frames including root",
+    "work ticks for instructions, name hashing/probes and bulk stack operations"
+  ],
+  "ownership": {
+    "all_vm_buffers": "admitted to MemoryBudget before execution; failed admissions and errors release acquired storage",
+    "result": "SharedBuffer retains full configured operand capacity through last owner",
+    "source_and_program": "caller-owned source and managed borrowed instruction tape; procedure results are diagnostic ranges, not standalone objects"
+  },
+  "verification": {
+    "library": {
+      "passed": 896,
+      "failed": 0,
+      "ignored": 57,
+      "log": "/tmp/rrrah-eps-vm-qualified-tests.log"
+    },
+    "independent": {
+      "cases": 24,
+      "engine": "Ghostscript 10.05.1",
+      "role": "test-only; ephemeral container, no production linkage",
+      "numeric_model": "Ghostscript default 64-bit integers; these cases do not require integer-overflow promotion",
+      "binary_sha256": "e522a84dc98345933621efba59577afe76d8f2d241ae103a92e6ccd37812b290",
+      "fixture_sha256": "b44ee006c8bcf4189ae4beb532aa253e408ad70b075acf9202efd121ae720858",
+      "log": "/tmp/rrrah-eps-vm-ghostscript-reference.log"
+    },
+    "native_controls": [
+      "operator aliases and redefinition",
+      "recursive factorial",
+      "conditions and repeat",
+      "numeric types and overflow promotion",
+      "empty versus nonempty procedure identity",
+      "3000 operator-exec tail chain with one execution frame",
+      "dictionary, operand, frame and work limits",
+      "one-shot cancellation",
+      "shared-root admission refusal and last-owner release"
+    ]
+  },
+  "oracle_driven_corrections": [
+    "mixed integer/real equality at f32 precision boundary",
+    "ordered comparison kept distinct from equality conversion",
+    "canonical empty procedure identity; distinct nonempty literals still compare unequal"
+  ],
+  "remaining": [
+    "full object VM and dictionary scopes",
+    "immediate-name capture and bind",
+    "stream-aware source reader for currentfile",
+    "native graphics, paths, clipping, images and fonts",
+    "independent EPS pixel qualification",
+    "viewer cache, prefetch, swap and GPU integration"
+  ],
+  "catalog_status": "EPS remains pending",
+  "performance": "No throughput/latency claim; all configured limits are resource bounds"
+}

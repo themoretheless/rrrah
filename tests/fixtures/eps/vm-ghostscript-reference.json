@@ -1,0 +1,348 @@
+{
+  "license": "CC0-1.0",
+  "reference": "Ghostscript independent execution, test-only",
+  "ghostscript_version": "10.05.1",
+  "ghostscript_binary_sha256": "e522a84dc98345933621efba59577afe76d8f2d241ae103a92e6ccd37812b290",
+  "image": "alpine:3.22.1",
+  "image_id": "sha256:4bcff63911fcb4448bd4fdacec207030997caf25e9bea4045fa6c8c44de311d1",
+  "numeric_model": "Ghostscript default 64-bit integers; these cases do not require integer-overflow promotion",
+  "source_sha256": "cf0f45374c0225eae6f25065af87fd364f90ac6f0e9da9a5af6c24ca001cdf7d",
+  "cases": [
+    {
+      "code": "/average {add 2 div} def 40 60 average",
+      "values": [
+        {
+          "type": "real",
+          "value": 50.0
+        }
+      ]
+    },
+    {
+      "code": "/inc {1 add} def 4 inc /plus /add load def 2 plus",
+      "values": [
+        {
+          "type": "integer",
+          "value": 7
+        }
+      ]
+    },
+    {
+      "code": "/x 1 def /x 9 def x /add {sub} def 10 3 add",
+      "values": [
+        {
+          "type": "integer",
+          "value": 9
+        },
+        {
+          "type": "integer",
+          "value": 7
+        }
+      ]
+    },
+    {
+      "code": "true {7} {9} ifelse false {100} if 3 {1 add} repeat",
+      "values": [
+        {
+          "type": "integer",
+          "value": 10
+        }
+      ]
+    },
+    {
+      "code": "{ {8} exec } exec",
+      "values": [
+        {
+          "type": "integer",
+          "value": 8
+        }
+      ]
+    },
+    {
+      "code": "/true false def true {1} {2} ifelse",
+      "values": [
+        {
+          "type": "integer",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "code": "1 2 3 3 1 roll",
+      "values": [
+        {
+          "type": "integer",
+          "value": 3
+        },
+        {
+          "type": "integer",
+          "value": 1
+        },
+        {
+          "type": "integer",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "code": "1 2 3 3 -1 roll",
+      "values": [
+        {
+          "type": "integer",
+          "value": 2
+        },
+        {
+          "type": "integer",
+          "value": 3
+        },
+        {
+          "type": "integer",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "code": "1 2 2 copy 1 index count",
+      "values": [
+        {
+          "type": "integer",
+          "value": 1
+        },
+        {
+          "type": "integer",
+          "value": 2
+        },
+        {
+          "type": "integer",
+          "value": 1
+        },
+        {
+          "type": "integer",
+          "value": 2
+        },
+        {
+          "type": "integer",
+          "value": 1
+        },
+        {
+          "type": "integer",
+          "value": 5
+        }
+      ]
+    },
+    {
+      "code": "10 4 sub 3 mul 2 div",
+      "values": [
+        {
+          "type": "real",
+          "value": 9.0
+        }
+      ]
+    },
+    {
+      "code": "{} dup eq {} {} eq 1 1.0 eq 2147483647 2147483648.0 eq",
+      "values": [
+        {
+          "type": "boolean",
+          "value": true
+        },
+        {
+          "type": "boolean",
+          "value": true
+        },
+        {
+          "type": "boolean",
+          "value": true
+        },
+        {
+          "type": "boolean",
+          "value": true
+        }
+      ]
+    },
+    {
+      "code": "/p { {} } def p p eq",
+      "values": [
+        {
+          "type": "boolean",
+          "value": true
+        }
+      ]
+    },
+    {
+      "code": "true false or 255 15 and 0 not",
+      "values": [
+        {
+          "type": "boolean",
+          "value": true
+        },
+        {
+          "type": "integer",
+          "value": 15
+        },
+        {
+          "type": "integer",
+          "value": -1
+        }
+      ]
+    },
+    {
+      "code": "7 /exec load dup exec",
+      "values": [
+        {
+          "type": "integer",
+          "value": 7
+        }
+      ]
+    },
+    {
+      "code": "/fact { dup 1 gt { dup 1 sub fact mul } { pop 1 } ifelse } def 6 fact",
+      "values": [
+        {
+          "type": "integer",
+          "value": 720
+        }
+      ]
+    },
+    {
+      "code": "7 0 {100 add} repeat",
+      "values": [
+        {
+          "type": "integer",
+          "value": 7
+        }
+      ]
+    },
+    {
+      "code": "0 500 {1 add} repeat",
+      "values": [
+        {
+          "type": "integer",
+          "value": 500
+        }
+      ]
+    },
+    {
+      "code": "/x /y def x",
+      "values": [
+        {
+          "type": "literal_name",
+          "value": "y"
+        }
+      ]
+    },
+    {
+      "code": "-7 neg -8 abs 4 3 lt 4 4 le 5 4 gt 5 5 ge 1 2 ne",
+      "values": [
+        {
+          "type": "integer",
+          "value": 7
+        },
+        {
+          "type": "integer",
+          "value": 8
+        },
+        {
+          "type": "boolean",
+          "value": false
+        },
+        {
+          "type": "boolean",
+          "value": true
+        },
+        {
+          "type": "boolean",
+          "value": true
+        },
+        {
+          "type": "boolean",
+          "value": true
+        },
+        {
+          "type": "boolean",
+          "value": true
+        }
+      ]
+    },
+    {
+      "code": "true false xor true false and false not",
+      "values": [
+        {
+          "type": "boolean",
+          "value": true
+        },
+        {
+          "type": "boolean",
+          "value": false
+        },
+        {
+          "type": "boolean",
+          "value": true
+        }
+      ]
+    },
+    {
+      "code": "1 2 exch dup pop",
+      "values": [
+        {
+          "type": "integer",
+          "value": 2
+        },
+        {
+          "type": "integer",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "code": "1 2 clear count",
+      "values": [
+        {
+          "type": "integer",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "code": "{1} {1} eq {add} {add} eq {1} dup eq {} {} eq",
+      "values": [
+        {
+          "type": "boolean",
+          "value": false
+        },
+        {
+          "type": "boolean",
+          "value": false
+        },
+        {
+          "type": "boolean",
+          "value": true
+        },
+        {
+          "type": "boolean",
+          "value": true
+        }
+      ]
+    },
+    {
+      "code": "16777217 16777216 eq 16777217 16777216.0 eq 2147483647 2147483648.0 lt 2147483647 2147483648.0 le",
+      "values": [
+        {
+          "type": "boolean",
+          "value": false
+        },
+        {
+          "type": "boolean",
+          "value": true
+        },
+        {
+          "type": "boolean",
+          "value": true
+        },
+        {
+          "type": "boolean",
+          "value": true
+        }
+      ]
+    }
+  ]
+}

@@ -625,3 +625,20 @@ pub use eps::{EpsInspectError, EpsSource, inspect_eps_source};
 
 mod eps_tokens;
 pub use eps_tokens::{EpsToken, EpsTokenError, EpsTokens};
+
+mod eps_strings;
+pub use eps_strings::{EpsStringError, decode_eps_string};
+
+mod eps_numbers;
+pub use eps_numbers::{EpsNumber, EpsNumberError, parse_eps_number};
+
+mod eps_program;
+pub use eps_program::{EpsCompileError, EpsCompileLimits, EpsInstruction, EpsProgram, compile_eps_program};
+
+mod eps_vm;
+pub use eps_vm::{EpsEvaluation, EpsOperator, EpsValue, EpsVmError, EpsVmLimit, EpsVmLimits, evaluate_eps_program};
+
+mod eps_graphics;
+pub use eps_graphics::{EpsDeviceColor, EpsGraphics, EpsGraphicsError, EpsGraphicsLimit, EpsGraphicsLimits, EpsMatrix, EpsPaint, EpsPaintKind, EpsPathSegment, EpsPoint, EpsStrokeStyle, EpsVectorScene};
+
+pub use eps_vm::{EpsVectorExecution, evaluate_eps_vectors};

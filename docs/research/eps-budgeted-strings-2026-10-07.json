@@ -1,0 +1,43 @@
+{
+  "scope": "Original PostScript literal, hexadecimal and ASCII85 string decoding; EPS execution/rendering remains pending",
+  "source": "crates/rrrah-decode/src/eps_strings.rs",
+  "specification": "https://www.adobe.com/jp/print/postscript/pdfs/PLRM.pdf",
+  "ownership": {
+    "input": "borrowed; source accounting remains caller-owned",
+    "output": "exact decoded length validated before MemoryBudget allocation; SharedBuffer retains charge through last owner",
+    "scratch": "no heap allocation in validation or decoding passes"
+  },
+  "limits": [
+    "decoded output bytes",
+    "literal parenthesis nesting matches lexer cap 128 including outer delimiter",
+    "cancellation checked each input iteration and each pass boundary"
+  ],
+  "verification": {
+    "decoder_library": {
+      "passed": 885,
+      "failed": 0,
+      "ignored": 57,
+      "log": "/tmp/rrrah-eps-string-final-tests.log"
+    },
+    "independent_ascii85_reference": {
+      "cases": 40,
+      "producer": "Python stdlib base64.a85encode/a85decode, test fixtures only",
+      "fixture": "tests/fixtures/eps/ascii85-python-reference.json",
+      "sha256": "54519dada88530f51581ab75aee8f3b46606e8b95757ace406f0254dabe67846"
+    },
+    "targeted_tests": [
+      "binary escape and newline normalization",
+      "odd hexadecimal nibble padding",
+      "ASCII85 zero groups, final partial groups, overflow and invalid z placement",
+      "transient cancellation during admitted output pass releases reservation",
+      "source and output compete under shared root limit",
+      "shared output charge retained until last owner"
+    ]
+  },
+  "limitations": [
+    "not a PostScript interpreter",
+    "no EPS raster route enabled",
+    "no full camera or format qualification claim",
+    "no throughput or interactive latency measurement"
+  ]
+}

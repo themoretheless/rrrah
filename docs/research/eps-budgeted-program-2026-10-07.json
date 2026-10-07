@@ -1,0 +1,53 @@
+{
+  "scope": "Budget-owned borrowed lexical EPS/PostScript instruction tape for future interpreter; not artwork rendering",
+  "source": "crates/rrrah-decode/src/eps_program.rs",
+  "reference": "https://www.adobe.com/jp/print/postscript/pdfs/PLRM.pdf",
+  "representation": {
+    "procedure": "matching brace indices, depth bounded by configured value <=128",
+    "number": "cached executable-word numeric interpretation; literal and immediate names kept as names",
+    "string": "encoded payload borrowed, decoded length prevalidated without heap scratch; object allocation deferred",
+    "array_dictionary_marks": "executable tokens retained; not treated as scanner-level matching groups"
+  },
+  "ownership": {
+    "source": "borrowed, source accounting remains caller-owned",
+    "tape": "first pass validates and counts, exact instruction storage admitted via MemoryBudget before allocation",
+    "sharing": "SharedBuffer clone retains allocation through last owner",
+    "scratch": "fixed 128-entry stack; no heap scratch"
+  },
+  "configured_limits": [
+    "instruction count",
+    "token byte size",
+    "decoded string byte size",
+    "procedure depth"
+  ],
+  "verification": {
+    "decoder_library": {
+      "passed": 891,
+      "failed": 0,
+      "ignored": 57,
+      "log": "/tmp/rrrah-eps-program-final-tests.log"
+    },
+    "tests": [
+      "nested brace partners",
+      "borrowed name pointer",
+      "numeric cache and literal-name distinction",
+      "decoded string lengths",
+      "malformed lexical data and numeric overflow before allocation",
+      "decoded string size refusal before allocation",
+      "empty/comment-only source",
+      "root pressure refuses allocation",
+      "one-shot cancellation during admitted second pass releases tape",
+      "last-owner program clone releases tape"
+    ]
+  },
+  "remaining": [
+    "dictionary lookup and immediate-name resolution",
+    "PostScript string object semantics",
+    "stream-aware currentfile data reader; arbitrary full EPS must not be precompiled as all-code",
+    "operator/procedure execution",
+    "native path/text/image rendering and independent pixel qualification",
+    "viewer cache/prefetch/swap/GPU route"
+  ],
+  "catalog_status": "EPS remains pending; no production viewer route added",
+  "performance": "No throughput or latency claim"
+}

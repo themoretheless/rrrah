@@ -1,0 +1,49 @@
+{
+  "scope": "Native allocation-free PostScript numeric recognition, not EPS execution or rendering",
+  "source": "crates/rrrah-decode/src/eps_numbers.rs",
+  "specification": "https://www.adobe.com/jp/print/postscript/pdfs/PLRM.pdf",
+  "numeric_model": {
+    "integer": "signed32; decimal overflow promotes to real",
+    "real": "finite IEEE754 f32, standard Rust decimal conversion",
+    "radix": "unsigned32 base2..36 converted to signed32 bit pattern; overflow refuses",
+    "names": "complete-word grammar; invalid numeric-looking names remain names"
+  },
+  "bounds": {
+    "input": "caller configured word-byte limit before scanning",
+    "allocation": "none",
+    "cancellation": "per scanned byte and before/after std numeric conversion; std conversion itself is not interruptible and is bounded by input limit"
+  },
+  "validation": {
+    "library_passed": 888,
+    "library_failed": 0,
+    "library_ignored": 57,
+    "log": "/tmp/rrrah-eps-numbers-final-tests.log",
+    "independent_radix_reference": {
+      "cases": 280,
+      "base_range": [
+        2,
+        36
+      ],
+      "producer": "Python int, explicit unsigned32/signed32 conversion, test-only",
+      "fixture": "tests/fixtures/eps/radix-python-reference.json",
+      "sha256": "480be8af4cb5a8ddcd8167da76bd2110b4cf5fc9a48c7980aec1dd13b827ba48"
+    },
+    "checks": [
+      "signed integer boundaries",
+      "decimal overflow promotion",
+      "negative real zero",
+      "decimal exponent grammar",
+      "radix case insensitivity",
+      "complete-name recognition",
+      "range refusal",
+      "token length cap",
+      "one-shot cancellation"
+    ]
+  },
+  "limitations": [
+    "EPS remains pending",
+    "no external interpreter runtime qualification",
+    "decimal float parser not independently bit-qualified against a PostScript implementation",
+    "no throughput or interactive latency claim"
+  ]
+}

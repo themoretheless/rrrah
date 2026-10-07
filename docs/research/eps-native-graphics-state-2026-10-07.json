@@ -1,0 +1,79 @@
+{
+  "scope": "Owned native EPS graphics state and persistent vector scene; not rasterization or viewer integration",
+  "source": "crates/rrrah-decode/src/eps_graphics.rs",
+  "references": [
+    "https://www.adobe.com/jp/print/postscript/pdfs/PLRM.pdf",
+    "https://raw.githubusercontent.com/ArtifexSoftware/ghostpdl/master/base/gxfixed.h"
+  ],
+  "representation": {
+    "path": "fixed-capacity immutable node arena; saved and painted paths share prefixes without copies",
+    "coordinates": "f64 canonical device/world coordinates; relative controls anchored to original current point",
+    "stroke": "paint snapshot retains final CTM and pen/style, including nonuniform transforms and zero-width hairline metadata",
+    "color": "clamped DeviceGray/RGB/CMYK retained as distinct metadata; no CMYK-to-RGB/profile substitution",
+    "bounds": "PostScript device control-point box mapped back through inverse CTM, excluding trailing moveto except isolated move",
+    "saved_state": "matrix, style and current path; gsave/grestore supported, VM save anchors are not implemented"
+  },
+  "ownership": {
+    "arena_paints_saved_states": "configured capacities admitted via shared MemoryBudget before use",
+    "scene": "shared immutable arena and paint buffers retain quotas through last owner; saved-state allocation released on finish",
+    "path_copy": "caller-owned destination, no heap scratch; size refusal writes nothing, cancelled destination must be discarded"
+  },
+  "limits": [
+    "total arena nodes including saved/discarded branches",
+    "paint count",
+    "saved state count",
+    "root RAM admission"
+  ],
+  "verification": {
+    "decoder_library": {
+      "passed": 900,
+      "failed": 0,
+      "ignored": 57,
+      "log": "/tmp/rrrah-eps-graphics-final-tests.log"
+    },
+    "independent_queries": {
+      "cases": 17,
+      "reference": "Ghostscript 10.05.1",
+      "reference_device": "nullpage, 1152dpi reduces 8-bit fixed device coordinate quantization",
+      "binary_sha256": "e522a84dc98345933621efba59577afe76d8f2d241ae103a92e6ccd37812b290",
+      "fixture_sha256": "ebdbd15a9a39ed0925b6ad0b941ffd242161fdf2df6cd6afc9a4585a00cba538",
+      "tolerance_user_units": 0.001,
+      "max_observed_numeric_difference": 9.958901169682122e-05,
+      "metrics_log": "/tmp/rrrah-eps-graphics-query-metrics.log"
+    },
+    "native_controls": [
+      "saved fill/stroke reuse same path head",
+      "path fork preserves earlier saved prefix",
+      "matrix and pen snapshot",
+      "last-owner root release",
+      "node/save/paint/root resource boundaries",
+      "pre-admitted atomic append refusal after closepath",
+      "non-finite/range refusal",
+      "singular inverse refusal",
+      "one-shot query/copy cancellation and retry",
+      "destination-size refusal",
+      "paint quota refusal preserves active path and does not append a paint"
+    ]
+  },
+  "reference_precision_investigation": {
+    "initial_resolution_dpi": 72,
+    "initial_failure": {
+      "case": "rotate25, moveto1,2, lineto15,20, pathbbox",
+      "native_xmax": 15,
+      "reference_xmax": 14.998291,
+      "difference": 0.001709
+    },
+    "followup_resolution_dpi": 1152,
+    "same_tolerance_retained": true,
+    "reason": "Ghostscript fixed-point path coordinates have 8 fractional device bits; increased reference resolution reduces device quantization error without reducing native f64 geometry precision"
+  },
+  "remaining": [
+    "connect graphics operations to native VM",
+    "native scene rasterization and independent pixel references",
+    "clip, dash, arcs, fonts, images and full graphics object semantics",
+    "camera/device color-profile policy",
+    "production EPS route and cache/prefetch/swap/GPU qualification"
+  ],
+  "catalog_status": "EPS remains pending; no preview fallback or viewer route added",
+  "performance": "No throughput/latency claim; persistent sharing verified structurally"
+}

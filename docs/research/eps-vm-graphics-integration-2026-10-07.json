@@ -1,0 +1,85 @@
+{
+  "scope": "Native EPS scalar/procedure interpreter connected to persistent graphics state and managed vector scene; no raster output yet",
+  "source": "crates/rrrah-decode/src/eps_vm.rs",
+  "entrypoint": "evaluate_eps_vectors",
+  "graphics_operator_count": 32,
+  "graphics_operators": [
+    "newpath",
+    "moveto",
+    "rmoveto",
+    "lineto",
+    "rlineto",
+    "curveto",
+    "rcurveto",
+    "closepath",
+    "stroke",
+    "fill",
+    "eofill",
+    "setgray",
+    "setrgbcolor",
+    "setcmykcolor",
+    "setlinewidth",
+    "setlinecap",
+    "setlinejoin",
+    "setmiterlimit",
+    "gsave",
+    "grestore",
+    "translate",
+    "scale",
+    "rotate",
+    "currentpoint",
+    "pathbbox",
+    "currentlinewidth",
+    "currentlinecap",
+    "currentlinejoin",
+    "currentmiterlimit",
+    "currentgray",
+    "currentrgbcolor",
+    "currentcmykcolor"
+  ],
+  "binding": "User definitions and loaded operator aliases dispatch through the same VM; arithmetic/procedures produce draw operands",
+  "ownership": {
+    "root": "caller-provided shared budget for program, VM, graphics and source admission",
+    "success": "shared operand buffer plus owned immutable vector scene retain configured capacities",
+    "failure": "fresh graphics state is private and destroyed on any VM/graphics error, cancellation or admission failure; partial scene never returned",
+    "queries": "pathbbox charges VM work for traversal; original Work/Cancelled causes preserved"
+  },
+  "verification": {
+    "decoder_library": {
+      "passed": 904,
+      "failed": 0,
+      "ignored": 57,
+      "log": "/tmp/rrrah-eps-vm-graphics-tests.log"
+    },
+    "independent_graphics_queries": {
+      "cases": 17,
+      "reference": "Ghostscript 10.05.1",
+      "resolution_dpi": 1152,
+      "tolerance_user_units": 0.001,
+      "fixture_sha256": "ebdbd15a9a39ed0925b6ad0b941ffd242161fdf2df6cd6afc9a4585a00cba538",
+      "route": "Authored action programs compiled and executed through VM, not direct graphics API"
+    },
+    "scene_control": "Calculated rectangle coordinates through a procedure and moveto alias; gsave/fill/grestore/stroke preserves identical path with pen CTM and color metadata",
+    "resource_controls": [
+      "paint quota failure discards full partial scene",
+      "undefined name after a successful stroke discards partial scene",
+      "unsupported clip and cross-family color queries refuse",
+      "graphics type errors refuse",
+      "root admission failure releases all VM/scene storage",
+      "one-shot cancellation releases storage",
+      "last owner of cloned execution releases output",
+      "pathbbox work exhaustion and cancellation keep original VM error classes"
+    ]
+  },
+  "remaining": [
+    "native vector scene rasterization",
+    "independent EPS pixel qualification",
+    "full arrays/dictionary/string object VM, bind and immediate names",
+    "stream-aware currentfile reading",
+    "clip, dash, arcs, text and images",
+    "cross-device-color family/profile-aware color conversion",
+    "production viewer route, cache/prefetch/swap/GPU qualification"
+  ],
+  "catalog_status": "EPS remains pending; no preview substitution or viewer route enabled",
+  "performance": "No throughput/latency claim"
+}
