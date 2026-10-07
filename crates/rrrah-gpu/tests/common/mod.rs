@@ -224,6 +224,46 @@ impl GpuReadback {
         self.read_frame(size, |encoder, target| renderer.encode(encoder, target))
     }
 
+    pub fn render_raster_with_aspect(
+        &self,
+        raster: &rrrah_core::DecodedRaster,
+        view: ViewParameters,
+        size: [u32; 2],
+        aspect: f32,
+    ) -> RgbaFrame {
+        let mut renderer = rrrah_gpu::RasterRenderer::new(&self.device, READBACK_FORMAT);
+        renderer.upload(&self.device, &self.queue, raster).unwrap();
+        renderer.set_pixel_aspect(&self.queue, aspect).unwrap();
+        renderer.update_view(&self.queue, view);
+        self.read_frame(size, |encoder, target| renderer.encode(encoder, target))
+    }
+
+    pub fn render_raster_aspect_transition(
+        &self,
+        raster: &rrrah_core::DecodedRaster,
+        view: ViewParameters,
+        size: [u32; 2],
+        aspect: f32,
+        invalid: &[f32],
+    ) -> (RgbaFrame, RgbaFrame) {
+        let mut renderer = rrrah_gpu::RasterRenderer::new(&self.device, READBACK_FORMAT);
+        renderer.upload(&self.device, &self.queue, raster).unwrap();
+        renderer.set_pixel_aspect(&self.queue, aspect).unwrap();
+        renderer.update_view(&self.queue, view);
+        let before = self.read_frame(size, |encoder, target| renderer.encode(encoder, target));
+        for &bad in invalid {
+            assert!(renderer.set_pixel_aspect(&self.queue, bad).is_err());
+            let frame = self.read_frame(size, |encoder, target| renderer.encode(encoder, target));
+            assert_eq!(
+                frame.pixels, before.pixels,
+                "invalid aspect changed display: {bad}"
+            );
+        }
+        renderer.upload(&self.device, &self.queue, raster).unwrap();
+        let after = self.read_frame(size, |encoder, target| renderer.encode(encoder, target));
+        (before, after)
+    }
+
     pub fn render_developed_raw(
         &self,
         raster: &rrrah_core::DecodedRaster,

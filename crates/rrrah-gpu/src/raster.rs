@@ -14,6 +14,8 @@ pub enum RasterUploadError {
     InvalidSamples,
     #[error("raster exceeds the bounded single-texture GPU limit")]
     TextureLimit,
+    #[error("pixel aspect must produce finite positive image geometry")]
+    InvalidPixelAspect,
 }
 
 #[repr(C)]
@@ -24,6 +26,8 @@ struct Parameters {
     pan: [f32; 2],
     zoom: f32,
     exposure: f32,
+    pixel_aspect: f32,
+    aspect_padding: [f32; 3],
     background: [f32; 4],
     raw_development: [u32; 4],
     curve: [[f32; 4]; 256],
@@ -170,6 +174,8 @@ impl RasterRenderer {
             pan: [0.0; 2],
             zoom: 1.0,
             exposure: 0.0,
+            pixel_aspect: 1.0,
+            aspect_padding: [0.0; 3],
             background: [0.018, 0.018, 0.018, 1.0],
             raw_development: [0; 4],
             curve: [[0.0; 4]; 256],
@@ -287,6 +293,7 @@ impl RasterRenderer {
         self.texture_reservation = reservation;
         self.parameters.raw_development = [0; 4];
         self.parameters.image_size = [raster.width() as f32, raster.height() as f32];
+        self.parameters.pixel_aspect = 1.0;
         queue.write_buffer(&self.uniform, 0, bytemuck::bytes_of(&self.parameters));
         Ok(())
     }
@@ -298,6 +305,18 @@ impl RasterRenderer {
         self.parameters.raw_development = [1, knots.len() as u32, 0, 0];
         self.parameters.curve[..knots.len()].copy_from_slice(&knots);
         queue.write_buffer(&self.uniform, 0, bytemuck::bytes_of(&self.parameters));
+    }
+
+    /// Adjust display geometry without resampling or changing texture coordinates.
+    /// Uploading a new raster resets the aspect to square pixels.
+    pub fn set_pixel_aspect(&mut self, queue: &wgpu::Queue, aspect: f32) -> Result<(), RasterUploadError> {
+        let width = self.parameters.image_size[0] * aspect;
+        if !aspect.is_finite() || aspect <= 0.0 || !width.is_finite() || width <= 0.0 {
+            return Err(RasterUploadError::InvalidPixelAspect);
+        }
+        self.parameters.pixel_aspect = aspect;
+        queue.write_buffer(&self.uniform, 0, bytemuck::bytes_of(&self.parameters));
+        Ok(())
     }
 
     pub fn update_view(&mut self, queue: &wgpu::Queue, view: ViewParameters) {

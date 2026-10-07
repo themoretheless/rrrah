@@ -32,7 +32,7 @@
     "cabinet_streams": [
       {
         "path": [
-          "\u4230\u4327\u3864\u41be\u4164"
+          "䈰䌧㡤䆾䅤"
         ],
         "bytes": 131635808
       }
@@ -48,6 +48,317 @@
       "original_name": "rla.h",
       "local_path": "/tmp/rrrah-maxsdk-files/fil7D0E9D9AFA8F630851B8684A6FDC2213",
       "sha256": "7eac0bce693e504d1413dcef5d6be03fc434e7191073388d99580d79e6068cf0"
+    },
+    {
+      "original_name": "gbuf.h",
+      "local_path": "/tmp/rrrah-maxsdk-files/filADD3E3F5D04E3DF4F1610B876F80F67B",
+      "sha256": "270ff584efc667fd8262f9fe5d7b5a3589c3a2ab6686fb754de4a36a32753ce6"
+    },
+    {
+      "original_name": "matrix3.h",
+      "local_path": "/tmp/rrrah-maxsdk-files/fil8CDF9C6B0D434BA0B622AF8FAA096C0A",
+      "sha256": "9246d9dc2843840496b79dfac4811ea70f0a7934a018ac9e8e3bbd782aff2f6c"
+    },
+    {
+      "original_name": "box2.h",
+      "local_path": "/tmp/rrrah-maxsdk-files/filB2CAD47DB0C0419B7E0054CD708421AE",
+      "sha256": "cf90924cb3feb22ba24c201912061da8da84914aa1a81c7de8d06f8a432b4409"
     }
-  ]
+  ],
+  "native_structural_inspector": {
+    "implementation": "crates/rrrah-decode/src/rpf.rs",
+    "status": "implemented; 3 focused tests passed; full decoder suite 830 passed, 54 ignored, 0 failed",
+    "allocation": "borrowed 740-byte header and row table; no dimension-driven allocation",
+    "preserves": [
+      "signed full and active windows",
+      "color/matte/auxiliary counts",
+      "8/16/32-bit declarations",
+      "14 G-buffer flags",
+      "layer/render-info/node-name flags",
+      "alpha association",
+      "next-image offset",
+      "file-order row offsets"
+    ],
+    "limitations": [
+      "Not full channel/layer decoding",
+      "Header signature shared with RLA; not an independent format identity guarantee",
+      "No camera/producer fixture qualification",
+      "No color interpretation inferred from floating-point storage"
+    ]
+  },
+  "native_byte_planes": {
+    "implementation": "decode_rpf_byte_planes",
+    "gbuffer_sample_bytes": [
+      4,
+      1,
+      2,
+      8,
+      4,
+      4,
+      1,
+      3,
+      2,
+      3,
+      3,
+      8,
+      3,
+      2
+    ],
+    "image_record_length": "big-endian u16",
+    "layer_record_length": "big-endian u32",
+    "order": "planes from highest byte to lowest, reconstructed producer-memory byte order",
+    "ownership": "caller-owned destination; no allocation",
+    "malformed_records": "validate all planes before modifying destination",
+    "cancellation": "checked per plane and per run; cancellation during writes may leave partial destination",
+    "remaining": [
+      "full row/channel framing",
+      "layer-record counts and X positions",
+      "float RGB/matte channels",
+      "render information and node name table",
+      "budget-owned image and swap representation",
+      "real producer fixture qualification"
+    ],
+    "validation": {
+      "focused": "5 RPF tests passed",
+      "full_decoder": "832 passed, 54 ignored, 0 failed",
+      "fixture_scope": "authored byte streams exercise all 14 channel widths, u16/u32 record prefixes, signed -128 literal control, repeated samples, malformed input destination preservation and cancellation; no external producer oracle"
+    }
+  },
+  "native_color_channel": {
+    "implementation": "decode_rpf_color_channel",
+    "float32": "big-endian uncompressed IEEE-754, exact bit preservation",
+    "integer8": "one RLE plane; SDK normalization /256",
+    "integer16": "two RLE planes in a single u16-length record; SDK normalization /65536",
+    "allocation": "caller-owned f32 destination",
+    "color_interpretation": "not inferred; no gamma or alpha conversion",
+    "validation": "8 focused RPF tests passed; full decoder 835 passed, 54 ignored, 0 failed; authored records only, not independent producer qualification",
+    "remaining": "full row framing including matte storage rules; layer X/count admission; metadata; root-budget ownership; swap/GPU integration; producer corpus"
+  },
+  "native_layer_inspector": {
+    "implementation": "inspect_rpf_layer_records",
+    "count": "signed little-endian i32 from Autodesk Windows writer; reject negative and caller-cap excess",
+    "records": "X coordinates then each present G-buffer channel in index order",
+    "allocation": "borrowed channel slices, fixed 14-entry array, zero dimension-driven allocations",
+    "validation": "every plane must expand to exactly the declared count and exhaust its own length; checks cancellation per run",
+    "budget_admission": "expanded_bytes reports exact X/channel payload weight; container/other rows separately charged",
+    "remaining": [
+      "X coordinate range/order and semantic layer qualification",
+      "full scanline assembly",
+      "budget-owned buffers and swap",
+      "producer fixture oracle"
+    ],
+    "tests": "10 focused RPF tests passed; current full decoder 837 passed, 54 ignored, 0 failed; authored streams only"
+  },
+  "native_layer_coordinates": {
+    "implementation": "RpfLayerRecords::validate_coordinates",
+    "allocation": "two streaming RLE cursors; no temporary X array",
+    "validation": [
+      "coordinates less than caller-supplied row width",
+      "nondecreasing X order",
+      "duplicate X retained as multiple layers",
+      "exact exhaustion of both planes",
+      "cancellation per coordinate"
+    ],
+    "basis": "gbuf.h RPF layer storage description and increasing X writer contract",
+    "tests": "12 focused RPF tests passed; full decoder 839 passed, 54 ignored, 0 failed; authored records only",
+    "remaining": "real producer fixture confirmation; full image assembly and budget ownership"
+  },
+  "native_layer_budget": {
+    "implementation": "RpfLayerRecords::decode_with_budget -> RpfDecodedLayers",
+    "admission": "coordinate validation followed by one exact payload reservation against shared root MemoryBudget",
+    "ownership": "one SharedBuffer containing X and all channels; clones retain the same reservation until last owner drops",
+    "errors": "allocation refusal, malformed channel, coordinate failure, cancellation release local reservation",
+    "remaining": [
+      "full image/row ownership including metadata",
+      "disk swap representation",
+      "GPU display/color interpretation",
+      "real producer independent qualification"
+    ],
+    "tests": "13 focused RPF tests passed; full decoder 840 passed, 54 ignored, 0 failed; root cap, shared last-owner release, cancellation and retry on authored layer records"
+  },
+  "native_node_names": {
+    "implementation": "inspect_rpf_node_names",
+    "fields": "little-endian u32 count and byte length",
+    "ownership": "borrowed raw bytes and name iterator; no allocation",
+    "interpretation": "producer code page not inferred; non-UTF8 bytes and padding retained",
+    "admission": "explicit max_names/max_bytes before scanning; terminator count validation; cancellation",
+    "tests": "15 focused RPF tests passed; full decoder 842 passed, 54 ignored, 0 failed; authored records test non-UTF8 bytes, empty names, padding, next-block boundary, truncation, caps, missing terminators and cancellation",
+    "remaining": "RenderInfo ABI/version layout and full file assembly; producer qualification"
+  },
+  "native_render_info": {
+    "implementation": "inspect_rpf_render_info",
+    "layout": "little-endian Windows field widths, version1000 prefix2 + body260; legacy body244",
+    "derivation": "36 scalar bytes + four Matrix3(12*f32+u32 flags)=208 + Rect16 modern only",
+    "preservation": "all float/matrix words retained as raw bits, BOOL words and signed time/region retained",
+    "validation": "truncation and projection enum; no inferred inverse transform",
+    "tests": "16 focused RPF tests passed; full decoder 843 passed, 54 ignored, 0 failed; authored legacy/modern structs test exact fields, all truncated lengths, next-block boundary and invalid projection",
+    "remaining": "producer fixture/ABI qualification and full file assembly"
+  },
+  "native_file_view": {
+    "implementation": "inspect_rpf_file -> RpfFileView",
+    "ownership": "borrowed metadata and encoded rows, no heap allocation",
+    "layout": "official Autodesk writer: top-to-bottom physical rows, reverse offset table",
+    "admission": "strict decreasing offsets, unique row starts, metadata bounded before first row, name caps, cancellation",
+    "row_access": "constant-time top-to-bottom row slices bounded by following physical row or next-image offset",
+    "preserves": "render-info, node-name raw bytes and metadata padding",
+    "tests": "18 focused RPF tests passed; current full decoder 845 passed, 54 ignored, 0 failed; authored joined file verifies metadata, row orientation, padding, malformed offsets and name caps",
+    "remaining": [
+      "full decoded row assembly including all main/G-buffer channels and layers",
+      "entire image root-budget admission",
+      "disk swap and GPU display",
+      "producer fixture oracle"
+    ]
+  },
+  "native_row_view": {
+    "implementation": "inspect_rpf_row -> RpfRowView",
+    "ownership": "borrowed color/matte/auxiliary record region, 14 G-buffer slices and optional layer view",
+    "admission": "depth-specific exact sample count, record boundaries, layer count cap, coordinates, trailing bytes, cancellation",
+    "header_preservation": "added storage/matte/auxiliary type words and auxiliary bit depth",
+    "tests": "19 focused RPF tests passed; full decoder 846 passed, 54 ignored, 0 failed; authored complete mixed-depth row with all truncation boundaries, count cap and trailing-byte refusal",
+    "remaining": [
+      "producer-specific type semantics including mixed matte/color depth",
+      "whole image root-owned buffers and metadata",
+      "swap/GPU/color interpretation",
+      "real producer independent oracle"
+    ]
+  },
+  "native_image_allocation_plan": {
+    "implementation": "RpfFileView::allocation_plan",
+    "preflight": "validate every row/channel/layer before output allocation",
+    "limits": [
+      "per-row layers",
+      "whole-image layers",
+      "whole-image packed output bytes"
+    ],
+    "weight": [
+      "main channels as f32",
+      "G-buffer bytes",
+      "all expanded layer X/channel arrays",
+      "12-byte per-row layer index",
+      "original header/offset/metadata bytes"
+    ],
+    "allocation": "no heap allocation during preflight",
+    "tests": "20 focused RPF tests passed; full decoder 847 passed, 54 ignored, 0 failed; authored two-row layered file tests exact packed weight, one-byte-short cap, per-row/global layer caps, cancellation and corrupt later row",
+    "remaining": "execute plan into root-owned packed buffers; swap/GPU and producer oracle"
+  },
+  "native_whole_image_decoder": {
+    "implementation": "RpfFileView::decode_with_budget -> RpfDecodedImage",
+    "admission": "full preflight followed by one exact root-budget buffer reservation",
+    "representation": "retained producer metadata, channel-major little-endian f32 main samples, native G-buffer bytes, packed row layer indexes and layer payloads",
+    "temporary_buffers": "none; records write into final packed allocation",
+    "ownership": "clone shares allocation; last owner releases root charge; cancellation drops unfinished allocation",
+    "display": "no inferred color/alpha conversion, pending producer semantics qualification",
+    "tests": "21 focused RPF tests passed; full decoder 848 passed, 54 ignored, 0 failed; authored two-row HDR/layered image verifies exact metadata, channels and layers, 816-byte admission, 815-byte refusal before allocation, shared last-owner release, cancellation after allocation and retry",
+    "remaining": [
+      "real producer file and independent oracle",
+      "mixed matte/color type qualification",
+      "disk swap integration",
+      "GPU display/color/HDR interpretation"
+    ]
+  },
+  "sdk_plane_oracle": {
+    "generator": "scripts/generate-rpf-sdk-plane-oracle.py",
+    "fixture": "tests/fixtures/rpf/sdk-plane-oracle.json",
+    "fixture_sha256": "de7f451d303fcef792143999608959998ff526c05ea075e1be15f2d460e266c5",
+    "cases": 98,
+    "scope": "synthetic producer-memory arrays encoded with unchanged official SDK encode() compiled locally; not an actual product-rendered RPF",
+    "coverage": "all 14 channel widths, 1/127/128/129/255/256/513 samples, repeated and literal runs; decoder verifies short and long record prefixes",
+    "sdk_source": "official rla.cpp SHA recorded in official_sample_sources",
+    "tests": "98 source-oracle cases exact for image and layer record decoding; 22 focused RPF tests passed; full decoder 849 passed, 54 ignored, 0 failed"
+  },
+  "producer_file_search_current": {
+    "sdk_package": "all 6404 extracted files scanned for modern/old RLA revision signature at header offset26; no candidates",
+    "official_samples_article": "https://www.autodesk.com/support/technical/article/caas/sfdcarticles/sfdcarticles/3ds-Max-2018-and-2019-Sample-Files.html",
+    "article_fetch_result": "HTTP403; sample archive contents not verified",
+    "remaining": "real producer RPF fixture and independent full-file semantics oracle"
+  },
+  "native_swap_snapshot": {
+    "implementation": "RpfDecodedImage::snapshot and RpfImageSnapshot::restore",
+    "metadata": "fixed-size layout and BLAKE3 digest; no retained image buffer",
+    "io": "format-independent real SwapStore streams existing packed bytes; restores into root-managed buffer",
+    "verification": "exact length and digest before publishing reconstructed image; cancellation per64KiB",
+    "scope": "in-session snapshot paired with swap handle; not a standalone persisted codec or gallery route",
+    "tests": "23 focused RPF tests passed; full decoder 850 passed, 54 ignored, 0 failed; real on-disk SwapStore restores exact816-byte image after source last-owner drop; repeated pressure refusal retains blob; exact retry; cancelled, corrupt and short buffers release RAM; last disk handle releases quota"
+  },
+  "native_display_raster": {
+    "implementation": "RpfDecodedImage::to_raster_with_interpretation",
+    "interpretation": "explicit RGB/matte selection, alpha association, caller-declared color space",
+    "samples": "f32 HDR retained; non-finite samples, invalid alpha and zero-alpha associated emission fail explicitly",
+    "ownership": "source and prepared raster allocations share caller root budget",
+    "tests": "24 focused RPF tests passed; full decoder 851 passed, 54 ignored, 0 failed; authored HDR RGB selection and shared source+display root-cap lifecycle; no GPU or matte oracle qualification yet",
+    "remaining": "matte interpretation independent qualification; actual GPU readback, gallery routing and real producer qualification",
+    "alpha_numeric_tests": "explicit straight and premultiplied HDR numeric references; zero-alpha emission, out-of-range/NaN alpha, NaN RGB and unassociation overflow refuse without allocation leaks",
+    "current_tests": "26 focused RPF tests passed; full decoder 853 passed, 54 ignored, 0 failed; authored semantic cases only, actual producer alpha/GPU qualification remains open"
+  },
+  "metal_raster_lifecycle": {
+    "test": "crates/rrrah-app/tests/rpf_readback.rs::hdr_rpf_alpha_ram_and_swap_match_explicit_reference_on_gpu",
+    "result": "passed",
+    "adapter": "Metal Apple M4 Max",
+    "seconds": 0.56,
+    "cases": [
+      "straight alpha HDR",
+      "premultiplied alpha HDR"
+    ],
+    "checks": [
+      "RPF decoded samples converted with explicit linear-sRGB interpretation",
+      "128x64 GPU frame exact against hand-authored float reference",
+      "pinned RAM lease prevents shrinking cache",
+      "asynchronous real disk swap after source owner drop",
+      "restore root-pressure refusal and retry",
+      "restored float samples exact",
+      "restored GPU frame exact",
+      "CPU root used zero after last owner drop"
+    ],
+    "limitations": [
+      "synthetic 2x1 producer-independent fixture",
+      "SDR target readback; no physical HDR display proof",
+      "native all-channel packed swap qualified separately",
+      "no real producer file qualification or gallery routing"
+    ]
+  },
+  "producer_aspect_metadata": {
+    "implementation": "RpfDecodedImage::declared_image_aspect and producer_pixel_aspect",
+    "source": "official RLAWriter::InitHeader writes width*aspect/height into aspect_ratio[8]",
+    "derivation": "pixel aspect = declared image aspect * full window height / full window width",
+    "missing": "None; no invented square-pixel metadata",
+    "validation": "bounded 8-byte field; positive finite parsed and derived values; malformed values fail",
+    "tests": "full decoder854 passed,54 ignored,0 failed; authored full/cropped windows distinguish image vs pixel aspect; missing, malformed, nonpositive/nonfinite and derived-overflow values checked",
+    "remaining": "GPU physical geometry application and real producer qualification"
+  },
+  "gpu_pixel_aspect": {
+    "implementation": [
+      "RasterRenderer::set_pixel_aspect",
+      "shaders/raster_view.wgsl display_size and coordinate transform"
+    ],
+    "allocation": "no resampling or texture reallocation; changes uniform geometry only",
+    "reset": "new raster upload resets pixel aspect to1",
+    "validation": "finite positive aspect and derived displayed width; errors preserve prior uniform",
+    "qualification": "Metal Apple M4 Max: RPF aspect2 synthetic2x1 raster matches physical rectangle of square-pixel4x1 reference exactly; square-pixel baseline differs",
+    "tests": "2 RPF GPU tests passed; existing raster and linear RAW readback suites passed",
+    "limits": "gallery routing, real producer file and physical HDR display remain unqualified",
+    "transition_test": {
+      "test": "pixel_aspect_rejection_is_atomic_and_next_upload_resets_geometry",
+      "adapter": "Metal Apple M4 Max",
+      "result": "passed",
+      "checks": [
+        "zero/negative/NaN/infinite/overflowing aspects reject and retain exact previous frame",
+        "next upload on same renderer returns exact square-pixel baseline",
+        "aspect2 baseline differs from square baseline"
+      ],
+      "invocation": "explicit ignored GPU qualification test; no claim for absent hardware"
+    }
+  },
+  "bounded_file_api": {
+    "implementation": "decode_rpf_file_with_budget(DecodeRequest, MemoryBudget, RpfDecodeLimits)",
+    "source_io": "existing bounded_io, 64KiB cancellation checks and managed source reservation",
+    "ownership": "encoded source and decoded packed output coexist under same root cap; source drops before return",
+    "limits": "explicit node-name, per-row/global layer and output caps",
+    "selection": "first image only; other requested indexes refuse before source allocation",
+    "tests": "28 focused RPF tests passed; full decoder855 passed,54 ignored,0 failed; actual temporary file proves shared encoded+decoded peak, one-byte-short refusal, source release, pre-allocation cancellation/index refusal",
+    "remaining": [
+      "linked-image traversal qualification",
+      "gallery interpretation/routing",
+      "real producer file qualification"
+    ]
+  }
 }

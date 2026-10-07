@@ -139,6 +139,7 @@ mod raster_color;
 #[cfg(test)]
 mod raster_corpus;
 mod rla;
+mod rpf;
 mod scientific;
 mod sgi;
 mod sniff;
@@ -465,6 +466,16 @@ pub use raster_color::{
 pub use rla::{
     RlaAlphaMode, RlaColorSpace, RlaFloatByteOrder, decode_rla_float_with_interpretation,
     decode_rla_with_interpretation,
+};
+pub use rpf::{
+    RPF_GBUFFER_SAMPLE_BYTES, RpfAspectError, RpfDecodeLimits, RpfDecodedImage, RpfDecodedLayers,
+    RpfDisplayError, RpfFileError, RpfFileView, RpfHeader, RpfImageAllocationPlan, RpfImageDecodeError,
+    RpfImageSnapshot, RpfInspectError, RpfInspection, RpfLayerCoordinateError, RpfLayerDecodeError,
+    RpfLayerError, RpfLayerRecords, RpfNameError, RpfNodeNames, RpfPlanError, RpfPlaneError, RpfReadError,
+    RpfRenderInfo, RpfRenderInfoError, RpfRowError, RpfRowView, RpfSnapshotError, RpfWindow,
+    decode_rpf_byte_planes, decode_rpf_color_channel, decode_rpf_file_with_budget, inspect_rpf,
+    inspect_rpf_file, inspect_rpf_layer_records, inspect_rpf_node_names, inspect_rpf_render_info,
+    inspect_rpf_row,
 };
 pub use scientific::{ScalarWindow, decode_raster_with_window};
 pub use wal::{decode_wal_with_palette, wal_palette_path};

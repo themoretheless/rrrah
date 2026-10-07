@@ -383,3 +383,27 @@ fn qualified_sd10_linear_raster_full_frame_display_readback() {
     assert_eq!(budget.used(), 0);
     eprintln!("X3F {dimensions} full-frame GPU sRGB max deviation={maximum}; CPU leases released");
 }
+
+#[test]
+#[ignore = "requires actual GPU adapter"]
+fn pixel_aspect_rejection_is_atomic_and_next_upload_resets_geometry() {
+    let gpu = common::qualification_gpu().expect("actual GPU required for aspect transition");
+    eprintln!("aspect transition adapter: {}", gpu.adapter_name());
+    let raster = frame(2, vec![1.0; 8]);
+    let parameters = ViewParameters {
+        viewport: [128.0, 64.0],
+        ..Default::default()
+    };
+    let square = gpu.render_raster(&raster, parameters, [128, 64]);
+    let expanded = gpu.render_raster_with_aspect(&raster, parameters, [128, 64], 2.0);
+    assert_ne!(expanded.pixels, square.pixels);
+    let (before, after) = gpu.render_raster_aspect_transition(
+        &raster,
+        parameters,
+        [128, 64],
+        2.0,
+        &[0.0, -1.0, f32::NAN, f32::INFINITY, f32::MAX],
+    );
+    assert_eq!(before.pixels, expanded.pixels);
+    assert_eq!(after.pixels, square.pixels);
+}

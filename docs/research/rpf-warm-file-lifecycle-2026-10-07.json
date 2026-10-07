@@ -1,0 +1,85 @@
+{
+  "scope": "authored synthetic warm-file RPF; no actual producer, no GPU stage, no isolated-host or cold-cache claim",
+  "cpu": "Apple M4 Max",
+  "dimensions": [
+    1024,
+    512
+  ],
+  "input_bytes": 8839908,
+  "source_sha256": "0f50f7919c4bea3125472a5354b024d017604f4b27eab4d44eb734f5ed95f0d1",
+  "generator": "scripts/generate-rpf-benchmark-fixture.py",
+  "runner": "crates/rrrah-decode/examples/rpf_lifecycle_timing.rs",
+  "storage": "float32 HDR RGBA plus all14 G-buffer channels with repeated-byte planes; layer counts0",
+  "runs": [
+    {
+      "decode_file_ms": 27.489125,
+      "display_raster_ms": 5.08225,
+      "final_used": 0,
+      "iteration": 0,
+      "packed_bytes": 33563364,
+      "packed_digest": "6e8973b7e0daff8a11907ab223426c9a86361a41d3e74364e731f70a14a9bb4e",
+      "peak_managed_bytes": 42403272,
+      "pixels": 524288,
+      "warmup": true
+    },
+    {
+      "decode_file_ms": 20.187083,
+      "display_raster_ms": 5.074042,
+      "final_used": 0,
+      "iteration": 1,
+      "packed_bytes": 33563364,
+      "packed_digest": "6e8973b7e0daff8a11907ab223426c9a86361a41d3e74364e731f70a14a9bb4e",
+      "peak_managed_bytes": 42403272,
+      "pixels": 524288,
+      "warmup": false
+    },
+    {
+      "decode_file_ms": 56.978916999999996,
+      "display_raster_ms": 6.195042000000001,
+      "final_used": 0,
+      "iteration": 2,
+      "packed_bytes": 33563364,
+      "packed_digest": "6e8973b7e0daff8a11907ab223426c9a86361a41d3e74364e731f70a14a9bb4e",
+      "peak_managed_bytes": 42403272,
+      "pixels": 524288,
+      "warmup": false
+    },
+    {
+      "decode_file_ms": 23.054499999999997,
+      "display_raster_ms": 5.087917,
+      "final_used": 0,
+      "iteration": 3,
+      "packed_bytes": 33563364,
+      "packed_digest": "6e8973b7e0daff8a11907ab223426c9a86361a41d3e74364e731f70a14a9bb4e",
+      "peak_managed_bytes": 42403272,
+      "pixels": 524288,
+      "warmup": false
+    },
+    {
+      "decode_file_ms": 55.027208,
+      "display_raster_ms": 14.568417,
+      "final_used": 0,
+      "iteration": 4,
+      "packed_bytes": 33563364,
+      "packed_digest": "6e8973b7e0daff8a11907ab223426c9a86361a41d3e74364e731f70a14a9bb4e",
+      "peak_managed_bytes": 42403272,
+      "pixels": 524288,
+      "warmup": false
+    },
+    {
+      "decode_file_ms": 53.520584,
+      "display_raster_ms": 11.734917,
+      "final_used": 0,
+      "iteration": 5,
+      "packed_bytes": 33563364,
+      "packed_digest": "6e8973b7e0daff8a11907ab223426c9a86361a41d3e74364e731f70a14a9bb4e",
+      "peak_managed_bytes": 42403272,
+      "pixels": 524288,
+      "warmup": false
+    }
+  ],
+  "median_decode_file_ms": 53.520584,
+  "median_display_raster_ms": 6.195042000000001,
+  "peak_managed_bytes": 42403272,
+  "verification": "all main and G-buffer samples exact; full packed digest identical; managed root0 after each run"
+}

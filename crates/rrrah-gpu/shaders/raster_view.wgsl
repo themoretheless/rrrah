@@ -4,6 +4,7 @@ struct Parameters {
     pan: vec2<f32>,
     zoom: f32,
     exposure: f32,
+    pixel_aspect: f32,
     background: vec4<f32>,
     raw_development: vec4<u32>,
     curve: array<vec4<f32>, 256>,
@@ -84,8 +85,10 @@ fn evaluate_curve(x:f32)->f32 {
 
 @fragment
 fn fs_main(@builtin(position) position: vec4<f32>) -> @location(0) vec4<f32> {
-    let fit = min(max(p.viewport.x-32.0,1.0)/p.image_size.x, max(p.viewport.y-32.0,1.0)/p.image_size.y);
-    let location = (position.xy - p.viewport*0.5 - p.pan) / (fit*p.zoom) + p.image_size*0.5;
+    let shape = vec2<f32>(p.pixel_aspect, 1.0);
+    let display_size = p.image_size * shape;
+    let fit = min(max(p.viewport.x-32.0,1.0)/display_size.x, max(p.viewport.y-32.0,1.0)/display_size.y);
+    let location = (position.xy - p.viewport*0.5 - p.pan) / (fit*p.zoom*shape) + p.image_size*0.5;
     if any(location < vec2<f32>(0.0)) || any(location >= p.image_size) {
         return p.background;
     }
