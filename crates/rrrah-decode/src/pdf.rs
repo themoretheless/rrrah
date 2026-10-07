@@ -944,3 +944,80 @@ mod tensor_background_coverage_tests {
         }
     }
 }
+
+#[cfg(test)]
+mod overlap_patch_tests {
+    #[test]
+    #[ignore = "known mesh overlap averaging defect; geometric fragment experiment too slow on real AI"]
+    fn later_coincident_tensor_patch_covers_earlier_color() {
+        let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../../tests/fixtures/pdf/tensor-overlap-rgb.pdf");
+        let image = crate::decode_raster(&crate::DecodeRequest::new(path)).unwrap();
+        let rrrah_core::RasterPixels::Rgba8(pixels) = image.pixels() else {
+            panic!()
+        };
+        assert!(pixels.chunks_exact(4).all(|p| p == [0, 0, 255, 255]));
+    }
+}
+
+#[cfg(test)]
+mod direct_shading_background_tests {
+    #[test]
+    fn direct_sh_ignores_background_and_preserves_fractional_alpha() {
+        let request = crate::DecodeRequest::new("direct-sh.pdf");
+        let direct = super::decode(
+            include_bytes!("../../../tests/fixtures/pdf/tensor-fractional-direct-background-rgb.pdf"),
+            &request,
+        )
+        .unwrap();
+        let reference = super::decode(
+            include_bytes!("../../../tests/fixtures/pdf/tensor-fractional-rgb.pdf"),
+            &request,
+        )
+        .unwrap();
+        let (rrrah_core::RasterPixels::Rgba8(a), rrrah_core::RasterPixels::Rgba8(b)) =
+            (direct.pixels(), reference.pixels())
+        else {
+            panic!()
+        };
+        assert_eq!(&**a, &**b);
+    }
+}
+
+#[cfg(test)]
+mod shading_context_cache_tests {
+    #[test]
+    fn shared_shading_keeps_background_context_in_both_draw_orders() {
+        let base = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/pdf");
+        let read = |name: &str| crate::decode_raster(&crate::DecodeRequest::new(base.join(name))).unwrap();
+        let pattern = read("tensor-fractional-background-rgb.pdf");
+        let direct = read("tensor-fractional-direct-background-rgb.pdf");
+        let (RasterPixels::Rgba8(left), RasterPixels::Rgba8(right)) = (pattern.pixels(), direct.pixels())
+        else {
+            panic!()
+        };
+        for name in [
+            "tensor-background-context-pattern-first.pdf",
+            "tensor-background-context-direct-first.pdf",
+        ] {
+            let image = read(name);
+            assert_eq!((image.width(), image.height()), (32, 32));
+            let RasterPixels::Rgba8(pixels) = image.pixels() else {
+                panic!()
+            };
+            for y in 0..32 {
+                assert_eq!(
+                    &pixels[y * 128..y * 128 + 64],
+                    &left[y * 128..y * 128 + 64],
+                    "{name}: pattern row {y}"
+                );
+                assert_eq!(
+                    &pixels[y * 128 + 64..(y + 1) * 128],
+                    &right[y * 128 + 64..(y + 1) * 128],
+                    "{name}: direct row {y}"
+                );
+            }
+        }
+    }
+    use rrrah_core::RasterPixels;
+}

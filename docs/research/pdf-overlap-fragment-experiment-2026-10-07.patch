@@ -1,0 +1,226 @@
+diff --git a/vendor/hayro-interpret/src/encode.rs b/vendor/hayro-interpret/src/encode.rs
+index 5241b695..03ede011 100644
+--- a/vendor/hayro-interpret/src/encode.rs
++++ b/vendor/hayro-interpret/src/encode.rs
+@@ -188,70 +188,106 @@ pub(crate) struct MeshSample {
+     coverage: f32,
+ }
+
+-// A triangle clipped against a rectangle has at most seven vertices.
+-// Coordinates are local to the pixel to avoid large-coordinate area cancellation.
+-fn triangle_pixel_area(t: &Triangle, x: u16, y: u16) -> Option<(f32, Point)> {
+-    let origin = Point::new(f64::from(x), f64::from(y));
+-    let mut points = [Point::ZERO; 8];
+-    for (i, p) in [t.p0.point, t.p1.point, t.p2.point].into_iter().enumerate() {
+-        points[i] = Point::new(p.x - origin.x, p.y - origin.y);
++// Convex clipping in local pixel coordinates keeps area calculations stable.
++fn clip_half_plane(points: &[Point], a: Point, b: Point, sign: f64) -> Vec<Point> {
++    let mut output = Vec::new();
++    if points.is_empty() {
++        return output;
+     }
+-    let mut len = 3;
+-    for (axis, bound, greater) in [(0, 0.0, true), (0, 1.0, false), (1, 0.0, true), (1, 1.0, false)] {
+-        if len == 0 {
+-            return None;
++    let distance = |p: Point| sign * ((b.x - a.x) * (p.y - a.y) - (b.y - a.y) * (p.x - a.x));
++    let mut previous = points[points.len() - 1];
++    for current in points.iter().copied() {
++        let dp = distance(previous);
++        let dc = distance(current);
++        if (dp >= 0.0) != (dc >= 0.0) {
++            output.push(previous + (current - previous) * (dp / (dp - dc)));
+         }
+-        let mut out = [Point::ZERO; 8];
+-        let mut count = 0;
+-        let coordinate = |p: Point| if axis == 0 { p.x } else { p.y };
+-        let inside = |p: Point| {
+-            if greater {
+-                coordinate(p) >= bound
+-            } else {
+-                coordinate(p) <= bound
+-            }
+-        };
+-        let mut previous = points[len - 1];
+-        for current in points[..len].iter().copied() {
+-            if inside(previous) != inside(current) {
+-                let ratio = (bound - coordinate(previous)) / (coordinate(current) - coordinate(previous));
+-                out[count] = previous + (current - previous) * ratio;
+-                count += 1;
+-            }
+-            if inside(current) {
+-                out[count] = current;
+-                count += 1;
+-            }
+-            previous = current;
++        if dc >= 0.0 {
++            output.push(current);
+         }
+-        points = out;
+-        len = count;
++        previous = current;
+     }
+-    let mut cross_sum = 0.0;
++    output
++}
++fn polygon_area(points: &[Point]) -> Option<(f32, Point)> {
++    let mut cross = 0.0;
+     let mut cx = 0.0;
+     let mut cy = 0.0;
+-    for i in 0..len {
++    for i in 0..points.len() {
+         let a = points[i];
+-        let b = points[(i + 1) % len];
+-        let cross = a.x * b.y - b.x * a.y;
+-        cross_sum += cross;
+-        cx += (a.x + b.x) * cross;
+-        cy += (a.y + b.y) * cross;
++        let b = points[(i + 1) % points.len()];
++        let c = a.x * b.y - b.x * a.y;
++        cross += c;
++        cx += (a.x + b.x) * c;
++        cy += (a.y + b.y) * c;
+     }
+-    if cross_sum.abs() <= 1e-15 {
++    if cross.abs() <= 1e-15 {
+         return None;
+     }
+     Some((
+-        (cross_sum.abs() * 0.5) as f32,
+-        Point::new(
+-            origin.x + cx / (3.0 * cross_sum),
+-            origin.y + cy / (3.0 * cross_sum),
+-        ),
++        (cross.abs() * 0.5) as f32,
++        Point::new(cx / (3.0 * cross), cy / (3.0 * cross)),
+     ))
+ }
++fn pixel_polygon(t: &Triangle, x: u16, y: u16) -> Vec<Point> {
++    let mut points = [t.p0.point, t.p1.point, t.p2.point]
++        .map(|p| Point::new(p.x - f64::from(x), p.y - f64::from(y)))
++        .to_vec();
++    for (a, b) in [
++        (Point::new(0., 0.), Point::new(1., 0.)),
++        (Point::new(1., 0.), Point::new(1., 1.)),
++        (Point::new(1., 1.), Point::new(0., 1.)),
++        (Point::new(0., 1.), Point::new(0., 0.)),
++    ] {
++        points = clip_half_plane(&points, a, b, 1.0);
++    }
++    points
++}
++// Partition the old convex fragment into disjoint pieces outside the new one.
++fn uncovered_parts(points: &[Point], cover: &[Point]) -> Vec<Vec<Point>> {
++    let mut intersection = points.to_vec();
++    let mut outside = Vec::new();
++    let signed: f64 = (0..cover.len())
++        .map(|i| {
++            let a = cover[i];
++            let b = cover[(i + 1) % cover.len()];
++            a.x * b.y - b.x * a.y
++        })
++        .sum();
++    let sign = if signed >= 0.0 { 1.0 } else { -1.0 };
++    let mut overlap = points.to_vec();
++    for i in 0..cover.len() {
++        let a = cover[i];
++        let b = cover[(i + 1) % cover.len()];
++        if (b - a).hypot2() <= 1e-24 {
++            continue;
++        }
++        overlap = clip_half_plane(&overlap, a, b, sign);
++        if polygon_area(&overlap).is_none() {
++            return vec![points.to_vec()];
++        }
++    }
++    for i in 0..cover.len() {
++        let a = cover[i];
++        let b = cover[(i + 1) % cover.len()];
++        if (b - a).hypot2() <= 1e-24 {
++            continue;
++        }
++        let piece = clip_half_plane(&intersection, a, b, -sign);
++        if polygon_area(&piece).is_some() {
++            outside.push(piece);
++        }
++        intersection = clip_half_plane(&intersection, a, b, sign);
++        if polygon_area(&intersection).is_none() {
++            break;
++        }
++    }
++    outside
++}
+
+ fn sample_triangles(triangles: &[Triangle], transform: Affine) -> FxHashMap<(u16, u16), MeshSample> {
+-    let mut map: FxHashMap<(u16, u16), MeshSample> = FxHashMap::default();
++    let mut fragments: FxHashMap<(u16, u16), Vec<(Vec<Point>, usize)>> = FxHashMap::default();
++    let mut transformed = Vec::new();
+
+     for t in triangles {
+         let t = {
+@@ -270,29 +306,52 @@ fn sample_triangles(triangles: &[Triangle], transform: Affine) -> FxHashMap<(u16
+         };
+
+         let bbox = t.bounding_box();
++        let index = transformed.len();
++        transformed.push(t.clone());
+
+         for y in (bbox.y0.floor() as u16)..(bbox.y1.ceil() as u16) {
+             for x in (bbox.x0.floor() as u16)..(bbox.x1.ceil() as u16) {
+-                if let Some((area, point)) = triangle_pixel_area(&t, x, y) {
+-                    let colors = t.interpolate(point);
+-                    let sample = map.entry((x, y)).or_insert_with(|| MeshSample {
+-                        colors: colors.iter().map(|_| 0.0).collect(),
+-                        coverage: 0.0,
+-                    });
+-                    for (total, color) in sample.colors.iter_mut().zip(colors) {
+-                        *total += color * area;
++                let polygon = pixel_polygon(&t, x, y);
++                if polygon_area(&polygon).is_some() {
++                    let pieces = fragments.entry((x, y)).or_default();
++                    let old = std::mem::take(pieces);
++                    for (fragment, owner) in old {
++                        for remainder in uncovered_parts(&fragment, &polygon) {
++                            pieces.push((remainder, owner));
++                        }
+                     }
+-                    sample.coverage += area;
++                    pieces.push((polygon, index));
+                 }
+             }
+         }
+     }
+
+-    for sample in map.values_mut() {
+-        for color in &mut sample.colors {
+-            *color /= sample.coverage;
++    let mut map = FxHashMap::default();
++    for ((x, y), pieces) in fragments {
++        let mut sample = MeshSample {
++            colors: ColorComponents::new(),
++            coverage: 0.0,
++        };
++        for (polygon, owner) in pieces {
++            if let Some((area, point)) = polygon_area(&polygon) {
++                let colors = transformed[owner]
++                    .interpolate(Point::new(point.x + f64::from(x), point.y + f64::from(y)));
++                if sample.colors.is_empty() {
++                    sample.colors = colors.iter().map(|_| 0.0).collect();
++                }
++                for (total, color) in sample.colors.iter_mut().zip(colors) {
++                    *total += color * area;
++                }
++                sample.coverage += area;
++            }
++        }
++        if sample.coverage > 0.0 {
++            for color in &mut sample.colors {
++                *color /= sample.coverage;
++            }
++            sample.coverage = sample.coverage.min(1.0);
++            map.insert((x, y), sample);
+         }
+-        sample.coverage = sample.coverage.min(1.0);
+     }
+     map
+ }

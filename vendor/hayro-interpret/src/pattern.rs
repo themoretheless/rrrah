@@ -34,11 +34,7 @@ pub enum Pattern<'a> {
 }
 
 impl<'a> Pattern<'a> {
-    pub(crate) fn new(
-        object: Object<'a>,
-        ctx: &Context<'a>,
-        resources: &Resources<'a>,
-    ) -> Option<Self> {
+    pub(crate) fn new(object: Object<'a>, ctx: &Context<'a>, resources: &Resources<'a>) -> Option<Self> {
         match object {
             Object::Dict(dict) => Some(Self::Shading(ShadingPattern::new(
                 &dict,
@@ -82,6 +78,8 @@ impl CacheKey for Pattern<'_> {
 /// A shading pattern.
 #[derive(Clone, Debug)]
 pub struct ShadingPattern {
+    /// Background applies to a pattern fill, but not to the direct `sh` operator.
+    pub paint_background: bool,
     /// The underlying shading of the pattern.
     pub shading: Arc<Shading>,
     /// A transformation matrix to apply prior to rendering.
@@ -99,16 +97,14 @@ impl ShadingPattern {
 
             Shading::new(dict, stream, cache)
         })?;
-        let matrix = dict
-            .get::<[f64; 6]>(MATRIX)
-            .map(Affine::new)
-            .unwrap_or_default();
+        let matrix = dict.get::<[f64; 6]>(MATRIX).map(Affine::new).unwrap_or_default();
 
         if dict.contains_key(EXT_G_STATE) {
             warn!("shading patterns with ext_g_state are not supported yet");
         }
 
         Some(Self {
+            paint_background: true,
             shading: Arc::new(shading),
             opacity,
             matrix,
@@ -119,7 +115,11 @@ impl ShadingPattern {
 
 impl CacheKey for ShadingPattern {
     fn cache_key(&self) -> u128 {
-        hash128(&(self.shading.cache_key(), self.matrix.cache_key()))
+        hash128(&(
+            self.shading.cache_key(),
+            self.matrix.cache_key(),
+            self.paint_background,
+        ))
     }
 }
 
@@ -154,11 +154,7 @@ impl Debug for TilingPattern<'_> {
 }
 
 impl<'a> TilingPattern<'a> {
-    pub(crate) fn new(
-        stream: Stream<'a>,
-        ctx: &Context<'a>,
-        resources: &Resources<'a>,
-    ) -> Option<Self> {
+    pub(crate) fn new(stream: Stream<'a>, ctx: &Context<'a>, resources: &Resources<'a>) -> Option<Self> {
         let cache_key = stream.cache_key();
         let dict = stream.dict();
 
@@ -171,10 +167,7 @@ impl<'a> TilingPattern<'a> {
         }
 
         let is_color = dict.get::<u8>(PAINT_TYPE)? == 1;
-        let matrix = dict
-            .get::<[f64; 6]>(MATRIX)
-            .map(Affine::new)
-            .unwrap_or_default();
+        let matrix = dict.get::<[f64; 6]>(MATRIX).map(Affine::new).unwrap_or_default();
 
         let state = ctx.get().clone();
         let ctx_bbox = ctx.bbox();
@@ -286,24 +279,14 @@ struct StencilPatternDevice<'a, 'b, T: Device<'a>> {
 
 impl<'a, 'b, T: Device<'a>> StencilPatternDevice<'a, 'b, T> {
     pub(crate) fn new(device: &'b mut T, paint: Paint<'a>) -> Self {
-        Self {
-            inner: device,
-            paint,
-        }
+        Self { inner: device, paint }
     }
 }
 
 // Only filling, stroking of paths and stencil masks are allowed.
 impl<'a, T: Device<'a>> Device<'a> for StencilPatternDevice<'a, '_, T> {
-    fn draw_path(
-        &mut self,
-        path: &BezPath,
-        transform: Affine,
-        _: &Paint<'_>,
-        draw_mode: &PathDrawMode,
-    ) {
-        self.inner
-            .draw_path(path, transform, &self.paint, draw_mode);
+    fn draw_path(&mut self, path: &BezPath, transform: Affine, _: &Paint<'_>, draw_mode: &PathDrawMode) {
+        self.inner.draw_path(path, transform, &self.paint, draw_mode);
     }
 
     fn set_soft_mask(&mut self, _: Option<SoftMask<'_>>) {}
@@ -322,8 +305,7 @@ impl<'a, T: Device<'a>> Device<'a> for StencilPatternDevice<'a, '_, T> {
         p: &Paint<'a>,
         draw_mode: &GlyphDrawMode,
     ) {
-        self.inner
-            .draw_glyph(g, transform, glyph_transform, p, draw_mode);
+        self.inner.draw_glyph(g, transform, glyph_transform, p, draw_mode);
     }
 
     fn draw_image(&mut self, image: Image<'a, '_>, transform: Affine) {

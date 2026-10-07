@@ -312,6 +312,7 @@ pub fn inspect_eip(bytes: &[u8]) -> Result<EipManifest, EipError> {
                         | "orf"
                         | "raf"
                         | "pef"
+                        | "ptx"
                         | "rw2"
                         | "rwl"
                         | "mrw"
@@ -386,6 +387,45 @@ mod tests {
             let mut corrupted = b.clone();
             corrupted[35] ^= 1;
             assert!(inspect_eip(&corrupted).is_ok());
+        }
+    }
+    #[test]
+    fn ptx_member_is_inventory_raw_and_ambiguous_sources_are_refused() {
+        for compression in [zip::CompressionMethod::Stored, zip::CompressionMethod::Deflated] {
+            let bytes = package(&["CaptureOne/settings.cos", "source.PTX"], compression);
+            let manifest = inspect_eip(&bytes).unwrap();
+            assert_eq!(manifest.raw_index, 1);
+            let budget = rrrah_core::MemoryBudget::new(7);
+            let raw = read_eip_raw(&bytes, &budget, &|| false).unwrap();
+            assert_eq!(&*raw.bytes, b"payload");
+            assert_eq!(budget.used(), 7);
+            drop(raw);
+            assert_eq!(budget.used(), 0);
+            assert!(inspect_eip(&package(&["source.PTX", "other.pef"], compression)).is_err());
+        }
+    }
+    #[test]
+    fn ptx_and_pef_members_reach_native_decoder_and_release_failed_import() {
+        for name in ["source.PTX", "source.pef"] {
+            for compression in [zip::CompressionMethod::Stored, zip::CompressionMethod::Deflated] {
+                let bytes = package(&[name], compression);
+                let mut request = crate::DecodeRequest::new("unread-package.eip");
+                let budget = rrrah_core::MemoryBudget::new(7);
+                request.memory_budget = Some(budget.clone());
+                assert!(matches!(
+                    decode_eip_sensor(&bytes, &request),
+                    Err(EipError::Decode(_))
+                ));
+                assert_eq!(budget.peak(), 7);
+                assert_eq!(budget.used(), 0);
+                let zero = rrrah_core::MemoryBudget::new(0);
+                request.memory_budget = Some(zero.clone());
+                assert!(matches!(
+                    decode_eip_sensor(&bytes, &request),
+                    Err(EipError::Memory(_))
+                ));
+                assert_eq!(zero.peak(), 0);
+            }
         }
     }
     #[test]

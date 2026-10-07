@@ -1,0 +1,53 @@
+{
+  "format": "Autodesk 3ds Max Rich Pixel Format",
+  "status": "not implemented",
+  "primary_source": "https://help.autodesk.com/cloudhelp/2022/ENU/Max-Developer-Help/3ds_max_sdk_features/rendering/textures_maps/rpf_files_and_the_g-buffer.html",
+  "verified_facts": [
+    "RPF carries arbitrary channels beyond legacy RLA",
+    "G-buffer can store multiple layers at each pixel",
+    "RealPixel is a 32-bit RGBE representation",
+    "Official binary reader/writer implementation resides in SDK samples/images/rla/rla.cpp"
+  ],
+  "implementation_requirements": [
+    "Obtain actual header/record layout from official sample before admitting files",
+    "Bound layer counts, channel sizes, row offsets and total expanded bytes before allocation",
+    "Retain declared image and auxiliary channels rather than treat as renamed RLA",
+    "Qualify floating/RGBE decoding independently and route HDR values without clipping",
+    "Preserve managed ownership through RAM and swap",
+    "Use producer-generated RPF samples and independent oracle for complete records"
+  ],
+  "evidence_missing": [
+    "Producer-generated RPF qualification file"
+  ],
+  "next_action": "Derive native header, auxiliary channel and layered record contracts from extracted official sources",
+  "official_sdk_download": {
+    "landing_page": "https://aps.autodesk.com/developer/overview/3ds-max-api",
+    "url": "https://autodesk-adn-transfer.s3.us-west-2.amazonaws.com/ADN+Extranet/M%26E/Max/Autodesk+3ds+Max+2026/SDK_3dsMax2026.msi",
+    "head_status": 200,
+    "expected_bytes": 133779456,
+    "local_path": "/tmp/rrrah-maxsdk-2026.msi",
+    "status": "download complete, embedded cabinet extracted",
+    "sha256": "b46c6f220450073f203013e1992676c8ed830945ced584eef32792a82ebb8f0a",
+    "actual_bytes": 133779456,
+    "cabinet_streams": [
+      {
+        "path": [
+          "\u4230\u4327\u3864\u41be\u4164"
+        ],
+        "bytes": 131635808
+      }
+    ]
+  },
+  "official_sample_sources": [
+    {
+      "original_name": "rla.cpp",
+      "local_path": "/tmp/rrrah-maxsdk-files/filBCA64F1F9A10621029B10F67E3CAA3AF",
+      "sha256": "ec15eb71ab1b400d36185dc3061be853ef1c8e72e8976df82234cae6deed4b53"
+    },
+    {
+      "original_name": "rla.h",
+      "local_path": "/tmp/rrrah-maxsdk-files/fil7D0E9D9AFA8F630851B8684A6FDC2213",
+      "sha256": "7eac0bce693e504d1413dcef5d6be03fc434e7191073388d99580d79e6068cf0"
+    }
+  ]
+}

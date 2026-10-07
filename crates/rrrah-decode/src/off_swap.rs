@@ -430,6 +430,41 @@ mod tests {
             write_off_swap_payload(&restored, &mut encoded).unwrap();
             assert_eq!(encoded, bytes);
             assert_eq!(restored.bounds, mesh.bounds);
+            assert_eq!(restored.encoding, mesh.encoding);
+            assert_eq!(restored.declared_edges, mesh.declared_edges);
+            assert_eq!(restored.indices, mesh.indices);
+            assert_eq!(restored.triangles, mesh.triangles);
+            assert_eq!(restored.faces.len(), mesh.faces.len());
+            for (actual, expected) in restored.faces.iter().zip(&mesh.faces) {
+                assert_eq!(actual.indices, expected.indices);
+                assert_eq!(actual.color, expected.color);
+            }
+            for (actual, expected) in [
+                (
+                    restored.positions.iter().flatten().collect::<Vec<_>>(),
+                    mesh.positions.iter().flatten().collect::<Vec<_>>(),
+                ),
+                (
+                    restored.normals.iter().flatten().collect::<Vec<_>>(),
+                    mesh.normals.iter().flatten().collect::<Vec<_>>(),
+                ),
+                (
+                    restored.colors.iter().flatten().collect::<Vec<_>>(),
+                    mesh.colors.iter().flatten().collect::<Vec<_>>(),
+                ),
+                (
+                    restored.texcoords.iter().flatten().collect::<Vec<_>>(),
+                    mesh.texcoords.iter().flatten().collect::<Vec<_>>(),
+                ),
+            ] {
+                assert_eq!(actual.len(), expected.len());
+                assert!(
+                    actual
+                        .iter()
+                        .zip(expected)
+                        .all(|(a, e)| a.to_bits() == e.to_bits())
+                );
+            }
             let expected = crate::DecodedModel::Off(restored.clone()).capacity_bytes();
             assert_eq!(root.used(), expected);
             let clone = restored.clone();

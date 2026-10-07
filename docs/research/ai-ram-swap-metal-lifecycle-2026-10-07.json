@@ -1,0 +1,45 @@
+{
+  "scope": "Selected pages of pinned actual AI files; lifecycle preservation only. Independent rendering fidelity remains incomplete.",
+  "sources": {
+    "VectorApple.ai": "c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06",
+    "one.ai": "97786949c268233a446e1738fb9c2f941e4d109811bd2f972948cdb7a45d64b4"
+  },
+  "pages": [
+    {
+      "file": "VectorApple.ai",
+      "index": 0,
+      "extent": [
+        301,
+        246
+      ]
+    },
+    {
+      "file": "one.ai",
+      "index": 0,
+      "extent": [
+        1366,
+        768
+      ]
+    },
+    {
+      "file": "one.ai",
+      "index": 1,
+      "extent": [
+        177,
+        175
+      ]
+    }
+  ],
+  "adapter": "Metal Apple M4 Max",
+  "checks": [
+    "RAM leased frame equals prepared baseline",
+    "RAM shrinking below pinned allocation refuses atomically",
+    "native and prepared swap pixels exact",
+    "Metal frame after restore equals baseline",
+    "restore refuses exhausted root budget, succeeds after release",
+    "root allocation zero after each page"
+  ],
+  "test": "real_ai_pages_swap_preserves_pixels_and_metal_frame",
+  "result": "passed",
+  "seconds": 1.01
+}

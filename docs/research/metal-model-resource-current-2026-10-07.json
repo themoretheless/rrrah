@@ -1,0 +1,23 @@
+{
+  "scope": "Actual GPU geometry and resource lifecycle readback, not end-to-end qualification of every 3D file format",
+  "adapter": "Metal Apple M4 Max",
+  "results": {
+    "model_readback": 5,
+    "resource_lease": 3,
+    "filmstrip_readback": 2,
+    "failed": 0,
+    "ignored": 0
+  },
+  "inspected_cases": [
+    "Distinctly shaded overlapping facets produce same frame independent of submission order",
+    "Float64 normalization preserves small geometry at translation 1e12 and extreme finite scales",
+    "Model vertex and depth allocation refusal preserves existing resources",
+    "Raster and model textures compete for shared parent budget",
+    "Submitted resources retain managed credit through GPU completion even after renderer destruction",
+    "Thumbnail slot removal releases texture credit"
+  ],
+  "remaining": [
+    "Real NVIDIA qualification",
+    "All supported model parsers through RAM/swap/display pipeline"
+  ]
+}

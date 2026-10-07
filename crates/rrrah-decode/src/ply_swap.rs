@@ -248,6 +248,54 @@ mod tests {
             write_ply_swap_payload(&restored, &mut encoded).unwrap();
             assert_eq!(encoded, bytes, "{name}");
             assert_eq!(restored.bounds, mesh.bounds);
+            assert_eq!(restored.encoding, mesh.encoding);
+            assert_eq!(restored.comments, mesh.comments);
+            assert_eq!(restored.object_info, mesh.object_info);
+            assert_eq!(restored.triangles, mesh.triangles);
+            assert_eq!(restored.elements.len(), mesh.elements.len());
+            for (actual, expected) in restored.elements.iter().zip(&mesh.elements) {
+                assert_eq!(actual.name, expected.name);
+                assert_eq!(actual.count, expected.count);
+                assert_eq!(actual.properties.len(), expected.properties.len());
+                for (a, e) in actual.properties.iter().zip(&expected.properties) {
+                    assert_eq!(a.name, e.name);
+                    let (a, e) = match (&a.values, &e.values) {
+                        (PlyValues::Scalar(a), PlyValues::Scalar(e)) => (a, e),
+                        (
+                            PlyValues::List {
+                                count_type: ac,
+                                offsets: ao,
+                                values: a,
+                            },
+                            PlyValues::List {
+                                count_type: ec,
+                                offsets: eo,
+                                values: e,
+                            },
+                        ) => {
+                            assert_eq!(ac, ec);
+                            assert_eq!(ao, eo);
+                            (a, e)
+                        }
+                        _ => panic!("{name}: property representation changed"),
+                    };
+                    assert_eq!(a.kind(), e.kind());
+                    assert_eq!(a.len(), e.len());
+                    match (a, e) {
+                        (PlyScalars::F32(a), PlyScalars::F32(e)) => {
+                            assert!(a.iter().zip(e).all(|(a, e)| a.to_bits() == e.to_bits()))
+                        }
+                        (PlyScalars::F64(a), PlyScalars::F64(e)) => {
+                            assert!(a.iter().zip(e).all(|(a, e)| a.to_bits() == e.to_bits()))
+                        }
+                        _ => {
+                            for index in 0..a.len() {
+                                assert_eq!(a.get(index), e.get(index));
+                            }
+                        }
+                    }
+                }
+            }
             let retained = crate::DecodedModel::Ply(restored.clone()).capacity_bytes();
             assert_eq!(root.used(), retained);
             let clone = restored.clone();

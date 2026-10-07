@@ -1,0 +1,23 @@
+{
+  "scope": "Current unit and concurrency tests of memory/cache/swap libraries, including managed raster and RAW adapters; not universal format or GPU qualification",
+  "command": "cargo test -p rrrah-memory -p rrrah-cache -p rrrah-swap --lib --locked --offline --target-dir /tmp/rrrah-required-corpus-target",
+  "results": {
+    "rrrah-cache": 118,
+    "rrrah-memory": 38,
+    "rrrah-swap": 9,
+    "failed": 0,
+    "ignored": 0
+  },
+  "inspected_invariants": [
+    "Combined byte/count/TTL tightening refuses atomically when visible pin and lease prevent eviction",
+    "Accepted new TTL applies to inserted/replaced entries; existing insertion deadlines remain unchanged",
+    "Expired visible allocation stays charged until unpinned and last owner drops",
+    "Disk byte/count/TTL and queue admission limits independently enforced",
+    "Idle swap TTL maintenance reclaims physical objects without foreground lookups",
+    "Repeated worker barriers do not starve TTL maintenance"
+  ],
+  "limitations": [
+    "Tests do not establish latency for every format",
+    "Existing TTL policy does not retroactively alter resident deadlines"
+  ]
+}

@@ -124,6 +124,7 @@ impl ShadingPattern {
             .shading
             .background
             .as_ref()
+            .filter(|_| self.paint_background)
             .map(|b| color_space.to_rgba(b, 1.0, false))
             .unwrap_or(AlphaColor::TRANSPARENT);
 

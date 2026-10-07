@@ -1,0 +1,26 @@
+{
+  "status": "rejected and removed from production",
+  "synthetic_overlap": "26 PDF tests passed before full-source qualification",
+  "real_ai": "VectorApple process exceeded 20 seconds; previous baseline about 0.513 seconds",
+  "optimization": "Pre-test geometric overlap still exceeded 11 seconds with observed RSS 513936 KiB; stopped explicitly",
+  "limitation": "No completed output/fidelity comparison for interrupted runs",
+  "next_action": "Resolve patch order with bounded subdivision/spatial representation avoiding fragment explosion",
+  "known_overlap_defect": "Retained ignored regression explicitly records unresolved production defect",
+  "roundoff_experiment": {
+    "local_twice_area_epsilon": 1e-09,
+    "status": "terminated after verified 10-second timeout",
+    "seconds": 10.023251958000401,
+    "conclusion": "Roundoff threshold alone does not solve runtime growth; do not use in production"
+  },
+  "fragment_growth_diagnostic": {
+    "returncode": 101,
+    "stderr": "\nthread 'main' (2658149) panicked at vendor/hayro-interpret/src/encode.rs:324:21:\nfragment diagnostic: triangle=214 pixel=(62,181) count=129\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+    "seconds": 0.714021292000325
+  },
+  "diagnostic_interpretation": "129 retained fragments in one pixel by triangle 214, within the first tessellated patch. Patch tessellation fragments must be integrated/coalesced before cross-patch painter ordering; roundoff alone cannot explain growth.",
+  "bounding_box_fast_path_experiment": {
+    "status": "verified 10-second timeout",
+    "seconds": 10.016504541999893,
+    "conclusion": "Pairwise traversal and retained fragmented geometry remain dominant; bbox rejection alone insufficient"
+  }
+}

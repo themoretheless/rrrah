@@ -1,0 +1,18 @@
+{
+  "fixture": "tests/fixtures/pdf/tensor-overlap-rgb.pdf",
+  "construction": "Coincident independent planar tensor patches, red then blue",
+  "actual_center_rgba": [
+    128,
+    0,
+    128,
+    255
+  ],
+  "expected_center_rgba": [
+    0,
+    0,
+    255,
+    255
+  ],
+  "result": "mismatch",
+  "next_action": "Preserve patch order and resolve geometric overlap before area integration"
+}

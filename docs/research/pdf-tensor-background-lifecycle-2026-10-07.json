@@ -1,0 +1,25 @@
+{
+  "scope": "Authored PDF tensor fixtures; RAM lease and swap transport preservation, not universal AI color fidelity",
+  "fixtures": [
+    "tensor-shared-edge-2bit.pdf",
+    "tensor-shared-edge-4bit.pdf",
+    "tensor-shared-edge-8bit.pdf",
+    "tensor-fractional-rgb.pdf",
+    "tensor-fractional-background-rgb.pdf",
+    "tensor-fractional-direct-background-rgb.pdf",
+    "tensor-background-context-pattern-first.pdf",
+    "tensor-background-context-direct-first.pdf"
+  ],
+  "adapter": "Metal Apple M4 Max",
+  "verification": {
+    "ram": "Prepared raster frame identical while leased; shrinking below pinned allocation refused",
+    "swap": "Native and prepared pixel representations preserved exactly; Metal frames identical after restore",
+    "budget": "Restore refused under exhausted root budget and succeeds after release; root used bytes zero after each case",
+    "cache_context": "Whole-page row comparison with separate pattern/direct references passed for both draw orders"
+  },
+  "result": "passed",
+  "test_seconds": null,
+  "command": "cargo test -p rrrah --test pdf_readback short_flag_tensor --locked --offline --target-dir /tmp/rrrah-required-corpus-target -- --ignored --nocapture",
+  "background_context": "Background fixture now uses an actual PatternType 2 fill. Direct sh explicitly ignores declared Background. Both draw orders share one shading object and transformation.",
+  "timing_note": "See current run log; previous timing predates additional fixtures"
+}

@@ -1,0 +1,31 @@
+{
+  "scope": "Checked-in native model fixtures through app decoding, real swap and physical Metal readback; not universal syntax qualification",
+  "formats": [
+    "STL",
+    "OBJ",
+    "PLY",
+    "OFF"
+  ],
+  "adapter": "Metal Apple M4 Max",
+  "tests": {
+    "model_readback": 5,
+    "stl_swap": 6,
+    "failed": 0,
+    "ignored": 0
+  },
+  "cases": [
+    "Managed geometry produces same GPU pixels and releases CPU credit",
+    "Concave OBJ notch preserved",
+    "Float64 PLY precision reaches normalization before float32 upload",
+    "Binary OFF attributes and concave surface reach GPU",
+    "Restored model GPU frames equal original",
+    "Repeated memory pressure preserves disk entry for retry",
+    "Corrupted swap payloads release credit and permit replacement",
+    "Sustained small-RAM navigation releases all owners",
+    "Independent disk byte/count/fixed TTL limits"
+  ],
+  "remaining": [
+    "Broader camera/model corpus qualification",
+    "NVIDIA execution and physical HDR"
+  ]
+}

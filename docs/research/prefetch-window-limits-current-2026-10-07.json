@@ -1,0 +1,32 @@
+{
+  "scope": "Current gallery scheduling and local EOS R8 RAW prefetch; not all 100 formats",
+  "unit_result": {
+    "passed": 28,
+    "ignored": 6
+  },
+  "real_fixture_checks": {
+    "byte_limit_retains_priority": "passed",
+    "count_limit_retains_priority": "passed",
+    "shared_budget_refuses_then_recovers": "passed",
+    "missing_neighbor_count": "passed with restored pinned Sony DSC-F828 source"
+  },
+  "inspected_contract": {
+    "defaults": {
+      "behind": 2,
+      "ahead": 5
+    },
+    "direction": "Backward navigation swaps directional distances; nearest files in travel direction have priority",
+    "limits": "Clamped to gallery length, zero disables side, usize::MAX tested without overflow",
+    "generation": "Foreground invalidates pending generation; latest pending command replaces previous"
+  },
+  "remaining": "Cross-format end-to-end prefetch qualification remains incomplete",
+  "srf_source": {
+    "url": "https://raw.pixls.us/getfile.php/1351/nice/Sony%20-%20DSC-F828%20-%204:3.SRF",
+    "sha256": "07739f94bcab0c7e198d418ac65172d0dce04bb84a7683ecffd0bfe4b32f6d79",
+    "bytes": 17393344
+  },
+  "real_fixture_result": {
+    "passed": 4,
+    "failed": 0
+  }
+}

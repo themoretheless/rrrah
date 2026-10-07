@@ -152,6 +152,62 @@ mod tests {
         assert_eq!(budget.used(), 0);
     }
     #[test]
+    #[ignore = "requires pinned Mamiya ZD source; validates lifecycle, not photographic color"]
+    fn real_zd_sensor_admission_cancellation_and_last_owner() {
+        let source = std::fs::read(std::env::var("RRRAH_MEF_SOURCE").unwrap()).unwrap();
+        let weight = 4016 * 5344 * 2_u64;
+        let budget = MemoryBudget::new(weight);
+        let output = decode_mef_zd_sensor(&source, &budget, &|| false).unwrap();
+        assert_eq!(output.len() as u64 * 2, weight);
+        assert!(output.iter().all(|v| *v <= 4095));
+        let owner = output.clone();
+        drop(output);
+        assert_eq!(budget.used(), weight);
+        drop(owner);
+        assert_eq!(budget.used(), 0);
+        let short = MemoryBudget::new(weight - 1);
+        assert!(matches!(
+            decode_mef_zd_sensor(&source, &short, &|| false),
+            Err(DecodeError::Memory(_))
+        ));
+        assert_eq!(short.peak(), 0);
+        let calls = std::cell::Cell::new(0);
+        let cancelled = || {
+            calls.set(calls.get() + 1);
+            calls.get() >= 128
+        };
+        let cancel_budget = MemoryBudget::new(weight);
+        assert!(matches!(
+            decode_mef_zd_sensor(&source, &cancel_budget, &cancelled),
+            Err(DecodeError::Cancelled)
+        ));
+        assert_eq!(cancel_budget.peak(), weight);
+        assert_eq!(cancel_budget.used(), 0);
+        assert!(decode_mef_zd_sensor(&source, &budget, &|| false).is_ok());
+        assert_eq!(budget.used(), 0);
+        // Corrupt the actual sensor IFD rather than the rendered preview.
+        let offset = 116920;
+        let count = usize::from(u16::from_be_bytes([source[offset], source[offset + 1]]));
+        for tag in [256u16, 257, 273, 278, 279] {
+            let entry = (0..count)
+                .map(|i| offset + 2 + i * 12)
+                .find(|&p| u16::from_be_bytes([source[p], source[p + 1]]) == tag)
+                .unwrap();
+            let mut damaged = source.clone();
+            damaged[entry + 8..entry + 12].fill(0);
+            let refusal_budget = MemoryBudget::new(weight);
+            assert!(
+                decode_mef_zd_sensor(&damaged, &refusal_budget, &|| false).is_err(),
+                "tag {tag}"
+            );
+            assert_eq!(
+                refusal_budget.peak(),
+                0,
+                "tag {tag} allocated output before refusing"
+            );
+        }
+    }
+    #[test]
     #[ignore = "requires external Mamiya ZD source and independent sensor oracle"]
     fn real_zd_full_sensor_matches_oracle() {
         let source = std::fs::read(std::env::var("RRRAH_MEF_SOURCE").unwrap()).unwrap();

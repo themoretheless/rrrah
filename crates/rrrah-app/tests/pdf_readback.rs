@@ -26,6 +26,10 @@ fn short_flag_tensor_pages_swap_preserves_pixels_and_metal_frame() {
             ("tensor-shared-edge-4bit.pdf", 0, (64, 32), 1),
             ("tensor-shared-edge-8bit.pdf", 0, (64, 32), 1),
             ("tensor-fractional-rgb.pdf", 0, (32, 32), 1),
+            ("tensor-fractional-background-rgb.pdf", 0, (32, 32), 1),
+            ("tensor-fractional-direct-background-rgb.pdf", 0, (32, 32), 1),
+            ("tensor-background-context-pattern-first.pdf", 0, (32, 32), 1),
+            ("tensor-background-context-direct-first.pdf", 0, (32, 32), 1),
         ],
     );
 }
@@ -50,6 +54,15 @@ fn qualify_pdf_swap_pages(corpus: &std::path::Path, cases: &[(&str, usize, (u32,
         };
         // This baseline proves transport preservation, not independent AI color correctness.
         let expected = gpu.render_raster(&prepared, parameters, [96, 64]).pixels;
+        let mut ram = rrrah_cache::RasterRamCache::new(rrrah_cache::CacheLimits::bytes(
+            prepared.capacity_bytes(),
+        ));
+        assert!(ram.insert(1u8, prepared.clone()));
+        let lease = ram.get_lease(&1).unwrap();
+        assert!(ram.set_limits(rrrah_cache::CacheLimits::bytes(0)).is_none());
+        assert_eq!(gpu.render_raster(&lease, parameters, [96, 64]).pixels, expected);
+        drop(lease);
+        drop(ram);
         for source in [native, prepared] {
             let weight = source.capacity_bytes();
             let swap = rrrah_cache::ImageSwapCache::<u32, rrrah_core::DecodedRaster>::new_with_budgets(

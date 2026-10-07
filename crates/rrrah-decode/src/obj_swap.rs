@@ -258,6 +258,50 @@ mod tests {
             assert_eq!(restored.bounds, mesh.bounds);
             assert_eq!(restored.corners, mesh.corners);
             assert_eq!(restored.triangles, mesh.triangles);
+            assert_eq!(restored.faces.len(), mesh.faces.len());
+            for (actual, expected) in restored.faces.iter().zip(&mesh.faces) {
+                assert_eq!(actual.corners, expected.corners);
+                assert_eq!(actual.object, expected.object);
+                assert_eq!(actual.groups, expected.groups);
+                assert_eq!(actual.material, expected.material);
+                assert_eq!(actual.smoothing_group, expected.smoothing_group);
+            }
+            assert_eq!(
+                restored.material_libraries, mesh.material_libraries,
+                "{name}: material libraries"
+            );
+            assert_eq!(
+                restored
+                    .positions
+                    .iter()
+                    .flatten()
+                    .map(|v| v.to_bits())
+                    .collect::<Vec<_>>(),
+                mesh.positions
+                    .iter()
+                    .flatten()
+                    .map(|v| v.to_bits())
+                    .collect::<Vec<_>>(),
+                "{name}: homogeneous positions"
+            );
+            for (restored_values, source_values) in [
+                (&restored.texcoords, &mesh.texcoords),
+                (&restored.normals, &mesh.normals),
+            ] {
+                assert_eq!(
+                    restored_values
+                        .iter()
+                        .flatten()
+                        .map(|v| v.to_bits())
+                        .collect::<Vec<_>>(),
+                    source_values
+                        .iter()
+                        .flatten()
+                        .map(|v| v.to_bits())
+                        .collect::<Vec<_>>(),
+                    "{name}: UV/normal bits"
+                );
+            }
             assert_eq!(
                 root.used(),
                 crate::DecodedModel::Obj(restored.clone()).capacity_bytes()

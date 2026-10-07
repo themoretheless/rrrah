@@ -1,0 +1,40 @@
+{
+  "scope": "Current actual Metal numeric readback; not NVIDIA/CUDA or physical HDR display qualification",
+  "adapter": "Apple M4 Max",
+  "backend": "Metal",
+  "regular_tests": {
+    "compute_readback": 3,
+    "raster_readback": 7,
+    "raw_linear_readback": 2,
+    "rgbe_compute_readback": 3,
+    "failed": 0,
+    "ignored": 4
+  },
+  "full_sensor_managed_exposure": {
+    "result": "passed",
+    "extent": [
+      6188,
+      4120
+    ],
+    "pixels": 25494560,
+    "all_pixels_exact": true,
+    "interleaved_end_to_end_ms": 184.817,
+    "managed_end_to_end_ms": 146.304,
+    "gpu_peak_bytes": 1223738992,
+    "cpu_peak_bytes": 815825920,
+    "final_used_bytes": 0,
+    "timing_scope": "single diagnostic run, no comparative performance claim"
+  },
+  "coverage": [
+    "negative and above-one float render targets",
+    "compute HDR exposure with alpha preservation and dispatch tail",
+    "readback cancellation and retry",
+    "managed CPU/GPU resource ownership",
+    "RGBE four-plane compute versus CPU reference"
+  ],
+  "remaining": [
+    "Actual NVIDIA CUDA execution",
+    "Physical HDR display output",
+    "Universal format pipeline qualification"
+  ]
+}
