@@ -102,7 +102,8 @@ impl Opcode {
     pub fn is_applied(&self) -> bool {
         matches!(
             self,
-            Self::GainMap { .. }
+            Self::WarpRectilinear { .. }
+                | Self::GainMap { .. }
                 | Self::FixVignetteRadial { .. }
                 | Self::FixBadPixelsConstant { .. }
                 | Self::FixBadPixelsList { .. }
@@ -447,7 +448,7 @@ pub fn parse_list(d: &[u8]) -> Result<Vec<Opcode>, super::DevelopError> {
         if flags & !3 != 0 {
             return Err(Invalid("unknown opcode flags"));
         }
-        if version > 0x0107_0100 || !matches!(id, 3 | 4 | 5 | 9) {
+        if version > 0x0107_0100 || !matches!(id, 1 | 3 | 4 | 5 | 9) {
             if flags & 1 != 0 {
                 continue;
             }
@@ -502,6 +503,11 @@ pub(super) fn validate_lists(lists: &OpcodeLists) -> Result<(), super::DevelopEr
                         return Err(Invalid("invalid single-plane gain map"));
                     }
                 }
+                Opcode::WarpRectilinear { planes, center }
+                    if stage == 3
+                        && matches!(planes.len(), 1 | 3)
+                        && planes.iter().flatten().all(|v| v.is_finite())
+                        && center.iter().all(|v| v.is_finite() && (0.0..=1.0).contains(v)) => {}
                 Opcode::FixVignetteRadial { k, center }
                     if stage == 3
                         && k.iter().all(|p| p.is_finite())
@@ -625,7 +631,9 @@ pub(super) fn apply_list(
                         rh,
                         p - area.plane as usize,
                     );
-                    buf[(y * w + x) * cpp + p] *= g;
+                    let value = &mut buf[(y * w + x) * cpp + p];
+                    // DNG GainMap ProcessArea bounds the normalized result at 1.
+                    *value = (*value * g).min(scale);
                 }
             }
             Opcode::DeltaPerRow { area, deltas } | Opcode::DeltaPerColumn { area, deltas } => {
@@ -758,14 +766,40 @@ fn fix_pixels(
 }
 
 /// Apply `OpcodeList3` (on the demosaiced RGB image, values normalised to [0, 1]).
-pub(super) fn apply_list3(list: &[Opcode], img: &mut Rgb32f) -> Result<(), super::DevelopError> {
+pub(super) fn apply_list3(
+    list: &[Opcode],
+    img: &mut Rgb32f,
+    cancelled: &impl Fn() -> bool,
+) -> Result<(), super::DevelopError> {
     if list.is_empty() {
         return Ok(());
     }
     let (w, h) = (img.width, img.height);
     for op in list {
         match op {
-            Opcode::WarpRectilinear { .. } => unreachable!("validated opcode subset"),
+            Opcode::WarpRectilinear { planes, center } => {
+                if planes.iter().all(|p| *p == [1.0, 0.0, 0.0, 0.0, 0.0, 0.0]) {
+                    continue;
+                }
+                let source = img.data.clone();
+                for y in 0..h {
+                    if cancelled() {
+                        return Err(super::DevelopError::Cancelled);
+                    }
+                    for x in 0..w {
+                        for c in 0..3 {
+                            let coefficients = planes[if planes.len() == 1 { 0 } else { c }];
+                            let point = rectilinear_source_point(
+                                coefficients,
+                                *center,
+                                [w as u32, h as u32],
+                                [x as f64, y as f64],
+                            )?;
+                            img.data[y * w + x][c] = rectilinear_sample(&source, [w, h], point, c)?;
+                        }
+                    }
+                }
+            }
             Opcode::WarpFisheye { .. } | Opcode::TrimBounds { .. } | Opcode::Unknown { .. } => {}
             other => {
                 let mut flat: Vec<f32> = img.data.iter().flat_map(|p| *p).collect();
@@ -777,4 +811,306 @@ pub(super) fn apply_list3(list: &[Opcode], img: &mut Rgb32f) -> Result<(), super
         }
     }
     Ok(())
+}
+
+#[cfg(test)]
+mod gain_map_bounds_tests {
+    use super::*;
+    #[test]
+    fn gain_map_clips_padded_extent_and_saturates_normalized_highlights() {
+        let map = Opcode::GainMap {
+            area: Area {
+                top: 0,
+                left: 0,
+                bottom: 4,
+                right: 3,
+                plane: 0,
+                planes: 1,
+                row_pitch: 1,
+                col_pitch: 1,
+            },
+            points_v: 1,
+            points_h: 1,
+            spacing: [1.0, 1.0],
+            origin: [0.0, 0.0],
+            map_planes: 1,
+            gains: vec![2.0],
+        };
+        let mut pixels = [0.75, 0.25, 0.9, 0.1];
+        apply_list(&[map], &mut pixels, 2, 2, 1, None, 1.0).unwrap();
+        assert_eq!(pixels, [1.0, 0.5, 1.0, 0.2]);
+    }
+}
+
+#[cfg(test)]
+mod gain_map_sdk_tests {
+    #[test]
+    fn spatial_gains_match_independent_dng_sdk_interpolation() {
+        let reference = include_bytes!("../../../../tests/fixtures/dng/gain-map-sdk.f32le");
+        assert_eq!(reference.len(), 20 * 23 * 4);
+        let gains: Vec<f32> = (0..3)
+            .flat_map(|y| {
+                (0..4).map(move |x| {
+                    (1.0 + 0.13 * y as f64 + 0.07 * x as f64 + 0.03 * x as f64 * y as f64) as f32
+                })
+            })
+            .collect();
+        let mut maximum = 0.0f32;
+        for (i, bytes) in reference.chunks_exact(4).enumerate() {
+            let expected = f32::from_le_bytes(bytes.try_into().unwrap());
+            let actual = super::gain_at(
+                3,
+                4,
+                [0.3, 0.2],
+                [0.1, -0.05],
+                1,
+                &gains,
+                (i / 23) as f64 / 20.0 + 0.5 / 20.0,
+                (i % 23) as f64 / 23.0 + 0.5 / 23.0,
+                0,
+            );
+            maximum = maximum.max((actual - expected).abs());
+        }
+        assert!(maximum <= 3e-7, "gain-map max absolute error {maximum}");
+    }
+}
+
+/// DNG rectilinear destination-to-source coordinates for square pixels.
+/// Coordinates and center are `[x, y]`; radial coefficients precede two tangential coefficients.
+/// Image resampling and non-square pixel aspect admission are separate operations.
+pub fn rectilinear_source_point(
+    coefficients: [f64; 6],
+    center: [f64; 2],
+    extent: [u32; 2],
+    point: [f64; 2],
+) -> Result<[f64; 2], super::DevelopError> {
+    if extent.contains(&0)
+        || coefficients
+            .iter()
+            .chain(center.iter())
+            .chain(point.iter())
+            .any(|v| !v.is_finite())
+        || center.iter().any(|v| !(0.0..=1.0).contains(v))
+    {
+        return Err(super::DevelopError::Invalid("invalid rectilinear geometry"));
+    }
+    let w = f64::from(extent[0]);
+    let h = f64::from(extent[1]);
+    let cx = center[0] * w;
+    let cy = center[1] * h;
+    let radius = max_radius(cx, cy, w, h);
+    let dx = (point[0] - cx) / radius;
+    let dy = (point[1] - cy) / radius;
+    let r2 = (dx * dx + dy * dy).min(1.0);
+    let k = coefficients;
+    let radial = k[0] + r2 * (k[1] + r2 * (k[2] + r2 * k[3]));
+    let tx = k[5] * (r2 + 2.0 * dx * dx) + 2.0 * k[4] * dx * dy;
+    let ty = k[4] * (r2 + 2.0 * dy * dy) + 2.0 * k[5] * dx * dy;
+    let result = [cx + radius * (dx * radial + tx), cy + radius * (dy * radial + ty)];
+    if result.iter().any(|v| !v.is_finite()) {
+        return Err(super::DevelopError::Invalid("rectilinear coordinate overflow"));
+    }
+    Ok(result)
+}
+
+#[cfg(test)]
+mod rectilinear_coordinate_tests {
+    use super::rectilinear_source_point;
+    #[test]
+    fn identity_and_fusion_plane_scales_preserve_the_optical_center() {
+        for point in [[0.0, 0.0], [1552.0, 1500.0], [3103.0, 2999.0]] {
+            assert_eq!(
+                rectilinear_source_point([1.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.5; 2], [3104, 3000], point)
+                    .unwrap(),
+                point
+            );
+        }
+        let point = rectilinear_source_point(
+            [1.00037422, 0.0, 0.0, 0.0, 0.0, 0.0],
+            [0.5; 2],
+            [3104, 3000],
+            [552.0, 500.0],
+        )
+        .unwrap();
+        assert!((point[0] - 551.62578).abs() < 1e-9);
+        assert!((point[1] - 499.62578).abs() < 1e-9);
+        assert!(rectilinear_source_point([f64::NAN; 6], [0.5; 2], [3104, 3000], [0.0; 2]).is_err());
+    }
+}
+
+#[cfg(test)]
+mod rectilinear_sdk_tests {
+    #[test]
+    fn coordinates_match_independent_sdk_radial_and_tangential_evaluation() {
+        let reference = include_bytes!("../../../../tests/fixtures/dng/rectilinear-sdk.f64le");
+        assert_eq!(reference.len(), 300 * 16);
+        for (i, pair) in reference.chunks_exact(16).enumerate() {
+            let expected = [
+                f64::from_le_bytes(pair[..8].try_into().unwrap()),
+                f64::from_le_bytes(pair[8..].try_into().unwrap()),
+            ];
+            let actual = super::rectilinear_source_point(
+                [0.97, 0.05, -0.01, 0.002, 0.003, -0.004],
+                [0.4, 0.6],
+                [40, 30],
+                [(i % 20 * 2) as f64, (i / 20 * 2) as f64],
+            )
+            .unwrap();
+            for c in 0..2 {
+                assert!((actual[c] - expected[c]).abs() < 1e-11, "point {i} channel {c}");
+            }
+        }
+    }
+}
+
+/// DNG warp's 4x4 bicubic weights for quantized 1/32-pixel y/x phases.
+pub fn rectilinear_bicubic_weights(phase_y: u8, phase_x: u8) -> Result<[f32; 16], super::DevelopError> {
+    if phase_y >= 32 || phase_x >= 32 {
+        return Err(super::DevelopError::Invalid("invalid warp phase"));
+    }
+    fn kernel(x: f64) -> f32 {
+        let x = x.abs();
+        let a = -0.75;
+        let v = if x >= 2.0 {
+            0.0
+        } else if x >= 1.0 {
+            ((a * x - 5.0 * a) * x + 8.0 * a) * x - 4.0 * a
+        } else {
+            ((a + 2.0) * x - (a + 3.0)) * x * x + 1.0
+        };
+        v as f32
+    }
+    let mut weights = [0.0f32; 16];
+    let mut sum = 0.0f64;
+    for y in 0..4 {
+        for x in 0..4 {
+            let value = kernel(x as f64 - 1.0 - f64::from(phase_x) / 32.0)
+                * kernel(y as f64 - 1.0 - f64::from(phase_y) / 32.0);
+            weights[y * 4 + x] = value;
+            sum += f64::from(value);
+        }
+    }
+    let normalize = (1.0 / sum) as f32;
+    for w in &mut weights {
+        *w *= normalize;
+    }
+    Ok(weights)
+}
+#[cfg(test)]
+mod bicubic_sdk_tests {
+    #[test]
+    fn all_quantized_warp_phases_match_sdk_weight_bits() {
+        let reference = include_bytes!("../../../../tests/fixtures/dng/bicubic-sdk.f32le");
+        assert_eq!(reference.len(), 32 * 32 * 16 * 4);
+        for y in 0..32 {
+            for x in 0..32 {
+                let weights = super::rectilinear_bicubic_weights(y, x).unwrap();
+                for (i, w) in weights.iter().enumerate() {
+                    let offset = ((usize::from(y) * 32 + usize::from(x)) * 16 + i) * 4;
+                    assert_eq!(
+                        w.to_bits(),
+                        u32::from_le_bytes(reference[offset..offset + 4].try_into().unwrap())
+                    );
+                }
+            }
+        }
+    }
+}
+
+static WARP_WEIGHTS: std::sync::LazyLock<[[f32; 16]; 1024]> = std::sync::LazyLock::new(|| {
+    std::array::from_fn(|i| {
+        rectilinear_bicubic_weights((i / 32) as u8, (i % 32) as u8).expect("bounded phase")
+    })
+});
+/// Sample normalized RGB with the DNG 32-phase bicubic kernel and repeated edge pixels.
+pub fn rectilinear_sample(
+    source: &[[f32; 3]],
+    extent: [usize; 2],
+    point: [f64; 2],
+    channel: usize,
+) -> Result<f32, super::DevelopError> {
+    let [w, h] = extent;
+    if w == 0
+        || h == 0
+        || w.checked_mul(h) != Some(source.len())
+        || channel >= 3
+        || point.iter().any(|p| !p.is_finite())
+    {
+        return Err(super::DevelopError::Invalid("invalid warp sampling layout"));
+    }
+    let px = point[0].clamp(-2.0, w as f64 + 1.0);
+    let py = point[1].clamp(-2.0, h as f64 + 1.0);
+    let bx = px.floor() as isize;
+    let by = py.floor() as isize;
+    let fx = ((px - px.floor()) * 32.0) as usize;
+    let fy = ((py - py.floor()) * 32.0) as usize;
+    let weights = &WARP_WEIGHTS[fy * 32 + fx];
+    let mut total = 0.0f32;
+    for y in 0..4 {
+        for x in 0..4 {
+            let sx = (bx + x as isize - 1).clamp(0, w as isize - 1) as usize;
+            let sy = (by + y as isize - 1).clamp(0, h as isize - 1) as usize;
+            total += weights[y * 4 + x] * source[sy * w + sx][channel];
+        }
+    }
+    Ok(total.clamp(0.0, 1.0))
+}
+
+#[cfg(test)]
+mod warp_sampling_tests {
+    use super::*;
+    #[test]
+    fn warp_identity_edges_and_cancellation_are_bounded() {
+        let source = vec![[0.25, 0.5, 0.75]; 16];
+        assert_eq!(
+            rectilinear_sample(&source, [4, 4], [-100.0, 100.0], 1).unwrap(),
+            0.5
+        );
+        let mut image = super::super::Rgb32f {
+            width: 4,
+            height: 4,
+            data: source.clone(),
+        };
+        let opcode = Opcode::WarpRectilinear {
+            planes: vec![[1.01, 0.0, 0.0, 0.0, 0.0, 0.0]],
+            center: [0.5; 2],
+        };
+        assert!(matches!(
+            apply_list3(&[opcode], &mut image, &|| true),
+            Err(super::super::DevelopError::Cancelled)
+        ));
+        assert_eq!(image.data, source);
+    }
+}
+
+#[cfg(test)]
+mod full_warp_sdk_tests {
+    #[test]
+    fn full_rgb_warp_matches_independent_sdk_image_opcode() {
+        let reference = include_bytes!("../../../../tests/fixtures/dng/warp-image-sdk.f32le");
+        assert_eq!(reference.len(), 32 * 48 * 3 * 4);
+        let data = (0..32)
+            .flat_map(|y| {
+                (0..48).map(move |x| {
+                    std::array::from_fn(|c| (((x * 17 + y * 31 + c * 43) % 251) as f64 / 250.0) as f32)
+                })
+            })
+            .collect();
+        let mut image = super::super::Rgb32f {
+            width: 48,
+            height: 32,
+            data,
+        };
+        let op = super::Opcode::WarpRectilinear {
+            planes: vec![[0.97, 0.05, -0.01, 0.002, 0.003, -0.004]],
+            center: [0.4, 0.6],
+        };
+        super::apply_list3(&[op], &mut image, &|| false).unwrap();
+        let mut maximum = 0.0f32;
+        for (actual, b) in image.data.iter().flatten().zip(reference.chunks_exact(4)) {
+            let expected = f32::from_le_bytes(b.try_into().unwrap());
+            maximum = maximum.max((actual - expected).abs());
+        }
+        assert!(maximum <= 1e-6, "full SDK warp maximum error {maximum}");
+    }
 }

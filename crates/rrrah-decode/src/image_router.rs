@@ -46,7 +46,7 @@ pub fn is_supported_image_path(path: &Path) -> bool {
 pub fn is_supported_raw_path(path: &Path) -> bool {
     path.extension().and_then(|s| s.to_str()).is_some_and(|s| {
         [
-            "crw", "cr3", "cr2", "dng", "nef", "nrw", "arw", "sr2", "mrw", "erf", "kdc", "srw", "3fr", "fff",
+            "crw", "cr3", "cr2", "dng", "gpr", "nef", "nrw", "arw", "sr2", "mrw", "erf", "kdc", "srw", "3fr", "fff",
             "dcr", "mos", "iiq", "srf", "dcs", "orf", "pef", "ptx", "rw2", "rwl", "raw", "raf", "tif",
             "tiff",
         ]

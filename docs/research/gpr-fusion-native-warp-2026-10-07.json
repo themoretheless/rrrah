@@ -1,0 +1,21 @@
+{
+  "change": "native WarpRectilinear list3 admission and cancellable RGB resampling",
+  "geometry": "square pixels; normalized radial/tangential source map; one or three independent coefficient planes",
+  "kernel": "SDK-exact 4x4 bicubic weights, A=-0.75 and 32 phases",
+  "edges": "native repeated edge samples; full SDK image comparison still pending",
+  "output": "normalized clamp 0..1 as SDK warp resample",
+  "accounting": "source RGB clone under existing conservative develop scratch reservation; immutable shared weight table",
+  "real_source": "official Fusion-back.GPR",
+  "tests": {
+    "core": 90,
+    "Fusion_default_quality": "passed, 3104x3000 raster differs from no-op development",
+    "cancel_before_first_row": "passed, destination unchanged",
+    "managed_after_release": 0
+  },
+  "remaining": [
+    "independent complete warped image oracle including edge policy",
+    "non-square pixel aspect",
+    "GPU/swap corrected Fusion qualification",
+    "full independent color"
+  ]
+}

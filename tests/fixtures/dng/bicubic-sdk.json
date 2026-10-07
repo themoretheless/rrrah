@@ -1,0 +1,18 @@
+{
+  "oracle": "unchanged dng_resample_weights_2d::Initialize(dng_resample_bicubic::Get())",
+  "commit": "446c736a38fb14f51343605c0780d347dc602f89",
+  "host": "scripts/bicubic-sdk-oracle.cpp",
+  "phases": [
+    32,
+    32
+  ],
+  "kernel": [
+    4,
+    4
+  ],
+  "coefficient": -0.75,
+  "values": 16384,
+  "sha256": "4ecdeaa9a71cf8eeec83d54b48568e4cb1d6e4b89a0586e413b136b19da5fd1f",
+  "native_match": "all 16384 f32 weight bits exact",
+  "remaining": "image sampling, border extension and pipeline admission"
+}

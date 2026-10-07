@@ -1,0 +1,40 @@
+{
+  "change": "DNG gain-map multiplication saturates at normalized scale; no lower clipping added",
+  "reference": {
+    "repository": "gopro/gpr",
+    "commit": "446c736a38fb14f51343605c0780d347dc602f89",
+    "path": "source/lib/dng_sdk/dng_gain_map.cpp",
+    "function": "dng_opcode_GainMap::ProcessArea",
+    "operation": "Min_real32(value * gain, 1.0f)"
+  },
+  "fixture": {
+    "sensor": [
+      2,
+      2
+    ],
+    "area": [
+      0,
+      0,
+      4,
+      3
+    ],
+    "gain": 2,
+    "input": [
+      0.75,
+      0.25,
+      0.9,
+      0.1
+    ],
+    "expected": [
+      1,
+      0.5,
+      1,
+      0.2
+    ]
+  },
+  "tests": {
+    "core_passed": 85,
+    "HERO9_full_default_development": "passed; managed usage zero after drop"
+  },
+  "remaining": "full independent spatial gain interpolation and final rendered color"
+}

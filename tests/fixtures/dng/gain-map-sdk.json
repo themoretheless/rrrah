@@ -1,0 +1,27 @@
+{
+  "oracle": "unmodified dng_gain_map::Interpolate from externally compiled GoPro DNG SDK",
+  "repository": "https://github.com/gopro/gpr",
+  "commit": "446c736a38fb14f51343605c0780d347dc602f89",
+  "host": "scripts/gain-map-sdk-oracle.cpp",
+  "image": [
+    23,
+    20
+  ],
+  "map_points": [
+    4,
+    3
+  ],
+  "spacing_vh": [
+    0.3,
+    0.2
+  ],
+  "origin_vh": [
+    0.1,
+    -0.05
+  ],
+  "gain_formula": "float(1 + .13*y + .07*x + .03*x*y)",
+  "sha256": "be7b0f947025f888779f5af6dd224e45979a15f2bef78401603bc433b6290890",
+  "samples": 460,
+  "native_max_abs_bound": 3e-07,
+  "scope": "nonconstant one-plane map, fractional interpolation and edge clamping; not complete developed color"
+}

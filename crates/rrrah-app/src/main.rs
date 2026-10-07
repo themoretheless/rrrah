@@ -8699,3 +8699,193 @@ mod hdr_surface_policy_tests {
         assert!(select_viewer_surface(&caps, true).is_ok());
     }
 }
+
+#[cfg(test)]
+mod gpr_preload_tests {
+    use super::*;
+    #[test]
+    #[ignore = "requires pinned HERO9 GPR"]
+    fn gpr_preload_hits_ram_and_disk_and_cancels_stale_generation() {
+        let path = PathBuf::from(std::env::var("RRRAH_GPR_SOURCE").expect("RRRAH_GPR_SOURCE"));
+        assert!(rrrah_decode::is_supported_raw_path(&path));
+        assert!(rrrah_decode::is_supported_image_path(&path));
+        let dir = tempfile::tempdir().unwrap();
+        let disk = DiskMosaicCache::with_max_bytes(dir.path().to_path_buf(), 512 * 1024 * 1024);
+        let root = rrrah_cache::MemoryBudget::new(512 * 1024 * 1024);
+        let mut request = DecodeRequest::new(path);
+        request.memory_budget = Some(root.clone());
+        let recipe = NativeRawDecoder.mosaic_recipe(&request).unwrap();
+        let fingerprint = SourceFingerprint::from_path(&request.path).unwrap();
+        let key = CacheKey::for_mosaic_recipe(&fingerprint, 0, recipe);
+        let gate = Arc::new(DecodeGate::new());
+        let mut ram = MosaicRamCache::new(128 * 1024 * 1024);
+        let blocker = root.try_reserve(root.limit()).unwrap();
+        assert!(!preload_raw(&request, &disk, &mut ram, None, 1, &gate).unwrap());
+        assert_eq!(root.used(), root.limit());
+        drop(blocker);
+        assert!(preload_raw(&request, &disk, &mut ram, None, 1, &gate).unwrap());
+        assert_eq!(ram.visible(), None);
+        let first = ram.get(&key).unwrap();
+        let blocker = root.try_reserve(root.available_bytes()).unwrap();
+        assert!(preload_raw(&request, &disk, &mut ram, None, 1, &gate).unwrap());
+        drop(blocker);
+        let hit = ram.get(&key).unwrap();
+        assert!(first.pixels.ptr_eq(&hit.pixels));
+        assert!(first.pixels.is_managed());
+        disk.store(key, &first).unwrap();
+        drop(hit);
+        drop(ram);
+        let mut ram = MosaicRamCache::new(128 * 1024 * 1024);
+        assert!(preload_raw(&request, &disk, &mut ram, None, 1, &gate).unwrap());
+        assert_eq!(ram.visible(), None);
+        let restored = ram.get(&key).unwrap();
+        assert_eq!(first.metadata, restored.metadata);
+        assert_eq!(&*first.pixels, &*restored.pixels);
+        ram.mark_visible(&key);
+        let generation = Arc::new(AtomicU64::new(2));
+        request.cancellation = Some(GenerationToken::new(generation, 1));
+        assert!(preload_raw(&request, &disk, &mut ram, None, 1, &gate).is_err());
+        assert_eq!(ram.visible(), Some(key));
+        drop(first);
+        drop(restored);
+        drop(ram);
+        assert_eq!(root.used(), 0);
+    }
+
+    #[test]
+    #[ignore = "requires pinned HERO9 GPR"]
+    fn gpr_neighbour_windows_preserve_visible_and_bound_count_and_bytes() {
+        let source = std::env::var("RRRAH_GPR_SOURCE").expect("RRRAH_GPR_SOURCE");
+        let dir = tempfile::tempdir().unwrap();
+        let paths: Vec<_> = (0..5).map(|i| {
+            let path = dir.path().join(format!("{i}.GPR"));
+            std::fs::copy(&source, &path).unwrap();
+            std::fs::File::open(&path).unwrap().set_times(std::fs::FileTimes::new().set_modified(
+                std::time::UNIX_EPOCH + Duration::from_secs(1_700_000_000 + i),
+            )).unwrap();
+            path
+        }).collect();
+        let root = rrrah_cache::MemoryBudget::new(256 * 1024 * 1024);
+        let disk = DiskMosaicCache::with_max_bytes(dir.path().join("cache"), 256 * 1024 * 1024);
+        let gate = Arc::new(DecodeGate::new());
+        let request_for = |path: PathBuf| {
+            let mut request = DecodeRequest::new(path);
+            request.memory_budget = Some(root.clone());
+            request
+        };
+        let key_for = |request: &DecodeRequest| CacheKey::for_mosaic_recipe(
+            &SourceFingerprint::from_path(&request.path).unwrap(), 0,
+            NativeRawDecoder.mosaic_recipe(request).unwrap(),
+        );
+        let visible_request = request_for(paths[2].clone());
+        let visible_key = key_for(&visible_request);
+        let visible = NativeRawDecoder.decode(&visible_request).unwrap().mosaic;
+        let sensor_bytes = visible.pixels.capacity_bytes();
+        let mut ram = MosaicRamCache::with_limits(rrrah_cache::CacheLimits {
+            max_bytes: 2 * sensor_bytes, max_entries: Some(2), ttl: None,
+        });
+        assert!(ram.insert_visible(visible_key, visible.clone()));
+        for direction in [gallery::NavDirection::Forward, gallery::NavDirection::Backward] {
+            let planned = gallery::neighbour_prefetch_paths(&paths, 2, direction,
+                gallery::PrefetchWindow { behind: 1, ahead: 2 });
+            assert_eq!(planned.len(), 3);
+            assert_eq!(planned[0], paths[if direction == gallery::NavDirection::Forward { 3 } else { 1 }]);
+            for path in planned {
+                assert!(rrrah_decode::is_supported_raw_path(&path));
+                let request = request_for(path);
+                let key = key_for(&request);
+                assert!(preload_raw(&request, &disk, &mut ram, None, 1, &gate).unwrap());
+                let warmed = ram.get(&key).unwrap();
+                let blocker = root.try_reserve(root.available_bytes()).unwrap();
+                assert!(preload_raw(&request, &disk, &mut ram, None, 1, &gate).unwrap());
+                let hit = ram.get(&key).unwrap();
+                assert!(hit.pixels.ptr_eq(&warmed.pixels));
+                drop(blocker);
+                assert_eq!(ram.len(), 2);
+                assert_eq!(ram.visible(), Some(visible_key));
+                assert!(ram.get(&visible_key).unwrap().pixels.ptr_eq(&visible.pixels));
+                drop(hit);
+                drop(warmed);
+                assert_eq!(root.used(), 2 * sensor_bytes);
+            }
+        }
+        drop(visible);
+        drop(ram);
+        assert_eq!(root.used(), 0);
+    }
+}
+
+#[cfg(test)]
+mod gpr_development_tests {
+    use super::*;
+    #[test]
+    #[ignore = "requires pinned HERO9 GPR"]
+    fn gpr_opcodes_trigger_default_quality_development() {
+        let budget = rrrah_core::MemoryBudget::new(1024 * 1024 * 1024);
+        let mut request = DecodeRequest::new(std::env::var("RRRAH_GPR_SOURCE").unwrap());
+        request.memory_budget = Some(budget.clone());
+        let mosaic = NativeRawDecoder.decode(&request).unwrap().mosaic;
+        let (raster, _) = prepare_quality_raw(&mosaic, &request, None).unwrap().expect("GPR corrections must trigger development");
+        assert_eq!((raster.width(), raster.height()), (5568, 4176));
+        assert!(budget.peak() <= budget.limit());
+        drop(raster);
+        drop(mosaic);
+        assert_eq!(budget.used(), 0);
+    }
+
+    #[test]
+    #[ignore = "requires pinned HERO9 GPR"]
+    fn navigation_cancels_gpr_quality_development_after_float_admission() {
+        let budget = rrrah_core::MemoryBudget::new(1024 * 1024 * 1024);
+        let generation = Arc::new(AtomicU64::new(1));
+        let mut request = DecodeRequest::new(std::env::var("RRRAH_GPR_SOURCE").unwrap());
+        request.memory_budget = Some(budget.clone());
+        let mosaic = NativeRawDecoder.decode(&request).unwrap().mosaic;
+        request.cancellation = Some(GenerationToken::new(generation.clone(), 1));
+        let worker = std::thread::spawn(move || prepare_quality_raw(&mosaic, &request, None));
+        let deadline = std::time::Instant::now() + Duration::from_secs(30);
+        // The decoded sensor and compressed source peak are below this bound.
+        // Observe live retained bytes, proving float development admission.
+        while budget.used() <= 256 * 1024 * 1024 && !worker.is_finished() {
+            assert!(std::time::Instant::now() < deadline, "float admission timed out");
+            std::thread::yield_now();
+        }
+        assert!(budget.used() > 256 * 1024 * 1024);
+        generation.store(2, Ordering::Release);
+        let error = worker.join().unwrap().unwrap_err();
+        assert!(error.to_lowercase().contains("cancel"), "{error}");
+        assert_eq!(budget.used(), 0);
+        let small = rrrah_core::MemoryBudget::new(128 * 1024 * 1024);
+        let mut retry = DecodeRequest::new(std::env::var("RRRAH_GPR_SOURCE").unwrap());
+        retry.memory_budget = Some(small.clone());
+        let retained = NativeRawDecoder.decode(&retry).unwrap().mosaic;
+        let sensor_bytes = retained.pixels.capacity_bytes();
+        assert!(prepare_quality_raw(&retained, &retry, None).is_err());
+        assert_eq!(small.used(), sensor_bytes);
+        assert_eq!(retained.pixels.len(), 23_251_968);
+        drop(retained);
+        assert_eq!(small.used(), 0);
+
+    }
+}
+
+#[cfg(test)]
+mod fusion_warp_tests {
+    use super::*;
+    #[test]
+    #[ignore = "requires pinned official Fusion GPR"]
+    fn fusion_warp_triggers_quality_and_changes_corrected_channels() {
+        let path=PathBuf::from(std::env::var("RRRAH_GPR_CORPUS").unwrap()).join("Fusion-back.GPR");
+        let budget=rrrah_core::MemoryBudget::new(512*1024*1024);
+        let mut request=DecodeRequest::new(path);request.memory_budget=Some(budget.clone());
+        let mosaic=NativeRawDecoder.decode(&request).unwrap().mosaic;
+        let lists=rrrah_decode::raw_development_opcodes(&request).unwrap();
+        assert_eq!(lists.list3.len(),1);
+        let (corrected,_)=prepare_quality_raw(&mosaic,&request,None).unwrap().expect("warp must trigger quality");
+        let plain=rrrah_core::develop::develop_raw(&mosaic,&Default::default(),&Default::default(),Some(&budget),&||false).unwrap();
+        assert_eq!((corrected.width(),corrected.height()),(3104,3000));
+        let (rrrah_core::RasterPixels::Rgba32Float(a),rrrah_core::RasterPixels::Rgba32Float(b))=(corrected.pixels(),plain.pixels()) else {panic!()};
+        assert!(a.iter().zip(b.iter()).any(|(x,y)|x.to_bits()!=y.to_bits()));
+        drop(corrected);drop(plain);drop(mosaic);assert_eq!(budget.used(),0);
+    }
+}

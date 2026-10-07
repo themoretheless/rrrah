@@ -191,6 +191,7 @@ pub(crate) fn parse(data: &[u8]) -> Result<DngImage<'_>, DngError> {
     let compression = match compression_code {
         COMPRESSION_UNCOMPRESSED => Compression::Uncompressed,
         COMPRESSION_JPEG => Compression::LosslessJpeg,
+        9 => Compression::Vc5,
         actual => return Err(DngError::UnsupportedCompression { actual }),
     };
     let predictor = optional_u16(raw, TAG_PREDICTOR)?.unwrap_or(1);
@@ -204,11 +205,20 @@ pub(crate) fn parse(data: &[u8]) -> Result<DngImage<'_>, DngError> {
     let black_level = parse_black_level(raw, active_area, samples_per_pixel)?;
     let white_level = parse_white_level(raw, stored_bits_per_sample, samples_per_pixel)?;
     let linearization_table = parse_linearization_table(raw)?;
-    let output_bits_per_sample = output_bit_depth(
-        stored_bits_per_sample,
-        &white_level,
-        linearization_table.as_deref(),
-    )?;
+    let output_bits_per_sample = if compression == Compression::Vc5 {
+        match white_level.as_slice() {
+            [4095] => 12,
+            [16383] => 14,
+            [65535] => 16,
+            _ => return Err(DngError::UnsupportedCompression { actual: 9 }),
+        }
+    } else {
+        output_bit_depth(
+            stored_bits_per_sample,
+            &white_level,
+            linearization_table.as_deref(),
+        )?
+    };
     let color_planes = cfa.plane_colors.len();
     let color_matrix_1 = parse_optional_matrix(
         raw,
@@ -319,6 +329,47 @@ pub(crate) struct DngImage<'a> {
 }
 
 impl DngImage<'_> {
+    /// Decode VC-5 directly into managed ownership, retaining the source lease in the caller.
+    pub(crate) fn decode_vc5(
+        &self,
+        request: &crate::DecodeRequest,
+    ) -> Result<rrrah_core::SharedBuffer<u16>, crate::DecodeError> {
+        use crate::vc5::{self, BayerOrder};
+        let invalid = |message: &str| crate::DecodeError::NativeDng(message.to_owned());
+        let Storage::Tiles {
+            tile_width,
+            tile_height,
+            segments,
+        } = &self.storage
+        else {
+            return Err(invalid("VC-5 requires a complete sensor tile"));
+        };
+        if self.compression != Compression::Vc5
+            || segments.len() != 1
+            || *tile_width != self.width
+            || *tile_height != self.height
+            || self.width % 2 != 0
+            || self.height % 2 != 0
+            || self.metadata.linearization_table.is_some()
+            || self.metadata.cfa.rows != 2
+            || self.metadata.cfa.columns != 2
+        {
+            return Err(invalid("unsupported VC-5 DNG sensor layout"));
+        }
+        use CfaColor::{Blue, Green, Red};
+        let order = match self.metadata.cfa.cells.as_slice() {
+            [Red, Green, Green, Blue] => BayerOrder::Rggb,
+            [Green, Blue, Red, Green] => BayerOrder::Gbrg,
+            _ => return Err(invalid("unsupported VC-5 DNG Bayer order")),
+        };
+        request.check_cancelled()?;
+        let index = vc5::index_raw(segments[0].bytes).map_err(invalid)?;
+        if u32::from(index.width) != self.width || u32::from(index.height) != self.height {
+            return Err(invalid("VC-5 and DNG sensor dimensions disagree"));
+        }
+        vc5::decode_bayer(&index, self.output_bits_per_sample, order, request)
+    }
+
     /// Decodes the stored CFA plane and applies `LinearizationTable`, if present.
     ///
     /// Segments decode on a bounded worker set (`RRRAH_DNG_DECODE_WORKERS`,
@@ -347,6 +398,7 @@ impl DngImage<'_> {
         let mut pixels = match self.compression {
             Compression::Uncompressed => uncompressed::decode(self, cancelled, workers),
             Compression::LosslessJpeg => lossless_storage::decode(self, cancelled, workers),
+            Compression::Vc5 => return Err(DngError::UnsupportedCompression { actual: 9 }),
         }?;
         let pixel_unpack = pixel_unpack_started.elapsed();
 
@@ -406,6 +458,7 @@ pub(crate) struct DngPixelTimings {
 pub(crate) enum Compression {
     Uncompressed,
     LosslessJpeg,
+    Vc5,
 }
 
 #[derive(Debug)]

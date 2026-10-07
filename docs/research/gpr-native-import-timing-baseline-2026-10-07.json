@@ -1,0 +1,25 @@
+{
+  "reps": 5,
+  "warmups": 1,
+  "wall_ms": {
+    "p50": 2308.452375,
+    "p95": 2340.598625
+  },
+  "source_ms": {
+    "p50": 0.45858299999999996,
+    "p95": 0.47645899999999997
+  },
+  "decode_ms": {
+    "p50": 2307.866042,
+    "p95": 2340.068709
+  },
+  "managed_peak_bytes": 111408770,
+  "pixel_blake3": "46a00b5f142b66974884dbbf961635f8563f3a3828a06b0843583bea0cd2b5a6",
+  "scope": "warm native sensor import; excludes gain maps, development, GPU and presentation",
+  "build": "workspace dev: own opt-level 1, dependencies opt-level 3; not release benchmark",
+  "machine": "Apple M4 Max macOS arm64",
+  "source_sha256": "9249208a3482d6d71d39575210fe19ab3dd737e5e446a4d0718d4bd9d3c4358b",
+  "native_vc5_source_sha256": "476c285516baf43b6d5f3fee2b87376a34919b53166399006371df0a32419b70",
+  "correctness": "every repetition verifies complete sensor BLAKE3 and metadata against warmup; managed root returns zero after each",
+  "optimization_candidate": "Vc5Runs::magnitude linear codebook scan at every prefix length; causal impact not yet measured"
+}

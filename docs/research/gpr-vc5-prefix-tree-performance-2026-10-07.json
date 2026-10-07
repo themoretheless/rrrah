@@ -1,0 +1,66 @@
+{
+  "scope": "warm sensor import dev build opt-level1, excludes development and GPU; sequential pre/post measurements not interleaved",
+  "baseline": {
+    "p50": 2308.452375,
+    "p95": 2340.598625
+  },
+  "prefix_tree": {
+    "reps": 5,
+    "warmups": 1,
+    "wall_ms": {
+      "p50": 564.2581250000001,
+      "p95": 568.986
+    },
+    "source_ms": {
+      "p50": 0.470375,
+      "p95": 0.484709
+    },
+    "decode_ms": {
+      "p50": 563.6883339999999,
+      "p95": 568.425374
+    },
+    "managed_peak_bytes": 111408770,
+    "pixel_blake3": "46a00b5f142b66974884dbbf961635f8563f3a3828a06b0843583bea0cd2b5a6"
+  },
+  "p50_speedup": 4.091128284594927,
+  "nodes": 527,
+  "static_table_bytes": 3162,
+  "full_sdk_sources": [
+    {
+      "source": "HERO9",
+      "samples": 23251968,
+      "exact": true,
+      "sensor_sha256": "6592240ad9710edba5190fd1fd17c951cdb9f2359cedd3d2ab6728efaafcf882"
+    },
+    {
+      "source": "Fusion-back",
+      "samples": 9312000,
+      "exact": true,
+      "sensor_sha256": "44732fc1dbc2883b89f33be4f6a7b2cd1f93c401c75859e4d82ad96be7399527"
+    },
+    {
+      "source": "Fusion-front",
+      "samples": 9312000,
+      "exact": true,
+      "sensor_sha256": "58382d65b40cdd82b33f3b91a47de1b5f329a6289bafc20a88d30a4543f97ed3"
+    },
+    {
+      "source": "HERO5",
+      "samples": 12000000,
+      "exact": true,
+      "sensor_sha256": "fc4da317d5acd87ff502b5f692da8a2b5e8562297c7a30ab4d774ee3cd718166"
+    },
+    {
+      "source": "HERO6",
+      "samples": 12000000,
+      "exact": true,
+      "sensor_sha256": "7c0fa7faa996b89b68cbafd60b69a5d6b3d6338ec63b620944eb5749400dac43"
+    },
+    {
+      "source": "HERO7",
+      "samples": 12000000,
+      "exact": true,
+      "sensor_sha256": "fab22db6b11e8ecb220e54e35a5b81d98500db26ff2cc741b84c472d09d0b220"
+    }
+  ]
+}

@@ -72,28 +72,47 @@ impl NativeDngDecoder {
             .map_err(|_| DecodeError::DimensionOverflow)?
             .checked_mul(2)
             .ok_or(DecodeError::DimensionOverflow)?;
-        let reservation = request
-            .memory_budget
-            .as_ref()
-            .map(|budget| budget.try_reserve(output_bytes))
-            .transpose()?;
         let raw_image_started = Instant::now();
-        let decoded = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| image.decode_u16(&cancelled)))
-            .map_err(|_| DecodeError::DecoderPanicked)?
-            .map_err(|error| map_dng_error(&error))?;
+        let (pixels, pixel_timings): (rrrah_core::PixelBuffer<u16>, dng::DngPixelTimings) =
+            if image.compression == dng::Compression::Vc5 {
+                let pixels = image.decode_vc5(request)?;
+                let elapsed = raw_image_started.elapsed();
+                (
+                    pixels.into(),
+                    dng::DngPixelTimings {
+                        pixel_unpack: elapsed,
+                        linearization: Default::default(),
+                        total: elapsed,
+                    },
+                )
+            } else {
+                let reservation = request
+                    .memory_budget
+                    .as_ref()
+                    .map(|budget| budget.try_reserve(output_bytes))
+                    .transpose()?;
+                let decoded =
+                    std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| image.decode_u16(&cancelled)))
+                        .map_err(|_| DecodeError::DecoderPanicked)?
+                        .map_err(|error| map_dng_error(&error))?;
+                let pixels = match reservation {
+                    Some(reservation) => reservation.try_adopt(decoded.pixels)?.into(),
+                    None => Arc::new(decoded.pixels).into(),
+                };
+                (pixels, decoded.timings)
+            };
         let raw_image = raw_image_started.elapsed();
         request.check_cancelled()?;
-
         let dng_timings = DngDecodeTimings {
             tiff_header: image.parse_timings.tiff_header,
             ifd_walk: image.parse_timings.ifd_walk,
             raw_ifd_select: image.parse_timings.raw_ifd_select,
             metadata: image.parse_timings.metadata,
             storage_plan: image.parse_timings.storage_plan,
-            pixel_unpack: decoded.timings.pixel_unpack,
-            linearization: decoded.timings.linearization,
+            pixel_unpack: pixel_timings.pixel_unpack,
+            linearization: pixel_timings.linearization,
         };
-        let (mosaic, adapt) = adapt_dng(&image, decoded.pixels, reservation)?;
+        let (mosaic, adapt) = adapt_dng(&image, pixels)?;
         let adapt_metadata = adapt.total;
         let raw_decode = decoder_select.saturating_add(raw_image);
         request.check_cancelled()?;
@@ -148,8 +167,7 @@ fn map_dng_error(error: &DngError) -> DecodeError {
 
 fn adapt_dng(
     image: &DngImage<'_>,
-    pixels: Vec<u16>,
-    reservation: Option<rrrah_core::Reservation>,
+    pixels: rrrah_core::PixelBuffer<u16>,
 ) -> Result<(DecodedMosaic, AdaptTimings), DecodeError> {
     let total_started = Instant::now();
 
@@ -267,10 +285,7 @@ fn adapt_dng(
         crop_area,
         orientation,
     };
-    let mosaic = match reservation {
-        Some(reservation) => DecodedMosaic::new(metadata, reservation.try_adopt(pixels)?)?,
-        None => DecodedMosaic::new(metadata, Arc::new(pixels))?,
-    };
+    let mosaic = DecodedMosaic::new(metadata, pixels)?;
     let finalize = finalize_started.elapsed();
 
     Ok((
@@ -679,5 +694,73 @@ mod tests {
         // A malformed row count is ignored rather than misparsed.
         let short = vec![1.0_f64; 6];
         assert_eq!(select_xyz_to_camera_d65(Some(&short), Some(17), None, None), None);
+    }
+}
+
+#[cfg(test)]
+mod gpr_admission_tests {
+    use super::*;
+
+    #[test]
+    #[ignore = "requires pinned HERO9 source and independent full Bayer oracle"]
+    fn hero9_native_dng_matches_sensor_oracle_and_releases_budget() {
+        let source = std::env::var("RRRAH_GPR_SOURCE").expect("RRRAH_GPR_SOURCE");
+        let oracle = std::fs::read(std::env::var("RRRAH_GPR_SENSOR_ORACLE").expect("RRRAH_GPR_SENSOR_ORACLE")).unwrap();
+        let budget = rrrah_core::MemoryBudget::new(128 * 1024 * 1024);
+        let mut request = DecodeRequest::new(&source);
+        request.memory_budget = Some(budget.clone());
+        let decoded = crate::NativeRawDecoder.decode(&request).unwrap();
+        assert_eq!(decoded.mosaic.metadata.bits_per_sample, 14);
+        assert_eq!(decoded.mosaic.pixels.len() * 2, oracle.len());
+        for (native, reference) in decoded.mosaic.pixels.iter().zip(oracle.chunks_exact(2)) {
+            assert_eq!(*native, u16::from_le_bytes([reference[0], reference[1]]));
+        }
+        assert_eq!(budget.used(), 46_503_936);
+        drop(decoded);
+        assert_eq!(budget.used(), 0);
+        let small = rrrah_core::MemoryBudget::new(8 * 1024 * 1024);
+        request.memory_budget = Some(small.clone());
+        assert!(crate::NativeRawDecoder.decode(&request).is_err());
+        assert_eq!(small.used(), 0);
+    }
+
+    #[test]
+    #[ignore = "requires pinned HERO9 GPR source"]
+    fn damaged_gpr_refuses_without_retaining_managed_pixels() {
+        let path = std::env::var("RRRAH_GPR_SOURCE").expect("RRRAH_GPR_SOURCE");
+        let source = std::fs::read(&path).unwrap();
+        assert_eq!(source.len(), 6_763_778);
+        let ifd = u32::from_le_bytes(source[4..8].try_into().unwrap()) as usize;
+        let entries = u16::from_le_bytes(source[ifd..ifd+2].try_into().unwrap()) as usize;
+        let entry = |tag: u16| (0..entries).map(|i| ifd+2+i*12)
+            .find(|o| u16::from_le_bytes(source[*o..*o+2].try_into().unwrap())==tag).unwrap();
+        let tile_entry = entry(324);
+        let tile = u32::from_le_bytes(source[tile_entry+8..tile_entry+12].try_into().unwrap()) as usize;
+        let width_record = crate::vc5::Vc5Records::new(&source[tile..]).unwrap()
+            .map(Result::unwrap).find(|r| r.tag==20).unwrap().offset;
+        let mut wrong_width = source.clone();
+        wrong_width[tile+width_record+2..tile+width_record+4].copy_from_slice(&5566u16.to_be_bytes());
+        let mut invalid_white = source.clone();
+        let white = entry(50717);
+        assert_eq!(u16::from_le_bytes(source[white+2..white+4].try_into().unwrap()),3);
+        invalid_white[white+8..white+10].copy_from_slice(&8191u16.to_le_bytes());
+        let mut bad_signature = source.clone();
+        bad_signature[tile..tile+4].copy_from_slice(b"BAD!");
+        let mut truncated = source.clone();
+        truncated.pop();
+        for (data, expected) in [
+            (wrong_width, "dimensions disagree"),
+            (invalid_white, "Compression 9"),
+            (bad_signature, "VC-5"),
+            (truncated, ""),
+        ] {
+            let budget = rrrah_core::MemoryBudget::new(128 * 1024 * 1024);
+            let mut request = DecodeRequest::new(&path);
+            request.memory_budget = Some(budget.clone());
+            let error = NativeDngDecoder.decode_source(&request, data, Default::default(), Instant::now()).unwrap_err();
+            assert!(error.to_string().contains(expected), "{error}");
+            assert_eq!(budget.used(), 0);
+            assert_eq!(budget.peak(), 0, "invalid framing must precede sensor allocation");
+        }
     }
 }

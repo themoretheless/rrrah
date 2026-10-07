@@ -1,0 +1,23 @@
+{
+  "source": "official pinned HERO9 GPR",
+  "pipeline": "NativeRawDecoder -> four list2 gain maps -> default develop_raw -> RasterSwapCache -> Metal",
+  "extent": [
+    5568,
+    4176
+  ],
+  "float_components": 93007872,
+  "pixel_bytes": 372031488,
+  "root_limit": 1073741824,
+  "assertions": [
+    "float component bits identical",
+    "color-space metadata identical",
+    "128x96 native and restored Metal frame exact and nonzero",
+    "pressure refusal preserves entry",
+    "retry succeeds",
+    "one write and one read",
+    "queue zero after operation",
+    "root usage zero after final drop"
+  ],
+  "adapter": "Metal Apple M4 Max",
+  "scope": "developed-data transport qualification; same native development before and after swap, not independent rendered color"
+}

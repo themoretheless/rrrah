@@ -1,0 +1,32 @@
+{
+  "scope": "Application RAW preload on five copied official HERO9 sources with distinct file timestamps and cache keys; same camera/content, not cross-camera corpus",
+  "window": {
+    "behind": 1,
+    "ahead": 2,
+    "directions": [
+      "forward",
+      "backward"
+    ],
+    "planned_neighbours_per_direction": 3
+  },
+  "ram_limits": {
+    "bytes": 93007872,
+    "count": 2,
+    "ttl": null
+  },
+  "managed_root_limit": 268435456,
+  "verified": [
+    "nearest direction priority",
+    "all planned paths passed production preload_raw",
+    "each RAM hit at zero free root memory reuses pixel pointer",
+    "visible pin and shared sensor retained",
+    "exactly two RAM entries and 93007872 managed bytes after each neighbour",
+    "managed root zero after drop"
+  ],
+  "runtime_seconds": 20.03,
+  "remaining": [
+    "independent camera color",
+    "additional GPR sources",
+    "physical HDR and NVIDIA/CUDA runtime coverage"
+  ]
+}

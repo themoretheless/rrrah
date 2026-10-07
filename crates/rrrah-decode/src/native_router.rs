@@ -57,7 +57,7 @@ impl NativeFormat {
             Some("srf") => Ok(Self::Srf),
             Some("crw") => Ok(Self::Crw),
             Some("cr3") => Ok(Self::Cr3),
-            Some("dng" | "tif" | "tiff") => Ok(Self::Dng),
+            Some("dng" | "gpr" | "tif" | "tiff") => Ok(Self::Dng),
             Some("cr2") => Ok(Self::Cr2),
             Some("nef") => Ok(Self::Nef),
             Some("mrw") => Ok(Self::Mrw),
@@ -178,7 +178,7 @@ mod tests {
     use super::*;
     #[test]
     fn unsupported_raw_index_precedes_format_resolution_and_source_io() {
-        for extension in ["cr3", "tiff", "nef", "mrw", "unknown"] {
+        for extension in ["cr3", "tiff", "gpr", "nef", "mrw", "unknown"] {
             for index in [1, usize::MAX] {
                 let mut request = DecodeRequest::new(format!("/rrrah-absent-indexed-source.{extension}"));
                 request.image_index = index;
@@ -191,7 +191,7 @@ mod tests {
     }
     #[test]
     fn cancelled_router_refuses_before_opening_or_resolving_source() {
-        for extension in ["cr3", "tiff", "nef", "unknown"] {
+        for extension in ["cr3", "tiff", "gpr", "nef", "unknown"] {
             let mut request = DecodeRequest::new(format!("/rrrah-absent-cancelled-source.{extension}"));
             request.cancellation = Some(crate::GenerationToken::new(
                 std::sync::Arc::new(std::sync::atomic::AtomicU64::new(2)),
@@ -217,7 +217,7 @@ mod tests {
             NativeFormat::from_path(Path::new("a.CR3")).unwrap(),
             NativeFormat::Cr3
         );
-        for path in ["a.dng", "a.DNG", "a.tif", "a.TIFF"] {
+        for path in ["a.dng", "a.DNG", "a.gpr", "a.GPR", "a.tif", "a.TIFF"] {
             assert_eq!(
                 NativeFormat::from_path(Path::new(path)).unwrap(),
                 NativeFormat::Dng

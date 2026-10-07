@@ -1,0 +1,20 @@
+{
+  "change": "VC-5 index requires stable sensor header values across repeated records",
+  "fields": [
+    "channel count",
+    "width",
+    "height",
+    "image format",
+    "pattern width",
+    "pattern height",
+    "components per pattern"
+  ],
+  "existing_guard": "packed prescale remains stable",
+  "case_count": 14,
+  "zero_first": "treated as explicit value, not missing tag",
+  "failure": "changing VC-5 sensor header is unsupported",
+  "scope": "bounded framing refuses unsupported dynamic sensor layout; channel/subband indices and quantization remain per-band state",
+  "tests": {
+    "vc5_including_pinned_HERO9": 19
+  }
+}

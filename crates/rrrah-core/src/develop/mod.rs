@@ -199,13 +199,9 @@ pub fn develop_raw(
             }
         }
     }
-    for op in &lists.list2 {
-        if let Opcode::GainMap { area, .. } = op {
-            if area.bottom > md.height || area.right > md.width {
-                return Err(DevelopError::Invalid("gain-map area outside sensor"));
-            }
-        }
-    }
+    // DNG GainMap AreaSpec is intersected with the destination image.
+    // Padded codec extents may legitimately extend beyond the sensor (GoPro).
+    // The opcode kernel already clips its area iterator to image bounds.
     if (!lists.list2.is_empty() || !lists.list3.is_empty())
         && md
             .active_area
@@ -319,7 +315,7 @@ pub fn develop_raw(
                 p[c] /= wb[c];
             }
         }
-        opcodes::apply_list3(&lists.list3, &mut rgb)?;
+        opcodes::apply_list3(&lists.list3, &mut rgb, cancelled)?;
         for p in &mut rgb.data {
             for c in 0..3 {
                 p[c] *= wb[c];
@@ -662,6 +658,7 @@ mod tests {
                 center: [0.5; 2],
             }],
             &mut img,
+            &|| false,
         )
         .unwrap();
         assert_eq!(img.data[12], [0.5; 3]);

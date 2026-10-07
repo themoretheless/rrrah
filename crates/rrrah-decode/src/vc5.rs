@@ -505,6 +505,45 @@ mod tests {
 #[path = "vc5_codebook.rs"]
 mod codebook;
 
+#[derive(Clone, Copy)]
+struct PrefixNode {
+    children: [u16; 2],
+    symbol: u16,
+}
+const EMPTY_PREFIX: PrefixNode = PrefixNode {
+    children: [u16::MAX; 2],
+    symbol: u16::MAX,
+};
+// Immutable generated-at-compile-time lookup: no allocation or request budget.
+static PREFIX_TREE: [PrefixNode; 527] = build_prefix_tree();
+const fn build_prefix_tree() -> [PrefixNode; 527] {
+    let mut tree = [EMPTY_PREFIX; 527];
+    let mut used = 1usize;
+    let mut symbol = 0usize;
+    while symbol < codebook::CODES.len() {
+        let (length, bits, _, _) = codebook::CODES[symbol];
+        let mut node = 0usize;
+        let mut position = length;
+        while position > 0 {
+            assert!(tree[node].symbol == u16::MAX);
+            position -= 1;
+            let bit = ((bits >> position) & 1) as usize;
+            if tree[node].children[bit] == u16::MAX {
+                assert!(used < 527);
+                tree[node].children[bit] = used as u16;
+                used += 1;
+            }
+            node = tree[node].children[bit] as usize;
+        }
+        assert!(tree[node].symbol == u16::MAX);
+        assert!(tree[node].children[0] == u16::MAX && tree[node].children[1] == u16::MAX);
+        tree[node].symbol = symbol as u16;
+        symbol += 1;
+    }
+    assert!(used == 527);
+    tree
+}
+
 /// Signed quantized coefficient runs; inverse companding is a later stage.
 #[derive(Debug)]
 pub struct Vc5Runs<'a> {
@@ -529,14 +568,18 @@ impl<'a> Vc5Runs<'a> {
         Ok(value)
     }
     fn magnitude(&mut self) -> Result<(usize, i32), &'static str> {
-        let mut bits = 0;
-        for length in 1..=26 {
-            bits = (bits << 1) | self.read_bit()?;
-            if let Some((_, _, count, value)) = codebook::CODES
-                .iter()
-                .find(|(size, code, _, _)| *size == length && *code == bits)
-            {
-                return Ok((*count, *value));
+        let mut node = 0usize;
+        for _ in 1..=26 {
+            let bit = self.read_bit()? as usize;
+            let child = PREFIX_TREE[node].children[bit];
+            if child == u16::MAX {
+                return Err("invalid VC-5 entropy code");
+            }
+            node = child as usize;
+            let symbol = PREFIX_TREE[node].symbol;
+            if symbol != u16::MAX {
+                let (_, _, count, value) = codebook::CODES[symbol as usize];
+                return Ok((count, value));
             }
         }
         Err("invalid VC-5 entropy code")
@@ -914,6 +957,16 @@ pub fn index_raw(bytes: &[u8]) -> Result<Vc5Index<'_>, &'static str> {
         pattern_height: u16,
         components: u16,
         prescale: u16,
+        prescale_seen: bool,
+        header_seen: u8,
+    }
+    fn stable_header(value: &mut u16, seen: &mut u8, bit: u8, next: u16) -> Result<(), &'static str> {
+        if *seen & (1 << bit) != 0 && *value != next {
+            return Err("changing VC-5 sensor header is unsupported");
+        }
+        *seen |= 1 << bit;
+        *value = next;
+        Ok(())
     }
     fn walk<'a>(
         records: Vc5Records<'a>,
@@ -943,14 +996,20 @@ pub fn index_raw(bytes: &[u8]) -> Result<Vc5Index<'_>, &'static str> {
                 });
             } else {
                 match record.tag {
-                    12 => state.channels = record.value,
-                    20 => state.width = record.value,
-                    21 => state.height = record.value,
-                    84 => state.format = record.value,
-                    106 => state.pattern_width = record.value,
-                    107 => state.pattern_height = record.value,
-                    108 => state.components = record.value,
-                    109 => state.prescale = record.value,
+                    12 => stable_header(&mut state.channels, &mut state.header_seen, 0, record.value)?,
+                    20 => stable_header(&mut state.width, &mut state.header_seen, 1, record.value)?,
+                    21 => stable_header(&mut state.height, &mut state.header_seen, 2, record.value)?,
+                    84 => stable_header(&mut state.format, &mut state.header_seen, 3, record.value)?,
+                    106 => stable_header(&mut state.pattern_width, &mut state.header_seen, 4, record.value)?,
+                    107 => stable_header(&mut state.pattern_height, &mut state.header_seen, 5, record.value)?,
+                    108 => stable_header(&mut state.components, &mut state.header_seen, 6, record.value)?,
+                    109 => {
+                        if state.prescale_seen && state.prescale != record.value {
+                            return Err("changing VC-5 prescale is unsupported");
+                        }
+                        state.prescale = record.value;
+                        state.prescale_seen = true;
+                    }
                     62 => state.channel = usize::from(record.value),
                     48 => state.band = usize::from(record.value),
                     53 => state.quantization = record.value,
@@ -1200,4 +1259,63 @@ pub fn decode_bayer(
     }
     request.check_cancelled()?;
     Ok(output.freeze())
+}
+
+#[cfg(test)]
+mod prescale_tests {
+    use super::index_raw;
+
+    #[test]
+    fn conflicting_prescale_is_rejected_before_band_admission() {
+        let source = [b'V', b'C', b'-', b'5', 0, 109, 0x28, 0, 0, 109, 0, 0];
+        assert_eq!(
+            index_raw(&source).unwrap_err(),
+            "changing VC-5 prescale is unsupported"
+        );
+        // Zero is a real value, rather than an indication that the tag was absent.
+        let zero_first = [b'V', b'C', b'-', b'5', 0, 109, 0, 0, 0, 109, 0x28, 0];
+        assert_eq!(
+            index_raw(&zero_first).unwrap_err(),
+            "changing VC-5 prescale is unsupported"
+        );
+        let repeated = [b'V', b'C', b'-', b'5', 0, 109, 0x28, 0, 0, 109, 0x28, 0];
+        assert_eq!(
+            index_raw(&repeated).unwrap_err(),
+            "unsupported VC-5 RAW representation"
+        );
+    }
+}
+
+#[cfg(test)]
+mod prefix_tree_tests {
+    #[test]
+    fn every_original_codeword_resolves_to_its_exact_symbol() {
+        for &(length, bits, count, value) in &super::codebook::CODES {
+            let aligned = bits << (32 - u32::from(length));
+            let bytes = aligned.to_be_bytes();
+            let mut runs = super::Vc5Runs::new(&bytes, count);
+            assert_eq!(runs.magnitude().unwrap(), (count, value));
+            assert_eq!(runs.bit, usize::from(length));
+        }
+    }
+}
+
+#[cfg(test)]
+mod immutable_header_tests {
+    #[test]
+    fn conflicting_sensor_headers_refuse_including_zero_first_values() {
+        for tag in [12u16, 20, 21, 84, 106, 107, 108] {
+            for (first, second) in [(0u16, 1u16), (10, 20)] {
+                let mut bytes = b"VC-5".to_vec();
+                for value in [first, second] {
+                    bytes.extend_from_slice(&tag.to_be_bytes());
+                    bytes.extend_from_slice(&value.to_be_bytes());
+                }
+                assert_eq!(
+                    super::index_raw(&bytes).unwrap_err(),
+                    "changing VC-5 sensor header is unsupported"
+                );
+            }
+        }
+    }
 }

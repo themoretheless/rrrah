@@ -479,7 +479,7 @@ pub fn raw_development_opcodes(
 ) -> Result<rrrah_core::develop::OpcodeLists, DecodeError> {
     request.check_cancelled()?;
     if !request.path.extension().is_some_and(|e| {
-        e.eq_ignore_ascii_case("dng") || e.eq_ignore_ascii_case("tif") || e.eq_ignore_ascii_case("tiff")
+        e.eq_ignore_ascii_case("dng") || e.eq_ignore_ascii_case("gpr") || e.eq_ignore_ascii_case("tif") || e.eq_ignore_ascii_case("tiff")
     }) {
         return Ok(rrrah_core::develop::OpcodeLists::default());
     }
@@ -546,3 +546,26 @@ pub fn raster_external_dependencies(request: &DecodeRequest, header: &[u8]) -> V
 
 /// Native VC-5 framing and managed sensor reconstruction; DNG admission is separate.
 pub mod vc5;
+
+#[cfg(test)]
+mod gpr_opcode_tests {
+    #[test]
+    #[ignore = "requires pinned official GoPro sample corpus"]
+    fn official_gpr_corrections_are_not_silently_omitted() {
+        let root = std::path::PathBuf::from(std::env::var("RRRAH_GPR_CORPUS").unwrap());
+        for name in ["HERO9", "HERO5", "HERO6", "HERO7", "Fusion-back", "Fusion-front"] {
+            let budget = rrrah_core::MemoryBudget::new(16 * 1024 * 1024);
+            let mut request = super::DecodeRequest::new(root.join(format!("{name}.GPR")));
+            request.memory_budget = Some(budget.clone());
+            let lists = super::raw_development_opcodes(&request).unwrap();
+            assert!(lists.list1.is_empty());
+            if name.starts_with("Fusion") {
+                assert_eq!(lists.list3.len(), 1);
+            } else {
+                assert!(!lists.list2.is_empty());
+            }
+            eprintln!("{name}: {} / {} / {} opcodes", lists.list1.len(), lists.list2.len(), lists.list3.len());
+            assert_eq!(budget.used(), 0);
+        }
+    }
+}

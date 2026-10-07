@@ -1,0 +1,18 @@
+{
+  "scope": "Native DNG admission mutations of official HERO9; source bytes supplied by external test host",
+  "cases": [
+    "VC-5 width disagrees with TIFF dimensions",
+    "unsupported WhiteLevel 8191",
+    "invalid VC-5 signature",
+    "source truncated by one byte"
+  ],
+  "assertions": [
+    "all return explicit errors",
+    "no managed sensor/intermediate allocation",
+    "managed root used and peak both zero"
+  ],
+  "limitations": [
+    "compressed source in this test is a host-owned Vec outside budget",
+    "entropy corruption during reconstruction requires separate adversaries"
+  ]
+}

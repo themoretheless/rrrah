@@ -1,0 +1,30 @@
+{
+  "oracle": "unchanged SDK dng_warp_params_rectilinear::EvaluateRatio and EvaluateTangential; explicit square-pixel geometry assembly in test host",
+  "repository": "https://github.com/gopro/gpr",
+  "commit": "446c736a38fb14f51343605c0780d347dc602f89",
+  "host": "scripts/rectilinear-sdk-oracle.cpp",
+  "points": 300,
+  "extent": [
+    40,
+    30
+  ],
+  "center_xy": [
+    0.4,
+    0.6
+  ],
+  "coefficients": [
+    0.97,
+    0.05,
+    -0.01,
+    0.002,
+    0.003,
+    -0.004
+  ],
+  "sha256": "d3211d05685606775006d40f218219ddb539eb751d1d7e9cc123724d945a9f77",
+  "native_max_absolute_error_bound": 1e-11,
+  "remaining": [
+    "image resampling integration",
+    "non-square pixel aspect",
+    "independent full image warp comparison"
+  ]
+}

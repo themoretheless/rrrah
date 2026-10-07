@@ -1,0 +1,52 @@
+{
+  "changes": [
+    "GPR added to DNG opcode dispatch",
+    "GainMap area may extend beyond sensor; existing bounded iterator intersects sensor extent"
+  ],
+  "reference": "pinned SDK dng_gain_map.cpp ProcessArea uses fAreaSpec.Overlap(dstArea)",
+  "HERO9": {
+    "sensor_height": 4176,
+    "gain_map_bottom": 4192,
+    "gain_map_count": 4,
+    "default_quality_development": "passed full 5568x4176 output",
+    "memory_limit": 1073741824,
+    "after_drop": 0
+  },
+  "other_opcode_counts": {
+    "HERO5": [
+      0,
+      4,
+      0
+    ],
+    "HERO6": [
+      0,
+      4,
+      0
+    ],
+    "HERO7": [
+      0,
+      4,
+      0
+    ],
+    "Fusion-back": [
+      0,
+      0,
+      0
+    ],
+    "Fusion-front": [
+      0,
+      0,
+      0
+    ]
+  },
+  "limitations": [
+    "Fusion optional WarpRectilinear remains omitted by supported opcode subset",
+    "full independent rendered color not qualified",
+    "prior direct mosaic Metal tests did not exercise gain maps"
+  ],
+  "tests": {
+    "core": 84,
+    "external_opcode_admission": 1,
+    "external_HERO9_default_quality": 1
+  }
+}
