@@ -1,0 +1,753 @@
+{
+  "catalog_sha256": "020d5ce9ae7764eae615368e7f7b7e7f6f6466cbb8c8d7a3e028756e53066d38",
+  "catalog_rows": 100,
+  "pending_implementation": [
+    "PTX",
+    "MEF",
+    "RWZ",
+    "BAY",
+    "CAP",
+    "EIP",
+    "EPS",
+    "AI",
+    "GPR",
+    "RPF"
+  ],
+  "qualification_rule": "implemented subset is not universal format qualification; each row retains its stated limits",
+  "BAY_external_corpus_search": {
+    "repository": "https://raw.pixls.us/json/getrepository.php",
+    "matching_casio_rows": [
+      [
+        "Casio",
+        "QV-11",
+        "",
+        null,
+        "",
+        "<a href='https://creativecommons.org/publicdomain/zero/1.0/' title='Creative Commons 0 - Public Domain' class='cc'>co</a>",
+        "2020-10-25",
+        "<a href='https://raw.pixls.us/getfile.php/4140/nice/Casio - QV-11.cam'>Casio - QV-11.cam</a><div class='checksumdata'><span title='sha256 Checksum'>1647c01d2621fa3fc174f8b271a8fecd1e9da97e43c71ea1b92f5795a62dbf49</span>&nbsp;(24.84kB)</div>",
+        ""
+      ],
+      [
+        "Casio",
+        "QV-5000SX",
+        "4:3",
+        1.23,
+        "",
+        "<a href='https://creativecommons.org/publicdomain/zero/1.0/' title='Creative Commons 0 - Public Domain' class='cc'>co</a>",
+        "2020-10-25",
+        "<a href='https://raw.pixls.us/getfile.php/4141/nice/Casio - QV-5000SX - 4:3.cam'>Casio - QV-5000SX - 4:3.cam</a><div class='checksumdata'><span title='sha256 Checksum'>bf1b8daf304eb622677760307229f479f83bd8dd1a56d747a205c433afee48a3</span>&nbsp;(313.06kB)</div>",
+        ""
+      ]
+    ],
+    "required_models": [
+      "QV-2000UX",
+      "QV-3000EX",
+      "QV-5700"
+    ],
+    "required_sources_found": false,
+    "production_status": "explicit layout native sensor unpack only; CFA/color/viewer unqualified"
+  },
+  "rows": [
+    {
+      "number": 1,
+      "format": "JPEG",
+      "implementation": "Raster first-image decoder; qualification pending",
+      "qualification": "Pillow CC0 baseline pixel/alpha oracle passes; standalone profiled CMYK JPEG with Adobe APP14 transform 0 preserves channels through ICC, matches the independent 512-pixel oracle exactly and passes float display preparation with released managed ownership; standalone profiled YCCK APP14 transform 2 also matches its independent 512-pixel oracle exactly; both fixtures and 16 asymmetric cases covering all eight EXIF orientations pass RAM leases, pressure-preserving native/prepared swap restoration and actual Metal frames against independent references (maximum one RGB8 level); broader profiles, subsampling and physical viewer qualification remain pending; full variants/color/viewer pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 2,
+      "format": "PNG",
+      "implementation": "Raster decode, ICC bytes, sRGB/cICP precedence, straight alpha and 16-bit samples",
+      "qualification": "Pillow CC0 baseline pixel/alpha oracle passes; full variants/color/viewer pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 3,
+      "format": "GIF",
+      "implementation": "Selected composited RGBA8 frames, delay and repeat metadata; decode stops at selection",
+      "qualification": "Twelve independent Pillow presentations for KEEP/BACKGROUND/PREVIOUS; malformed bounds checked; live playback/full variants pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 4,
+      "format": "WebP",
+      "implementation": "Still decoder plus selected linear-light animation composition, delays/plays, ICC source color",
+      "qualification": "Sixteen libwebp raw-frame/linear presentation contracts, lossy ALPH and lossless; full variants/live playback pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 5,
+      "format": "AVIF",
+      "implementation": "dav1d/image first image, ICC retained; exact pixel-aligned primary clean-aperture crop before transforms",
+      "qualification": "RGB/alpha libavif oracles; ICC and NCLX sRGB display checked; crop rational/order/refusal tests, 24 crop metadata cases against libavif, and eight libavif-exported top-left crops with seven orientations pass native pixel and RAM/swap/Metal qualification; explicit PQ/HLG BT.2020 viewer policies and neutral/colored SVT 10-bit producer decode/swap/Metal float readback pass; independent 12-bit/alpha HDR producers, fractional crop, sequence and physical HDR output pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 6,
+      "format": "HEIF / HEIC",
+      "implementation": "libheif HEVC primary image; ICC, NCLX sRGB/linear, straight alpha, item transforms and native precision",
+      "qualification": "Four authored lossless pixel oracles and adjacent 12-bit values; other codecs/HDR/sequence/viewer/full qualification pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 7,
+      "format": "JPEG-XL",
+      "implementation": "jxl-oxide first frame, ICC and native sample precision",
+      "qualification": "libjxl container/codestream alpha oracles; animation/HDR/CMYK/full qualification pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 8,
+      "format": "TIFF",
+      "implementation": "Raster first-image decoder; qualification pending",
+      "qualification": "Pillow CC0 baseline pixel/alpha oracle passes; full variants/color/viewer pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 9,
+      "format": "BMP",
+      "implementation": "Raster first-image decoder; qualification pending",
+      "qualification": "Pillow CC0 baseline pixel/alpha oracle passes; full variants/color/viewer pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 10,
+      "format": "ICO",
+      "implementation": "Raster first-image decoder; qualification pending",
+      "qualification": "Pillow CC0 baseline pixel/alpha oracle passes; full variants/color/viewer pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 11,
+      "format": "CUR",
+      "implementation": "PNG/DIB image through ICO decoder; hotspot bounds checked",
+      "qualification": "Two independent ICO pixel oracles; hotspot preserved through display; full cursor qualification pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 12,
+      "format": "SVG",
+      "implementation": "resvg shapes/text/embedded sRGB PNG, intrinsic viewport, straight RGBA",
+      "qualification": "CairoSVG shapes and embedded-PNG alpha fixtures; other resources/animation/full qualification pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 13,
+      "format": "EMF",
+      "implementation": "Bounded 88/100/108-byte fixed header with optional UTF16 description rectangle/ellipse and 16/32-bit polygon/polyline/Bezier and continuation subset through SVG; fixed/anisotropic mapping with saved origins/extents, fill modes, MOVETOEX/LINETO current point, saved contexts, stock/custom solid/null RGB brushes/pens and bounded object table with deletion/index reuse",
+      "qualification": "Eight authored opaque fills agree exactly with separate Java2D renderer and pass native/display, RAW-suffix routing, RAM leases, pressure-preserving streamed swap and Metal. Thirty mathematical fixtures pass RAM/swap/Metal; independent EMF-to-SVG/Cairo comparison is 25/30 exact with metric/reflected and continuation mismatches recorded; Bezier cases are collinear; the separate Java2D winding mismatch remains recorded. Independent producers, non-null stroke rasterization, transforms, clipping, fonts/bitmaps, extended headers/color and full qualification pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 14,
+      "format": "APNG",
+      "implementation": "8-bit source frames, selected linear-light float32 composition, timing/repeat metadata",
+      "qualification": "Authored linear-light oracles plus FFmpeg structural/compatibility readback; live playback/16-bit/full color and variant qualification pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 15,
+      "format": "MNG",
+      "implementation": "Native MNG-VLC plus admitted LC global palette/transparency and intrapixel subset; opaque 8/16-bit and linear-light alpha composition, explicit selection/ticks",
+      "qualification": "Authored opaque and 28 alpha presentations preserve native/display samples through RAM/swap and actual Metal; embedded PNG samples independently agree with FFmpeg. Independent MNG compositor, wider control/loops/object placement and physical viewer qualification pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 16,
+      "format": "JNG",
+      "implementation": "Standalone 8-bit JPEG RGB/gray with PNG 1/2/4/8/16-bit or JPEG 8-bit straight alpha, outer color declarations",
+      "qualification": "Eight Pillow JPEG/alpha sample contracts; native adjacent alpha16 preserved; wider JPEG/MNG/live viewer/full qualification pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 17,
+      "format": "JPEG-2000",
+      "implementation": "OpenJPEG JP2/J2K, unsigned full-resolution RGB/gray/straight alpha, 8/16-bit, RGB ICC",
+      "qualification": "OpenJPEG/FFmpeg pixel fixtures; palette/subsampling/signed/CMYK/full qualification pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 18,
+      "format": "JPEG-LS",
+      "implementation": "Static CharLS gray/RGB, 2\u201316 bits, planar/line/sample layouts, near-lossless, RGB ICC",
+      "qualification": "29 native-sample contracts: 13 FFmpeg readbacks, 16 authored lossless expectations; wider color/preset/SPIFF/interop/live viewer qualification pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 19,
+      "format": "JPEG-XR",
+      "implementation": "Static JXRLib gray/RGB 8/16-bit, HALF/FLOAT, separate alpha, ICC, all eight container orientations",
+      "qualification": "21 typed contracts; independent Rust non-alpha samples plus authored orientation; wider pixel layouts/interleaved alpha/color/interop/live viewer qualification pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 20,
+      "format": "QOI",
+      "implementation": "Raster decoder preserves sRGB/linear transfer flag and alpha",
+      "qualification": "Both transfer flags tested through linear conversion; viewer/corpus pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 21,
+      "format": "TGA",
+      "implementation": "Raster first-image decoder; qualification pending",
+      "qualification": "Pillow CC0 baseline pixel/alpha oracle passes; full variants/color/viewer pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 22,
+      "format": "PNM",
+      "implementation": "Raster first-image decoder; standard P1\u2013P6 BT.709 preparation",
+      "qualification": "ASCII/binary PBM/PGM/PPM and full-range 8/16-bit color checks pass; 65,536-value nominal reference and independently modeled Netpbm toe difference recorded; Metal frame and payload color-tag roundtrip pass. PAM, nonstandard linear/sRGB variations and broader qualification remain separate.",
+      "pending_implementation": false
+    },
+    {
+      "number": 23,
+      "format": "PAM",
+      "implementation": "First image; RGB/gray/black-white with straight alpha and native maxval scaling",
+      "qualification": "Five authored tuple/alpha oracles, including adjacent 16-bit values; transfer/page/viewer/full qualification pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 24,
+      "format": "PFM",
+      "implementation": "Native float RGB/grayscale, bottom-up, both endians; scale retained",
+      "qualification": "Synthetic precision/row/endian/size tests pass; viewer and corpus pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 25,
+      "format": "Farbfeld",
+      "implementation": "Native RGBA16 retained; explicit assumed-sRGB import, straight alpha",
+      "qualification": "Adjacent 16-bit sample oracle and linear-display alpha checks; compressed wrappers/viewer/full qualification pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 26,
+      "format": "OpenEXR",
+      "implementation": "First selected RGB(A) surface; HALF/FLOAT retained as f32 and associated alpha converted to straight",
+      "qualification": "OpenEXR NONE/RLE/ZIP/PIZ pixel oracles; zero-alpha emission, explicit linear Rec.709 declarations supported; other primaries, layers/deep/tiled/viewer/full qualification pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 27,
+      "format": "Radiance-HDR",
+      "implementation": "RGBE float samples, unspecified linear RGB",
+      "qualification": "Authored old-style and modern scanline RLE HDR oracles; primaries/exposure/orientation/viewer/full qualification pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 28,
+      "format": "PSD",
+      "implementation": "Native saved RGB/gray composition, raw/RLE/ZIP/prediction, 8/16/32-bit; ICC resources",
+      "qualification": "FFmpeg raw/RLE and psd-tools merged-alpha fixtures; layers/color modes/full qualification pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 29,
+      "format": "PSB",
+      "implementation": "Native saved composition with 64-bit section lengths and 32-bit RLE row lengths",
+      "qualification": "psd-tools raw/RLE pixel oracles; full large-document qualification pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 30,
+      "format": "XCF",
+      "implementation": "Partial: legacy v0-v3 8-bit normal-layer flatten routes through decode_image/decode_raster; ICC preserved, managed source/canvas/pixels/profile, cancellation, gallery detection and SDR Metal/swap fixture transport verified. Native selected-layer/mask and group metadata APIs remain available.",
+      "qualification": "12 bounded legacy normal-layer compositions exactly match pinned independent parsing and Pillow alpha composition, including gray, opaque indexed, endpoint masks and one 128/255 opacity case; dimensions/managed release verified. Modern precision, groups/effects/non-normal modes, general fractional masks/opacity, indexed-alpha, v0 indexed interpretation and full color/viewer qualification remain. Untagged inputs require explicit sRGB interpretation. No physical presentation proof; see research/xcf-current-full-flatten-2026-10-06.json and research/xcf-raster-route-metal-2026-10-06.json.",
+      "pending_implementation": false
+    },
+    {
+      "number": 31,
+      "format": "KRA",
+      "implementation": "Saved full-canvas PNG composition through common color pipeline",
+      "qualification": "Python ZIP/Pillow pixels, ICC display and MIME routing checked; native tiles/layers/animation/full qualification pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 32,
+      "format": "ORA",
+      "implementation": "Stored composition PNG through common color pipeline",
+      "qualification": "Python ZIP/Pillow RGBA and ICC fixtures; layers/recomposition/full qualification pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 33,
+      "format": "Aseprite",
+      "implementation": "Selected native RGBA/gray-alpha/indexed frames, raw/zlib/linked cels, normal layer/group composition, palettes, color profiles and timing/tags",
+      "qualification": "63 selected-frame contracts (39 independent asefile, 24 authored); wider blends/tilemaps/precise bounds/full interop/live playback/viewer qualification pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 34,
+      "format": "DDS",
+      "implementation": "Native BC1/BC2/BC3 and masked RGB16/24/32 selected 2D mip",
+      "qualification": "Thirteen baseline Pillow/FFmpeg fixtures and 36 selected-mip Pillow oracles; other texture layouts/full qualification pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 35,
+      "format": "KTX",
+      "implementation": "Native KTX1 selected 2D mip: RGB/RGBA 8/16/float32 and BC1/2/3, orientation/endian handling",
+      "qualification": "Authored PNG/native sample and independent DDS block oracles, including 60 selected mips; array/cube/volume/other storage/full qualification pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 36,
+      "format": "KTX2",
+      "implementation": "Native ordinary RGB/RGBA/BGR/BGRA 8-bit, RGB/RGBA16 and float32; plain/DEFLATE, DFD and orientation",
+      "qualification": "Twelve authored pixel fixtures, four precision files and 96 selected-mip native sample oracles; BasisLZ/UASTC/Zstd/compressed textures/array/cube/volume/viewer/full qualification pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 37,
+      "format": "Basis",
+      "implementation": "ETC1S/UASTC LDR transcoding to managed RGBA8 with selected image/mip, file sRGB flag, CRC and bounded output admission",
+      "qualification": "Eight authored files and 32 selected mips/images (white, 7x5 colored-alpha blocks and two-image red/green mip chains) pass RAM leases, 64 native/prepared pressure-preserving streamed swap roundtrips and actual Metal readback. White reference is exact; colored-alpha channels agree within fixed error 8/255, and swap samples are bit-exact. Four pinned upstream ETC1S/UASTC producer files additionally pass all 13 mip/image selections and 26 native/prepared RAM/swap/Metal preservation roundtrips with SHA256-verified inputs; four newer codecs explicitly refuse. Independent pixel/color oracle, full producer coverage, complex spatial textures/alpha, array/cube/Y-flip, KTX2 Basis and direct compressed GPU upload qualification pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 38,
+      "format": "PVR",
+      "implementation": "v3 ordinary 8/16/float32 RGB channels, PVRTC1 2/4 bpp, mip selection, orientation metadata",
+      "qualification": "Authored native samples and PowerVR SDK raw-PVRTC oracle; other codecs/legacy/cube/array/packed/viewer pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 39,
+      "format": "ASTC",
+      "implementation": "Arm reference decoder, all 14 2D footprints; RGBA8 LDR / RGBA32F HDR, validated block classification",
+      "qualification": "14 reference pixel oracles; compressed and constant HDR precision checked; 3D/color semantics/viewer/full qualification pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 40,
+      "format": "PKM",
+      "implementation": "Bounded ETC1/ETC2 RGB/RGBA8/RGBA1 color textures via Rust block decoder",
+      "qualification": "Android ETC1 oracle, cropping and baseline ETC2 alpha cases; full ETC2/EAC qualification pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 41,
+      "format": "DNG",
+      "implementation": "Bounded native mosaic decoder; full qualification pending",
+      "qualification": "1 pinned current corpus case(s) pass full sensor hash, geometry/CFA, WB/matrix and declared metadata contracts against independent LibRaw references under 256 MiB managed admission; broader variants and physical display remain open. See research/current-managed-raw-corpus-2026-10-06.json.",
+      "pending_implementation": false
+    },
+    {
+      "number": 42,
+      "format": "CR3",
+      "implementation": "Bounded native mosaic decoder; full qualification pending",
+      "qualification": "2 pinned current corpus case(s) pass full sensor hash, geometry/CFA, WB/matrix and declared metadata contracts against independent LibRaw references under 256 MiB managed admission; broader variants and physical display remain open. See research/current-managed-raw-corpus-2026-10-06.json.",
+      "pending_implementation": false
+    },
+    {
+      "number": 43,
+      "format": "CR2",
+      "implementation": "Bounded native mosaic decoder; full qualification pending",
+      "qualification": "1 pinned current corpus case(s) pass full sensor hash, geometry/CFA, WB/matrix and declared metadata contracts against independent LibRaw references under 256 MiB managed admission; broader variants and physical display remain open. See research/current-managed-raw-corpus-2026-10-06.json.",
+      "pending_implementation": false
+    },
+    {
+      "number": 44,
+      "format": "CRW",
+      "implementation": "Native Canon EOS 10D CIFF/table-zero subset",
+      "qualification": "All 6,518,336 sensor samples match independent LibRaw 0.22.2 through the public RAW router. Strict WB/profile/crop/orientation, managed admission, real mixed-gallery prefetch/disk restore, lease TTL/size/count, swap pressure retry and Metal frame preservation verified. Other cameras/tables/storage, live navigation and photographic/physical-display qualification remain open. See `research/crw-public-sensor-oracle-2026-10-06.json` and `research/crw-router-prefetch-metal-2026-10-06.json`.",
+      "pending_implementation": false
+    },
+    {
+      "number": 45,
+      "format": "NEF",
+      "implementation": "Bounded native mosaic decoder; full qualification pending",
+      "qualification": "1 pinned current corpus case(s) pass full sensor hash, geometry/CFA, WB/matrix and declared metadata contracts against independent LibRaw references under 256 MiB managed admission; broader variants and physical display remain open. See research/current-managed-raw-corpus-2026-10-06.json.",
+      "pending_implementation": false
+    },
+    {
+      "number": 46,
+      "format": "NRW",
+      "implementation": "Native subset: COOLPIX P7700/P7800 mode 7",
+      "qualification": "Sensor/color oracle, swap and Metal readback; other cameras pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 47,
+      "format": "ARW",
+      "implementation": "Bounded native mosaic decoder; full qualification pending",
+      "qualification": "2 pinned current corpus case(s) pass full sensor hash, geometry/CFA, WB/matrix and declared metadata contracts against independent LibRaw references under 256 MiB managed admission; broader variants and physical display remain open. See research/current-managed-raw-corpus-2026-10-06.json.",
+      "pending_implementation": false
+    },
+    {
+      "number": 48,
+      "format": "SRF",
+      "implementation": "Native subset: Sony DSC-F828 encrypted RGBE sensor",
+      "qualification": "CC0 object 1351: all sensor samples match LibRaw; explicit four-plane WB/profile, CPU thumbnails, RAM/disk/swap and independent Metal frame readback qualified. Other models, tiled/cropped RGBE variants and physical color/display qualification remain.",
+      "pending_implementation": false
+    },
+    {
+      "number": 49,
+      "format": "SR2",
+      "implementation": "Native DSC-R1 14-bit uncompressed sensor and strict color metadata",
+      "qualification": "Object 3221: all 10,390,272 samples, GRBG black levels from encrypted 0x7300, WB, matrix, white level and 3925\u00d72608 crop match LibRaw. Persistent cache and swap preserve full pixels/metadata; actual Metal readback matches the independent sensor/color reference. Other cameras/storage profiles and full photographic color qualification pending. See `tests/fixtures/sr2-qualification.json`.",
+      "pending_implementation": false
+    },
+    {
+      "number": 50,
+      "format": "ORF",
+      "implementation": "Bounded native mosaic decoder; full qualification pending",
+      "qualification": "1 pinned current corpus case(s) pass full sensor hash, geometry/CFA, WB/matrix and declared metadata contracts against independent LibRaw references under 256 MiB managed admission; broader variants and physical display remain open. See research/current-managed-raw-corpus-2026-10-06.json.",
+      "pending_implementation": false
+    },
+    {
+      "number": 51,
+      "format": "RW2",
+      "implementation": "Bounded native mosaic decoder; full qualification pending",
+      "qualification": "1 pinned current corpus case(s) pass full sensor hash, geometry/CFA, WB/matrix and declared metadata contracts against independent LibRaw references under 256 MiB managed admission; broader variants and physical display remain open. See research/current-managed-raw-corpus-2026-10-06.json.",
+      "pending_implementation": false
+    },
+    {
+      "number": 52,
+      "format": "RAW-Panasonic",
+      "implementation": "Native subset: FZ50 mode 34828 left-aligned and FZ8 mode 34316/format 2 packed; independent sensor oracles; other legacy profiles rejected",
+      "qualification": "Persistent cache, pressure/retry swap and Metal readback for both cameras; broader cameras pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 53,
+      "format": "RAF",
+      "implementation": "Bounded native mosaic decoder; full qualification pending",
+      "qualification": "1 pinned current corpus case(s) pass full sensor hash, geometry/CFA, WB/matrix and declared metadata contracts against independent LibRaw references under 256 MiB managed admission; broader variants and physical display remain open. See research/current-managed-raw-corpus-2026-10-06.json.",
+      "pending_implementation": false
+    },
+    {
+      "number": 54,
+      "format": "PEF",
+      "implementation": "Bounded native mosaic decoder; full qualification pending",
+      "qualification": "1 pinned current corpus case(s) pass full sensor hash, geometry/CFA, WB/matrix and declared metadata contracts against independent LibRaw references under 256 MiB managed admission; broader variants and physical display remain open. See research/current-managed-raw-corpus-2026-10-06.json.",
+      "pending_implementation": false
+    },
+    {
+      "number": 55,
+      "format": "PTX",
+      "implementation": "Pending",
+      "qualification": "PEF-compatible extension routing tested; independent camera-produced PTX source still missing",
+      "pending_implementation": true
+    },
+    {
+      "number": 56,
+      "format": "SRW",
+      "implementation": "Native Samsung EX1 little-endian sensor words and strict keyed WB in TIFF",
+      "qualification": "Object 1204: all 10,252,640 samples and color metadata match LibRaw; persistent cache, swap pressure retry and whole 128\u00d796 Metal frame verified. Other Samsung layouts and full qualification pending.",
+      "pending_implementation": false
+    },
+    {
+      "number": 57,
+      "format": "RWL",
+      "implementation": "Native RW2-family subset; D-LUX Typ 109 oracle",
+      "qualification": "Metal/swap readback; physical display and broader cameras pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 58,
+      "format": "DCR",
+      "implementation": "Native DCS760C compression-65000 sensor and strict native WB/profile",
+      "qualification": "All 6,128,640 samples and color metadata match LibRaw under 128 MiB managed budget; persistent cache, swap pressure retry, Metal frame and five malformed sources qualified; broader Kodak variants and full qualification pending.",
+      "pending_implementation": false
+    },
+    {
+      "number": 59,
+      "format": "KDC",
+      "implementation": "Native Kodak P880 packed12 subset; other cameras pending",
+      "qualification": "CC0 object 2339: all 8,049,120 sensor values and color metadata match LibRaw; five native WB selections independently checked. Persistent cache/swap exact roundtrip and whole-frame Metal readback verified; eight malformed cases rejected without preview fallback or retained memory. Full photographic color and physical display pending; see `tests/fixtures/kdc-qualification.json`.",
+      "pending_implementation": false
+    },
+    {
+      "number": 60,
+      "format": "MRW",
+      "implementation": "Native Dynax 7D and DiMAGE A2 packed 12-bit mode 0x59, managed sensor decode and strict camera color/levels",
+      "qualification": "CC0 objects 1826 and 4419: full sensor samples, WB, calibrated matrix, CFA, crop, black/white levels independently qualified; native RAW and mixed-image routing connected. Persistent cache and swap preserve all pixels/metadata; actual Metal readback matches independent samples/color. Other cameras/storage modes, visible window presentation and full photographic color qualification pending; see `tests/fixtures/mrw-qualification.json`.",
+      "pending_implementation": false
+    },
+    {
+      "number": 61,
+      "format": "MOS",
+      "implementation": "Native Leaf Aptus 22 MM TIFF, single compression-99 lossless JPEG tile; bounded PKTS WB, exact camera profile, full 21,418,752-sample LibRaw equality and managed allocation; other cameras/layouts unqualified",
+      "qualification": "Required RAW corpus, RAM lease/limits, disk/swap pressure retry and full Metal frame equality pass; 6 malformed cases and low-budget refusal release allocations",
+      "pending_implementation": false
+    },
+    {
+      "number": 62,
+      "format": "MEF",
+      "implementation": "Pending: explicit native Mamiya ZD sensor import API",
+      "qualification": "Pinned source public route now traverses linked SubIFDs but refuses unsupported TIFF field type 4084 before color; no preview fallback or retained managed credit. Public `decode_mef_zd_sensor` returns managed sensor codes only; full sensor comparison remains independent of viewer qualification. Native WB remains unresolved. Public TIFF structure and color support pending; see tests/fixtures/mef-investigation.json",
+      "pending_implementation": true
+    },
+    {
+      "number": 63,
+      "format": "ERF",
+      "implementation": "Native Epson R-D1 subset; other profiles pending",
+      "qualification": "CC0 object 2680: all 6,152,960 sensor samples and strict native color metadata qualified against LibRaw; persistent cache/swap exact roundtrip, pressure retry and whole-frame Metal readback verified. Five malformed variants rejected without preview fallback or retained managed memory. Physical display and universal ERF coverage pending; see `tests/fixtures/erf-qualification.json`.",
+      "pending_implementation": false
+    },
+    {
+      "number": 64,
+      "format": "IIQ",
+      "implementation": "Native Phase One P20+-H format-3 subset; other cameras/storage pending",
+      "qualification": "CC0 object 4366: all 17,065,152 samples after native black, pixel, gain-grid and isolated-column correction match independent LibRaw stages. Native WB/profile/crop, RAM leases, persistent cache, bounded swap pressure retry and whole-frame Metal readback verified. Seven malformed cases rejected with budget zero. Other variants, physical display and full photographic color pending; see `tests/fixtures/iiq-investigation.json`.",
+      "pending_implementation": false
+    },
+    {
+      "number": 65,
+      "format": "3FR",
+      "implementation": "Native uncompressed Hasselblad X1D full sensor with file-origin WB/matrix/levels/crop",
+      "qualification": "Object 2058: all 52,852,736 samples match LibRaw. Embedded matrix precision and stored default crop retained; persistent cache, swap pressure retry and consistent 128\u00d796 Metal frames verified. Stored matrix/WB/levels/crop independently match tifffile 2026.9.20. Photographic color accuracy and broader layouts pending.",
+      "pending_implementation": false
+    },
+    {
+      "number": 66,
+      "format": "FFF",
+      "implementation": "Native CFV-50 predictor-8 sensor, native WB and exact FFF profile",
+      "qualification": "Object 1637: all 51,679,680 samples and color match LibRaw; persistent cache, swap RAM-pressure retry and whole Metal frame verified. Broader camera/codec variants and full qualification pending.",
+      "pending_implementation": false
+    },
+    {
+      "number": 67,
+      "format": "X3F",
+      "implementation": "Native Sigma SD10/SD14 legacy Huffman/CAMF subset, strict selected WB_DESC, linear RGBA16 and raster viewer routing",
+      "qualification": "Pinned SD10 Auto 2267\u00d71513 and SD14 Sunlight 2639\u00d71757 public output match independent standalone converter channel-for-channel. SD14 explicit Auto is also exact. RAM/swap exact restoration, preload windows, generation cancellation and completed Metal rendering verified. Linear fixture full-frame Metal readback deviation <=1 code value. Other cameras/encodings and full-image qualification of additional WB modes remain pending, as do physical display/HDR; see `research/x3f-sd14-public-sunlight-2026-10-06.json` and `research/x3f-reproducible-full-output-2026-10-06.json`",
+      "pending_implementation": false
+    },
+    {
+      "number": 68,
+      "format": "RWZ",
+      "implementation": "Pending",
+      "qualification": "Pending",
+      "pending_implementation": true
+    },
+    {
+      "number": 69,
+      "format": "BAY",
+      "implementation": "Pending: native explicit-layout sensor unpack for Casio QV-2000UX, QV-3000EX and QV-5700",
+      "qualification": "Camera-file qualification, CFA/color metadata and viewer routing pending",
+      "pending_implementation": true
+    },
+    {
+      "number": 70,
+      "format": "CAP",
+      "implementation": "Pending",
+      "qualification": "Pending",
+      "pending_implementation": true
+    },
+    {
+      "number": 71,
+      "format": "EIP",
+      "implementation": "Pending: bounded inventory, managed RAW extraction and explicit sensor import APIs",
+      "qualification": "Classic ZIP directory/entry admission and unique RAW candidate inspection; managed source inflation and IIQ sensor oracle; Capture One settings/ICC/LCC interpretation and real EIP oracle remain pending.",
+      "pending_implementation": true
+    },
+    {
+      "number": 72,
+      "format": "DCS",
+      "implementation": "Native Kodak DCS520C lossless-JPEG TIFF subset, strict WB/profile/response curve",
+      "qualification": "CC0 object 2573: original TIFF routes to backend 22 revision 1; all 2,013,760 sensor samples match LibRaw; managed ownership, RAM lease, disk/swap restore and Metal frame readback pass. Exact observed extra JPEG tail accepted only in this camera path; other cameras/tails, physical navigation/color/display and full qualification remain.",
+      "pending_implementation": false
+    },
+    {
+      "number": 73,
+      "format": "EPS",
+      "implementation": "Pending",
+      "qualification": "Pending",
+      "pending_implementation": true
+    },
+    {
+      "number": 74,
+      "format": "AI",
+      "implementation": "Pending: `.ai` gallery candidate; PDF-compatible content uses the PDF renderer, including selected pages. PostScript AI remains unsupported.",
+      "qualification": "Pinned Adobe-produced PDF-compatible AI: RAM/page keys and swap/Metal preservation pass, but strict Poppler comparison fails on two of three pages (33,054 and 2,790 differing pixels); one page exact. Rendering fidelity and PostScript AI remain pending. See research/current-ai-poppler-2026-10-06.json.",
+      "pending_implementation": true
+    },
+    {
+      "number": 75,
+      "format": "STI",
+      "implementation": "Native indexed8/ETRLE, RGB16/24/32 masks and bounded zlib; explicit subimage selection, managed output",
+      "qualification": "Ten authored images and twenty external JA2 images agree with sample references; external parser plus original blitter resolves literal-zero coverage; native/prepared RAM/swap/Metal checks pass. Independent RGB/zlib producers, placement/application semantics, color and full qualification pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 76,
+      "format": "PDF",
+      "implementation": "Hayro 0.7.1 selected page raster at one pixel per point, bounded geometry/page count, source/pixmap/final-buffer reservations and straight RGBA8 conversion",
+      "qualification": "Two authored opaque 10x10 pages match Poppler and ordinary native routing exactly; managed ownership and insufficient budget/index refusals pass. Both selected opaque pages and a constant half-alpha page pass RAM leases, six native/prepared pressure-preserving streamed swap restores and actual Metal frame readback against mathematical colors. Fixed-profile DeviceCMYK float fills use native hybrid ICC stages: 4721 independent LittleCMS vectors stay within one RGB8 level, an opaque CMYK PDF matches exactly and passes RAM/swap/Metal. Parser/render scratch, interruptible rendering, broader transparency/fonts/color/profiles, independent producer breadth and physical presentation qualification pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 77,
+      "format": "GPR",
+      "implementation": "Pending",
+      "qualification": "Native managed VC-5: six official HERO5/6/7/9 and Fusion sources, 77,875,968 sensor values exact against complete GoPro SDK. HERO gain maps applied in default quality development; RAM limits, previous/next preload, cancellation, sensor/developed-float swap and Metal tested on HERO9. Native Fusion rectilinear development enabled; synthetic full warp-image comparison against SDK passes; independent final camera color and broader variants remain unqualified; see research/gpr-full-sdk-sensor-oracle-2026-10-07.json and research/gpr-developed-float-swap-metal-2026-10-07.json",
+      "pending_implementation": true
+    },
+    {
+      "number": 78,
+      "format": "XBM",
+      "implementation": "Native X11 byte / X10 short monochrome",
+      "qualification": "Pillow-encoded / FFmpeg-decoded X11 fixture; X10 synthetic checks; full syntax/hotspot qualification pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 79,
+      "format": "XPM",
+      "implementation": "Native XPM2/XPM3 palette and transparency",
+      "qualification": "FFmpeg multi-character XPM3 oracle; XPM2 synthetic; full named colors/extensions/hotspots pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 80,
+      "format": "PCX",
+      "implementation": "Native RGB/indexed/planar RLE decoder; explicit assumed-sRGB import",
+      "qualification": "Synthetic and Pillow CC0 pixel oracles; linear display preparation checked; full qualification pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 81,
+      "format": "DCX",
+      "implementation": "Native directory and selected PCX page via image_index",
+      "qualification": "Two-page Pillow pixel oracle; malformed offsets and out-of-range selection tested; CLI and bracket-key page routing implemented; live window navigation pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 82,
+      "format": "SGI",
+      "implementation": "Native 8/16-bit normal-color, verbatim/RLE",
+      "qualification": "RGB/RGBA Pillow pixel fixtures; full variant qualification pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 83,
+      "format": "SUN-Raster",
+      "implementation": "Native 1/8/24/32-bit, palette, RGB/BGR and RLE",
+      "qualification": "Eight independent Pillow/FFmpeg fixtures; other variants pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 84,
+      "format": "IFF-ILBM",
+      "implementation": "Native 1\u20138 planes/palette, 24-bit RGB, mask/index transparency, EHB/HAM6, raw/ByteRun1",
+      "qualification": "Ten independent RGB fixtures plus authored HAM mask alpha; HAM8/animation/aspect/full qualification pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 85,
+      "format": "IFF-PBM",
+      "implementation": "Native 8-bit indexed bitmap, raw/ByteRun1, transparent index",
+      "qualification": "Four FFmpeg pixel/alpha fixtures; aspect and full qualification pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 86,
+      "format": "PICT",
+      "implementation": "Native v2 rectangles and packed RGB555/planar RGB8 DirectBitsRect; raw xRGB/RGB555 and drop-pad RGB; rectangular clipping, source cropping and extended resolution",
+      "qualification": "Authored CC0 RGBA fixtures, four packed external pixel oracles and three exact macOS xRGB/drop-pad cases; RAM/swap/Metal transport and explicit viewer sRGB policy checked; unpacked RGB555 independent disagreement, broader commands, producer color and corpus licensing qualification pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 87,
+      "format": "MacPaint",
+      "implementation": "Native 576x720 data fork and MacBinary I/II/III, versions 0/2, row-wise PackBits, opaque RGBA",
+      "qualification": "Ten pixel oracles plus CRC/bounds/routing checks; AppleDouble/native-app/viewer/full qualification pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 88,
+      "format": "WMF",
+      "implementation": "Native placeable geometry subset through SVG; solid/null pens/brushes, polygons/polylines, rectangle/ellipse/roundrect, window/viewport state, save/restore and free-object deletion",
+      "qualification": "Six authored fills agree exactly with libwmf and pass RAM/swap/Metal; malformed/index/budget tests. External arrow01 decodes but differs in 1,181 white-matted pixels; curved corners lack a suitable independent oracle. Fonts/bitmaps/clipping/other map modes, full variants/color and physical viewer qualification pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 89,
+      "format": "FITS",
+      "implementation": "Primary/IMAGE scalar arrays; all native BITPIX types, BSCALE/BZERO, BLANK, HDU/section selection, explicit window",
+      "qualification": "22 Astropy native/physical/window plane oracles and malformed/precision checks; compressed/WCS/live viewer pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 90,
+      "format": "DICOM",
+      "implementation": "Native Part 10 Explicit VR LE MONOCHROME1/2 8/16-bit scalar frames, signed/stored-bit extraction, rescale and explicit window",
+      "qualification": "Four pydicom pixel/rescale fixtures; compressed/implicit/big-endian syntax, sequences/LUT/color and clinical presentation/full qualification pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 91,
+      "format": "NRRD",
+      "implementation": "Partial",
+      "qualification": "Attached scalar 2D/3D uint8/uint16/int16/float32, raw/gzip/text; explicit window",
+      "pending_implementation": false
+    },
+    {
+      "number": 92,
+      "format": "MRC",
+      "implementation": "MRC2014 scalar int8/int16/uint16/float16/float32 sections; both endians, explicit window",
+      "qualification": "20 mrcfile raw-unit plane oracles, exhaustive half conversion, metadata/bounds/routing checks; other modes/live UI/physical-space rendering pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 93,
+      "format": "DPX",
+      "implementation": "Unsigned single-element RGB/RGBA/ABGR/luma, 8/10/12/16-bit, endian and orientation handling",
+      "qualification": "24 FFmpeg exact sample oracles; authored orientation/padding/ABGR16 and malformed checks; full color/variants/viewer pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 94,
+      "format": "Cineon",
+      "implementation": "V4.5 unsigned pixel-interleaved gray/RGB, 8/10/16-bit, endian/orientation/padding",
+      "qualification": "12 OpenImageIO sample oracles; malformed header and RAW-suffix routing checks; log/color/variants/viewer pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 95,
+      "format": "RLA",
+      "implementation": "Indexed gray/RGB 8/16-bit byte-plane RLE and explicit-endian float32; explicit matte alpha/color interpretation; contained active/full windows",
+      "qualification": "14 OpenImageIO sample oracles, reordered rows, mixed precision, composition/bounds checks; offset canvas placement has native tests only; producer coordinate/color/channel and live viewer qualification pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 96,
+      "format": "RPF",
+      "implementation": "Pending",
+      "qualification": "Pending",
+      "pending_implementation": true
+    },
+    {
+      "number": 97,
+      "format": "PIC-Softimage",
+      "implementation": "Native 8/16-bit RGB/alpha packets, raw/pure/mixed RLE; assumed sRGB",
+      "qualification": "12 OpenImageIO exact sample fixtures, malformed packets/runs and RAW-suffix routing; full variants/viewer pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 98,
+      "format": "PIX-Alias",
+      "implementation": "Native row RLE, 8-bit gray/24-bit BGR, assumed sRGB",
+      "qualification": "FFmpeg pixel oracles, row bounds and maximum run checked; full qualification pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 99,
+      "format": "WAL",
+      "implementation": "Quake II base mip; explicit RGBA palette API or game-tree PCX palette",
+      "qualification": "Two Pillow palette-override pixel oracles; game-tree routing and malformed mip/palette checks; full variants/viewer pending",
+      "pending_implementation": false
+    },
+    {
+      "number": 100,
+      "format": "WAD",
+      "implementation": "WAD3 indexed mip textures with embedded palette and selected texture index",
+      "qualification": "Two archives/four image oracles via vgio mip parser + authored Pillow palette; bounds/index/routing checks; full WAD variants/viewer pending",
+      "pending_implementation": false
+    }
+  ]
+}

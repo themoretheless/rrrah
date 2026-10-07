@@ -1,0 +1,70 @@
+{
+  "revision": "225c40c9f5d0ea3ff0e793ee1dacc386c198c3d4",
+  "sources": [
+    {
+      "name": "VectorApple.ai",
+      "source": "https://media.githubusercontent.com/media/opendesigndev/illustrator-parser-pdfcpu/225c40c9f5d0ea3ff0e793ee1dacc386c198c3d4/__tests__/fixtures/VectorApple.ai",
+      "sha256": "c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06",
+      "bytes": 1062861
+    },
+    {
+      "name": "one.ai",
+      "source": "https://media.githubusercontent.com/media/opendesigndev/illustrator-parser-pdfcpu/225c40c9f5d0ea3ff0e793ee1dacc386c198c3d4/__tests__/fixtures/one.ai",
+      "sha256": "97786949c268233a446e1738fb9c2f941e4d109811bd2f972948cdb7a45d64b4",
+      "bytes": 204049
+    }
+  ],
+  "decoder_sha256": "fee2d5a190228e10beda0e122c6dc9522fc56b8af2e18a0adb40c693c33dc265",
+  "poppler_version": "pdftoppm version 26.10.0\nCopyright 2005-2026 The Poppler Developers - http://poppler.freedesktop.org\nCopyright 1996-2011, 2022 Glyph & Cog, LLC",
+  "scope": "Strict 72 dpi white-composite RGB comparison; no tolerance. No GPU, private AI data or full format qualification.",
+  "pages": [
+    {
+      "file": "VectorApple.ai",
+      "index": 0,
+      "exact": false,
+      "native": {
+        "width": 301,
+        "height": 246,
+        "image_index": 0,
+        "image_count": 1
+      },
+      "poppler_header": "P6\n301 246",
+      "different_pixels": 33066,
+      "max_channel_error": 213,
+      "rgba_sha256": "3e68f7172e35ef12d951e10b398bbcd0cee88badcf078a75b7afa6491d27e932"
+    },
+    {
+      "file": "one.ai",
+      "index": 0,
+      "exact": false,
+      "native": {
+        "width": 1366,
+        "height": 768,
+        "image_index": 0,
+        "image_count": 2
+      },
+      "poppler_header": "P6\n1366 768",
+      "different_pixels": 2790,
+      "max_channel_error": 115,
+      "rgba_sha256": "027fc9ed92a3b78452a61c4fafcaec04944eeaad3b1e753b809f7edc0cf4b417"
+    },
+    {
+      "file": "one.ai",
+      "index": 1,
+      "exact": true,
+      "native": {
+        "width": 177,
+        "height": 175,
+        "image_index": 1,
+        "image_count": 2
+      },
+      "poppler_header": "P6\n177 175",
+      "different_pixels": 0,
+      "max_channel_error": 0,
+      "rgba_sha256": "155a1e78cb7d2dd3d3aaf2832e7591b61f9ec0cbf5b97bef36a7787a5907f38f"
+    }
+  ],
+  "experiment": "signed i32 mesh sample keys and floor lookup replacing unsigned u16",
+  "conclusion": "No change to any of the three page comparisons; does not explain pinned VectorApple discrepancy; experimental patch reverted",
+  "next_investigation": "TensorProductPatch map coordinate/control point order, fixed 20x20 tessellation and inflated triangle interpolation"
+}

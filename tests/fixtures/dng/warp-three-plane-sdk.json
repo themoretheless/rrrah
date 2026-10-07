@@ -1,0 +1,21 @@
+{
+  "oracle": "unchanged GoPro SDK dng_opcode_WarpRectilinear::Apply",
+  "commit": "446c736a38fb14f51343605c0780d347dc602f89",
+  "host": "scripts/warp-image-sdk-oracle.cpp",
+  "arguments": [
+    "output.f32le",
+    "three"
+  ],
+  "extent": [
+    48,
+    32
+  ],
+  "planes": 3,
+  "values": 4608,
+  "sha256": "09bbebf010e16d0fc2e1659bf6b0373a176da4f4333b562c4c5e50609a233d91",
+  "native_match": "maximum absolute error <= 1e-6, separate radial and tangential coefficients per channel; full image including edges",
+  "limitations": [
+    "square pixels",
+    "synthetic RGB does not qualify independent final camera color"
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "experiment": "only shading AntiAlias false->true on isolated largest original patch",
+  "poppler_different_pixels": 0,
+  "max_channel_change": 0,
+  "edge_samples": [
+    {
+      "x": 224,
+      "y": 117,
+      "false_rgb": [
+        128,
+        31,
+        35
+      ],
+      "true_rgb": [
+        128,
+        31,
+        35
+      ]
+    },
+    {
+      "x": 224,
+      "y": 120,
+      "false_rgb": [
+        128,
+        31,
+        35
+      ],
+      "true_rgb": [
+        128,
+        31,
+        35
+      ]
+    },
+    {
+      "x": 224,
+      "y": 124,
+      "false_rgb": [
+        128,
+        31,
+        35
+      ],
+      "true_rgb": [
+        128,
+        31,
+        35
+      ]
+    }
+  ],
+  "scope": "oracle rendering policy diagnostic; not proof either renderer has exact area coverage",
+  "correction": "Any comparison of geometric Y to raster row before PDF-to-raster flip is invalid; corrected area oracle: ai-tensor-pixel-area-2026-10-07.json"
+}

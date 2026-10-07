@@ -68,10 +68,7 @@ impl ShadingPattern {
 
                 encoded
             }
-            ShadingType::TriangleMesh {
-                triangles,
-                function,
-            } => {
+            ShadingType::TriangleMesh { triangles, function } => {
                 let full_transform = self.matrix;
                 let samples = sample_triangles(triangles, full_transform);
 
@@ -185,11 +182,76 @@ fn encode_axial_shading(
     )
 }
 
-fn sample_triangles(
-    triangles: &[Triangle],
-    transform: Affine,
-) -> FxHashMap<(u16, u16), ColorComponents> {
-    let mut map = FxHashMap::default();
+#[derive(Debug)]
+pub(crate) struct MeshSample {
+    colors: ColorComponents,
+    coverage: f32,
+}
+
+// A triangle clipped against a rectangle has at most seven vertices.
+// Coordinates are local to the pixel to avoid large-coordinate area cancellation.
+fn triangle_pixel_area(t: &Triangle, x: u16, y: u16) -> Option<(f32, Point)> {
+    let origin = Point::new(f64::from(x), f64::from(y));
+    let mut points = [Point::ZERO; 8];
+    for (i, p) in [t.p0.point, t.p1.point, t.p2.point].into_iter().enumerate() {
+        points[i] = Point::new(p.x - origin.x, p.y - origin.y);
+    }
+    let mut len = 3;
+    for (axis, bound, greater) in [(0, 0.0, true), (0, 1.0, false), (1, 0.0, true), (1, 1.0, false)] {
+        if len == 0 {
+            return None;
+        }
+        let mut out = [Point::ZERO; 8];
+        let mut count = 0;
+        let coordinate = |p: Point| if axis == 0 { p.x } else { p.y };
+        let inside = |p: Point| {
+            if greater {
+                coordinate(p) >= bound
+            } else {
+                coordinate(p) <= bound
+            }
+        };
+        let mut previous = points[len - 1];
+        for current in points[..len].iter().copied() {
+            if inside(previous) != inside(current) {
+                let ratio = (bound - coordinate(previous)) / (coordinate(current) - coordinate(previous));
+                out[count] = previous + (current - previous) * ratio;
+                count += 1;
+            }
+            if inside(current) {
+                out[count] = current;
+                count += 1;
+            }
+            previous = current;
+        }
+        points = out;
+        len = count;
+    }
+    let mut cross_sum = 0.0;
+    let mut cx = 0.0;
+    let mut cy = 0.0;
+    for i in 0..len {
+        let a = points[i];
+        let b = points[(i + 1) % len];
+        let cross = a.x * b.y - b.x * a.y;
+        cross_sum += cross;
+        cx += (a.x + b.x) * cross;
+        cy += (a.y + b.y) * cross;
+    }
+    if cross_sum.abs() <= 1e-15 {
+        return None;
+    }
+    Some((
+        (cross_sum.abs() * 0.5) as f32,
+        Point::new(
+            origin.x + cx / (3.0 * cross_sum),
+            origin.y + cy / (3.0 * cross_sum),
+        ),
+    ))
+}
+
+fn sample_triangles(triangles: &[Triangle], transform: Affine) -> FxHashMap<(u16, u16), MeshSample> {
+    let mut map: FxHashMap<(u16, u16), MeshSample> = FxHashMap::default();
 
     for t in triangles {
         let t = {
@@ -211,14 +273,27 @@ fn sample_triangles(
 
         for y in (bbox.y0.floor() as u16)..(bbox.y1.ceil() as u16) {
             for x in (bbox.x0.floor() as u16)..(bbox.x1.ceil() as u16) {
-                let point = Point::new(x as f64, y as f64);
-                if t.contains_point(point) {
-                    map.insert((x, y), t.interpolate(point));
+                if let Some((area, point)) = triangle_pixel_area(&t, x, y) {
+                    let colors = t.interpolate(point);
+                    let sample = map.entry((x, y)).or_insert_with(|| MeshSample {
+                        colors: colors.iter().map(|_| 0.0).collect(),
+                        coverage: 0.0,
+                    });
+                    for (total, color) in sample.colors.iter_mut().zip(colors) {
+                        *total += color * area;
+                    }
+                    sample.coverage += area;
                 }
             }
         }
     }
 
+    for sample in map.values_mut() {
+        for color in &mut sample.colors {
+            *color /= sample.coverage;
+        }
+        sample.coverage = sample.coverage.min(1.0);
+    }
     map
 }
 
@@ -255,7 +330,7 @@ pub(crate) enum EncodedShadingType {
         extend: [bool; 2],
     },
     Sampled {
-        samples: FxHashMap<(u16, u16), ColorComponents>,
+        samples: FxHashMap<(u16, u16), MeshSample>,
         function: Option<ShadingFunction>,
     },
     Dummy,
@@ -320,13 +395,25 @@ impl EncodedShadingType {
             Self::Sampled { samples, function } => {
                 let sample_point = (pos.x as u16, pos.y as u16);
 
-                if let Some(color) = samples.get(&sample_point) {
-                    if let Some(function) = function {
+                if let Some(sample) = samples.get(&sample_point) {
+                    let color = &sample.colors;
+                    let foreground = if let Some(function) = function {
                         let val = function.eval(&color.to_smallvec())?;
-                        Some(color_space.to_rgba(&val, 1.0, false))
+                        color_space.to_rgba(&val, sample.coverage, false)
                     } else {
-                        Some(color_space.to_rgba(color, 1.0, false))
+                        color_space.to_rgba(color, sample.coverage, false)
+                    };
+                    let mut combined = foreground.premultiplied();
+                    let background = bg_color.premultiplied();
+                    for c in 0..4 {
+                        combined[c] += background[c] * (1.0 - sample.coverage);
                     }
+                    if combined[3] > 0.0 {
+                        for c in 0..3 {
+                            combined[c] /= combined[3];
+                        }
+                    }
+                    Some(AlphaColor::new(combined))
                 } else {
                     Some(bg_color)
                 }
@@ -345,23 +432,10 @@ fn ts_from_line_to_line(src1: Point, src2: Point, dst1: Point, dst2: Point) -> A
 }
 
 fn unit_to_line(p0: Point, p1: Point) -> Affine {
-    Affine::new([
-        p1.y - p0.y,
-        p0.x - p1.x,
-        p1.x - p0.x,
-        p1.y - p0.y,
-        p0.x,
-        p0.y,
-    ])
+    Affine::new([p1.y - p0.y, p0.x - p1.x, p1.x - p0.x, p1.y - p0.y, p0.x, p0.y])
 }
 
-fn radial_pos(
-    pos: &Point,
-    p1: &Point,
-    r: Point,
-    min_extend: bool,
-    max_extend: bool,
-) -> Option<f32> {
+fn radial_pos(pos: &Point, p1: &Point, r: Point, min_extend: bool, max_extend: bool) -> Option<f32> {
     let r0 = r.x as f32;
     let dx = p1.x as f32;
     let dy = p1.y as f32;

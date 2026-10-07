@@ -726,3 +726,221 @@ mod soft_mask_isolation_tests {
         assert_eq!(budget.used(), 0);
     }
 }
+
+#[cfg(test)]
+mod tensor_center_tests {
+    #[test]
+    fn planar_tensor_samples_pixel_centers_with_bounded_color_error() {
+        let budget = rrrah_core::MemoryBudget::new(1024 * 1024);
+        let mut request = crate::DecodeRequest::new("tensor-corners-rgb.pdf");
+        request.memory_budget = Some(budget.clone());
+        let image = super::decode(
+            include_bytes!("../../../tests/fixtures/pdf/tensor-corners-rgb.pdf"),
+            &request,
+        )
+        .unwrap();
+        let rrrah_core::RasterPixels::Rgba8(pixels) = image.pixels() else {
+            panic!("RGBA8 required");
+        };
+        assert_eq!((image.width(), image.height()), (32, 32));
+        for y in 0..32 {
+            for x in 0..32 {
+                let u = (x as f64 + 0.5) / 32.0;
+                let v = 1.0 - (y as f64 + 0.5) / 32.0;
+                let expected = [
+                    255.0 * (1.0 - v),
+                    255.0 * (u * (1.0 - v) + (1.0 - u) * v),
+                    255.0 * u,
+                ];
+                for c in 0..3 {
+                    assert!(
+                        (f64::from(pixels[(y * 32 + x) * 4 + c]) - expected[c].round()).abs() <= 1.0,
+                        "pixel {x},{y} channel {c}"
+                    );
+                }
+                assert_eq!(pixels[(y * 32 + x) * 4 + 3], 255);
+            }
+        }
+        drop(image);
+        assert_eq!(budget.used(), 0);
+    }
+}
+
+#[cfg(test)]
+mod tensor_patch_alignment_tests {
+    #[test]
+    fn two_bit_flags_preserve_shared_edge_like_eight_bit_flags() {
+        let request = crate::DecodeRequest::new("tensor-shared-edge.pdf");
+        let a = super::decode(
+            include_bytes!("../../../tests/fixtures/pdf/tensor-shared-edge-8bit.pdf"),
+            &request,
+        )
+        .unwrap();
+        let b = super::decode(
+            include_bytes!("../../../tests/fixtures/pdf/tensor-shared-edge-2bit.pdf"),
+            &request,
+        )
+        .unwrap();
+        let four = super::decode(
+            include_bytes!("../../../tests/fixtures/pdf/tensor-shared-edge-4bit.pdf"),
+            &request,
+        )
+        .unwrap();
+        let rrrah_core::RasterPixels::Rgba8(four) = four.pixels() else {
+            panic!("RGBA8 required")
+        };
+        let (rrrah_core::RasterPixels::Rgba8(a), rrrah_core::RasterPixels::Rgba8(b)) =
+            (a.pixels(), b.pixels())
+        else {
+            panic!("RGBA8 required")
+        };
+        assert_eq!(&**a, &**b);
+        assert_eq!(&**a, &**four);
+        for y in 0..32 {
+            for x in 0..64 {
+                let u = if x < 32 {
+                    0.0
+                } else {
+                    (x as f64 - 32.0 + 0.5) / 32.0
+                };
+                let expected = [(255.0 * (1.0 - u)).round(), 0.0, (255.0 * u).round()];
+                for c in 0..3 {
+                    assert!((f64::from(b[(y * 64 + x) * 4 + c]) - expected[c]).abs() <= 1.0);
+                }
+                assert_eq!(b[(y * 64 + x) * 4 + 3], 255);
+            }
+        }
+    }
+}
+
+#[cfg(test)]
+mod tensor_triangle_geometry_tests {
+    #[test]
+    fn inflated_patch_triangles_have_consistent_bounds_and_vertex_colors() {
+        use hayro::hayro_interpret::shading::TensorProductPatch;
+        let ordering = [
+            (0, 0),
+            (0, 1),
+            (0, 2),
+            (0, 3),
+            (1, 3),
+            (2, 3),
+            (3, 3),
+            (3, 2),
+            (3, 1),
+            (3, 0),
+            (2, 0),
+            (1, 0),
+            (1, 1),
+            (1, 2),
+            (2, 2),
+            (2, 1),
+        ];
+        let mut patch = TensorProductPatch {
+            control_points: Default::default(),
+            colors: std::array::from_fn(|i| vec![i as f32 / 3.0, 0.0, 0.0].into_iter().collect()),
+        };
+        for (point, (x, y)) in patch.control_points.iter_mut().zip(ordering) {
+            point.x = f64::from(x) * 10.0;
+            point.y = f64::from(y) * 10.0;
+        }
+        let mut triangles = Vec::new();
+        patch.to_triangles(&mut triangles);
+        assert!(!triangles.is_empty());
+        for triangle in triangles {
+            let bounds = triangle.bounding_box();
+            for vertex in [&triangle.p0, &triangle.p1, &triangle.p2] {
+                assert!(
+                    vertex.point.x >= bounds.x0
+                        && vertex.point.x <= bounds.x1
+                        && vertex.point.y >= bounds.y0
+                        && vertex.point.y <= bounds.y1
+                );
+                let actual = triangle.interpolate(vertex.point);
+                for (a, b) in actual.iter().zip(&vertex.colors) {
+                    assert!((a - b).abs() < 1e-5);
+                }
+            }
+        }
+    }
+}
+
+#[cfg(test)]
+mod tensor_fractional_coverage_tests {
+    #[test]
+    fn fractional_tensor_edges_match_exact_rectangle_area() {
+        let request = crate::DecodeRequest::new("tensor-fractional-rgb.pdf");
+        let image = super::decode(
+            include_bytes!("../../../tests/fixtures/pdf/tensor-fractional-rgb.pdf"),
+            &request,
+        )
+        .unwrap();
+        let rrrah_core::RasterPixels::Rgba8(pixels) = image.pixels() else {
+            panic!("RGBA8 required")
+        };
+        for y in 0..32 {
+            for x in 0..32 {
+                let x_coverage = if x == 0 {
+                    0.75
+                } else if x == 31 {
+                    0.25
+                } else {
+                    1.0
+                };
+                let y_coverage = if y == 0 {
+                    0.25
+                } else if y == 31 {
+                    0.75
+                } else {
+                    1.0
+                };
+                let alpha = (255.0f64 * x_coverage * y_coverage).round() as i16;
+                assert!(
+                    (i16::from(pixels[(y * 32 + x) * 4 + 3]) - alpha).abs() <= 1,
+                    "pixel {x},{y}"
+                );
+                assert_eq!(&pixels[(y * 32 + x) * 4..(y * 32 + x) * 4 + 3], &[255, 0, 0]);
+            }
+        }
+    }
+}
+
+#[cfg(test)]
+mod tensor_background_coverage_tests {
+    #[test]
+    fn fractional_tensor_edges_mix_with_declared_background() {
+        let request = crate::DecodeRequest::new("tensor-fractional-background-rgb.pdf");
+        let image = super::decode(
+            include_bytes!("../../../tests/fixtures/pdf/tensor-fractional-background-rgb.pdf"),
+            &request,
+        )
+        .unwrap();
+        let rrrah_core::RasterPixels::Rgba8(pixels) = image.pixels() else {
+            panic!("RGBA8 required")
+        };
+        for y in 0..32 {
+            for x in 0..32 {
+                let xc = if x == 0 {
+                    0.75
+                } else if x == 31 {
+                    0.25
+                } else {
+                    1.0
+                };
+                let yc = if y == 0 {
+                    0.25
+                } else if y == 31 {
+                    0.75
+                } else {
+                    1.0
+                };
+                let red = (255.0f64 * xc * yc).round() as i16;
+                let p = &pixels[(y * 32 + x) * 4..(y * 32 + x) * 4 + 4];
+                assert!((i16::from(p[0]) - red).abs() <= 1);
+                assert_eq!(p[1], 0);
+                assert!((i16::from(p[2]) - (255 - red)).abs() <= 1);
+                assert_eq!(p[3], 255, "declared opaque background at {x},{y}");
+            }
+        }
+    }
+}

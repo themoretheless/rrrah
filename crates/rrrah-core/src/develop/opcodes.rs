@@ -114,6 +114,9 @@ impl Opcode {
 /// The three opcode lists of a DNG raw IFD.
 #[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct OpcodeLists {
+    /// Horizontal / vertical DNG DefaultScale; absent means square pixels.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub pixel_aspect: Option<f64>,
     pub list1: Vec<Opcode>,
     pub list2: Vec<Opcode>,
     pub list3: Vec<Opcode>,
@@ -165,7 +168,7 @@ impl Rd<'_> {
 fn parse_one(id: u32, flags: u32, params: &[u8]) -> Option<Opcode> {
     let mut r = Rd { d: params, p: 0 };
     let f = |r: &mut Rd| r.f64().filter(|v| v.is_finite());
-    Some(match id {
+    let op = match id {
         1 => {
             let n = r.u32()? as usize;
             if n == 0 || n > 4 {
@@ -290,14 +293,19 @@ fn parse_one(id: u32, flags: u32, params: &[u8]) -> Option<Opcode> {
                 _ => Opcode::ScalePerColumn { area, scales: v },
             }
         }
-        _ => Opcode::Unknown {
-            id,
-            flags,
-            params: params.to_vec(),
-        },
-    })
+        _ => {
+            r.p = params.len();
+            Opcode::Unknown {
+                id,
+                flags,
+                params: params.to_vec(),
+            }
+        }
+    };
+    (r.remaining() == 0).then_some(op)
 }
 
+#[cfg(test)]
 fn put_area(o: &mut Vec<u8>, a: &Area) {
     for v in [
         a.top,
@@ -313,6 +321,7 @@ fn put_area(o: &mut Vec<u8>, a: &Area) {
     }
 }
 
+#[cfg(test)]
 fn params(op: &Opcode) -> (u32, u32, Vec<u8>) {
     let mut o = Vec::new();
     let f64s = |o: &mut Vec<u8>, v: &[f64]| v.iter().for_each(|x| o.extend_from_slice(&x.to_be_bytes()));
@@ -424,7 +433,7 @@ pub fn write_list(list: &[Opcode]) -> Vec<u8> {
     out
 }
 
-/// Parse an opcode list blob. Malformed opcodes become [`Opcode::Unknown`]; a truncated list stops early.
+/// Parse a bounded opcode list. Malformed or truncated data is rejected; optional unsupported opcodes are skipped.
 pub fn parse_list(d: &[u8]) -> Result<Vec<Opcode>, super::DevelopError> {
     use super::DevelopError::Invalid;
     if d.len() > 1 << 20 {
@@ -455,9 +464,6 @@ pub fn parse_list(d: &[u8]) -> Result<Vec<Opcode>, super::DevelopError> {
             return Err(Invalid("unsupported required opcode or minimum version"));
         }
         let op = parse_one(id, flags, params).ok_or(Invalid("malformed opcode parameters"))?;
-        if self::params(&op).2.len() != params.len() {
-            return Err(Invalid("opcode parameter length mismatch"));
-        }
         out.push(op);
     }
     if r.remaining() != 0 {
@@ -468,6 +474,9 @@ pub fn parse_list(d: &[u8]) -> Result<Vec<Opcode>, super::DevelopError> {
 
 pub(super) fn validate_lists(lists: &OpcodeLists) -> Result<(), super::DevelopError> {
     use super::DevelopError::Invalid;
+    if lists.pixel_aspect.is_some_and(|v| !v.is_finite() || v <= 0.0) {
+        return Err(Invalid("invalid DNG pixel aspect"));
+    }
     for (stage, list) in [(1, &lists.list1), (2, &lists.list2), (3, &lists.list3)] {
         for op in list {
             match op {
@@ -766,10 +775,20 @@ fn fix_pixels(
 }
 
 /// Apply `OpcodeList3` (on the demosaiced RGB image, values normalised to [0, 1]).
+#[cfg(test)]
 pub(super) fn apply_list3(
     list: &[Opcode],
     img: &mut Rgb32f,
     cancelled: &impl Fn() -> bool,
+) -> Result<(), super::DevelopError> {
+    apply_list3_with_aspect(list, img, cancelled, 1.0)
+}
+
+pub(super) fn apply_list3_with_aspect(
+    list: &[Opcode],
+    img: &mut Rgb32f,
+    cancelled: &impl Fn() -> bool,
+    pixel_aspect: f64,
 ) -> Result<(), super::DevelopError> {
     if list.is_empty() {
         return Ok(());
@@ -789,11 +808,12 @@ pub(super) fn apply_list3(
                     for x in 0..w {
                         for c in 0..3 {
                             let coefficients = planes[if planes.len() == 1 { 0 } else { c }];
-                            let point = rectilinear_source_point(
+                            let point = rectilinear_source_point_with_aspect(
                                 coefficients,
                                 *center,
                                 [w as u32, h as u32],
                                 [x as f64, y as f64],
+                                pixel_aspect,
                             )?;
                             img.data[y * w + x][c] = rectilinear_sample(&source, [w, h], point, c)?;
                         }
@@ -878,13 +898,27 @@ mod gain_map_sdk_tests {
 /// DNG rectilinear destination-to-source coordinates for square pixels.
 /// Coordinates and center are `[x, y]`; radial coefficients precede two tangential coefficients.
 /// Image resampling and non-square pixel aspect admission are separate operations.
+#[cfg(test)]
 pub fn rectilinear_source_point(
     coefficients: [f64; 6],
     center: [f64; 2],
     extent: [u32; 2],
     point: [f64; 2],
 ) -> Result<[f64; 2], super::DevelopError> {
-    if extent.contains(&0)
+    rectilinear_source_point_with_aspect(coefficients, center, extent, point, 1.0)
+}
+
+/// DNG pixel aspect is horizontal DefaultScale divided by vertical DefaultScale.
+pub fn rectilinear_source_point_with_aspect(
+    coefficients: [f64; 6],
+    center: [f64; 2],
+    extent: [u32; 2],
+    point: [f64; 2],
+    pixel_aspect: f64,
+) -> Result<[f64; 2], super::DevelopError> {
+    if !pixel_aspect.is_finite()
+        || pixel_aspect <= 0.0
+        || extent.contains(&0)
         || coefficients
             .iter()
             .chain(center.iter())
@@ -898,15 +932,23 @@ pub fn rectilinear_source_point(
     let h = f64::from(extent[1]);
     let cx = center[0] * w;
     let cy = center[1] * h;
-    let radius = max_radius(cx, cy, w, h);
+    let square_h = (h / pixel_aspect).round();
+    if !square_h.is_finite() || square_h > f64::from(i32::MAX) {
+        return Err(super::DevelopError::Invalid("rectilinear aspect extent overflow"));
+    }
+    let radius = max_radius(cx, center[1] * square_h, w, square_h);
     let dx = (point[0] - cx) / radius;
     let dy = (point[1] - cy) / radius;
-    let r2 = (dx * dx + dy * dy).min(1.0);
+    let scaled_dy = dy / pixel_aspect;
+    let r2 = (dx * dx + scaled_dy * scaled_dy).min(1.0);
     let k = coefficients;
     let radial = k[0] + r2 * (k[1] + r2 * (k[2] + r2 * k[3]));
-    let tx = k[5] * (r2 + 2.0 * dx * dx) + 2.0 * k[4] * dx * dy;
-    let ty = k[4] * (r2 + 2.0 * dy * dy) + 2.0 * k[5] * dx * dy;
-    let result = [cx + radius * (dx * radial + tx), cy + radius * (dy * radial + ty)];
+    let tx = k[5] * (r2 + 2.0 * dx * dx) + 2.0 * k[4] * dx * scaled_dy;
+    let ty = k[4] * (r2 + 2.0 * scaled_dy * scaled_dy) + 2.0 * k[5] * dx * scaled_dy;
+    let result = [
+        cx + radius * (dx * radial + tx),
+        cy + radius * (dy * radial + ty * pixel_aspect),
+    ];
     if result.iter().any(|v| !v.is_finite()) {
         return Err(super::DevelopError::Invalid("rectilinear coordinate overflow"));
     }
@@ -1040,17 +1082,20 @@ pub fn rectilinear_sample(
     }
     let px = point[0].clamp(-2.0, w as f64 + 1.0);
     let py = point[1].clamp(-2.0, h as f64 + 1.0);
-    let bx = px.floor() as isize;
-    let by = py.floor() as isize;
-    let fx = ((px - px.floor()) * 32.0) as usize;
-    let fy = ((py - py.floor()) * 32.0) as usize;
+    let floor_x = px.floor();
+    let floor_y = py.floor();
+    let bx = floor_x as isize;
+    let by = floor_y as isize;
+    let fx = ((px - floor_x) * 32.0) as usize;
+    let fy = ((py - floor_y) * 32.0) as usize;
     let weights = &WARP_WEIGHTS[fy * 32 + fx];
+    let columns: [usize; 4] =
+        std::array::from_fn(|x| (bx + x as isize - 1).clamp(0, w as isize - 1) as usize);
     let mut total = 0.0f32;
     for y in 0..4 {
+        let row = (by + y as isize - 1).clamp(0, h as isize - 1) as usize * w;
         for x in 0..4 {
-            let sx = (bx + x as isize - 1).clamp(0, w as isize - 1) as usize;
-            let sy = (by + y as isize - 1).clamp(0, h as isize - 1) as usize;
-            total += weights[y * 4 + x] * source[sy * w + sx][channel];
+            total += weights[y * 4 + x] * source[row + columns[x]][channel];
         }
     }
     Ok(total.clamp(0.0, 1.0))
@@ -1088,21 +1133,88 @@ mod full_warp_sdk_tests {
     #[test]
     fn full_rgb_warp_matches_independent_sdk_image_opcode() {
         let reference = include_bytes!("../../../../tests/fixtures/dng/warp-image-sdk.f32le");
+        qualify(reference, vec![[0.97, 0.05, -0.01, 0.002, 0.003, -0.004]], false);
+    }
+
+    #[test]
+    fn per_channel_warp_matches_independent_sdk_image_opcode() {
+        let reference = include_bytes!("../../../../tests/fixtures/dng/warp-three-plane-sdk.f32le");
+        let planes = (0..3)
+            .map(|p| {
+                let p = f64::from(p);
+                [
+                    0.97 + 0.01 * p,
+                    0.05 - 0.02 * p,
+                    -0.01,
+                    0.002,
+                    0.003 + 0.001 * p,
+                    -0.004 + 0.002 * p,
+                ]
+            })
+            .collect();
+        qualify(reference, planes, false);
+    }
+
+    #[test]
+    fn hdr_warp_matches_independent_sdk_clipping() {
+        let reference = include_bytes!("../../../../tests/fixtures/dng/warp-hdr-sdk.f32le");
+        let planes = (0..3)
+            .map(|p| {
+                let p = f64::from(p);
+                [
+                    0.97 + 0.01 * p,
+                    0.05 - 0.02 * p,
+                    -0.01,
+                    0.002,
+                    0.003 + 0.001 * p,
+                    -0.004 + 0.002 * p,
+                ]
+            })
+            .collect();
+        qualify(reference, planes, true);
+    }
+
+    #[test]
+    fn identity_warp_preserves_hdr_bits() {
+        let source = vec![[-0.5, 1.25, 8.0]; 4];
+        let mut image = super::super::Rgb32f {
+            width: 2,
+            height: 2,
+            data: source.clone(),
+        };
+        let op = super::Opcode::WarpRectilinear {
+            planes: vec![[1.0, 0.0, 0.0, 0.0, 0.0, 0.0]; 3],
+            center: [0.5; 2],
+        };
+        super::apply_list3(&[op], &mut image, &|| false).unwrap();
+        for (a, b) in image.data.iter().flatten().zip(source.iter().flatten()) {
+            assert_eq!(a.to_bits(), b.to_bits());
+        }
+    }
+
+    fn qualify(reference: &[u8], planes: Vec<[f64; 6]>, hdr: bool) {
         assert_eq!(reference.len(), 32 * 48 * 3 * 4);
-        let data = (0..32)
+        let data: Vec<[f32; 3]> = (0..32)
             .flat_map(|y| {
                 (0..48).map(move |x| {
                     std::array::from_fn(|c| (((x * 17 + y * 31 + c * 43) % 251) as f64 / 250.0) as f32)
                 })
             })
             .collect();
+        let data = if hdr {
+            data.into_iter()
+                .map(|p: [f32; 3]| p.map(|v| v * 4.0 - 0.5))
+                .collect()
+        } else {
+            data
+        };
         let mut image = super::super::Rgb32f {
             width: 48,
             height: 32,
             data,
         };
         let op = super::Opcode::WarpRectilinear {
-            planes: vec![[0.97, 0.05, -0.01, 0.002, 0.003, -0.004]],
+            planes,
             center: [0.4, 0.6],
         };
         super::apply_list3(&[op], &mut image, &|| false).unwrap();
@@ -1112,5 +1224,168 @@ mod full_warp_sdk_tests {
             maximum = maximum.max((actual - expected).abs());
         }
         assert!(maximum <= 1e-6, "full SDK warp maximum error {maximum}");
+    }
+}
+
+#[cfg(test)]
+mod parameter_boundary_tests {
+    use super::*;
+
+    #[test]
+    fn rectilinear_parameters_require_exact_consumption() {
+        let valid = write_list(&[Opcode::WarpRectilinear {
+            planes: vec![[1.0, 0.0, 0.0, 0.0, 0.0, 0.0]],
+            center: [0.5; 2],
+        }]);
+        assert_eq!(parse_list(&valid).unwrap().len(), 1);
+        let mut extra = valid.clone();
+        let size = u32::from_be_bytes(extra[16..20].try_into().unwrap());
+        extra[16..20].copy_from_slice(&(size + 1).to_be_bytes());
+        extra.push(0);
+        assert!(parse_list(&extra).is_err());
+        for end in 0..valid.len() {
+            assert!(parse_list(&valid[..end]).is_err(), "truncation at {end}");
+        }
+    }
+
+    #[test]
+    fn oversized_gain_dimensions_are_rejected_before_collecting() {
+        let mut parameters = vec![0u8; 32]; // AreaSpec
+        parameters.extend_from_slice(&u32::MAX.to_be_bytes());
+        parameters.extend_from_slice(&u32::MAX.to_be_bytes());
+        for value in [1.0f64, 1.0, 0.0, 0.0] {
+            parameters.extend_from_slice(&value.to_be_bytes());
+        }
+        parameters.extend_from_slice(&u32::MAX.to_be_bytes());
+        let mut blob = Vec::new();
+        for value in [1u32, 9, 0x0103_0000, 0, parameters.len() as u32] {
+            blob.extend_from_slice(&value.to_be_bytes());
+        }
+        blob.extend_from_slice(&parameters);
+        assert!(parse_list(&blob).is_err());
+    }
+}
+
+#[cfg(test)]
+mod warp_timing_tests {
+    #[test]
+    #[ignore = "manual fixed-work warp sampling benchmark"]
+    fn sampling_fixed_work_timing() {
+        let source: Vec<[f32; 3]> = (0..256 * 256)
+            .map(|i| [((i * 17) % 251) as f32 / 250.0; 3])
+            .collect();
+        let mut checksum = 0.0f64;
+        for run in 0..6 {
+            let start = std::time::Instant::now();
+            let mut sum = 0.0f64;
+            for i in 0..1_000_000 {
+                let point = [
+                    (i % 260) as f64 - 2.0 + 0.37,
+                    ((i / 260) % 260) as f64 - 2.0 + 0.63,
+                ];
+                sum += f64::from(
+                    super::rectilinear_sample(
+                        std::hint::black_box(&source),
+                        [256, 256],
+                        std::hint::black_box(point),
+                        i % 3,
+                    )
+                    .unwrap(),
+                );
+            }
+            checksum = sum;
+            eprintln!(
+                "run={run} ms={:.3} checksum={sum:.9}",
+                start.elapsed().as_secs_f64() * 1000.0
+            );
+        }
+        assert!(checksum > 0.0);
+    }
+}
+
+#[cfg(test)]
+mod aspect_warp_sdk_tests {
+    #[test]
+    fn non_square_rgb_warp_matches_complete_sdk_image() {
+        let reference = include_bytes!("../../../../tests/fixtures/dng/warp-aspect-sdk.f32le");
+        let source: Vec<[f32; 3]> = (0..32)
+            .flat_map(|y| {
+                (0..48).map(move |x| {
+                    std::array::from_fn(|c| (((x * 17 + y * 31 + c * 43) % 251) as f64 / 250.0) as f32)
+                })
+            })
+            .collect();
+        let planes = (0..3)
+            .map(|c| {
+                let p = f64::from(c);
+                [
+                    0.97 + 0.01 * p,
+                    0.05 - 0.02 * p,
+                    -0.01,
+                    0.002,
+                    0.003 + 0.001 * p,
+                    -0.004 + 0.002 * p,
+                ]
+            })
+            .collect();
+        let mut image = super::super::Rgb32f {
+            width: 48,
+            height: 32,
+            data: source.clone(),
+        };
+        super::apply_list3_with_aspect(
+            &[super::Opcode::WarpRectilinear {
+                planes,
+                center: [0.4, 0.6],
+            }],
+            &mut image,
+            &|| false,
+            1.5,
+        )
+        .unwrap();
+        for (actual, bytes) in image.data.iter().flatten().zip(reference.chunks_exact(4)) {
+            assert!((*actual - f32::from_le_bytes(bytes.try_into().unwrap())).abs() <= 1e-6);
+        }
+        let mut maximum = 0.0f32;
+        for y in 0..32 {
+            for x in 0..48 {
+                for c in 0..3 {
+                    let p = c as f64;
+                    let k = [
+                        0.97 + 0.01 * p,
+                        0.05 - 0.02 * p,
+                        -0.01,
+                        0.002,
+                        0.003 + 0.001 * p,
+                        -0.004 + 0.002 * p,
+                    ];
+                    let point = super::rectilinear_source_point_with_aspect(
+                        k,
+                        [0.4, 0.6],
+                        [48, 32],
+                        [x as f64, y as f64],
+                        1.5,
+                    )
+                    .unwrap();
+                    let actual = super::rectilinear_sample(&source, [48, 32], point, c).unwrap();
+                    let offset = ((y * 48 + x) * 3 + c) * 4;
+                    let expected = f32::from_le_bytes(reference[offset..offset + 4].try_into().unwrap());
+                    maximum = maximum.max((actual - expected).abs());
+                }
+            }
+        }
+        assert!(maximum <= 1e-6, "SDK non-square warp error {maximum}");
+        for aspect in [0.0, -1.0, f64::NAN, f64::INFINITY] {
+            assert!(
+                super::rectilinear_source_point_with_aspect(
+                    [1.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+                    [0.5; 2],
+                    [48, 32],
+                    [1.0; 2],
+                    aspect
+                )
+                .is_err()
+            );
+        }
     }
 }

@@ -1,0 +1,19 @@
+{
+  "flag_bits": [
+    2,
+    4,
+    8
+  ],
+  "decoder_test": "all three full buffers identical; pixel-center mathematical error <=1",
+  "viewer_test": "short_flag_tensor_pages_swap_preserves_pixels_and_metal_frame passed",
+  "adapter": "Metal Apple M4 Max",
+  "checks": [
+    "native and prepared representations",
+    "all restored pixel components exact",
+    "metadata exact",
+    "actual GPU frame identical after swap",
+    "pressure refusal then retry",
+    "root memory releases after final owners drop"
+  ],
+  "scope": "authored two-patch tensor fixtures, not all PDF/AI shading or physical HDR"
+}

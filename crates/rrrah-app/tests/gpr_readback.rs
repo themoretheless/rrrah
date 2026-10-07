@@ -179,22 +179,73 @@ fn navigation_cancels_active_gpr_decode_and_releases_all_managed_buffers() {
 #[test]
 #[ignore = "requires pinned HERO9 GPR and Metal adapter"]
 fn developed_gpr_float_swap_and_metal_preserve_corrected_pixels() {
+    qualify_developed_gpr("HERO9", 4, 0);
+}
+
+#[test]
+#[ignore = "requires pinned Fusion GPR sources and Metal adapter"]
+fn fusion_rectilinear_float_swap_and_metal_preserve_corrected_pixels() {
+    for name in ["Fusion-back", "Fusion-front"] {
+        qualify_developed_gpr(name, 0, 1);
+    }
+}
+
+fn qualify_developed_gpr(name: &str, gain_maps: usize, warps: usize) {
     use rrrah_decode::RawDecoder;
     let root = std::path::PathBuf::from(std::env::var("RRRAH_GPR_CORPUS").unwrap());
     let budget = rrrah_core::MemoryBudget::new(1024 * 1024 * 1024);
-    let mut request = rrrah_decode::DecodeRequest::new(root.join("HERO9.GPR"));
+    let mut request = rrrah_decode::DecodeRequest::new(root.join(format!("{name}.GPR")));
     request.memory_budget = Some(budget.clone());
     let mosaic = rrrah_decode::NativeRawDecoder.decode(&request).unwrap().mosaic;
     let lists = rrrah_decode::raw_development_opcodes(&request).unwrap();
-    assert_eq!(lists.list2.len(), 4);
+    assert_eq!(lists.list2.len(), gain_maps);
+    assert_eq!(lists.list3.len(), warps);
     let raster =
         rrrah_core::develop::develop_raw(&mosaic, &Default::default(), &lists, Some(&budget), &|| false)
             .unwrap();
     drop(mosaic);
     let weight = raster.capacity_bytes();
     assert_eq!(budget.used(), weight);
+    // Full developed float allocation participates in the same policies as other rasters.
+    let mut too_small = rrrah_cache::RasterRamCache::<u8>::new(rrrah_cache::CacheLimits::bytes(weight - 1));
+    assert!(!too_small.insert(1, raster.clone()));
+    let mut no_entries = rrrah_cache::RasterRamCache::<u8>::new(rrrah_cache::CacheLimits {
+        max_bytes: weight,
+        max_entries: Some(0),
+        ttl: None,
+    });
+    assert!(!no_entries.insert(1, raster.clone()));
+    let mut expired = rrrah_cache::RasterRamCache::<u8>::new(rrrah_cache::CacheLimits {
+        max_bytes: weight,
+        max_entries: Some(1),
+        ttl: Some(std::time::Duration::ZERO),
+    });
+    assert!(expired.insert(1, raster.clone()));
+    assert!(expired.get_background_with_cancel(&1, || false).is_none());
+    let mut pinned = rrrah_cache::RasterRamCache::<u8>::new(rrrah_cache::CacheLimits {
+        max_bytes: weight,
+        max_entries: Some(1),
+        ttl: Some(std::time::Duration::ZERO),
+    });
+    assert!(pinned.insert_visible(1, raster.clone()));
+    // TTL prevents new acquisitions, while the visible owner's pin retains membership.
+    assert!(pinned.get_visible_lease_for(&raster).is_none());
+    assert_eq!(pinned.len(), 1);
+    assert!(
+        pinned
+            .set_limits(rrrah_cache::CacheLimits::bytes(weight - 1))
+            .is_none()
+    );
+    assert_eq!(pinned.len(), 1);
+    assert_eq!(
+        budget.used(),
+        weight,
+        "cache clones must share the managed allocation"
+    );
+    drop((pinned, expired, no_entries, too_small));
+
     let gpu = common::qualification_gpu().expect("Metal required");
-    eprintln!("developed GPR adapter: {}", gpu.adapter_name());
+    eprintln!("developed {name} adapter: {}", gpu.adapter_name());
     let view = rrrah_gpu::ViewParameters {
         viewport: [128.0, 96.0],
         zoom: 0.02,

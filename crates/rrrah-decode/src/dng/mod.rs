@@ -291,6 +291,23 @@ pub(crate) fn opcode_lists(data: &[u8]) -> Result<rrrah_core::develop::OpcodeLis
     let directories = collect_directories(&tiff).map_err(|e| e.to_string())?;
     let raw = select_raw_ifd(&directories).map_err(|e| e.to_string())?;
     let mut lists = rrrah_core::develop::OpcodeLists::default();
+    if let Some(entry) = raw.entry(50718).map_err(|e| e.to_string())? {
+        if entry.field_type != FieldType::Rational {
+            return Err("DNG DefaultScale must contain unsigned rationals".into());
+        }
+        let scales = entry.numeric_values().map_err(|e| e.to_string())?;
+        if scales.len() != 2 || scales.iter().any(|v| !v.is_finite() || *v <= 0.0) {
+            return Err("invalid DNG DefaultScale".into());
+        }
+        let aspect = scales[0] / scales[1];
+        if !aspect.is_finite() || aspect <= 0.0 {
+            return Err("invalid DNG pixel aspect".into());
+        }
+        if aspect != 1.0 {
+            lists.pixel_aspect = Some(aspect);
+        }
+    }
+
     for (tag, out) in [
         (51008, &mut lists.list1),
         (51009, &mut lists.list2),
@@ -2620,5 +2637,41 @@ mod tests {
         }
         let next_offset = offset + 2 + entries.len() * 12;
         bytes[next_offset..next_offset + 4].copy_from_slice(&next.to_le_bytes());
+    }
+}
+
+#[cfg(test)]
+mod default_scale_admission_tests {
+    #[test]
+    #[ignore = "requires pinned official HERO9 source"]
+    fn default_scale_is_carried_and_malformed_values_refused() {
+        let root = std::path::PathBuf::from(std::env::var("RRRAH_GPR_CORPUS").unwrap());
+        let source = std::fs::read(root.join("HERO9.GPR")).unwrap();
+        let ifd = u32::from_le_bytes(source[4..8].try_into().unwrap()) as usize;
+        let count = u16::from_le_bytes(source[ifd..ifd + 2].try_into().unwrap()) as usize;
+        let entry = (0..count)
+            .map(|i| ifd + 2 + i * 12)
+            .find(|&o| u16::from_le_bytes(source[o..o + 2].try_into().unwrap()) == 50718)
+            .unwrap();
+        let values = u32::from_le_bytes(source[entry + 8..entry + 12].try_into().unwrap()) as usize;
+        assert_eq!(super::opcode_lists(&source).unwrap().pixel_aspect, None);
+        let mut scaled = source.clone();
+        for (i, v) in [3u32, 2, 1, 1].into_iter().enumerate() {
+            scaled[values + i * 4..values + i * 4 + 4].copy_from_slice(&v.to_le_bytes());
+        }
+        let lists = super::opcode_lists(&scaled).unwrap();
+        assert_eq!(lists.pixel_aspect, Some(1.5));
+        assert_eq!(lists.list2.len(), 4);
+        for field in [0usize, 1, 2, 3] {
+            let mut bad = scaled.clone();
+            bad[values + field * 4..values + field * 4 + 4].fill(0);
+            assert!(super::opcode_lists(&bad).is_err(), "zero scale component {field}");
+        }
+        let mut bad_type = scaled.clone();
+        bad_type[entry + 2..entry + 4].copy_from_slice(&10u16.to_le_bytes());
+        assert!(super::opcode_lists(&bad_type).is_err());
+        let mut bad_count = scaled;
+        bad_count[entry + 4..entry + 8].copy_from_slice(&1u32.to_le_bytes());
+        assert!(super::opcode_lists(&bad_count).is_err());
     }
 }

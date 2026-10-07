@@ -1,0 +1,21 @@
+{
+  "sources": [
+    "Fusion-back.GPR",
+    "Fusion-front.GPR"
+  ],
+  "adapter": "Metal Apple M4 Max",
+  "test": "fusion_rectilinear_float_swap_and_metal_preserve_corrected_pixels",
+  "result": "passed",
+  "checks": [
+    "native rectilinear list3 applied",
+    "all developed float components bit exact after swap",
+    "Metal frame exact before and after restore",
+    "restore refused under root pressure then retried",
+    "root usage zero after release",
+    "one write and read per source; queue empty"
+  ],
+  "limitations": [
+    "transport preservation does not establish independent final camera color",
+    "physical HDR presentation and NVIDIA runtime remain unqualified"
+  ]
+}

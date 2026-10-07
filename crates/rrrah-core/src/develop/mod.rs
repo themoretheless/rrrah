@@ -315,7 +315,12 @@ pub fn develop_raw(
                 p[c] /= wb[c];
             }
         }
-        opcodes::apply_list3(&lists.list3, &mut rgb, cancelled)?;
+        opcodes::apply_list3_with_aspect(
+            &lists.list3,
+            &mut rgb,
+            cancelled,
+            lists.pixel_aspect.unwrap_or(1.0),
+        )?;
         for p in &mut rgb.data {
             for c in 0..3 {
                 p[c] *= wb[c];

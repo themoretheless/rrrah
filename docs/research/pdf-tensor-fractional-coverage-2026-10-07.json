@@ -1,0 +1,48 @@
+{
+  "implementation": "fixed eight-point clipping buffer; area and centroid per triangle/pixel; weighted components and bounded alpha; inflation removed",
+  "authored_test": "fractional rectangle per-pixel alpha agrees with exact formula within1; all24 PDF tests passed",
+  "real_patch": [
+    {
+      "x": 223,
+      "y": 117,
+      "area_oracle_alpha8": 185,
+      "native_alpha8": 185,
+      "difference": 0
+    },
+    {
+      "x": 224,
+      "y": 117,
+      "area_oracle_alpha8": 39,
+      "native_alpha8": 38,
+      "difference": 1
+    },
+    {
+      "x": 224,
+      "y": 120,
+      "area_oracle_alpha8": 47,
+      "native_alpha8": 44,
+      "difference": 3
+    },
+    {
+      "x": 224,
+      "y": 124,
+      "area_oracle_alpha8": 23,
+      "native_alpha8": 20,
+      "difference": 3
+    },
+    {
+      "x": 225,
+      "y": 120,
+      "area_oracle_alpha8": 0,
+      "native_alpha8": 0,
+      "difference": 0
+    }
+  ],
+  "scope_limits": [
+    "20x20 curved geometry approximation",
+    "overlapping/folded patches require separate union qualification",
+    "color averaging before nonlinear conversion not fully qualified",
+    "parser/render scratch not globally memory qualified"
+  ],
+  "correction": "Replaced earlier oracle values after correcting page-to-raster Y transform; real boundary agrees within3 alpha8 levels for these samples."
+}

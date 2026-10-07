@@ -14,8 +14,8 @@ use hayro_syntax::object::Object;
 use hayro_syntax::object::Rect;
 use hayro_syntax::object::Stream;
 use hayro_syntax::object::dict::keys::{
-    BACKGROUND, BBOX, BITS_PER_COMPONENT, BITS_PER_COORDINATE, BITS_PER_FLAG, COLORSPACE, COORDS,
-    DECODE, DOMAIN, EXTEND, FUNCTION, MATRIX, SHADING_TYPE, VERTICES_PER_ROW,
+    BACKGROUND, BBOX, BITS_PER_COMPONENT, BITS_PER_COORDINATE, BITS_PER_FLAG, COLORSPACE, COORDS, DECODE,
+    DOMAIN, EXTEND, FUNCTION, MATRIX, SHADING_TYPE, VERTICES_PER_ROW,
 };
 use kurbo::{Affine, BezPath, CubicBez, ParamCurve, Point, Shape};
 use smallvec::{SmallVec, smallvec};
@@ -131,10 +131,7 @@ impl Shading {
         let shading_type = match shading_num {
             1 => {
                 let domain = dict.get::<[f32; 4]>(DOMAIN).unwrap_or([0.0, 1.0, 0.0, 1.0]);
-                let matrix = dict
-                    .get::<[f64; 6]>(MATRIX)
-                    .map(Affine::new)
-                    .unwrap_or_default();
+                let matrix = dict.get::<[f64; 6]>(MATRIX).map(Affine::new).unwrap_or_default();
                 let function = read_function(dict, &color_space)?;
 
                 ShadingType::FunctionBased {
@@ -149,8 +146,8 @@ impl Shading {
                 let extend = dict.get::<[bool; 2]>(EXTEND).unwrap_or([false, false]);
                 let (coords, invalid) = if shading_num == 2 {
                     let read = dict.get::<[f32; 4]>(COORDS)?;
-                    let invalid = (read[0] - read[2]).is_nearly_zero()
-                        && (read[1] - read[3]).is_nearly_zero();
+                    let invalid =
+                        (read[0] - read[2]).is_nearly_zero() && (read[1] - read[3]).is_nearly_zero();
                     ([read[0], read[1], read[2], read[3], 0.0, 0.0], invalid)
                 } else {
                     let read = dict.get::<[f32; 6]>(COORDS)?;
@@ -181,10 +178,7 @@ impl Shading {
                 let bp_comp = dict.get::<u8>(BITS_PER_COMPONENT)?;
                 let bpf = dict.get::<u8>(BITS_PER_FLAG)?;
                 let function = read_function(dict, &color_space);
-                let decode = dict
-                    .get::<Array<'_>>(DECODE)?
-                    .iter::<f32>()
-                    .collect::<Vec<_>>();
+                let decode = dict.get::<Array<'_>>(DECODE)?.iter::<f32>().collect::<Vec<_>>();
 
                 let triangles = read_free_form_triangles(
                     stream_data.as_ref(),
@@ -195,10 +189,7 @@ impl Shading {
                     &decode,
                 )?;
 
-                ShadingType::TriangleMesh {
-                    triangles,
-                    function,
-                }
+                ShadingType::TriangleMesh { triangles, function }
             }
             5 => {
                 let stream = stream?;
@@ -206,10 +197,7 @@ impl Shading {
                 let bp_coord = dict.get::<u8>(BITS_PER_COORDINATE)?;
                 let bp_comp = dict.get::<u8>(BITS_PER_COMPONENT)?;
                 let function = read_function(dict, &color_space);
-                let decode = dict
-                    .get::<Array<'_>>(DECODE)?
-                    .iter::<f32>()
-                    .collect::<Vec<_>>();
+                let decode = dict.get::<Array<'_>>(DECODE)?.iter::<f32>().collect::<Vec<_>>();
                 let vertices_per_row = dict.get::<u32>(VERTICES_PER_ROW)?;
 
                 let triangles = read_lattice_triangles(
@@ -221,10 +209,7 @@ impl Shading {
                     &decode,
                 )?;
 
-                ShadingType::TriangleMesh {
-                    triangles,
-                    function,
-                }
+                ShadingType::TriangleMesh { triangles, function }
             }
             6 => {
                 let stream = stream?;
@@ -233,10 +218,7 @@ impl Shading {
                 let bp_comp = dict.get::<u8>(BITS_PER_COMPONENT)?;
                 let bpf = dict.get::<u8>(BITS_PER_FLAG)?;
                 let function = read_function(dict, &color_space);
-                let decode = dict
-                    .get::<Array<'_>>(DECODE)?
-                    .iter::<f32>()
-                    .collect::<Vec<_>>();
+                let decode = dict.get::<Array<'_>>(DECODE)?.iter::<f32>().collect::<Vec<_>>();
 
                 let patches = read_coons_patch_mesh(
                     stream_data.as_ref(),
@@ -256,10 +238,7 @@ impl Shading {
                 let bp_comp = dict.get::<u8>(BITS_PER_COMPONENT)?;
                 let bpf = dict.get::<u8>(BITS_PER_FLAG)?;
                 let function = read_function(dict, &color_space);
-                let decode = dict
-                    .get::<Array<'_>>(DECODE)?
-                    .iter::<f32>()
-                    .collect::<Vec<_>>();
+                let decode = dict.get::<Array<'_>>(DECODE)?.iter::<f32>().collect::<Vec<_>>();
 
                 let patches = read_tensor_product_patch_mesh(
                     stream_data.as_ref(),
@@ -439,14 +418,7 @@ impl CoonsPatch {
     /// Get the interpolated colors of the point from the patch.
     pub fn interpolate(&self, pos: Point) -> ColorComponents {
         let (u, v) = (pos.x, pos.y);
-        let (c0, c1, c2, c3) = {
-            (
-                &self.colors[0],
-                &self.colors[1],
-                &self.colors[2],
-                &self.colors[3],
-            )
-        };
+        let (c0, c1, c2, c3) = { (&self.colors[0], &self.colors[1], &self.colors[2], &self.colors[3]) };
 
         let mut result = SmallVec::new();
         for i in 0..c0.len() {
@@ -523,14 +495,7 @@ impl TensorProductPatch {
     /// Get the interpolated colors of the point from the patch.
     pub fn interpolate(&self, pos: Point) -> ColorComponents {
         let (u, v) = (pos.x, pos.y);
-        let (c0, c1, c2, c3) = {
-            (
-                &self.colors[0],
-                &self.colors[1],
-                &self.colors[2],
-                &self.colors[3],
-            )
-        };
+        let (c0, c1, c2, c3) = { (&self.colors[0], &self.colors[1], &self.colors[2], &self.colors[3]) };
 
         let mut result = SmallVec::new();
         for i in 0..c0.len() {
@@ -600,6 +565,16 @@ fn read_free_form_triangles(
     Some(triangles)
 }
 
+// The dependency's 8-bit fast path ignores the current bit offset.
+// Short patch flags leave component values unaligned until the record ends.
+fn read_component_bits(reader: &mut BitReader<'_>, bits: u8) -> Option<u32> {
+    if bits == 8 && reader.bit_pos() != 0 {
+        Some((reader.read(4)? << 4) | reader.read(4)?)
+    } else {
+        reader.read(bits)
+    }
+}
+
 /// Common interpolation functions used across different shading types.
 struct InterpolationHelpers {
     bp_coord: u8,
@@ -651,7 +626,7 @@ impl InterpolationHelpers {
         let mut colors = smallvec![];
         if has_function {
             colors.push(self.interpolate_comp(
-                reader.read(self.bp_comp)?,
+                read_component_bits(reader, self.bp_comp)?,
                 *decode.first()?,
                 *decode.get(1)?,
             ));
@@ -659,7 +634,7 @@ impl InterpolationHelpers {
             let num_components = decode.len() / 2;
             for (_, decode) in (0..num_components).zip(decode.chunks_exact(2)) {
                 colors.push(self.interpolate_comp(
-                    reader.read(self.bp_comp)?,
+                    read_component_bits(reader, self.bp_comp)?,
                     decode[0],
                     decode[1],
                 ));
@@ -680,11 +655,7 @@ impl InterpolationHelpers {
         let colors = self.read_colors(reader, has_function, decode)?;
         reader.align();
 
-        Some(TriangleVertex {
-            flag,
-            point,
-            colors,
-        })
+        Some(TriangleVertex { flag, point, colors })
     }
 }
 
@@ -749,32 +720,9 @@ where
                 colors: interpolate(Point::new(u1, v1)),
             };
 
-            let inflate_point = |p: Point, mid: Point| -> Point {
-                const INFLATION_FACTOR: f64 = 1.025;
-                mid + (p - mid) * INFLATION_FACTOR
-            };
-
-            // Converting to triangles is lossy and can lead to gaps. To make this a bit better,
-            // we slightly inflate the triangles.
-            let inflate = |mut triangle: Triangle| {
-                let mid = triangle.kurbo_tri.centroid();
-                triangle.p0.point = inflate_point(triangle.p0.point, mid);
-                triangle.p1.point = inflate_point(triangle.p1.point, mid);
-                triangle.p2.point = inflate_point(triangle.p2.point, mid);
-
-                triangle
-            };
-
-            buffer.push(inflate(Triangle::new(
-                v00.clone(),
-                v10.clone(),
-                v01.clone(),
-            )));
-            buffer.push(inflate(Triangle::new(
-                v10.clone(),
-                v11.clone(),
-                v01.clone(),
-            )));
+            // Exact triangle/pixel clipping handles shared edges without inflation.
+            buffer.push(Triangle::new(v00.clone(), v10.clone(), v01.clone()));
+            buffer.push(Triangle::new(v10, v11, v01));
         }
     }
 }
@@ -946,6 +894,9 @@ where
             _ => break,
         }
 
+        // Each patch record starts at a byte boundary, including short flag fields.
+        reader.align();
+
         let mut fixed_points = [Point::ZERO; 16];
         for i in 0..16 {
             if i < control_points.len() {
@@ -958,11 +909,7 @@ where
     Some(patches)
 }
 
-fn copy_patch_control_points(
-    flag: u32,
-    prev_control_points: &[Point],
-    control_points: &mut [Point],
-) {
+fn copy_patch_control_points(flag: u32, prev_control_points: &[Point], control_points: &mut [Point]) {
     match flag {
         1 => {
             control_points[0] = prev_control_points[3];
@@ -1011,10 +958,7 @@ fn read_tensor_product_patch_mesh(
 
 fn read_function(dict: &Dict<'_>, color_space: &ColorSpace) -> Option<ShadingFunction> {
     if let Some(arr) = dict.get::<Array<'_>>(FUNCTION) {
-        let arr: Option<SmallVec<_>> = arr
-            .iter::<Object<'_>>()
-            .map(|o| Function::new(&o))
-            .collect();
+        let arr: Option<SmallVec<_>> = arr.iter::<Object<'_>>().map(|o| Function::new(&o)).collect();
         let arr = arr?;
 
         if arr.len() != color_space.num_components() as usize {

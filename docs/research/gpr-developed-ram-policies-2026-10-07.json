@@ -1,0 +1,20 @@
+{
+  "sources": [
+    "HERO9.GPR",
+    "Fusion-back.GPR",
+    "Fusion-front.GPR"
+  ],
+  "result": "two integration tests passed, all three full developed float images",
+  "checks": [
+    "size one byte below capacity refuses admission",
+    "count zero refuses admission",
+    "zero TTL refuses a new background acquisition",
+    "visible pin retains expired membership",
+    "shrinking size below visible allocation refuses policy change atomically",
+    "cache clones share root memory charge",
+    "all floats and Metal frames preserved after swap pressure refusal and retry",
+    "root zero after final owners drop"
+  ],
+  "ttl_contract": "fixed insertion age; expiration prevents new lookup, existing owner retains allocation",
+  "limitations": "not independent final camera color or all 100 formats"
+}

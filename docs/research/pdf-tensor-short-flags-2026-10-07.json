@@ -1,0 +1,15 @@
+{
+  "fixtures": [
+    "tensor-shared-edge-8bit.pdf",
+    "tensor-shared-edge-2bit.pdf"
+  ],
+  "independent_oracle": "Poppler renders both as same shared-edge red-to-blue geometry",
+  "before": "2-bit flag fixture becomes transparent; 8-bit renders two patches",
+  "defects": [
+    "missing byte alignment after each patch",
+    "dependency read(8) fast path ignores current bit offset for unaligned color components"
+  ],
+  "fix": "align patch records and read unaligned eight-bit components as two four-bit reads",
+  "verification": "both full RGBA buffers exact against each other; mathematical pixel-center channel error <=1; all 22 PDF tests passed",
+  "remaining": "real VectorApple uses 8-bit flags, so its dominant fidelity discrepancy remains unresolved"
+}

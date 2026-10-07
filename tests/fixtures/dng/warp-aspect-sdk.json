@@ -1,0 +1,19 @@
+{
+  "oracle": "unchanged GoPro SDK dng_opcode_WarpRectilinear::Apply",
+  "commit": "446c736a38fb14f51343605c0780d347dc602f89",
+  "host": "scripts/warp-image-sdk-oracle.cpp",
+  "arguments": [
+    "output.f32le",
+    "aspect"
+  ],
+  "extent": [
+    48,
+    32
+  ],
+  "pixel_aspect": 1.5,
+  "values": 4608,
+  "sha256": "80f7ddc41a18289ff729d761230bbde27dadd8c1a49c1c60c496d9daf9df1885",
+  "native_match": "geometry helper and production opcode application both <= 1e-6",
+  "metadata": "DNG DefaultScale horizontal/vertical carried by OpcodeLists.pixel_aspect; absent remains square",
+  "limits": "full display aspect/cropping and broader aspect values not yet qualified"
+}

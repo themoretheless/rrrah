@@ -4,14 +4,36 @@ mod common;
 #[test]
 #[ignore = "requires pinned external AI corpus; set RRRAH_AI_CORPUS"]
 fn real_ai_pages_swap_preserves_pixels_and_metal_frame() {
-    let gpu = common::qualification_gpu().expect("actual GPU required");
-    eprintln!("AI adapter: {}", gpu.adapter_name());
     let corpus = std::path::PathBuf::from(std::env::var("RRRAH_AI_CORPUS").unwrap());
-    for (name, index, extent, count) in [
-        ("VectorApple.ai", 0, (301, 246), 1),
-        ("one.ai", 0, (1366, 768), 2),
-        ("one.ai", 1, (177, 175), 2),
-    ] {
+    qualify_pdf_swap_pages(
+        &corpus,
+        &[
+            ("VectorApple.ai", 0, (301, 246), 1),
+            ("one.ai", 0, (1366, 768), 2),
+            ("one.ai", 1, (177, 175), 2),
+        ],
+    );
+}
+
+#[test]
+#[ignore = "requires actual GPU adapter"]
+fn short_flag_tensor_pages_swap_preserves_pixels_and_metal_frame() {
+    let corpus = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/pdf");
+    qualify_pdf_swap_pages(
+        &corpus,
+        &[
+            ("tensor-shared-edge-2bit.pdf", 0, (64, 32), 1),
+            ("tensor-shared-edge-4bit.pdf", 0, (64, 32), 1),
+            ("tensor-shared-edge-8bit.pdf", 0, (64, 32), 1),
+            ("tensor-fractional-rgb.pdf", 0, (32, 32), 1),
+        ],
+    );
+}
+
+fn qualify_pdf_swap_pages(corpus: &std::path::Path, cases: &[(&str, usize, (u32, u32), usize)]) {
+    let gpu = common::qualification_gpu().expect("actual GPU required");
+    eprintln!("PDF adapter: {}", gpu.adapter_name());
+    for &(name, index, extent, count) in cases {
         let directory = tempfile::tempdir().unwrap();
         let budget = rrrah_core::MemoryBudget::new(64 * 1024 * 1024);
         let mut request = rrrah_decode::DecodeRequest::new(corpus.join(name));
@@ -215,8 +237,12 @@ fn independently_referenced_pdfs_and_profiled_jpegs_match_through_ram_swap_and_m
         ("cmyk-image8", "cmyk-image8-littlecms.rgba", 4721, 1, 1),
         ("cmyk-app14-profiled", "cmyk-jpeg-app14-littlecms.rgba", 64, 8, 0),
         ("ycck-app14-profiled", "ycck-jpeg-app14-littlecms.rgba", 64, 8, 0),
-    ].into_iter().map(|(name, golden, width, height, tolerance)|
-        (name.to_owned(), golden.to_owned(), width, height, tolerance)).collect();
+    ]
+    .into_iter()
+    .map(|(name, golden, width, height, tolerance)| {
+        (name.to_owned(), golden.to_owned(), width, height, tolerance)
+    })
+    .collect();
     for kind in ["cmyk", "ycck"] {
         for orientation in 1..=8 {
             let name = format!("{kind}-profiled-orientation-{orientation}");

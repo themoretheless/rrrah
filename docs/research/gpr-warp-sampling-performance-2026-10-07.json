@@ -1,0 +1,26 @@
+{
+  "work": "1000000 samples of 256x256 RGB, fixed fractional coordinates and repeated edges",
+  "build": "test optimized profile on Apple M4 Max",
+  "warmup_runs": 1,
+  "measured_runs": 5,
+  "before_ms": [
+    24.656,
+    23.752,
+    24.281,
+    23.234,
+    23.662
+  ],
+  "after_ms": [
+    19.137,
+    17.83,
+    19.385,
+    18.252,
+    17.674
+  ],
+  "before_median_ms": 23.752,
+  "after_median_ms": 18.252,
+  "speedup": 1.3013368397983782,
+  "checksum": "499954.890748918 identical all runs",
+  "correctness": "96 core tests passed including three independent full SDK warp fixtures; both Fusion swap/Metal lifecycle checks passed",
+  "limitations": "microbenchmark, no whole viewer loading speed claim"
+}

@@ -1,0 +1,107 @@
+{
+  "experiment": "one original standalone patch, original CMYK and control points, 72dpi white composite",
+  "results": {
+    "offset": 58580,
+    "covered_pixels": 620,
+    "interior_pixels": 437,
+    "different_pixels": 620,
+    "max_channel_error": 224,
+    "interior_max_error": 6,
+    "interior_different_pixels": 437,
+    "interior_mean_max_error": 5.118993135011442,
+    "corner_components_u8": [
+      [
+        83,
+        243,
+        236,
+        71
+      ],
+      [
+        91,
+        243,
+        236,
+        78
+      ],
+      [
+        91,
+        243,
+        236,
+        78
+      ],
+      [
+        91,
+        243,
+        236,
+        78
+      ]
+    ]
+  },
+  "limits": "interior defined by native opaque cross-neighborhood; oracle coverage not independently available",
+  "coverage_diagnostic": {
+    "native_alpha_histogram": {
+      "0": 73492,
+      "255": 554
+    },
+    "errors_above_32": 66,
+    "above_32_in_interior": 0,
+    "examples": [
+      {
+        "x": 224,
+        "y": 117,
+        "alpha": 0,
+        "error": 224,
+        "interior": false
+      },
+      {
+        "x": 224,
+        "y": 118,
+        "alpha": 0,
+        "error": 224,
+        "interior": false
+      },
+      {
+        "x": 224,
+        "y": 119,
+        "alpha": 0,
+        "error": 224,
+        "interior": false
+      },
+      {
+        "x": 224,
+        "y": 120,
+        "alpha": 0,
+        "error": 224,
+        "interior": false
+      },
+      {
+        "x": 224,
+        "y": 121,
+        "alpha": 0,
+        "error": 224,
+        "interior": false
+      },
+      {
+        "x": 224,
+        "y": 122,
+        "alpha": 0,
+        "error": 224,
+        "interior": false
+      },
+      {
+        "x": 224,
+        "y": 123,
+        "alpha": 0,
+        "error": 224,
+        "interior": false
+      },
+      {
+        "x": 224,
+        "y": 124,
+        "alpha": 0,
+        "error": 224,
+        "interior": false
+      }
+    ],
+    "finding": "native mesh coverage is binary; all errors above32 are outside opaque cross-neighborhood; investigate edge coverage rather than increase grid density"
+  }
+}

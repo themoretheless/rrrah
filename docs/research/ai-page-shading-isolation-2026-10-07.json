@@ -1,0 +1,36 @@
+{
+  "source": "pinned VectorApple.ai",
+  "experiment": "remove page-level sh operators with pypdf; other operations and form resources preserved",
+  "results": [
+    {
+      "case": "apple",
+      "different_pixels": 33066,
+      "max_channel_error": 213,
+      "more_than_10": 18248
+    },
+    {
+      "case": "no-shading",
+      "different_pixels": 10770,
+      "max_channel_error": 251,
+      "more_than_10": 4586
+    },
+    {
+      "case": "no-mesh",
+      "removed_type": 7,
+      "removed_operators": 3,
+      "different_pixels": 11919,
+      "more_than_10": 6275,
+      "max_channel_error": 188
+    },
+    {
+      "case": "no-axial",
+      "removed_type": 2,
+      "removed_operators": 9,
+      "different_pixels": 31968,
+      "more_than_10": 16603,
+      "max_channel_error": 251
+    }
+  ],
+  "limitation": "ablation identifies contributing operations, not proof of root cause or fidelity; native diagnostic executable inherited from earlier qualification",
+  "native_executable_sha256": "0d8cc7a247fc78915014fb818d9908e88ab1f6d53d60715612c545f2c36a8794"
+}

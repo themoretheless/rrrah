@@ -479,7 +479,10 @@ pub fn raw_development_opcodes(
 ) -> Result<rrrah_core::develop::OpcodeLists, DecodeError> {
     request.check_cancelled()?;
     if !request.path.extension().is_some_and(|e| {
-        e.eq_ignore_ascii_case("dng") || e.eq_ignore_ascii_case("gpr") || e.eq_ignore_ascii_case("tif") || e.eq_ignore_ascii_case("tiff")
+        e.eq_ignore_ascii_case("dng")
+            || e.eq_ignore_ascii_case("gpr")
+            || e.eq_ignore_ascii_case("tif")
+            || e.eq_ignore_ascii_case("tiff")
     }) {
         return Ok(rrrah_core::develop::OpcodeLists::default());
     }
@@ -564,8 +567,30 @@ mod gpr_opcode_tests {
             } else {
                 assert!(!lists.list2.is_empty());
             }
-            eprintln!("{name}: {} / {} / {} opcodes", lists.list1.len(), lists.list2.len(), lists.list3.len());
+            eprintln!(
+                "{name}: {} / {} / {} opcodes",
+                lists.list1.len(),
+                lists.list2.len(),
+                lists.list3.len()
+            );
             assert_eq!(budget.used(), 0);
         }
+    }
+}
+
+#[cfg(test)]
+mod opcode_geometry_serde_compatibility_tests {
+    #[test]
+    fn old_lists_remain_square_and_new_aspect_roundtrips() {
+        let legacy = r#"{"list1":[],"list2":[],"list3":[]}"#;
+        let old: rrrah_core::develop::OpcodeLists = serde_json::from_str(legacy).unwrap();
+        assert_eq!(old.pixel_aspect, None);
+        assert_eq!(serde_json::to_string(&old).unwrap(), legacy);
+        let mut asymmetric = old;
+        asymmetric.pixel_aspect = Some(1.5);
+        let bytes = serde_json::to_vec(&asymmetric).unwrap();
+        let restored: rrrah_core::develop::OpcodeLists = serde_json::from_slice(&bytes).unwrap();
+        assert_eq!(restored, asymmetric);
+        assert_eq!(restored.pixel_aspect, Some(1.5));
     }
 }

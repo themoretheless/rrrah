@@ -1,0 +1,25 @@
+{
+  "oracle": "unchanged GoPro SDK dng_opcode_WarpRectilinear::Apply",
+  "commit": "446c736a38fb14f51343605c0780d347dc602f89",
+  "host": "scripts/warp-image-sdk-oracle.cpp",
+  "arguments": [
+    "output.f32le",
+    "hdr"
+  ],
+  "extent": [
+    48,
+    32
+  ],
+  "planes": 3,
+  "input_range": [
+    -0.5,
+    3.5
+  ],
+  "values": 4608,
+  "sha256": "f2d95f7fe40386f74e2045f175ab6a52e3c32786fee35dbe50d607c6b3c1539c",
+  "native_match": "maximum absolute error <= 1e-6 including SDK clipping to [0,1]",
+  "identity_policy": "native identity opcode bypass preserves negative and above-one float bits",
+  "limitations": [
+    "DNG opcode stage semantics only; not proof of physical HDR display or final camera color"
+  ]
+}
