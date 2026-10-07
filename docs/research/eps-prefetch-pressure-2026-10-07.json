@@ -1,0 +1,33 @@
+{
+  "scope": "Native EPS subset: neighbour prefetch and typed memory pressure",
+  "validation": {
+    "decoder": {
+      "passed": 929,
+      "ignored": 60
+    },
+    "app_binary": {
+      "passed": 160,
+      "ignored": 24
+    },
+    "eps_lifecycle_cpu": {
+      "passed": 2,
+      "ignored": 1
+    },
+    "eps_lifecycle_metal": {
+      "passed": 1,
+      "adapter": "Metal Apple M4 Max"
+    }
+  },
+  "checks": [
+    "Forward and backward neighbour windows behind=1 ahead=2",
+    "RAM preload pointer reuse and visible-frame preservation",
+    "Stale generation cancellation releases allocations",
+    "Nested EPS source, VM and graphics admission errors retain typed memory pressure",
+    "Memory pressure retries only when requested allocation fits total root budget"
+  ],
+  "limitations": [
+    "Restricted EPS operator and color subset",
+    "Independent grayscale quantization and diagonal stroke pixel gates remain unresolved",
+    "No universal EPS qualification"
+  ]
+}

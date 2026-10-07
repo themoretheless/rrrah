@@ -1,0 +1,11 @@
+{
+  "scope": "Native bounded EPS file-to-raster import",
+  "api": "decode_eps_file_document",
+  "source": "Shared managed whole-file reader with format cap enforced from metadata before allocation, 64KiB cancellation chunks, exact admitted source size and growth/truncation refusal",
+  "budget": "Source, compiler, VM, scene, raster working allocations and output use the supplied root. Successful return retains pixels only; file source credit releases before return",
+  "selection": "Only image index zero; request generation cancellation honored during read, parse, execution and rasterization",
+  "verification": "Authored temporary EPS file decodes to 64 retained bytes; cap below declared size fails with peak zero; root below source size fails without retained credit; normal root shows source plus working allocation peak then releases after raster drop",
+  "tests": { "passed": 928, "failed": 0, "ignored": 60 },
+  "remaining": "EPS common viewer route, cache/swap/prefetch/GPU lifecycle, strict color and edge qualification, broader PostScript objects/operators and real-document performance",
+  "status": "Explicit subset file API; EPS catalog remains pending"
+}

@@ -1,0 +1,18 @@
+{
+  "scope": "Native single-segment EPS stroke fill outline",
+  "api": "outline_eps_segment",
+  "caps": "Butt, round and square; round zero-length segment produces a disk",
+  "coordinates": "Construct pen in stroke user space, then transform all contour vertices; nonuniform affine pen preserved",
+  "rounding_geometry": "Circular arc subdivision uses transformed sagitta bound via affine Frobenius norm; caller vertex limit bounds work",
+  "memory": "Exact admitted outline segment buffer under caller MemoryBudget; no growing scratch vector or recursive stack",
+  "errors": "Invalid/nonfinite geometry, unsupported width-zero hairline, excessive segment requirement and cancellation discard private output",
+  "verification_scope": "Analytic butt/square geometry under scale 2x3 and translation; disk chord midpoint error; exact 4x4 mask for all three caps including 13/16 circle coverage; quota and cancellation behavior",
+  "tests": { "passed": 918, "failed": 0, "ignored": 58 },
+  "remaining": [
+    "Polyline joins and closed-path stroke outlines",
+    "Stroke curve flattening tolerance under the final affine transform",
+    "Device-space hairlines",
+    "Scene stroke compositing and independent Ghostscript pixel qualification"
+  ],
+  "status": "Primitive only; scene rasterizer still rejects strokes and EPS catalog remains pending"
+}

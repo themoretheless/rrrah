@@ -1,0 +1,11 @@
+{
+  "scope": "Implemented EPS subset connected to common image/raster routing",
+  "routing": "EPS extension is a gallery image candidate; matching ASCII PostScript or DOS EPS signature selects bounded native document importer; non-EPS signatures continue through existing raster handling",
+  "defaults": "Fixed density one pixel per PostScript point, explicit DeviceGrayRgbAsSrgb policy, native default work/geometry limits; caller root used when supplied, bounded 512MiB fallback otherwise",
+  "cache_identity": "Common route exposes no variable density or device-color settings; existing source identity/subimage/display key applies. Standalone API custom density must not reuse this fixed-policy cache key",
+  "verification": "929 decoder tests passed including PNG with misleading EPS suffix; EPS lifecycle now uses decode_image and common source classification; RAM eviction, swap pressure/cancel/restore and TTL tests pass; actual Metal Apple M4 Max readback exactly matches analytic raster",
+  "logs": ["/tmp/rrrah-eps-common-route-decode.log", "/tmp/rrrah-eps-common-lifecycle.log", "/tmp/rrrah-eps-common-metal.log"],
+  "prefetch_limit": "Shared prefetch calls common raster loader, but EPS neighbour scheduling/background loader run has not yet been directly exercised",
+  "remaining": "Wider PostScript objects/operators/streams, strict color and boundary oracle gates, actual neighbour prefetch and UI display proof, real-document throughput, CUDA/NVIDIA and physical HDR",
+  "status": "Current native subset routed; catalog qualification remains pending, no claim of all EPS files"
+}

@@ -1,0 +1,12 @@
+{
+  "scope": "Native EPS affine stroke curve preparation",
+  "api": "prepare_eps_stroke",
+  "geometry": "Inverse final paint CTM maps persistent world path to stroke user coordinates; viewport times final CTM maps pen and flattened geometry to raster coordinates",
+  "tolerance": "Pixel tolerance divided by final linear transform Frobenius norm before native cubic subdivision",
+  "memory": "Transformed path and flattened output use the caller root; retained prepared stroke stores only managed flattened path plus fixed metadata",
+  "refusals": "Non-stroke selection, nonfinite/collapsed transform, invalid tolerance, noninvertible paint CTM and width-zero hairline",
+  "verification": "Curve built before scale 2x3 restores endpoint to user x=5 while final matrix restores world x=10; viewport vertical inversion retained; no curves in prepared output; exact retained bytes and cancellation release",
+  "tests": { "passed": 922, "failed": 0, "ignored": 60 },
+  "remaining": "Scene subpath extraction and stroke compositing, device hairlines, raster boundary/strokeadjust qualification and viewer routing",
+  "status": "EPS remains pending"
+}

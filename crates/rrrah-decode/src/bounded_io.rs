@@ -65,6 +65,16 @@ pub(crate) fn read_bounded(request: &DecodeRequest) -> Result<SourceBuffer, Deco
     let Some(budget) = &request.memory_budget else {
         return read_legacy(request).map(SourceBuffer::Legacy);
     };
+    read_managed_capped(request, budget, MAX_INPUT_BYTES).map(SourceBuffer::Managed)
+}
+
+/// Format-specific source limit enforced before managed source admission.
+pub(crate) fn read_managed_capped(
+    request: &DecodeRequest,
+    budget: &rrrah_core::MemoryBudget,
+    max_bytes: u64,
+) -> Result<rrrah_core::MutableBuffer<u8>, DecodeError> {
+    let limit = max_bytes.min(MAX_INPUT_BYTES);
     request.check_cancelled()?;
     let io_error = |source| DecodeError::Io {
         path: request.path.clone(),
@@ -72,11 +82,11 @@ pub(crate) fn read_bounded(request: &DecodeRequest) -> Result<SourceBuffer, Deco
     };
     let mut file = File::open(&request.path).map_err(io_error)?;
     let declared = file.metadata().map_err(io_error)?.len();
-    if declared > MAX_INPUT_BYTES {
+    if declared > limit {
         return Err(DecodeError::InputTooLarge {
             path: request.path.clone(),
             actual: declared,
-            limit: MAX_INPUT_BYTES,
+            limit,
         });
     }
     let capacity = usize::try_from(declared).map_err(|_| DecodeError::DimensionOverflow)?;
@@ -93,7 +103,7 @@ pub(crate) fn read_bounded(request: &DecodeRequest) -> Result<SourceBuffer, Deco
             "source grew during budgeted read",
         )));
     }
-    Ok(SourceBuffer::Managed(data))
+    Ok(data)
 }
 
 /// Mutable during parsing (e.g. CUR normalization), with ownership-bound admission.

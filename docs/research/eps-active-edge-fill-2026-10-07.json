@@ -1,0 +1,12 @@
+{
+  "scope": "Native EPS fill active-edge indexing",
+  "change": "Sort admitted edges once by vertical start; admit reached edges and remove expired edges while scan rows advance; compute and sort crossings only for active edges",
+  "memory": "Additional managed usize index buffer with exact edge count; every edge, crossing, index and output allocation remains under caller MemoryBudget",
+  "cancellation": "Polling during initial sort, admissions, removals, crossings, spans and output conversion",
+  "regression": "100 disjoint one-row rectangles on a 1x1000 page; all pixels exact with max_work 30000. Prior full scanning needs at least 200000 edge checks alone",
+  "performance_claim_limit": "Verified work cap, not measured wall-clock throughput or general speedup",
+  "tests": { "passed": 915, "failed": 0, "ignored": 58 },
+  "log": "/tmp/rrrah-eps-active-edges.log",
+  "remaining": "Stroke rasterization, color pixel qualification, bbox-to-viewer integration, real document throughput",
+  "status": "EPS remains pending"
+}

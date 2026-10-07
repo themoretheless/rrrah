@@ -20,6 +20,8 @@ pub(crate) const MAX_RASTER_BYTES: u64 = 512 * 1024 * 1024;
 
 #[derive(Debug, Error)]
 pub enum RasterDecodeError {
+    #[error(transparent)]
+    Eps(#[from] crate::EpsDocumentError),
     #[error("invalid or unsupported JPEG color: {0}")]
     InvalidJpegColor(&'static str),
     #[error("invalid or unsupported TIFF alpha: {0}")]
@@ -165,6 +167,18 @@ pub fn decode_raster_file(path: impl AsRef<Path>) -> Result<DecodedRaster, Raste
 
 pub fn decode_raster(request: &DecodeRequest) -> Result<DecodedRaster, RasterDecodeError> {
     request.check_cancelled()?;
+    let eps_candidate=if request.path.extension().is_some_and(|e|e.eq_ignore_ascii_case("eps")) {
+        let file=std::fs::File::open(&request.path).map_err(|source|DecodeError::Io {path:request.path.clone(),source})?;
+        let (header,length)=crate::sniff::read_header(file).map_err(|source|DecodeError::Io {path:request.path.clone(),source})?;
+        let prefix=&header[..length];
+        prefix.starts_with(b"%!PS-Adobe-") || prefix.starts_with(&[0xc5,0xd0,0xd3,0xc6])
+    } else {false};
+    if eps_candidate {
+        let fallback=rrrah_core::MemoryBudget::new(MAX_RASTER_BYTES);
+        let budget=request.memory_budget.as_ref().unwrap_or(&fallback);
+        return crate::decode_eps_file_document(request,1.,crate::EpsRasterColorPolicy::DeviceGrayRgbAsSrgb,
+            crate::EpsDocumentLimits::default(),budget).map_err(RasterDecodeError::Eps);
+    }
     if request.image_index != 0
         && !request.path.extension().is_some_and(|e| {
             e.eq_ignore_ascii_case("dcm")
@@ -799,6 +813,17 @@ fn adopt_raster_output<T: Copy>(
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn png_magic_wins_over_eps_suffix() {
+        let path=std::env::temp_dir().join(format!("rrrah-png-eps-{}-{}.eps",std::process::id(),std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_nanos()));
+        std::fs::write(&path,include_bytes!("../../../tests/fixtures/raster/pattern.png")).unwrap();
+        let mut request=crate::DecodeRequest::new(&path);
+        request.memory_budget=Some(rrrah_core::MemoryBudget::new(1024*1024));
+        let image=super::decode_raster(&request).unwrap();
+        assert_eq!((image.width(),image.height()),(16,16));
+        drop(image);assert_eq!(request.memory_budget.as_ref().unwrap().used(),0);
+        std::fs::remove_file(path).unwrap();
+    }
     #[test]
     fn avif_integer_normalization_covers_every_10_and_12_bit_code() {
         let request = crate::DecodeRequest::new("unused.avif");

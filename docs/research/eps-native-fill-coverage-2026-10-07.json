@@ -1,0 +1,15 @@
+{
+  "scope": "Native EPS flattened-path fill coverage",
+  "api": "fill_eps_path",
+  "output": "Managed top-to-bottom 8-bit coverage mask",
+  "rules": "Nonzero winding and even-odd, half-open vertical edge crossings, implicit closure of open subpaths, samples per axis 1 through 8",
+  "memory": "Count actual nonhorizontal edges before exact edge and crossing buffers; output, working edges and crossings share the caller MemoryBudget; in-place cancellable heapsort",
+  "limits": "Pixel and edge caps, checked shared work count across preparation and scan conversion, cancellation including move-only and horizontal paths",
+  "tests": "Analytic fractional rectangle coverage, same-orientation nested contours for both rules, last-owner memory lifetime, admission refusal, work exhaustion and post-admission cancellation",
+  "limitations": [
+    "Coverage only; no color compositing, strokes or EPS viewer activation",
+    "Scans all edges on each sample row; active-edge indexing and measured throughput remain pending",
+    "No independent Ghostscript pixel parity claim",
+    "Large coordinate arithmetic that becomes nonfinite is refused"
+  ]
+}

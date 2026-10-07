@@ -156,7 +156,7 @@ fn finite<const N: usize>(values: [f64; N]) -> Result<[f64; N], EpsGraphicsError
 fn point(m: EpsMatrix, p: EpsPoint) -> Result<EpsPoint, EpsGraphicsError> {
     finite([m[0] * p[0] + m[2] * p[1] + m[4], m[1] * p[0] + m[3] * p[1] + m[5]])
 }
-fn inverse(m: EpsMatrix) -> Result<EpsMatrix, EpsGraphicsError> {
+pub(crate) fn inverse(m: EpsMatrix) -> Result<EpsMatrix, EpsGraphicsError> {
     let det = m[0] * m[3] - m[1] * m[2];
     if det == 0. || !det.is_finite() {
         return Err(EpsGraphicsError::InvalidMatrix);
@@ -535,6 +535,61 @@ impl EpsGraphics {
     }
 }
 impl EpsVectorScene {
+    /// Materializes exactly one path under the caller's memory root. `transform`
+    /// maps canonical world points into the renderer's coordinate space. For
+    /// affine strokes, use the inverse paint CTM and apply the pen CTM while
+    /// rasterizing; a viewport alone is sufficient for filled paths.
+    /// Errors discard the private output, leaving the scene reusable.
+    pub fn prepare_path<F: FnMut() -> bool>(
+        &self,
+        paint: usize,
+        transform: EpsMatrix,
+        budget: &MemoryBudget,
+        mut cancelled: F,
+    ) -> Result<SharedBuffer<EpsPathSegment>, EpsGraphicsError> {
+        if cancelled() {
+            return Err(EpsGraphicsError::Cancelled);
+        }
+        finite(transform)?;
+        let count = self
+            .paints()
+            .get(paint)
+            .ok_or(EpsGraphicsError::Range)?
+            .node_count;
+        let mut output = budget.try_buffer(count, EpsPathSegment::Move([0., 0.]))?;
+        self.copy_path(paint, &mut output, &mut cancelled)?;
+        for segment in output.iter_mut() {
+            if cancelled() {
+                return Err(EpsGraphicsError::Cancelled);
+            }
+            *segment = match *segment {
+                EpsPathSegment::Move(p) => EpsPathSegment::Move(point(transform, p)?),
+                EpsPathSegment::Line { start, end } => EpsPathSegment::Line {
+                    start: point(transform, start)?,
+                    end: point(transform, end)?,
+                },
+                EpsPathSegment::Close { start, end } => EpsPathSegment::Close {
+                    start: point(transform, start)?,
+                    end: point(transform, end)?,
+                },
+                EpsPathSegment::Curve {
+                    start,
+                    control1,
+                    control2,
+                    end,
+                } => EpsPathSegment::Curve {
+                    start: point(transform, start)?,
+                    control1: point(transform, control1)?,
+                    control2: point(transform, control2)?,
+                    end: point(transform, end)?,
+                },
+            };
+        }
+        if cancelled() {
+            return Err(EpsGraphicsError::Cancelled);
+        }
+        Ok(output.freeze())
+    }
     pub fn paints(&self) -> &[EpsPaint] {
         &self.paints[..self.length]
     }
@@ -575,6 +630,66 @@ impl EpsVectorScene {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn prepared_path_admits_exact_storage_transforms_and_releases_failed_output() {
+        let source_root = MemoryBudget::new(100_000);
+        let mut g = EpsGraphics::new(limits(), &source_root, || false).unwrap();
+        g.scale(2., 3.).unwrap();
+        g.move_to(1., 2.).unwrap();
+        g.curve_to([2., 3., 4., 5., 6., 7.]).unwrap();
+        g.close_path().unwrap();
+        g.paint(EpsPaintKind::Stroke).unwrap();
+        let scene = g.finish();
+        let bytes = (3 * std::mem::size_of::<EpsPathSegment>()) as u64;
+        let refused = MemoryBudget::new(bytes - 1);
+        assert!(matches!(
+            scene.prepare_path(0, IDENTITY, &refused, || false),
+            Err(EpsGraphicsError::Memory(_))
+        ));
+        assert_eq!((refused.used(), refused.peak()), (0, 0));
+        let root = MemoryBudget::new(bytes);
+        let path = scene
+            .prepare_path(0, inverse(scene.paints()[0].matrix).unwrap(), &root, || false)
+            .unwrap();
+        assert_eq!(path[0], EpsPathSegment::Move([1., 2.]));
+        assert_eq!(
+            path[1],
+            EpsPathSegment::Curve {
+                start: [1., 2.],
+                control1: [2., 3.],
+                control2: [4., 5.],
+                end: [6., 7.]
+            }
+        );
+        assert_eq!(
+            path[2],
+            EpsPathSegment::Close {
+                start: [6., 7.],
+                end: [1., 2.]
+            }
+        );
+        let last = path.clone();
+        drop(path);
+        assert_eq!(root.used(), bytes);
+        drop(last);
+        assert_eq!(root.used(), 0);
+        let mut polls = 0;
+        assert!(matches!(
+            scene.prepare_path(0, IDENTITY, &root, || {
+                polls += 1;
+                polls == 7
+            }),
+            Err(EpsGraphicsError::Cancelled)
+        ));
+        assert_eq!(root.used(), 0);
+        assert!(matches!(
+            scene.prepare_path(0, [f64::MAX, 0., 0., 1., 0., 0.], &root, || false),
+            Err(EpsGraphicsError::Range)
+        ));
+        assert_eq!(root.used(), 0);
+        assert!(scene.prepare_path(0, IDENTITY, &root, || false).is_ok());
+        assert_eq!(root.used(), 0);
+    }
     fn limits() -> EpsGraphicsLimits {
         EpsGraphicsLimits {
             max_nodes: 128,

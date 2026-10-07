@@ -1,0 +1,12 @@
+{
+  "scope": "Explicit experimental native EPS source-to-DecodedRaster path",
+  "api": "decode_eps_document",
+  "pipeline": "Borrowed source framing, outer DSC bounds, density/dimension preflight, budgeted lexical compilation, native VM/vector evaluation, native fill/stroke RGBA scene rasterization",
+  "viewport": "Preserves caller pixels per PostScript point; translates negative page origin, flips vertical axis, ceils output extent without anisotropic fit scaling",
+  "memory": "Caller owns source bytes; managed program, VM, scene, render working data and output share caller root. Program and evaluation buffers drop before rasterization; only pixel credit remains on success",
+  "color": "Caller explicitly chooses device Gray/RGB interpretation; CMYK conversion remains unsupported; transparent backdrop",
+  "verification": "Authored valid EPS with negative BoundingBox produces all-red 4x4 and 8x8 rasters at densities 1 and 2; last-owner credit release; excessive dimensions rejected before root admission; insufficient memory and cancellation return no partial output",
+  "tests": { "passed": 927, "failed": 0, "ignored": 60 },
+  "remaining": "General PostScript operators/objects/streams, strict color and raster boundary gates, bounded file importer, viewer/cache/swap/GPU lifecycle and real-document throughput",
+  "status": "Explicit subset API only; EPS common viewer route and catalog qualification remain pending"
+}

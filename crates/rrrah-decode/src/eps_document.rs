@@ -1,0 +1,304 @@
+//! Explicit experimental native EPS document rasterization.
+use crate::*;
+use rrrah_core::{DecodedRaster, MemoryBudget, RasterColorSpace, RasterError, RasterPixels};
+#[derive(Debug, Clone, Copy)]
+pub struct EpsDocumentLimits {
+    pub max_source_bytes: usize,
+    pub compile: EpsCompileLimits,
+    pub vm: EpsVmLimits,
+    pub graphics: EpsGraphicsLimits,
+    pub raster: EpsRasterLimits,
+}
+impl Default for EpsDocumentLimits {
+    fn default() -> Self {
+        Self {
+            max_source_bytes: 64 * 1024 * 1024,
+            compile: EpsCompileLimits::default(),
+            vm: EpsVmLimits::default(),
+            graphics: EpsGraphicsLimits::default(),
+            raster: EpsRasterLimits::default(),
+        }
+    }
+}
+#[derive(Debug, thiserror::Error)]
+pub enum EpsDocumentError {
+    #[error(transparent)]
+    File(#[from] DecodeError),
+    #[error("invalid EPS density or excessive raster dimensions")]
+    Dimensions,
+    #[error("EPS document rasterization cancelled")]
+    Cancelled,
+    #[error(transparent)]
+    Source(#[from] EpsInspectError),
+    #[error(transparent)]
+    Bounds(#[from] EpsBoundsError),
+    #[error(transparent)]
+    Compile(#[from] EpsCompileError),
+    #[error(transparent)]
+    Vm(#[from] EpsVmError),
+    #[error(transparent)]
+    Render(#[from] EpsRasterError),
+    #[error(transparent)]
+    Raster(#[from] RasterError),
+}
+impl EpsDocumentError {
+    /// Retains typed root-admission failures for foreground cache reclamation.
+    pub fn memory_error(&self) -> Option<&rrrah_core::BufferError> {
+        match self {
+            Self::File(DecodeError::Memory(e))
+            | Self::Compile(EpsCompileError::Memory(e))
+            | Self::Vm(EpsVmError::Memory(e))
+            | Self::Vm(EpsVmError::Graphics(EpsGraphicsError::Memory(e)))
+            | Self::Raster(RasterError::Memory(e)) => Some(e),
+            Self::Render(error) => match error {
+                EpsRasterError::Memory(e)
+                | EpsRasterError::Graphics(EpsGraphicsError::Memory(e))
+                | EpsRasterError::Flatten(EpsFlattenError::Memory(e))
+                | EpsRasterError::Fill(EpsFillError::Memory(e))
+                | EpsRasterError::StrokeOutline(EpsStrokeError::Memory(e))
+                | EpsRasterError::StrokePreparation(EpsStrokePrepareError::Graphics(
+                    EpsGraphicsError::Memory(e),
+                ))
+                | EpsRasterError::StrokePreparation(EpsStrokePrepareError::Flatten(
+                    EpsFlattenError::Memory(e),
+                ))
+                | EpsRasterError::StrokePreparation(EpsStrokePrepareError::Stroke(EpsStrokeError::Memory(
+                    e,
+                ))) => Some(e),
+                _ => None,
+            },
+            _ => None,
+        }
+    }
+}
+/// Pixels per PostScript point, with transparent backdrop and explicit device
+/// color policy. Source bytes belong to the caller; every native heap working
+/// buffer and output uses `budget`. Unsupported operators refuse the document.
+/// Embedded previews are never substituted for the original artwork.
+pub fn decode_eps_document<F: FnMut() -> bool>(
+    bytes: &[u8],
+    pixels_per_point: f64,
+    policy: EpsRasterColorPolicy,
+    limits: EpsDocumentLimits,
+    budget: &MemoryBudget,
+    mut cancelled: F,
+) -> Result<DecodedRaster, EpsDocumentError> {
+    if cancelled() {
+        return Err(EpsDocumentError::Cancelled);
+    }
+    if !pixels_per_point.is_finite() || pixels_per_point <= 0. {
+        return Err(EpsDocumentError::Dimensions);
+    }
+    let source = inspect_eps_source(bytes, limits.max_source_bytes)?;
+    let bounds = inspect_eps_bounds(&source, &mut cancelled)?;
+    let dimension = |axis: usize| {
+        let size = ((bounds.maximum[axis] - bounds.minimum[axis]) * pixels_per_point).ceil();
+        if !size.is_finite() || size < 1. || size > f64::from(u32::MAX) {
+            Err(EpsDocumentError::Dimensions)
+        } else {
+            Ok(size as u32)
+        }
+    };
+    let width = dimension(0)?;
+    let height = dimension(1)?;
+    if u64::from(width) * u64::from(height) > limits.raster.fill.max_pixels as u64 {
+        return Err(EpsDocumentError::Dimensions);
+    }
+    let viewport = [
+        pixels_per_point,
+        0.,
+        0.,
+        -pixels_per_point,
+        -bounds.minimum[0] * pixels_per_point,
+        bounds.maximum[1] * pixels_per_point,
+    ];
+    if !viewport.iter().all(|v| v.is_finite()) {
+        return Err(EpsDocumentError::Dimensions);
+    }
+    let program = compile_eps_program(&source, limits.compile, budget, &mut cancelled)?;
+    let EpsVectorExecution { evaluation, scene } =
+        evaluate_eps_vectors(&program, limits.vm, limits.graphics, budget, &mut cancelled)?;
+    drop(evaluation);
+    drop(program);
+    let pixels = rasterize_eps_scene(
+        &scene,
+        width,
+        height,
+        viewport,
+        policy,
+        limits.raster,
+        budget,
+        &mut cancelled,
+    )?;
+    drop(scene);
+    if cancelled() {
+        return Err(EpsDocumentError::Cancelled);
+    }
+    Ok(DecodedRaster::new(
+        width,
+        height,
+        RasterPixels::Rgba8(pixels.into()),
+        RasterColorSpace::Srgb,
+    )?)
+}
+/// Bounded file entry: source and output share root admission. Nonzero image
+/// selection is refused and request cancellation is honored throughout.
+pub fn decode_eps_file_document(
+    request: &DecodeRequest,
+    pixels_per_point: f64,
+    policy: EpsRasterColorPolicy,
+    limits: EpsDocumentLimits,
+    budget: &MemoryBudget,
+) -> Result<DecodedRaster, EpsDocumentError> {
+    request.check_cancelled()?;
+    if request.image_index != 0 {
+        return Err(DecodeError::UnsupportedImageIndex {
+            index: request.image_index,
+        }
+        .into());
+    }
+    let source = crate::bounded_io::read_managed_capped(request, budget, limits.max_source_bytes as u64)?;
+    let cancelled = || {
+        request
+            .cancellation
+            .as_ref()
+            .is_some_and(GenerationToken::is_cancelled)
+    };
+    let raster = decode_eps_document(&source, pixels_per_point, policy, limits, budget, cancelled)?;
+    drop(source);
+    request.check_cancelled()?;
+    Ok(raster)
+}
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn bounded_file_source_cap_and_retained_output_share_root() {
+        let path = std::env::temp_dir().join(format!(
+            "rrrah-eps-import-{}-{}.eps",
+            std::process::id(),
+            std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .unwrap()
+                .as_nanos()
+        ));
+        std::fs::write(&path, CODE).unwrap();
+        let request = DecodeRequest::new(&path);
+        let policy = EpsRasterColorPolicy::DeviceGrayRgbAsSrgb;
+        let refused = MemoryBudget::new(100_000);
+        let mut small = limits();
+        small.max_source_bytes = CODE.len() - 1;
+        assert!(matches!(
+            decode_eps_file_document(&request, 1., policy, small, &refused),
+            Err(EpsDocumentError::File(DecodeError::InputTooLarge { .. }))
+        ));
+        assert_eq!(refused.peak(), 0);
+        let tiny = MemoryBudget::new(CODE.len() as u64 - 1);
+        assert!(decode_eps_file_document(&request, 1., policy, limits(), &tiny).is_err());
+        assert_eq!(tiny.used(), 0);
+        let root = MemoryBudget::new(100_000);
+        let raster = decode_eps_file_document(&request, 1., policy, limits(), &root).unwrap();
+        assert_eq!(root.used(), 64);
+        assert!(root.peak() > CODE.len() as u64 + 64);
+        drop(raster);
+        assert_eq!(root.used(), 0);
+        std::fs::remove_file(path).unwrap();
+    }
+    fn limits() -> EpsDocumentLimits {
+        EpsDocumentLimits {
+            vm: EpsVmLimits {
+                max_operands: 64,
+                max_dictionary_entries: 16,
+                max_execution_frames: 8,
+                max_work: 10000,
+            },
+            graphics: EpsGraphicsLimits {
+                max_nodes: 16,
+                max_paints: 4,
+                max_saved_states: 0,
+            },
+            ..EpsDocumentLimits::default()
+        }
+    }
+    const CODE:&[u8]=b"%!PS-Adobe-3.0 EPSF-3.0\n%%BoundingBox: -2 -3 2 1\n%%EndComments\n1 0 0 setrgbcolor -2 -3 moveto 2 -3 lineto 2 1 lineto -2 1 lineto closepath fill\n%%EOF\n";
+    #[test]
+    fn native_document_negative_origin_density_and_output_lifetime() {
+        let root = MemoryBudget::new(100_000);
+        for density in [1., 2.] {
+            let raster = decode_eps_document(
+                CODE,
+                density,
+                EpsRasterColorPolicy::DeviceGrayRgbAsSrgb,
+                limits(),
+                &root,
+                || false,
+            )
+            .unwrap();
+            let RasterPixels::Rgba8(pixels) = raster.pixels() else {
+                panic!()
+            };
+            assert!(pixels.chunks_exact(4).all(|p| p == [255, 0, 0, 255]));
+            assert_eq!(pixels.len(), (4. * density * 4. * density * 4.) as usize);
+            assert_eq!(root.used(), pixels.len() as u64);
+            let last = raster.clone();
+            drop(raster);
+            assert!(root.used() > 0);
+            drop(last);
+            assert_eq!(root.used(), 0);
+        }
+    }
+    #[test]
+    fn document_errors_do_not_return_partial_preview_or_output() {
+        let root = MemoryBudget::new(100_000);
+        assert!(matches!(
+            decode_eps_document(
+                CODE,
+                0.,
+                EpsRasterColorPolicy::DeviceGrayRgbAsSrgb,
+                limits(),
+                &root,
+                || false
+            ),
+            Err(EpsDocumentError::Dimensions)
+        ));
+        let mut small = limits();
+        small.raster.fill.max_pixels = 15;
+        assert!(matches!(
+            decode_eps_document(
+                CODE,
+                1.,
+                EpsRasterColorPolicy::DeviceGrayRgbAsSrgb,
+                small,
+                &root,
+                || false
+            ),
+            Err(EpsDocumentError::Dimensions)
+        ));
+        assert_eq!(root.peak(), 0);
+        let refused = MemoryBudget::new(1);
+        assert!(
+            decode_eps_document(
+                CODE,
+                1.,
+                EpsRasterColorPolicy::DeviceGrayRgbAsSrgb,
+                limits(),
+                &refused,
+                || false
+            )
+            .is_err()
+        );
+        assert_eq!(refused.used(), 0);
+        assert!(
+            decode_eps_document(
+                CODE,
+                1.,
+                EpsRasterColorPolicy::DeviceGrayRgbAsSrgb,
+                limits(),
+                &root,
+                || root.used() != 0
+            )
+            .is_err()
+        );
+        assert_eq!(root.used(), 0);
+    }
+}

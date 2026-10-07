@@ -1,0 +1,11 @@
+{
+  "scope": "Native allocation-free outer EPS DSC page bounds",
+  "api": "inspect_eps_bounds",
+  "behavior": "Outer header and trailer BoundingBox/HiResBoundingBox, explicit atend resolution, HiRes precedence, nested BeginDocument/EndDocument isolation",
+  "precision": "HiRes decimal metadata parsed directly to f64 after numeric validation; no f32 rounding inherited from VM real objects",
+  "limits": "64KiB line cap, 128 nested documents, cancellation between lines and every 4096 scanned bytes; no heap output/scratch",
+  "refusals": "Missing, conflicting, malformed, degenerate or unresolved bounds; unbalanced document nesting; BeginBinary/BeginData until a stream-aware reader exists",
+  "color_experiment": "Ghostscript UseFastColor=true leaves tested gray/RGB 0.5 at 127; disabling ICC did not resolve native 128 discrepancy. A requested 16-bit ppmraw experiment was rejected by its header assertion and yields no qualified 16-bit evidence",
+  "remaining": "Stroke rasterization, source stream support, pixel color qualification and viewer integration",
+  "status": "EPS catalog remains pending"
+}

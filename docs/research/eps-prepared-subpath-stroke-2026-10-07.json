@@ -1,0 +1,12 @@
+{
+  "scope": "Managed prepared EPS stroke subpath assembly",
+  "api": "outline_eps_prepared_stroke",
+  "behavior": "Validates flattened Move/Line/Close topology, gathers stroke-user points per subpath, assembles open/closed polylines into a single nonzero-fill outline",
+  "memory": "Exact final output admission; temporary point and primitive outline buffers plus prepared input share caller budget; private outputs drop on errors",
+  "limits": "Total subpath count, total output segment count, per-subpath scanning/polyline work allowance and cancellation",
+  "verification": "One scene stroke containing closed rectangle plus disconnected open segment keeps center hole and fills both segment columns; subpath limit refusal and final root release",
+  "tests": { "passed": 923, "failed": 0, "ignored": 60 },
+  "performance_limit": "Nested two-pass materialization is correct but repeated temporary allocations remain to be benchmarked and optimized",
+  "remaining": "Stroke scene color compositing, hairlines, independent raster boundary policy qualification and EPS viewer route",
+  "status": "EPS remains pending"
+}

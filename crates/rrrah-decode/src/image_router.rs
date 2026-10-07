@@ -32,7 +32,7 @@ pub fn is_supported_image_path(path: &Path) -> bool {
                 "fit", "fts", "mrc", "mrcs", "map", "nrrd", "wad", "rla", "pic", "cin", "cineon", "dpx",
                 "wal", "mac", "macp", "pntg", "mpnt", "pam", "ff", "exr", "hdr", "pfm", "pcx", "sgi", "rgb",
                 "rgba", "bw", "ras", "sun", "sunras", "dds", "avif", "xbm", "xpm", "cur", "svg", "ora",
-                "pdf", "ai", "basis", "ktx2", "ktx", "pkm", "iff", "ilbm", "lbm", "pix", "astc", "heic",
+                "pdf", "ai", "eps", "basis", "ktx2", "ktx", "pkm", "iff", "ilbm", "lbm", "pix", "astc", "heic",
                 "heif", "hif", "x3f", "pict", "pct", "kra", "xcf", "psd", "psb", "dcx", "mng", "sti", "wmf",
                 "emf", "jxl", "jp2", "j2k", "j2c", "jpc",
             ]

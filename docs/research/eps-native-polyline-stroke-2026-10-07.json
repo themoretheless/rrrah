@@ -1,0 +1,12 @@
+{
+  "scope": "Native one-subpath polyline stroke assembly",
+  "api": "outline_eps_polyline",
+  "behavior": "Open endpoint caps, internal joins, closed final edge and seam join, repeated-point skipping; isolated moveto paints nothing, explicit zero-length open round stroke produces a disk",
+  "memory": "Two passes with exact final buffer admission; transient primitive outlines and final output share caller MemoryBudget; no growing production Vec",
+  "limits": "Cumulative contour segment cap, shared point/emission work allowance across both passes, cancellation and explicit width-zero refusal",
+  "verification": "Closed 5x5 rectangle ring including repeated point has exactly one transparent center pixel; segment/work errors release credit; independent unadjusted butt, square and miter pixel comparisons now use complete polyline assembly",
+  "tests": { "passed": 921, "failed": 0, "ignored": 60 },
+  "performance_limit": "Primitive buffers are recreated during both passes; allocation reuse and wall-clock throughput remain to be measured/optimized",
+  "remaining": "Multiple scene subpaths, curve conversion tolerance, device hairlines, scene compositing, strokeadjust and diagonal-boundary qualification",
+  "status": "EPS scene rasterizer still rejects strokes; catalog remains pending"
+}

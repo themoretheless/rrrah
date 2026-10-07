@@ -1,0 +1,11 @@
+{
+  "scope": "Native EPS scene hairline support",
+  "policy": "Width zero resolves to one-pixel software raster pen in device coordinates; no substitution of a tiny user-space width",
+  "pipeline": "Map canonical world path through viewport, flatten with pixel tolerance, assemble with identity pen matrix and resolved width 1",
+  "singular_matrix": "Final paint CTM need not be inverted for hairlines; world path retains its construction coordinates",
+  "verification": "Identical exact RGBA one-row line for final paint scales 1x1, 20x3 and 0x0; transparent surroundings and final root release",
+  "tests": { "passed": 925, "failed": 0, "ignored": 60 },
+  "scope_limit": "Explicit software-device policy; Ghostscript hairline/strokeadjust and antialiased edge equivalence not qualified",
+  "remaining": "Independent hairline oracle, raster boundary/strokeadjust qualification, color rounding discrepancy, source-to-viewer integration and measured throughput",
+  "status": "EPS remains pending"
+}

@@ -1,0 +1,15 @@
+{
+  "scope": "Native cubic-to-polyline preparation for EPS rasterization",
+  "api": "flatten_eps_path",
+  "method": "Iterative midpoint De Casteljau subdivision; both controls must lie within tolerance of the finite endpoint segment",
+  "coordinate_contract": "Caller transforms geometry into raster coordinates before flattening; tolerance uses those units",
+  "memory": "Fixed 33-entry stack, no recursive calls; validation/count pass followed by exact MemoryBudget output admission",
+  "limits": "Finite positive tolerance, depth at most 32, segment cap, shared work cap across both passes, cancellation per input segment/subdivision",
+  "topology": "Move and Close preserved; cubic endpoints and consecutive line connectivity retained, including loops and collinear reversal",
+  "verification_scope": "Dense direct Bernstein samples of three authored cubic shapes, memory accounting, quota refusal and output-pass cancellation",
+  "limitations": [
+    "Not a pixel rasterizer or completed EPS viewer route",
+    "Stroke outline generation and fill scan conversion still required",
+    "No claim of Ghostscript pixel parity or measured rendering throughput"
+  ]
+}

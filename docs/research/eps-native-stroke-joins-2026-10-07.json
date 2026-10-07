@@ -1,0 +1,11 @@
+{
+  "scope": "Native stroke join outline primitives",
+  "api": "outline_eps_join",
+  "behavior": "Miter, round and bevel; miter falls back to bevel when geometric miter ratio exceeds caller limit; straight segments need no patch; round reversal uses a disk",
+  "orientation": "Join patches and segment outlines have matching clockwise winding before affine transformation, enabling nonzero union without cancellation holes",
+  "memory": "Exact managed contour admission, bounded circular subdivision and cancellation while producing vertices",
+  "verification": "Right-angle outer corner masks: miter 255, bevel 96, round 207; miter limit 1 falls back to bevel; overlapping stroke-body pixel stays 255; root credit releases after each case",
+  "tests": { "passed": 919, "failed": 0, "ignored": 58 },
+  "remaining": "General polyline/closed-path assembly, zero-length edge treatment, device hairlines, curve stroke tolerance, scene integration and independent stroke pixel oracle",
+  "status": "Primitives only; EPS scene rasterization still rejects strokes and catalog remains pending"
+}

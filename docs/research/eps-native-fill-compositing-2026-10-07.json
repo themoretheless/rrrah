@@ -1,0 +1,18 @@
+{
+  "scope": "Native EPS scene fills to straight-alpha RGBA",
+  "api": "rasterize_eps_fills",
+  "pipeline": "Managed transformed path, bounded cubic flattening, native winding/parity coverage, source-order premultiplied byte source-over, final straight-alpha conversion",
+  "color": "Caller explicitly chooses DeviceGrayRgbAsSrgb; CMYK rejected before output admission",
+  "coordinates": "Caller supplies world-to-raster viewport including vertical inversion and translation",
+  "memory": "Output and all path, flattening and coverage buffers share caller root; obsolete working buffers drop between stages; cloned output holds credit until last owner",
+  "limits": "Configured stage limits, paint cap and total compositing pixel work preflight",
+  "verification_scope": "Authored analytic layered rectangle pixels with vertical inversion, output lifetime, cancellation after admission and CMYK refusal before admission",
+  "remaining": [
+    "Native stroke outlines and affine pens",
+    "Independent Ghostscript pixel comparisons",
+    "Profile conversion for device colors",
+    "Bounding-box source integration and viewer route",
+    "Measured throughput and active-edge optimization"
+  ],
+  "status": "Experimental fill API; EPS catalog remains pending"
+}

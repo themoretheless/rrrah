@@ -1,0 +1,16 @@
+{
+  "scope": "Native EPS scene path preparation for rasterization",
+  "api": "EpsVectorScene::prepare_path",
+  "memory": "Exact segment count admitted through the caller MemoryBudget; cloned output retains credit until its last owner drops",
+  "coordinates": "Caller affine transform applied to all endpoints and cubic controls; inverse paint CTM restores stroke user coordinates before the renderer applies its affine pen",
+  "failure_behavior": "Private output dropped on cancellation or nonfinite transformed coordinates; immutable source scene remains reusable",
+  "focused_test": "prepared_path_admits_exact_storage_transforms_and_releases_failed_output passed",
+  "rasterization_status": "Not implemented: preparation does not produce pixels or enable EPS decoding",
+  "rasterizer_audit": "Existing tiny-skia 0.11.4 BasicEdgeBuilder creates a Vec with capacity 64 and grows it while building edges; output-only admission does not account for this working allocation",
+  "remaining": [
+    "Bound and admit rasterizer working allocations",
+    "Rasterize fill rules, affine strokes and hairlines with cancellation",
+    "Explicit device color conversion policy",
+    "Independent pixel comparison and EPS source bounding-box integration"
+  ]
+}

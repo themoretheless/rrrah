@@ -642,3 +642,27 @@ mod eps_graphics;
 pub use eps_graphics::{EpsDeviceColor, EpsGraphics, EpsGraphicsError, EpsGraphicsLimit, EpsGraphicsLimits, EpsMatrix, EpsPaint, EpsPaintKind, EpsPathSegment, EpsPoint, EpsStrokeStyle, EpsVectorScene};
 
 pub use eps_vm::{EpsVectorExecution, evaluate_eps_vectors};
+
+mod eps_flatten;
+pub use eps_flatten::{EpsFlattenError, EpsFlattenLimits, flatten_eps_path};
+
+mod eps_fill;
+pub use eps_fill::{EpsFillError, EpsFillLimits, fill_eps_path};
+
+mod eps_raster;
+pub use eps_raster::{EpsRasterColorPolicy, EpsRasterError, EpsRasterLimits, rasterize_eps_fills};
+pub use eps_raster::rasterize_eps_scene;
+
+mod eps_bounds;
+pub use eps_bounds::{EpsBounds, EpsBoundsError, inspect_eps_bounds};
+
+mod eps_stroke;
+pub use eps_stroke::{EpsStrokeError, outline_eps_segment, outline_eps_join, outline_eps_polyline};
+
+mod eps_stroke_prepare;
+pub use eps_stroke_prepare::{EpsPreparedStroke, EpsStrokePrepareError, prepare_eps_stroke};
+pub use eps_stroke_prepare::{EpsStrokeAssemblyLimits, outline_eps_prepared_stroke};
+
+mod eps_document;
+pub use eps_document::{EpsDocumentError, EpsDocumentLimits, decode_eps_document};
+pub use eps_document::decode_eps_file_document;

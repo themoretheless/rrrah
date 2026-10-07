@@ -1,0 +1,11 @@
+{
+  "scope": "Native EPS scene fills and positive-width unadjusted strokes to RGBA",
+  "api": "rasterize_eps_scene",
+  "pipeline": "Final CTM stroke-user preparation, affine-aware curve subdivision, managed subpath outlines, nonzero coverage, source-order color compositing",
+  "compatibility": "rasterize_eps_fills remains fill-only and explicitly refuses strokes",
+  "memory": "Output and every preparation/outline/coverage buffer share caller root; failures discard private RGBA output",
+  "verification": "Native program compiler and VM produce red rectangle then blue width-two line; exact 4x4 RGBA rows prove source-order stroke overlay; final retained allocation 64 bytes; post-admission cancellation releases output",
+  "tests": { "passed": 924, "failed": 0, "ignored": 60 },
+  "remaining": "Device hairlines, strokeadjust and diagonal boundary qualification, color oracle discrepancy, document-to-viewer integration, measured throughput",
+  "status": "Experimental native scene API; EPS catalog remains pending"
+}

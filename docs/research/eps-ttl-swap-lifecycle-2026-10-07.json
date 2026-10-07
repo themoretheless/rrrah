@@ -1,0 +1,12 @@
+{
+  "scope": "Authored EPS raster TTL and ownership lifecycle through existing cache/swap",
+  "test": "eps_expired_visible_frame_spills_after_unpin_and_restores_exactly",
+  "policy": "Deterministic TTL zero avoids sleeps. Expired visible frame cannot be leased by new consumers but its visible pin protects resident storage; unpin permits expiry spill",
+  "ownership": "External DecodedRaster clone retains 64 pixel bytes after RAM membership disappears and swap write completes; releasing last external owner frees credit",
+  "restore": "Changing policy to TTL none permits background restoration from unchanged swap object; every RGBA byte matches analytic EPS red/blue raster",
+  "results": { "cpu_passed": 2, "failed": 0, "gpu_not_run_this_turn": 1 },
+  "log": "/tmp/rrrah-eps-ttl-lifecycle.log",
+  "scope_limits": "Selected authored EPS subset. No EPS production viewer routing, prefetch, disk-TTL, arbitrary positive TTL timing, CUDA/NVIDIA or physical HDR proof",
+  "remaining": "Prefetch/viewer integration and source identity, broader EPS qualification, strict color and raster edge gates, measured throughput",
+  "status": "EPS catalog remains pending"
+}

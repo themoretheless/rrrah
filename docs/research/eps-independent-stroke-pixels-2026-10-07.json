@@ -1,0 +1,13 @@
+{
+  "scope": "Independent stroke primitive pixel qualification",
+  "oracle": "Ghostscript 10.05.1, test-only Alpine container, ppmraw 8x8 72dpi GraphicsAlphaBits=1",
+  "fixtures": ["tests/fixtures/eps/stroke-pixel-ghostscript-reference.json", "tests/fixtures/eps/stroke-unadjusted-pixel-ghostscript-reference.json"],
+  "cases_per_fixture": 6,
+  "default_failure": "Butt stroke pixel 42: native geometric outline white, Ghostscript black; oracle includes an additional row",
+  "verified_intervention": "Explicit false setstrokeadjust removes extra row; butt, square and right-angle miter cases then compare exactly",
+  "remaining_unadjusted_failure": "Bevel pixel 53: native white, Ghostscript black at a diagonal boundary; full unadjusted pixel qualification remains failing",
+  "gates": "Default-policy and full unadjusted strict gates retained as ignored tests; independent axis-stroke comparison is active; no tolerance widened",
+  "scope_limit": "Primitive outlines assembled in tests, not a complete EPS VM-to-stroke scene route; round/cap antialias and all stroke cases remain unqualified",
+  "remaining": "Raster boundary rules, strokeadjust support/policy, full path assembly, device hairlines and scene integration",
+  "status": "EPS remains pending"
+}

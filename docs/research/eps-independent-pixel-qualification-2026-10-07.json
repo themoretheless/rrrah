@@ -1,0 +1,19 @@
+{
+  "scope": "Independent Ghostscript fixtures compared with native compile/VM/scene/raster pipeline",
+  "reference": "tests/fixtures/eps/pixel-ghostscript-reference.json",
+  "generator": "scripts/generate-eps-pixel-ghostscript-reference.py",
+  "oracle": "Ghostscript 10.05.1 in temporary official Alpine 3.22.1 container; test-only, source via stdin, ppmraw 8x8, 72dpi, GraphicsAlphaBits=1",
+  "cases": 9,
+  "exact_binary_color_cases": 5,
+  "observed_failure": "saved_fill_path pixel 27 red channel: native 128, Ghostscript 127 for DeviceGray 0.5",
+  "additional_oracle_observations": "Gray 0.25 -> 64; Gray 0.75 -> 191; RGB 0.5 -> 127",
+  "strict_gate": "independent_ghostscript_full_color_pixel_qualification remains ignored and failing until color conversion policy is qualified; no tolerance was widened",
+  "native_policy": "Explicit DeviceGrayRgbAsSrgb with nearest 8-bit rounding retained; no unverified emulation of Ghostscript internal quantization",
+  "primary_sources_inspected": [
+    "https://raw.githubusercontent.com/ArtifexSoftware/ghostpdl/master/base/gxfrac.h",
+    "https://raw.githubusercontent.com/ArtifexSoftware/ghostpdl/master/base/gxcmap.c"
+  ],
+  "source_limit": "Master source is not pinned to the oracle binary version; exact cause of the one-byte discrepancy is not established",
+  "remaining": "Full color qualification, curves/antialiased edge pixel comparison, native stroke, bounding boxes and viewer integration",
+  "status": "EPS remains pending; five binary-color cases do not qualify all EPS pixels"
+}

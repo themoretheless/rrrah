@@ -1940,6 +1940,7 @@ impl std::fmt::Display for RasterLoadError {
 impl RasterLoadError {
     fn retryable_memory_pressure(&self) -> bool {
         let memory = match self {
+            Self::Decode(rrrah_decode::RasterDecodeError::Eps(error))=>error.memory_error(),
             Self::Decode(rrrah_decode::RasterDecodeError::X3f(rrrah_decode::X3fError::Memory(error))) => {
                 Some(error)
             }
@@ -8893,5 +8894,49 @@ mod fusion_warp_tests {
         let (rrrah_core::RasterPixels::Rgba32Float(a),rrrah_core::RasterPixels::Rgba32Float(b))=(corrected.pixels(),plain.pixels()) else {panic!()};
         assert!(a.iter().zip(b.iter()).any(|(x,y)|x.to_bits()!=y.to_bits()));
         drop(corrected);drop(plain);drop(mosaic);assert_eq!(budget.used(),0);
+    }
+}
+
+#[cfg(test)]
+mod eps_preload_tests {
+    use super::*;
+    const EPS: &[u8] = b"%!PS-Adobe-3.0 EPSF-3.0\n%%BoundingBox: 0 0 4 4\n%%EndComments\n1 0 0 setrgbcolor 0 0 moveto 4 0 lineto 4 4 lineto 0 4 lineto closepath fill\n";
+    #[test]
+    fn eps_neighbour_windows_reuse_preload_preserve_visible_and_cancel_stale() {
+        let dir=tempfile::tempdir().unwrap();
+        let paths:Vec<_>=(0..5).map(|i| {let path=dir.path().join(format!("{i}.eps"));std::fs::write(&path,EPS).unwrap();path}).collect();
+        let root=rrrah_core::MemoryBudget::new(32*1024*1024);
+        let request_for=|path:PathBuf| {let mut request=DecodeRequest::new(path);request.memory_budget=Some(root.clone());request};
+        let mut cache=RasterDisplayCache::new(rrrah_cache::CacheLimits {max_bytes:512,max_entries:Some(2),ttl:None});
+        let gate=Arc::new(DecodeGate::new());let visible=request_for(paths[2].clone());
+        let (frame,_)=load_cached_raster_for_display(&visible,None,&mut cache).unwrap();
+        for direction in [gallery::NavDirection::Forward,gallery::NavDirection::Backward] {
+            let planned=gallery::neighbour_prefetch_paths(&paths,2,direction,gallery::PrefetchWindow {behind:1,ahead:2});
+            assert_eq!(planned.len(),3);
+            assert_eq!(planned[0],paths[if direction==gallery::NavDirection::Forward {3}else{1}]);
+            for path in planned {
+                assert!(foreground_neighbour_supported(&path));let request=request_for(path);
+                let (warmed,_)=preload_raster(&request,None,&mut cache,&gate).unwrap();
+                let (hit,_)=load_cached_raster_mode(&request,None,&mut cache,false,||panic!("EPS preload decoded again")).unwrap();
+                let (rrrah_core::RasterPixels::Rgba32Float(a),rrrah_core::RasterPixels::Rgba32Float(b))=(warmed.pixels(),hit.pixels()) else {panic!()};
+                assert!(a.ptr_eq(b));assert_eq!(cache.len(),2);
+                drop(hit);drop(warmed);
+                drop(load_cached_raster_with(&visible,None,&mut cache,||panic!("visible EPS displaced")).unwrap());
+            }
+        }
+        let generation=Arc::new(std::sync::atomic::AtomicU64::new(1));
+        let mut stale=request_for(paths[0].clone());stale.cancellation=Some(rrrah_decode::GenerationToken::new(generation.clone(),1));
+        generation.store(2,std::sync::atomic::Ordering::Release);
+        let used=root.used();assert!(preload_raster(&stale,None,&mut cache,&gate).is_err());assert_eq!(root.used(),used);
+        drop(frame);drop(cache);assert_eq!(root.used(),0);
+    }
+    #[test]
+    fn eps_source_vm_and_graphics_admission_errors_are_retryable() {
+        let dir=tempfile::tempdir().unwrap();let path=dir.path().join("pressure.eps");std::fs::write(&path,EPS).unwrap();
+        for limit in [1,1024,65536,1024*1024] {
+            let root=rrrah_core::MemoryBudget::new(32*1024*1024);let held=root.try_reserve(root.limit()-limit).unwrap();let mut request=DecodeRequest::new(&path);request.memory_budget=Some(root.clone());
+            let error=load_raster_for_display_typed(&request,None).unwrap_err();
+            assert!(error.retryable_memory_pressure(),"available {limit}: {error}");drop(held);assert_eq!(root.used(),0);
+        }
     }
 }

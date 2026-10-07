@@ -1,0 +1,13 @@
+{
+  "scope": "Authored native EPS file lifecycle through existing RAM cache, swap and actual Metal",
+  "test": "crates/rrrah-app/tests/eps_lifecycle.rs",
+  "source": "4x4 red filled rectangle with width-two blue overlaid stroke, native bounded file decoder",
+  "ram": "64-byte/count-one cache evicts first EPS raster on second admission and spills to existing RasterSwapCache",
+  "swap": "Pressure refusal and cancelled lookup preserve ability to restore; background restore returns exact RGBA and sRGB metadata; final raster retains 64 root bytes then releases them",
+  "gpu": "Actual Metal Apple M4 Max: restored raster prepared for display and rendered offscreen at 32x32; every output byte equals independently authored analytic raster through the same GPU display pipeline",
+  "results": { "cpu_passed": 1, "metal_passed": 1, "failed": 0 },
+  "logs": ["/tmp/rrrah-eps-lifecycle.log", "/tmp/rrrah-eps-lifecycle-metal.log"],
+  "scope_limits": "Explicit EPS decoder in test; no common viewer routing, source-key qualification, EPS prefetch or TTL proof. Offscreen sRGB readback is not physical HDR-window qualification. CUDA/NVIDIA not exercised",
+  "remaining": "EPS viewer/prefetch integration, color and stroke-boundary oracle gates, wider real-document coverage, measured throughput",
+  "status": "Selected authored subset lifecycle passes; EPS catalog remains pending"
+}
