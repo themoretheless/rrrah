@@ -1,0 +1,118 @@
+{
+  "date": "2026-10-07",
+  "producer_fixture_found": false,
+  "sources": [
+    {
+      "url": "https://www.autodesk.com/support/technical/article/caas/tsarticles/ts/3CM2c0t6Fvo2lSawUNRICT.html",
+      "result": "Direct request returned access-denied HTML; no archive URL obtained"
+    },
+    {
+      "url": "https://www.vtc.com/modules/products/workfileDownload.php?MOVIE_FOLDER=combustion4",
+      "result": "Redirected to vtc.com then HTTP 404, HTML instead of archive"
+    }
+  ],
+  "probe_validation": {
+    "fixture": "authored synthetic varying G-buffer planes, not rendered producer",
+    "fixture_sha256": "403ef9301f94b4a0a54a17c6992d5fe59642d967ae3c0151996f776c181fca62",
+    "report": {
+      "decode": {
+        "auxiliary_channels": 0,
+        "channels": [
+          {
+            "blake3": "edb47b3390ade4fbf02bdaedd9ae22a4057e69ac9155b3008cd34bb7141e11dd",
+            "bytes": 2097152,
+            "index": 0
+          },
+          {
+            "blake3": "07063ab47e584de43bb4704317d2e40465a3fbe105300546ca7919011c886df5",
+            "bytes": 524288,
+            "index": 1
+          },
+          {
+            "blake3": "60cb6ea92ec60d4c1b568bccd9ae94da26bf61dbde9de3ad8d419c2d10162a2f",
+            "bytes": 1048576,
+            "index": 2
+          },
+          {
+            "blake3": "a3a1cd77410bc3d469f268502b6ff548a2f46c23c0494d432fbe5dbc39d80ea4",
+            "bytes": 4194304,
+            "index": 3
+          },
+          {
+            "blake3": "33dd8e8f2122ffd01190c22276b75ae269d2279dbe03a2b9c332c1b82bb52926",
+            "bytes": 2097152,
+            "index": 4
+          },
+          {
+            "blake3": "b2be7865226cd9ed7bb270f6bb6da72a7c8b92a4f057b1633a795d10fb45b0e6",
+            "bytes": 2097152,
+            "index": 5
+          },
+          {
+            "blake3": "06519448f182ac86f6bccb42ab9932b1f22c3a4db8d155d47ba71fadf19f42c8",
+            "bytes": 524288,
+            "index": 6
+          },
+          {
+            "blake3": "d8b4c51af1de295e5caa01d55a141a5ad645c983b1c0cd87d380806d6e9a2425",
+            "bytes": 1572864,
+            "index": 7
+          },
+          {
+            "blake3": "e77ed709abbcb67987037732bda58ec45562699b0e18a82e3a969cc22e3cdf4f",
+            "bytes": 1048576,
+            "index": 8
+          },
+          {
+            "blake3": "86c43c63f4477f48093e8a8a6be3a54dc3fce0a9df59c75398655447ec2037b7",
+            "bytes": 1572864,
+            "index": 9
+          },
+          {
+            "blake3": "107fe670b85e8438ac6797a3dbee18c90063d24f7b51d8f8e68cb9947bd8ce93",
+            "bytes": 1572864,
+            "index": 10
+          },
+          {
+            "blake3": "4138f9607aaa3764d1203f14501a8edb9590b3b4388f5a0efae83498dd4157d8",
+            "bytes": 4194304,
+            "index": 11
+          },
+          {
+            "blake3": "5af2b9d874c6f5d916ff35f5caa46fec33d2307c96a0e461fafe963127a2cf87",
+            "bytes": 1572864,
+            "index": 12
+          },
+          {
+            "blake3": "82887a3e9b85a56dd5500e69d2fa9a900af6179dfd2239bb3872bfd4b74642ad",
+            "bytes": 1048576,
+            "index": 13
+          }
+        ],
+        "color_channels": 3,
+        "color_interpretation": "unspecified; no inferred display conversion",
+        "decode_ms": 49.536249999999995,
+        "gbuffer_bytes": 25165824,
+        "height": 512,
+        "layer_bytes": 0,
+        "layer_records": 0,
+        "main_channels": 4,
+        "main_float_bytes": 8388608,
+        "matte_channels": 1,
+        "metadata_bytes": 2788,
+        "packed_blake3": "1ca199b8e2a1aaf01e88d29a6520de9351b37e993c37096a11adb18dbff42e1f",
+        "packed_bytes": 33563364,
+        "path": "/tmp/rrrah-rpf-varying.rpf",
+        "peak_managed_bytes": 67372488,
+        "producer_pixel_aspect": "Ok(Some(1.0))",
+        "retained_managed_bytes": 33563364,
+        "width": 1024
+      },
+      "final_managed_bytes": 0
+    },
+    "truncated_file_exit_status": 1,
+    "truncated_file_error": "File(Header(Truncated)); peak_managed_bytes=1",
+    "source_and_output_peak_exact": true
+  },
+  "remaining": "Real producer fixture, full independent producer decoder comparison, color interpretation, gallery routing, linked-frame semantics"
+}

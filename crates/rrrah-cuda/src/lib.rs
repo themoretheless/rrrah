@@ -90,11 +90,7 @@ impl CudaExposure {
         cpu: &MemoryBudget,
         mut cancelled: impl FnMut() -> bool,
     ) -> Result<SharedBuffer<f32>, CudaError> {
-        let (rgba, remainder) = pixels.as_chunks::<4>();
-        if !remainder.is_empty() {
-            return Err(CudaError::Invalid("incomplete interleaved RGBA pixel"));
-        }
-        validate(rgba, stops, &mut cancelled)?;
+        let rgba = validate_interleaved(pixels, stops, &mut cancelled)?;
         if rgba.is_empty() {
             return Ok(cpu.try_buffer(0, 0f32)?.freeze());
         }
@@ -118,6 +114,21 @@ impl CudaExposure {
         }
         Ok(result.freeze())
     }
+}
+fn validate_interleaved<'a>(
+    pixels: &'a [f32],
+    stops: f32,
+    cancelled: &mut impl FnMut() -> bool,
+) -> Result<&'a [[f32; 4]], CudaError> {
+    if cancelled() {
+        return Err(CudaError::Cancelled);
+    }
+    let (rgba, remainder) = pixels.as_chunks::<4>();
+    if !remainder.is_empty() {
+        return Err(CudaError::Invalid("incomplete interleaved RGBA pixel"));
+    }
+    validate(rgba, stops, cancelled)?;
+    Ok(rgba)
 }
 fn validate(pixels: &[[f32; 4]], stops: f32, cancelled: &mut impl FnMut() -> bool) -> Result<(), CudaError> {
     if cancelled() {
@@ -143,6 +154,33 @@ fn validate(pixels: &[[f32; 4]], stops: f32, cancelled: &mut impl FnMut() -> boo
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn interleaved_validation_prioritizes_cancellation_and_borrows_complete_pixels() {
+        for count in 0..8 {
+            assert!(matches!(
+                validate_interleaved(&vec![1.; count], f32::NAN, &mut || true),
+                Err(CudaError::Cancelled)
+            ));
+        }
+        for count in [1, 2, 3, 5, 6, 7] {
+            assert!(matches!(
+                validate_interleaved(&vec![1.; count], 0., &mut || false),
+                Err(CudaError::Invalid(_))
+            ));
+        }
+        let values = [-0., 4., -2., 0.5, 8., 1., 0.25, 1.];
+        let pixels = validate_interleaved(&values, 1., &mut || false).unwrap();
+        assert_eq!(pixels.as_ptr().cast::<f32>(), values.as_ptr());
+        assert_eq!(pixels[0][0].to_bits(), (-0.0f32).to_bits());
+        let mut polls = 0;
+        assert!(matches!(
+            validate_interleaved(&values, 1., &mut || {
+                polls += 1;
+                polls == 3
+            }),
+            Err(CudaError::Cancelled)
+        ));
+    }
     #[test]
     fn signed_hdr_and_alpha_are_accepted_but_nonfinite_and_overflow_refused() {
         assert!(validate(&[[-2., 8., 0.25, 0.5]], 1., &mut || false).is_ok());

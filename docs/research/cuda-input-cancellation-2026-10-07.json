@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-07",
+  "change": "CUDA interleaved input validation checks cancellation before pixel layout, matching Metal compute cancellation precedence",
+  "verified": [
+    "Cancelled malformed input returns Cancelled",
+    "Noncancelled incomplete RGBA rejects",
+    "Complete RGBA view borrows original allocation without flattening copy",
+    "Signed zero bits remain unchanged during validation",
+    "Cancellation during validation rejects before device/CPU output admission",
+    "macOS explicitly reports UnsupportedPlatform with no fallback"
+  ],
+  "tests": {
+    "passed": 4,
+    "ignored_hardware": 1,
+    "failed": 0
+  },
+  "scope": "Host validation and readback helper unit tests only",
+  "remaining": [
+    "Run PTX and driver paths on actual supported NVIDIA Linux/Windows hardware",
+    "GPU numerical, memory admission, cancellation, cleanup and rendering qualification"
+  ]
+}

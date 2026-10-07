@@ -6,7 +6,9 @@
 
 mod bay;
 mod jpeg_cmyk;
-pub use bay::{BaySensorError, BaySensorLayout, unpack_bay_sensor};
+pub use bay::{
+    BayReadError, BaySensorError, BaySensorLayout, read_bay_sensor_with_budget, unpack_bay_sensor,
+};
 
 mod ciff;
 mod crw;
@@ -59,7 +61,8 @@ pub use stl::{StlDecodeError, StlFacet, StlMesh, decode_stl};
 mod eip;
 mod x3f;
 pub use eip::{
-    EipEntry, EipError, EipManifest, EipRaw, EipSensor, decode_eip_sensor, inspect_eip, read_eip_raw,
+    EipEntry, EipError, EipManifest, EipRaw, EipSensor, decode_eip_file_sensor, decode_eip_sensor,
+    inspect_eip, read_eip_raw, read_eip_raw_with_budget,
 };
 pub use x3f::{
     X3fCamf, X3fCamfEntry, X3fCamfMatrix, X3fColorTransform, X3fEntry, X3fError, X3fImageInfo, X3fInventory,

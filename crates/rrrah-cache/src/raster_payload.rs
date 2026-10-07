@@ -141,6 +141,24 @@ pub fn read_raster_payload(
     reader: &mut impl Read,
     budget: &MemoryBudget,
 ) -> Result<DecodedRaster, RasterPayloadError> {
+    read_raster_payload_impl(reader, budget, None)
+}
+/// Reject descriptor/object-length disagreement before allocating profile or pixels.
+pub fn read_raster_payload_with_length(
+    reader: &mut impl Read,
+    bytes: u64,
+    budget: &MemoryBudget,
+) -> Result<DecodedRaster, RasterPayloadError> {
+    if bytes < HEADER as u64 {
+        return Err(RasterPayloadError::Invalid("payload length"));
+    }
+    read_raster_payload_impl(reader, budget, Some(bytes))
+}
+fn read_raster_payload_impl(
+    reader: &mut impl Read,
+    budget: &MemoryBudget,
+    bytes: Option<u64>,
+) -> Result<DecodedRaster, RasterPayloadError> {
     let mut h = [0u8; HEADER];
     reader.read_exact(&mut h)?;
     let invalid_color_extension = if h[17] == 7 {
@@ -194,6 +212,10 @@ pub fn read_raster_payload(
         }
         None
     };
+    let expected = HEADER as u64 + profile_len as u64 + count * size;
+    if bytes.is_some_and(|bytes| bytes != expected) {
+        return Err(RasterPayloadError::Invalid("payload length"));
+    }
     let mut profile_reservation = budget.try_reserve(profile_len as u64)?;
     let mut profile = Vec::new();
     profile
@@ -242,6 +264,54 @@ pub fn read_raster_payload(
 mod tests {
     use super::*;
     use std::{io::Cursor, sync::Arc};
+    #[test]
+    fn object_length_disagreement_is_invalid_before_any_reservation() {
+        let frame = DecodedRaster::new(
+            1,
+            1,
+            RasterPixels::Rgba32Float(Arc::new(vec![4., 2., -0., 1.]).into()),
+            RasterColorSpace::Icc(vec![1, 2, 3]),
+        )
+        .unwrap();
+        let mut encoded = Vec::new();
+        write_raster_payload(&mut encoded, &frame).unwrap();
+        for bytes in [0, 63, encoded.len() as u64 - 1, encoded.len() as u64 + 1] {
+            let root = MemoryBudget::new(0);
+            assert!(matches!(
+                read_raster_payload_with_length(&mut Cursor::new(&encoded), bytes, &root),
+                Err(RasterPayloadError::Invalid("payload length"))
+            ));
+            assert_eq!(root.peak(), 0);
+        }
+        let mut oversized = encoded.clone();
+        oversized[8..12].copy_from_slice(&100000u32.to_le_bytes());
+        let root = MemoryBudget::new(0);
+        assert!(matches!(
+            read_raster_payload_with_length(&mut Cursor::new(&oversized), encoded.len() as u64, &root),
+            Err(RasterPayloadError::Invalid("payload length"))
+        ));
+        assert_eq!(root.peak(), 0);
+        assert!(matches!(
+            <DecodedRaster as crate::SwapPayload>::read_payload(
+                &mut Cursor::new(&oversized),
+                encoded.len() as u64,
+                &root
+            ),
+            Err(crate::SwapPayloadError::Invalid(_))
+        ));
+        let root = MemoryBudget::new(19);
+        let restored =
+            read_raster_payload_with_length(&mut Cursor::new(&encoded), encoded.len() as u64, &root).unwrap();
+        let RasterPixels::Rgba32Float(samples) = restored.pixels() else {
+            panic!()
+        };
+        assert_eq!(
+            samples.iter().map(|v| v.to_bits()).collect::<Vec<_>>(),
+            [4.0f32, 2., -0., 1.].map(f32::to_bits)
+        );
+        drop(restored);
+        assert_eq!(root.used(), 0);
+    }
     #[test]
     fn icc_profile_is_admitted_before_read_and_shared_until_last_owner() {
         let frame = DecodedRaster::new(

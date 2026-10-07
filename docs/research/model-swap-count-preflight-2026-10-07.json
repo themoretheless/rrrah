@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-07",
+  "test": "model_swap::tests::malformed_all_model_codecs_refuse_geometry_without_large_reservations",
+  "result": "passed",
+  "codecs": [
+    "STL",
+    "OBJ",
+    "OFF",
+    "PLY"
+  ],
+  "cases": {
+    "oversized_u64_count": 4,
+    "short_magic_lengths_0_through_7": 32
+  },
+  "verified": [
+    "Shared ModelPayload dispatcher classifies oversized-count objects as invalid payloads",
+    "No geometry allocations: each root peak remains below 4096 bytes of bookkeeping",
+    "All failed restore reservations released",
+    "Short objects reject with zero root peak even under zero memory budget"
+  ],
+  "limitations": [
+    "Bounded model bookkeeping may be reserved before variable-section validation",
+    "Does not prove every malformed input case or a new model producer format",
+    "No new CUDA or physical HDR evidence"
+  ]
+}

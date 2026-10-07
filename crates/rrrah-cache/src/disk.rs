@@ -535,7 +535,7 @@ impl DiskMosaicCache {
         if cancelled() {
             return Err(CacheError::Cancelled);
         }
-        self.prune_for_write(&path, entry_bytes, protected)?;
+        let evictions = self.plan_write_evictions(&path, entry_bytes, protected)?;
 
         let mut temporary = NamedTempFile::new_in(parent).map_err(|source| CacheError::Io {
             path: parent.to_owned(),
@@ -560,6 +560,16 @@ impl DiskMosaicCache {
         temporary.as_file().sync_data()?;
         if cancelled() {
             return Err(CacheError::Cancelled);
+        }
+        // Commit starts after the final cancellation check. Until now both
+        // live and expired residents remain untouched. Keep eviction and
+        // publication together under the writer lock without cancellation gaps.
+        for victim in evictions {
+            match fs::remove_file(&victim) {
+                Ok(()) => {}
+                Err(error) if error.kind() == std::io::ErrorKind::NotFound => {}
+                Err(source) => return Err(CacheError::Io { path: victim, source }),
+            }
         }
         temporary.persist(&path).map_err(|error| CacheError::Io {
             path: path.clone(),
@@ -608,12 +618,13 @@ impl DiskMosaicCache {
         Ok(lock)
     }
 
-    fn prune_for_write(
+    fn plan_write_evictions(
         &self,
         destination: &Path,
         incoming_bytes: u64,
         protected: &[CacheKey],
-    ) -> Result<(), CacheError> {
+    ) -> Result<Vec<PathBuf>, CacheError> {
+        let mut evictions = Vec::new();
         if self.max_entries == Some(0) {
             return Err(CacheError::DiskCountExceeded { limit: 0 });
         }
@@ -669,16 +680,7 @@ impl DiskMosaicCache {
                     continue;
                 }
                 if self.expired(&metadata, now) {
-                    match fs::remove_file(&entry_path) {
-                        Ok(()) => {}
-                        Err(error) if error.kind() == std::io::ErrorKind::NotFound => {}
-                        Err(source) => {
-                            return Err(CacheError::Io {
-                                path: entry_path,
-                                source,
-                            });
-                        }
-                    }
+                    evictions.push(entry_path);
                     continue;
                 }
                 resident = resident
@@ -723,22 +725,9 @@ impl DiskMosaicCache {
             {
                 break;
             }
-            match fs::remove_file(&candidate) {
-                Ok(()) => {
-                    resident = resident.saturating_sub(bytes);
-                    remaining_entries = remaining_entries.saturating_sub(1);
-                }
-                Err(error) if error.kind() == std::io::ErrorKind::NotFound => {
-                    resident = resident.saturating_sub(bytes);
-                    remaining_entries = remaining_entries.saturating_sub(1);
-                }
-                Err(source) => {
-                    return Err(CacheError::Io {
-                        path: candidate,
-                        source,
-                    });
-                }
-            }
+            evictions.push(candidate);
+            resident = resident.saturating_sub(bytes);
+            remaining_entries = remaining_entries.saturating_sub(1);
         }
         if resident.saturating_add(incoming_bytes) > self.max_bytes {
             return Err(CacheError::DiskBudgetExceeded {
@@ -751,7 +740,7 @@ impl DiskMosaicCache {
                 return Err(CacheError::DiskCountExceeded { limit });
             }
         }
-        Ok(())
+        Ok(evictions)
     }
 
     fn path_for(&self, key: CacheKey) -> PathBuf {
@@ -1636,6 +1625,44 @@ mod tests {
         }
         cache.store_with_cancel(key, &original, || false).unwrap();
         assert_eq!(cache.load(key).unwrap().unwrap().mosaic.pixels, original.pixels);
+    }
+    #[test]
+    fn cancelled_incoming_store_does_not_evict_live_resident() {
+        for count_limit in [true, false] {
+            let directory = tempdir().unwrap();
+            let cache = DiskMosaicCache::new(directory.path());
+            let resident = test_key(197);
+            let incoming = test_key(198);
+            cache.store(resident, &test_mosaic()).unwrap();
+            let path = cache.path_for(resident);
+            let original = std::fs::read(&path).unwrap();
+            let cache = if count_limit {
+                cache.with_max_entries(Some(1))
+            } else {
+                DiskMosaicCache::with_max_bytes(directory.path(), original.len() as u64)
+            };
+            for cancel_at in 1..=7 {
+                let mut calls = 0;
+                assert!(matches!(
+                    cache.store_with_cancel(incoming, &test_mosaic(), || {
+                        calls += 1;
+                        calls >= cancel_at
+                    }),
+                    Err(CacheError::Cancelled)
+                ));
+                assert_eq!(
+                    std::fs::read(&path).unwrap(),
+                    original,
+                    "cancel point {cancel_at} evicted resident"
+                );
+                assert!(!cache.contains(incoming));
+                assert_eq!(cache.usage().unwrap().entries, 1);
+            }
+            cache.store(incoming, &test_mosaic()).unwrap();
+            assert!(!cache.contains(resident));
+            assert!(cache.contains(incoming));
+            assert_eq!(cache.usage().unwrap().entries, 1);
+        }
     }
     #[test]
     fn waiting_write_lock_can_cancel_without_releasing_current_writer() {

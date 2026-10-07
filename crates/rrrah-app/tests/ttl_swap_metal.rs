@@ -134,3 +134,111 @@ fn expired_real_cr3_lease_and_swap_restore_preserve_metal_frame() {
     drop(ram);
     assert_eq!(budget.used(), 0);
 }
+
+#[test]
+#[ignore = "manual hardware qualification"]
+fn live_count_size_and_ttl_changes_preserve_hdr_frames_through_swap() {
+    use rrrah_core::{DecodedRaster, RasterColorSpace, RasterPixels};
+    let gpu = common::qualification_gpu().expect("actual GPU required");
+    eprintln!("live policy adapter: {}", gpu.adapter_name());
+    let root = MemoryBudget::new(128);
+    let make = |red: f32| {
+        DecodedRaster::new(
+            2,
+            1,
+            RasterPixels::Rgba32Float(
+                std::sync::Arc::new(vec![red, -0.0, 0.5, 1.0, 8.0, 0.25, -0.5, 1.0]).into(),
+            ),
+            RasterColorSpace::LinearSrgb,
+        )
+        .unwrap()
+        .try_manage_pixels(&root)
+        .unwrap()
+    };
+    let params = rrrah_gpu::ViewParameters {
+        viewport: [96., 64.],
+        ..Default::default()
+    };
+    let directory = tempfile::tempdir().unwrap();
+    let mut ram = rrrah_cache::RasterRamCache::new(CacheLimits {
+        max_bytes: 64,
+        max_entries: Some(2),
+        ttl: None,
+    });
+    ram.enable_swap(
+        rrrah_cache::RasterSwapCache::new_with_budgets(
+            directory.path(),
+            ImageSwapConfig {
+                limits: CacheLimits::bytes(4096),
+                queue_bytes: 64,
+                queue_count: 2,
+                restore_bytes: 32,
+            },
+            MemoryBudget::new(64),
+            root.clone(),
+        )
+        .unwrap(),
+    );
+    let first = make(2.0);
+    let expected = gpu.render_raster(&first, params, [96, 64]).pixels;
+    assert!(ram.insert(1u8, first));
+    let lease = ram.get_lease(&1).unwrap();
+    assert!(ram.insert_visible(2, make(4.0)));
+    let tight = CacheLimits {
+        max_bytes: 32,
+        max_entries: Some(1),
+        ttl: Some(Duration::ZERO),
+    };
+    assert!(!ram.set_limits_and_spill(tight));
+    assert_eq!((ram.len(), ram.resident_bytes(), root.used()), (2, 64, 64));
+    assert!(ram.get(&1).is_some());
+    assert_eq!(gpu.render_raster(&lease, params, [96, 64]).pixels, expected);
+    drop(lease);
+    assert!(ram.set_limits_and_spill(tight));
+    ram.swap().unwrap().wait_idle().unwrap();
+    assert_eq!((ram.len(), root.used()), (1, 32));
+    let restored = ram.get_background_with_cancel(&1, || false).unwrap();
+    assert_eq!(ram.len(), 1, "background restore cannot displace visible frame");
+    let RasterPixels::Rgba32Float(values) = restored.pixels() else {
+        panic!()
+    };
+    assert_eq!(values[0].to_bits(), 2.0f32.to_bits());
+    assert_eq!(values[1].to_bits(), (-0.0f32).to_bits());
+    assert_eq!(gpu.render_raster(&restored, params, [96, 64]).pixels, expected);
+    drop(restored);
+    assert_eq!(root.used(), 32);
+    let replacement = make(16.0);
+    let replacement_bits = match replacement.pixels() {
+        RasterPixels::Rgba32Float(v) => v.iter().map(|v| v.to_bits()).collect::<Vec<_>>(),
+        _ => panic!(),
+    };
+    let replacement_frame = gpu.render_raster(&replacement, params, [96, 64]).pixels;
+    assert!(ram.insert_visible(2, replacement.clone()));
+    assert!(ram.get(&2).is_none(), "replacement takes the new zero TTL");
+    assert_eq!(ram.spill_expired(), 0, "visible expired frame remains protected");
+    ram.mark_visible(3);
+    assert_eq!(ram.spill_expired(), 1);
+    ram.swap().unwrap().wait_idle().unwrap();
+    assert_eq!(root.used(), 32, "external display owner retains its reservation");
+    assert_eq!(
+        gpu.render_raster(&replacement, params, [96, 64]).pixels,
+        replacement_frame
+    );
+    drop(replacement);
+    assert_eq!(root.used(), 0);
+    let final_frame = ram.get(&2).unwrap();
+    let RasterPixels::Rgba32Float(values) = final_frame.pixels() else {
+        panic!()
+    };
+    assert_eq!(
+        values.iter().map(|v| v.to_bits()).collect::<Vec<_>>(),
+        replacement_bits
+    );
+    assert_eq!(
+        gpu.render_raster(&final_frame, params, [96, 64]).pixels,
+        replacement_frame
+    );
+    drop(final_frame);
+    drop(ram);
+    assert_eq!(root.used(), 0);
+}

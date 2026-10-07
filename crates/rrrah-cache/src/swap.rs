@@ -95,10 +95,10 @@ impl SwapPayload for DecodedRaster {
     }
     fn read_payload(
         reader: &mut impl Read,
-        _bytes: u64,
+        bytes: u64,
         budget: &MemoryBudget,
     ) -> Result<Self, SwapPayloadError> {
-        crate::read_raster_payload(reader, budget).map_err(|e| match e {
+        crate::read_raster_payload_with_length(reader, bytes, budget).map_err(|e| match e {
             crate::RasterPayloadError::Memory(e) => SwapPayloadError::Memory(e),
             e => SwapPayloadError::Invalid(std::io::Error::other(e)),
         })

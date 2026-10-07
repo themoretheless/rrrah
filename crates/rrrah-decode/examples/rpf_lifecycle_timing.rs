@@ -3,7 +3,11 @@ use rrrah_core::{MemoryBudget, RasterColorSpace};
 use rrrah_decode::{DecodeRequest, RlaAlphaMode, RpfDecodeLimits, decode_rpf_file_with_budget};
 fn main() {
     let args: Vec<_> = std::env::args().collect();
-    assert_eq!(args.len(), 2, "usage: rpf_lifecycle_timing FILE");
+    assert!(
+        (2..=3).contains(&args.len()),
+        "usage: rpf_lifecycle_timing FILE [varying]"
+    );
+    let varying = args.get(2).is_some_and(|value| value == "varying");
     let request = DecodeRequest::new(&args[1]);
     let limits = RpfDecodeLimits {
         max_node_names: 0,
@@ -40,9 +44,19 @@ fn main() {
         for (channel, size) in rrrah_decode::RPF_GBUFFER_SAMPLE_BYTES.iter().enumerate() {
             let data = image.gbuffer_channel(channel).unwrap();
             assert_eq!(data.len(), pixels as usize * size);
-            for sample in data.chunks_exact(*size) {
+            for (pixel, sample) in data.chunks_exact(*size).enumerate() {
                 for (plane, value) in sample.iter().enumerate() {
-                    assert_eq!(*value, ((channel * 13 + plane * 17) & 255) as u8);
+                    assert_eq!(
+                        *value,
+                        ((channel * 13
+                            + plane * 17
+                            + if varying {
+                                (pixel % plan.width as usize) * 37
+                            } else {
+                                0
+                            })
+                            & 255) as u8
+                    );
                 }
             }
         }

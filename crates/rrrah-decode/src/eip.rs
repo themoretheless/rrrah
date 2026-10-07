@@ -96,6 +96,49 @@ pub struct EipSensor {
     pub raw_recipe: rrrah_core::MosaicRecipeManifest,
 }
 
+fn read_package_with_budget(
+    request: &crate::DecodeRequest,
+    budget: &rrrah_core::MemoryBudget,
+) -> Result<crate::bounded_io::SourceBuffer, EipError> {
+    request.check_cancelled()?;
+    if request.image_index != 0 {
+        return Err(crate::DecodeError::UnsupportedImageIndex {
+            index: request.image_index,
+        }
+        .into());
+    }
+    let mut bounded = request.clone();
+    bounded.memory_budget = Some(budget.clone());
+    Ok(crate::bounded_io::read_bounded(&bounded)?)
+}
+
+/// Read a package from disk with both ZIP source and inflated RAW charged to
+/// the supplied root. The package allocation is released before returning.
+pub fn read_eip_raw_with_budget(
+    request: &crate::DecodeRequest,
+    budget: &rrrah_core::MemoryBudget,
+) -> Result<EipRaw, EipError> {
+    let source = read_package_with_budget(request, budget)?;
+    read_eip_raw(&source, budget, &|| {
+        request
+            .cancellation
+            .as_ref()
+            .is_some_and(crate::GenerationToken::is_cancelled)
+    })
+}
+
+/// File-based sensor import charging package, inflated RAW and decoded sensor
+/// to the request's required shared root. Does not apply Capture One edits.
+pub fn decode_eip_file_sensor(request: &crate::DecodeRequest) -> Result<EipSensor, EipError> {
+    request.check_cancelled()?;
+    let budget = request
+        .memory_budget
+        .as_ref()
+        .ok_or(EipError::Invalid("sensor import requires a memory budget"))?;
+    let source = read_package_with_budget(request, budget)?;
+    decode_eip_sensor(&source, request)
+}
+
 /// Explicit sensor-only import. Capture One settings, masks and ICC/LCC assets
 /// are inventoried but not interpreted; this is not authored appearance reproduction.
 /// Source package bytes are borrowed. RAW inflation and sensor output share the
@@ -366,6 +409,144 @@ mod tests {
             writer.write_all(b"payload").unwrap();
         }
         writer.finish().unwrap().into_inner()
+    }
+    #[test]
+    #[ignore = "manual real CR3 file lifecycle qualification"]
+    fn file_cr3_sensor_matches_original_with_package_raw_and_sensor_admission() {
+        use crate::RawDecoder;
+        let original = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/IMG_9043.CR3");
+        let reference_root = rrrah_core::MemoryBudget::new(128 * 1024 * 1024);
+        let mut original_request = crate::DecodeRequest::new(&original);
+        original_request.memory_budget = Some(reference_root.clone());
+        let reference = crate::NativeRawDecoder.decode(&original_request).unwrap().mosaic;
+        let raw_bytes = std::fs::metadata(&original).unwrap().len();
+        let dir = std::env::temp_dir().join(format!(
+            "rrrah-eip-positive-{}-{}",
+            std::process::id(),
+            std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .unwrap()
+                .as_nanos()
+        ));
+        std::fs::create_dir(&dir).unwrap();
+        struct Cleanup(std::path::PathBuf);
+        impl Drop for Cleanup {
+            fn drop(&mut self) {
+                let _ = std::fs::remove_dir_all(&self.0);
+            }
+        }
+        let _cleanup = Cleanup(dir.clone());
+        for compression in [zip::CompressionMethod::Stored, zip::CompressionMethod::Deflated] {
+            let path = dir.join(format!("{compression:?}.eip"));
+            let mut writer = zip::ZipWriter::new(std::fs::File::create(&path).unwrap());
+            writer
+                .start_file(
+                    "source.CR3",
+                    zip::write::SimpleFileOptions::default().compression_method(compression),
+                )
+                .unwrap();
+            std::io::copy(&mut std::fs::File::open(&original).unwrap(), &mut writer).unwrap();
+            writer.finish().unwrap();
+            let package_bytes = std::fs::metadata(&path).unwrap().len();
+            let root = rrrah_core::MemoryBudget::new(256 * 1024 * 1024);
+            let mut request = crate::DecodeRequest::new(&path);
+            request.memory_budget = Some(root.clone());
+            let imported = decode_eip_file_sensor(&request).unwrap();
+            assert_eq!(imported.decoded.mosaic.metadata, reference.metadata);
+            assert_eq!(imported.decoded.mosaic.pixels, reference.pixels);
+            let sensor_bytes = imported.decoded.mosaic.pixels.capacity_bytes();
+            assert_eq!(root.used(), sensor_bytes);
+            let peak = root.peak();
+            assert!(peak >= package_bytes + raw_bytes + sensor_bytes);
+            let clone = imported.decoded.mosaic.pixels.clone();
+            drop(imported);
+            assert_eq!(root.used(), sensor_bytes);
+            drop(clone);
+            assert_eq!(root.used(), 0);
+            let tight = rrrah_core::MemoryBudget::new(peak - 1);
+            request.memory_budget = Some(tight.clone());
+            assert!(decode_eip_file_sensor(&request).is_err());
+            assert_eq!(tight.used(), 0);
+            let exact = rrrah_core::MemoryBudget::new(peak);
+            request.memory_budget = Some(exact.clone());
+            let retry = decode_eip_file_sensor(&request).unwrap();
+            assert_eq!(retry.decoded.mosaic.pixels, reference.pixels);
+            drop(retry);
+            assert_eq!(exact.used(), 0);
+            eprintln!(
+                "EIP file {compression:?}: package={package_bytes} raw={raw_bytes} sensor={sensor_bytes} peak={peak} samples={} final=0",
+                reference.pixels.len()
+            );
+        }
+        drop(reference);
+        assert_eq!(reference_root.used(), 0);
+    }
+    #[test]
+    fn disk_package_and_inflated_raw_share_root_and_failures_release_source() {
+        let path = std::env::temp_dir().join(format!(
+            "rrrah-eip-bounded-{}-{}.eip",
+            std::process::id(),
+            std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .unwrap()
+                .as_nanos()
+        ));
+        struct Cleanup(std::path::PathBuf);
+        impl Drop for Cleanup {
+            fn drop(&mut self) {
+                let _ = std::fs::remove_file(&self.0);
+            }
+        }
+        let _cleanup = Cleanup(path.clone());
+        for compression in [zip::CompressionMethod::Stored, zip::CompressionMethod::Deflated] {
+            let bytes = package(&["source.pef", "CaptureOne/settings.cos"], compression);
+            std::fs::write(&path, &bytes).unwrap();
+            let mut request = crate::DecodeRequest::new(&path);
+            let required = bytes.len() as u64 + 7;
+            let root = rrrah_core::MemoryBudget::new(required);
+            let raw = read_eip_raw_with_budget(&request, &root).unwrap();
+            assert_eq!(&*raw.bytes, b"payload");
+            assert_eq!(root.peak(), required);
+            assert_eq!(root.used(), 7);
+            let clone = raw.bytes.clone();
+            drop(raw);
+            assert_eq!(root.used(), 7);
+            drop(clone);
+            assert_eq!(root.used(), 0);
+            let tight = rrrah_core::MemoryBudget::new(required - 1);
+            assert!(matches!(
+                read_eip_raw_with_budget(&request, &tight),
+                Err(EipError::Memory(_))
+            ));
+            assert_eq!(tight.peak(), bytes.len() as u64);
+            assert_eq!(tight.used(), 0);
+            let fresh = rrrah_core::MemoryBudget::new(required);
+            request.image_index = 1;
+            assert!(matches!(
+                read_eip_raw_with_budget(&request, &fresh),
+                Err(EipError::Decode(crate::DecodeError::UnsupportedImageIndex {
+                    index: 1
+                }))
+            ));
+            assert_eq!(fresh.peak(), 0);
+            request.image_index = 0;
+            request.cancellation = Some(crate::GenerationToken::new(
+                std::sync::Arc::new(std::sync::atomic::AtomicU64::new(1)),
+                0,
+            ));
+            assert!(matches!(
+                read_eip_raw_with_budget(&request, &fresh),
+                Err(EipError::Decode(crate::DecodeError::Cancelled))
+            ));
+            assert_eq!(fresh.peak(), 0);
+            request.cancellation = None;
+            request.memory_budget = Some(fresh.clone());
+            assert!(matches!(
+                decode_eip_file_sensor(&request),
+                Err(EipError::Decode(_))
+            ));
+            assert_eq!(fresh.used(), 0);
+        }
     }
     #[test]
     fn inventories_raw_and_assets_without_inflating() {

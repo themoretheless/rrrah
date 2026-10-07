@@ -150,6 +150,23 @@ impl GpuReadback {
         &self.adapter_name
     }
 
+    pub fn expose_interleaved(
+        &self,
+        samples: &[f32],
+        stops: f32,
+        gpu: &rrrah_core::MemoryBudget,
+        cpu: &rrrah_core::MemoryBudget,
+    ) -> Result<rrrah_core::PixelBuffer<f32>, rrrah_gpu::ExposureError> {
+        rrrah_gpu::LinearExposureCompute::new(&self.device).execute_interleaved_with_cancel(
+            &self.queue,
+            samples,
+            stops,
+            gpu,
+            cpu,
+            || false,
+        )
+    }
+
     pub fn render_with_tiling(
         &self,
         mosaic: &DecodedMosaic,

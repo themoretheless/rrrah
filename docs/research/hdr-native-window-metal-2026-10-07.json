@@ -1,0 +1,49 @@
+{
+  "date": "2026-10-07",
+  "adapter": "Metal Apple M4 Max",
+  "native_window_created": true,
+  "surface_configuration": "Rgba16Float / ExtendedSrgbLinear",
+  "environment": {
+    "RRRAH_HDR_SURFACE": "1",
+    "RUST_LOG": "rrrah=debug"
+  },
+  "source": "tests/fixtures/raster/pattern.png",
+  "source_color_interpretation": "explicit sRGB",
+  "displays": [
+    {
+      "name": "Color LCD",
+      "type": "spdisplays_built-in-liquid-retina-xdr",
+      "asleep": "spdisplays_yes",
+      "online": "spdisplays_yes"
+    },
+    {
+      "name": "LG UltraFine",
+      "type": null,
+      "asleep": "spdisplays_yes",
+      "online": "spdisplays_yes"
+    },
+    {
+      "name": "M27P6",
+      "type": null,
+      "asleep": "spdisplays_yes",
+      "online": "spdisplays_yes"
+    }
+  ],
+  "runtime_log": [
+    "[2026-10-07T02:36:41Z DEBUG rrrah] foreground generation=0 RAW policy=cache-first",
+    "[2026-10-07T02:36:41Z INFO  rrrah] GPU adapter: backend=Metal name=Apple M4 Max vendor=0x0000 device=0x0000",
+    "[2026-10-07T02:36:41Z INFO  rrrah] Viewer surface: hdr=true format=Rgba16Float color_space=ExtendedSrgbLinear",
+    "[2026-10-07T02:36:41Z DEBUG rrrah] viewer surface acquisition deferred: occluded",
+    "[2026-10-07T02:36:41Z DEBUG rrrah] viewer surface acquisition deferred: occluded",
+    "[2026-10-07T02:36:42Z DEBUG rrrah] viewer surface acquisition deferred: occluded"
+  ],
+  "first_frame_presented": false,
+  "reason": "Surface acquisition deferred because the window is occluded; system display inventory reports sleeping displays",
+  "probe_process": "Started and terminated only the owned probe process after 15 seconds",
+  "scope": "Native-window HDR format selection and configuration, not physical HDR appearance or luminance",
+  "remaining": [
+    "Run while the target HDR display is awake and the window is visible",
+    "Verify float HDR source presentation",
+    "Measure physical HDR luminance and color behavior"
+  ]
+}

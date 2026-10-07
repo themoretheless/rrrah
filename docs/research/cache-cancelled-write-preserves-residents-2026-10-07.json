@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-07",
+  "problem": "Cancelled incoming persistent mosaic write previously evicted live cache residents during capacity pruning before payload publication",
+  "reproduction_before": "cancelled_incoming_store_does_not_evict_live_resident failed: resident path missing",
+  "change": "Plan evictions under existing writer lock before staging; execute deletions only after payload flush, sync_data and final cancellation check, immediately before atomic publication",
+  "verified": [
+    "Seven cancellation checkpoints preserve resident bytes and keep incoming key absent",
+    "Both byte limit and entry count limit scenarios",
+    "Successful uncancelled write still evicts resident and respects limit",
+    "Protected-neighbour admission, cache count/size/TTL and concurrent writer tests pass",
+    "Real CR3 authored EIP Stored/Deflate RAM/disk/swap/Metal chain remains pixel-exact"
+  ],
+  "tests": {
+    "cache": 119,
+    "memory": 38,
+    "swap": 9,
+    "real_eip_metal": 1,
+    "failed": 0
+  },
+  "limitations": [
+    "Cancellation arriving after final check may observe an already-started commit",
+    "Filesystem failure during final commit is not rollback-transactional",
+    "Temporary staged file uses filesystem space outside resident-entry accounting",
+    "No new NVIDIA or physical HDR qualification"
+  ]
+}

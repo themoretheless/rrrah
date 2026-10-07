@@ -1,0 +1,862 @@
+{
+  "scope": "Alternating executables without intervening builds, three pairs, each one warmup and five measured runs; non-isolated Apple M4 Max",
+  "workloads": {
+    "constant": {
+      "pairs": [
+        {
+          "before": [
+            {
+              "decode_file_ms": 28.733416000000002,
+              "display_raster_ms": 12.184958,
+              "final_used": 0,
+              "iteration": 0,
+              "packed_bytes": 33563364,
+              "packed_digest": "6e8973b7e0daff8a11907ab223426c9a86361a41d3e74364e731f70a14a9bb4e",
+              "peak_managed_bytes": 42403272,
+              "pixels": 524288,
+              "warmup": true
+            },
+            {
+              "decode_file_ms": 21.137667,
+              "display_raster_ms": 5.599959,
+              "final_used": 0,
+              "iteration": 1,
+              "packed_bytes": 33563364,
+              "packed_digest": "6e8973b7e0daff8a11907ab223426c9a86361a41d3e74364e731f70a14a9bb4e",
+              "peak_managed_bytes": 42403272,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 18.332541,
+              "display_raster_ms": 4.954125,
+              "final_used": 0,
+              "iteration": 2,
+              "packed_bytes": 33563364,
+              "packed_digest": "6e8973b7e0daff8a11907ab223426c9a86361a41d3e74364e731f70a14a9bb4e",
+              "peak_managed_bytes": 42403272,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 26.030874999999998,
+              "display_raster_ms": 4.971667,
+              "final_used": 0,
+              "iteration": 3,
+              "packed_bytes": 33563364,
+              "packed_digest": "6e8973b7e0daff8a11907ab223426c9a86361a41d3e74364e731f70a14a9bb4e",
+              "peak_managed_bytes": 42403272,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 19.229875,
+              "display_raster_ms": 4.723625,
+              "final_used": 0,
+              "iteration": 4,
+              "packed_bytes": 33563364,
+              "packed_digest": "6e8973b7e0daff8a11907ab223426c9a86361a41d3e74364e731f70a14a9bb4e",
+              "peak_managed_bytes": 42403272,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 20.243417,
+              "display_raster_ms": 5.32175,
+              "final_used": 0,
+              "iteration": 5,
+              "packed_bytes": 33563364,
+              "packed_digest": "6e8973b7e0daff8a11907ab223426c9a86361a41d3e74364e731f70a14a9bb4e",
+              "peak_managed_bytes": 42403272,
+              "pixels": 524288,
+              "warmup": false
+            }
+          ],
+          "after": [
+            {
+              "decode_file_ms": 40.469625,
+              "display_raster_ms": 6.4005,
+              "final_used": 0,
+              "iteration": 0,
+              "packed_bytes": 33563364,
+              "packed_digest": "6e8973b7e0daff8a11907ab223426c9a86361a41d3e74364e731f70a14a9bb4e",
+              "peak_managed_bytes": 42403272,
+              "pixels": 524288,
+              "warmup": true
+            },
+            {
+              "decode_file_ms": 34.026374999999994,
+              "display_raster_ms": 5.306084,
+              "final_used": 0,
+              "iteration": 1,
+              "packed_bytes": 33563364,
+              "packed_digest": "6e8973b7e0daff8a11907ab223426c9a86361a41d3e74364e731f70a14a9bb4e",
+              "peak_managed_bytes": 42403272,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 31.908458,
+              "display_raster_ms": 5.304875,
+              "final_used": 0,
+              "iteration": 2,
+              "packed_bytes": 33563364,
+              "packed_digest": "6e8973b7e0daff8a11907ab223426c9a86361a41d3e74364e731f70a14a9bb4e",
+              "peak_managed_bytes": 42403272,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 35.337291,
+              "display_raster_ms": 4.7270840000000005,
+              "final_used": 0,
+              "iteration": 3,
+              "packed_bytes": 33563364,
+              "packed_digest": "6e8973b7e0daff8a11907ab223426c9a86361a41d3e74364e731f70a14a9bb4e",
+              "peak_managed_bytes": 42403272,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 31.356375,
+              "display_raster_ms": 5.309375,
+              "final_used": 0,
+              "iteration": 4,
+              "packed_bytes": 33563364,
+              "packed_digest": "6e8973b7e0daff8a11907ab223426c9a86361a41d3e74364e731f70a14a9bb4e",
+              "peak_managed_bytes": 42403272,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 39.224584,
+              "display_raster_ms": 5.569458999999999,
+              "final_used": 0,
+              "iteration": 5,
+              "packed_bytes": 33563364,
+              "packed_digest": "6e8973b7e0daff8a11907ab223426c9a86361a41d3e74364e731f70a14a9bb4e",
+              "peak_managed_bytes": 42403272,
+              "pixels": 524288,
+              "warmup": false
+            }
+          ]
+        },
+        {
+          "after": [
+            {
+              "decode_file_ms": 36.105625,
+              "display_raster_ms": 5.185875,
+              "final_used": 0,
+              "iteration": 0,
+              "packed_bytes": 33563364,
+              "packed_digest": "6e8973b7e0daff8a11907ab223426c9a86361a41d3e74364e731f70a14a9bb4e",
+              "peak_managed_bytes": 42403272,
+              "pixels": 524288,
+              "warmup": true
+            },
+            {
+              "decode_file_ms": 31.703916999999997,
+              "display_raster_ms": 5.585459,
+              "final_used": 0,
+              "iteration": 1,
+              "packed_bytes": 33563364,
+              "packed_digest": "6e8973b7e0daff8a11907ab223426c9a86361a41d3e74364e731f70a14a9bb4e",
+              "peak_managed_bytes": 42403272,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 31.974959,
+              "display_raster_ms": 5.306917,
+              "final_used": 0,
+              "iteration": 2,
+              "packed_bytes": 33563364,
+              "packed_digest": "6e8973b7e0daff8a11907ab223426c9a86361a41d3e74364e731f70a14a9bb4e",
+              "peak_managed_bytes": 42403272,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 32.097874999999995,
+              "display_raster_ms": 5.305791,
+              "final_used": 0,
+              "iteration": 3,
+              "packed_bytes": 33563364,
+              "packed_digest": "6e8973b7e0daff8a11907ab223426c9a86361a41d3e74364e731f70a14a9bb4e",
+              "peak_managed_bytes": 42403272,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 35.891791999999995,
+              "display_raster_ms": 5.624542,
+              "final_used": 0,
+              "iteration": 4,
+              "packed_bytes": 33563364,
+              "packed_digest": "6e8973b7e0daff8a11907ab223426c9a86361a41d3e74364e731f70a14a9bb4e",
+              "peak_managed_bytes": 42403272,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 32.569375,
+              "display_raster_ms": 6.282209000000001,
+              "final_used": 0,
+              "iteration": 5,
+              "packed_bytes": 33563364,
+              "packed_digest": "6e8973b7e0daff8a11907ab223426c9a86361a41d3e74364e731f70a14a9bb4e",
+              "peak_managed_bytes": 42403272,
+              "pixels": 524288,
+              "warmup": false
+            }
+          ],
+          "before": [
+            {
+              "decode_file_ms": 32.699583,
+              "display_raster_ms": 6.5865409999999995,
+              "final_used": 0,
+              "iteration": 0,
+              "packed_bytes": 33563364,
+              "packed_digest": "6e8973b7e0daff8a11907ab223426c9a86361a41d3e74364e731f70a14a9bb4e",
+              "peak_managed_bytes": 42403272,
+              "pixels": 524288,
+              "warmup": true
+            },
+            {
+              "decode_file_ms": 21.992082999999997,
+              "display_raster_ms": 5.303042,
+              "final_used": 0,
+              "iteration": 1,
+              "packed_bytes": 33563364,
+              "packed_digest": "6e8973b7e0daff8a11907ab223426c9a86361a41d3e74364e731f70a14a9bb4e",
+              "peak_managed_bytes": 42403272,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 28.596083,
+              "display_raster_ms": 5.574875,
+              "final_used": 0,
+              "iteration": 2,
+              "packed_bytes": 33563364,
+              "packed_digest": "6e8973b7e0daff8a11907ab223426c9a86361a41d3e74364e731f70a14a9bb4e",
+              "peak_managed_bytes": 42403272,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 19.743084,
+              "display_raster_ms": 5.100459,
+              "final_used": 0,
+              "iteration": 3,
+              "packed_bytes": 33563364,
+              "packed_digest": "6e8973b7e0daff8a11907ab223426c9a86361a41d3e74364e731f70a14a9bb4e",
+              "peak_managed_bytes": 42403272,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 23.933083,
+              "display_raster_ms": 5.588832999999999,
+              "final_used": 0,
+              "iteration": 4,
+              "packed_bytes": 33563364,
+              "packed_digest": "6e8973b7e0daff8a11907ab223426c9a86361a41d3e74364e731f70a14a9bb4e",
+              "peak_managed_bytes": 42403272,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 22.631625,
+              "display_raster_ms": 5.678332999999999,
+              "final_used": 0,
+              "iteration": 5,
+              "packed_bytes": 33563364,
+              "packed_digest": "6e8973b7e0daff8a11907ab223426c9a86361a41d3e74364e731f70a14a9bb4e",
+              "peak_managed_bytes": 42403272,
+              "pixels": 524288,
+              "warmup": false
+            }
+          ]
+        },
+        {
+          "before": [
+            {
+              "decode_file_ms": 29.276709,
+              "display_raster_ms": 5.592709,
+              "final_used": 0,
+              "iteration": 0,
+              "packed_bytes": 33563364,
+              "packed_digest": "6e8973b7e0daff8a11907ab223426c9a86361a41d3e74364e731f70a14a9bb4e",
+              "peak_managed_bytes": 42403272,
+              "pixels": 524288,
+              "warmup": true
+            },
+            {
+              "decode_file_ms": 21.028083,
+              "display_raster_ms": 4.725875,
+              "final_used": 0,
+              "iteration": 1,
+              "packed_bytes": 33563364,
+              "packed_digest": "6e8973b7e0daff8a11907ab223426c9a86361a41d3e74364e731f70a14a9bb4e",
+              "peak_managed_bytes": 42403272,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 21.153374999999997,
+              "display_raster_ms": 7.018292,
+              "final_used": 0,
+              "iteration": 2,
+              "packed_bytes": 33563364,
+              "packed_digest": "6e8973b7e0daff8a11907ab223426c9a86361a41d3e74364e731f70a14a9bb4e",
+              "peak_managed_bytes": 42403272,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 25.157833,
+              "display_raster_ms": 4.906916,
+              "final_used": 0,
+              "iteration": 3,
+              "packed_bytes": 33563364,
+              "packed_digest": "6e8973b7e0daff8a11907ab223426c9a86361a41d3e74364e731f70a14a9bb4e",
+              "peak_managed_bytes": 42403272,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 21.385624999999997,
+              "display_raster_ms": 6.675458000000001,
+              "final_used": 0,
+              "iteration": 4,
+              "packed_bytes": 33563364,
+              "packed_digest": "6e8973b7e0daff8a11907ab223426c9a86361a41d3e74364e731f70a14a9bb4e",
+              "peak_managed_bytes": 42403272,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 21.547417,
+              "display_raster_ms": 5.570167,
+              "final_used": 0,
+              "iteration": 5,
+              "packed_bytes": 33563364,
+              "packed_digest": "6e8973b7e0daff8a11907ab223426c9a86361a41d3e74364e731f70a14a9bb4e",
+              "peak_managed_bytes": 42403272,
+              "pixels": 524288,
+              "warmup": false
+            }
+          ],
+          "after": [
+            {
+              "decode_file_ms": 39.271791,
+              "display_raster_ms": 6.2595410000000005,
+              "final_used": 0,
+              "iteration": 0,
+              "packed_bytes": 33563364,
+              "packed_digest": "6e8973b7e0daff8a11907ab223426c9a86361a41d3e74364e731f70a14a9bb4e",
+              "peak_managed_bytes": 42403272,
+              "pixels": 524288,
+              "warmup": true
+            },
+            {
+              "decode_file_ms": 31.737374999999997,
+              "display_raster_ms": 5.480125,
+              "final_used": 0,
+              "iteration": 1,
+              "packed_bytes": 33563364,
+              "packed_digest": "6e8973b7e0daff8a11907ab223426c9a86361a41d3e74364e731f70a14a9bb4e",
+              "peak_managed_bytes": 42403272,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 33.341792000000005,
+              "display_raster_ms": 5.863125,
+              "final_used": 0,
+              "iteration": 2,
+              "packed_bytes": 33563364,
+              "packed_digest": "6e8973b7e0daff8a11907ab223426c9a86361a41d3e74364e731f70a14a9bb4e",
+              "peak_managed_bytes": 42403272,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 33.643208,
+              "display_raster_ms": 5.551125,
+              "final_used": 0,
+              "iteration": 3,
+              "packed_bytes": 33563364,
+              "packed_digest": "6e8973b7e0daff8a11907ab223426c9a86361a41d3e74364e731f70a14a9bb4e",
+              "peak_managed_bytes": 42403272,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 32.20025,
+              "display_raster_ms": 5.234541,
+              "final_used": 0,
+              "iteration": 4,
+              "packed_bytes": 33563364,
+              "packed_digest": "6e8973b7e0daff8a11907ab223426c9a86361a41d3e74364e731f70a14a9bb4e",
+              "peak_managed_bytes": 42403272,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 32.682625,
+              "display_raster_ms": 6.313166,
+              "final_used": 0,
+              "iteration": 5,
+              "packed_bytes": 33563364,
+              "packed_digest": "6e8973b7e0daff8a11907ab223426c9a86361a41d3e74364e731f70a14a9bb4e",
+              "peak_managed_bytes": 42403272,
+              "pixels": 524288,
+              "warmup": false
+            }
+          ]
+        }
+      ],
+      "before_median_ms": 21.385624999999997,
+      "after_median_ms": 32.569375,
+      "speedup": 0.6566176047283682,
+      "digest_and_memory_equal": true
+    },
+    "varying": {
+      "pairs": [
+        {
+          "before": [
+            {
+              "decode_file_ms": 42.287083,
+              "display_raster_ms": 6.135833,
+              "final_used": 0,
+              "iteration": 0,
+              "packed_bytes": 33563364,
+              "packed_digest": "1ca199b8e2a1aaf01e88d29a6520de9351b37e993c37096a11adb18dbff42e1f",
+              "peak_managed_bytes": 67372488,
+              "pixels": 524288,
+              "warmup": true
+            },
+            {
+              "decode_file_ms": 33.743666999999995,
+              "display_raster_ms": 5.919458,
+              "final_used": 0,
+              "iteration": 1,
+              "packed_bytes": 33563364,
+              "packed_digest": "1ca199b8e2a1aaf01e88d29a6520de9351b37e993c37096a11adb18dbff42e1f",
+              "peak_managed_bytes": 67372488,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 40.040375000000004,
+              "display_raster_ms": 5.596167,
+              "final_used": 0,
+              "iteration": 2,
+              "packed_bytes": 33563364,
+              "packed_digest": "1ca199b8e2a1aaf01e88d29a6520de9351b37e993c37096a11adb18dbff42e1f",
+              "peak_managed_bytes": 67372488,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 34.890416,
+              "display_raster_ms": 5.341458,
+              "final_used": 0,
+              "iteration": 3,
+              "packed_bytes": 33563364,
+              "packed_digest": "1ca199b8e2a1aaf01e88d29a6520de9351b37e993c37096a11adb18dbff42e1f",
+              "peak_managed_bytes": 67372488,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 35.913542,
+              "display_raster_ms": 5.570083,
+              "final_used": 0,
+              "iteration": 4,
+              "packed_bytes": 33563364,
+              "packed_digest": "1ca199b8e2a1aaf01e88d29a6520de9351b37e993c37096a11adb18dbff42e1f",
+              "peak_managed_bytes": 67372488,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 35.599208,
+              "display_raster_ms": 4.870959,
+              "final_used": 0,
+              "iteration": 5,
+              "packed_bytes": 33563364,
+              "packed_digest": "1ca199b8e2a1aaf01e88d29a6520de9351b37e993c37096a11adb18dbff42e1f",
+              "peak_managed_bytes": 67372488,
+              "pixels": 524288,
+              "warmup": false
+            }
+          ],
+          "after": [
+            {
+              "decode_file_ms": 39.641667,
+              "display_raster_ms": 6.224208999999999,
+              "final_used": 0,
+              "iteration": 0,
+              "packed_bytes": 33563364,
+              "packed_digest": "1ca199b8e2a1aaf01e88d29a6520de9351b37e993c37096a11adb18dbff42e1f",
+              "peak_managed_bytes": 67372488,
+              "pixels": 524288,
+              "warmup": true
+            },
+            {
+              "decode_file_ms": 36.678125,
+              "display_raster_ms": 9.861416,
+              "final_used": 0,
+              "iteration": 1,
+              "packed_bytes": 33563364,
+              "packed_digest": "1ca199b8e2a1aaf01e88d29a6520de9351b37e993c37096a11adb18dbff42e1f",
+              "peak_managed_bytes": 67372488,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 37.303333,
+              "display_raster_ms": 6.784167,
+              "final_used": 0,
+              "iteration": 2,
+              "packed_bytes": 33563364,
+              "packed_digest": "1ca199b8e2a1aaf01e88d29a6520de9351b37e993c37096a11adb18dbff42e1f",
+              "peak_managed_bytes": 67372488,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 37.80025,
+              "display_raster_ms": 5.155125,
+              "final_used": 0,
+              "iteration": 3,
+              "packed_bytes": 33563364,
+              "packed_digest": "1ca199b8e2a1aaf01e88d29a6520de9351b37e993c37096a11adb18dbff42e1f",
+              "peak_managed_bytes": 67372488,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 35.449,
+              "display_raster_ms": 5.471292,
+              "final_used": 0,
+              "iteration": 4,
+              "packed_bytes": 33563364,
+              "packed_digest": "1ca199b8e2a1aaf01e88d29a6520de9351b37e993c37096a11adb18dbff42e1f",
+              "peak_managed_bytes": 67372488,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 39.490375,
+              "display_raster_ms": 5.047916000000001,
+              "final_used": 0,
+              "iteration": 5,
+              "packed_bytes": 33563364,
+              "packed_digest": "1ca199b8e2a1aaf01e88d29a6520de9351b37e993c37096a11adb18dbff42e1f",
+              "peak_managed_bytes": 67372488,
+              "pixels": 524288,
+              "warmup": false
+            }
+          ]
+        },
+        {
+          "after": [
+            {
+              "decode_file_ms": 39.747792,
+              "display_raster_ms": 7.43625,
+              "final_used": 0,
+              "iteration": 0,
+              "packed_bytes": 33563364,
+              "packed_digest": "1ca199b8e2a1aaf01e88d29a6520de9351b37e993c37096a11adb18dbff42e1f",
+              "peak_managed_bytes": 67372488,
+              "pixels": 524288,
+              "warmup": true
+            },
+            {
+              "decode_file_ms": 33.950624999999995,
+              "display_raster_ms": 5.412333,
+              "final_used": 0,
+              "iteration": 1,
+              "packed_bytes": 33563364,
+              "packed_digest": "1ca199b8e2a1aaf01e88d29a6520de9351b37e993c37096a11adb18dbff42e1f",
+              "peak_managed_bytes": 67372488,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 42.263875,
+              "display_raster_ms": 5.092083,
+              "final_used": 0,
+              "iteration": 2,
+              "packed_bytes": 33563364,
+              "packed_digest": "1ca199b8e2a1aaf01e88d29a6520de9351b37e993c37096a11adb18dbff42e1f",
+              "peak_managed_bytes": 67372488,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 36.553957999999994,
+              "display_raster_ms": 5.3063340000000006,
+              "final_used": 0,
+              "iteration": 3,
+              "packed_bytes": 33563364,
+              "packed_digest": "1ca199b8e2a1aaf01e88d29a6520de9351b37e993c37096a11adb18dbff42e1f",
+              "peak_managed_bytes": 67372488,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 34.195125,
+              "display_raster_ms": 5.304958,
+              "final_used": 0,
+              "iteration": 4,
+              "packed_bytes": 33563364,
+              "packed_digest": "1ca199b8e2a1aaf01e88d29a6520de9351b37e993c37096a11adb18dbff42e1f",
+              "peak_managed_bytes": 67372488,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 38.08525,
+              "display_raster_ms": 5.302417,
+              "final_used": 0,
+              "iteration": 5,
+              "packed_bytes": 33563364,
+              "packed_digest": "1ca199b8e2a1aaf01e88d29a6520de9351b37e993c37096a11adb18dbff42e1f",
+              "peak_managed_bytes": 67372488,
+              "pixels": 524288,
+              "warmup": false
+            }
+          ],
+          "before": [
+            {
+              "decode_file_ms": 40.4405,
+              "display_raster_ms": 5.7557920000000005,
+              "final_used": 0,
+              "iteration": 0,
+              "packed_bytes": 33563364,
+              "packed_digest": "1ca199b8e2a1aaf01e88d29a6520de9351b37e993c37096a11adb18dbff42e1f",
+              "peak_managed_bytes": 67372488,
+              "pixels": 524288,
+              "warmup": true
+            },
+            {
+              "decode_file_ms": 36.992375,
+              "display_raster_ms": 5.683040999999999,
+              "final_used": 0,
+              "iteration": 1,
+              "packed_bytes": 33563364,
+              "packed_digest": "1ca199b8e2a1aaf01e88d29a6520de9351b37e993c37096a11adb18dbff42e1f",
+              "peak_managed_bytes": 67372488,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 35.498584,
+              "display_raster_ms": 6.162584,
+              "final_used": 0,
+              "iteration": 2,
+              "packed_bytes": 33563364,
+              "packed_digest": "1ca199b8e2a1aaf01e88d29a6520de9351b37e993c37096a11adb18dbff42e1f",
+              "peak_managed_bytes": 67372488,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 35.458709,
+              "display_raster_ms": 5.5755,
+              "final_used": 0,
+              "iteration": 3,
+              "packed_bytes": 33563364,
+              "packed_digest": "1ca199b8e2a1aaf01e88d29a6520de9351b37e993c37096a11adb18dbff42e1f",
+              "peak_managed_bytes": 67372488,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 37.084417,
+              "display_raster_ms": 6.417125,
+              "final_used": 0,
+              "iteration": 4,
+              "packed_bytes": 33563364,
+              "packed_digest": "1ca199b8e2a1aaf01e88d29a6520de9351b37e993c37096a11adb18dbff42e1f",
+              "peak_managed_bytes": 67372488,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 43.496,
+              "display_raster_ms": 5.318583,
+              "final_used": 0,
+              "iteration": 5,
+              "packed_bytes": 33563364,
+              "packed_digest": "1ca199b8e2a1aaf01e88d29a6520de9351b37e993c37096a11adb18dbff42e1f",
+              "peak_managed_bytes": 67372488,
+              "pixels": 524288,
+              "warmup": false
+            }
+          ]
+        },
+        {
+          "before": [
+            {
+              "decode_file_ms": 47.63275,
+              "display_raster_ms": 7.605084,
+              "final_used": 0,
+              "iteration": 0,
+              "packed_bytes": 33563364,
+              "packed_digest": "1ca199b8e2a1aaf01e88d29a6520de9351b37e993c37096a11adb18dbff42e1f",
+              "peak_managed_bytes": 67372488,
+              "pixels": 524288,
+              "warmup": true
+            },
+            {
+              "decode_file_ms": 35.533833,
+              "display_raster_ms": 4.736666,
+              "final_used": 0,
+              "iteration": 1,
+              "packed_bytes": 33563364,
+              "packed_digest": "1ca199b8e2a1aaf01e88d29a6520de9351b37e993c37096a11adb18dbff42e1f",
+              "peak_managed_bytes": 67372488,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 41.059958,
+              "display_raster_ms": 5.308333,
+              "final_used": 0,
+              "iteration": 2,
+              "packed_bytes": 33563364,
+              "packed_digest": "1ca199b8e2a1aaf01e88d29a6520de9351b37e993c37096a11adb18dbff42e1f",
+              "peak_managed_bytes": 67372488,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 33.654,
+              "display_raster_ms": 8.080791,
+              "final_used": 0,
+              "iteration": 3,
+              "packed_bytes": 33563364,
+              "packed_digest": "1ca199b8e2a1aaf01e88d29a6520de9351b37e993c37096a11adb18dbff42e1f",
+              "peak_managed_bytes": 67372488,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 40.900375000000004,
+              "display_raster_ms": 7.11125,
+              "final_used": 0,
+              "iteration": 4,
+              "packed_bytes": 33563364,
+              "packed_digest": "1ca199b8e2a1aaf01e88d29a6520de9351b37e993c37096a11adb18dbff42e1f",
+              "peak_managed_bytes": 67372488,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 41.345042,
+              "display_raster_ms": 5.3055840000000005,
+              "final_used": 0,
+              "iteration": 5,
+              "packed_bytes": 33563364,
+              "packed_digest": "1ca199b8e2a1aaf01e88d29a6520de9351b37e993c37096a11adb18dbff42e1f",
+              "peak_managed_bytes": 67372488,
+              "pixels": 524288,
+              "warmup": false
+            }
+          ],
+          "after": [
+            {
+              "decode_file_ms": 41.378917,
+              "display_raster_ms": 5.233333,
+              "final_used": 0,
+              "iteration": 0,
+              "packed_bytes": 33563364,
+              "packed_digest": "1ca199b8e2a1aaf01e88d29a6520de9351b37e993c37096a11adb18dbff42e1f",
+              "peak_managed_bytes": 67372488,
+              "pixels": 524288,
+              "warmup": true
+            },
+            {
+              "decode_file_ms": 40.415042,
+              "display_raster_ms": 5.103916,
+              "final_used": 0,
+              "iteration": 1,
+              "packed_bytes": 33563364,
+              "packed_digest": "1ca199b8e2a1aaf01e88d29a6520de9351b37e993c37096a11adb18dbff42e1f",
+              "peak_managed_bytes": 67372488,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 34.763416,
+              "display_raster_ms": 4.9815830000000005,
+              "final_used": 0,
+              "iteration": 2,
+              "packed_bytes": 33563364,
+              "packed_digest": "1ca199b8e2a1aaf01e88d29a6520de9351b37e993c37096a11adb18dbff42e1f",
+              "peak_managed_bytes": 67372488,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 38.840209,
+              "display_raster_ms": 4.741875,
+              "final_used": 0,
+              "iteration": 3,
+              "packed_bytes": 33563364,
+              "packed_digest": "1ca199b8e2a1aaf01e88d29a6520de9351b37e993c37096a11adb18dbff42e1f",
+              "peak_managed_bytes": 67372488,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 35.484583,
+              "display_raster_ms": 5.579167,
+              "final_used": 0,
+              "iteration": 4,
+              "packed_bytes": 33563364,
+              "packed_digest": "1ca199b8e2a1aaf01e88d29a6520de9351b37e993c37096a11adb18dbff42e1f",
+              "peak_managed_bytes": 67372488,
+              "pixels": 524288,
+              "warmup": false
+            },
+            {
+              "decode_file_ms": 37.508624999999995,
+              "display_raster_ms": 4.968792,
+              "final_used": 0,
+              "iteration": 5,
+              "packed_bytes": 33563364,
+              "packed_digest": "1ca199b8e2a1aaf01e88d29a6520de9351b37e993c37096a11adb18dbff42e1f",
+              "peak_managed_bytes": 67372488,
+              "pixels": 524288,
+              "warmup": false
+            }
+          ]
+        }
+      ],
+      "before_median_ms": 35.913542,
+      "after_median_ms": 37.303333,
+      "speedup": 0.9627435167790502,
+      "digest_and_memory_equal": true
+    }
+  },
+  "decision": "Rejected and reverted. Constant-channel workload is slower in alternating runs; varying workload also shows no benefit.",
+  "baseline_commit": "a83dfe7b",
+  "candidate_diff": "--- baseline/rpf.rs\n+++ candidate/rpf.rs\n@@ -308,8 +308,13 @@\n                     let value = *record.get(pos).ok_or(E::Truncated)?;\n                     pos += 1;\n                     if write {\n-                        for i in x..x + run {\n-                            output[i * sample_bytes + plane] = value;\n+                        let destination = &mut output[x * sample_bytes..(x + run) * sample_bytes];\n+                        if sample_bytes == 1 {\n+                            destination.fill(value);\n+                        } else {\n+                            for sample in destination.chunks_exact_mut(sample_bytes) {\n+                                sample[plane] = value;\n+                            }\n                         }\n                     }\n                 } else {\n",
+  "fixture_sha256": {
+    "constant": "0f50f7919c4bea3125472a5354b024d017604f4b27eab4d44eb734f5ed95f0d1",
+    "varying": "403ef9301f94b4a0a54a17c6992d5fe59642d967ae3c0151996f776c181fca62"
+  },
+  "validation": {
+    "decoder_tests_passed": 855,
+    "decoder_tests_ignored": 54,
+    "sdk_plane_oracle_cases": 98,
+    "production_source_restored": true
+  }
+}

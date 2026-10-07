@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-07",
+  "scope": "Explicit-camera-layout BAY bounded file input; sensor values only",
+  "api": "read_bay_sensor_with_budget",
+  "fixture": "Authored constant 173-byte QV2000UX storage, not a real camera capture",
+  "source_bytes": 1976352,
+  "sensor_bytes": 3952704,
+  "exact_root_peak_bytes": 5929056,
+  "retained_root_bytes": 3952704,
+  "final_root_bytes": 0,
+  "verified": [
+    "All sensor samples equal fixture values",
+    "Source and sensor share supplied root budget",
+    "One-byte-short peak limit refuses decoded allocation and releases source",
+    "Cloned sensor owners retain credit until last owner drops",
+    "Unsupported image index and pre-cancellation refuse before reservation",
+    "Truncated storage rejects and releases source"
+  ],
+  "decoder_tests": {
+    "passed": 856,
+    "ignored": 54,
+    "failed": 0
+  },
+  "limitations": [
+    "No camera identity inference",
+    "No CFA, WB, black level or color qualification",
+    "BAY viewer route remains unqualified"
+  ]
+}

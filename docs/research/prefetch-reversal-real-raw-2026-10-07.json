@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-07",
+  "test": "navigation_reversal_cancels_blocked_forward_and_warms_backward_raw",
+  "result": "passed",
+  "duration_seconds": 0.68,
+  "window": {
+    "behind": 0,
+    "ahead": 1,
+    "reversed_backward_extent": 1
+  },
+  "cache_limits": {
+    "bytes": 134217728,
+    "count": 1,
+    "ttl": null
+  },
+  "shared_root_limit": 100663296,
+  "measured_peak": 72357586,
+  "samples_compared": 25494560,
+  "verified": [
+    "Forward worker entered checking while foreground ticket prevented decode",
+    "Navigation reversal invalidated old generation",
+    "Only new backward neighbour published",
+    "Cancelled forward cache key absent",
+    "Cache contains exactly one highest-priority backward neighbour",
+    "Restored full sensor and metadata equal native original",
+    "Final root usage zero"
+  ],
+  "fixtures": {
+    "forward": "tests/IMG_9043.CR3",
+    "backward": "tests/IMG_9074.CR3"
+  },
+  "regular_gallery_tests": {
+    "passed": 28,
+    "ignored": 7,
+    "failed": 0
+  },
+  "limitations": [
+    "Cancellation tested while waiting for decode admission, not after GPU submission",
+    "One neighbour per direction; larger windows covered separately",
+    "No new color, CUDA or physical HDR qualification"
+  ]
+}

@@ -3,7 +3,7 @@
 import argparse
 import pathlib
 import struct
-p=argparse.ArgumentParser();p.add_argument('output',type=pathlib.Path);p.add_argument('--width',type=int,default=1024);p.add_argument('--height',type=int,default=512);a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('output',type=pathlib.Path);p.add_argument('--width',type=int,default=1024);p.add_argument('--height',type=int,default=512);p.add_argument('--pattern',choices=['constant','varying'],default='constant');a=p.parse_args()
 if not (1 <= a.width <= 16383 and 1 <= a.height <= 32768):p.error('dimensions exceed fixture header/float-record bounds')
 sizes=[4,1,2,8,4,4,1,3,2,3,3,8,3,2]
 h=bytearray(740)
@@ -19,7 +19,10 @@ for channel,size in enumerate(sizes):
  for plane in reversed(range(size)):
   value=(channel*13+plane*17)&255;payload=bytearray();remaining=a.width
   while remaining:
-   run=min(128,remaining);payload+=bytes([run-1,value]);remaining-=run
+   run=min(128,remaining)
+   if a.pattern=='constant':payload+=bytes([run-1,value])
+   else:payload+=bytes([(-run)&255])+bytes((value+(a.width-remaining+i)*37)&255 for i in range(run))
+   remaining-=run
   row+=struct.pack('>H',len(payload))+payload
 row+=struct.pack('<i',0)
 base=740+4*a.height

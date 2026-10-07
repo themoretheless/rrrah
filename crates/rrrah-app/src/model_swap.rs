@@ -85,3 +85,46 @@ impl SwapPayload for ModelPayload {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn malformed_all_model_codecs_refuse_geometry_without_large_reservations() {
+        let mut stl = b"RRSTL001".to_vec();
+        stl.extend(u64::MAX.to_le_bytes());
+        let mut obj = b"RROBJ001".to_vec();
+        obj.extend(u64::MAX.to_le_bytes());
+        let mut off = b"RROFF001".to_vec();
+        off.push(0); // ASCII metadata
+        off.extend(0u32.to_le_bytes());
+        off.extend(u64::MAX.to_le_bytes());
+        let mut ply = b"RRPLY001".to_vec();
+        ply.push(0); // ASCII metadata
+        ply.extend(0u64.to_le_bytes()); // vertex element
+        for _ in 0..3 {
+            ply.extend(0u64.to_le_bytes());
+        }
+        ply.extend(u64::MAX.to_le_bytes()); // comment count
+        for bytes in [stl, obj, off, ply] {
+            let root = MemoryBudget::new(1024 * 1024);
+            assert!(matches!(
+                ModelPayload::read_payload(&mut bytes.as_slice(), bytes.len() as u64, &root),
+                Err(SwapPayloadError::Invalid(_))
+            ));
+            assert_eq!(root.used(), 0);
+            assert!(
+                root.peak() < 4096,
+                "only bounded model bookkeeping may be reserved"
+            );
+            for end in 0..8 {
+                let empty = MemoryBudget::new(0);
+                assert!(matches!(
+                    ModelPayload::read_payload(&mut &bytes[..end], end as u64, &empty),
+                    Err(SwapPayloadError::Invalid(_))
+                ));
+                assert_eq!(empty.peak(), 0);
+            }
+        }
+    }
+}

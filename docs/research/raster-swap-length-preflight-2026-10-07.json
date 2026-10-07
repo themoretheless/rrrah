@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-07",
+  "change": "Raster swap codec now validates exact object length against header, ICC bytes and pixel storage before reservations",
+  "api": "read_raster_payload_with_length",
+  "wired_to": "DecodedRaster SwapPayload::read_payload",
+  "verified": [
+    "Shorter than header length rejected without reading or reserving",
+    "Both short and oversized declared lengths reject with zero budget peak",
+    "Header with enlarged width and short object is Invalid, not transient Memory",
+    "Valid ICC RGBA32F roundtrip preserves bits including negative zero",
+    "120 cache tests pass",
+    "Metal live count/size/TTL RAM/swap frame preservation test passes"
+  ],
+  "tests": {
+    "cache_passed": 120,
+    "metal_passed": 1,
+    "failed": 0
+  },
+  "limitations": [
+    "Legacy reader without supplied object length retains streaming behavior",
+    "Physical HDR and NVIDIA not tested"
+  ]
+}

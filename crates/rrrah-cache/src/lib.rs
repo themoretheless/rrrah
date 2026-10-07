@@ -12,7 +12,10 @@ mod mosaic_object_v1;
 mod mosaic_payload_v1;
 mod ram;
 mod raster_payload;
-pub use raster_payload::{RasterPayloadError, raster_payload_len, read_raster_payload, write_raster_payload};
+pub use raster_payload::{
+    RasterPayloadError, raster_payload_len, read_raster_payload, read_raster_payload_with_length,
+    write_raster_payload,
+};
 mod raster_ram;
 pub use raster_ram::RasterRamCache;
 mod swap;

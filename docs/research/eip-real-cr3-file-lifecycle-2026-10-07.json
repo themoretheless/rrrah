@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-07",
+  "source": "tests/IMG_9043.CR3",
+  "source_sha256": "d06cbb10e84882cf130430bdc88ed2652c2622b96dea8d6a854c09e3bee37e59",
+  "scope": "File lifecycle for authored EIP ZIP containers containing a real Canon EOS R8 CR3; not Capture One authored appearance",
+  "reference": "Direct NativeRawDecoder result from original CR3, full sensor and metadata comparison",
+  "samples_per_case": 25494560,
+  "raw_bytes": 22382226,
+  "sensor_bytes": 50989120,
+  "cases": [
+    {
+      "compression": "Stored",
+      "package_bytes": 22382344,
+      "peak_managed_bytes": 95753690
+    },
+    {
+      "compression": "Deflated",
+      "package_bytes": 22124954,
+      "peak_managed_bytes": 95496300
+    }
+  ],
+  "verified": [
+    "All sensor samples and metadata equal original native route",
+    "Peak equals package plus inflated RAW plus sensor allocation",
+    "Return retains only sensor reservation",
+    "One-byte-short peak cap rejects and releases all buffers",
+    "Exact measured peak cap retries successfully",
+    "Last cloned pixel owner releases root to zero"
+  ],
+  "result": "passed",
+  "duration_seconds": 1.08,
+  "limitations": [
+    "Authored ZIP packages, not Capture One exported EIP",
+    "Reference is same native decoder; this verifies file and package lifecycle, not independent CR3 decoding",
+    "Capture One adjustments and profiles not reproduced",
+    "No new GPU or physical HDR evidence"
+  ]
+}

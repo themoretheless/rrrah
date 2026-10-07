@@ -4115,6 +4115,12 @@ impl GpuState {
             Ok(value) => anyhow::bail!("invalid RRRAH_HDR_SURFACE={value}; expected 0 or 1"),
         };
         let (surface_format, surface_color_space) = select_viewer_surface(&capabilities, hdr_surface)?;
+        log::info!(
+            "Viewer surface: hdr={} format={:?} color_space={:?}",
+            hdr_surface,
+            surface_format,
+            surface_color_space
+        );
         let size = window.inner_size();
         let config = wgpu::SurfaceConfiguration {
             usage: wgpu::TextureUsages::RENDER_ATTACHMENT,

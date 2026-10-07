@@ -1,0 +1,44 @@
+{
+  "date": "2026-10-07",
+  "adapter": "Metal Apple M4 Max",
+  "test": "file_eip_cr3_ram_disk_swap_preserves_complete_sensor_and_metal_frame",
+  "result": "passed",
+  "duration_seconds": 2.24,
+  "sensor_samples_per_case": 25494560,
+  "cases": [
+    {
+      "encoding": "stored",
+      "package_sha256": "95dd4b27c194aedfcc3ec98d501a6480212f2b1e4e111ad8e0e166e4ab60b95a"
+    },
+    {
+      "encoding": "deflated",
+      "package_sha256": "064e0ed04a12d983646348a809b18c33afb7a58bbf1e42d2a8c0ff21d1eed48c"
+    }
+  ],
+  "verified": [
+    "Full file-based sensor import equals native original sensor and metadata",
+    "128x96 SDR GPU frame is pixel-exact after import",
+    "RAM lease prevents limit reduction; releasing lease allows eviction",
+    "Persistent disk cache restores sensor, metadata and GPU frame exactly",
+    "Asynchronous swap writes and restores same sensor, metadata and GPU frame",
+    "Root-pressure restore refusal retains swap entry and does not count as corruption",
+    "Retry succeeds after releasing pressure",
+    "One write and one read per case; zero swap errors",
+    "Final root usage zero"
+  ],
+  "limits": {
+    "root_bytes": 134217728,
+    "ram_bytes": 67108864,
+    "persistent_disk_bytes": 67108864,
+    "swap_bytes": 67108864,
+    "swap_queue_bytes": 67108864,
+    "swap_queue_count": 1,
+    "restore_bytes": 67108864
+  },
+  "limitations": [
+    "Authored packages of real EOS R8 CR3, not Capture One exported EIP",
+    "Same native decoder used for original comparison; lifecycle evidence, not a new independent sensor oracle",
+    "SDR GPU readback, not physical HDR output",
+    "Capture One edits not interpreted"
+  ]
+}

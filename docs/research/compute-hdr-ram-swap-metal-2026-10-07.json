@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-07",
+  "test": "compute_hdr_result_preserves_float_bits_ram_swap_and_rendering",
+  "adapter": "Metal Apple M4 Max",
+  "result": "passed",
+  "duration_seconds": 0.72,
+  "geometry": [
+    164,
+    50
+  ],
+  "pixel_count": 8200,
+  "samples_checked": 32800,
+  "verified": [
+    "Managed compute output preserves CPU oracle float bits including signed zero, negative HDR RGB and unchanged alpha",
+    "GPU reservations released after queue/readback completion",
+    "Input and output CPU allocations share root; source release retains only output",
+    "Raster wraps computed output without flattened copy",
+    "RAM lease prevents eviction; releasing lease enables shrink",
+    "Actual disk swap restores every float bit",
+    "Non-background SDR readback matches CPU-oracle raster before RAM admission, during lease and after swap",
+    "Final CPU root usage zero; one swap write/read and zero errors"
+  ],
+  "budgets": {
+    "cpu_bytes": 262400,
+    "gpu_bytes": 393616,
+    "swap_bytes": 131264,
+    "queue_bytes": 131200,
+    "restore_bytes": 131200
+  },
+  "limitations": [
+    "Authored HDR fixture, not a format producer qualification",
+    "SDR readback, no physical HDR luminance proof",
+    "NVIDIA CUDA runtime not tested"
+  ]
+}

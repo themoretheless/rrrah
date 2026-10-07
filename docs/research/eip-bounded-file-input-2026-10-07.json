@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-07",
+  "scope": "Explicit sensor-only EIP file input with shared root admission",
+  "apis": [
+    "read_eip_raw_with_budget",
+    "decode_eip_file_sensor"
+  ],
+  "verified": [
+    "File ZIP allocation charged to supplied root",
+    "Inflated RAW shares root with source package",
+    "Exact source length plus expanded RAW length peak admitted",
+    "One-byte-short limit refuses inflation and releases source",
+    "RAW clone retains credit until last owner drops",
+    "Cancelled and nonzero-image requests refuse before source allocation",
+    "Native PEF decoder error releases both file and inflated RAW"
+  ],
+  "fixtures": "Authored Stored and Deflate ZIP packages with malformed PEF payload; not Capture One produced packages",
+  "tests": {
+    "eip_passed": 10,
+    "eip_ignored": 5,
+    "decoder_passed": 857,
+    "decoder_ignored": 54,
+    "failed": 0
+  },
+  "remaining": [
+    "Actual Capture One package acquisition and authored adjustments reproduction",
+    "Camera color qualification"
+  ],
+  "positive_file_lifecycle": "eip-real-cr3-file-lifecycle-2026-10-07.json"
+}

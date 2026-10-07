@@ -12,9 +12,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         "qv5700" => BaySensorLayout::Qv5700,
         _ => return Err("unknown explicit camera layout".into()),
     };
-    let bytes = std::fs::read(&args[2])?;
     let budget = rrrah_core::MemoryBudget::new(16 * 1024 * 1024);
-    let samples = rrrah_decode::unpack_bay_sensor(&bytes, layout, &budget, || false)?;
+    let samples = rrrah_decode::read_bay_sensor_with_budget(
+        &rrrah_decode::DecodeRequest::new(&args[2]),
+        layout,
+        &budget,
+    )?;
     let mut output = std::io::BufWriter::new(std::fs::File::create(&args[3])?);
     for sample in samples.iter() {
         output.write_all(&sample.to_le_bytes())?;

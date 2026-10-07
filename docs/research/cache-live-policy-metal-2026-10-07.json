@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-07",
+  "adapter": "Metal Apple M4 Max",
+  "test": "live_count_size_and_ttl_changes_preserve_hdr_frames_through_swap",
+  "test_source_sha256": "b7174ad9c73ca5201c24563ab0caf9007221f394f66c1a39c603dc961ec6cfdf",
+  "result": "passed",
+  "duration_seconds": 0.84,
+  "command": "cargo test -p rrrah --test ttl_swap_metal --locked --offline --target-dir /tmp/rrrah-required-corpus-target live_count_size_and_ttl_changes -- --ignored --nocapture",
+  "verified": [
+    "Combined byte/count/TTL reduction rejected atomically while lease and visible pin prevent eviction",
+    "Lease image remains exactly equal on GPU after rejected policy",
+    "Lease release allows reduction and actual asynchronous disk spill",
+    "Background swap restore preserves all values and cannot displace visible frame",
+    "Replacement adopts zero TTL while the visible frame remains protected",
+    "Expired unpinned frame spills while an external display owner retains root credit",
+    "Restored replacement preserves float bits including negative zero and exact SDR GPU readback",
+    "Final cache and last display owner release root to zero"
+  ],
+  "limits": {
+    "root_bytes": 128,
+    "initial_ram_bytes": 64,
+    "initial_count": 2,
+    "reduced_ram_bytes": 32,
+    "reduced_count": 1,
+    "new_ttl_seconds": 0,
+    "swap_bytes": 4096,
+    "queue_bytes": 64,
+    "queue_count": 2,
+    "restore_bytes": 32
+  },
+  "limitations": [
+    "Synthetic two-pixel linear HDR source",
+    "SDR offscreen readback; physical HDR output not proven",
+    "NVIDIA CUDA and other adapters not tested"
+  ]
+}

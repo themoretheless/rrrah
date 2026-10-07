@@ -1207,6 +1207,101 @@ mod tests {
     }
 
     #[test]
+    #[ignore = "manual real EOS R8 navigation reversal qualification"]
+    fn navigation_reversal_cancels_blocked_forward_and_warms_backward_raw() {
+        let directory = tempfile::tempdir().unwrap();
+        let root = rrrah_cache::MemoryBudget::new(96 * 1024 * 1024);
+        let telemetry = Arc::new(CacheTelemetry::new(true, 128 * 1024 * 1024));
+        let gate = Arc::new(DecodeGate::new());
+        let ticket = gate.request_foreground();
+        let worker = RawPrefetcher::with_budget(
+            Some(directory.path().to_owned()),
+            false,
+            gate.clone(),
+            telemetry.clone(),
+            PrefetchWindow {
+                behind: 0,
+                ahead: 1,
+            },
+            rrrah_cache::CacheLimits {
+                max_bytes: 128 * 1024 * 1024,
+                max_entries: Some(1),
+                ttl: None,
+            },
+            Some(root.clone()),
+        );
+        let repo = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../..");
+        let paths = [
+            repo.join("tests/IMG_9074.CR3"),
+            PathBuf::from("selected.png"),
+            repo.join("tests/IMG_9043.CR3"),
+        ];
+        worker.finish_foreground_and_submit(&paths, 1, NavDirection::Forward);
+        let old = GenerationToken::new(
+            gate.speculative_generation(),
+            worker.generation.load(Ordering::Acquire),
+        );
+        let deadline = std::time::Instant::now() + Duration::from_secs(5);
+        while telemetry.snapshot().prefetch_phase != PrefetchPhase::Checking
+            && std::time::Instant::now() < deadline
+        {
+            thread::sleep(Duration::from_millis(1));
+        }
+        assert_eq!(telemetry.snapshot().prefetch_phase, PrefetchPhase::Checking);
+        assert_eq!(root.used(), 0);
+        worker.begin_foreground();
+        assert!(old.is_cancelled());
+        worker.finish_foreground_and_submit(&paths, 1, NavDirection::Backward);
+        drop(ticket);
+        let deadline = std::time::Instant::now() + Duration::from_secs(10);
+        while (telemetry.snapshot().prefetch_completed == 0 || root.used() != 0)
+            && std::time::Instant::now() < deadline
+        {
+            thread::sleep(Duration::from_millis(1));
+        }
+        let snapshot = telemetry.snapshot();
+        assert_eq!(snapshot.prefetch_planned, 1);
+        assert_eq!(snapshot.prefetch_stored, 1);
+        assert_eq!(snapshot.prefetch_failures, 0);
+        assert!(snapshot.prefetch_completed > 0);
+        assert_eq!(root.used(), 0);
+        let key = |path: &PathBuf| {
+            let request = DecodeRequest::new(path);
+            CacheKey::for_mosaic_recipe(
+                &SourceFingerprint::from_path(path).unwrap(),
+                0,
+                NativeRawDecoder.mosaic_recipe(&request).unwrap(),
+            )
+        };
+        let cache = rrrah_cache::DiskMosaicCache::new(directory.path());
+        assert!(
+            !cache.contains(key(&paths[2])),
+            "cancelled forward neighbour must not publish"
+        );
+        assert!(cache.contains(key(&paths[0])));
+        assert_eq!(cache.usage().unwrap().entries, 1);
+        let restored = cache
+            .load_with_budget(key(&paths[0]), &root)
+            .unwrap()
+            .unwrap()
+            .mosaic;
+        let reference_root = rrrah_cache::MemoryBudget::new(96 * 1024 * 1024);
+        let mut request = DecodeRequest::new(&paths[0]);
+        request.memory_budget = Some(reference_root.clone());
+        let reference = NativeRawDecoder.decode(&request).unwrap().mosaic;
+        assert_eq!(restored.pixels, reference.pixels);
+        assert_eq!(restored.metadata, reference.metadata);
+        eprintln!(
+            "reverse prefetch: {} samples exact; cancelled forward absent; one backward entry; peak={} final=0",
+            restored.pixels.len(),
+            root.peak()
+        );
+        drop(reference);
+        drop(restored);
+        assert_eq!(root.used(), 0);
+        assert_eq!(reference_root.used(), 0);
+    }
+    #[test]
     #[ignore = "requires local EOS R8 tests/IMG_9043.CR3 fixture"]
     fn raw_prefetch_count_limit_preserves_highest_priority_neighbour() {
         let root = tempfile::tempdir().unwrap();

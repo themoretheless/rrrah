@@ -34,6 +34,37 @@ pub enum BaySensorError {
     #[error(transparent)]
     Memory(#[from] rrrah_core::BufferError),
 }
+#[derive(Debug, thiserror::Error)]
+pub enum BayReadError {
+    #[error(transparent)]
+    Source(#[from] crate::DecodeError),
+    #[error(transparent)]
+    Sensor(#[from] BaySensorError),
+}
+/// Read explicit-layout BAY samples with source and output charged to one root.
+/// Camera identity and color interpretation remain the caller's responsibility.
+pub fn read_bay_sensor_with_budget(
+    request: &crate::DecodeRequest,
+    layout: BaySensorLayout,
+    budget: &rrrah_core::MemoryBudget,
+) -> Result<rrrah_core::PixelBuffer<u16>, BayReadError> {
+    request.check_cancelled()?;
+    if request.image_index != 0 {
+        return Err(crate::DecodeError::UnsupportedImageIndex {
+            index: request.image_index,
+        }
+        .into());
+    }
+    let mut bounded = request.clone();
+    bounded.memory_budget = Some(budget.clone());
+    let source = crate::bounded_io::read_bounded(&bounded)?;
+    Ok(unpack_bay_sensor(&source, layout, budget, || {
+        request
+            .cancellation
+            .as_ref()
+            .is_some_and(crate::GenerationToken::is_cancelled)
+    })?)
+}
 /// Sensor values only: no CFA, black/white levels, WB, crop or display color.
 /// QV-5700 consumes 2585 ten-bit samples per 3232-byte row; six padding bits
 /// remain after the final sample. There is no auto-detect or implicit crop.
@@ -88,6 +119,72 @@ pub fn unpack_bay_sensor(
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn file_source_and_sensor_share_budget_and_release_after_refusal() {
+        let layout = BaySensorLayout::Qv2000Ux;
+        let (width, height) = layout.dimensions();
+        let len = (width * height) as usize;
+        let path = std::env::temp_dir().join(format!(
+            "rrrah-bay-input-{}-{}.bay",
+            std::process::id(),
+            std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .unwrap()
+                .as_nanos()
+        ));
+        struct Cleanup(std::path::PathBuf);
+        impl Drop for Cleanup {
+            fn drop(&mut self) {
+                let _ = std::fs::remove_file(&self.0);
+            }
+        }
+        let _cleanup = Cleanup(path.clone());
+        std::fs::write(&path, vec![173u8; len]).unwrap();
+        let mut request = crate::DecodeRequest::new(path.clone());
+        let exact = rrrah_core::MemoryBudget::new(len as u64 * 3);
+        let output = read_bay_sensor_with_budget(&request, layout, &exact).unwrap();
+        assert!(output.iter().all(|sample| *sample == 173));
+        assert_eq!(exact.peak(), len as u64 * 3);
+        assert_eq!(exact.used(), len as u64 * 2);
+        let clone = output.clone();
+        drop(output);
+        assert_eq!(exact.used(), len as u64 * 2);
+        drop(clone);
+        assert_eq!(exact.used(), 0);
+        let tight = rrrah_core::MemoryBudget::new(len as u64 * 3 - 1);
+        assert!(matches!(
+            read_bay_sensor_with_budget(&request, layout, &tight),
+            Err(BayReadError::Sensor(BaySensorError::Memory(_)))
+        ));
+        assert_eq!(tight.peak(), len as u64);
+        assert_eq!(tight.used(), 0);
+        request.image_index = 1;
+        let fresh = rrrah_core::MemoryBudget::new(len as u64 * 3);
+        assert!(matches!(
+            read_bay_sensor_with_budget(&request, layout, &fresh),
+            Err(BayReadError::Source(crate::DecodeError::UnsupportedImageIndex {
+                index: 1
+            }))
+        ));
+        assert_eq!(fresh.peak(), 0);
+        request.image_index = 0;
+        request.cancellation = Some(crate::GenerationToken::new(
+            std::sync::Arc::new(std::sync::atomic::AtomicU64::new(1)),
+            0,
+        ));
+        assert!(matches!(
+            read_bay_sensor_with_budget(&request, layout, &fresh),
+            Err(BayReadError::Source(crate::DecodeError::Cancelled))
+        ));
+        assert_eq!(fresh.peak(), 0);
+        request.cancellation = None;
+        std::fs::write(path, [0u8]).unwrap();
+        assert!(matches!(
+            read_bay_sensor_with_budget(&request, layout, &fresh),
+            Err(BayReadError::Sensor(BaySensorError::Length))
+        ));
+        assert_eq!(fresh.used(), 0);
+    }
     #[test]
     fn all_ten_bit_values_storage_columns_padding_and_managed_ownership() {
         let layout = BaySensorLayout::Qv5700;
