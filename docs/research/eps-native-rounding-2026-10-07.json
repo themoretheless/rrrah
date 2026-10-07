@@ -1,0 +1,27 @@
+{
+  "scope": "Native PostScript ceiling, floor, round and truncate in EPS VM",
+  "operators": [
+    "ceiling",
+    "floor",
+    "round",
+    "truncate"
+  ],
+  "specification": "https://www.adobe.com/jp/print/postscript/pdfs/PLRM.pdf",
+  "semantics": [
+    "Preserve integer/real operand type",
+    "round ties toward positive infinity",
+    "f64 intermediate protects adjacent f32 values from accidental ties",
+    "Managed execution cleanup on stackunderflow and typecheck"
+  ],
+  "validation": {
+    "native_regression_tests": 2,
+    "ghostscript_typed_cases": 28,
+    "decoder_tests_passed": 931,
+    "decoder_tests_ignored": 60
+  },
+  "reference_fixture": "tests/fixtures/eps/vm-ghostscript-reference.json",
+  "limitations": [
+    "Full EPS operator coverage and independent pixel qualification remain incomplete",
+    "This change does not qualify all 100 formats or all hardware backends"
+  ]
+}

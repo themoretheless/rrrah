@@ -6,7 +6,7 @@
   "image": "alpine:3.22.1",
   "image_id": "sha256:4bcff63911fcb4448bd4fdacec207030997caf25e9bea4045fa6c8c44de311d1",
   "numeric_model": "Ghostscript default 64-bit integers; these cases do not require integer-overflow promotion",
-  "source_sha256": "cf0f45374c0225eae6f25065af87fd364f90ac6f0e9da9a5af6c24ca001cdf7d",
+  "source_sha256": "7341aa457b85b12a53e629409348d6010e13671772c9494c5e5f18613ff502d0",
   "cases": [
     {
       "code": "/average {add 2 div} def 40 60 average",
@@ -341,6 +341,219 @@
         {
           "type": "boolean",
           "value": true
+        }
+      ]
+    },
+    {
+      "code": "99 ceiling -99 floor 99 round -99 truncate",
+      "values": [
+        {
+          "type": "integer",
+          "value": 99
+        },
+        {
+          "type": "integer",
+          "value": -99
+        },
+        {
+          "type": "integer",
+          "value": 99
+        },
+        {
+          "type": "integer",
+          "value": -99
+        }
+      ]
+    },
+    {
+      "code": "3.2 ceiling -4.8 ceiling 3.2 floor -4.8 floor 6.5 round -6.5 round 3.9 truncate -3.9 truncate",
+      "values": [
+        {
+          "type": "real",
+          "value": 4.0
+        },
+        {
+          "type": "real",
+          "value": -4.0
+        },
+        {
+          "type": "real",
+          "value": 3.0
+        },
+        {
+          "type": "real",
+          "value": -5.0
+        },
+        {
+          "type": "real",
+          "value": 7.0
+        },
+        {
+          "type": "real",
+          "value": -6.0
+        },
+        {
+          "type": "real",
+          "value": 3.0
+        },
+        {
+          "type": "real",
+          "value": -3.0
+        }
+      ]
+    },
+    {
+      "code": "0.49999997 round -0.50000006 round 8388609.0 round",
+      "values": [
+        {
+          "type": "real",
+          "value": 0.0
+        },
+        {
+          "type": "real",
+          "value": -1.0
+        },
+        {
+          "type": "real",
+          "value": 8388609.0
+        }
+      ]
+    },
+    {
+      "code": "2147483647 floor -2147483648 ceiling 1.0 round -1.0 truncate",
+      "values": [
+        {
+          "type": "integer",
+          "value": 2147483647
+        },
+        {
+          "type": "integer",
+          "value": -2147483648
+        },
+        {
+          "type": "real",
+          "value": 1.0
+        },
+        {
+          "type": "real",
+          "value": -1.0
+        }
+      ]
+    },
+    {
+      "code": "5 2 idiv -5 2 idiv 5 -2 idiv -5 -2 idiv",
+      "values": [
+        {
+          "type": "integer",
+          "value": 2
+        },
+        {
+          "type": "integer",
+          "value": -2
+        },
+        {
+          "type": "integer",
+          "value": -2
+        },
+        {
+          "type": "integer",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "code": "5 3 mod -5 3 mod 5 -3 mod -5 -3 mod -2147483648 -1 mod",
+      "values": [
+        {
+          "type": "integer",
+          "value": 2
+        },
+        {
+          "type": "integer",
+          "value": -2
+        },
+        {
+          "type": "integer",
+          "value": 2
+        },
+        {
+          "type": "integer",
+          "value": -2
+        },
+        {
+          "type": "integer",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "code": "0 sqrt 9 sqrt 16.0 sqrt",
+      "values": [
+        {
+          "type": "real",
+          "value": 0.0
+        },
+        {
+          "type": "real",
+          "value": 3.0
+        },
+        {
+          "type": "real",
+          "value": 4.0
+        }
+      ]
+    },
+    {
+      "code": "0 sin 90 sin 180 sin 270 sin -90 sin 360090 sin",
+      "values": [
+        {
+          "type": "real",
+          "value": 0.0
+        },
+        {
+          "type": "real",
+          "value": 1.0
+        },
+        {
+          "type": "real",
+          "value": 0.0
+        },
+        {
+          "type": "real",
+          "value": -1.0
+        },
+        {
+          "type": "real",
+          "value": -1.0
+        },
+        {
+          "type": "real",
+          "value": 1.0
+        }
+      ]
+    },
+    {
+      "code": "0 cos 90 cos 180 cos 270 cos 360090 cos",
+      "values": [
+        {
+          "type": "real",
+          "value": 1.0
+        },
+        {
+          "type": "real",
+          "value": 0.0
+        },
+        {
+          "type": "real",
+          "value": -1.0
+        },
+        {
+          "type": "real",
+          "value": 0.0
+        },
+        {
+          "type": "real",
+          "value": 0.0
         }
       ]
     }

@@ -1,0 +1,16 @@
+{
+  "scope": "Reproducible X3F oracle artifact retention for repeat GPU qualification",
+  "change": "Optional --artifacts-dir creates a fresh persistent workspace and records oracle path plus hash; default temporary cleanup remains unchanged",
+  "verified": [
+    "CLI help parses",
+    "Python source parses",
+    "Default workspace is removed",
+    "Explicit workspace survives context exit",
+    "Existing directory is refused without overwrite"
+  ],
+  "current_full_frame_revalidation": "Not executed: pinned SD10/SD14 sources and isolated LibRaw build from previous temporary run no longer exist",
+  "limitations": [
+    "Retention workflow verified independently; full qualification still requires pinned source and test-only oracle build",
+    "No new X3F pixel or HDR proof in this turn"
+  ]
+}

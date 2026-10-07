@@ -1,0 +1,29 @@
+{
+  "scope": "Content-based EPS routing across misleading file extensions",
+  "implementation": [
+    "Shared EPS candidate signature helper",
+    "ASCII candidates require EPSF marker on first line; plain PostScript remains unsupported",
+    "DOS EPS candidates use binary signature with subsequent full section validation",
+    "Stack-only 256-byte probe before managed source admission",
+    "Raster signature wins over misleading RAW suffix"
+  ],
+  "validation": {
+    "decoder_tests_passed": 936,
+    "decoder_tests_ignored": 60,
+    "verified_suffixes": [
+      "eps",
+      "png",
+      "nef",
+      "unknown"
+    ],
+    "exact_red_rgba_pixels": true,
+    "selected_index_refused": true,
+    "root_budget_released": true,
+    "plain_postscript_ai_regression_preserved": true
+  },
+  "limitations": [
+    "Candidate probe is limited to first 256 bytes",
+    "No timing claim: additional file open/read cost has not been benchmarked",
+    "Full EPS support and independent pixel gates remain incomplete"
+  ]
+}

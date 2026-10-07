@@ -1,0 +1,27 @@
+{
+  "scope": "Independent f32-bit EPS degree trigonometry qualification",
+  "reference": {
+    "version": "10.05.1",
+    "binary_sha256": "e522a84dc98345933621efba59577afe76d8f2d241ae103a92e6ccd37812b290",
+    "source_sha256": "b89ca68279b387bfbe9565ee6b9641374cd827a2aeeca68289b751f90cfe021f",
+    "encoding": "writeobject IEEE little-endian real; exact f32 bits",
+    "license": "CC0-1.0"
+  },
+  "validation": {
+    "cases": 2894,
+    "maximum_ulp_distance": 0,
+    "test_gate_ulp": 0,
+    "decoder_passed": 942,
+    "decoder_ignored": 60
+  },
+  "coverage": [
+    "sin and cos from -360 to +360 degrees in 0.5-degree steps",
+    "Positive/negative tiny angles",
+    "Positive/negative multiple revolutions"
+  ],
+  "limitations": [
+    "Finite pinned corpus; not exhaustive all-f32 transcendental proof",
+    "Other EPS operators and pixel fidelity remain incomplete",
+    "Full 100-format/cache/backend/HDR goal is not complete"
+  ]
+}

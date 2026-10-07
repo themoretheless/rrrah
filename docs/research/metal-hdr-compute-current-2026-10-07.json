@@ -1,40 +1,47 @@
 {
-  "scope": "Current actual Metal numeric readback; not NVIDIA/CUDA or physical HDR display qualification",
-  "adapter": "Apple M4 Max",
-  "backend": "Metal",
-  "regular_tests": {
-    "compute_readback": 3,
-    "raster_readback": 7,
-    "raw_linear_readback": 2,
-    "rgbe_compute_readback": 3,
-    "failed": 0,
-    "ignored": 4
+  "scope": "Current Metal HDR float rendering, RAW and RGBE compute qualification",
+  "adapter": {
+    "name": "Apple M4 Max",
+    "backend": "Metal"
   },
-  "full_sensor_managed_exposure": {
-    "result": "passed",
-    "extent": [
-      6188,
-      4120
-    ],
-    "pixels": 25494560,
-    "all_pixels_exact": true,
-    "interleaved_end_to_end_ms": 184.817,
-    "managed_end_to_end_ms": 146.304,
-    "gpu_peak_bytes": 1223738992,
-    "cpu_peak_bytes": 815825920,
-    "final_used_bytes": 0,
-    "timing_scope": "single diagnostic run, no comparative performance claim"
+  "validation": {
+    "raster_readback": {
+      "passed": 7,
+      "ignored": 2
+    },
+    "raw_linear_readback": {
+      "passed": 2,
+      "ignored": 0
+    },
+    "rgbe_compute_readback": {
+      "passed": 3,
+      "ignored": 1
+    },
+    "explicit_pixel_aspect": {
+      "passed": 1
+    },
+    "total_passed": 13
   },
-  "coverage": [
-    "negative and above-one float render targets",
-    "compute HDR exposure with alpha preservation and dispatch tail",
-    "readback cancellation and retry",
-    "managed CPU/GPU resource ownership",
-    "RGBE four-plane compute versus CPU reference"
+  "evidence": [
+    "Raster Rgba16Float exact binary16 readback [8,4,-1,1] after exposure",
+    "RAW scene-linear readback to both Rgba16Float and Rgba32Float, includes signed RGBE and SDR/linear mode transitions",
+    "Four-plane compute covers edges, odd dimensions, CFA layouts, HDR and tail guard",
+    "Managed GPU admission, cancellation and ownership completion",
+    "Pixel-aspect rejection remains atomic and next upload resets geometry"
   ],
-  "remaining": [
-    "Actual NVIDIA CUDA execution",
-    "Physical HDR display output",
-    "Universal format pipeline qualification"
+  "source_sha256": {
+    "crates/rrrah-gpu/tests/raster_readback.rs": "721ffa85a79fc35e70724cc1adda8679534fad38d92f22166299b3b0c00e0f46",
+    "crates/rrrah-gpu/tests/raw_linear_readback.rs": "2b3d71211643f56656d005a141abb5cd3a55ca4ea8b1ff3781aa3be4ee242791",
+    "crates/rrrah-gpu/tests/rgbe_compute_readback.rs": "56428ead8b959cdfbee9e3e3ce3e5a539bd75a00867fac9f347811605fd65071"
+  },
+  "limitations": [
+    "Offscreen float targets do not prove physical HDR window, display calibration or luminance",
+    "X3F full-frame oracle test remains ignored",
+    "F828 full-sensor compute oracle remains ignored",
+    "CUDA/NVIDIA hardware not exercised"
+  ],
+  "logs": [
+    "/tmp/rrrah-metal-hdr-compute.log",
+    "/tmp/rrrah-metal-pixel-aspect.log"
   ]
 }

@@ -5,7 +5,38 @@ Uses an ephemeral official Alpine container; no runtime dependency is introduced
 import hashlib
 import json
 import subprocess
+import struct
+import sys
 from pathlib import Path
+
+def generate_binary_trigonometry():
+    angles = [i * 0.5 for i in range(-720, 721)] + [1e-30, -1e-30, 1e-6, -1e-6, 360090, -360090]
+    codes = [f'{angle:.9g} {op}' for angle in angles for op in ['sin', 'cos']]
+    source = ('2 setobjectformat (%stdout) (w) file /out exch def\n' +
+              '\n'.join(f'out {code} 0 writeobject' for code in codes) +
+              '\nout flushfile quit\n').encode()
+    result = subprocess.run(['docker','run','--rm','-i','alpine:3.22.1','sh','-c',
+        'apk add --no-cache ghostscript >/tmp/install.log && gs --version >&2 && sha256sum /usr/bin/gs >&2 && gs -q -dNODISPLAY -dBATCH -dNOPAUSE -'],
+        input=source,stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=120,check=True)
+    assert len(result.stdout) == len(codes) * 12
+    cases = []
+    for i,code in enumerate(codes):
+        record = result.stdout[i*12:(i+1)*12]
+        # PLRM 3.14.2: IEEE little-endian header, one real, zero tag/length.
+        assert record[:8] == bytes.fromhex('81010c0002000000'), record.hex()
+        cases.append({'code':code,'real_bits':struct.unpack('<I',record[8:])[0]})
+    rows=result.stderr.decode().splitlines()
+    version=next(r for r in rows if r.count('.')==2 and r.replace('.','').isdigit())
+    binary_sha=next(r.split()[0] for r in rows if r.endswith('/usr/bin/gs'))
+    Path('tests/fixtures/eps/trig-binary-ghostscript-reference.json').write_text(json.dumps({
+        'license':'CC0-1.0','ghostscript_version':version,'binary_sha256':binary_sha,
+        'source_sha256':hashlib.sha256(source).hexdigest(),'encoding':'writeobject IEEE little-endian real; exact f32 bits',
+        'cases':cases},indent=2)+'\n')
+    print(f'Generated {len(cases)} exact binary trigonometry reference values.')
+
+if '--trig-binary' in sys.argv:
+    generate_binary_trigonometry()
+    raise SystemExit(0)
 
 image = 'alpine:3.22.1'
 codes = [
@@ -33,6 +64,18 @@ codes = [
     '1 2 clear count',
     '{1} {1} eq {add} {add} eq {1} dup eq {} {} eq',
     '16777217 16777216 eq 16777217 16777216.0 eq 2147483647 2147483648.0 lt 2147483647 2147483648.0 le',
+    '99 ceiling -99 floor 99 round -99 truncate',
+    '3.2 ceiling -4.8 ceiling 3.2 floor -4.8 floor 6.5 round -6.5 round 3.9 truncate -3.9 truncate',
+    '0.49999997 round -0.50000006 round 8388609.0 round',
+    '2147483647 floor -2147483648 ceiling 1.0 round -1.0 truncate',
+
+    '5 2 idiv -5 2 idiv 5 -2 idiv -5 -2 idiv',
+    '5 3 mod -5 3 mod 5 -3 mod -5 -3 mod -2147483648 -1 mod',
+    '0 sqrt 9 sqrt 16.0 sqrt',
+
+    '0 sin 90 sin 180 sin 270 sin -90 sin 360090 sin',
+    '0 cos 90 cos 180 cos 270 cos 360090 cos',
+
 ]
 lines=['/rrrahOracleDump {count {dup type == ==} repeat} bind def']
 for i,code in enumerate(codes):

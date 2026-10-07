@@ -1,0 +1,50 @@
+{
+  "scope": "Actual app EPS prefetch with independent cache byte/count caps and planner window matrix",
+  "validation": {
+    "eps_app_tests_passed": 2,
+    "window_matrix_tests_passed": 1,
+    "window_matrix_configurations": 6528,
+    "byte_only_limit": {
+      "max_bytes": 512,
+      "max_entries": null
+    },
+    "count_only_limit": {
+      "max_bytes": 4096,
+      "max_entries": 2
+    },
+    "both_policies_observed": {
+      "resident_bytes": 512,
+      "resident_frames": 2,
+      "visible_pin_preserved": true,
+      "warmed_pixels_reused_by_pointer": true,
+      "stale_generation_cancelled": true,
+      "root_after_owner_drop": 0
+    }
+  },
+  "planner_coverage": {
+    "gallery_lengths": "0..15",
+    "selected": "0..=gallery_length",
+    "behind": [
+      0,
+      1,
+      3,
+      "usize::MAX"
+    ],
+    "ahead": [
+      0,
+      2,
+      5,
+      "usize::MAX"
+    ],
+    "directions": [
+      "none",
+      "forward",
+      "backward"
+    ]
+  },
+  "limitations": [
+    "Only authored EPS actual decode lifecycle covered by new independent-policy test",
+    "Planner matrix alone is not all-format prefetch qualification",
+    "TTL/swap evidence is in separate lifecycle tests"
+  ]
+}

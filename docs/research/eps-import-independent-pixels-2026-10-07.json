@@ -1,0 +1,24 @@
+{
+  "scope": "Independent complete-document pixel qualification for EPS rectangle/showpage import",
+  "reference": {
+    "version": "10.05.1",
+    "binary_sha256": "e522a84dc98345933621efba59577afe76d8f2d241ae103a92e6ccd37812b290",
+    "source_sha256": "ea076214e29b61a8b73bdb712f534d231fd5986fbfec6f141f13b208a521d168",
+    "mode": "Importer suppresses showpage, original operator retained only by oracle harness to emit final pages",
+    "fixture_license": "CC0-1.0"
+  },
+  "validation": {
+    "cases": 2,
+    "pixels_compared": 128,
+    "rgba_channels_compared": 512,
+    "tolerance": 0,
+    "managed_root_after_drop": 0,
+    "decoder_tests_passed": 939,
+    "decoder_tests_ignored": 60
+  },
+  "limitations": [
+    "Authored binary RGB axis-aligned fills only",
+    "Independent gray quantization and diagonal stroke gates remain unresolved",
+    "Not full EPS or 100-format qualification"
+  ]
+}

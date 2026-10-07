@@ -18,6 +18,20 @@ pub struct EpsSource<'a> {
     pub tiff_preview: Option<&'a [u8]>,
 }
 
+/// Candidate framing only; full syntax and DOS section ranges are validated
+/// by `inspect_eps_source` before execution.
+pub(crate) fn has_magic(bytes: &[u8]) -> bool {
+    bytes.starts_with(&[0xc5, 0xd0, 0xd3, 0xc6])
+        || (bytes.starts_with(b"%!PS-Adobe-")
+            && bytes
+                .split(|b| matches!(b, b'\r' | b'\n'))
+                .next()
+                .is_some_and(|line| {
+                    line.split(|b| b.is_ascii_whitespace())
+                        .any(|word| word.starts_with(b"EPSF-"))
+                }))
+}
+
 /// Locate the original PostScript without interpreting it or substituting a
 /// preview. DOS EPS section offsets are unsigned little-endian absolute offsets.
 /// Source memory belongs to the caller. No allocations or renderer are involved.

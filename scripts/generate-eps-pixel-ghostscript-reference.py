@@ -29,10 +29,20 @@ if stroke:
         ("round", "2 setlinewidth 1 setlinejoin 2 2 moveto 5 2 lineto 5 6 lineto stroke"),
         ("limited_miter", "2 setlinewidth 0 setlinejoin 1 setmiterlimit 2 2 moveto 5 2 lineto 5 6 lineto stroke"),
     ]
+eps_import = "--eps-import" in sys.argv
+if eps_import:
+    if stroke:
+        raise SystemExit("--eps-import and --stroke are mutually exclusive")
+    cases = [
+        ("terminal_showpage_rectangle", "1 0 0 setrgbcolor 1 1 6 6 rectfill showpage"),
+        ("computed_negative_rectangle_showpage_alias", "1 0 0 setrgbcolor 49 sqrt 7 -6 -6 rectfill showpage /flush /showpage load def flush 0 0 1 setrgbcolor 7 2 idiv 3 2 2 rectfill flush"),
+    ]
 background = "1 setgray 0 0 moveto 8 0 lineto 8 8 lineto 0 8 lineto closepath fill 0 setgray "
 unadjusted = stroke and "--no-stroke-adjust" in sys.argv
 prefix = "false setstrokeadjust " if unadjusted else ""
-source = "\n".join(background + prefix + program + " showpage" for _, program in cases).encode()
+source = "\n".join(background + prefix + program + (" rrrahEmit" if eps_import else " showpage") for _, program in cases).encode()
+if eps_import:
+    source = b"/rrrahEmit /showpage load def /showpage {} def\n" + source
 result = subprocess.run([
     "docker", "run", "--rm", "-i", "alpine:3.22.1", "sh", "-c",
     "apk add --no-cache ghostscript >/tmp/install.log && gs --version >&2 && sha256sum /usr/bin/gs >&2 && gs -q -dBATCH -dNOPAUSE -sDEVICE=ppmraw -dGraphicsAlphaBits=1 -r72 -g8x8 -sOutputFile=%stdout -"
@@ -63,6 +73,8 @@ metadata = result.stderr.decode().splitlines()
 version = next(row for row in metadata if row.count(".") == 2 and row.replace(".", "").isdigit())
 binary_sha = next(row.split()[0] for row in metadata if row.endswith("/usr/bin/gs"))
 destination = "tests/fixtures/eps/stroke-pixel-ghostscript-reference.json" if stroke else "tests/fixtures/eps/pixel-ghostscript-reference.json"
+if eps_import:
+    destination = "tests/fixtures/eps/import-pixel-ghostscript-reference.json"
 if unadjusted:
     destination = "tests/fixtures/eps/stroke-unadjusted-pixel-ghostscript-reference.json"
 Path(destination).write_text(json.dumps({

@@ -1,0 +1,18 @@
+{
+  "scope": "Direct pixel I/O canonical encoding and incomplete-read ownership regression",
+  "validation": {
+    "cache_unit_passed": 122,
+    "cache_stress_passed": 5,
+    "boundary_lengths": "1, block-1, block, block+1, 2*block+1",
+    "canonical_bytes": "Exact independently assembled u16 little-endian bytes",
+    "bounded_write_read_calls": true,
+    "managed_full_payload_roundtrip": true,
+    "truncation_cases": 15,
+    "managed_budget_after_truncation": 0,
+    "unbudgeted_truncation_rejected": true
+  },
+  "limitations": [
+    "Executed on little-endian M4 Max; big-endian branch not executed",
+    "Codec resource evidence does not prove every format lifecycle or hardware backend"
+  ]
+}

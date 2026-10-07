@@ -3,10 +3,124 @@ mod common;
 use rrrah_core::{DecodedRaster, MemoryBudget, RasterColorSpace, RasterPixels};
 use rrrah_decode::*;
 
+#[test]
+#[ignore = "requires actual GPU adapter; run explicitly with RRRAH_GPU_BACKEND=metal"]
+fn independent_eps_import_pixels_survive_swap_and_metal() {
+    let gpu = common::qualification_gpu().expect("required GPU adapter");
+    eprintln!("Independent EPS import adapter: {}", gpu.adapter_name());
+    let reference: serde_json::Value = serde_json::from_str(include_str!(
+        "../../../tests/fixtures/eps/import-pixel-ghostscript-reference.json"
+    ))
+    .unwrap();
+    let cases = reference["cases"].as_array().unwrap();
+    assert_eq!(cases.len(), 2);
+    for case in cases {
+        let directory = tempfile::tempdir().unwrap();
+        let path = directory.path().join("import.eps");
+        let source = format!(
+            "%!PS-Adobe-3.0 EPSF-3.0\n%%BoundingBox: 0 0 8 8\n%%EndComments\n{}\n%%EOF\n",
+            case["source"].as_str().unwrap()
+        );
+        std::fs::write(&path, source).unwrap();
+        let root = MemoryBudget::new(32 * 1024 * 1024);
+        let mut request = DecodeRequest::new(&path);
+        request.memory_budget = Some(root.clone());
+        let decode = || {
+            let DecodedImage::Raster(frame) = decode_image(&request).unwrap() else {
+                panic!()
+            };
+            frame
+        };
+        let swap = rrrah_cache::RasterSwapCache::<u8>::new_with_budgets(
+            directory.path(),
+            rrrah_cache::ImageSwapConfig {
+                limits: rrrah_cache::CacheLimits {
+                    max_bytes: 4096,
+                    max_entries: Some(2),
+                    ttl: None,
+                },
+                queue_bytes: 512,
+                queue_count: 2,
+                restore_bytes: 256,
+            },
+            MemoryBudget::new(512),
+            root.clone(),
+        )
+        .unwrap();
+        let mut ram = rrrah_cache::RasterRamCache::new(rrrah_cache::CacheLimits {
+            max_bytes: 256,
+            max_entries: Some(1),
+            ttl: None,
+        });
+        ram.enable_swap(swap);
+        assert!(ram.insert(1, decode()));
+        assert!(ram.insert(2, decode()));
+        ram.swap().unwrap().wait_idle().unwrap();
+        assert!(ram.get_lease(&1).is_none());
+        let restored = ram.get_background_with_cancel(&1, || false).unwrap();
+        ram.swap().unwrap().wait_idle().unwrap();
+        assert!(ram.swap().unwrap().stats().reads >= 1);
+        drop(ram);
+        let rgb = case["rgb"].as_array().unwrap();
+        let expected: Vec<u8> = rgb
+            .chunks_exact(3)
+            .flat_map(|p| {
+                [
+                    p[0].as_u64().unwrap() as u8,
+                    p[1].as_u64().unwrap() as u8,
+                    p[2].as_u64().unwrap() as u8,
+                    255,
+                ]
+            })
+            .collect();
+        let RasterPixels::Rgba8(native) = restored.pixels() else {
+            panic!()
+        };
+        assert_eq!(&native[..], &expected[..], "{}", case["name"]);
+        let prepared = prepare_raster_for_display_with_budget(&restored, Some(&root)).unwrap();
+        let golden = DecodedRaster::new(
+            8,
+            8,
+            RasterPixels::Rgba8(std::sync::Arc::new(expected).into()),
+            RasterColorSpace::Srgb,
+        )
+        .unwrap()
+        .to_linear_srgb()
+        .unwrap();
+        let view = rrrah_gpu::ViewParameters {
+            viewport: [32.; 2],
+            zoom: 4.,
+            ..Default::default()
+        };
+        assert_eq!(
+            gpu.render_raster(&prepared, view, [32, 32]).pixels,
+            gpu.render_raster(&golden, view, [32, 32]).pixels,
+            "{}",
+            case["name"]
+        );
+        drop(prepared);
+        drop(restored);
+        assert_eq!(root.used(), 0);
+    }
+}
+
 fn exercise_lifecycle() -> (DecodedRaster, MemoryBudget) {
+    exercise_lifecycle_with_source(false)
+}
+
+fn exercise_lifecycle_with_source(computed: bool) -> (DecodedRaster, MemoryBudget) {
     let directory = tempfile::tempdir().unwrap();
     let path = directory.path().join("native.eps");
-    std::fs::write(&path,b"%!PS-Adobe-3.0 EPSF-3.0\n%%BoundingBox: 0 0 4 4\n%%EndComments\n1 0 0 setrgbcolor 0 0 moveto 4 0 lineto 4 4 lineto 0 4 lineto closepath fill 0 0 1 setrgbcolor 2 setlinewidth 0 2 moveto 4 2 lineto stroke\n").unwrap();
+    let body = if computed {
+        "1 0 0 setrgbcolor 4 4 -4 -4 rectfill 0 0 1 setrgbcolor 2 setlinewidth 0 5 2 idiv moveto 16 sqrt 2 lineto stroke"
+    } else {
+        "1 0 0 setrgbcolor 0 0 moveto 4 0 lineto 4 4 lineto 0 4 lineto closepath fill 0 0 1 setrgbcolor 2 setlinewidth 0 2 moveto 4 2 lineto stroke"
+    };
+    std::fs::write(
+        &path,
+        format!("%!PS-Adobe-3.0 EPSF-3.0\n%%BoundingBox: 0 0 4 4\n%%EndComments\n{body}\n"),
+    )
+    .unwrap();
     let root = MemoryBudget::new(32 * 1024 * 1024);
     let decode = || {
         assert!(is_supported_image_path(&path));
@@ -75,6 +189,12 @@ fn exercise_lifecycle() -> (DecodedRaster, MemoryBudget) {
 #[test]
 fn eps_file_ram_count_eviction_swap_pressure_cancel_and_restore() {
     let (raster, root) = exercise_lifecycle();
+    drop(raster);
+    assert_eq!(root.used(), 0);
+}
+#[test]
+fn eps_computed_rectangles_survive_ram_swap_pressure_and_restore() {
+    let (raster, root) = exercise_lifecycle_with_source(true);
     drop(raster);
     assert_eq!(root.used(), 0);
 }
@@ -149,35 +269,37 @@ fn eps_expired_visible_frame_spills_after_unpin_and_restores_exactly() {
 fn eps_restored_raster_matches_analytic_reference_on_metal() {
     let gpu = common::qualification_gpu().expect("required GPU adapter");
     eprintln!("EPS lifecycle adapter: {}", gpu.adapter_name());
-    let (raster, root) = exercise_lifecycle();
-    let prepared = prepare_raster_for_display_with_budget(&raster, Some(&root)).unwrap();
-    let mut pixels = Vec::new();
-    for at in 0..16 {
-        pixels.extend(if (1..=2).contains(&(at / 4)) {
-            [0, 0, 255, 255]
-        } else {
-            [255, 0, 0, 255]
-        });
+    for computed in [false, true] {
+        let (raster, root) = exercise_lifecycle_with_source(computed);
+        let prepared = prepare_raster_for_display_with_budget(&raster, Some(&root)).unwrap();
+        let mut pixels = Vec::new();
+        for at in 0..16 {
+            pixels.extend(if (1..=2).contains(&(at / 4)) {
+                [0, 0, 255, 255]
+            } else {
+                [255, 0, 0, 255]
+            });
+        }
+        let golden = DecodedRaster::new(
+            4,
+            4,
+            RasterPixels::Rgba8(std::sync::Arc::new(pixels).into()),
+            RasterColorSpace::Srgb,
+        )
+        .unwrap()
+        .to_linear_srgb()
+        .unwrap();
+        let view = rrrah_gpu::ViewParameters {
+            viewport: [32.; 2],
+            zoom: 4.,
+            ..rrrah_gpu::ViewParameters::default()
+        };
+        assert_eq!(
+            gpu.render_raster(&prepared, view, [32, 32]).pixels,
+            gpu.render_raster(&golden, view, [32, 32]).pixels
+        );
+        drop(prepared);
+        drop(raster);
+        assert_eq!(root.used(), 0);
     }
-    let golden = DecodedRaster::new(
-        4,
-        4,
-        RasterPixels::Rgba8(std::sync::Arc::new(pixels).into()),
-        RasterColorSpace::Srgb,
-    )
-    .unwrap()
-    .to_linear_srgb()
-    .unwrap();
-    let view = rrrah_gpu::ViewParameters {
-        viewport: [32.; 2],
-        zoom: 4.,
-        ..rrrah_gpu::ViewParameters::default()
-    };
-    assert_eq!(
-        gpu.render_raster(&prepared, view, [32, 32]).pixels,
-        gpu.render_raster(&golden, view, [32, 32]).pixels
-    );
-    drop(prepared);
-    drop(raster);
-    assert_eq!(root.used(), 0);
 }

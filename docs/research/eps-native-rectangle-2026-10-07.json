@@ -1,0 +1,23 @@
+{
+  "scope": "Numeric rectfill and rectstroke forms in native EPS graphics VM",
+  "specification": "https://www.adobe.com/jp/print/postscript/pdfs/PLRM.pdf",
+  "implementation": [
+    "Persistent arena nodes and paint storage remain root-budgeted",
+    "Current path, CTM and style restored after rectangle construction including failure",
+    "No additional gsave slots required",
+    "Negative width/height and degenerate rectangles use explicit closed-path semantics"
+  ],
+  "validation": {
+    "decoder_passed": 935,
+    "decoder_ignored": 60,
+    "new_tests": 2,
+    "pixel_equivalence_cases": 4,
+    "path_style_restoration": true,
+    "managed_output_release": true
+  },
+  "limitations": [
+    "Array, encoded-string and explicit-matrix forms remain unsupported",
+    "Canonical EPS graphics CTM excludes output viewport: transform operators require device-space integration before implementation",
+    "Independent stroke pixel gates and full EPS qualification remain incomplete"
+  ]
+}

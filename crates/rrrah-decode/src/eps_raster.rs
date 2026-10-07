@@ -166,6 +166,13 @@ fn rasterize<F: FnMut() -> bool>(
             if at % 4096 == 0 && cancelled() {
                 return Err(EpsRasterError::Cancelled);
             }
+            if alpha == 0 {
+                continue;
+            }
+            if alpha == 255 {
+                pixel.copy_from_slice(&[color[0] as u8, color[1] as u8, color[2] as u8, 255]);
+                continue;
+            }
             let alpha = u32::from(alpha);
             let inverse = 255 - alpha;
             for channel in 0..3 {
@@ -182,7 +189,7 @@ fn rasterize<F: FnMut() -> bool>(
         let alpha = u32::from(pixel[3]);
         if alpha == 0 {
             pixel[..3].fill(0);
-        } else {
+        } else if alpha != 255 {
             for channel in &mut pixel[..3] {
                 *channel = ((u32::from(*channel) * 255 + alpha / 2) / alpha).min(255) as u8;
             }

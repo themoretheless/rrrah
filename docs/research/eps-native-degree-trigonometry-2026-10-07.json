@@ -1,0 +1,22 @@
+{
+  "scope": "Native EPS sin/cos numeric coordinate operators",
+  "specification": "https://www.adobe.com/jp/print/postscript/pdfs/PLRM.pdf",
+  "semantics": [
+    "Degree input, real result",
+    "Exact cardinal results",
+    "Finite-input reduction modulo 360 before radians conversion",
+    "No additional heap allocations"
+  ],
+  "validation": {
+    "decoder_passed": 940,
+    "decoder_ignored": 60,
+    "typed_ghostscript_cases": 33,
+    "ghostscript_version": "10.05.1",
+    "cardinal_positive_negative_multi_revolution_match": true,
+    "extreme_finite_angles_bounded": true
+  },
+  "limitations": [
+    "Independent exact cases cover cardinal angles; broad arbitrary-angle numerical accuracy not qualified",
+    "Full EPS and 100-format/backend/HDR requirements remain incomplete"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "scope": "EPS importer showpage compatibility, EPSF 3.0 section 3.2",
+  "specification": "https://printtechnologies.org/standards/files/epsf_spec_v3_0.pdf",
+  "implementation": [
+    "Vector EPS import default showpage resolves to empty procedure",
+    "User dictionary definitions retain precedence",
+    "Alias/load/exec use procedure semantics",
+    "Scalar-only VM retains undefined-name rejection; not a general PostScript page device"
+  ],
+  "validation": {
+    "decoder_passed": 938,
+    "decoder_ignored": 60,
+    "new_tests": 2,
+    "empty_procedure_identity": true,
+    "current_path_preserved": true,
+    "user_override": true,
+    "document_exact_pixel_match": true,
+    "root_released": true
+  },
+  "limitations": [
+    "Only EPS importer suppression is implemented, not general showpage page-device semantics",
+    "Full EPS and all 100 format qualification remain incomplete"
+  ]
+}

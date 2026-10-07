@@ -1,0 +1,30 @@
+{
+  "scope": "Updated native EPS operators, content routing and alpha fast paths through app RAM/swap/Metal",
+  "validation": {
+    "app_binary_passed": 160,
+    "app_binary_ignored": 24,
+    "eps_cpu_lifecycle_passed": 3,
+    "eps_cpu_lifecycle_ignored": 1,
+    "explicit_gpu_test_passed": 1,
+    "adapter": "Metal Apple M4 Max",
+    "gpu_sources": [
+      "literal paths",
+      "negative-size rectfill and idiv/sqrt coordinates"
+    ],
+    "offscreen_pixel_equality": "All 32x32 RGBA bytes equal analytic reference for both sources",
+    "memory_after_final_owner_drop": 0
+  },
+  "covered": [
+    "RAM count eviction to swap",
+    "Typed pressure refusal followed by restore",
+    "Cancelled restore",
+    "TTL expiry and visible pin/unpin",
+    "Foreground neighbour prefetch regression suite",
+    "Actual Metal rendering after swap restore"
+  ],
+  "limitations": [
+    "Selected authored EPS subset; not general EPS qualification",
+    "Offscreen SDR test does not prove physical HDR display",
+    "CUDA/NVIDIA hardware unverified"
+  ]
+}

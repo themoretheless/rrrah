@@ -1,0 +1,70 @@
+{
+  "scope": "Current target inventory and cache-policy revalidation",
+  "catalog_sha256": "827acef5306e8b97413de348ec158ae6a7cbf2ab966c646588682e715d3ec7ad",
+  "format_rows": 100,
+  "implemented_subsets": 91,
+  "fully_qualified_rows": 0,
+  "pending_normal_viewer_rows": [
+    {
+      "index": 55,
+      "format": "PTX",
+      "implementation": "Pending"
+    },
+    {
+      "index": 62,
+      "format": "MEF",
+      "implementation": "Pending: explicit native Mamiya ZD sensor import API"
+    },
+    {
+      "index": 68,
+      "format": "RWZ",
+      "implementation": "Pending"
+    },
+    {
+      "index": 69,
+      "format": "BAY",
+      "implementation": "Pending: native explicit-layout sensor unpack for Casio QV-2000UX, QV-3000EX and QV-5700"
+    },
+    {
+      "index": 70,
+      "format": "CAP",
+      "implementation": "Pending"
+    },
+    {
+      "index": 71,
+      "format": "EIP",
+      "implementation": "Pending: bounded inventory, managed RAW extraction and explicit sensor import APIs"
+    },
+    {
+      "index": 74,
+      "format": "AI",
+      "implementation": "Pending: `.ai` gallery candidate; PDF-compatible content uses the PDF renderer, including selected pages. PostScript AI remains unsupported."
+    },
+    {
+      "index": 77,
+      "format": "GPR",
+      "implementation": "Pending"
+    },
+    {
+      "index": 96,
+      "format": "RPF",
+      "implementation": "Pending"
+    }
+  ],
+  "cache_results": [
+    "test result: ok. 121 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.43s",
+    "test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s",
+    "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+  ],
+  "limitations": [
+    "Implemented subsets are not full-format qualification",
+    "126 cache tests do not prove every format lifecycle",
+    "Physical HDR and NVIDIA CUDA hardware remain unverified"
+  ],
+  "next_requirements": [
+    "Complete independent EPS pixel/operator qualification",
+    "Camera-produced missing RAW/container sources and color qualification",
+    "Remaining per-format gallery/cache/swap/prefetch lifecycle coverage",
+    "Physical HDR presentation and actual NVIDIA tests"
+  ]
+}

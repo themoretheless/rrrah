@@ -1,0 +1,34 @@
+{
+  "scope": "Existing synthetic 24MP mosaic route benchmark extended with real managed swap",
+  "environment": {
+    "cpu": "Apple M4 Max",
+    "profile": "dev; workspace crates opt-level=1",
+    "frames": 2,
+    "samples": 5,
+    "navigation_steps": 8
+  },
+  "results": [
+    "ram_route ops_per_sample=4 samples=5 p50_ns_op=937.50 p95_ns_op=5781.25 best_ns_op=854.25",
+    "disk_route ops_per_sample=2 samples=5 p50_ms_op=62.269 p95_ms_op=66.034 best_ms_op=59.768",
+    "navigation steps=8 frames=2 ram_p50_us_step=0.54 ram_p95_us_step=1.68 disk_only_p50_ms_step=66.164 disk_only_p95_ms_step=79.392 speedup_p50=122130x",
+    "eviction rounds=64 budget_frames=3 insert_p50_us=0.67 insert_p95_us=2.79 visible_lookup_p50_ns=250.00 visible_lookup_p95_ns=291.00 visible_survived=true",
+    "eviction samples_config=5 (single deterministic run)",
+    "swap_route samples=5 bytes=48000000 write_complete_p50_ms=152.834 restore_p50_ms=50.202 managed_peak_bytes=48000000 queue_peak_bytes=48000000 final_used=0 exact_samples=true"
+  ],
+  "swap_verified": [
+    "Complete 48,000,000-byte restored sensor buffer equals authored source",
+    "Write completion barrier before restore timing",
+    "Separate 48,000,000-byte queue and restore limits",
+    "Managed root and queue peak each 48,000,000 bytes",
+    "Both root and queue return to zero after operations"
+  ],
+  "reproduce": "RRRAH_MOSAIC_BENCH_FRAMES=2 RRRAH_MOSAIC_BENCH_SAMPLES=5 RRRAH_MOSAIC_BENCH_NAV_STEPS=8 cargo bench -p rrrah-cache --bench mosaic_routes --profile dev --locked --offline --target-dir /tmp/rrrah-required-corpus-target",
+  "source_sha256": "4578eb7ecbc957c376a53c29ebdd7b1b02a69b0dee433169063589423159c56f",
+  "limitations": [
+    "Synthetic mosaic, not RAW entropy decoding",
+    "Warm OS disk pages and small sample count",
+    "RAM lookup timings exclude pixel rendering and GPU upload",
+    "Swap write completion is not a claim about physical durable media",
+    "No general viewer latency or all-format speed claim"
+  ]
+}

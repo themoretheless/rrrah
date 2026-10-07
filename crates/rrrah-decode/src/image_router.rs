@@ -3,7 +3,6 @@
 use crate::{
     DecodeError, DecodeOutput, DecodeRequest, NativeRawDecoder, RasterDecodeError, RawDecoder,
     bounded_io::read_managed,
-    decode_raster,
     sniff::{SniffedFormat, read_header, sniff},
 };
 use rrrah_core::DecodedRaster;
@@ -56,6 +55,10 @@ pub fn is_supported_raw_path(path: &Path) -> bool {
 }
 
 pub fn image_source_kind(request: &DecodeRequest) -> Result<ImageSourceKind, RasterDecodeError> {
+    inspect_image_source(request).map(|(kind, _)| kind)
+}
+
+fn inspect_image_source(request: &DecodeRequest) -> Result<(ImageSourceKind, bool), RasterDecodeError> {
     request.check_cancelled()?;
     // Share one bounded header read between sensor and raster detection.
     let file = std::fs::File::open(&request.path).map_err(|source| DecodeError::Io {
@@ -68,6 +71,11 @@ pub fn image_source_kind(request: &DecodeRequest) -> Result<ImageSourceKind, Ras
     })?;
     let bytes = &header[..length];
     request.check_cancelled()?;
+    let eps_candidate = crate::eps::has_magic(bytes);
+    Ok((classify_image_source(request, bytes)?, eps_candidate))
+}
+
+fn classify_image_source(request: &DecodeRequest, bytes: &[u8]) -> Result<ImageSourceKind, RasterDecodeError> {
     if bytes.starts_with(b"FOVb") || crate::dicom::has_magic(bytes) {
         return Ok(ImageSourceKind::Raster);
     }
@@ -105,7 +113,8 @@ pub fn image_source_kind(request: &DecodeRequest) -> Result<ImageSourceKind, Ras
         }
         _ => {
             // An actual raster signature wins over a misleading RAW suffix.
-            let raster_magic = crate::xcf::has_magic(&bytes)
+            let raster_magic = crate::eps::has_magic(&bytes)
+                || crate::xcf::has_magic(&bytes)
                 || crate::pict::has_magic(&bytes)
                 || crate::dicom::has_magic(&bytes)
                 || crate::aseprite::has_magic(&bytes)
@@ -165,9 +174,10 @@ pub fn decode_image_file(path: impl AsRef<Path>) -> Result<DecodedImage, RasterD
 }
 
 pub fn decode_image(request: &DecodeRequest) -> Result<DecodedImage, RasterDecodeError> {
-    match image_source_kind(request)? {
+    let (kind, eps_candidate) = inspect_image_source(request)?;
+    match kind {
         ImageSourceKind::Sensor => Ok(DecodedImage::Sensor(Box::new(NativeRawDecoder.decode(request)?))),
-        ImageSourceKind::Raster => Ok(DecodedImage::Raster(decode_raster(request)?)),
+        ImageSourceKind::Raster => Ok(DecodedImage::Raster(crate::raster::decode_raster_inspected(request, eps_candidate)?)),
     }
 }
 

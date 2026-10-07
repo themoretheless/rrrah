@@ -443,6 +443,30 @@ impl EpsGraphics {
     }
     /// Records path and pen metadata without rasterizing or substituting previews.
     /// Stroke/fill consume the active path, while saved persistent branches remain.
+    /// Numeric rectangle form; preserves the caller's current path and state.
+    /// Temporary path nodes remain budgeted in the persistent scene arena.
+    pub fn paint_rectangle(
+        &mut self,
+        x: f64,
+        y: f64,
+        width: f64,
+        height: f64,
+        kind: EpsPaintKind,
+    ) -> Result<(), EpsGraphicsError> {
+        finite([x, y, width, height, x + width, y + height])?;
+        let saved = self.state;
+        let result = (|| {
+            self.new_path();
+            self.move_to(x, y)?;
+            self.line_to(x + width, y)?;
+            self.line_to(x + width, y + height)?;
+            self.line_to(x, y + height)?;
+            self.close_path()?;
+            self.paint(kind)
+        })();
+        self.state = saved;
+        result
+    }
     pub fn paint(&mut self, kind: EpsPaintKind) -> Result<(), EpsGraphicsError> {
         if self.state.length != 0 {
             if self.used_paints == self.paints.len() {

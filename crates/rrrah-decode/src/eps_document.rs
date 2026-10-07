@@ -248,6 +248,150 @@ mod tests {
         }
     }
     #[test]
+    fn computed_numeric_coordinates_match_literal_document_pixels() {
+        let computed = b"%!PS-Adobe-3.0 EPSF-3.0\n%%BoundingBox: -2 -3 2 1\n%%EndComments\n1 0 0 setrgbcolor -5 2 idiv -7 4 mod moveto 4 sqrt -3 lineto 2 1.2 floor lineto -2 0.6 round lineto closepath fill\n%%EOF\n";
+        let root = MemoryBudget::new(100_000);
+        let decode = |code| {
+            decode_eps_document(
+                code,
+                1.,
+                EpsRasterColorPolicy::DeviceGrayRgbAsSrgb,
+                limits(),
+                &root,
+                || false,
+            )
+            .unwrap()
+        };
+        let expected = decode(CODE);
+        let actual = decode(computed);
+        let (RasterPixels::Rgba8(expected_pixels), RasterPixels::Rgba8(actual_pixels)) =
+            (expected.pixels(), actual.pixels())
+        else {
+            panic!()
+        };
+        assert_eq!(&expected_pixels[..], &actual_pixels[..]);
+        drop(expected);
+        drop(actual);
+        assert_eq!(root.used(), 0);
+    }
+    #[test]
+    fn rectangle_operator_pixels_match_explicit_paths_without_save_slots() {
+        let root = MemoryBudget::new(100_000);
+        for (rect, path) in [
+            (
+                "-2 -3 4 4 rectfill",
+                "-2 -3 moveto 2 -3 lineto 2 1 lineto -2 1 lineto closepath fill",
+            ),
+            (
+                "2 1 -4 -4 rectfill",
+                "2 1 moveto -2 1 lineto -2 -3 lineto 2 -3 lineto closepath fill",
+            ),
+            (
+                "-1 -2 2 2 rectstroke",
+                "-1 -2 moveto 1 -2 lineto 1 0 lineto -1 0 lineto closepath stroke",
+            ),
+            (
+                "0 0 0 0 rectfill",
+                "0 0 moveto 0 0 lineto 0 0 lineto 0 0 lineto closepath fill",
+            ),
+        ] {
+            let decode = |body| {
+                let code = format!(
+                    "%!PS-Adobe-3.0 EPSF-3.0\n%%BoundingBox: -2 -3 2 1\n%%EndComments\n1 0 0 setrgbcolor 1 setlinewidth {body}\n%%EOF\n"
+                );
+                decode_eps_document(
+                    code.as_bytes(),
+                    1.,
+                    EpsRasterColorPolicy::DeviceGrayRgbAsSrgb,
+                    limits(),
+                    &root,
+                    || false,
+                )
+                .unwrap()
+            };
+            let actual = decode(rect);
+            let expected = decode(path);
+            let (RasterPixels::Rgba8(a), RasterPixels::Rgba8(e)) = (actual.pixels(), expected.pixels())
+            else {
+                panic!()
+            };
+            assert_eq!(&a[..], &e[..], "{rect}");
+            drop(actual);
+            drop(expected);
+            assert_eq!(root.used(), 0);
+        }
+    }
+    #[test]
+    fn imported_rectangles_and_showpage_match_independent_ghostscript_pixels() {
+        let reference: serde_json::Value = serde_json::from_str(include_str!(
+            "../../../tests/fixtures/eps/import-pixel-ghostscript-reference.json"
+        ))
+        .unwrap();
+        let cases = reference["cases"].as_array().unwrap();
+        assert_eq!(cases.len(), 2);
+        let root = MemoryBudget::new(32 * 1024 * 1024);
+        for case in cases {
+            let source = format!(
+                "%!PS-Adobe-3.0 EPSF-3.0\n%%BoundingBox: 0 0 8 8\n%%EndComments\n{}\n%%EOF\n",
+                case["source"].as_str().unwrap()
+            );
+            let raster = decode_eps_document(
+                source.as_bytes(),
+                1.,
+                EpsRasterColorPolicy::DeviceGrayRgbAsSrgb,
+                EpsDocumentLimits::default(),
+                &root,
+                || false,
+            )
+            .unwrap();
+            let RasterPixels::Rgba8(pixels) = raster.pixels() else {
+                panic!()
+            };
+            let rgb = case["rgb"].as_array().unwrap();
+            assert_eq!(pixels.len(), 256);
+            assert_eq!(rgb.len(), 192);
+            for (i, pixel) in pixels.chunks_exact(4).enumerate() {
+                let expected = [
+                    rgb[i * 3].as_u64().unwrap() as u8,
+                    rgb[i * 3 + 1].as_u64().unwrap() as u8,
+                    rgb[i * 3 + 2].as_u64().unwrap() as u8,
+                    255,
+                ];
+                assert_eq!(pixel, expected, "{} pixel {i}", case["name"]);
+            }
+            drop(raster);
+            assert_eq!(root.used(), 0);
+        }
+    }
+    #[test]
+    fn imported_showpage_keeps_complete_document_pixels() {
+        let root = MemoryBudget::new(100_000);
+        let code = std::str::from_utf8(CODE)
+            .unwrap()
+            .replace("1 0 0 setrgbcolor", "showpage 1 0 0 setrgbcolor")
+            .replace("%%EOF", "showpage /flush /showpage load def flush\n%%EOF");
+        let decode = |bytes| {
+            decode_eps_document(
+                bytes,
+                1.,
+                EpsRasterColorPolicy::DeviceGrayRgbAsSrgb,
+                limits(),
+                &root,
+                || false,
+            )
+            .unwrap()
+        };
+        let expected = decode(CODE);
+        let actual = decode(code.as_bytes());
+        let (RasterPixels::Rgba8(a), RasterPixels::Rgba8(e)) = (actual.pixels(), expected.pixels()) else {
+            panic!()
+        };
+        assert_eq!(&a[..], &e[..]);
+        drop(actual);
+        drop(expected);
+        assert_eq!(root.used(), 0);
+    }
+    #[test]
     fn document_errors_do_not_return_partial_preview_or_output() {
         let root = MemoryBudget::new(100_000);
         assert!(matches!(

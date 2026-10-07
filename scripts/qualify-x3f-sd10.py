@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Pinned SD10 arithmetic qualification. External LibRaw is a test oracle only."""
 import argparse
+from contextlib import nullcontext
 import hashlib
 import json
 import os
@@ -23,6 +24,15 @@ def sha(path):
     return digest.hexdigest()
 
 
+def artifact_workspace(destination):
+    if destination is None:
+        return tempfile.TemporaryDirectory(prefix='rrrah-x3f-qualification-')
+    destination = Path(destination).resolve()
+    # Never overwrite an earlier qualification or another running process.
+    destination.mkdir(parents=True, exist_ok=False)
+    return nullcontext(str(destination))
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('source', type=Path)
@@ -35,7 +45,9 @@ def main():
                         help='Pinned independent standalone dcraw.c; enables full output and rotation checks')
     parser.add_argument('--sd14-source', type=Path,
                         help='Also qualify pinned CC0 SD14 sensor, eight WB neutrals and complete Sunlight/Auto output')
-    parser.add_argument('--metal-readback', action='store_true',
+    parser.add_argument('--artifacts-dir', type=Path,
+                        help='Preserve generated oracle files in a new directory; refuses an existing directory')
+    parser.add_argument('--metal-readback' , action='store_true',
                         help='Require actual Metal full-frame readback against generated linear PPMs')
     args = parser.parse_args()
     if args.metal_readback and not args.dcraw_source:
@@ -74,8 +86,9 @@ def main():
               'remaining': ['Independent complete converter output unless --dcraw-source is supplied',
                             'Physical display and HDR qualification', 'Other X3F variants']}
     try:
-        with tempfile.TemporaryDirectory(prefix='rrrah-x3f-qualification-') as scratch:
+        with artifact_workspace(args.artifacts_dir) as scratch:
             scratch = Path(scratch)
+            report['artifact_workspace'] = {'path': str(scratch), 'preserved': args.artifacts_dir is not None}
             for helper in ['x3f-channel-oracle', 'x3f-camf-oracle']:
                 run(['c++', '-std=c++17', '-DUSE_X3FTOOLS', ROOT/'scripts'/f'{helper}.cpp',
                      f'-I{args.libraw_root}', archive, f'-L{args.library_dir}', '-llcms2', '-lz',
@@ -306,7 +319,7 @@ def main():
                         raise RuntimeError(f'Missing full-frame Metal qualification for {camera}')
                     report['metal_readback'].append({'camera':camera,'dimensions':[width,height],
                         'adapter':adapter[1],'pixels_checked':width*height,'max_deviation_rgba8':int(marker[1]),
-                        'oracle_sha256':sha(ppm),'managed_cpu_final_used':0,
+                        'oracle_sha256':sha(ppm),'oracle_path':str(ppm) if args.artifacts_dir else None,'managed_cpu_final_used':0,
                         'scope':'Independent qualified linear fixture to offscreen SDR sRGB texture; not physical HDR'})
                 report['status'] = 'passed'
     except Exception as error:

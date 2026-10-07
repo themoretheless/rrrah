@@ -1,0 +1,34 @@
+{
+  "scope": "Zero-staging-copy canonical mosaic pixel writer on little-endian hosts",
+  "change": [
+    "Write bounded borrowed u16 byte slices directly",
+    "Canonical payload unchanged",
+    "Big-endian conversion retained",
+    "Cancellation write chunk size unchanged"
+  ],
+  "validation": {
+    "cache_unit_tests": 121,
+    "cache_stress_tests": 5,
+    "full_24mp_swap_exact": true,
+    "root_and_queue_final_used": 0
+  },
+  "benchmark": {
+    "environment": {
+      "cpu": "Apple M4 Max",
+      "profile": "dev; workspace crates opt-level=1",
+      "frames": 2,
+      "samples": 5,
+      "navigation_steps": 8
+    },
+    "before": "swap_route samples=5 bytes=48000000 write_complete_p50_ms=152.834 restore_p50_ms=50.202 managed_peak_bytes=48000000 queue_peak_bytes=48000000 final_used=0 exact_samples=true",
+    "after": "swap_route samples=5 bytes=48000000 write_complete_p50_ms=62.129 restore_p50_ms=55.082 managed_peak_bytes=48000000 queue_peak_bytes=48000000 final_used=0 exact_samples=true",
+    "write_before_ms": 152.834,
+    "write_after_ms": 62.129,
+    "observed_write_ratio": 2.4599462408858987
+  },
+  "limitations": [
+    "Sequential synthetic dev-profile runs; not universal speedup",
+    "Big-endian branch retained but not executed on M4 Max",
+    "Does not prove all-format or physical HDR performance"
+  ]
+}

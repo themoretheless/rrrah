@@ -1,0 +1,29 @@
+{
+  "scope": "Native EPS integer division, remainder and square root",
+  "specification": "https://www.adobe.com/jp/print/postscript/pdfs/PLRM.pdf",
+  "operators": [
+    "idiv",
+    "mod",
+    "sqrt"
+  ],
+  "semantics": [
+    "idiv and mod require integer operands",
+    "Integer division truncates toward zero; remainder follows dividend sign",
+    "32-bit quotient overflow and zero divisor return UndefinedResult",
+    "Negative sqrt returns Range; successful sqrt returns real",
+    "i64 intermediate avoids minimum-integer division/remainder panic"
+  ],
+  "validation": {
+    "decoder_tests_passed": 933,
+    "decoder_tests_ignored": 60,
+    "independent_typed_ghostscript_cases": 31,
+    "ghostscript_version": "10.05.1",
+    "ghostscript_binary_sha256": "e522a84dc98345933621efba59577afe76d8f2d241ae103a92e6ccd37812b290",
+    "computed_document_pixels_equal_literal_document": true,
+    "error_paths_release_memory": true
+  },
+  "limitations": [
+    "Restricted EPS subset; full operator and pixel qualification pending",
+    "No claim of completion for 100 formats or CUDA/NVIDIA/HDR"
+  ]
+}

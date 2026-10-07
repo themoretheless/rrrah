@@ -1,0 +1,17 @@
+{
+  "scope": "Preserve tiny negative EPS degree angles",
+  "problem": "Unsigned modulo may add 360 and erase the small argument; radians sine then reflects full-turn floating-point error",
+  "fix": "Signed remainder with explicit positive and negative cardinal cases",
+  "validation": {
+    "decoder_passed": 941,
+    "decoder_ignored": 60,
+    "small_angle_cases": 3,
+    "small_angle_reference": "Independent linear Taylor term, cubic correction below f32 precision",
+    "negative_cardinal_cases": 6,
+    "typed_ghostscript_cases_still_pass": 33
+  },
+  "limitations": [
+    "General arbitrary-angle transcendental accuracy not fully qualified",
+    "All-format/backend/HDR objective incomplete"
+  ]
+}

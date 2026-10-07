@@ -8905,9 +8905,13 @@ mod eps_preload_tests {
     fn eps_neighbour_windows_reuse_preload_preserve_visible_and_cancel_stale() {
         let dir=tempfile::tempdir().unwrap();
         let paths:Vec<_>=(0..5).map(|i| {let path=dir.path().join(format!("{i}.eps"));std::fs::write(&path,EPS).unwrap();path}).collect();
+        for limits in [
+            rrrah_cache::CacheLimits {max_bytes:512,max_entries:None,ttl:None},
+            rrrah_cache::CacheLimits {max_bytes:4096,max_entries:Some(2),ttl:None},
+        ] {
         let root=rrrah_core::MemoryBudget::new(32*1024*1024);
         let request_for=|path:PathBuf| {let mut request=DecodeRequest::new(path);request.memory_budget=Some(root.clone());request};
-        let mut cache=RasterDisplayCache::new(rrrah_cache::CacheLimits {max_bytes:512,max_entries:Some(2),ttl:None});
+        let mut cache=RasterDisplayCache::new(limits);
         let gate=Arc::new(DecodeGate::new());let visible=request_for(paths[2].clone());
         let (frame,_)=load_cached_raster_for_display(&visible,None,&mut cache).unwrap();
         for direction in [gallery::NavDirection::Forward,gallery::NavDirection::Backward] {
@@ -8919,7 +8923,7 @@ mod eps_preload_tests {
                 let (warmed,_)=preload_raster(&request,None,&mut cache,&gate).unwrap();
                 let (hit,_)=load_cached_raster_mode(&request,None,&mut cache,false,||panic!("EPS preload decoded again")).unwrap();
                 let (rrrah_core::RasterPixels::Rgba32Float(a),rrrah_core::RasterPixels::Rgba32Float(b))=(warmed.pixels(),hit.pixels()) else {panic!()};
-                assert!(a.ptr_eq(b));assert_eq!(cache.len(),2);
+                assert!(a.ptr_eq(b));assert_eq!(cache.len(),2);assert_eq!(cache.resident_bytes(),512);
                 drop(hit);drop(warmed);
                 drop(load_cached_raster_with(&visible,None,&mut cache,||panic!("visible EPS displaced")).unwrap());
             }
@@ -8929,6 +8933,7 @@ mod eps_preload_tests {
         generation.store(2,std::sync::atomic::Ordering::Release);
         let used=root.used();assert!(preload_raster(&stale,None,&mut cache,&gate).is_err());assert_eq!(root.used(),used);
         drop(frame);drop(cache);assert_eq!(root.used(),0);
+        }
     }
     #[test]
     fn eps_source_vm_and_graphics_admission_errors_are_retryable() {

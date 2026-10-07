@@ -1,0 +1,26 @@
+{
+  "scope": "Direct destination reads in unbudgeted canonical mosaic payload decoder",
+  "change": [
+    "Remove separate heap byte staging buffer",
+    "Initialize exact u16 destination before bounded reads",
+    "Use checked bytemuck byte view; u16 has no invalid bit patterns",
+    "Retain big-endian conversion and preallocation descriptor checks"
+  ],
+  "validation": {
+    "cache_tests_passed": 121,
+    "stress_tests_passed": 5,
+    "swap_full_pixel_equality": true,
+    "root_queue_release": true
+  },
+  "current_benchmark": [
+    "disk_route ops_per_sample=2 samples=5 p50_ms_op=57.561 p95_ms_op=91.146 best_ms_op=55.585",
+    "navigation steps=8 frames=2 ram_p50_us_step=0.49 ram_p95_us_step=1.03 disk_only_p50_ms_step=62.850 disk_only_p95_ms_step=63.842 speedup_p50=128363x",
+    "swap_route samples=5 bytes=48000000 write_complete_p50_ms=50.782 restore_p50_ms=49.716 managed_peak_bytes=48000000 queue_peak_bytes=48000000 final_used=0 exact_samples=true"
+  ],
+  "limitations": [
+    "Managed swap restore already used direct destination reads before this change",
+    "Sequential warm-page dev benchmarks have variable timing; no causal speedup claimed",
+    "Big-endian branch not run on this host",
+    "Full format and backend goal remains incomplete"
+  ]
+}

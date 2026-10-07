@@ -1,0 +1,15 @@
+{
+  "scope": "Reuse router EPS signature in common decode_image route",
+  "change": "inspect_image_source returns source kind and EPS candidate from one bounded header read; decode_raster_inspected consumes the result without a second signature probe",
+  "validation": {
+    "decoder_passed": 936,
+    "decoder_ignored": 60,
+    "cargo_check": "passed",
+    "diff_check": "passed"
+  },
+  "limitations": [
+    "No wall-clock performance benchmark",
+    "Direct decode_raster keeps its own bounded signature probe",
+    "Full 100-format/backend/HDR qualification remains incomplete"
+  ]
+}

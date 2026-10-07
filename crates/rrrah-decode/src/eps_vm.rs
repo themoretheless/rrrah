@@ -12,8 +12,17 @@ pub enum EpsOperator {
     Sub,
     Mul,
     Div,
+    IntegerDiv,
+    Remainder,
+    Sqrt,
+    Sin,
+    Cos,
     Neg,
     Abs,
+    Ceiling,
+    Floor,
+    Round,
+    Truncate,
     Dup,
     Exch,
     Pop,
@@ -49,6 +58,8 @@ pub enum EpsOperator {
     Stroke,
     Fill,
     EvenOddFill,
+    RectFill,
+    RectStroke,
     SetGray,
     SetRgbColor,
     SetCmykColor,
@@ -289,6 +300,13 @@ impl<'a> Machine<'a, '_> {
             b"true" => Ok(EpsValue::Boolean(true)),
             b"false" => Ok(EpsValue::Boolean(false)),
             b"null" => Ok(EpsValue::Null),
+            // EPSF 3.0 section 3.2: the importer defines showpage as an
+            // empty procedure. User definitions still win above.
+            b"showpage" if self.graphics.is_some() => Ok(EpsValue::Procedure {
+                begin: 0,
+                end: 0,
+                identity: 0,
+            }),
             _ => operator(key)
                 .map(EpsValue::Operator)
                 .ok_or(EpsVmError::UndefinedName(at)),
@@ -314,6 +332,8 @@ impl<'a> Machine<'a, '_> {
             | O::Stroke
             | O::Fill
             | O::EvenOddFill
+            | O::RectFill
+            | O::RectStroke
             | O::SetGray
             | O::SetRgbColor
             | O::SetCmykColor
@@ -340,6 +360,36 @@ impl<'a> Machine<'a, '_> {
                 let a = self.number()?;
                 self.push(EpsValue::Number(arithmetic(op, a, b)?))?;
             }
+            O::IntegerDiv | O::Remainder => {
+                let b = i64::from(self.integer()?);
+                let a = i64::from(self.integer()?);
+                if b == 0 {
+                    return Err(E::UndefinedResult);
+                }
+                let wide = if op == O::IntegerDiv { a / b } else { a % b };
+                let value = i32::try_from(wide).map_err(|_| E::UndefinedResult)?;
+                self.push(EpsValue::Number(EpsNumber::Integer(value)))?;
+            }
+            O::Sin | O::Cos => {
+                // Signed reduction preserves tiny negative angles that would be
+                // lost when adding a full turn to normalize into 0..360.
+                let angle = as_double(self.number()?) % 360.;
+                let value = match (op, angle) {
+                    (O::Sin, 0. | 180. | -180.) | (O::Cos, 90. | -90. | 270. | -270.) => 0.,
+                    (O::Sin, 90. | -270.) | (O::Cos, 0.) => 1.,
+                    (O::Sin, 270. | -90.) | (O::Cos, 180. | -180.) => -1.,
+                    (O::Sin, _) => angle.to_radians().sin(),
+                    _ => angle.to_radians().cos(),
+                };
+                self.push(EpsValue::Number(EpsNumber::Real(value as f32)))?;
+            }
+            O::Sqrt => {
+                let value = as_double(self.number()?);
+                if value < 0. {
+                    return Err(E::Range);
+                }
+                self.push(EpsValue::Number(EpsNumber::Real(value.sqrt() as f32)))?;
+            }
             O::Neg | O::Abs => {
                 let a = self.number()?;
                 let value = match a {
@@ -354,6 +404,21 @@ impl<'a> Machine<'a, '_> {
                             .unwrap_or(EpsNumber::Real(2147483648.0))
                     }
                     EpsNumber::Real(n) => EpsNumber::Real(if op == O::Neg { -n } else { n.abs() }),
+                };
+                self.push(EpsValue::Number(value))?;
+            }
+            O::Ceiling | O::Floor | O::Round | O::Truncate => {
+                let value = match self.number()? {
+                    EpsNumber::Integer(n) => EpsNumber::Integer(n),
+                    EpsNumber::Real(n) => EpsNumber::Real(match op {
+                        O::Ceiling => n.ceil(),
+                        O::Floor => n.floor(),
+                        // PostScript ties go toward positive infinity. Compute
+                        // in f64 so adding 0.5 cannot round a nearby f32 first.
+                        O::Round => (f64::from(n) + 0.5).floor() as f32,
+                        O::Truncate => n.trunc(),
+                        _ => unreachable!(),
+                    }),
                 };
                 self.push(EpsValue::Number(value))?;
             }
@@ -516,7 +581,7 @@ impl<'a> Machine<'a, '_> {
             O::MoveTo | O::RelativeMoveTo | O::LineTo | O::RelativeLineTo | O::Translate | O::Scale => 2,
             O::CurveTo | O::RelativeCurveTo => 6,
             O::SetRgbColor => 3,
-            O::SetCmykColor => 4,
+            O::SetCmykColor | O::RectFill | O::RectStroke => 4,
             O::Rotate | O::SetGray | O::SetLineWidth | O::SetLineCap | O::SetLineJoin | O::SetMiterLimit => 1,
             _ => 0,
         };
@@ -543,6 +608,17 @@ impl<'a> Machine<'a, '_> {
             O::Stroke => graphics.paint(EpsPaintKind::Stroke)?,
             O::Fill => graphics.paint(EpsPaintKind::FillNonZero)?,
             O::EvenOddFill => graphics.paint(EpsPaintKind::FillEvenOdd)?,
+            O::RectFill | O::RectStroke => graphics.paint_rectangle(
+                args[0],
+                args[1],
+                args[2],
+                args[3],
+                if op == O::RectFill {
+                    EpsPaintKind::FillNonZero
+                } else {
+                    EpsPaintKind::Stroke
+                },
+            )?,
             O::SetGray => graphics.set_color(EpsDeviceColor::Gray(args[0]))?,
             O::SetRgbColor => graphics.set_color(EpsDeviceColor::Rgb([args[0], args[1], args[2]]))?,
             O::SetCmykColor => {
@@ -722,8 +798,17 @@ fn operator(word: &[u8]) -> Option<EpsOperator> {
         b"sub" => O::Sub,
         b"mul" => O::Mul,
         b"div" => O::Div,
+        b"idiv" => O::IntegerDiv,
+        b"mod" => O::Remainder,
+        b"sqrt" => O::Sqrt,
+        b"sin" => O::Sin,
+        b"cos" => O::Cos,
         b"neg" => O::Neg,
         b"abs" => O::Abs,
+        b"ceiling" => O::Ceiling,
+        b"floor" => O::Floor,
+        b"round" => O::Round,
+        b"truncate" => O::Truncate,
         b"dup" => O::Dup,
         b"exch" => O::Exch,
         b"pop" => O::Pop,
@@ -759,6 +844,8 @@ fn operator(word: &[u8]) -> Option<EpsOperator> {
         b"stroke" => O::Stroke,
         b"fill" => O::Fill,
         b"eofill" => O::EvenOddFill,
+        b"rectfill" => O::RectFill,
+        b"rectstroke" => O::RectStroke,
         b"setgray" => O::SetGray,
         b"setrgbcolor" => O::SetRgbColor,
         b"setcmykcolor" => O::SetCmykColor,
@@ -1034,13 +1121,154 @@ mod tests {
         );
     }
     #[test]
+    fn integer_division_remainder_and_square_root_obey_numeric_contract() {
+        assert_eq!(run(b"5 2 idiv -5 2 idiv 5 -2 idiv -5 -2 idiv 5 3 mod -5 3 mod 5 -3 mod -5 -3 mod -2147483648 -1 mod"),
+            [2,-2,-2,2,2,-2,2,-2,0].map(int).to_vec());
+        assert_eq!(
+            run(b"0 sqrt 9 sqrt 16.0 sqrt"),
+            [0., 3., 4.]
+                .map(|n| EpsValue::Number(EpsNumber::Real(n)))
+                .to_vec()
+        );
+        let root = MemoryBudget::new(1_000_000);
+        for (code, kind) in [
+            (b"1 0 idiv".as_slice(), 0),
+            (b"1 0 mod", 0),
+            (b"-2147483648 -1 idiv", 0),
+            (b"1.0 2 idiv", 1),
+            (b"1 2.0 mod", 1),
+            (b"true sqrt", 1),
+            (b"-1 sqrt", 2),
+        ] {
+            let program = compile(code, &root);
+            let error = evaluate_eps_program(&program, EpsVmLimits::default(), &root, || false).unwrap_err();
+            assert!(
+                match kind {
+                    0 => matches!(error, EpsVmError::UndefinedResult),
+                    1 => matches!(error, EpsVmError::Type),
+                    _ => matches!(error, EpsVmError::Range),
+                },
+                "{code:?}: {error}"
+            );
+            drop(program);
+            assert_eq!(root.used(), 0);
+        }
+    }
+    #[test]
+    fn degree_trigonometry_preserves_cardinals_and_bounds_large_angles() {
+        assert_eq!(
+            run(b"0 sin 90 sin 180 sin 270 sin -90 sin 360090 sin 0 cos 90 cos 180 cos 270 cos"),
+            [0., 1., 0., -1., -1., 1., 1., 0., -1., 0.]
+                .map(|n| EpsValue::Number(EpsNumber::Real(n)))
+                .to_vec()
+        );
+        for code in [b"3.4e38 sin".as_slice(), b"-3.4e38 cos"] {
+            let result = run(code);
+            let EpsValue::Number(EpsNumber::Real(n)) = result[0] else {
+                panic!()
+            };
+            assert!(n.is_finite() && (-1. ..=1.).contains(&n));
+        }
+    }
+    #[test]
+    fn tiny_negative_degree_angles_do_not_disappear_during_reduction() {
+        for (code, angle) in [
+            (b"-1e-30 sin".as_slice(), -1e-30f32),
+            (b"1e-30 sin", 1e-30f32),
+            (b"-0.000001 sin", -0.000001f32),
+        ] {
+            let actual = run(code);
+            let EpsValue::Number(EpsNumber::Real(value)) = actual[0] else {
+                panic!()
+            };
+            // Independent small-angle expansion: cubic correction is below
+            // f32 precision throughout this range.
+            let expected = (f64::from(angle) * std::f64::consts::PI / 180.) as f32;
+            assert_ne!(value, 0.);
+            assert_eq!(value.to_bits(), expected.to_bits());
+        }
+        assert_eq!(
+            run(b"-180 sin -270 sin -360 sin -180 cos -270 cos -360 cos"),
+            [0., 1., 0., -1., 0., 1.]
+                .map(|n| EpsValue::Number(EpsNumber::Real(n)))
+                .to_vec()
+        );
+    }
+    #[test]
+    fn degree_trigonometry_matches_exact_binary_ghostscript_reference() {
+        let reference: serde_json::Value = serde_json::from_str(include_str!(
+            "../../../tests/fixtures/eps/trig-binary-ghostscript-reference.json"
+        ))
+        .unwrap();
+        let cases = reference["cases"].as_array().unwrap();
+        assert_eq!(cases.len(), 2894);
+        let ordered = |bits: u32| {
+            if bits & 0x80000000 != 0 {
+                !bits
+            } else {
+                bits | 0x80000000
+            }
+        };
+        let mut maximum = 0;
+        for case in cases {
+            let code = case["code"].as_str().unwrap();
+            let actual = run(code.as_bytes());
+            let EpsValue::Number(EpsNumber::Real(value)) = actual[0] else {
+                panic!()
+            };
+            let expected = case["real_bits"].as_u64().unwrap() as u32;
+            let distance = ordered(value.to_bits()).abs_diff(ordered(expected));
+            maximum = maximum.max(distance);
+            assert!(
+                distance == 0,
+                "{code}: native={value:?}, reference={:?}, ULP={distance}",
+                f32::from_bits(expected)
+            );
+        }
+        eprintln!(
+            "EPS sin/cos binary reference: {} cases, maximum {maximum} ULP",
+            cases.len()
+        );
+    }
+    #[test]
+    fn rounding_preserves_types_and_uses_positive_ties() {
+        assert_eq!(
+            run(b"99 ceiling -99 floor 99 round -99 truncate"),
+            vec![int(99), int(-99), int(99), int(-99)]
+        );
+        let expected = [4., -4., 3., -5., 7., -6., 3., -3.];
+        assert_eq!(run(b"3.2 ceiling -4.8 ceiling 3.2 floor -4.8 floor 6.5 round -6.5 round 3.9 truncate -3.9 truncate"),
+            expected.map(|n| EpsValue::Number(EpsNumber::Real(n))).to_vec());
+        // The immediately adjacent f32 values must not turn into a tie during
+        // intermediate arithmetic, even around a representable integer.
+        assert_eq!(
+            run(b"0.49999997 round -0.50000006 round 8388609.0 round"),
+            [0., -1., 8388609.]
+                .map(|n| EpsValue::Number(EpsNumber::Real(n)))
+                .to_vec()
+        );
+    }
+    #[test]
+    fn rounding_errors_release_managed_execution_memory() {
+        let root = MemoryBudget::new(1_000_000);
+        for code in [b"round".as_slice(), b"true floor", b"/x ceiling", b"{} truncate"] {
+            let program = compile(code, &root);
+            assert!(matches!(
+                evaluate_eps_program(&program, EpsVmLimits::default(), &root, || false),
+                Err(EpsVmError::StackUnderflow | EpsVmError::Type)
+            ));
+            drop(program);
+            assert_eq!(root.used(), 0);
+        }
+    }
+    #[test]
     fn independent_ghostscript_values_and_types_match_scalar_and_procedure_cases() {
         let reference: serde_json::Value = serde_json::from_str(include_str!(
             "../../../tests/fixtures/eps/vm-ghostscript-reference.json"
         ))
         .unwrap();
         let cases = reference["cases"].as_array().unwrap();
-        assert_eq!(cases.len(), 24);
+        assert_eq!(cases.len(), 33);
         for case in cases {
             let code = case["code"].as_str().unwrap();
             let actual = run(code.as_bytes());
@@ -1269,6 +1497,62 @@ mod vector_tests {
             drop(program);
             assert_eq!(root.used(), 0);
         }
+    }
+    #[test]
+    fn eps_import_showpage_is_empty_aliasable_and_user_redefinable() {
+        let root = MemoryBudget::new(1_000_000);
+        let program=compile(b"/showpage load {} eq 1 2 moveto showpage /flush /showpage load def flush currentpoint /showpage { 7 } def showpage",&root);
+        let result = evaluate_eps_vectors(&program, vm(), graphics(), &root, || false).unwrap();
+        assert_eq!(
+            result.evaluation.values(),
+            &[
+                EpsValue::Boolean(true),
+                EpsValue::Number(EpsNumber::Real(1.)),
+                EpsValue::Number(EpsNumber::Real(2.)),
+                EpsValue::Number(EpsNumber::Integer(7))
+            ]
+        );
+        drop(result);
+        drop(program);
+        assert_eq!(root.used(), 0);
+        let program = compile(b"showpage", &root);
+        assert!(matches!(
+            evaluate_eps_program(&program, vm(), &root, || false),
+            Err(EpsVmError::UndefinedName(_))
+        ));
+        drop(program);
+        assert_eq!(root.used(), 0);
+    }
+    #[test]
+    fn numeric_rectangles_preserve_path_style_and_support_negative_sizes() {
+        let root = MemoryBudget::new(1_000_000);
+        let program=compile(b"1 2 moveto 3 4 lineto 2 setlinewidth 10 20 -4 -6 rectfill 1 1 2 3 rectstroke currentpoint stroke",&root);
+        let result = evaluate_eps_vectors(&program, vm(), graphics(), &root, || false).unwrap();
+        assert_eq!(
+            result.evaluation.values(),
+            &[
+                EpsValue::Number(EpsNumber::Real(3.)),
+                EpsValue::Number(EpsNumber::Real(4.))
+            ]
+        );
+        assert_eq!(result.scene.paints().len(), 3);
+        assert_eq!(result.scene.paints()[0].kind, EpsPaintKind::FillNonZero);
+        assert_eq!(result.scene.paints()[1].kind, EpsPaintKind::Stroke);
+        assert_eq!(result.scene.paints()[2].node_count, 2);
+        assert!(result.scene.paints().iter().all(|p| p.style.width == 2.));
+        let mut path = [EpsPathSegment::Move([0., 0.]); 5];
+        result.scene.copy_path(0, &mut path, || false).unwrap();
+        assert_eq!(path[0], EpsPathSegment::Move([10., 20.]));
+        assert_eq!(
+            path[2],
+            EpsPathSegment::Line {
+                start: [6., 20.],
+                end: [6., 14.]
+            }
+        );
+        drop(result);
+        drop(program);
+        assert_eq!(root.used(), 0);
     }
     #[test]
     fn computed_procedures_operator_aliases_and_fill_stroke_build_one_shared_path() {

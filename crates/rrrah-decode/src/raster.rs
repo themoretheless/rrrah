@@ -167,12 +167,27 @@ pub fn decode_raster_file(path: impl AsRef<Path>) -> Result<DecodedRaster, Raste
 
 pub fn decode_raster(request: &DecodeRequest) -> Result<DecodedRaster, RasterDecodeError> {
     request.check_cancelled()?;
-    let eps_candidate=if request.path.extension().is_some_and(|e|e.eq_ignore_ascii_case("eps")) {
-        let file=std::fs::File::open(&request.path).map_err(|source|DecodeError::Io {path:request.path.clone(),source})?;
-        let (header,length)=crate::sniff::read_header(file).map_err(|source|DecodeError::Io {path:request.path.clone(),source})?;
-        let prefix=&header[..length];
-        prefix.starts_with(b"%!PS-Adobe-") || prefix.starts_with(&[0xc5,0xd0,0xd3,0xc6])
-    } else {false};
+    // A small stack-only framing probe also handles renamed EPS. Keep the
+    // existing unavailable-file/index error precedence on failed probes.
+    let eps_candidate = std::fs::File::open(&request.path).ok().and_then(|mut file| {
+        let mut prefix = [0u8; 256];
+        let mut used = 0;
+        while used < prefix.len() {
+            match file.read(&mut prefix[used..]) {
+                Ok(0) => break,
+                Ok(n) => used += n,
+                Err(error) if error.kind() == std::io::ErrorKind::Interrupted => continue,
+                Err(_) => return None,
+            }
+        }
+        Some(crate::eps::has_magic(&prefix[..used]))
+    }).unwrap_or(false);
+    decode_raster_inspected(request, eps_candidate)
+}
+
+/// Reuse the router's bounded header probe instead of opening the source again.
+pub(crate) fn decode_raster_inspected(request: &DecodeRequest, eps_candidate: bool) -> Result<DecodedRaster, RasterDecodeError> {
+    request.check_cancelled()?;
     if eps_candidate {
         let fallback=rrrah_core::MemoryBudget::new(MAX_RASTER_BYTES);
         let budget=request.memory_budget.as_ref().unwrap_or(&fallback);
@@ -813,6 +828,24 @@ fn adopt_raster_output<T: Copy>(
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn eps_framing_wins_over_raster_raw_and_unknown_suffixes() {
+        let code=b"%!PS-Adobe-3.0 EPSF-3.0\n%%BoundingBox: 0 0 2 2\n%%EndComments\n1 0 0 setrgbcolor 0 0 2 2 rectfill\n%%EOF\n";
+        for suffix in ["eps","png","nef","unknown"] {
+            let path=std::env::temp_dir().join(format!("rrrah-eps-magic-{}-{suffix}.{suffix}",std::process::id()));
+            std::fs::write(&path,code).unwrap();
+            let root=rrrah_core::MemoryBudget::new(32*1024*1024);
+            let mut request=crate::DecodeRequest::new(&path);request.memory_budget=Some(root.clone());
+            assert_eq!(crate::image_source_kind(&request).unwrap(),crate::ImageSourceKind::Raster);
+            let crate::DecodedImage::Raster(image)=crate::decode_image(&request).unwrap() else {panic!()};
+            assert_eq!((image.width(),image.height()),(2,2));
+            let rrrah_core::RasterPixels::Rgba8(pixels)=image.pixels() else {panic!()};
+            assert!(pixels.chunks_exact(4).all(|p|p==[255,0,0,255]));
+            drop(image);assert_eq!(root.used(),0);
+            request.image_index=1;assert!(matches!(super::decode_raster(&request),Err(super::RasterDecodeError::Eps(_))));assert_eq!(root.used(),0);
+            std::fs::remove_file(path).unwrap();
+        }
+    }
     #[test]
     fn png_magic_wins_over_eps_suffix() {
         let path=std::env::temp_dir().join(format!("rrrah-png-eps-{}-{}.eps",std::process::id(),std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_nanos()));

@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-07",
+  "adapter": "Metal Apple M4 Max",
+  "test": "independent_eps_import_pixels_survive_swap_and_metal",
+  "oracle": "tests/fixtures/eps/import-pixel-ghostscript-reference.json",
+  "cases": 2,
+  "native_pixels_compared": 128,
+  "gpu_pixels_compared": 2048,
+  "comparison": "exact byte equality",
+  "route": [
+    "common decode",
+    "RAM count eviction",
+    "asynchronous swap",
+    "managed restore",
+    "linear display preparation",
+    "Metal offscreen render"
+  ],
+  "root_budget_after_drop": 0,
+  "suite": {
+    "passed": 5,
+    "failed": 0,
+    "ignored": 0
+  },
+  "limitations": [
+    "selected EPS subset",
+    "offscreen SDR readback; no physical HDR proof",
+    "no NVIDIA hardware qualification"
+  ]
+}

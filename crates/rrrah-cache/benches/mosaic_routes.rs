@@ -9,6 +9,8 @@
 //!   * `navigation`  — back/forward browsing across a frame window with the
 //!     RAM cache enabled vs disabled (disk-only fallback, the `--ram_cache_mb 0`
 //!     configuration),
+//!   * `swap_route`  — bounded asynchronous write completion and managed restore,
+//!     with exact full-buffer comparison and ownership release,
 //!   * `eviction`    — pin protection under budget pressure: the visible frame
 //!     must survive eviction storms and lookups must stay fast.
 //!
@@ -82,6 +84,63 @@ fn main() {
     disk_route(&fixture, samples);
     navigation(&fixture, nav_steps, samples);
     eviction_under_pressure(samples);
+    swap_route(&fixture, samples);
+}
+
+/// Real asynchronous swap write completion and managed synchronous restore.
+fn swap_route(fixture: &Fixture, samples: usize) {
+    let directory = tempfile::tempdir().unwrap();
+    let bytes = fixture.mosaics[0].byte_len() as u64;
+    let root = rrrah_core::MemoryBudget::new(bytes * 2 + 1024 * 1024);
+    let queue = rrrah_core::MemoryBudget::new(bytes);
+    let swap = rrrah_cache::MosaicSwapCache::new_with_budgets(
+        directory.path(),
+        rrrah_cache::ImageSwapConfig {
+            limits: rrrah_cache::CacheLimits {
+                max_bytes: bytes * (samples as u64 + 1) + 1024 * 1024,
+                max_entries: Some(samples + 1),
+                ttl: None,
+            },
+            queue_bytes: bytes,
+            queue_count: 1,
+            restore_bytes: bytes,
+        },
+        queue.clone(),
+        root.clone(),
+    )
+    .unwrap();
+    let mut writes = Vec::new();
+    let mut restores = Vec::new();
+    for i in 0..samples {
+        let key = CacheKey::for_mosaic_recipe(&fingerprint_for(1000 + i as u64), 0, benchmark_manifest());
+        let source = synthetic_mosaic(0).try_manage_pixels(&root).unwrap();
+        let started = Instant::now();
+        swap.enqueue(key, source);
+        swap.wait_idle().unwrap();
+        writes.push(started.elapsed());
+        assert_eq!(root.used(), 0);
+        assert_eq!(queue.used(), 0);
+        let started = Instant::now();
+        let restored = swap
+            .try_get(&key, || false)
+            .unwrap()
+            .expect("published swap object");
+        restores.push(started.elapsed());
+        assert_eq!(&restored.pixels[..], &fixture.mosaics[0].pixels[..]);
+        assert_eq!(root.used(), bytes);
+        drop(restored);
+        assert_eq!(root.used(), 0);
+    }
+    writes.sort();
+    restores.sort();
+    println!(
+        "swap_route samples={samples} bytes={bytes} write_complete_p50_ms={:.3} restore_p50_ms={:.3} managed_peak_bytes={} queue_peak_bytes={} final_used=0 exact_samples=true",
+        writes[samples / 2].as_secs_f64() * 1000.,
+        restores[samples / 2].as_secs_f64() * 1000.,
+        root.peak(),
+        queue.peak()
+    );
+    assert_eq!(swap.stats().writes, samples as u64);
 }
 
 /// Route (a): RAM hit. Each operation is one navigation step on the loader
