@@ -1,0 +1,64 @@
+{
+  "scope": "Alpha soft-mask group without CS",
+  "fixture": "tests/fixtures/pdf/soft-mask-alpha-without-group-cs.pdf",
+  "sha256": "288aecc0f53376c81a77049ba368bd0e2729bea4164ae7b65ba75105ae777b9e",
+  "before_native_rgba_cells": [
+    [
+      0,
+      0,
+      0,
+      255
+    ],
+    [
+      0,
+      0,
+      0,
+      255
+    ]
+  ],
+  "independent_poppler_white_rgb_cells": [
+    [
+      0,
+      0,
+      0
+    ],
+    [
+      255,
+      255,
+      255
+    ]
+  ],
+  "cause": "SoftMask::new required GROUP/CS before checking whether S was Alpha or Luminosity. Missing optional CS discarded the alpha mask.",
+  "change": "Read mask subtype first; require usable CS for luminosity only. Alpha coverage remains applicable without CS.",
+  "primary_reference": "https://opensource.adobe.com/dc-acrobat-sdk-docs/pdfstandards/pdfreference1.4.pdf",
+  "remaining": [
+    "Luminosity calibrated group conversions remain unqualified",
+    "Actual AI strict comparisons and full 100-format GPU CUDA HDR requirements remain active"
+  ],
+  "validation": "test result: ok. 877 passed; 0 failed; 56 ignored; 0 measured; 0 filtered out; finished in 0.61s",
+  "after_rgba_cells": [
+    [
+      0,
+      0,
+      0,
+      255
+    ],
+    [
+      0,
+      0,
+      0,
+      0
+    ]
+  ],
+  "shared_root_release_verified": true,
+  "later_full_oracle_boundary_check": {
+    "exact": false,
+    "pixel": [
+      8,
+      0
+    ],
+    "native_alpha": 0,
+    "poppler_alpha": 32,
+    "report": "pdf-mask-metal-integration-2026-10-07.json"
+  }
+}

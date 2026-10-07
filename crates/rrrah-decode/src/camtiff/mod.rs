@@ -96,7 +96,7 @@ mod kodak_dcr_color;
 mod leaf_packets;
 mod makernote_color;
 mod mef_sensor;
-pub use mef_sensor::decode_mef_zd_sensor;
+pub use mef_sensor::{decode_mef_zd_sensor, decode_mef_zd_sensor_file};
 mod mos;
 mod nef;
 mod olympus_entropy;

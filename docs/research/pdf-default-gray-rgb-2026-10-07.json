@@ -1,0 +1,39 @@
+{
+  "scope": "PDF DefaultGray and DefaultRGB explicit device fills and shared image under nested resource scopes",
+  "fixtures": {
+    "tests/fixtures/pdf/device-default-gray-contexts.pdf": {
+      "sha256": "54f319ff41f129a498f094a0bb1742a7d0e8b4841413788cb8350568a8ce8e21",
+      "dimensions": [
+        32,
+        8
+      ],
+      "license": "CC0"
+    },
+    "tests/fixtures/pdf/device-default-rgb-contexts.pdf": {
+      "sha256": "97206401110227be9d27da9a3132f4ea01b1d33a985b59f053bfa3b5afe23ef1",
+      "dimensions": [
+        32,
+        8
+      ],
+      "license": "CC0"
+    }
+  },
+  "native_tests": {
+    "command": "cargo test --locked --offline --target-dir /tmp/rrrah-required-corpus-target -p rrrah-decode --lib pdf_device_default_tests",
+    "passed": 4,
+    "failed": 0,
+    "memory": "Both new cases release the shared root budget to zero after dropping decoded raster"
+  },
+  "independent_oracle": {
+    "renderer": "pdftoppm",
+    "resolution_dpi": 72,
+    "pixels_per_fixture": 256,
+    "expected": "Left half exact RGB 255,0,0; right half exact RGB 0,0,255",
+    "result": "exact for both fixtures"
+  },
+  "limitations": [
+    "Only explicit device fill operators and shared image paths qualified here; implicit initial color and soft mask defaults remain unqualified",
+    "This does not qualify every PDF or all 100 catalog formats",
+    "GPU HDR display and actual NVIDIA CUDA execution remain outside this check"
+  ]
+}

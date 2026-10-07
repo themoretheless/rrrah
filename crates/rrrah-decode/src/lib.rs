@@ -105,7 +105,7 @@ pub use apng::{ApngImage, decode_apng};
 mod avif_color;
 mod bounded_io;
 mod camtiff;
-pub use camtiff::decode_mef_zd_sensor;
+pub use camtiff::{decode_mef_zd_sensor, decode_mef_zd_sensor_file};
 pub use camtiff::erf::{EpsonMakerMetadata, read_erf_maker_metadata};
 mod mrw;
 pub use mrw::{MrwLayout, NativeMrwDecoder};
@@ -619,3 +619,9 @@ mod pdf_patch_tests;
 
 #[cfg(test)]
 mod pdf_device_default_tests;
+
+mod eps;
+pub use eps::{EpsInspectError, EpsSource, inspect_eps_source};
+
+mod eps_tokens;
+pub use eps_tokens::{EpsToken, EpsTokenError, EpsTokens};

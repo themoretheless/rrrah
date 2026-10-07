@@ -1,0 +1,29 @@
+{
+  "scope": "Owned CUDA exposure host-to-device bounded upload cancellation",
+  "change": "Replace one whole-image cuMemcpyHtoD_v2 with borrowed source slices of at most 4194304 bytes, polling cancellation before each transfer; errors propagate before kernel launch. No staging CPU allocation.",
+  "verified_local": [
+    "Two-chunk offsets and final 3-pixel tail",
+    "Chunk pointers alias source without flattening or staging",
+    "Signed zero retained in borrowed values",
+    "Transient one-shot cancellation on second poll prevents copying tail",
+    "First copy error prevents later callbacks",
+    "Overflow refused before any copy callback"
+  ],
+  "tests": {
+    "passed": 5,
+    "hardware_test_ignored": 1
+  },
+  "clippy": "all targets, no deps: passed without warnings",
+  "limitations": [
+    "Actual CUDA API transfer and kernel execution not verified on macOS",
+    "No measured NVIDIA latency or throughput; 4 MiB bound is not a time bound",
+    "Viewer integration, graphics interop and actual NVIDIA qualification remain open",
+    "Full 100-format, cache lifecycle for all sources and physical HDR requirements remain active"
+  ],
+  "windows_cross_check": {
+    "target": "x86_64-pc-windows-gnu",
+    "command": "cargo check --locked --offline -p rrrah-cuda --all-targets --target x86_64-pc-windows-gnu",
+    "passed": true,
+    "scope": "Rust type/build validation; no linking, driver loading or NVIDIA execution"
+  }
+}

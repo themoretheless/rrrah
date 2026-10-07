@@ -10,8 +10,12 @@ before allocation. Device accounting excludes context, JIT and driver overhead.
 Each call owns a context; submitted work is synchronized before readback and
 the context is destroyed before releasing device credit. Cleanup failure
 conservatively retains device credit and library ownership when resource
-release cannot be established. Cancellation after submission discards results
-after synchronization. Source CPU accounting belongs to the caller.
+release cannot be established. Input upload borrows the source in at most 4 MiB synchronous transfers and checks
+cancellation before each transfer. A cancelled upload does not launch the kernel.
+Readback checks cancellation between 64 KiB transfers. Cancellation after
+submission discards results after synchronization. Source CPU accounting belongs
+to the caller. These byte bounds do not establish a time bound or measured
+throughput on NVIDIA hardware.
 
 This is a foundation, not a qualified viewer backend. It is connected to the
 existing offscreen raster timing example via `--cuda-exposure`; it is not

@@ -207,6 +207,9 @@ impl ColorSpaceType {
 pub struct ColorSpace(Arc<ColorSpaceType>, u128);
 
 impl ColorSpace {
+    pub(crate) fn is_device(&self) -> bool {
+        matches!(self.0.as_ref(), ColorSpaceType::DeviceGray | ColorSpaceType::DeviceRgb | ColorSpaceType::DeviceCmyk)
+    }
     pub(crate) fn resource_key(&self) -> u128 { self.1 }
     /// Create a new color space from the given object.
     pub(crate) fn new(object: Object<'_>, cache: &Cache) -> Option<Self> {

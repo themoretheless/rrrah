@@ -1,0 +1,17 @@
+{
+  "scope": "Borrowed EPS PostScript lexer, not an interpreter or renderer",
+  "limits": [
+    "token count",
+    "token byte length",
+    "literal string nesting 128",
+    "cancellation polling during scanning"
+  ],
+  "validation": {
+    "command": "cargo test --locked --offline -p rrrah-decode --lib",
+    "passed": 881,
+    "ignored": 57,
+    "failed": 0,
+    "log": "/tmp/rrrah-push-decode.log"
+  },
+  "qualification": "EPS remains pending; raw token payloads require later interpretation and string decoding"
+}

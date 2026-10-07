@@ -1,0 +1,42 @@
+{
+  "cause": "vello luminance mask uses CSS/SVG coefficients 0.2126,0.7152,0.0722; PDF device luminosity uses 0.30,0.59,0.11",
+  "specification": "https://developer.adobe.com/document-services/docs/assets/35e4369068f86065372c18787171a17e/PDF_ISO_32000-1.pdf",
+  "clause": "11.5.3",
+  "change": "Vendor hayro 0.7.1 with original licenses and use PDF coefficients only when the effective group color space remains a device space. Resolve group device defaults before selecting this path. Alpha and calibrated luminosity paths retain existing renderer behavior.",
+  "before_blue_alpha": 18,
+  "after_blue_alpha": 28,
+  "oracle_white_rgb_bands": [
+    [
+      178,
+      178,
+      178
+    ],
+    [
+      105,
+      105,
+      105
+    ],
+    [
+      227,
+      227,
+      227
+    ]
+  ],
+  "native_expected_alpha_bands": [
+    77,
+    150,
+    28
+  ],
+  "fixtures": {
+    "tests/fixtures/pdf/soft-mask-shared-group.pdf": "94fd6df1914264c9b20eb192c94afde02afeead2c95a91ab2d12ec28422c7534",
+    "tests/fixtures/pdf/soft-mask-device-rgb-bands.pdf": "40c37ad3ff51640ac443b2f694f2605b2c19edefa30cb135bea682ed3d4cdae3"
+  },
+  "limitations": [
+    "Calibrated luminosity needs group-space XYZ Y conversion qualification; existing CSS-based fallback is not universal correctness",
+    "CMYK conversion and nontrivial group blending are not qualified by RGB primary-band fixture",
+    "Renderer scratch allocation is still not wholly admitted by shared root memory budget",
+    "Full 100-format, GPU HDR presentation and actual CUDA/NVIDIA requirements remain active"
+  ],
+  "validation": "test result: ok. 875 passed; 0 failed; 56 ignored; 0 measured; 0 filtered out; finished in 0.36s",
+  "memory": "RGB primary-band decoded output released shared root budget to zero after drop"
+}

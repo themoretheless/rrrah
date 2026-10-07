@@ -1,0 +1,26 @@
+{
+  "scope": "Explicit native Mamiya ZD MEF file sensor import",
+  "api": "decode_mef_zd_sensor_file",
+  "source": "/tmp/rrrah-mamiya-zd.mef",
+  "source_sha256": "bcd63507c3c4cc3ea1bad2945e3f88cb4677a1a3c762e1acc38df4445714eb7c",
+  "source_bytes": 36575308,
+  "sensor_dimensions": [
+    4016,
+    5344
+  ],
+  "sensor_samples": 21461504,
+  "retained_sensor_bytes": 42923008,
+  "change": "Force bounded source read and existing own sensor decoder under one supplied root budget. Reject nonzero selection and stale cancellation before opening source.",
+  "qualification": "File sensor output matches all values from the existing sensor API; this is file transport consistency, not a new independent camera-color qualification. Existing independent sensor evidence is recorded in mef-investigation.json.",
+  "remaining": [
+    "MEF WB remains unresolved; no fabricated WB/profile and no embedded-preview fallback",
+    "No MEF photographic color or interactive viewer qualification",
+    "TIFF metadata/parser scratch is not fully covered by source/pixel allocation accounting",
+    "Full 100-format, NVIDIA CUDA execution and physical HDR requirements remain active"
+  ],
+  "real_file_test_passed": true,
+  "full_decoder_validation": "test result: ok. 878 passed; 0 failed; 57 ignored; 0 measured; 0 filtered out; finished in 0.33s",
+  "managed_peak_verified": 79498316,
+  "final_owner_release_verified": true,
+  "source_and_output_too_small_rejection_verified": true
+}

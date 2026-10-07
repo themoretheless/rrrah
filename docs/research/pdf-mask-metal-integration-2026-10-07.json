@@ -1,0 +1,47 @@
+{
+  "scope": "Updated PDF mask decoder through RAM, bounded swap and actual Metal readback",
+  "hardware": "Metal Apple M4 Max",
+  "actual_ai_report": "ai-mask-fixes-viewer-2026-10-07.json",
+  "actual_ai_ram_prefetch_passed": true,
+  "actual_ai_swap_gpu_passed": true,
+  "independent_mask_cases": [
+    {
+      "file": "soft-mask-device-rgb-bands.pdf",
+      "passed": true
+    },
+    {
+      "file": "soft-mask-shared-group.pdf",
+      "passed": true
+    },
+    {
+      "file": "soft-mask-alpha-without-group-cs.pdf",
+      "passed": false,
+      "stage": "source pixel comparison before GPU",
+      "first_different_byte": 35,
+      "pixel": [
+        8,
+        0
+      ],
+      "channel": "alpha",
+      "native": 0,
+      "poppler": 32
+    }
+  ],
+  "strict_mask_test_exit": 101,
+  "oracle_manifest": "tests/fixtures/pdf/soft-mask-poppler-goldens.json",
+  "checks_in_passing_cases": [
+    "Exact source RGBA versus independent Poppler-derived alpha",
+    "Exact actual GPU frame versus independently prepared source reference",
+    "Different mask bands visible in GPU frame",
+    "Resident lease survives zero cache byte limit",
+    "Native and linear display representations restored bit-for-bit from swap",
+    "Restore rejects exhausted shared budget then succeeds after pressure release",
+    "Shared root budget returns to zero"
+  ],
+  "limits": [
+    "One alpha-mask antialiasing boundary differs from Poppler; strict integrated mask gate fails",
+    "Actual AI source color comparison still fails on two pages",
+    "Headless Metal does not prove HDR presentation on a physical display",
+    "CUDA/NVIDIA execution and universal 100-format qualification remain unverified"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "scope": "EPS original PostScript section framing; no execution or raster decoding",
+  "api": "inspect_eps_source",
+  "primary_specification": "https://printtechnologies.org/standards/files/epsf_spec_v3_0.pdf",
+  "implemented": [
+    "Borrow ASCII PostScript source without allocation",
+    "Locate DOS binary source by checked absolute little-endian offsets and lengths",
+    "Reject missing, truncated, overlapping and competing preview sections",
+    "Separate opaque WMF or TIFF preview bytes from artwork without using preview as output",
+    "Verify bytewise-XOR header checksum unless FFFF sentinel",
+    "Inspect at most 256 bytes for first-line signature",
+    "Explicit caller source-length cap"
+  ],
+  "validation_boundary": "Synthetic header contracts only; preview payload validity and graphics execution are not qualified.",
+  "remaining": [
+    "Native PostScript tokenizer, stacks and bounded interpreter",
+    "DSC bounding boxes, transforms, clipping, paths, text, images and color semantics",
+    "Independent raster oracle and real EPS producer files",
+    "Viewer discovery, RAM/swap/prefetch/GPU integration for EPS",
+    "Full 100-format, NVIDIA/CUDA execution and physical HDR goal remains active"
+  ],
+  "validation": "test result: ok. 879 passed; 0 failed; 57 ignored; 0 measured; 0 filtered out; finished in 0.48s"
+}

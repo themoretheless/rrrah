@@ -145,9 +145,12 @@ impl Driver {
         check("cuMemAlloc output", unsafe {
             (self.allocate)(&raw mut output_device, bytes)
         })?;
-        // SAFETY: exact allocated device size and a live contiguous f32 slice.
-        check("cuMemcpyHtoD_v2", unsafe {
-            (self.copy_to_device)(input_device, pixels.as_ptr().cast(), bytes)
+        crate::readback::copy_input_chunks(pixels, input_device, cancelled, |chunk, address| {
+            // SAFETY: checked contiguous subrange of the allocated device
+            // payload and live borrowed CPU slice; no staging copy.
+            check("cuMemcpyHtoD_v2", unsafe {
+                (self.copy_to_device)(address, chunk.as_ptr().cast(), std::mem::size_of_val(chunk))
+            })
         })?;
         if cancelled() {
             return Err(CudaError::Cancelled);

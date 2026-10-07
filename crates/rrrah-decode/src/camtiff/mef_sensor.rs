@@ -106,9 +106,84 @@ pub fn decode_mef_zd_sensor(
         .ok_or_else(|| error("truncated packed sensor"))?;
     packed_12(sensor, 4016, 5344, budget, cancelled)
 }
+/// Read a qualified ZD sensor file with source and output under one root budget.
+/// Only image zero is supported. Returns raw codes, not developed camera color.
+pub fn decode_mef_zd_sensor_file(
+    request: &crate::DecodeRequest,
+    budget: &MemoryBudget,
+) -> Result<PixelBuffer<u16>, DecodeError> {
+    request.check_cancelled()?;
+    if request.image_index != 0 {
+        return Err(DecodeError::UnsupportedImageIndex {
+            index: request.image_index,
+        });
+    }
+    let mut bounded = request.clone();
+    bounded.memory_budget = Some(budget.clone());
+    let source = crate::bounded_io::read_bounded(&bounded)?;
+    decode_mef_zd_sensor(&source, budget, &|| {
+        bounded
+            .cancellation
+            .as_ref()
+            .is_some_and(crate::GenerationToken::is_cancelled)
+    })
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn file_import_rejects_selection_and_stale_generation_before_reading() {
+        let budget = MemoryBudget::new(1);
+        let mut request = crate::DecodeRequest::new("nonexistent.mef");
+        request.image_index = 1;
+        assert!(matches!(
+            decode_mef_zd_sensor_file(&request, &budget),
+            Err(DecodeError::UnsupportedImageIndex { index: 1 })
+        ));
+        request.image_index = 0;
+        request.cancellation = Some(crate::GenerationToken::new(
+            std::sync::Arc::new(std::sync::atomic::AtomicU64::new(2)),
+            1,
+        ));
+        assert!(matches!(
+            decode_mef_zd_sensor_file(&request, &budget),
+            Err(DecodeError::Cancelled)
+        ));
+        assert_eq!(budget.peak(), 0);
+    }
+
+    #[test]
+    #[ignore = "requires pinned Mamiya ZD source; qualifies file admission, not camera color"]
+    fn real_zd_file_import_shares_source_and_output_budget() {
+        let path = std::env::var("RRRAH_MEF_SOURCE").unwrap();
+        let source = std::fs::read(&path).unwrap();
+        let weight = 4016 * 5344 * 2_u64;
+        let oracle_budget = MemoryBudget::new(weight);
+        let expected = decode_mef_zd_sensor(&source, &oracle_budget, &|| false).unwrap();
+        let budget = MemoryBudget::new(source.len() as u64 + weight);
+        let request = crate::DecodeRequest::new(&path);
+        let output = decode_mef_zd_sensor_file(&request, &budget).unwrap();
+        assert_eq!(&output[..], &expected[..]);
+        assert_eq!(budget.used(), weight);
+        assert_eq!(budget.peak(), source.len() as u64 + weight);
+        let held = output.clone();
+        drop(output);
+        assert_eq!(budget.used(), weight);
+        drop(held);
+        assert_eq!(budget.used(), 0);
+        let short = MemoryBudget::new(source.len() as u64 + weight - 1);
+        assert!(matches!(
+            decode_mef_zd_sensor_file(&request, &short),
+            Err(DecodeError::Memory(_))
+        ));
+        assert_eq!(short.used(), 0);
+        assert_eq!(short.peak(), source.len() as u64);
+        let too_small = MemoryBudget::new(source.len() as u64 - 1);
+        assert!(decode_mef_zd_sensor_file(&request, &too_small).is_err());
+        assert_eq!(too_small.peak(), 0);
+    }
+
     #[test]
     fn packed_boundaries_admission_cancel_and_ownership() {
         let bytes = [0x00, 0x0f, 0xff, 0x12, 0x3a, 0xbc];

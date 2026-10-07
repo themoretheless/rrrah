@@ -1,0 +1,68 @@
+{
+  "scope": "PDF mask cache separation across inherited color resources",
+  "fixture": "tests/fixtures/pdf/soft-mask-inherited-profile.pdf",
+  "sha256": "1e9fd57fe1205fb05e9638538a9f61902c809815509bbd5e442c0eb39b6a836b",
+  "before_native_rgba_cells": [
+    [
+      0,
+      0,
+      0,
+      54
+    ],
+    [
+      0,
+      0,
+      0,
+      54
+    ]
+  ],
+  "independent_poppler_white_rgb_cells": [
+    [
+      178,
+      178,
+      178
+    ],
+    [
+      227,
+      227,
+      227
+    ]
+  ],
+  "change": "Hash all seven resource dictionaries and every parent scope into mask identity, alongside mask dictionary and root transform.",
+  "qualification_boundary": "Native context isolation, not calibrated luminosity correctness. Independent oracle differs in alpha 77/28 versus native 54/18.",
+  "actual_ai_after_device_luminosity_change": {
+    "VectorApple.ai:0": {
+      "different_pixels": 33167,
+      "max_channel_error": 214
+    },
+    "one.ai:0": {
+      "different_pixels": 2790,
+      "max_channel_error": 115
+    },
+    "one.ai:1": {
+      "different_pixels": 0,
+      "max_channel_error": 0
+    }
+  },
+  "remaining": [
+    "Calibrated group luminosity and precise group-space blending are not qualified",
+    "Actual AI strict comparisons still fail on two pages",
+    "Full 100-format cache/swap/prefetch/GPU/CUDA/HDR objective remains active"
+  ],
+  "after_native_rgba_cells": [
+    [
+      0,
+      0,
+      0,
+      54
+    ],
+    [
+      0,
+      0,
+      0,
+      18
+    ]
+  ],
+  "validation": "test result: ok. 876 passed; 0 failed; 56 ignored; 0 measured; 0 filtered out; finished in 0.32s",
+  "shared_root_release_verified": true
+}

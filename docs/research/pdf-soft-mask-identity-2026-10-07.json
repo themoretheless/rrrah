@@ -1,0 +1,74 @@
+{
+  "scope": "PDF soft-mask definition cache identity",
+  "fixture": "tests/fixtures/pdf/soft-mask-shared-group.pdf",
+  "fixture_sha256": "94fd6df1914264c9b20eb192c94afde02afeead2c95a91ab2d12ec28422c7534",
+  "before_native_rgba_cells": [
+    [
+      0,
+      0,
+      0,
+      18
+    ],
+    [
+      0,
+      0,
+      0,
+      18
+    ],
+    [
+      0,
+      0,
+      0,
+      18
+    ]
+  ],
+  "independent_poppler_white_composite_rgb_cells": [
+    [
+      227,
+      227,
+      227
+    ],
+    [
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0
+    ]
+  ],
+  "cause": "Mask cache identity used only shared group object identifier and root transform, aliasing S and TR variants. Equality used only group identifier.",
+  "change": "Hash complete soft-mask dictionary plus root transform; equality uses the same cache identity.",
+  "remaining": [
+    "Luminosity conversion differs: native solid-blue opacity 18, Poppler 28; strict independent luminosity match is not achieved",
+    "Group resource defaults, inherited named resources and bounding-box context are not fully qualified by this fixture",
+    "All 100 format and GPU/HDR/CUDA requirements remain active"
+  ],
+  "after_native_rgba_cells": [
+    [
+      0,
+      0,
+      0,
+      18
+    ],
+    [
+      0,
+      0,
+      0,
+      255
+    ],
+    [
+      0,
+      0,
+      0,
+      255
+    ]
+  ],
+  "validation": {
+    "focused_passed": 6,
+    "full_decoder_log": "/tmp/rrrah-soft-mask-full-tests.log",
+    "full_decoder_result": "test result: ok. 874 passed; 0 failed; 56 ignored; 0 measured; 0 filtered out; finished in 0.35s"
+  }
+}

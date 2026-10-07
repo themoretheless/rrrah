@@ -1,0 +1,24 @@
+{
+  "fixture": "tests/fixtures/pdf/device-default-gray-implicit.pdf",
+  "sha256": "cb09691c154380ec8b9f8247ca00aeab85a2a4701376b0b846505282d12553d3",
+  "scope": "Initial implicit gray with DefaultGray resource; no explicit color-selection operator",
+  "oracle": {
+    "renderer": "Poppler pdftoppm",
+    "dpi": 72,
+    "pixels": 64,
+    "unique_rgb": [
+      [
+        0,
+        0,
+        0
+      ]
+    ],
+    "exact": true
+  },
+  "native": {
+    "test": "implicit_initial_gray_remains_black_with_default_gray_resource",
+    "passed": true,
+    "profile_test_suite_passed": 5
+  },
+  "conclusion": "Preserve initial black. Resolving an explicit device color operator through DefaultGray does not justify recoloring the initial graphics state."
+}

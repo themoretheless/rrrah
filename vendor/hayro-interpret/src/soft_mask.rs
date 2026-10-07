@@ -49,6 +49,9 @@ impl TransferFunction {
 
 struct Repr<'a> {
     obj_id: ObjectIdentifier,
+    definition_key: u128,
+    resource_key: u128,
+    device_luminosity: bool,
     group: FormXObject<'a>,
     mask_type: MaskType,
     parent_resources: Resources<'a>,
@@ -64,9 +67,25 @@ struct Repr<'a> {
 
 impl Hash for Repr<'_> {
     fn hash<H: Hasher>(&self, state: &mut H) {
-        self.obj_id.hash(state);
+        self.definition_key.hash(state);
+        self.resource_key.hash(state);
         self.root_transform.cache_key().hash(state);
     }
+}
+
+// Resource lookup inherits through nested scopes; every dictionary in the
+// chain can change the same group's rendered mask without changing its stream.
+fn resource_cache_key(resources: &Resources<'_>) -> u128 {
+    hash128(&(
+        resources.ext_g_states.cache_key(),
+        resources.fonts.cache_key(),
+        resources.properties.cache_key(),
+        resources.color_spaces.cache_key(),
+        resources.x_objects.cache_key(),
+        resources.patterns.cache_key(),
+        resources.shadings.cache_key(),
+        resources.parent().map(resource_cache_key),
+    ))
 }
 
 /// A soft mask.
@@ -81,7 +100,7 @@ impl Debug for SoftMask<'_> {
 
 impl PartialEq for SoftMask<'_> {
     fn eq(&self, other: &Self) -> bool {
-        self.0.obj_id == other.0.obj_id
+        self.cache_key() == other.cache_key()
     }
 }
 
@@ -99,21 +118,40 @@ impl<'a> SoftMask<'a> {
         context: &Context<'a>,
         parent_resources: Resources<'a>,
     ) -> Option<Self> {
-        // TODO: With this setup, if there is a luminosity mask and alpha mask pointing to the
-        // same xobject, the ID will be the same.
+        // The same group may have distinct mask kinds, backgrounds and transfers.
+        let definition_key = dict.cache_key();
         let obj_id = dict.get_ref(G)?.into();
         let group_stream = dict.get::<Stream<'_>>(G)?;
         let group = FormXObject::new(&group_stream)?;
-        let cs = ColorSpace::new(
-            group.dict.get::<Dict<'_>>(GROUP)?.get::<Object<'_>>(CS)?,
-            &context.interpreter_cache.object_cache,
-        )?;
+        let kind = match dict.get::<Name<'_>>(S)?.deref() {
+            LUMINOSITY => MaskType::Luminosity,
+            ALPHA => MaskType::Alpha,
+            _ => return None,
+        };
+        let cs = group
+            .dict
+            .get::<Dict<'_>>(GROUP)?
+            .get::<Object<'_>>(CS)
+            .and_then(|object| ColorSpace::new(object, &context.interpreter_cache.object_cache));
+        // Alpha derives solely from coverage; a group CS is mandatory only
+        // for luminosity masks. Do not discard an alpha mask without one.
+        let cs = match (cs, kind) {
+            (Some(cs), _) => cs,
+            (None, MaskType::Alpha) => ColorSpace::device_gray(),
+            (None, MaskType::Luminosity) => return None,
+        };
+        let resources = Resources::from_parent(
+            group.dict.get::<Dict<'_>>(RESOURCES).unwrap_or_default(),
+            parent_resources.clone(),
+        );
+        let cs = cs.with_device_defaults(&context.device_color_defaults(&resources));
+        let device_luminosity = cs.is_device();
         let transfer_function = dict
             .get::<Object<'_>>(TR)
             .and_then(|o| Function::new(&o))
             .map(TransferFunction);
-        let (mask_type, background) = match dict.get::<Name<'_>>(S)?.deref() {
-            LUMINOSITY => {
+        let (mask_type, background) = match kind {
+            MaskType::Luminosity => {
                 let color = dict
                     .get::<ColorComponents>(BC)
                     .map(|c| Color::new(cs, c, 1.0))
@@ -121,17 +159,19 @@ impl<'a> SoftMask<'a> {
 
                 (MaskType::Luminosity, color)
             }
-            ALPHA => (
+            MaskType::Alpha => (
                 MaskType::Alpha,
                 // Background color attribute should only be used with luminosity masks.
                 Color::new(ColorSpace::device_gray(), smallvec![0.0], 1.0),
             ),
-            _ => return None,
         };
         let nesting_depth = context.nesting_depth() + 1;
 
         Some(Self(Rc::new(Repr {
             obj_id,
+            definition_key,
+            resource_key: resource_cache_key(&resources),
+            device_luminosity,
             group,
             mask_type,
             root_transform: context.get().ctm,
@@ -166,6 +206,11 @@ impl<'a> SoftMask<'a> {
     /// This can be used as a unique identifier for caching purposes.
     pub fn id(&self) -> ObjectIdentifier {
         self.0.obj_id
+    }
+
+    /// Whether luminosity uses the PDF device-space RGB approximation.
+    pub fn uses_device_luminosity(&self) -> bool {
+        self.0.device_luminosity
     }
 
     /// Return the underlying mask type.

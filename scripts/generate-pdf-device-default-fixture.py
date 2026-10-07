@@ -4,9 +4,9 @@ import hashlib,json,struct
 from pathlib import Path
 root=Path(__file__).resolve().parents[1]/'tests/fixtures/pdf'
 u32=lambda v:struct.pack('>I',v)
-def profile(xyz):
- h=bytearray(128);h[4:8]=b'rrrh';h[8:12]=u32(0x02100000);h[12:16]=b'scnr';h[16:20]=b'CMYK';h[20:24]=b'XYZ ';h[24:36]=struct.pack('>6H',2026,10,7,0,0,0);h[36:40]=b'acsp';h[40:44]=b'APPL';h[68:80]=struct.pack('>3i',*[round(v*65536) for v in [.9642,1,.8249]]);h[80:84]=b'rrrh'
- lut=b'mft2'+bytes(4)+bytes([4,3,2,0])+struct.pack('>9i',65536,0,0,0,65536,0,0,0,65536)+struct.pack('>2H',2,2)+struct.pack('>8H',*([0,65535]*4))+struct.pack('>48H',*([max(0,min(65535,round(v*32768))) for v in xyz]*16))+struct.pack('>6H',*([0,65535]*3))
+def profile(xyz, channels=4):
+ h=bytearray(128);h[4:8]=b'rrrh';h[8:12]=u32(0x02100000);h[12:16]=b'scnr';h[16:20]={1:b'GRAY',3:b'RGB ',4:b'CMYK'}[channels];h[20:24]=b'XYZ ';h[24:36]=struct.pack('>6H',2026,10,7,0,0,0);h[36:40]=b'acsp';h[40:44]=b'APPL';h[68:80]=struct.pack('>3i',*[round(v*65536) for v in [.9642,1,.8249]]);h[80:84]=b'rrrh'
+ lut=b'mft2'+bytes(4)+bytes([channels,3,2,0])+struct.pack('>9i',65536,0,0,0,65536,0,0,0,65536)+struct.pack('>2H',2,2)+struct.pack('>'+str(2*channels)+'H',*([0,65535]*channels))+struct.pack('>'+str(3*(2**channels))+'H',*([max(0,min(65535,round(v*32768))) for v in xyz]*(2**channels)))+struct.pack('>6H',*([0,65535]*3))
  white=b'XYZ '+bytes(4)+struct.pack('>3i',*[round(v*65536) for v in [.9642,1,.8249]])
  tags=[(b'A2B0',lut),(b'wtpt',white)];offset=128+4+12*len(tags);table=bytearray(u32(len(tags)));data=bytearray()
  for name,value in tags:
@@ -52,3 +52,36 @@ xref=len(output);output+=f'xref\n0 {len(offsets)}\n0000000000 65535 f \n'.encode
 for offset in offsets[1:]:output+=f'{offset:010d} 00000 n \n'.encode()
 output+=f'trailer\n<< /Size {len(offsets)} /Root 1 0 R >>\nstartxref\n{xref}\n%%EOF\n'.encode()
 path=root/'mesh-equal-dictionaries-distinct-streams.pdf';path.write_bytes(output);path.with_suffix('.json').write_text(json.dumps({'license':'CC0','sha256':hashlib.sha256(output).hexdigest(),'construction':'Two type-7 streams with identical dictionary bytes and transforms, red versus blue payloads. Left/right clip rectangles select halves. Must not share encoded shading cache entries.','dimensions':[16,8]},indent=2)+'\n')
+
+# Authored one- and three-channel device replacement profiles.
+for channels, name, operator, sample in [(1, 'gray', b'0 g', bytes([0])), (3, 'rgb', b'0 1 0 rg', bytes([0,255,0]))]:
+    device = b'/DeviceGray' if channels == 1 else b'/DeviceRGB'
+    default = b'/DefaultGray' if channels == 1 else b'/DefaultRGB'
+    profiles = [profile([.4360747,.2225045,.0139322],channels), profile([.1430804,.0606169,.7141733],channels)]
+    objects = [b'<< /Type /Catalog /Pages 2 0 R >>',b'<< /Type /Pages /Kids [3 0 R] /Count 1 >>',b'<< /Type /Page /Parent 2 0 R /MediaBox [0 0 32 8] /Resources << /XObject << /R 7 0 R /B 8 0 R >> >> /Contents 4 0 R >>',stream(b'<<',b'q /R Do Q q 1 0 0 1 16 0 cm /B Do Q')]
+    objects += [stream(b'<< /N '+str(channels).encode()+b' /Alternate '+device,data) for data in profiles]
+    for number in [5,6]:
+        content = operator+b' 0 0 8 8 re f q 8 0 0 8 8 0 cm /I Do Q'
+        resources = b'/Resources << /ColorSpace << '+default+b' [/ICCBased '+str(number).encode()+b' 0 R] >> /XObject << /I 9 0 R >> >>'
+        objects.append(stream(b'<< /Type /XObject /Subtype /Form /BBox [0 0 16 8] '+resources,content))
+    objects.append(stream(b'<< /Type /XObject /Subtype /Image /Width 1 /Height 1 /BitsPerComponent 8 /ColorSpace '+device,sample))
+    output=bytearray(b'%PDF-1.7\n');offsets=[0]
+    for i,obj in enumerate(objects,1):
+        offsets.append(len(output));output+=f'{i} 0 obj\n'.encode()+obj+b'\nendobj\n'
+    xref=len(output);output+=f'xref\n0 {len(offsets)}\n0000000000 65535 f \n'.encode()
+    for offset in offsets[1:]:output+=f'{offset:010d} 00000 n \n'.encode()
+    output+=f'trailer\n<< /Size {len(offsets)} /Root 1 0 R >>\nstartxref\n{xref}\n%%EOF\n'.encode()
+    path=root/f'device-default-{name}-contexts.pdf';path.write_bytes(output)
+    path.with_suffix('.json').write_text(json.dumps({'license':'CC0','sha256':hashlib.sha256(output).hexdigest(),'dimensions':[32,8],'construction':'Two nested resource scopes with constant red/blue ICC profiles. Device fill and shared image exercise scoped replacements and cache isolation.'},indent=2)+'\n')
+
+# Page starts with the implicit DeviceGray black; no colour operator is used.
+objects=[b'<< /Type /Catalog /Pages 2 0 R >>',b'<< /Type /Pages /Kids [3 0 R] /Count 1 >>',b'<< /Type /Page /Parent 2 0 R /MediaBox [0 0 8 8] /Resources << /ColorSpace << /DefaultGray [/ICCBased 5 0 R] >> >> /Contents 4 0 R >>',stream(b'<<',b'0 0 8 8 re f'),stream(b'<< /N 1 /Alternate /DeviceGray',profile([.4360747,.2225045,.0139322],1))]
+output=bytearray(b'%PDF-1.7\n');offsets=[0]
+for i,obj in enumerate(objects,1):
+    offsets.append(len(output));output+=f'{i} 0 obj\n'.encode()+obj+b'\nendobj\n'
+xref=len(output);output+=f'xref\n0 {len(offsets)}\n0000000000 65535 f \n'.encode()
+for offset in offsets[1:]:output+=f'{offset:010d} 00000 n \n'.encode()
+output+=f'trailer\n<< /Size {len(offsets)} /Root 1 0 R >>\nstartxref\n{xref}\n%%EOF\n'.encode()
+(root/'device-default-gray-implicit.pdf').write_bytes(output)
+
+(root/'device-default-gray-implicit.json').write_text(json.dumps({'license':'CC0','sha256':hashlib.sha256(output).hexdigest(),'dimensions':[8,8],'construction':'Implicit initial DeviceGray black with a constant-red DefaultGray ICC resource; no colour-selection operator. Independent Poppler renders black.'},indent=2)+'\n')
