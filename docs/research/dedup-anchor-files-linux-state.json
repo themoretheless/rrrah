@@ -1,0 +1,33 @@
+{
+  "status": "verified_native_linux_automatic_guarded_anchor_files",
+  "tests": 59,
+  "suites": {
+    "anchor_candidate_search": 1,
+    "anchor_rank_file": 2,
+    "anchor_rank": 4,
+    "local_rank": 5,
+    "local_rank_cached": 3,
+    "piecewise_local_rank": 2,
+    "piecewise_warp": 4,
+    "mesh_rank_regions": 3,
+    "projective_grid": 3,
+    "mesh_grid": 2,
+    "mesh_rank": 2,
+    "rank_region": 7,
+    "projective_exhaustive_domains": 3,
+    "projective_domains": 4,
+    "projective_geometry": 14
+  },
+  "snapshot_files": 2937,
+  "current_files_changed_after_snapshot": [
+    "crates/rrrah-dedup/src/local_collection.rs",
+    "crates/rrrah-dedup/src/local_scan.rs"
+  ],
+  "pins": {
+    "docs/research/dedup-anchor-files-linux-snapshot.json": "c548db32aad839c9489f2afa82111363ff2ceb08a71cccc326fb90d4f5e807a0",
+    "docs/research/dedup-anchor-files-linux-native.log": "0a0d491755d485d71f269cacb973c6102739959ef1fde38e8be2b1dcbd298788",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-anchor-files-linux.py": "a29cdc5c2ea7e643308b1f0a8e3f622d6c1d5975a204242fcbb04b7b3154b53c",
+    "scripts/run-dedup-linux-local-rank.sh": "cd17d6a618857e6195c64557a3a9fe464afd076f2907e1c7579081451d04c1ac"
+  },
+  "scope": "Native Linux aarch64 automatic candidate/guarded file fixture tests including scale, full original points, exact direct parity, request-token cancellation, file mutation and managed release, plus geometry/rank regressions. Exact frozen dedup source/test bytes; current changed collection/scan modules have matching historical archives. New collection API is outside this gate; no real corpus, Windows, unrelated precision, full package or collection admission proof."
+}

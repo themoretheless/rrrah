@@ -1,0 +1,18 @@
+{
+  "status": "verified_native_linux_rank_region",
+  "returncode": 0,
+  "tests": 4,
+  "verified_snapshot_files": 2861,
+  "input_hashes": {
+    "docs/research/dedup-rank-region-linux-snapshot.json": "c8eeb2677b990e2049d64d6bad09a0256ae5b0bd949eed772ed3f27d792bf9a7",
+    "docs/research/dedup-rank-region-linux-native.log": "ed6f62e9bea5c1705b27d0c138ca1edf76a3af0edba340439d8ce7a3d299c648",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-rank-region-linux.py": "19d85d14561fb60c768df30dcba61a9dddd50a532d3134440905d5bd6c32da59",
+    "scripts/run-dedup-linux-rank-region.sh": "fde30a8ebcf05f7ecad4d2e164712a3307f967a64be03e15a0550c831efea168"
+  },
+  "current_code_test_hashes": {
+    "crates/rrrah-dedup/src/lib.rs": "060f497e7dee3dcf4f4fcbbf3ff1104cc341e25129e33d0cfef5ae511a60efe8",
+    "crates/rrrah-dedup/src/rank_region.rs": "1cf3e008463c5391e9451fd1684e526a87a6c46e4a4e122402d7b5c9dd8f1bd1",
+    "crates/rrrah-dedup/tests/rank_region.rs": "82be92db5524be06e024ba97dc75a30963222422dcabe48a02cd70625d0105b7"
+  },
+  "scope": "Native Linux aarch64 no-default-features local rank suite; all snapshot bytes verified. Current rank module, lib export and tests match. Measurement examples/Cargo additions excluded; no automatic classifier, broad precision, Windows or Linux file/decode rank qualification."
+}

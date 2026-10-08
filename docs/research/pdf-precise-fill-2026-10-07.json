@@ -1,0 +1,175 @@
+{
+  "scope": "12 selected worst-edge pixels of producer one.ai; bounded precise native fill implementation",
+  "method": "Independent original cubic evaluation; polygon pixel clipping; local shoelace area; 1024/8192 subdivisions per curve converge within1e-4",
+  "rows": [
+    {
+      "x": 1061,
+      "y": 189,
+      "coverage": [
+        0.7806039469469916,
+        0.7806473517387387
+      ],
+      "area_gray8": 56,
+      "native_gray8": 115,
+      "poppler_gray8": 0,
+      "precise_alpha8": 199,
+      "precise_gray8": 56
+    },
+    {
+      "x": 1072,
+      "y": 189,
+      "coverage": [
+        0.7806039469469916,
+        0.7806473517387387
+      ],
+      "area_gray8": 56,
+      "native_gray8": 115,
+      "poppler_gray8": 0,
+      "precise_alpha8": 199,
+      "precise_gray8": 56
+    },
+    {
+      "x": 1061,
+      "y": 605,
+      "coverage": [
+        0.7806039469469899,
+        0.7806473517387315
+      ],
+      "area_gray8": 56,
+      "native_gray8": 115,
+      "poppler_gray8": 0,
+      "precise_alpha8": 199,
+      "precise_gray8": 56
+    },
+    {
+      "x": 1072,
+      "y": 605,
+      "coverage": [
+        0.7806039469469899,
+        0.7806473517387315
+      ],
+      "area_gray8": 56,
+      "native_gray8": 115,
+      "poppler_gray8": 0,
+      "precise_alpha8": 199,
+      "precise_gray8": 56
+    },
+    {
+      "x": 948,
+      "y": 384,
+      "coverage": [
+        0.7723154263817922,
+        0.7723401392824201
+      ],
+      "area_gray8": 58,
+      "native_gray8": 111,
+      "poppler_gray8": 0,
+      "precise_alpha8": 197,
+      "precise_gray8": 58
+    },
+    {
+      "x": 1185,
+      "y": 384,
+      "coverage": [
+        0.7723154263817671,
+        0.7723401392824214
+      ],
+      "area_gray8": 58,
+      "native_gray8": 111,
+      "poppler_gray8": 0,
+      "precise_alpha8": 197,
+      "precise_gray8": 58
+    },
+    {
+      "x": 948,
+      "y": 410,
+      "coverage": [
+        0.7723154263817922,
+        0.7723401392824201
+      ],
+      "area_gray8": 58,
+      "native_gray8": 111,
+      "poppler_gray8": 0,
+      "precise_alpha8": 197,
+      "precise_gray8": 58
+    },
+    {
+      "x": 1185,
+      "y": 410,
+      "coverage": [
+        0.772315426381767,
+        0.7723401392824214
+      ],
+      "area_gray8": 58,
+      "native_gray8": 111,
+      "poppler_gray8": 0,
+      "precise_alpha8": 197,
+      "precise_gray8": 58
+    },
+    {
+      "x": 251,
+      "y": 224,
+      "coverage": [
+        0.5820632996063672,
+        0.582104595443338
+      ],
+      "area_gray8": 107,
+      "native_gray8": 174,
+      "poppler_gray8": 68,
+      "precise_alpha8": 148,
+      "precise_gray8": 107
+    },
+    {
+      "x": 396,
+      "y": 224,
+      "coverage": [
+        0.5820632996063734,
+        0.5821045954433346
+      ],
+      "area_gray8": 107,
+      "native_gray8": 174,
+      "poppler_gray8": 68,
+      "precise_alpha8": 148,
+      "precise_gray8": 107
+    },
+    {
+      "x": 251,
+      "y": 570,
+      "coverage": [
+        0.5820632996063674,
+        0.5821045954433319
+      ],
+      "area_gray8": 107,
+      "native_gray8": 174,
+      "poppler_gray8": 68,
+      "precise_alpha8": 148,
+      "precise_gray8": 107
+    },
+    {
+      "x": 396,
+      "y": 570,
+      "coverage": [
+        0.5820632996063736,
+        0.5821045954433285
+      ],
+      "area_gray8": 107,
+      "native_gray8": 174,
+      "poppler_gray8": 68,
+      "precise_alpha8": 148,
+      "precise_gray8": 107
+    }
+  ],
+  "source_sha256": "97786949c268233a446e1738fb9c2f941e4d109811bd2f972948cdb7a45d64b4",
+  "native_alpha_convention": "Black RGBA [0,0,0,alpha] composited on white using existing strict verifier integer formula",
+  "interpretation": "The worst pixels indicate coverage differences. Independent cubic area is a geometric diagnostic, not a replacement for full PDF color/compositing qualification. Poppler pixel equality alone is insufficient to identify which coverage is more accurate.",
+  "next_action": "Inspect curve flattening and raster coverage precision",
+  "max_error_before": 67,
+  "max_error_after": 0,
+  "implementation": "Adaptive De Casteljau; finite transformed control-hull distance to segment <=1/256 pixel; depth20 and65536 element limits; explicit warning/refusal",
+  "test_results": "969 passed, zero failures, 66 ignored; authored exact parabola integral and bounded refusal now active",
+  "limits": [
+    "Bounded subdivision buffer not yet charged to shared root",
+    "Strokes, clip curves and glyph-outline fill precision not all covered by this path",
+    "Speed and full AI appearance not yet qualified"
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "scope": "Metal HDR live viewer on built-in Liquid Retina XDR",
+  "backend": "Metal",
+  "adapter": "Apple M4 Max",
+  "surface": {
+    "hdr": true,
+    "format": "Rgba16Float",
+    "color_space": "ExtendedSrgbLinear"
+  },
+  "screen": [
+    {
+      "current_edr_headroom": 1.2000000476837158,
+      "name": "Built-in Retina Display",
+      "potential_edr_headroom": 16,
+      "reference_edr_headroom": 0
+    }
+  ],
+  "screen_while_hdr_active": [
+    {
+      "current_edr_headroom": 8.79120922088623,
+      "name": "Built-in Retina Display",
+      "potential_edr_headroom": 16,
+      "reference_edr_headroom": 0
+    }
+  ],
+  "native_window": "Rrrah \u2014 image 3x2 ready in 13.73ms",
+  "visible_image_confirmed": true,
+  "source": "tests/fixtures/raster/float-none-rec709-declared.exr",
+  "source_sha256": "237d1030caf9022f441458e8a90b718df4fe07f24e473b0bcf827d1b0ac9628e",
+  "log": "/tmp/rrrah-metal-hdr-bundle.log",
+  "limitations": [
+    "Screen EDR headroom is dynamic OS state; the difference is not a controlled causal experiment.",
+    "Screenshot confirms presented content, not HDR luminance or color accuracy.",
+    "No physical luminance/colorimeter measurement; absolute nits and display calibration remain unqualified.",
+    "NVIDIA/CUDA intentionally deferred by user."
+  ]
+}

@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/Users/themoretheless/Documents/Sources/rrrah/scripts/snapshot-dedup-validation.py", line 35, in <module>
+    assert {str(path.relative_to(root)): digest(path) for path in files} == before, 'Source changed during snapshot; preserve this failed snapshot and retry in a fresh directory.'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Source changed during snapshot; preserve this failed snapshot and retry in a fresh directory.

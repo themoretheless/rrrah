@@ -1,0 +1,41 @@
+{
+  "scope": "Test-only admitted native-component group frame storage; interpreter/native color-boundary integration still pending",
+  "source_sha256": {
+    "vendor/hayro/src/native_frame.rs": "dffc06a6fbaaad85b359bb0c0e5b71d636b824e7fa9588da019b81da6f7d0d65",
+    "vendor/hayro/src/native_blend.rs": "5e671edd771e5bd17b4c2f2fa7f120079099e65ec418ba20afd08f427f70b987"
+  },
+  "suite": {
+    "passed": 101,
+    "failed": 0,
+    "ignored": 8,
+    "filtered": 1,
+    "seconds": 1.75,
+    "log": "/tmp/rrrah-native-group-frame-controls.log"
+  },
+  "controls": [
+    "CMYK non-isolated knockout frame retains initial backdrop separate from current pixels",
+    "Transparent full-shape child restores initial backdrop while group contribution alpha becomes zero",
+    "Fractional child yields alpha3/4 and independent native cyan1/3 magenta2/3 contribution after backdrop removal",
+    "All3 admission refusal points release storage",
+    "Every constructor cancellation checkpoint releases storage",
+    "Every contribution-extraction cancellation checkpoint releases storage and yields no output",
+    "Wrong destination-space key, out-of-range index and cancellation latch frame failure after valid prior draw; contribution then refuses",
+    "After contribution only current pixel storage credit remains; initial/coverage credits released; output drop releases final credit"
+  ],
+  "allocation": "Three separately credited exact buffers: initial pixels, current pixels, shape/alpha coverage. All storage credits precede allocations. Vec storage precedes guard field drops. No new pixel quantization.",
+  "limits": {
+    "max_pixels": 16777216,
+    "per_pixel_bytes_expression": "2*size_of::<native_blend::Pixel>() + size_of::<PreciseCoverage>()",
+    "metadata": "Frame is returned by value; future caller must admit stack/container capacity separately",
+    "caller_space_key": "Exact verified destination-space key required; profile conversion not inferred from equal component counts"
+  },
+  "remaining": [
+    "Derive verified color/profile identities and implement group boundary conversions",
+    "Connect original paints and group space/inheritance to scene replay",
+    "Native gradient and image sample handling",
+    "Mask luminosity and profile-qualified RGB output conversion",
+    "Independent oracle qualification and production routing"
+  ],
+  "scene_integration_enabled": false,
+  "production_enabled": false
+}

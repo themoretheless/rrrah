@@ -1,0 +1,23 @@
+{
+  "status": "macos_linux_pass",
+  "session": 13992,
+  "log": "docs/research/dedup-five-flatten-memory-macos.log",
+  "source_before": {
+    "crates/rrrah-dedup/src/local_collection.rs": "470c30d6b6394f026c715d868adb091d5dc81080e47489d7235573d83b0c3b39",
+    "crates/rrrah-dedup/tests/five_collection.rs": "6c8b21edf17cba70989ef330213ad2b327275d873f85f7f630cc15ba4833aff5"
+  },
+  "scope": "Both gradient recipe flattening descriptor and owner buffers reserve before allocation and adopt actual capacity. Binary split, final proposal union, generic lifecycle metadata and full RSS still pending.",
+  "linux_session": 8509,
+  "linux_tracking": "docs/research/dedup-five-flatten-memory-linux-state.json",
+  "linux_log": "docs/research/dedup-five-flatten-memory-linux.log",
+  "macos_exit_code": 0,
+  "macos_test_count": 1,
+  "source_after": {
+    "crates/rrrah-dedup/src/local_collection.rs": "470c30d6b6394f026c715d868adb091d5dc81080e47489d7235573d83b0c3b39",
+    "crates/rrrah-dedup/tests/five_collection.rs": "6c8b21edf17cba70989ef330213ad2b327275d873f85f7f630cc15ba4833aff5"
+  },
+  "selected_sources_unchanged": true,
+  "linux_exit_code": 0,
+  "linux_test_count": 9,
+  "linux_selected_sources_unchanged": true
+}

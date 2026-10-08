@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-07",
+  "feature": "Native bounded Farbfeld decoding directly from source bytes into admitted RGBA16 storage",
+  "contract": [
+    "Exact file framing and nonzero bounded dimensions",
+    "Big-endian channel values retained without conversion",
+    "Output memory reserved before allocation and adopted without duplicate pixel buffer",
+    "Cancellation checked every 4096 pixels and before commit",
+    "Color remains explicitly assumed sRGB",
+    "Unsupported subimage refused"
+  ],
+  "tests": {
+    "log": "/tmp/rrrah-native-farbfeld-final.log",
+    "passed": 962,
+    "ignored": 65,
+    "checks": [
+      "Independent raster corpus remains exact",
+      "Adjacent and extreme u16 samples and alpha retained",
+      "Exact 16-byte output budget succeeds and one-byte-short budget releases all occupancy",
+      "Truncated or extra payload rejected",
+      "Nonzero image index rejected"
+    ]
+  },
+  "benchmark": {
+    "adapter": "Apple M4 Max Metal",
+    "source": "/tmp/rrrah-resident-1920x1080.ff, generated source documented in resident-large-view-stages-2026-10-07.json",
+    "log": "/tmp/rrrah-farbfeld-native-large-after.log",
+    "iterations": 15,
+    "warmup": 3,
+    "before_decode_p50_ms": 68.021,
+    "after_decode_p50_ms": 4.628,
+    "before_total_p50_ms": 107.873,
+    "after_total_p50_ms": 91.231,
+    "after_total_p95_ms": 135.546,
+    "cpu_peak_bytes": 50028544,
+    "gpu_peak_bytes": 132710416,
+    "released_cpu": 0,
+    "released_gpu": 0
+  },
+  "limits": [
+    "Sequential dev-profile warm-cache measurements; strong timing variance on shared host",
+    "Stage medians do not sum to total median",
+    "No broad format, camera RAW or cold-storage acceleration claim"
+  ],
+  "status": "local, not pushed"
+}

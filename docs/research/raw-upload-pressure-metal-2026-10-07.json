@@ -1,0 +1,23 @@
+{
+  "scope": "RAW atlas replacement under independent budget exhaustion",
+  "adapter": "Metal Apple M4 Max",
+  "budgets": [
+    "GPU atlas residency with replacement overlap",
+    "CPU halo/row packing",
+    "Queued aligned GPU uploads"
+  ],
+  "verification": [
+    "Occupy all available bytes in each root independently",
+    "Replacement refuses with structured GpuError::Memory",
+    "Previous resident size and 64x64 rendered Metal frame remain exact",
+    "After held pressure credit releases: original atlas credit remains, CPU and queue occupancy zero",
+    "Successful subsequent replacement changes frame; final renderer drop frees all roots"
+  ],
+  "test_suite": "11 passed, zero failures, zero ignored",
+  "log": "/tmp/rrrah-raw-upload-pressure.log",
+  "limits": [
+    "Synthetic tiled CFA input",
+    "Logical allocation budgets, not physical total driver VRAM",
+    "No NVIDIA/CUDA or physical HDR qualification"
+  ]
+}

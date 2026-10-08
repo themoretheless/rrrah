@@ -1,0 +1,17 @@
+{
+  "scope": "Cooperative cancellation of PDF fast-path eight-bit RGB conversion",
+  "implementation": "Convert eight-bit image data in component-aligned blocks of 1024 pixels. Check cancellation before output allocation, before every conversion block and before returning. No partial RGB buffer is returned. Existing float conversion remains chunked.",
+  "active_test": "x_object::image_color_cancellation_tests::u8_block_conversion_is_exact_and_cancellation_returns_no_partial_buffer",
+  "verified": [
+    "Gray, RGB and CMYK conversion of 6147 pixels each matches the original whole-buffer conversion byte-for-byte.",
+    "Partial final blocks preserve output.",
+    "Every observed cancellation checkpoint refuses without a partial buffer.",
+    "Real PDF/AI RAM, swap and Metal frame qualification continues to pass."
+  ],
+  "validation": {"decoder_library_passed": 973, "ignored": 66, "vendor_color_focused_passed": 2, "pdf_viewer_metal_passed": 6, "failed": 0},
+  "logs": ["/tmp/rrrah-pdf-u8-color-cancel.log", "/tmp/rrrah-pdf-u8-color-cancel-unit.log", "/tmp/rrrah-pdf-u8-color-cancel-metal.log"],
+  "limitations": [
+    "Encoded filter decoding, component unpacking, transfer functions and other rendering phases remain incompletely interruptible.",
+    "No new whole-viewer latency guarantee or complete allocation-cap claim."
+  ]
+}

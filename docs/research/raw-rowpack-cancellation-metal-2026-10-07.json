@@ -1,0 +1,34 @@
+{
+  "change": "Cancellable padded RAW upload row packing; little-endian checks every 64 rows, big-endian encoder every 4096 samples",
+  "verification": [
+    "257x513 sensor values preserved exactly in 768-byte GPU rows",
+    "All alignment padding remains zero",
+    "All 11 padded-row checkpoints cancel",
+    "Dynamic Metal upload test now covers 76 checkpoints across nine tiles and preserves previous frame/budget",
+    "Successful retry and final resource release still pass"
+  ],
+  "tests": {
+    "gpu": [
+      [
+        "49",
+        "0",
+        "0"
+      ],
+      [
+        "11",
+        "0",
+        "0"
+      ]
+    ],
+    "app": "164 passed, zero failures, 25 ignored"
+  },
+  "logs": [
+    "/tmp/rrrah-raw-rowpack-cancel.log",
+    "/tmp/rrrah-raw-rowpack-cancel-app.log"
+  ],
+  "limits": [
+    "Little-endian Apple M4 Max hardware exercised; big-endian branch not physically qualified",
+    "Vector zero initialization does not poll internally",
+    "No latency benchmark claim; no physical HDR or NVIDIA/CUDA proof"
+  ]
+}

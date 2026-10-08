@@ -1,0 +1,99 @@
+   Compiling rrrah-dedup v0.1.0 (/workspace/crates/rrrah-dedup)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+warning: linker stderr: /validation/sysroot/usr/bin/ld: /validation/target/debug/deps/libjpegxr-8d01a0594e000fc4.rlib(2e643c6506a180d9-strenc.o): in function `StrIOEncInit':
+         /validation/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/jpegxr-0.3.1/jxrlib/image/encode/strenc.c:485:(.text.StrIOEncInit+0xf0): the use of `tmpnam' is dangerous, better use `mkstemp'
+  |
+  = note: `#[warn(linker_messages)]` on by default
+
+warning: linker stdout: /validation/sysroot/usr/bin/ld: /validation/target/debug/deps/libjpegxr-8d01a0594e000fc4.rlib(2e643c6506a180d9-strenc.o): note: the message above does not take linker garbage collection into account
+
+warning: `rrrah-dedup` (test "gradient_candidate_smoothing") generated 2 warnings
+warning: `rrrah-dedup` (test "anchor_rank_driven_collection_preflight") generated 2 warnings (2 duplicates)
+warning: variable `H` should have a snake case name
+   --> crates/rrrah-dedup/tests/candidate_reflected_geometry.rs:126:9
+    |
+126 |     let H=geometry.transform.matrix;
+    |         ^ help: convert the identifier to snake case: `h`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: `rrrah-dedup` (test "candidate_reflected_geometry") generated 3 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "gradient_reflection") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "anchor_reflection_fallback") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "anchor_geometry_rank_fallback") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "anchor_reflected_geometry") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "anchor_rank_driven_collection") generated 2 warnings (2 duplicates)
+    Finished `test` profile [optimized + debuginfo] target(s) in 11m 25s
+     Running tests/anchor_geometry_rank_fallback.rs (/validation/target/debug/deps/anchor_geometry_rank_fallback-9d2769062fca6abc)
+
+running 1 test
+test rank_driven_fallback_admission_selection_cancel_and_release ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.84s
+
+     Running tests/anchor_rank_driven_collection.rs (/validation/target/debug/deps/anchor_rank_driven_collection-4d6a4c0aa15eeaca)
+
+running 1 test
+test rank_driven_indexed_collection_matches_all_direct_pairs ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 23.79s
+
+     Running tests/anchor_rank_driven_collection_preflight.rs (/validation/target/debug/deps/anchor_rank_driven_collection_preflight-89abde52cb0374fb)
+
+running 1 test
+test rank_driven_collection_caps_refuse_before_iteration ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/anchor_reflected_geometry.rs (/validation/target/debug/deps/anchor_reflected_geometry-e2677dd0d30b77cf)
+
+running 1 test
+test reflected_file_search_common_lifecycle_and_original_pixel_parity ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 11.14s
+
+     Running tests/anchor_reflection_fallback.rs (/validation/target/debug/deps/anchor_reflection_fallback-81c518cf71d105ae)
+
+running 3 tests
+test all_eight_cumulative_caps_refuse_before_missing_io_and_cancel_wins ... ok
+test ordinary_mirror_and_foreign_select_correct_six_phase_recipes ... ok
+test six_phase_cancellation_and_both_source_mutations_release_memory ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 22.68s
+
+     Running tests/candidate_reflected_geometry.rs (/validation/target/debug/deps/candidate_reflected_geometry-f80b52d70983399e)
+
+running 1 test
+test reflected_geometry_recovers_original_coordinate_mirror_and_refuses_before_io ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.97s
+
+     Running tests/gradient_candidate_smoothing.rs (/validation/target/debug/deps/gradient_candidate_smoothing-e29574af02d0bb84)
+
+running 3 tests
+test smoothing_matches_independent_footprints_and_exact_last_owner_credit ... ok
+test zero_radius_exact_bits_half_memory_and_all_cancellation_points ... ok
+test work_memory_opacity_and_every_cancellation_refuse_without_retained_output ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/gradient_reflection.rs (/validation/target/debug/deps/gradient_reflection-a33549b539e5bb43)
+
+running 1 test
+test canonical_reflection_matches_independently_mirrored_pixels ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

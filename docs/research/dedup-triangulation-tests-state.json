@@ -1,0 +1,14 @@
+{
+  "status": "verified_native_target_triangulation_authored_grid",
+  "tests_passed": 6,
+  "command": "cargo test -p rrrah-dedup --features raster --test triangulation --test piecewise_warp --locked",
+  "pins": {
+    "crates/rrrah-dedup/src/triangulation.rs": "c4877afefffe7f5b9fbe758a44924b881f9580fe69647dfba1cbe1c639927214",
+    "crates/rrrah-dedup/tests/triangulation.rs": "18a18aff10dbb0edbc911dcee4359d7afe1f37e202377741e8640e48c9a116c2",
+    "crates/rrrah-dedup/src/piecewise_warp.rs": "cdd8fd51e2012e4d0be0d42719d10003a3afaa3f92d8301256ba5d51ce50d8bd",
+    "crates/rrrah-dedup/tests/piecewise_warp.rs": "884c3f7c50d785e0558d441d96745d53ec5c8ba262184cdfe8494eda40e5f19a",
+    "crates/rrrah-dedup/src/lib.rs": "8d247c55d0bf53be1f813f10c661e78d67f802abfc2857996f0e861c7b38eebb",
+    "docs/research/dedup-triangulation-tests.log": "94df2151672fcd4efcfaa8b503df60d519d8e2a9e6ba08236f7738b21f9d6fdc"
+  },
+  "scope": "Deterministic 9-point grid, source geometry acceptance, duplicate/collinear rejection, bounded work/memory refusal, every observed cancellation checkpoint. No real folded-image mesh or pixel-copy admission proof."
+}

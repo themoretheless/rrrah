@@ -72,8 +72,38 @@ def main():
                                    for c in (r, g, b))
                     different = sum(actual[i:i+3] != oracle[i:i+3]
                                     for i in range(0, len(oracle), 3))
+                    absolute_sum = 0
+                    squared_sum = 0
+                    maximum = 0
+                    above = {1: 0, 8: 0, 32: 0, 128: 0}
+                    bounds = [width, height, -1, -1]
+                    regions = {}
+                    for offset in range(0, len(oracle), 3):
+                        pixel_error = 0
+                        for channel in range(3):
+                            error = abs(actual[offset + channel] - oracle[offset + channel])
+                            absolute_sum += error
+                            squared_sum += error * error
+                            maximum = max(maximum, error)
+                            pixel_error = max(pixel_error, error)
+                        if pixel_error:
+                            pixel = offset // 3
+                            x, y = pixel % width, pixel // width
+                            bounds = [min(bounds[0], x), min(bounds[1], y), max(bounds[2], x), max(bounds[3], y)]
+                            region = (x // 64, y // 64)
+                            entry = regions.setdefault(region, [0, 0, 0])
+                            entry[0] += 1
+                            entry[1] += pixel_error
+                            entry[2] = max(entry[2], pixel_error)
+                        for threshold in above:
+                            above[threshold] += pixel_error > threshold
                     row.update(different_pixels=different,
-                               max_channel_error=max(abs(a-b) for a, b in zip(actual, oracle)),
+                               max_channel_error=maximum,
+                               difference_bounds_inclusive=bounds if different else None,
+                               highest_error_regions=[{"origin": [x * 64, y * 64], "different_pixels": values[0], "summed_max_channel_error": values[1], "max_channel_error": values[2]} for (x, y), values in sorted(regions.items(), key=lambda entry: (-entry[1][1], entry[0]))[:16]],
+                               mean_absolute_channel_error=absolute_sum / len(oracle),
+                               rms_channel_error=(squared_sum / len(oracle)) ** 0.5,
+                               pixels_above_channel_error={str(key): value for key, value in above.items()},
                                rgba_sha256=sha256(rgba), exact=different == 0)
                 except (ValueError, subprocess.CalledProcessError) as error:
                     row["error"] = str(error)

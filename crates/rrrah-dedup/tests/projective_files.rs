@@ -93,6 +93,311 @@ fn pyramid_photometric_files_preserve_identity_refusals_and_cancel_retry() {
         fit_mode: PhotometricFitMode::ConstrainedLeastSquares,
     };
     let budget = MemoryBudget::new(64 * 1024 * 1024);
+    {
+        use rrrah_dedup::{
+            gradient::GradientMatchPolicy,
+            local::LocalError,
+            local_scan::{
+                ProjectiveGradientPyramidFilePolicy, compare_local_files_projective_gradient_pyramid,
+            },
+        };
+        let q = ProjectiveGradientPyramidFilePolicy {
+            search: p,
+            matching: GradientMatchPolicy {
+                max_comparisons: 384 * 384,
+                max_squared_distance: 0.5,
+                squared_ratio: 0.64,
+            },
+            max_total_gradient_samples: 128 * 3 * 512,
+        };
+        let calls = Cell::new(0);
+        let identity = compare_local_files_projective_gradient_pyramid(&a, &a, q, &budget, || {
+            calls.set(calls.get() + 1);
+            false
+        })
+        .unwrap();
+        assert!(identity.candidate && identity.geometry.is_some() && identity.pixels.is_some());
+        assert_eq!(budget.used(), 0);
+        let checkpoints = calls.get();
+        for stop in [1, checkpoints / 2, checkpoints] {
+            calls.set(0);
+            assert!(matches!(
+                compare_local_files_projective_gradient_pyramid(&a, &a, q, &budget, || {
+                    calls.set(calls.get() + 1);
+                    calls.get() == stop
+                }),
+                Err(LocalFileError::Cancelled)
+            ));
+            assert_eq!(budget.used(), 0);
+        }
+        assert!(
+            compare_local_files_projective_gradient_pyramid(&a, &a, q, &budget, || false)
+                .unwrap()
+                .candidate
+        );
+        assert!(
+            !compare_local_files_projective_gradient_pyramid(&a, &b, q, &budget, || false)
+                .unwrap()
+                .candidate
+        );
+        assert_eq!(budget.used(), 0);
+        let fresh = MemoryBudget::new(64 * 1024 * 1024);
+        let short = ProjectiveGradientPyramidFilePolicy {
+            max_total_gradient_samples: q.max_total_gradient_samples - 1,
+            ..q
+        };
+        assert!(matches!(
+            compare_local_files_projective_gradient_pyramid(&a, &a, short, &fresh, || false),
+            Err(LocalFileError::Features(LocalError::Budget))
+        ));
+        assert_eq!(fresh.peak(), 0);
+        let failed = ProjectiveGradientPyramidFilePolicy {
+            matching: GradientMatchPolicy {
+                max_comparisons: 0,
+                ..q.matching
+            },
+            ..q
+        };
+        assert!(matches!(
+            compare_local_files_projective_gradient_pyramid(&a, &a, failed, &budget, || false),
+            Err(LocalFileError::Features(LocalError::Budget))
+        ));
+        assert_eq!(budget.used(), 0);
+        {
+            use rrrah_dedup::local_scan::{
+                SpatialFeaturePolicy, compare_local_files_projective_spatial_gradient_pyramid_with_recipe,
+            };
+            use rrrah_dedup::{
+                gradient::GradientCellRecipe,
+                local_scan::compare_local_files_projective_gradient_pyramid_with_recipe,
+            };
+            let spatial = SpatialFeaturePolicy {
+                columns: 2,
+                rows: 2,
+                max_per_cell: 32,
+            };
+            let spatial_calls = Cell::new(0usize);
+            let spatial_result = compare_local_files_projective_spatial_gradient_pyramid_with_recipe(
+                &a,
+                &a,
+                q,
+                GradientCellRecipe::Interpolated,
+                spatial,
+                &budget,
+                || {
+                    spatial_calls.set(spatial_calls.get() + 1);
+                    false
+                },
+            )
+            .unwrap();
+            assert!(spatial_result.candidate && spatial_result.geometry.is_some());
+            assert_eq!(budget.used(), 0);
+            let total = spatial_calls.get();
+            for stop in [1, total / 2, total] {
+                spatial_calls.set(0);
+                assert!(matches!(
+                    compare_local_files_projective_spatial_gradient_pyramid_with_recipe(
+                        &a,
+                        &a,
+                        q,
+                        GradientCellRecipe::Interpolated,
+                        spatial,
+                        &budget,
+                        || {
+                            spatial_calls.set(spatial_calls.get() + 1);
+                            spatial_calls.get() == stop
+                        }
+                    ),
+                    Err(LocalFileError::Cancelled)
+                ));
+                assert_eq!(budget.used(), 0);
+            }
+            assert!(
+                !compare_local_files_projective_spatial_gradient_pyramid_with_recipe(
+                    &a,
+                    &b,
+                    q,
+                    GradientCellRecipe::Interpolated,
+                    spatial,
+                    &budget,
+                    || false
+                )
+                .unwrap()
+                .candidate
+            );
+            let fresh = MemoryBudget::new(64 * 1024 * 1024);
+            let missing = DecodeRequest::new("missing-spatial-gradient.png");
+            assert!(matches!(
+                compare_local_files_projective_spatial_gradient_pyramid_with_recipe(
+                    &missing,
+                    &missing,
+                    q,
+                    GradientCellRecipe::Interpolated,
+                    SpatialFeaturePolicy {
+                        columns: 0,
+                        ..spatial
+                    },
+                    &fresh,
+                    || false
+                ),
+                Err(LocalFileError::InvalidPolicy)
+            ));
+            assert_eq!(fresh.peak(), 0);
+            assert!(matches!(
+                compare_local_files_projective_spatial_gradient_pyramid_with_recipe(
+                    &missing,
+                    &missing,
+                    short,
+                    GradientCellRecipe::Interpolated,
+                    spatial,
+                    &fresh,
+                    || false
+                ),
+                Err(LocalFileError::Features(LocalError::Budget))
+            ));
+            assert_eq!(fresh.peak(), 0);
+            let temp = tempfile::tempdir().unwrap();
+            let changed_path = temp.path().join("spatial-copy.png");
+            std::fs::write(&changed_path, std::fs::read(root.join("2414-base.png")).unwrap()).unwrap();
+            let changed_request = DecodeRequest::new(&changed_path);
+            spatial_calls.set(0);
+            drop(
+                compare_local_files_projective_spatial_gradient_pyramid_with_recipe(
+                    &a,
+                    &changed_request,
+                    q,
+                    GradientCellRecipe::Interpolated,
+                    spatial,
+                    &budget,
+                    || {
+                        spatial_calls.set(spatial_calls.get() + 1);
+                        false
+                    },
+                )
+                .unwrap(),
+            );
+            let callbacks = spatial_calls.get();
+            assert_eq!(budget.used(), 0);
+            spatial_calls.set(0);
+            let changed = Cell::new(false);
+            let refused = compare_local_files_projective_spatial_gradient_pyramid_with_recipe(
+                &a,
+                &changed_request,
+                q,
+                GradientCellRecipe::Interpolated,
+                spatial,
+                &budget,
+                || {
+                    spatial_calls.set(spatial_calls.get() + 1);
+                    if spatial_calls.get() == callbacks / 2 {
+                        use std::io::Write;
+                        std::fs::OpenOptions::new()
+                            .append(true)
+                            .open(&changed_path)
+                            .unwrap()
+                            .write_all(&[0])
+                            .unwrap();
+                        changed.set(true);
+                    }
+                    false
+                },
+            );
+            assert!(changed.get());
+            assert!(matches!(
+                refused,
+                Err(LocalFileError::Source(rrrah_dedup::exact::SnapshotError::Changed))
+            ));
+            assert_eq!(budget.used(), 0);
+            std::fs::write(&changed_path, std::fs::read(root.join("2414-base.png")).unwrap()).unwrap();
+            assert!(
+                compare_local_files_projective_spatial_gradient_pyramid_with_recipe(
+                    &a,
+                    &changed_request,
+                    q,
+                    GradientCellRecipe::Interpolated,
+                    spatial,
+                    &budget,
+                    || false
+                )
+                .unwrap()
+                .candidate
+            );
+            assert_eq!(budget.used(), 0);
+            let calls = Cell::new(0);
+            let interpolated = compare_local_files_projective_gradient_pyramid_with_recipe(
+                &a,
+                &a,
+                q,
+                GradientCellRecipe::Interpolated,
+                &budget,
+                || {
+                    calls.set(calls.get() + 1);
+                    false
+                },
+            )
+            .unwrap();
+            assert!(
+                interpolated.candidate && interpolated.geometry.is_some() && interpolated.pixels.is_some()
+            );
+            assert_eq!(budget.used(), 0);
+            let checkpoints = calls.get();
+            for stop in [1, checkpoints / 2, checkpoints] {
+                calls.set(0);
+                assert!(matches!(
+                    compare_local_files_projective_gradient_pyramid_with_recipe(
+                        &a,
+                        &a,
+                        q,
+                        GradientCellRecipe::Interpolated,
+                        &budget,
+                        || {
+                            calls.set(calls.get() + 1);
+                            calls.get() == stop
+                        },
+                    ),
+                    Err(LocalFileError::Cancelled)
+                ));
+                assert_eq!(budget.used(), 0);
+            }
+            assert!(
+                !compare_local_files_projective_gradient_pyramid_with_recipe(
+                    &a,
+                    &b,
+                    q,
+                    GradientCellRecipe::Interpolated,
+                    &budget,
+                    || false,
+                )
+                .unwrap()
+                .candidate
+            );
+            let fresh = MemoryBudget::new(64 * 1024 * 1024);
+            assert!(matches!(
+                compare_local_files_projective_gradient_pyramid_with_recipe(
+                    &a,
+                    &a,
+                    short,
+                    GradientCellRecipe::Interpolated,
+                    &fresh,
+                    || false,
+                ),
+                Err(LocalFileError::Features(LocalError::Budget))
+            ));
+            assert_eq!(fresh.peak(), 0);
+            assert!(matches!(
+                compare_local_files_projective_gradient_pyramid_with_recipe(
+                    &a,
+                    &a,
+                    failed,
+                    GradientCellRecipe::Interpolated,
+                    &budget,
+                    || false,
+                ),
+                Err(LocalFileError::Features(LocalError::Budget))
+            ));
+            assert_eq!(budget.used(), 0);
+        }
+    }
     let calls = Cell::new(0);
     let e = compare_local_files_projective_pyramid_photometric(&a, &a, p, &budget, || {
         calls.set(calls.get() + 1);
@@ -221,6 +526,24 @@ fn pyramid_photometric_files_preserve_identity_refusals_and_cancel_retry() {
             ));
             assert_eq!(budget.used(), 0);
         }
+        let mut inconclusive = q;
+        inconclusive.search.photometric.minimum_variance = 1.;
+        let refused =
+            compare_local_files_projective_pyramid_regions(&a, &a, inconclusive, &domains, &budget, || false)
+                .unwrap();
+        assert!(
+            refused.whole.fit_failure.is_some()
+                && refused.whole.unfitted.is_none()
+                && !refused.whole.candidate
+        );
+        assert!(
+            refused
+                .regions
+                .iter()
+                .all(|r| r.fit_failure.is_some() && r.pixels.is_none())
+        );
+        drop(refused);
+        assert_eq!(budget.used(), 0);
         let fresh = MemoryBudget::new(64 * 1024 * 1024);
         let mut short = q;
         short.max_total_sample_pairs -= 1;
@@ -4223,6 +4546,177 @@ fn complementary_files_preserve_both_searches_and_atomic_refusals() {
             evidence.pyramid.geometry.as_ref().unwrap().transform
         );
         assert_eq!(budget.used(), 0);
+        {
+            use rrrah_dedup::{
+                gradient::GradientMatchPolicy,
+                local_scan::{
+                    ProjectiveComplementaryGradientPolicy, ProjectiveGradientPyramidFilePolicy,
+                    compare_local_files_projective_complementary_gradient,
+                },
+            };
+            let gradient = ProjectiveGradientPyramidFilePolicy {
+                search: p,
+                matching: GradientMatchPolicy {
+                    max_comparisons: 384 * 384,
+                    max_squared_distance: 0.5,
+                    squared_ratio: 0.64,
+                },
+                max_total_gradient_samples: 128 * 3 * 512,
+            };
+            let combined = ProjectiveComplementaryGradientPolicy {
+                base: q,
+                gradient,
+                max_total_comparisons: policy.max_total_comparisons + 384 * 384,
+                max_total_hypotheses: policy.max_total_hypotheses + p.sampling.trials,
+                max_total_sample_pairs: q.max_total_sample_pairs + p.filter.filter.max_sample_pairs,
+                max_total_gradient_samples: 2 * gradient.max_total_gradient_samples,
+            };
+            let count = Cell::new(0);
+            let all =
+                compare_local_files_projective_complementary_gradient(&a, &b, combined, &budget, || {
+                    count.set(count.get() + 1);
+                    false
+                })
+                .unwrap();
+            assert_eq!(all.accepted_searches, [true, true, true, true]);
+            assert!(all.candidate);
+            assert_eq!(all.base.accepted_searches, joined.accepted_searches);
+            assert_eq!(budget.used(), 0);
+            let checkpoints = count.get();
+            for stop in [1, checkpoints / 2, checkpoints] {
+                count.set(0);
+                assert!(matches!(
+                    compare_local_files_projective_complementary_gradient(&a, &b, combined, &budget, || {
+                        count.set(count.get() + 1);
+                        count.get() == stop
+                    }),
+                    Err(LocalFileError::Cancelled)
+                ));
+                assert_eq!(budget.used(), 0);
+            }
+            for lane in 0..4 {
+                let mut short = combined;
+                match lane {
+                    0 => short.max_total_comparisons -= 1,
+                    1 => short.max_total_hypotheses -= 1,
+                    2 => short.max_total_sample_pairs -= 1,
+                    _ => short.max_total_gradient_samples -= 1,
+                }
+                let fresh = MemoryBudget::new(64 * 1024 * 1024);
+                assert!(
+                    compare_local_files_projective_complementary_gradient(&a, &b, short, &fresh, || false)
+                        .is_err()
+                );
+                assert_eq!(fresh.peak(), 0);
+            }
+            let mut failed = combined;
+            failed.gradient.matching.max_comparisons = 0;
+            assert!(matches!(
+                compare_local_files_projective_complementary_gradient(&a, &b, failed, &budget, || false),
+                Err(LocalFileError::Features(LocalError::Budget))
+            ));
+            assert_eq!(budget.used(), 0);
+            {
+                use rrrah_dedup::local_scan::{
+                    ProjectiveComplementaryGradientPortfolioPolicy,
+                    compare_local_files_projective_complementary_gradient_portfolio,
+                };
+                let five = ProjectiveComplementaryGradientPortfolioPolicy {
+                    primary: combined,
+                    interpolated: gradient,
+                    max_total_comparisons: combined.max_total_comparisons + gradient.matching.max_comparisons,
+                    max_total_hypotheses: combined.max_total_hypotheses + gradient.search.sampling.trials,
+                    max_total_sample_pairs: combined.max_total_sample_pairs
+                        + gradient.search.filter.filter.max_sample_pairs,
+                    max_total_gradient_samples: combined.max_total_gradient_samples
+                        + 2 * gradient.max_total_gradient_samples,
+                };
+                count.set(0);
+                let joined = compare_local_files_projective_complementary_gradient_portfolio(
+                    &a,
+                    &b,
+                    five,
+                    &budget,
+                    || {
+                        count.set(count.get() + 1);
+                        false
+                    },
+                )
+                .unwrap();
+                assert!(joined.candidate);
+                assert_eq!(joined.accepted_searches, [true; 5]);
+                assert_eq!(joined.primary.accepted_searches, all.accepted_searches);
+                assert_eq!(
+                    joined.primary.gradient.correspondences.len(),
+                    all.gradient.correspondences.len()
+                );
+                for (new, old) in joined
+                    .primary
+                    .gradient
+                    .correspondences
+                    .iter()
+                    .zip(&all.gradient.correspondences)
+                {
+                    assert_eq!(new.source, old.source);
+                    assert_eq!(new.target, old.target);
+                }
+                assert_eq!(budget.used(), 0);
+                let checkpoints = count.get();
+                for stop in [1, checkpoints / 2, checkpoints] {
+                    count.set(0);
+                    assert!(matches!(
+                        compare_local_files_projective_complementary_gradient_portfolio(
+                            &a,
+                            &b,
+                            five,
+                            &budget,
+                            || {
+                                count.set(count.get() + 1);
+                                count.get() == stop
+                            },
+                        ),
+                        Err(LocalFileError::Cancelled)
+                    ));
+                    assert_eq!(budget.used(), 0);
+                }
+                for lane in 0..4 {
+                    let mut short = five;
+                    match lane {
+                        0 => short.max_total_comparisons -= 1,
+                        1 => short.max_total_hypotheses -= 1,
+                        2 => short.max_total_sample_pairs -= 1,
+                        _ => short.max_total_gradient_samples -= 1,
+                    }
+                    let fresh = MemoryBudget::new(64 * 1024 * 1024);
+                    assert!(
+                        compare_local_files_projective_complementary_gradient_portfolio(
+                            &a,
+                            &b,
+                            short,
+                            &fresh,
+                            || false
+                        )
+                        .is_err()
+                    );
+                    assert_eq!(fresh.peak(), 0);
+                }
+                let mut last_error = five;
+                last_error.interpolated.matching.max_comparisons = 0;
+                let fresh = MemoryBudget::new(64 * 1024 * 1024);
+                assert!(matches!(
+                    compare_local_files_projective_complementary_gradient_portfolio(
+                        &a,
+                        &b,
+                        last_error,
+                        &fresh,
+                        || false,
+                    ),
+                    Err(LocalFileError::Features(LocalError::Budget))
+                ));
+                assert!(fresh.peak() > 0);
+                assert_eq!(fresh.used(), 0);
+            }
+        }
         let mut short = q;
         short.max_total_sample_pairs -= 1;
         let fresh = MemoryBudget::new(64 * 1024 * 1024);

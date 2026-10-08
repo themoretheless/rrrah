@@ -1,0 +1,93 @@
+{
+  "scope": "Test-only admitted row crossing preparation shared across pixels",
+  "source_sha256": "ae0f45adace30f764938038826f7337d0bf789064c01704d658ae403ec5229bd",
+  "suite": {
+    "passed": 91,
+    "failed": 0,
+    "ignored": 8,
+    "filtered": 1,
+    "seconds": 30.82,
+    "log": "/tmp/rrrah-row-crossings-controls.log"
+  },
+  "implementation": [
+    "Two-pass intersection count/materialization with exact admitted tuple storage",
+    "Globally anchored intersection coordinates sorted by X",
+    "Per-pixel binary range selection, preserving border and edge-vertex subdivision cuts",
+    "Row edges and crossing buffers drop before admission guards"
+  ],
+  "limits": {
+    "crossings_per_row": 1000000,
+    "crossing_tuple_bytes": 16,
+    "active_edges_per_row": 4096,
+    "row_geometry_work": 20000000,
+    "pixel_geometry_work": 20000000
+  },
+  "real_ai_rows": [
+    {
+      "fixture": "VectorApple.ai",
+      "page": 0,
+      "width": 301,
+      "height": 246,
+      "peak_admitted_bytes": 55658962,
+      "final_admitted_bytes": 0,
+      "status": "refused",
+      "capture_failed": false,
+      "capture_ms": 13155.450792,
+      "capture_deadline_expired": false,
+      "deadline_expired": true,
+      "events": 2755
+    },
+    {
+      "fixture": "one.ai",
+      "page": 0,
+      "width": 1366,
+      "height": 768,
+      "peak_admitted_bytes": 89640624,
+      "final_admitted_bytes": 0,
+      "status": "replayed",
+      "events": 8,
+      "knockout_groups": 0,
+      "capture_ms": 1.3715000000000002,
+      "capture_deadline_expired": false,
+      "whole_replay_ms": 2663.602333,
+      "tile_edge": 64,
+      "tile_replay_ms": 12254.707790999999,
+      "tile_different_pixels": 0,
+      "tile_peak_admitted_bytes": 9209008,
+      "tile_retained_comparison_baseline_bytes": 4664352
+    },
+    {
+      "fixture": "one.ai",
+      "page": 1,
+      "width": 177,
+      "height": 175,
+      "peak_admitted_bytes": 2602964,
+      "final_admitted_bytes": 0,
+      "status": "replayed",
+      "events": 1,
+      "knockout_groups": 0,
+      "capture_ms": 0.045083000000000005,
+      "capture_deadline_expired": false,
+      "whole_replay_ms": 0.32249999999999995,
+      "tile_edge": 64,
+      "tile_replay_ms": 0.34525,
+      "tile_different_pixels": 0,
+      "tile_peak_admitted_bytes": 592928,
+      "tile_retained_comparison_baseline_bytes": 124964
+    }
+  ],
+  "payloads_identical_to_previous_row_pipeline": {
+    "one.ai-page-0.tile-64.rgba": true,
+    "one.ai-page-0.rgba": true,
+    "one.ai-page-1.rgba": true,
+    "one.ai-page-1.tile-64.rgba": true
+  },
+  "conclusion": "Authored geometry and resource suites pass. Both one.ai pages and tiles match previous payloads exactly. VectorApple still hits unchanged page deadline before whole image in current run, so no complete large-file throughput or tile qualification claimed.",
+  "remaining": [
+    "Profile remaining VectorApple per-row/slab work and page compositing",
+    "VectorApple whole/tile replay within unchanged page deadline",
+    "Independent oracle conformance",
+    "Production integration"
+  ],
+  "production_enabled": false
+}

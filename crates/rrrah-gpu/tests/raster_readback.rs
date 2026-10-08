@@ -385,7 +385,6 @@ fn qualified_sd10_linear_raster_full_frame_display_readback() {
 }
 
 #[test]
-#[ignore = "requires actual GPU adapter"]
 fn pixel_aspect_rejection_is_atomic_and_next_upload_resets_geometry() {
     let gpu = common::qualification_gpu().expect("actual GPU required for aspect transition");
     eprintln!("aspect transition adapter: {}", gpu.adapter_name());
@@ -406,4 +405,106 @@ fn pixel_aspect_rejection_is_atomic_and_next_upload_resets_geometry() {
     );
     assert_eq!(before.pixels, expanded.pixels);
     assert_eq!(after.pixels, square.pixels);
+}
+
+#[test]
+fn cancelled_upload_validation_and_admission_preserve_visible_texture() {
+    let gpu = common::qualification_gpu().expect("actual GPU required");
+    eprintln!("upload cancellation adapter: {}", gpu.adapter_name());
+    let first = frame(1, vec![1., 0., 0., 1.]);
+    let replacement = DecodedRaster::new(
+        100,
+        100,
+        RasterPixels::Rgba32Float(Arc::new([0., 0., 1., 1.].repeat(10_000)).into()),
+        RasterColorSpace::LinearSrgb,
+    )
+    .unwrap();
+    gpu.verify_cancelled_raster_upload_keeps_previous_frame(&first, &replacement, view(), [64, 64]);
+}
+
+#[test]
+fn gpu_resident_compute_rows_match_cpu_exposure_reference() {
+    let gpu = common::qualification_gpu().expect("actual GPU required");
+    eprintln!("resident raster adapter: {}", gpu.adapter_name());
+    for [width, height] in [[7, 3], [16, 3], [64, 257], [7, 257]] {
+        let count = width * height;
+        let pixels: Vec<[f32; 4]> = (0..count)
+            .map(|i| {
+                [
+                    i as f32 / count as f32,
+                    0.25,
+                    (count - 1 - i) as f32 / count as f32,
+                    if i % 3 == 0 { 0.5 } else { 1. },
+                ]
+            })
+            .collect();
+        let expected = DecodedRaster::new(
+            width,
+            height,
+            RasterPixels::Rgba32Float(
+                Arc::new(
+                    pixels
+                        .iter()
+                        .flat_map(|p| [p[0] * 2., p[1] * 2., p[2] * 2., p[3]])
+                        .collect::<Vec<_>>(),
+                )
+                .into(),
+            ),
+            RasterColorSpace::LinearSrgb,
+        )
+        .unwrap();
+        let a = gpu.render_raster(&expected, view(), [64, 64]);
+        let b = gpu.render_resident_exposure(&pixels, [width, height], 1., view(), [64, 64]);
+        assert_eq!(a.pixels, b.pixels);
+        for aspect in [0.5, 2.0] {
+            let expected = expected.clone().with_pixel_aspect(Some(aspect)).unwrap();
+            let a = gpu.render_raster(&expected, view(), [64, 64]);
+            let b = gpu.render_resident_exposure_with_aspect(
+                &pixels, [width, height], 1., view(), [64, 64], Some(aspect));
+            assert_eq!(a.pixels, b.pixels);
+        }
+    }
+}
+
+#[test]
+#[ignore = "requires production HERO9 scene-linear dump; transport qualification, not demosaic/color oracle"]
+fn hero9_full_frame_developed_raw_matches_metal_display_transport() {
+    let path = std::env::var("RRRAH_HERO9_LINEAR_DUMP").expect("RRRAH_HERO9_LINEAR_DUMP");
+    qualify_full_gpr_display(std::path::Path::new(&path),[5568,4176],"HERO9");
+}
+
+#[test]
+#[ignore = "requires corrected production Fusion linear dumps; display transport qualification"]
+fn fusion_back_full_frame_developed_raw_matches_metal_display_transport() {
+    let root=std::env::var_os("RRRAH_FUSION_LINEAR_CORPUS").expect("RRRAH_FUSION_LINEAR_CORPUS");
+    qualify_full_gpr_display(&std::path::PathBuf::from(root).join("Fusion-back.rgba32fle"),[3104,3000],"Fusion-back");
+}
+
+#[test]
+#[ignore = "requires corrected production Fusion linear dumps; display transport qualification"]
+fn fusion_front_full_frame_developed_raw_matches_metal_display_transport() {
+    let root=std::env::var_os("RRRAH_FUSION_LINEAR_CORPUS").expect("RRRAH_FUSION_LINEAR_CORPUS");
+    qualify_full_gpr_display(&std::path::PathBuf::from(root).join("Fusion-front.rgba32fle"),[3104,3000],"Fusion-front");
+}
+
+fn qualify_full_gpr_display(path: &std::path::Path,extent: [u32;2],name: &str) {
+    let bytes = std::fs::read(path).unwrap();
+    let [width,height] = extent;
+    assert_eq!(bytes.len(),width as usize * height as usize * 16);
+    let pixels: Vec<f32> = bytes.chunks_exact(4).map(|b| f32::from_le_bytes(b.try_into().unwrap())).collect();
+    drop(bytes);
+    assert!(pixels.iter().all(|v| v.is_finite()));
+    let raster = DecodedRaster::new(width,height,RasterPixels::Rgba32Float(Arc::new(pixels).into()),RasterColorSpace::LinearSrgb).unwrap();
+    let gpu = common::qualification_gpu().expect("required Metal adapter");
+    eprintln!("{name} full-frame display adapter: {}",gpu.adapter_name());
+    let output = gpu.render_developed_raw(&raster,ViewParameters { viewport: [width as f32,height as f32], zoom: height as f32 / (height - 32) as f32, ..Default::default() },[width,height],&rrrah_core::develop::MonotoneCurve::identity());
+    let RasterPixels::Rgba32Float(source) = raster.pixels() else { unreachable!() };
+    let mut maximum = 0_u8;
+    for (i,(input,actual)) in source.chunks_exact(4).zip(output.pixels.chunks_exact(4)).enumerate() {
+        let expected = common::cpu_reference_rgb([input[0] as f64,input[1] as f64,input[2] as f64]);
+        for c in 0..3 { maximum = maximum.max(actual[c].abs_diff(expected[c])); }
+        assert_eq!(actual[3],255,"alpha pixel {i}");
+    }
+    eprintln!("{name} pixels checked: {}; maximum RGB8 difference: {maximum}",width as u64 * height as u64);
+    assert!(maximum <= 2,"full-frame transport difference {maximum}");
 }

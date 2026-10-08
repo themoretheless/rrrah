@@ -1,0 +1,47 @@
+{
+  "date": "2026-10-07",
+  "feature": "Explicit RPF common app import, preload and display-cache identity",
+  "cli_example": "rrrah --rpf-rgb 0 1 2 --rpf-matte 0 --rpf-alpha straight --rpf-color linear-srgb image.rpf",
+  "contract": [
+    "RGB indices require explicit alpha and color policies",
+    "Optional matte omission imports opaque pixels",
+    "Default interpretation clears RPF policy; no implicit defaults",
+    "Shared RasterInterpretation transports policy to worker requests",
+    "Display cache key includes complete RPF interpretation including color metadata",
+    "Existing raster swap keys inherit full interpretation identity"
+  ],
+  "evidence": {
+    "log": "/tmp/rrrah-rpf-app-swap-policy.log",
+    "passed": 164,
+    "ignored": 24,
+    "test": "rpf_cli_preload_and_cache_keys_keep_explicit_interpretations_separate",
+    "checks": [
+      "incomplete CLI configuration rejected",
+      "real synthetic file preloaded and managed pixels shared on hit",
+      "producer aspect 1.5 preserved",
+      "changing straight to premultiplied alpha creates distinct samples and cache entry",
+      "RGB permutation separates entries",
+      "sRGB versus linear interpretation separates entries",
+      "matte omission separates entry and produces opaque alpha",
+      "default policy cannot consume configured cache hit",
+      "managed root releases after cache and result drops",
+      "one-entry app RAM cache spills alternate RPF interpretations and restores original without decoder",
+      "restored RPF pixel bits and aspect 1.5 unchanged",
+      "one completed swap write/read before restored visible admission, RAM count remains one",
+      "managed root fully released after RPF swap owners and cache drop"
+    ]
+  },
+  "limits": [
+    "Synthetic explicit producer interpretations; broader real-file qualification pending",
+    "No live-window visual inspection in this run",
+    "Renamed RPF content detection and linked-image selection pending",
+    "Physical HDR/NVIDIA hardware gates open"
+  ],
+  "status": "local, not pushed",
+  "visible_lease_check": {
+    "log": "/tmp/rrrah-visible-aspect-lease.log",
+    "cache_passed": 124,
+    "test": "visible_lease_requires_matching_geometry_even_for_shared_pixels",
+    "contract": "shared pixel storage alone cannot grant visible lease with different explicit aspect; matching lease retains memory through last owner"
+  }
+}

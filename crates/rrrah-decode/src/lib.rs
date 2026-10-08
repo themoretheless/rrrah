@@ -66,7 +66,7 @@ pub use stl::{StlDecodeError, StlFacet, StlMesh, decode_stl};
 mod eip;
 mod x3f;
 pub use eip::{
-    EipEntry, EipError, EipManifest, EipRaw, EipSensor, decode_eip_file_sensor, decode_eip_sensor,
+    EipEntry, EipError, EipManifest, EipRaw, EipSensor, decode_eip_file_sensor, decode_eip_sensor, eip_file_sensor_recipe,
     inspect_eip, read_eip_raw, read_eip_raw_with_budget,
 };
 pub use x3f::{
@@ -120,6 +120,7 @@ pub mod dng;
 mod dng_backend;
 mod dpx;
 mod exr_color;
+mod hdr_color;
 mod fits;
 mod heif;
 mod iff;
@@ -142,6 +143,7 @@ mod pkm;
 mod png_color;
 mod psd;
 mod pvr;
+mod qoi_bounds;
 mod raster;
 mod raster_color;
 #[cfg(test)]
@@ -191,6 +193,8 @@ pub trait RawDecoder: Send + Sync {
 pub struct DecodeRequest {
     pub path: PathBuf,
     pub image_index: usize,
+    /// Explicit RPF channel, alpha and color interpretation. No inferred defaults.
+    pub rpf_interpretation: Option<RpfRasterInterpretation>,
     /// Explicit producer-declared alpha association for RLA. None refuses
     /// alpha-bearing RLA; color interpretation remains a separate policy.
     pub rla_alpha_mode: Option<RlaAlphaMode>,
@@ -220,6 +224,7 @@ impl DecodeRequest {
         Self {
             path: path.into(),
             image_index: 0,
+            rpf_interpretation: None,
             rla_alpha_mode: None,
             rla_float_byte_order: None,
             rla_color_space: None,
@@ -444,6 +449,7 @@ mod tests {
     fn stale_request_is_rejected_without_io() {
         let generation = Arc::new(AtomicU64::new(12));
         let request = DecodeRequest {
+            rpf_interpretation: None,
             rla_alpha_mode: None,
             rla_float_byte_order: None,
             rla_color_space: None,

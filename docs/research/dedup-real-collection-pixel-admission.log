@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-real-collection-pixel-admission.py", line 48, in <module>
+    assert result.returncode == 0, result.stderr
+           ^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 
+thread 'main' (13552064) panicked at crates/rrrah-dedup/examples/anchor_rank_driven_real_collection_probe.rs:159:151:
+collection refused: Budget
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+

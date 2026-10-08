@@ -1,0 +1,50 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+   Compiling rrrah-core v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-core)
+warning: unused variable: `cancel`
+   --> crates/rrrah-dedup/src/local_index.rs:715:5
+    |
+715 |     cancel: impl Fn() -> bool,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_cancel`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-dedup` (lib) generated 1 warning (run `cargo fix --lib -p rrrah-dedup` to apply 1 suggestion)
+error[E0308]: mismatched types
+   --> crates/rrrah-dedup/tests/projective_grid.rs:150:17
+    |
+140 |           run(&|| {
+    |                -- the expected closure
+...
+150 |               run(&|| {
+    |  _____________---_^
+    | |             |
+    | |             arguments to this function are incorrect
+151 | |                 c.set(c.get() + 1);
+152 | |                 c.get() == checkpoint
+153 | |             }),
+    | |_____________^ expected `&{closure@projective_grid.rs:140:14}`, found `&{closure@projective_grid.rs:150:18}`
+    |
+    = note: expected reference `&{closure@crates/rrrah-dedup/tests/projective_grid.rs:140:14: 140:16}`
+               found reference `&{closure@crates/rrrah-dedup/tests/projective_grid.rs:150:18: 150:20}`
+    = note: no two closures, even if identical, have the same type
+    = help: consider boxing your closure and/or using it as a trait object
+note: expected because the closure was earlier called with an argument of type `&{closure@crates/rrrah-dedup/tests/projective_grid.rs:140:14: 140:16}`
+   --> crates/rrrah-dedup/tests/projective_grid.rs:140:13
+    |
+140 |           run(&|| {
+    |  _________---_^
+    | |         |
+    | |         in this closure call
+141 | |             calls.set(calls.get() + 1);
+142 | |             false
+143 | |         })
+    | |_________^ expected because this argument is of type `&{closure@crates/rrrah-dedup/tests/projective_grid.rs:140:14: 140:16}`
+note: closure parameter defined here
+   --> crates/rrrah-dedup/tests/projective_grid.rs:128:16
+    |
+128 |     let run = |cancel| {
+    |                ^^^^^^
+
+For more information about this error, try `rustc --explain E0308`.
+error: could not compile `rrrah-dedup` (test "projective_grid") due to 1 previous error
+warning: build failed, waiting for other jobs to finish...

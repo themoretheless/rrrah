@@ -1,0 +1,110 @@
+{
+  "scope": "Test-only native interpreter replay, authored RGB PDFs. Not production qualification.",
+  "oracle_version": "pdftoppm version 26.10.0\nCopyright 2005-2026 The Poppler Developers - http://poppler.freedesktop.org\nCopyright 1996-2011, 2022 Glyph & Cog, LLC",
+  "results": [
+    {
+      "fixture": "pdf-knockout-colored-backdrop",
+      "different_pixels": 384,
+      "max_channel_error": 1,
+      "mean_absolute_channel_error": 0.25,
+      "prototype_edge": [
+        127,
+        127,
+        128,
+        255
+      ],
+      "poppler_edge": [
+        127,
+        127,
+        127
+      ]
+    },
+    {
+      "fixture": "pdf-knockout-fractional-isolated",
+      "different_pixels": 76,
+      "max_channel_error": 6,
+      "mean_absolute_channel_error": 0.4856770833333333,
+      "prototype_edge": [
+        239,
+        231,
+        247,
+        255
+      ],
+      "poppler_edge": [
+        244,
+        234,
+        245
+      ]
+    },
+    {
+      "fixture": "pdf-knockout-fractional-nonisolated",
+      "different_pixels": 76,
+      "max_channel_error": 16,
+      "mean_absolute_channel_error": 0.8763020833333334,
+      "prototype_edge": [
+        239,
+        231,
+        247,
+        255
+      ],
+      "poppler_edge": [
+        244,
+        244,
+        255
+      ]
+    },
+    {
+      "fixture": "pdf-knockout-overlap",
+      "different_pixels": 0,
+      "max_channel_error": 0,
+      "mean_absolute_channel_error": 0.0,
+      "prototype_edge": [
+        127,
+        127,
+        255,
+        255
+      ],
+      "poppler_edge": [
+        127,
+        127,
+        255
+      ]
+    },
+    {
+      "fixture": "pdf-knockout-transparent-child",
+      "different_pixels": 0,
+      "max_channel_error": 0,
+      "mean_absolute_channel_error": 0.0,
+      "prototype_edge": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "poppler_edge": [
+        255,
+        255,
+        255
+      ]
+    },
+    {
+      "fixture": "pdf-normal-overlap",
+      "different_pixels": 16,
+      "max_channel_error": 16,
+      "mean_absolute_channel_error": 0.3333333333333333,
+      "prototype_edge": [
+        127,
+        0,
+        128,
+        255
+      ],
+      "poppler_edge": [
+        127,
+        0,
+        128
+      ]
+    }
+  ],
+  "diagnostic_command": "RRRAH_KNOCKOUT_DIAGNOSTIC_ROOT=\"$PWD/tests/fixtures/raster\" RRRAH_KNOCKOUT_DIAGNOSTIC_OUTPUT=/tmp/rrrah-knockout-replay-oracle-fresh python3 scripts/test-pdf-mesh-bounds.py --renderer --filter external_authored_pdf_replay_diagnostic --include-ignored --target-dir /tmp/rrrah-required-corpus-target",
+  "conclusion": "Integer-interior knockout algebra supported; fractional coverage differs from Poppler and child isolation does not change current prototype edge. No normative AA claim or production integration justified by this comparison."
+}

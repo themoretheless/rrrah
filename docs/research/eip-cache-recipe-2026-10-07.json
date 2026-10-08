@@ -1,0 +1,38 @@
+{
+  "api": "eip_file_sensor_recipe",
+  "purpose": "Resolve original sensor decoder contract before cache lookup, without decoding sensor pixels",
+  "named_members": "Bounded ZIP source and inventory only; no RAW inflation",
+  "ambiguous_raw_member": "Managed extraction required to sniff native RW2; unsupported content refuses",
+  "cache_requirement": "Fingerprint complete EIP package and image index; Capture One appearance is not interpreted",
+  "verification": {
+    "named_extensions": [
+      "cr3",
+      "dng",
+      "mrw",
+      "iiq",
+      "mos",
+      "pef",
+      "ptx",
+      "nef",
+      "rw2",
+      "sr2"
+    ],
+    "packaging": [
+      "stored",
+      "deflated"
+    ],
+    "recipe_matches": "NativeRawDecoder for inner named source",
+    "memory": "Exact ZIP-byte budget succeeds, peak equals ZIP source allocation, final occupancy zero",
+    "invalid_index": "Refused before source admission",
+    "decoder_library": "964 passed, zero failures, 65 ignored",
+    "real_cr3": "Stored and deflated original sensor comparison still passes after shared backend resolver refactor"
+  },
+  "limitations": [
+    "Recipe lookup identifies implementation, not validity of compressed RAW data or camera/color qualification",
+    "No common viewer or app cache routing added yet"
+  ],
+  "logs": [
+    "/tmp/rrrah-eip-recipe.log",
+    "/tmp/rrrah-eip-recipe-real.log"
+  ]
+}

@@ -1,0 +1,120 @@
+{
+  "status": "verified_training_diagnostic_parity",
+  "cases": 7,
+  "screen_supported": true,
+  "folded_supports": 0,
+  "summary": [
+    {
+      "case": "screen_control",
+      "status": "ok",
+      "supported": true,
+      "directions": [
+        {
+          "training_fraction": 0.9925,
+          "heldout_fraction": 0.9929166666666667,
+          "training_rms": 0.01788614608100635,
+          "heldout_rms": 0.01782314338943501
+        },
+        {
+          "training_fraction": 0.9501762992488119,
+          "heldout_fraction": 0.9458920907418762,
+          "training_rms": 0.026007704962559917,
+          "heldout_rms": 0.0262257077179046
+        }
+      ]
+    },
+    {
+      "case": "folded_0",
+      "status": "ok",
+      "supported": false,
+      "directions": [
+        {
+          "training_fraction": 0.8143978164448994,
+          "heldout_fraction": 0.8111338797814208,
+          "training_rms": 0.041521873065683126,
+          "heldout_rms": 0.041373687076870294
+        },
+        {
+          "training_fraction": 0.6979445251012455,
+          "heldout_fraction": 0.7004361466064734,
+          "training_rms": 0.05677674593060116,
+          "heldout_rms": 0.057132310895485185
+        }
+      ]
+    },
+    {
+      "case": "folded_1",
+      "status": "ok",
+      "supported": false,
+      "directions": [
+        {
+          "training_fraction": 0.7319131832797428,
+          "heldout_fraction": 0.7200162074554295,
+          "training_rms": 0.03559800320037802,
+          "heldout_rms": 0.03500145331845066
+        },
+        {
+          "training_fraction": 0.9336428709615012,
+          "heldout_fraction": 0.932313353345599,
+          "training_rms": 0.02539556539726459,
+          "heldout_rms": 0.025365522393144126
+        }
+      ]
+    },
+    {
+      "case": "folded_2",
+      "status": "ok",
+      "supported": false,
+      "directions": [
+        {
+          "training_fraction": 0.6037234042553191,
+          "heldout_fraction": 0.5985790408525755,
+          "training_rms": 0.05140631125375412,
+          "heldout_rms": 0.05217633028036912
+        },
+        {
+          "training_fraction": 0.8056043741456747,
+          "heldout_fraction": 0.8010164190774042,
+          "training_rms": 0.033738520247519256,
+          "heldout_rms": 0.0336979803945163
+        }
+      ]
+    },
+    {
+      "case": "folded_3",
+      "status": "refusal:Region(Color(Bounds))",
+      "supported": false,
+      "directions": []
+    },
+    {
+      "case": "folded_4",
+      "status": "refusal:Region(Color(Bounds))",
+      "supported": false,
+      "directions": []
+    },
+    {
+      "case": "folded_5",
+      "status": "ok",
+      "supported": false,
+      "directions": [
+        {
+          "training_fraction": 0.7818361303060217,
+          "heldout_fraction": 0.7712450592885376,
+          "training_rms": 0.03475008666622038,
+          "heldout_rms": 0.03446462365786648
+        },
+        {
+          "training_fraction": 0.596642685851319,
+          "heldout_fraction": 0.5992120687998462,
+          "training_rms": 0.05277751289142993,
+          "heldout_rms": 0.05255162337839472
+        }
+      ]
+    }
+  ],
+  "input_hashes": {
+    "docs/research/dedup-folded-training-diagnostic.json": "04eac9c31b095859e356904e93b0dc55b1be50c4dfc1f35d35b0fb594494bbb2",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-folded-training-diagnostic.py": "d8c5137f2b9d8755ff9e2d25e65a0966da6daf60744dc3af6af199a0eaffa3ad"
+  },
+  "scope": "Pinned terminal outputs, exact prior direction/sample/read/memory parity and finite diagnostic arithmetic. The four successful fold fits show similar training/heldout errors; two retain color-bound refusals. No independent color-fit/pixel resampling oracle, causal diagnosis or fold recovery."
+}

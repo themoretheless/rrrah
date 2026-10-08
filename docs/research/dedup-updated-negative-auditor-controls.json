@@ -1,0 +1,27 @@
+{
+  "status": "verified_parser_rejection_controls",
+  "valid_positive_control_prefix": 0,
+  "rejected_corrupt_reports": 3,
+  "results": [
+    {
+      "case": "incomplete-terminal",
+      "returncode": 1,
+      "stderr": "Traceback (most recent call last):\n  File \"/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-updated-release-original-negatives.py\", line 9, in <module>\n    if r['status']=='complete' or not a.checkpoint:assert len(r['results'])==156\n                                                          ^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+    },
+    {
+      "case": "boolean-returncode",
+      "returncode": 1,
+      "stderr": "Traceback (most recent call last):\n  File \"/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-updated-release-original-negatives.py\", line 29, in <module>\n    control=r['positive_control'];assert type(control['returncode']) is int and control['returncode']==0\n                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+    },
+    {
+      "case": "raw-evidence-mismatch",
+      "returncode": 1,
+      "stderr": "Traceback (most recent call last):\n  File \"/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-updated-release-original-negatives.py\", line 30, in <module>\n    assert canonical(json.loads(control['stdout']))==canonical(control['evidence'])\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+    }
+  ],
+  "input_hashes": {
+    "docs/research/dedup-updated-release-original-negatives-200301-checkpoint-0-initial.json": "bbce8a899f31186fcdefc14d8c798b7ff7d09cf19894bb888f37b2f291b578de",
+    "scripts/verify-dedup-updated-release-original-negatives.py": "8760932c4ef362cbbca34dd3d14d0a5382cb7d934f4ad5b4a6bbdfe38d9e8b42"
+  },
+  "scope": "Three deliberate corruptions plus valid0-row positive/source prerequisite. Not a native negative result or full auditor correctness proof."
+}

@@ -1,0 +1,53 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 3m 06s
+     Running tests/affine_region.rs (target/debug/deps/affine_region-804a1ecf7c045aba)
+
+running 6 tests
+test source_footprint_mid_tap_cancel_releases_all_managed_credit ... ok
+test identity_is_heldout_verified_and_memory_released ... ok
+test preflight_and_mid_sampling_cancel_release_credit ... ok
+test source_footprint_preserves_analytic_anisotropic_pair_and_accounts_eight_reads ... ok
+test saturated_uniform_filter_refuses_as_uninformative_not_invalid ... ok
+test radius24_is_admitted_by_work_budget_and_refused_before_allocation_when_short ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.40s
+
+     Running tests/affine_region_file.rs (target/debug/deps/affine_region_file-8bab19142faf8a42)
+
+running 3 tests
+test cancellation_and_cumulative_work_refuse_before_missing_source_io ... ok
+test stable_files_verify_and_mutation_or_replacement_discards_evidence ... ok
+test automatic_file_grid_guards_source_and_retains_managed_regions ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+     Running tests/affine_region_grid.rs (target/debug/deps/affine_region_grid-529e087169e79346)
+
+running 2 tests
+test automatic_grid_retains_both_direction_results_and_managed_ownership ... ok
+test uniform_regions_are_retained_as_refusals_and_cancel_discards_partial_grid ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/affine_region_input_contract.rs (target/debug/deps/affine_region_input_contract-353248817946ce9f)
+
+running 2 tests
+test overflowed_domains_and_radius_refuse_before_allocation ... ok
+test unsupported_alpha_and_scene_range_refuse_in_either_direction_without_clipping ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

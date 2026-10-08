@@ -1,0 +1,91 @@
+{
+  "scope": "Test-only compositor real-AI diagnostic; no production qualification",
+  "poppler_version": "pdftoppm version 26.10.0",
+  "rows": [
+    {
+      "fixture": "VectorApple.ai",
+      "page": 0,
+      "width": 300,
+      "height": 245,
+      "peak_admitted_bytes": 19832936,
+      "final_admitted_bytes": 0,
+      "status": "unsupported",
+      "reason": "backdrop extraction rejected at pixel 16061: result=[115, 151, 88, 255], initial=[166, 154, 95, 255], coverage=GroupCoverage { shape: 255, alpha: 76 }, group=TransparencyGroupProperties { isolated: false, knockout: true }, blend=Normal",
+      "source_sha256": "c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06",
+      "exact": false
+    },
+    {
+      "fixture": "one.ai",
+      "page": 0,
+      "width": 1366,
+      "height": 768,
+      "peak_admitted_bytes": 19941816,
+      "final_admitted_bytes": 0,
+      "status": "replayed",
+      "events": 8,
+      "knockout_groups": 0,
+      "source_sha256": "97786949c268233a446e1738fb9c2f941e4d109811bd2f972948cdb7a45d64b4",
+      "exact": false,
+      "different_pixels": 2790,
+      "max_channel_error": 115,
+      "mean_absolute_error": 0.09860088000244022,
+      "rgba_sha256": "d5c8bce21084b1de6ccf509e6831a85b65231441668b033d09038eba7b919a8c",
+      "oracle_rgb_sha256": "d04c5ca83cfef9a672ed59480378acbe12221c1512e00cc0f80c86c6f7db58d7"
+    },
+    {
+      "fixture": "one.ai",
+      "page": 1,
+      "width": 177,
+      "height": 175,
+      "peak_admitted_bytes": 310942,
+      "final_admitted_bytes": 0,
+      "status": "replayed",
+      "events": 1,
+      "knockout_groups": 0,
+      "source_sha256": "97786949c268233a446e1738fb9c2f941e4d109811bd2f972948cdb7a45d64b4",
+      "exact": true,
+      "different_pixels": 0,
+      "max_channel_error": 0,
+      "mean_absolute_error": 0.0,
+      "rgba_sha256": "89db416a84fdc983853717f5fd73690c020e6feced867d1a3d4e02873f9d7e36",
+      "oracle_rgb_sha256": "9e754d40c23ce882917a696aca9cb873a6cd863ca40a6e1ee2d6a41255e414c8"
+    }
+  ],
+  "all_pages_exact": false,
+  "prototype_changes": [
+    "Group and paint blend capture/replay: Normal, Multiply, Screen, HardLight. Other modes remain unsupported.",
+    "Blend-aware knockout uses group initial backdrop, retaining independent shape and alpha.",
+    "Authored colored-backdrop group fixtures at half/full opacity match full render and 3/7 tiles."
+  ],
+  "verification": {
+    "prototype_tests_passed": 61,
+    "failed": 0,
+    "ignored_external_diagnostics": 5,
+    "explicit_real_ai_diagnostic_passed": true,
+    "diagnostic_pass_means": "Report completed and credit released, not image correctness."
+  },
+  "first_real_ai_extraction_failure": {
+    "pixel_index": 16061,
+    "x": 161,
+    "y": 53,
+    "result": [
+      115,
+      151,
+      88,
+      255
+    ],
+    "initial": [
+      166,
+      154,
+      95,
+      255
+    ],
+    "shape": 255,
+    "group_alpha": 76,
+    "red_retained_backdrop_rounded": 117,
+    "red_contribution": -2,
+    "assessment": "RGBA8 intermediate result fails the existing +/-1 backdrop-removal invariant. Do not widen tolerance; trace and fix intermediate precision.",
+    "next": "Reproduce valid nested composition causing this result, then preserve higher precision across group composition and backdrop removal."
+  },
+  "production_integrated": false
+}

@@ -1,0 +1,91 @@
+{
+  "scope": "Independent SDK full-resolution RGB output availability; not native color qualification",
+  "cases": [
+    {
+      "camera": "HERO5",
+      "exit_code": 0,
+      "output_bytes": 13,
+      "dimensions": [
+        0,
+        0
+      ],
+      "valid_rgb_payload": false,
+      "sha256": "f7c12a66c7c883ea0352cdf30cb5a3e69131e50beb978de98f36abc13c7685e6",
+      "log": "/tmp/rrrah-gpr-rgb-oracle-probe-20261007/HERO5.log"
+    },
+    {
+      "camera": "HERO6",
+      "exit_code": 0,
+      "output_bytes": 13,
+      "dimensions": [
+        0,
+        0
+      ],
+      "valid_rgb_payload": false,
+      "sha256": "f7c12a66c7c883ea0352cdf30cb5a3e69131e50beb978de98f36abc13c7685e6",
+      "log": "/tmp/rrrah-gpr-rgb-oracle-probe-20261007/HERO6.log"
+    },
+    {
+      "camera": "HERO7",
+      "exit_code": 0,
+      "output_bytes": 13,
+      "dimensions": [
+        0,
+        0
+      ],
+      "valid_rgb_payload": false,
+      "sha256": "f7c12a66c7c883ea0352cdf30cb5a3e69131e50beb978de98f36abc13c7685e6",
+      "log": "/tmp/rrrah-gpr-rgb-oracle-probe-20261007/HERO7.log"
+    },
+    {
+      "camera": "HERO9",
+      "exit_code": 0,
+      "output_bytes": 13,
+      "dimensions": [
+        0,
+        0
+      ],
+      "valid_rgb_payload": false,
+      "sha256": "f7c12a66c7c883ea0352cdf30cb5a3e69131e50beb978de98f36abc13c7685e6",
+      "log": "/tmp/rrrah-gpr-rgb-oracle-probe-20261007/HERO9.log"
+    },
+    {
+      "camera": "Fusion-back",
+      "exit_code": 0,
+      "output_bytes": 13,
+      "dimensions": [
+        0,
+        0
+      ],
+      "valid_rgb_payload": false,
+      "sha256": "f7c12a66c7c883ea0352cdf30cb5a3e69131e50beb978de98f36abc13c7685e6",
+      "log": "/tmp/rrrah-gpr-rgb-oracle-probe-20261007/Fusion-back.log"
+    },
+    {
+      "camera": "Fusion-front",
+      "exit_code": 0,
+      "output_bytes": 13,
+      "dimensions": [
+        0,
+        0
+      ],
+      "valid_rgb_payload": false,
+      "sha256": "f7c12a66c7c883ea0352cdf30cb5a3e69131e50beb978de98f36abc13c7685e6",
+      "log": "/tmp/rrrah-gpr-rgb-oracle-probe-20261007/Fusion-front.log"
+    }
+  ],
+  "limitation": "SDK RGB path applies approximate WB gains; source does not apply full DNG camera color matrices/gain-map development",
+  "cause": "SDK decoder RGB resolution switch omits FULL; 1:1 returns CODEC_ERROR_UNSUPPORTED_FORMAT (20), wrapper still returns true.",
+  "half_resolution_probe": {
+    "camera": "HERO9",
+    "dimensions": [
+      2784,
+      2088
+    ],
+    "output_bytes": 34877971,
+    "valid_rgb_payload": true,
+    "sha256": "aa44f8d8472cbef9a5743e9e2366895685b0d9cd01af080b5011cbf83dc0071e",
+    "log": "/tmp/rrrah-gpr-sdk-hero9-half.log",
+    "limitation": "SDK half-resolution RGB applies approximate gains, not full DNG color pipeline."
+  }
+}

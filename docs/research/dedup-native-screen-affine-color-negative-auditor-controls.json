@@ -1,0 +1,46 @@
+{
+  "status": "passed",
+  "input_hashes": {
+    "docs/research/dedup-native-screen-affine-color-negative-gate.json": "383e3ebed27f29cdefe415abe36a3cb95400a8b540c9e58c6e844fdfa7c56981",
+    "scripts/verify-dedup-native-screen-affine-color-negative-gate.py": "65164089c82e0176b5c69809f8100299e7a15bcaca7b424adffe4b88667c2f6e",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/test-dedup-native-screen-affine-color-negative-auditor.py": "71de4dcdc13d4ad5681e04c69c0c9c68f04b0ca09d53f949844476bcfa70209c"
+  },
+  "controls": [
+    {
+      "case": "valid",
+      "returncode": 0,
+      "expected": "accept"
+    },
+    {
+      "case": "false_acceptance",
+      "returncode": 1,
+      "expected": "reject"
+    },
+    {
+      "case": "sample_count",
+      "returncode": 1,
+      "expected": "reject"
+    },
+    {
+      "case": "roi_geometry",
+      "returncode": 1,
+      "expected": "reject"
+    },
+    {
+      "case": "source_digest",
+      "returncode": 1,
+      "expected": "reject"
+    },
+    {
+      "case": "missing_case",
+      "returncode": 1,
+      "expected": "reject"
+    },
+    {
+      "case": "duplicate_case",
+      "returncode": 1,
+      "expected": "reject"
+    }
+  ],
+  "scope": "Finite real-report mutation controls; not pixel or algorithm correctness evidence."
+}

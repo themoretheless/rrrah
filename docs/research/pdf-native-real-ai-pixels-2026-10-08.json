@@ -1,0 +1,122 @@
+{
+  "scope": "Native test-only real AI replay: refusal trace and strict Poppler RGB comparison",
+  "pages": [
+    {
+      "fixture": "VectorApple.ai",
+      "page": 0,
+      "width": 301,
+      "height": 246,
+      "peak_admitted_bytes": 48094328,
+      "final_admitted_bytes": 0,
+      "status": "native_diagnostic",
+      "native_completed": false,
+      "capture_failed": false,
+      "capture_ms": 1621.572042,
+      "native_replay_ms": 12.150083,
+      "deadline_expired": false,
+      "events": 2755,
+      "native_paints": 463,
+      "raster_events": 3,
+      "shading_events": 13,
+      "page_model": "Cmyk"
+    },
+    {
+      "fixture": "one.ai",
+      "page": 0,
+      "width": 1366,
+      "height": 768,
+      "peak_admitted_bytes": 168322584,
+      "final_admitted_bytes": 0,
+      "status": "native_diagnostic",
+      "native_completed": true,
+      "capture_failed": false,
+      "capture_ms": 1.477916,
+      "native_replay_ms": 3113.294625,
+      "deadline_expired": false,
+      "events": 8,
+      "native_paints": 2,
+      "raster_events": 0,
+      "shading_events": 0,
+      "page_model": "Rgb"
+    },
+    {
+      "fixture": "one.ai",
+      "page": 1,
+      "width": 177,
+      "height": 175,
+      "peak_admitted_bytes": 4957320,
+      "final_admitted_bytes": 0,
+      "status": "native_diagnostic",
+      "native_completed": true,
+      "capture_failed": false,
+      "capture_ms": 0.052208,
+      "native_replay_ms": 145.781667,
+      "deadline_expired": false,
+      "events": 1,
+      "native_paints": 0,
+      "raster_events": 0,
+      "shading_events": 0,
+      "page_model": "Rgb"
+    }
+  ],
+  "comparisons": [
+    {
+      "fixture": "one.ai",
+      "page": 0,
+      "exact": false,
+      "different_pixels": 2494,
+      "max_error": 58,
+      "mean_absolute_error": 0.0326369189238653,
+      "command": [
+        "pdftoppm",
+        "-r",
+        "72",
+        "-f",
+        "1",
+        "-l",
+        "1",
+        "-singlefile",
+        "/tmp/rrrah-integrated-ai-corpus/one.ai",
+        "/tmp/rrrah-real-ai-native-export-20261008/poppler-0"
+      ],
+      "native_sha256": "08d4bcdbf955acb0ac0d4f45488712302bd8babfff588fd986b726f568cef293",
+      "oracle_sha256": "d04c5ca83cfef9a672ed59480378acbe12221c1512e00cc0f80c86c6f7db58d7"
+    },
+    {
+      "fixture": "one.ai",
+      "page": 1,
+      "exact": true,
+      "different_pixels": 0,
+      "max_error": 0,
+      "mean_absolute_error": 0.0,
+      "command": [
+        "pdftoppm",
+        "-r",
+        "72",
+        "-f",
+        "2",
+        "-l",
+        "2",
+        "-singlefile",
+        "/tmp/rrrah-integrated-ai-corpus/one.ai",
+        "/tmp/rrrah-real-ai-native-export-20261008/poppler-1"
+      ],
+      "native_sha256": "89db416a84fdc983853717f5fd73690c020e6feced867d1a3d4e02873f9d7e36",
+      "oracle_sha256": "9e754d40c23ce882917a696aca9cb873a6cd863ca40a6e1ee2d6a41255e414c8"
+    }
+  ],
+  "source_manifest_verified": true,
+  "first_VectorApple_refusal": {
+    "depth": 0,
+    "event_index": 3,
+    "kind": "raster",
+    "reason": "Native replay has no Event::Raster handler"
+  },
+  "trace_log": "/tmp/rrrah-real-ai-native-export-20261008.log",
+  "limitations": [
+    "Strict pixel gate not relaxed",
+    "Native replay time in this diagnostic includes streaming export I/O",
+    "Production AI decoder and Metal integration not qualified",
+    "Supported pages only compared; refused VectorApple has no partial pixel export"
+  ]
+}

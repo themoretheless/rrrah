@@ -1,0 +1,12 @@
+"""Original-pixel confirmation of all eight verified local folded-print models."""
+import hashlib,json,subprocess
+from pathlib import Path
+root=Path('/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays');b=Path('docs/research');geometry=b/'dedup-folded-201702-regional-geometry.json';audit=b/'dedup-folded-201702-regional-geometry-audit.json';h=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest();g=json.loads(geometry.read_text());a=json.loads(audit.read_text());assert a['status']=='verified_folded_crop_local_geometry' and all(h(k)==v for obj in [g,a] for k,v in obj['input_hashes'].items());models=[v for v in g['results'][1]['evidence']['regions'] if v['matrix'] is not None];assert len(models)==8
+input=b/'dedup-folded-201702-local-models-input.txt';assert not input.exists();input.write_text(''.join(' '.join(str(v) for v in [*m['target_domain'],*[v for row in m['matrix'] for v in row]])+'\n' for m in models));left=root/'original-resolution-negative-200201'/g['original'];right=root/'original-resolution-strong-all'/g['query'];manifest=root/'prepared.json';m=json.loads(manifest.read_text())
+for path,split in [(left,'original'),(right,'strong')]:assert h(path)==next(v['source_sha256'] for v in m['images'][split] if v['filename']==path.name)
+exe=root/'gradient-scales-probe-screen-regional-model-pixels';pins={str(p):h(p) for p in [exe,left,right,manifest,geometry,audit,input,Path(__file__)]};out=b/'dedup-folded-201702-local-models-pixels.json';assert not out.exists();r={'status':'running_native','input_hashes':pins,'original':left.name,'query':right.name,'required_models':8,'scope':'Eight local native4x4 folded-print models with min10/tol2; same frozen original-pixel radius8 linear confirmation and grid4x4/max32. Count accepted support only within each fitting target domain. No default promotion, fold ground truth, negative precision or complete allocation proof.'}
+def save():
+ tmp=out.with_suffix('.tmp');tmp.write_text(json.dumps(r,indent=2)+'\n');tmp.replace(out)
+save();v=subprocess.run([str(exe),'screen-regional-model-pixels',str(left),str(right),str(input)],capture_output=True,text=True);assert all(h(k)==v for k,v in pins.items());r.update(returncode=v.returncode,stdout=v.stdout,stderr=v.stderr)
+if v.returncode:r['status']='native_failed';save();raise SystemExit(v.returncode)
+e=json.loads(v.stdout);assert e['status']=='ok' and len(e['experiments'])==8 and type(e['managed_used']) is int and e['managed_used']==0;r.update(status='complete_native_experiment',evidence=e);save()

@@ -1,0 +1,11 @@
+"""Terminal Linux suite and immutable snapshot verification."""
+import argparse,json,re,hashlib
+from pathlib import Path
+p=argparse.ArgumentParser();p.add_argument('returncode',type=int);p.add_argument('output',type=Path);a=p.parse_args();assert a.returncode==0 and not a.output.exists();base=Path('docs/research');manifest=base/'dedup-training-diagnostic-linux-snapshot.json';log=base/'dedup-training-diagnostic-linux-native.log';h=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest();r=json.loads(manifest.read_text());snapshot=Path(r['snapshot']);pins={str(p):h(p) for p in [manifest,log,Path(__file__)]};assert all(h(snapshot/k)==v for k,v in r['file_hashes'].items());text=log.read_text();expected={'affine_candidate_search':1,'affine_color':4,'affine_color_heldout_negative':1,'affine_region':8,'affine_region_file':5,'affine_region_grid':2,'region_footprint':5,'affine_region_input_contract':2};running=re.findall(r'Running tests/([a-z_]+)\.rs',text);assert sorted(running)==sorted(expected) and len(running)==8
+results=re.findall(r'test result: ok\. (\d+) passed; (\d+) failed; (\d+) ignored; (\d+) measured; (\d+) filtered out;',text);assert len(results)==8;assert all(list(map(int,row[1:]))==[0,0,0,0] for row in results);assert [int(v[0]) for v in results]==[expected[name] for name in running]
+current={}
+for name in ['affine_color','affine_region','affine_region_file','affine_region_grid','region_footprint']:
+ path=Path('crates/rrrah-dedup/src')/(name+'.rs');assert h(path)==r['file_hashes'][str(path)];current[str(path)]=h(path)
+for name in expected:
+ path=Path('crates/rrrah-dedup/tests')/(name+'.rs');assert h(path)==r['file_hashes'][str(path)];current[str(path)]=h(path)
+assert all(h(k)==v for k,v in pins.items());a.output.write_text(json.dumps({'status':'verified_native_linux_training_diagnostic','returncode':a.returncode,'tests':sum(expected.values()),'suite_counts':expected,'verified_snapshot_files':len(r['file_hashes']),'input_hashes':pins,'current_code_test_hashes':current,'scope':'Native Linux aarch64 eight focused suites; all immutable snapshot bytes verified. Current new modules/tests match. Current Cargo manifest has additional measurement examples outside this snapshot; snapshot is preserved, no Windows/broad corpus/full RSS proof.'},indent=2)+'\n')

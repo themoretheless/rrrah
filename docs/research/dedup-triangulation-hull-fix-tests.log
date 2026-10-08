@@ -1,0 +1,30 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: unused variable: `cancel`
+   --> crates/rrrah-dedup/src/local_index.rs:715:5
+    |
+715 |     cancel: impl Fn() -> bool,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_cancel`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-dedup` (lib) generated 1 warning (run `cargo fix --lib -p rrrah-dedup` to apply 1 suggestion)
+    Finished `test` profile [optimized + debuginfo] target(s) in 1.65s
+     Running tests/piecewise_warp.rs (target/debug/deps/piecewise_warp-a32c558a36b8be7c)
+
+running 4 tests
+test source_only_overlap_and_input_aliases_are_rejected ... ok
+test curved_grid_is_continuous_invertible_and_shared_credit_is_retained ... ok
+test inverted_degenerate_duplicate_overlapping_and_t_junction_faces_refuse ... ok
+test exact_memory_and_work_admission_and_every_checkpoint_cancel_are_atomic ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/triangulation.rs (target/debug/deps/triangulation-f8e2d3e4a070cb8f)
+
+running 3 tests
+test grid_topology_is_deterministic_and_passes_source_validation ... ok
+test invalid_budget_and_every_cancellation_release_credit ... ok
+test seeded_clouds_match_independent_hull_and_empty_circumcircle_oracles ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

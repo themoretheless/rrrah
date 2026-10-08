@@ -1,0 +1,74 @@
+{
+  "scope": "Test-only 32x16 authored clipped dashed PDF, 2x spatial sampling; includes initial parser work; alternating six runs per path. No production or real artwork throughput claim.",
+  "pixel_comparison": "exact for every paired run",
+  "results": [
+    {
+      "edge": 3,
+      "reuse_us": [
+        2275,
+        892,
+        1182,
+        896,
+        883,
+        888
+      ],
+      "reparse_us": [
+        2228,
+        2291,
+        2078,
+        2160,
+        1975,
+        1962
+      ],
+      "reuse_median_us": 894.0,
+      "reparse_median_us": 2119.0,
+      "ratio_reparse_to_reuse": 2.3702460850111855
+    },
+    {
+      "edge": 7,
+      "reuse_us": [
+        427,
+        379,
+        379,
+        376,
+        376,
+        377
+      ],
+      "reparse_us": [
+        628,
+        623,
+        612,
+        610,
+        616,
+        637
+      ],
+      "reuse_median_us": 378.0,
+      "reparse_median_us": 619.5,
+      "ratio_reparse_to_reuse": 1.6388888888888888
+    },
+    {
+      "edge": 16,
+      "reuse_us": [
+        233,
+        212,
+        215,
+        212,
+        212,
+        211
+      ],
+      "reparse_us": [
+        239,
+        237,
+        233,
+        230,
+        231,
+        230
+      ],
+      "reuse_median_us": 212.0,
+      "reparse_median_us": 232.0,
+      "ratio_reparse_to_reuse": 1.0943396226415094
+    }
+  ],
+  "host": "macOS-26.7.1-arm64-arm-64bit-Mach-O",
+  "reproduction": "RRRAH_TILE_BENCH_REPORT=/tmp/new-report.json python3 scripts/test-pdf-mesh-bounds.py --renderer --filter spatial_tile_scene_reuse_benchmark --include-ignored --target-dir /tmp/rrrah-required-corpus-target"
+}

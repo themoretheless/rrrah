@@ -1,0 +1,16 @@
+{
+  "status": "native_affine_color_primitive_four_controls_passed",
+  "input_hashes": {
+    "crates/rrrah-dedup/src/lib.rs": "47cc67092803d5be4f8a2dcffb5e4c0e53f2f4396f1c69bd4007a28bce05f5a2",
+    "crates/rrrah-dedup/src/affine_color.rs": "2c6106f7e91c3b2a246f8a36a23e6adae57ed7bfdc7d65363c8e82efdc5de2aa",
+    "crates/rrrah-dedup/tests/affine_color.rs": "8959184229b61487025a8eabbedac32d09ea70c42b5d06a461a17c74f2b93dee"
+  },
+  "command": "cargo test -p rrrah-dedup --no-default-features --test affine_color",
+  "tests_passed": 4,
+  "scope": "Constant-storage display-range opaque RGB fit, rank/variance/bounds safeguards and separate validation primitive; independently specified mixed-channel transform, held-out edits/negative and every cancellation checkpoint. No native real-screen pixels, file/collection integration, Linux or broad precision proof yet.",
+  "photometric_regression": {
+    "command": "cargo test -p rrrah-dedup --no-default-features --test photometric",
+    "tests_passed": 7,
+    "returncode": 0
+  }
+}

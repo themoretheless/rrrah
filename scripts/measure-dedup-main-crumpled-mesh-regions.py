@@ -1,0 +1,12 @@
+"""All original regions with>=10 prior inliers, unchanged full52-point mesh."""
+import hashlib,json,shutil,subprocess
+from pathlib import Path
+D=Path('docs/research');T=Path('/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays');h=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest();base=D/'dedup-combined-domain-release-original-full.json';b=json.loads(base.read_text());e=next(v['evidence'] for v in b['results'] if v['query']=='204702.jpg');points=T/'remaining-mesh/204702-global_inliers-points.txt';assert len(points.read_text().splitlines())==52;exe=T/'mesh-regions-pixels-probe-qualified';assert not exe.exists();shutil.copy2('target/release/examples/mesh_regions_pixels_probe',exe);pixels=[T/'all-photometric-local-rank'/f'{name}.rgba32' for name in ['204700','204702']];work=T/'crumpled-mesh-regions';work.mkdir(exist_ok=False);files=[base,points,exe,*pixels,Path(__file__),Path('crates/rrrah-dedup/examples/mesh_regions_pixels_probe.rs')];out=D/'dedup-main-crumpled-mesh-regions.json';assert not out.exists();r={'status':'running','original_mesh_inlier_indices':e['inliers'],'required_regions':len(e['regions']),'results':[],'input_hashes':{str(p):h(p) for p in files},'generated_hashes':{},'scope':'All existing regions;>=10 correspondences inside both rectangles from fixed full52-point globally admitted mesh. No new fit or post-refusal pruning; local piecewise pixel support only, not identity/precision qualification.'}
+def inside(p,rect):x,y,w,height=rect;return x<=p[0]<x+w and y<=p[1]<y+height
+for index,region in enumerate(e['regions']):
+ ids=[i for i in e['inliers'] if all(inside(p,rect) for p,rect in zip(e['correspondences'][i],region['domains']))];row={'region_index':index,'domains':region['domains'],'mesh_witness_indices':ids}
+ if len(ids)>=10:
+  rect=work/f'{index}-regions.txt';rect.write_text(' '.join(str(x) for box in region['domains'] for x in box)+'\n');r['generated_hashes'][str(rect)]=h(rect);p=subprocess.run([str(exe),*map(str,pixels),str(points),str(rect)],capture_output=True,text=True);row.update(returncode=p.returncode,stdout=p.stdout,stderr=p.stderr)
+  if p.returncode==0:row['rank']=[json.loads(x) for x in p.stdout.splitlines()]
+ r['results'].append(row);out.write_text(json.dumps(r,indent=2)+'\n')
+assert all(h(p)==v for p,v in r['input_hashes'].items()) and all(h(p)==v for p,v in r['generated_hashes'].items());r['status']='complete';out.write_text(json.dumps(r,indent=2)+'\n')

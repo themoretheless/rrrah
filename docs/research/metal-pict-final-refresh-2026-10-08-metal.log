@@ -1,0 +1,26 @@
+
+running 3 tests
+test pict_public_route_lease_swap_pressure_and_metal_preserve_rgba ... ok
+test pict_unpacked_xrgb_macos_pixels_survive_swap_pressure_and_metal ... ok
+test pict_external_directbits_oracle_swap_pressure_and_metal ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 10 filtered out; finished in 3.44s
+
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-cache` (lib) generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.68s
+     Running tests/hdr_raster_swap.rs (/private/tmp/rrrah-required-corpus-target/debug/deps/hdr_raster_swap-996363838a290484)
+Raster transport adapter: Metal Apple M4 Max
+Raster transport adapter: Metal Apple M4 Max
+Raster transport adapter: Metal Apple M4 Max
+Raster transport adapter: Metal Apple M4 Max
+Raster transport adapter: Metal Apple M4 Max
+Raster transport adapter: Metal Apple M4 Max
+Raster transport adapter: Metal Apple M4 Max

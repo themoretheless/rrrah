@@ -1,0 +1,143 @@
+{
+  "scope": "Test-only coverage tracing at all 14 known whole-versus-64-tile differing points; no production change",
+  "rows": [
+    {
+      "fixture": "VectorApple.ai",
+      "source_sha256": "c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06",
+      "coverage_differences": [
+        {
+          "event": 2103,
+          "x": 144,
+          "y": 66,
+          "whole_shape": 18,
+          "tile_shape": 17,
+          "paint": "shading"
+        }
+      ]
+    },
+    {
+      "fixture": "one.ai",
+      "source_sha256": "97786949c268233a446e1738fb9c2f941e4d109811bd2f972948cdb7a45d64b4",
+      "coverage_differences": [
+        {
+          "event": 1,
+          "x": 372,
+          "y": 204,
+          "whole_shape": 204,
+          "tile_shape": 203,
+          "paint": "color"
+        },
+        {
+          "event": 1,
+          "x": 266,
+          "y": 210,
+          "whole_shape": 118,
+          "tile_shape": 117,
+          "paint": "color"
+        },
+        {
+          "event": 1,
+          "x": 449,
+          "y": 346,
+          "whole_shape": 237,
+          "tile_shape": 238,
+          "paint": "color"
+        },
+        {
+          "event": 4,
+          "x": 1044,
+          "y": 192,
+          "whole_shape": 62,
+          "tile_shape": 63,
+          "paint": "color"
+        },
+        {
+          "event": 4,
+          "x": 1123,
+          "y": 214,
+          "whole_shape": 199,
+          "tile_shape": 198,
+          "paint": "color"
+        },
+        {
+          "event": 4,
+          "x": 987,
+          "y": 241,
+          "whole_shape": 0,
+          "tile_shape": 1,
+          "paint": "color"
+        },
+        {
+          "event": 4,
+          "x": 960,
+          "y": 303,
+          "whole_shape": 60,
+          "tile_shape": 61,
+          "paint": "color"
+        },
+        {
+          "event": 4,
+          "x": 954,
+          "y": 327,
+          "whole_shape": 16,
+          "tile_shape": 17,
+          "paint": "color"
+        },
+        {
+          "event": 4,
+          "x": 1179,
+          "y": 330,
+          "whole_shape": 149,
+          "tile_shape": 148,
+          "paint": "color"
+        },
+        {
+          "event": 4,
+          "x": 1161,
+          "y": 522,
+          "whole_shape": 247,
+          "tile_shape": 246,
+          "paint": "color"
+        },
+        {
+          "event": 4,
+          "x": 1135,
+          "y": 567,
+          "whole_shape": 163,
+          "tile_shape": 162,
+          "paint": "color"
+        },
+        {
+          "event": 4,
+          "x": 1010,
+          "y": 580,
+          "whole_shape": 199,
+          "tile_shape": 198,
+          "paint": "color"
+        },
+        {
+          "event": 4,
+          "x": 1101,
+          "y": 597,
+          "whole_shape": 13,
+          "tile_shape": 12,
+          "paint": "color"
+        }
+      ]
+    }
+  ],
+  "finding": "All14 RGB-differing sample positions have differing independently rasterized path shape. one.ai samples belong to color fills events1/4; VectorApple sample belongs to shading fill event2103. Every observed shape difference is exactly1/255. This localizes the discrepancy before blend/color composition.",
+  "backend_source": {
+    "version": "vello_common0.0.8 used by vello_cpu0.0.8",
+    "flatten_rs_sha256": "2c82b35e5e8f4a19966378d0d35f84c151eeb22317dd53f63dcc3375d2b6369d",
+    "flatten_simd_rs_sha256": "a8e0ae44bedd96b3994fbcdf5b0cb5da4d30695aac54395a1bf85cba964a5dbe",
+    "verified": "Point conversion stores f32; curve flattening applies affine, viewport culling and f32 SIMD evaluation.",
+    "assessment": "f32 coordinate magnitude/curve subdivision and viewport culling are candidate causes; trace does not by itself prove which dominates."
+  },
+  "next": "Build an authored contour reproducer and establish stable global-coordinate geometry/coverage before offsetting tile storage. Preserve strict tile equality gate.",
+  "limitations": [
+    "Trace selects14 known points; it does not prove an absence of other differences at other tile sizes or scales.",
+    "Only top-level recorded fill paths traced; arbitrary nested mask/stroke sources not covered.",
+    "Production compositor integration, other blend modes, strict real-AI Poppler gate remain pending."
+  ]
+}

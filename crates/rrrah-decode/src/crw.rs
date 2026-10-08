@@ -28,11 +28,33 @@ pub fn decode_crw_10d_with_tables(
     decode_with_timings(request, table_zero).map(|output| output.mosaic)
 }
 
-fn decode_with_timings(
-    request: &DecodeRequest,
-    table_zero: &[u8],
-) -> Result<crate::DecodeOutput, DecodeError> {
+fn decode_with_timings(request: &DecodeRequest, table_zero: &[u8]) -> Result<crate::DecodeOutput, DecodeError> {
     let total = std::time::Instant::now();
+    request.check_cancelled()?;
+    if request.image_index != 0 {
+        return Err(DecodeError::NativeCamera { format: "CRW", message: "CRW image index must be zero".into() });
+    }
+    if request.memory_budget.is_none() {
+        return Err(DecodeError::NativeCamera { format: "CRW", message: "explicit CRW memory budget required".into() });
+    }
+    validate_table_zero(table_zero)?;
+    let source_started = std::time::Instant::now();
+    let source = crate::bounded_io::read_managed(request)?;
+    decode_source_with_tables(request, table_zero, source, source_started.elapsed(), total)
+}
+
+fn validate_table_zero(table_zero: &[u8]) -> Result<(), DecodeError> {
+    if table_zero.len() != 209 || blake3::hash(table_zero).to_hex().as_str() != "47f131299f596ac3ba864797e19735428b8808a068f2b50edf250d6dec1b7916" {
+        return Err(DecodeError::NativeCamera { format: "CRW", message: "unqualified CRW table-zero data".into() });
+    }
+    Ok(())
+}
+
+fn decode_source_with_tables<S: std::ops::Deref<Target = [u8]>>(
+    request: &DecodeRequest, table_zero: &[u8], source: S,
+    source_open: std::time::Duration, total: std::time::Instant,
+) -> Result<crate::DecodeOutput, DecodeError> {
+    let select_started = std::time::Instant::now();
     let error = |message: &str| DecodeError::NativeCamera {
         format: "CRW",
         message: message.into(),
@@ -45,14 +67,7 @@ fn decode_with_timings(
         .memory_budget
         .as_ref()
         .ok_or_else(|| error("explicit CRW memory budget required"))?;
-    if table_zero.len() != 209 {
-        return Err(error("invalid CRW table-zero length"));
-    }
-    if blake3::hash(table_zero).to_hex().as_str()
-        != "47f131299f596ac3ba864797e19735428b8808a068f2b50edf250d6dec1b7916"
-    {
-        return Err(error("unqualified CRW table-zero data"));
-    }
+    validate_table_zero(table_zero)?;
     fn tree(bytes: &[u8]) -> Result<Huffman<'_>, &'static str> {
         let counts: [u8; 16] = bytes.get(..16).ok_or("short Huffman table")?.try_into().unwrap();
         let count: usize = counts.iter().map(|v| usize::from(*v)).sum();
@@ -61,10 +76,7 @@ fn decode_with_timings(
     }
     let first = tree(&table_zero[..29]).map_err(error)?;
     let rest = tree(&table_zero[29..]).map_err(error)?;
-    let decoder_select = total.elapsed();
-    let source_started = std::time::Instant::now();
-    let source = crate::bounded_io::read_managed(request)?;
-    let source_open = source_started.elapsed();
+    let decoder_select = select_started.elapsed();
     let raw_started = std::time::Instant::now();
     let mosaic = crate::crw_entropy::decode_10d(&source, 0, (&first, &rest), budget, &|| {
         request.check_cancelled().is_err()
@@ -116,6 +128,15 @@ mod tests {
         ));
         assert_eq!(budget.used(), 0);
         assert_eq!(budget.peak(), 0);
+    }
+}
+
+impl NativeCrwDecoder {
+    pub(crate) fn decode_source<S: std::ops::Deref<Target = [u8]>>(
+        &self, request: &DecodeRequest, source: S, source_open: std::time::Duration,
+        total: std::time::Instant,
+    ) -> Result<crate::DecodeOutput, DecodeError> {
+        decode_source_with_tables(request, include_bytes!("../data/crw/table-zero.bin"), source, source_open, total)
     }
 }
 

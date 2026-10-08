@@ -1,0 +1,52 @@
+{
+  "scope": "100000 valid mixed-format file paths enumerated and sampled through production raster cache/prefetch loaders",
+  "source_construction": "25000 hard links per original PNG/GIF/EXR/HDR fixture; no source mutation",
+  "source_files": [
+    {
+      "path": "tests/fixtures/raster/pattern.profiled.png",
+      "sha256": "3c551ef8c29f2ede5b2ed5abcf237cee9e98832885865bc59c810e6455dc377b"
+    },
+    {
+      "path": "tests/fixtures/raster/gif-animation-disposal-3.gif",
+      "sha256": "4d8ed22a0e1b33ef6de1f293eeb92a6548666bf95975514987903cbc8d66d5bf"
+    },
+    {
+      "path": "tests/fixtures/raster/float-none-rec709-declared.exr",
+      "sha256": "237d1030caf9022f441458e8a90b718df4fe07f24e473b0bcf827d1b0ac9628e"
+    },
+    {
+      "path": "tests/fixtures/raster/rle-hdr-rec709-declared.hdr",
+      "sha256": "7054e40d167f8f6b66768df908b25997e6f3e02c60e1c2efe1e72d2a7ddaed96"
+    }
+  ],
+  "paths": 100000,
+  "selected_navigation_steps": 512,
+  "passed": 1,
+  "failed": 0,
+  "scan_and_navigation_seconds": 0.997932042,
+  "test_total_seconds_including_link_creation_and_cleanup": 59.87,
+  "limits": {
+    "root_cpu_bytes": 1048576,
+    "cache_bytes": 65536,
+    "cache_entries": 2,
+    "neighbours": 3
+  },
+  "cpu_peak": 1048576,
+  "final_tracked_bytes": 0,
+  "controls": [
+    "All files enumerated in stable order",
+    "Selections at both directory boundaries plus deterministic jumps and reversals",
+    "Selected float component bits and dimensions match original fixture decode",
+    "Neighbour preload does not mutate visible frame",
+    "Visible cache hit reuses owned pixels under complete memory pressure",
+    "Cancelled generation preload fails without cache/budget changes"
+  ],
+  "log": "/tmp/rrrah-gallery-100k-valid-navigation-20261008.log",
+  "log_sha256": "262d7774c542c4d9d1b48e35c13632c4aa33e3fe3fdc506e2276b00decf83a2d",
+  "limitations": [
+    "Only four repeated valid fixtures, not 100000 diverse photographs",
+    "512 selected files and neighbours decoded, not every source",
+    "Expected pixels derive from original fixture decode, not independent format oracle",
+    "No real window or Metal presentation measurement; no TTL/swap in this control"
+  ]
+}

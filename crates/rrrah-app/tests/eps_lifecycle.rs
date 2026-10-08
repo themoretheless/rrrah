@@ -44,9 +44,52 @@ fn independent_eps_gray_rgb_ramp_survives_swap_and_metal() {
     compare_independent_eps_cases_through_swap_and_gpu(&gpu, &cases);
 }
 
+#[test]
+#[ignore = "requires actual GPU adapter; run explicitly with RRRAH_GPU_BACKEND=metal"]
+fn independent_eps_arc_pixels_survive_swap_and_metal() {
+    let gpu = common::qualification_gpu().expect("required GPU adapter");
+    eprintln!("EPS arc lifecycle adapter: {}", gpu.adapter_name());
+    let reference: serde_json::Value = serde_json::from_str(include_str!(
+        "../../../tests/fixtures/eps/arc-pixel-zero-adjust-ghostscript-reference.json"
+    ))
+    .unwrap();
+    let cases = reference["cases"].as_array().unwrap();
+    assert_eq!(cases.len(), 6);
+    // Full ellipse gate remains open: pixel 19 differs even with zero fill adjust.
+    let qualified: Vec<_> = cases
+        .iter()
+        .filter(|case| case["name"] != "ellipse")
+        .cloned()
+        .collect();
+    assert_eq!(qualified.len(), 5);
+    compare_independent_eps_cases_with_sampling(&gpu, &qualified, Some(1));
+}
+
+#[test]
+#[ignore = "requires actual GPU adapter; run explicitly with RRRAH_GPU_BACKEND=metal"]
+fn independent_eps_clip_pixels_survive_swap_and_metal() {
+    let gpu = common::qualification_gpu().expect("required GPU adapter");
+    eprintln!("EPS clipping adapter: {}", gpu.adapter_name());
+    let reference: serde_json::Value = serde_json::from_str(include_str!(
+        "../../../tests/fixtures/eps/clip-pixel-ghostscript-reference.json"
+    ))
+    .unwrap();
+    let cases = reference["cases"].as_array().unwrap();
+    assert_eq!(cases.len(), 10);
+    compare_independent_eps_cases_through_swap_and_gpu(&gpu, cases);
+}
+
 fn compare_independent_eps_cases_through_swap_and_gpu(
     gpu: &common::GpuReadback,
     cases: &[serde_json::Value],
+) {
+    compare_independent_eps_cases_with_sampling(gpu, cases, None);
+}
+
+fn compare_independent_eps_cases_with_sampling(
+    gpu: &common::GpuReadback,
+    cases: &[serde_json::Value],
+    samples: Option<u8>,
 ) {
     for case in cases {
         let directory = tempfile::tempdir().unwrap();
@@ -60,6 +103,18 @@ fn compare_independent_eps_cases_through_swap_and_gpu(
         let mut request = DecodeRequest::new(&path);
         request.memory_budget = Some(root.clone());
         let decode = || {
+            if let Some(samples) = samples {
+                let mut limits = EpsDocumentLimits::default();
+                limits.raster.fill.samples = samples;
+                return decode_eps_file_document(
+                    &request,
+                    1.,
+                    EpsRasterColorPolicy::DeviceGrayRgbAsSrgb,
+                    limits,
+                    &root,
+                )
+                .unwrap();
+            }
             let DecodedImage::Raster(frame) = decode_image(&request).unwrap() else {
                 panic!()
             };

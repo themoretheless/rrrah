@@ -5323,3 +5323,634 @@ Current Hayro 0.7.0 source `ColorSpace::convert_f32` converts DeviceCMYK operand
 New external `qualify-pdf-cmyk-float.py` binds LittleCMS 2.19 public APIs and format identifiers, extracts exact authored operand text from the pinned PDF, converts operands to f32, supplies floating CMYK in LittleCMS percentage units and compares RGB8 results. It separately reproduces Hayro's f32→CMYK8 rounding before independent ICC conversion, using identical pinned CGATS001Compat-v2-micro profile bytes. For intents 0–3, direct float input differs from native at 64/96 pixels with max error 3; reproduced CMYK8 input differs at 32/96 with max 1. Source/profile/native/library hashes, normalized input values and reference first rows are recorded in `research/pdf-cmyk-float-littlecms-2026-10-07.json`; native dump log: `research/pdf-cmyk-native-dump-2026-10-07.log`. Float CMYK format follows the [public LittleCMS header](https://github.com/mm2/Little-CMS/blob/lcms2.19/include/lcms2.h).
 
 This confirms measurable pre-ICC precision loss for this fixture and identifies the next renderer change: use the existing float ICC transform instead of the DeviceCMYK u8 shortcut. It does not establish that this accounts for all AI differences or remove the Poppler gate; final RGB output remains quantized, and masks, blends, rendering intent and path coverage remain separately unqualified. No renderer behavior has yet been changed by this diagnostic.
+
+### Rejected float-ICC renderer experiment (2026-10-07)
+
+A temporary repository-local hayro-interpret patch bypassed both DeviceCMYK convert_f32 quantization and the separate ToRgb::convert_sample u8 preference. The first change alone produced identical pixels because vector fills used the second shortcut. With both bypassed, the independent same-profile LittleCMS float oracle still differed by up to 3 RGB8 levels, now at 72/96 pixels (baseline 64/96). Against the reproduced CMYK8 oracle, the patched result differed at 8/96 pixels by at most 1. Thus invoking the existing moxcms float executor does not establish the expected direct-float ICC behavior and does not improve this qualification fixture. The patch was rejected and production dependencies/behavior restored.
+
+The reproducible rejected diff is `research/pdf-cmyk-float-rejected-renderer-patch-2026-10-07.diff`; independent report is `research/pdf-cmyk-float-patched-littlecms-2026-10-07.json`. The next investigation must compare ICC executor/profile interpolation and input normalization directly, rather than assume the float method name proves precision. This qualifies neither AI nor EPS and leaves the strict Poppler gate unchanged.
+
+### ICC discrepancy isolated from PDF rasterization (2026-10-07)
+
+New diagnostic example `cmyk_transform_probe` calls public moxcms 0.8.1 float and byte executors directly with the same pinned profile and independently recorded PDF operands. It does not invoke Hayro, parse a PDF, rasterize geometry or composite pixels. Direct float output equals the rejected float-patched PDF byte-for-byte for all 96 opaque pixels; direct byte output equals current production PDF byte-for-byte. Independent LittleCMS comparison reproduces the float discrepancy (max 3, 72/96 pixels), ruling out PDF geometry/compositing as its cause for this exact fixture. This is evidence to investigate ICC profile interpretation/interpolation/normalization, not a blanket diagnosis of other AI differences.
+
+Probe inputs and unrounded float RGB outputs: `research/pdf-cmyk-direct-moxcms-2026-10-07.log`. Independent report: `research/pdf-cmyk-direct-float-littlecms-2026-10-07.json`. Production runtime remains unchanged.
+
+### ICC interpolation/precision option matrix (2026-10-07)
+
+The direct diagnostic now exports all 16 combinations of moxcms Linear/Tetrahedral/Pyramid/Prism interpolation, preferred fixed-point on/off, and Low/High barycentric weights. The `options` feature is enabled only as a development dependency for this example, not the production decoder dependency. Comparing the 12 authored samples to the pinned LittleCMS float reference: default Linear/fixed/Low max error is 3 at 9/12 samples; Tetrahedral/Low yields max 2 at 7/12 samples for either fixed preference. High weights do not consistently improve agreement: Tetrahedral/no-fixed/High differs at 5/12 but max 3; other High configurations reach max 4. None matches the independent reference exactly.
+
+This establishes that interpolation choice affects this discrepancy, but neither a precision toggle nor the available tetrahedral option fully resolves it. No production policy is changed or gate relaxed. Logs with every unrounded RGB and option: `research/pdf-cmyk-moxcms-options-2026-10-07.log`; comparison: `research/pdf-cmyk-moxcms-options-comparison-2026-10-07.json`. Further qualification needs ICC table/curve execution comparison and broader CMYK vectors, not adoption based on this one strip.
+
+### Independent ICC oracle optimization audit (2026-10-07)
+
+The external LittleCMS diagnostic now tests default and public cmsFLAGS_NOOPTIMIZE (0x0100), each with RGB8 and float RGB output (the latter rounded explicitly afterward). Across intents 0–3, all four direct-float CMYK reference variants are identical at RGB8 precision, preserving the direct moxcms discrepancy of max 3 and 72/96 differing pixels. Thus the float comparison is stable under these oracle implementation choices. Byte-CMYK references are not stable: disabling optimization changes the reference and its difference from direct moxcms float rises to max 4 at 32/96 pixels, versus max 1 at 8/96 under the optimized byte oracle. Earlier closeness to the optimized byte oracle does not prove equivalent float input quantization inside moxcms.
+
+Report: `research/pdf-cmyk-littlecms-nooptimize-2026-10-07.json`. Public flags/formats: [LittleCMS 2.19 header](https://raw.githubusercontent.com/mm2/Little-CMS/lcms2.19/include/lcms2.h). Production behavior remains unchanged; investigate profile stages/interpolation against the stable float oracle.
+
+### Pinned CMYK ICC stage inventory (2026-10-07)
+
+Binary inspection of the SHA-pinned 8464-byte profile identifies ICC 2.1 scanner-class CMYK→Lab PCS with one A2B0 `mft2` stage, four input and three output channels, identity 3×3 matrix, 48-entry input curves per channel, a 6×6×6×6 CLUT, and two-entry identity output curves. A2B1/A2B2 are absent; separate rendering-intent tables do not exist in this profile. Input curves are not identity: their maximum normalized identity deviations are approximately 0.05615, 0.01324, 0.01941 and 0.04296. Full input curve samples, tag offsets/types and header metadata are recorded in `research/pdf-cmyk-icc-profile-structure-2026-10-07.json`.
+
+The next stage-level comparison should isolate CMYK→Lab before destination sRGB, including nonlinear input curve sampling, four-dimensional CLUT interpolation and ICC v2 Lab normalization. The identity matrix/output curves and nonexistent per-intent tables need not be treated as hypothetical causes for this exact profile. This structural inspection does not prove which remaining stage causes the numeric discrepancy.
+
+### Raw A2B0 stage independent evaluation (2026-10-07)
+
+New external `probe-cmyk-icc-stage.py` independently evaluates the pinned 48-entry input curves with linear interpolation and all 16 corners of the 4D six-node CLUT using Python floating arithmetic. It compares all 12 authored CMYK samples against LittleCMS public cmsReadTag(A2B0)/cmsPipelineEvalFloat, without destination sRGB, physical Lab unit conversion or RGB quantization. Maximum normalized Lab component difference is 1.3209851023265884e-05. Full shaped inputs and both stage outputs are in `research/pdf-cmyk-a2b0-stage-2026-10-07.json`, with profile/library hashes.
+
+This verifies the independent quadlinear interpretation of the source stage against LittleCMS for these samples and provides intermediate oracle values. It does not yet compare moxcms intermediate Lab output or prove that the small Lab difference cannot amplify near gamut boundaries. Next isolate moxcms source-stage execution and ICC v2 Lab normalization/destination conversion against these recorded intermediates. Production rendering remains unchanged.
+
+### Public moxcms CMYK→Lab probe limitation (2026-10-07)
+
+The direct diagnostic now attempts the pinned source profile→ColorProfile::new_lab() with Layout::Rgba→Layout::Rgb for each of the 16 options. All return UnsupportedProfileConnection from moxcms 0.8.1. The example records the per-variant error while retaining successful RGB diagnostics, rather than fabricating intermediate Lab values or failing before the report. Successful diagnostic execution and all 16 errors are recorded in `research/pdf-cmyk-moxcms-lab-2026-10-07.log`.
+
+This public transform cannot expose the intermediate oracle needed for source-stage comparison. Next use diagnostic-only instrumentation of internal ICC pipeline stages, keeping production dependencies unchanged until an independently validated correction exists. This is a limitation of the attempted public diagnostic connection, not a conclusion that CMYK PDF decoding is unsupported or an impasse for the broader goal.
+
+### Composite CMYK→RGB grid density experiment (2026-10-07)
+
+Source tracing found that moxcms 0.8.1 default CMYK→sRGB path precomputes the whole source curves/CLUT/Lab/destination conversion into a 17^4 RGB grid and interpolates the resulting RGB values. An isolated /tmp crate copy changed only this GRID_SIZE from 17 to 33; repository dependencies were untouched. Direct float qualification improves from max 3 at 72/96 pixels to max 1 at 40/96, under the unchanged stable float LittleCMS oracle. This demonstrates grid density contributes to the discrepancy for this fixture, beyond the earlier Hayro single-sample CMYK8 rounding.
+
+Raw RGB grid storage increases from 17^4×3×4 = 1,002,252 bytes to 33^4×3×4 = 14,231,052 bytes, before other construction/runtime allocations. A production change needs construction/throughput/memory measurements and broader nonneutral/edge CMYK qualification, or a stage-executed alternative avoiding the composite RGB approximation. Reports: `research/pdf-cmyk-grid33-probe-2026-10-07.log`, `research/pdf-cmyk-grid33-littlecms-2026-10-07.json`; exact isolated patch: `research/pdf-cmyk-grid33-experiment-2026-10-07.diff`. No production policy or strict AI gate is changed.
+
+### Composite grid performance tradeoff (2026-10-07)
+
+Diagnostic warm-process benchmark on macOS arm64 uses 262144 deterministic full-domain CMYK samples, 16 transform repetitions and five fresh transform constructions, opt-level 3. Median default-grid 17 build is 3.292 ms and throughput 68.386 Mpix/s; isolated grid 33 build is 31.400 ms and throughput 56.434 Mpix/s. Grid 33 uses a separate build directory after a shared-target trial incorrectly reused a same-version local dependency artifact; that trial is excluded. Final output checksums differ, as expected from the changed grid, and the baseline source file is byte-identical to the registry source. These are transform-only timings, excluding PDF load/rasterization and physical GPU display. Raw grid estimates remain 1.00 MB versus 14.23 MB, excluding temporary construction arrays and allocator overhead.
+
+Logs: `research/pdf-cmyk-grid17-benchmark-2026-10-07.log`, `research/pdf-cmyk-grid33-benchmark-2026-10-07.log`; comparison JSON: `research/pdf-cmyk-grid-benchmark-comparison-2026-10-07.json`; standalone benchmark source: `scripts/cmyk-grid-benchmark.rs` (dependencies moxcms 0.8.1 with options/extended_range and serde_json; isolated grid patch already recorded). Grid 33 improves the measured strip accuracy but costs about 9.5× construction time, 17.5% throughput and 14.2× raw grid memory. This motivates a stage-executed source ICC path rather than blindly increasing the production composite table. Broader color accuracy, actual load latency and managed intermediate allocation still require qualification.
+
+### Stage-executed CMYK matches independent float oracle (2026-10-07)
+
+An isolated moxcms 0.8.1 copy enabled any_to_any and forced the existing Katana source-stage route for the CMYK→RGB branch, avoiding the precomposed 17^4 RGB LUT. Direct float output matches the independent LittleCMS float reference exactly at RGB8 precision for all 96 strip pixels; all 16 precision/interpolation options yield zero maximum error on the 12 source colors. This supplies a concrete correction candidate to the earlier composite-grid discrepancy. Production remains unmodified and Hayro float/single-sample quantization still needs removal when integrating the candidate.
+
+Same deterministic benchmark: median build 1.154 ms, throughput 43.766 Mpix/s, versus composite17 3.292 ms/68.386 Mpix/s and composite33 31.400 ms/56.434 Mpix/s. The staged path improves preparation and measured accuracy but costs about 36% transform throughput versus composite17. It does not allocate the composite RGB grid; actual retained/temporary allocation accounting has not yet been measured. Broad seeded CMYK/gamut-edge qualification, vector-fill latency and PDF/AI regressions must precede production adoption.
+
+Exact patch: `research/pdf-cmyk-staged-experiment-2026-10-07.diff`; option/sample log: `research/pdf-cmyk-staged-probe-2026-10-07.log`; independent report: `research/pdf-cmyk-staged-littlecms-2026-10-07.json`; benchmark: `research/pdf-cmyk-staged-benchmark-2026-10-07.log`. Build uses isolated manifest with moxcms path dependency and options/extended_range/any_to_any, serde_json, opt-level 3, separate target directory.
+
+### Broad CMYK corpus rejects immediate staged-path adoption (2026-10-07)
+
+External `generate-cmyk-icc-corpus.py` creates 625 regular full-domain CMYK grid points plus 4096 seeded random points (seed 20261007), converts normalized f32 input to LittleCMS percentage units and exports unoptimized perceptual float RGB using the same pinned profile. Standalone `cmyk-corpus-probe.rs` executes the isolated forced-Katana moxcms path on exactly these 4721 inputs. Though the original strip matched, this broader corpus reaches max 7 RGB8 error at 2969 differing pixels, clamping both outputs to [0,1] before rounding. Raw float maximum 2.6934 includes gamut/clipping policy differences and must not be mistaken for normalized display error.
+
+Report with hashes and 16 worst-case source/reference/native vectors: `research/pdf-cmyk-staged-corpus-2026-10-07.json`. Immediate production adoption is rejected; diagnose these nonneutral/high-ink cases and destination/gamut handling first. This demonstrates why the prior 12-color success was insufficient qualification. Production dependencies remain unchanged and the strict AI gate remains active.
+
+### Broad ICC candidate versus baseline comparison (2026-10-07)
+
+The same 4721-point independently generated corpus now compares direct moxcms composite17, composite33 and forced stage execution. Composite17 max RGB8 error is 16, mean absolute per-channel error 0.57170, with 921 pixels above one level and 232 above three. Composite33 max is 8, mean 0.48874, 721 above one and 149 above three. Staged max is 7, mean 0.40556, 620 above one and 116 above three; 1248 samples improve but 322 worsen against composite17 using each pixel's maximum channel error. Thus the stage candidate reduces aggregate error by about 29%, but is not a uniform correction. Actual prefer_fixed_point=false plus allow_extended_range_rgb_xyz=true produces byte-identical float output to the staged default for this corpus.
+
+Report: `research/pdf-cmyk-broad-path-comparison-2026-10-07.json`. Each isolated library uses a separate target directory, with output hashes recorded to detect accidental dependency artifact reuse. Comparisons cover direct float execution, not Hayro's quantized production single-fill path. Diagnose the 322 regressions before adoption; no acceptance gate is weakened.
+
+### Broad source-stage discrepancy localized (2026-10-07)
+
+Diagnostic-only instrumentation in the isolated moxcms copy exports KatanaLut4x3::to_pcs_impl raw normalized Lab before v2/v4 scaling and destination conversion. For all 4721 samples, moxcms agrees with independent Python input-curve/quadlinear CLUT evaluation within 1.4166e-7, but differs from LittleCMS raw A2B0 pipeline by up to 0.01295072. The earlier 12-strip stage agreement does not generalize to the full CMYK domain. This locates a discrepancy in source-stage interpolation, before destination sRGB/gamut treatment. moxcms forcibly chooses quadlinear for Lab/XYZ PCS even when a tetrahedral option is selected; alternative source interpolation is the next targeted experiment.
+
+Comparison with 16 worst cases: `research/pdf-cmyk-broad-pcs-stage-comparison-2026-10-07.json`; exact isolated PCS dump instrumentation: `research/pdf-cmyk-pcs-instrumentation-2026-10-07.diff`. Generate the same corpus, use its normalized input rows with `probe-cmyk-icc-stage.py`, and compare the diagnostic f32 little-endian PCS dump. Production code remains unchanged.
+
+### Four-input ICC interpolation method identified (2026-10-07)
+
+Forcing moxcms Hypercube::tetra_vec3 at the source stage still leaves max RGB8 7 and max normalized source Lab discrepancy 0.0128276 (2525 differing RGB8 pixels), so generic four-dimensional tetrahedral interpolation is not the required method. LittleCMS 2.19 [Eval4InputsFloat source](https://raw.githubusercontent.com/mm2/Little-CMS/lcms2.19/src/cmsintrp.c) linearly interpolates along the first input C between two three-dimensional tetrahedral evaluations over M/Y/K. The external stage probe now independently implements this hybrid using sorted fractional coordinates and four barycentric vertices within each section.
+
+Across all 4721 samples, independent hybrid evaluation agrees with LittleCMS raw A2B0 within max 2.42257e-5 normalized Lab, versus quadlinear max 0.0129507. Mean per-sample maximum error is 8.31156e-6. Report: `research/pdf-cmyk-hybrid-stage-comparison-2026-10-07.json`; rejected generic tetra comparison: `research/pdf-cmyk-source-tetra-comparison-2026-10-07.json`. Next implement the hybrid in the isolated Rust source stage and qualify final RGB, speed and allocations before integrating. This does not yet change production behavior.
+
+### Rust hybrid source-stage candidate broad qualification (2026-10-07)
+
+The isolated Rust stage now implements first-dimension linear interpolation between two 3D tetrahedral sections directly over the original CLUT. Full 4721-point corpus reaches max 1 RGB8 difference, 161 differing pixels, mean per-channel RGB8 error 0.01136765; raw Lab stage matches LittleCMS within 2.42293e-5. This reduces mean error by about 98% from composite17's 0.57170 and eliminates all errors above one on this profile/corpus. The max-one agreement is evidence, not a universal-format or universal-profile gate.
+
+Five-repeat benchmark median preparation is 1.183 ms and throughput 20.106 Mpix/s. The straightforward implementation uses sorted fractional coordinates and eight source-table vertices, with no composite RGB grid; it is slower than the prior quadlinear stage (43.766 Mpix/s) and composite17 (68.386 Mpix/s). Optimization can specialize the three-coordinate ordering and reduce scalar indexing, but must retain the independent oracle. Next integrate a narrowly scoped float DeviceCMYK candidate into the PDF renderer, run actual PDF/AI qualification and measure single-fill/load behavior before any broad policy change.
+
+Clean candidate patch without PCS dump: `research/pdf-cmyk-hybrid-rust-candidate-2026-10-07.diff`, applied together with the prior forced-stage diagnostic patch and any_to_any feature; report: `research/pdf-cmyk-hybrid-rust-comparison-2026-10-07.json`; benchmark: `research/pdf-cmyk-hybrid-rust-benchmark-2026-10-07.log`. Production dependencies remain unchanged.
+
+### Production DeviceCMYK float-fill integration (2026-10-07)
+
+Repository-owned, license-preserving moxcms 0.8.1 and hayro-interpret 0.7.0 patches now integrate the qualified hybrid stage. New TransformOptions::rrrah_cmyk_hybrid defaults false and selects source-stage float execution plus hybrid interpolation only when explicitly enabled. Hayro's fixed DeviceCMYK float-fill transform enables it, bypassing both pre-ICC operand rounding and the single-sample u8 preference; existing byte image conversion remains its separate path. Other ordinary ICC transforms retain the default option. any_to_any dependency capability is enabled, so full decoder regression was run.
+
+Public PDF decode of the pinned 12×8 CMYK strips matches LittleCMS float reference exactly for every RGBA8 channel. Committed independent golden `tests/fixtures/pdf/cmyk-float-littlecms.rgba` and native regression test prove dimensions, pixels and zero managed root usage after last owner release. Focused PDF suite: 15 passed; full decoder library: 789 passed, 47 external cases ignored. Logs: `research/pdf-cmyk-integrated-regression-2026-10-07.log`, `research/pdf-cmyk-full-decode-regression-2026-10-07.log`; independent report: `research/pdf-cmyk-integrated-littlecms-2026-10-07.json`. Vendor provenance/local patch notes and upstream licenses are retained. ICC internal transform allocations remain outside managed pixel accounting and still need budget qualification.
+
+Strict actual Adobe AI Poppler comparison still fails 2/3 pages: VectorApple 33066 differing pixels (max 213), one.ai page0 2790 (max 115), page1 exact. Report: `research/ai-cmyk-integrated-poppler-2026-10-07.json`. Thus this corrects a measured DeviceCMYK conversion loss, not full AI qualification; private/PostScript AI, EPS, other rendering differences and overall 100-format/GPU objective remain open.
+
+### CMYK PDF viewer RAM/swap/Metal qualification (2026-10-07)
+
+The existing PDF readback integration suite now includes the corrected 12×8 DeviceCMYK strip PDF against the committed independent LittleCMS RGBA golden. Golden pixels are correctly interpreted as sRGB and converted to linear before rendering; the older endpoint-only cases had hidden a test-side assumption of already-linear byte values. Four independent-reference PDF cases now compare actual GPU frames before/after RAM lease use and native/prepared physical swap, with exact source bytes/restored float bits, selected-page/color identity, parent-budget saturation restore refusal/retry and zero root credit after release.
+
+Actual Metal qualification passed the targeted four-case test and the full PDF readback suite (2 passed, 1 external-source case ignored), with explicit GPU requirement rather than silent skip. Logs: `research/pdf-cmyk-ram-swap-metal-2026-10-07.log`, `research/pdf-cmyk-metal-full-regression-2026-10-07.log`. This covers CMYK float-fill transport on this fixed-profile sample, not PostScript AI/EPS, unknown CMYK profiles, physical HDR output, NVIDIA or full AI pixel conformance.
+
+### Native hybrid coordinate-order optimization (2026-10-07)
+
+Replaced general-purpose sorting of three M/Y/K fractional coordinates with a stable three-comparison sorting network in the repository-owned hybrid ICC stage. The production opt-in path emits byte-identical f32 output to the previous hybrid implementation for all 4721 independently generated corpus points, retaining max-one RGB8 oracle agreement. Targeted public PDF independent-golden regression passes after recompilation.
+
+Same warm-process five-repeat benchmark: median 23.074 Mpix/s versus prior 20.106 (about 14.8% faster), preparation 1.165 ms. Both checksums are identical. This is CPU transform throughput, not whole-viewer load latency or GPU throughput. Separate standalone production-library target enables rrrah_cmyk_hybrid explicitly; scripts/cmyk-corpus-probe.rs and cmyk-grid-benchmark.rs supply the workload. Reports: `research/pdf-cmyk-hybrid-optimized-benchmark-2026-10-07.log`, `research/pdf-cmyk-hybrid-optimized-comparison-2026-10-07.json`. Remaining AI/PDF rendering gaps and overall objective are unchanged.
+
+### Committed full-domain CMYK regression oracle (2026-10-07)
+
+The independently generated 4721-point corpus is now committed as normalized f32 little-endian CMYK inputs plus clamped/rounded LittleCMS RGB8 references. Metadata records 625 regular-grid samples, 4096 seeded samples, profile/library/input/reference hashes, perceptual intent, unoptimized float oracle, exact quantization and CC0 synthetic numeric provenance. A native decoder-library test executes the repository-owned opt-in hybrid ICC transform and checks every channel against this independent reference with maximum one RGB8 level, finite output and exact fixture extents. It cannot pass merely by matching the original strip.
+
+Both targeted DeviceCMYK tests pass without ignores: full-domain transform and exact public PDF decode/memory-release reference. Log: `research/pdf-cmyk-full-domain-native-regression-2026-10-07.log`; fixtures: `tests/fixtures/pdf/cmyk-full-domain-input.f32le`, `cmyk-full-domain-littlecms.rgb8`, `cmyk-full-domain-reference.json`. The one-level allowance is specific to this independently measured profile corpus and does not relax the strict Poppler AI gate. Other CMYK profiles and final AI renderer differences remain unqualified.
+
+### Shared ICC dependency cross-library regression (2026-10-07)
+
+After production hybrid integration and coordinate-order optimization, locked core/cache/decode/GPU/app library, binary and integration suites all completed successfully: 1286 passed, 0 failed, 107 ignored across 56 suites. This includes existing real Metal compute/readback, HDR producer transport, RAM/swap/TTL and decoder regressions. External-source/hardware tests retain their explicit skip constraints; this does not prove physical HDR or NVIDIA behavior, EPS/PostScript AI support or exact AI conformance. The 100-format catalog PDF row now reflects the independently qualified DeviceCMYK subset and remaining breadth.
+
+Full log: `research/cmyk-integration-cross-library-regression-2026-10-07.log`; parsed counts/scope: `research/cmyk-integration-cross-library-summary-2026-10-07.json`. No overall completion claim follows from these regression passes.
+
+### Single DeviceCMYK fill RGB buffer allocation removed (2026-10-07)
+
+Hayro's corrected single-color DeviceCMYK path now uses a three-float stack output instead of allocating a temporary RGB Vec for each vector fill. Batched output retains the existing vector path; the ICC executor's internal stage scratch remains separately allocated and unaccounted. Exact independent PDF and 4721-point native ICC tests both pass. Log: `research/pdf-cmyk-single-fill-buffer-regression-2026-10-07.log`. This removes a source-visible allocation; no whole-PDF latency improvement is claimed without a dedicated measurement. Remaining RAW routes such as MEF still require real format/color evidence and are not bypassed.
+
+### Independent CMYK fixture regeneration check (2026-10-07)
+
+Fresh generation from the recorded seed/grid and pinned ICC profile through external LittleCMS reproduces all 4721 committed normalized input vectors and RGB8 references byte-for-byte, including provenance hashes. The generator now exposes --verify-fixtures to fail on an input/reference/hash mismatch without consulting native renderer output. This verifies the regression golden is reproducible independent evidence, rather than a frozen native result. Reports: `research/pdf-cmyk-corpus-reproduction-2026-10-07.json`, `research/pdf-cmyk-corpus-reproduction-2026-10-07.log`. Broader profiles, byte-image ICC paths and unresolved formats remain separately pending.
+
+### Embedded CMYK8 PDF image discrepancy reproduced (2026-10-07)
+
+External corpus generator now supports --quantized-input, producing normalized f32 coordinates at exact CMYK8 code values before independent LittleCMS float conversion. An authored PDF image XObject contains all 4721 grid/seeded code tuples as one opaque 4721×1 DeviceCMYK8 image, with Interpolate false and exact one-source-pixel/page-point mapping. Current public PDF decode differs from the independent RGB8 golden at 3015 pixels, with maximum channel error 7. A preliminary 16-pixel grid slice had only max-one error and was insufficient; the committed fixture/reference contains the full corpus.
+
+Fixtures: `tests/fixtures/pdf/cmyk-image8.pdf`, `cmyk-image8-littlecms.rgba`; report with hashes/dimensions/scope: `research/pdf-cmyk-byte-image-baseline-2026-10-07.json`. This confirms the still-separate DeviceCMYK byte-image path needs stage-based precision qualification too. Source codes are already bytes, so preserving float PDF operands is not the relevant issue here. Next compare the native hybrid executor at these exact normalized byte codes and integrate the byte-image path if verified, with image memory/latency and full PDF regression. No byte-image production behavior changed in this investigation.
+
+### Embedded DeviceCMYK8 PDF image correction (2026-10-07)
+
+DeviceCMYK convert_u8 now normalizes exact byte code values and invokes the qualified original-stage hybrid float transform. It validates four-input/three-output lane correspondence and processes at most 256 pixels per call with fixed stack scratch (1024 CMYK floats + 768 RGB floats = 7168 bytes), avoiding a whole-image normalized-float allocation. Executor-internal stage allocation remains a separate bounded-per-block allocation and still needs explicit budget integration.
+
+The public decoder regression processes the entire 4721×1 authored CMYK8 image, including the last partial block, against the independent byte-code LittleCMS reference: every RGB channel within one level, alpha exact, dimensions exact and root memory zero after final owner release. This replaces baseline max-seven/3015-differing-pixel evidence. All 17 PDF tests pass with no ignores. Log: `research/pdf-cmyk-byte-image-regression-2026-10-07.log`. Batch throughput/load latency, GPU readback for this image case and broader ICC/mask/JPEG/color profiles remain pending; no full AI or overall completion claim.
+
+Full decoder library regression after the CMYK8 correction: 791 passed, 47 external cases ignored, no failures. Log: `research/pdf-cmyk-byte-full-decode-regression-2026-10-07.log`.
+
+### Embedded CMYK8 image RAM/swap/Metal qualification (2026-10-07)
+
+The independent-reference PDF viewer test now includes the 4721×1 CMYK8 image. It checks native source channels within one of LittleCMS, compares the displayed Metal frame within one, then requires byte-exact GPU frame identity through RAM leases and native/prepared swap restore, with exact source bytes or float bits, pressure-induced restore refusal/retry and zero root credit after final ownership release. The target spans the source width and the image is aligned vertically to a screen pixel center. A mandatory >128 distinct rendered RGB colors check prevents blank-frame false positives.
+
+An initial width-fit run placed the subpixel-height strip between pixel centers and falsely yielded equal blank frames; the content-presence assertion caught it. That result is excluded. The corrected run on Metal Apple M4 Max shows actual independent frame max error 1 and passes content presence plus transport checks. Full PDF readback suite: 2 passed, 1 external case ignored. Log: `research/pdf-cmyk-byte-ram-swap-metal-2026-10-07.log`. No general GPU/HDR/NVIDIA or full AI conformance claim follows.
+
+### Public CMYK8 PDF load/block-size measurement (2026-10-07)
+
+New `pdf_cmyk_load_bench` runs public decode_raster (including cached filesystem read) plus public display preparation, verifies zero managed bytes after every iteration and records root peak. Five repeats of 32 iterations on the 4721×1 source compare 256 versus 1024-pixel CMYK normalization blocks. Median warm decode is 0.248724 versus 0.242159 ms; display preparation 0.017226 versus 0.017220 ms; first process decode 3.242 versus 3.209 ms includes ICC first use, not cold disk I/O. Managed peak is 94420 bytes and final zero for both. Stack scratch rises from 7168 to 28672 bytes; ICC/external parser internals and stack bytes remain outside managed root accounting.
+
+The larger block offers only about 2.6% warm decode difference in this small-file trial for fourfold stack scratch, so production was restored to 256. No statistically established speedup or full-viewer/camera-file latency is claimed. Logs: `research/pdf-cmyk-byte-load-block256-2026-10-07.log`, `research/pdf-cmyk-byte-load-block1024-2026-10-07.log`; comparison: `research/pdf-cmyk-byte-block-size-comparison-2026-10-07.json`. Benchmark example preserves repeat counts, scope and parent-credit checks for larger producer inputs.
+
+### Embedded CMYK JPEG APP14/Decode inversion qualification (2026-10-07)
+
+A synthetic CC0 64×8 eight-color CMYK JPEG is independently encoded/decoded with Pillow 12.3/libjpeg at quality 100 without chroma subsampling. Its decoded CMYK codes feed external LittleCMS float ICC conversion with the pinned profile. The JPEG is embedded unchanged in a PDF DCTDecode image with explicit Decode [1 0] for all four channels, matching Adobe APP14 inverted sample convention. Native zune-based PDF decode matches all 512 independent RGBA pixels exactly. The golden is based on independently decoded compressed codes, not the pre-JPEG authored colors.
+
+New public decoder test checks dimensions, exact bytes and zero managed root after release. Source JPEG/PDF, LittleCMS RGBA golden and provenance metadata are committed under `tests/fixtures/pdf/cmyk-jpeg-app14*`; report: `research/pdf-cmyk-jpeg-app14-comparison-2026-10-07.json`. External corpus generator --input-cmyk8 supports numeric oracle creation from independently decoded JPEG bytes. YCCK, ColorTransform overrides, malformed APP14, arbitrary profiles and producer breadth remain pending; this does not establish whole JPEG/PDF or AI conformance.
+
+### Independently encoded YCCK JPEG PDF qualification (2026-10-07)
+
+External fixture-only `generate-ycck-jpeg.c` uses libjpeg-turbo public API with JCS_CMYK input, JCS_YCCK output, quality 100 and 1×1 sampling for all channels. The emitted JPEG has Adobe APP14 transform 2, verified from actual marker bytes. Pillow independently decodes CMYK values; external LittleCMS float ICC supplies final RGBA reference. JPEG bytes are embedded unchanged in a PDF with four inverted Decode pairs. Native PDF output agrees within max one RGB8 level (64/512 pixels differ), with exact alpha.
+
+New public native regression checks all channels, extent and last-owner managed release. Synthetic CC0 JPEG/PDF/golden/provenance files: `tests/fixtures/pdf/ycck-jpeg-app14*`; comparison: `research/pdf-ycck-app14-comparison-2026-10-07.json`. This qualifies one explicit APP14 YCCK/Decode case; ColorTransform overrides, subsampling, malformed markers, arbitrary ICC profiles and independent producer breadth remain pending. No production JPEG decoder change was required by this fixture.
+
+### Standalone profiled CMYK JPEG channel-loss reproduction (2026-10-07)
+
+The independently decoded APP14 CMYK JPEG now also has a standalone variant with the exact pinned 4-channel ICC profile inserted as one standard APP2 ICC_PROFILE segment without JPEG recompression. Independent Pillow CMYK decoding confirms all compressed channel codes remain byte-identical. Public standalone native output differs from the existing LittleCMS RGB oracle at 448/512 pixels, max RGB8 115; public display preparation fails UnsupportedProfileSpace. The ordinary image JPEG decoder projects source CMYK into RGB before its ICC profile is attached, so the retained four-channel profile no longer matches available samples. These are not equivalent to the corrected PDF CMYK/JPEG paths.
+
+Reproduction source: `tests/fixtures/raster/cmyk-app14-profiled.jpg`; report with source/profile hashes: `research/standalone-cmyk-jpeg-baseline-2026-10-07.json`. Next introduce original-channel JPEG CMYK decoding and ICC application before RGB projection, with managed source/output overlap and explicit unprofiled interpretation. No fabricated ICC fallback or goal-completion claim is made.
+
+### 2026-10-07: standalone profiled CMYK JPEG channel preservation
+
+The standalone JPEG path now preserves four CMYK channels through the embedded
+ICC transform rather than applying a CMYK profile to an already converted RGB
+image. Qualified source: `tests/fixtures/raster/cmyk-app14-profiled.jpg`, Adobe
+APP14 transform 0, 64 x 8. Public native decode matches every RGBA8 sample in the
+independent Pillow/libjpeg + LittleCMS float oracle
+`tests/fixtures/pdf/cmyk-jpeg-app14-littlecms.rgba` (512 pixels, maximum error 0).
+The previous standalone baseline had maximum RGB8 error 115 and failed display
+preparation with UnsupportedProfileSpace. Converted output is tagged sRGB; the
+source CMYK profile is consumed during conversion. Source and output buffers
+coexist and source capacity is separately admitted to the supplied memory budget.
+Codec/ICC scratch is not fully covered by that budget. This does not qualify all
+CMYK profiles, standalone YCCK, arbitrary JPEG metadata, or all 100 formats.
+
+### 2026-10-07: standalone profiled YCCK JPEG
+
+The same profile-preserving route now admits Adobe APP14 transform 2. Native
+JPEG decoding retains Y/Cb/Cr/K samples; a bounded full-range fixed-point color
+conversion reconstructs CMY, with Adobe K inversion, before ICC processing.
+`tests/fixtures/raster/ycck-app14-profiled.jpg` matches all 512 RGBA8 pixels in
+`tests/fixtures/pdf/ycck-jpeg-app14-littlecms.rgba` exactly. This oracle uses
+independent libjpeg/Pillow decoded CMYK samples and LittleCMS float conversion.
+The source is produced by `scripts/generate-ycck-jpeg.c`; add the pinned CGATS
+profile with `scripts/attach-jpeg-icc.py` without recompressing samples. Both
+profiled JPEG variants have public decode/display-preparation/managed-release
+regression checks. Wider subsampling, profiles, orientations and actual viewer
+RAM/swap/Metal qualification remain open for standalone profiled JPEG.
+
+### 2026-10-07: profiled CMYK/YCCK JPEG RAM, swap and actual Metal
+
+`rrrah` integration test
+`independently_referenced_pdfs_and_profiled_jpegs_match_through_ram_swap_and_metal`
+now includes both independently referenced standalone profiled JPEG fixtures.
+Actual adapter: Metal Apple M4 Max. Both decoded samples and the complete 96 x 64
+rendered frame match the independent JPEG/LittleCMS RGBA oracle exactly. A color
+count assertion requires the stripes to appear, preventing a blank-frame pass.
+RAM leases preserve the frame when cache capacity is reduced to zero. Native
+RGBA8 and prepared linear RGBA32F streamed swap restorations preserve bytes or
+float bits, color metadata and the full frame exactly. Exhausting the shared
+root budget refuses restoration without recording a corrupt-entry error;
+releasing pressure permits retry. Each case ends with zero managed bytes.
+Log: `docs/research/profiled-jpeg-ram-swap-metal-2026-10-07.log`.
+This proves these two fixtures through the tested offscreen viewer rendering
+pipeline, not physical display/HDR or arbitrary JPEG/profile qualification.
+
+### 2026-10-07: asymmetric profiled JPEG EXIF orientation qualification
+
+Sixteen independently referenced cases cover all eight EXIF orientations for
+both CMYK APP14 transform 0 and YCCK APP14 transform 2 with the pinned ICC
+profile. The 17 x 13 source varies along both axes; orientations 5–8 have 13 x 17
+output. External libjpeg/Pillow decoded CMYK samples feed LittleCMS float ICC;
+Pillow EXIF transpose supplies independent pixel placement. Public decoder
+comparison checks all 221 pixels in every case; maximum channel error is one
+RGB8 level, exact alpha. Managed ownership returns to zero after every decode.
+`jpeg_cmyk::tests::asymmetric_profiled_jpegs_preserve_all_eight_exif_orientations`
+is a permanent regression with tolerance two. Provenance hashes are in
+`tests/fixtures/raster/profiled-jpeg-orientation-reference.json`; measured
+per-case results are `docs/research/profiled-jpeg-orientations-2026-10-07.json`.
+Fixture tools: `generate-ycck-jpeg.c --asymmetric`,
+`generate-cmyk-icc-corpus.py --input-cmyk8`, and
+`generate-profiled-jpeg-orientations.py`. Other profiles, subsampling and physical
+presentation remain unqualified; this is not completion of the JPEG family.
+
+### 2026-10-07: all profiled JPEG orientations through RAM/swap/Metal
+
+The actual Metal integration now exercises all sixteen asymmetric CMYK/YCCK
+EXIF orientation fixtures in addition to the existing seven PDF/JPEG cases.
+Every full 96 x 64 frame is compared against the independently oriented ICC
+reference, with maximum observed RGB8 channel difference one for all sixteen
+cases. Color diversity prevents a blank-image pass. Each case also checks RAM
+lease survival under zero capacity, native RGBA8 and prepared RGBA32F streamed
+swap byte/bit identity, exact post-restore rendered frame, retained metadata,
+restoration refusal under root-memory pressure and successful retry afterward.
+All cases release managed root memory to zero. Actual adapter: Metal Apple M4
+Max. Evidence: `docs/research/profiled-jpeg-orientations-ram-swap-metal-2026-10-07.log`.
+This remains offscreen rendering qualification of the pinned profile and tested
+JPEG sample layouts; it does not prove physical presentation, broader JPEG
+profiles/subsampling, NVIDIA/CUDA or completion of all 100 formats.
+
+### 2026-10-07: profiled JPEG foreground prefetch limits and cancellation
+
+New foreground-loader regressions use real asymmetric CMYK/YCCK JPEG files
+through the production display preloader. Forward/backward navigation plans
+behind=1/ahead=2 with the correct priority neighbour; both independent byte and
+entry-count ceilings retain only two 3536-byte prepared frames. Every neighbour
+load preserves the visible frame and reuses its exact managed storage on a RAM
+hit. Newly admitted zero-TTL neighbours expire while the visible pin survives.
+The policy change preserves existing entry deadlines, as designed.
+A queued-navigation test holds the decode gate, starts an old-generation JPEG
+preload, then submits newer selections. The old preload cancels without cache
+admission; only the latest request remains queued. Releasing the gate permits
+real YCCK orientation-6 decode and linear display preparation (13 x 17), with
+zero managed bytes after cleanup. The tests cover cancellation at the gate,
+not interruption inside synchronous entropy decoding or ICC executor creation.
+Evidence: `docs/research/profiled-jpeg-prefetch-limits-cancellation-2026-10-07.log`.
+
+### 2026-10-07: reject contradictory JPEG APP14 channel declarations
+
+The profiled CMYK/YCCK header path now rejects conflicting Adobe APP14 transform
+values before decoded pixel allocation. Previously its accumulated declaration
+was overwritten by the last Adobe marker, matching the underlying JPEG codec's
+last-marker behavior; contradictory declarations could therefore pass admission.
+Repeated consistent transform-0 declarations remain accepted and reproduce all
+512 independent reference pixels exactly. Regressions prove the conflicting
+transform-2/transform-0 case returns InvalidJpegColor and retains zero managed
+bytes; the existing CMYK/YCCK color and sixteen orientation cases still pass.
+Evidence: `docs/research/profiled-jpeg-app14-conflicts-2026-10-07.log`.
+This guards declarations in the header before the first scan; arbitrary
+multi-scan marker placement and all malformed JPEG variants are not qualified.
+
+### 2026-10-07: pinned GPR HERO9 source and native compression gap
+
+Pinned official GoPro GPR repository commit
+`446c736a38fb14f51343605c0780d347dc602f89`, sample
+`data/samples/HERO9/GOPR0002.GPR`, 6,763,778 bytes, SHA256
+`9249208a3482d6d71d39575210fe19ab3dd737e5e446a4d0718d4bd9d3c4358b`.
+The TIFF/DNG declares a 5568 x 4176 16-bit CFA sensor, Compression=9,
+2 x 2 RGGB CFA, WhiteLevel=16383, explicit AsShotNeutral and two color matrices.
+Its one VC-5 tile is at offset 14622 with length 6749156. The current public
+native RAW decoder refuses `DNG Compression 9 is unsupported` with a 256 MiB
+managed budget. GPR remains Pending. Required next work is native VC-5 entropy
+and inverse-wavelet decoding plus Bayer reconstruction, followed by an
+independent full-sensor oracle and color/cache/swap/GPU qualification. Existing
+metadata is not proof of decoded correctness; preview substitution is excluded.
+Source/hash/structure/tile baseline:
+`docs/research/gpr-hero9-native-baseline-2026-10-07.json`.
+
+### 2026-10-07: native borrowed VC-5 tag/chunk reader
+
+New `rrrah_decode::vc5::Vc5Records` reads the VC-5 signature and big-endian
+signed tag/value records, including optional tags, 16-bit small chunks and
+24-bit large/section chunks. Payloads borrow the source buffer without copying;
+checked size/extent arithmetic rejects truncated records/chunks, terminates the
+iterator after one error and never scans ahead to resynchronize.
+The pinned official HERO9 essence parses completely: 5568 x 4176 header and
+four channel sections of 2126056, 1454472, 1375580 and 1792872 bytes. An explicitly
+run external regression verifies these source-dependent bounds; local regressions
+verify borrowed pointer identity and truncated header/large chunk refusal.
+This is stream framing, not coefficient decoding. Native VC-5 entropy decoding,
+subband reconstruction, inverse wavelet, Bayer assembly and sensor/color/viewer
+qualification remain required; GPR remains Pending.
+
+### 2026-10-07: native VC-5 nested sections and 16-bit lowpass unpack
+
+The borrowed stream reader can now enter recognized structural sections while
+keeping entropy blocks and vendor payloads opaque. The external pinned HERO9
+regression traverses all four channels, twelve wavelet sections, forty subband
+sections and forty entropy codeblocks with exact borrowed extents. The four
+lowpass blocks each contain 181656 bytes for 348 x 261 coefficients. New
+`lowpass_16` returns a nonallocating, exact-size big-endian u16 iterator with
+checked geometry and exact payload length; synthetic endian and overflow/zero/
+mismatched-size cases pass. Real block geometry passes; independent decoded
+coefficient/sensor equality is still required. Highpass entropy unpack, inverse
+wavelet and final Bayer reconstruction are not implemented, and GPR remains
+Pending. Evidence: `docs/research/gpr-vc5-native-nested-lowpass-2026-10-07.log`.
+
+### 2026-10-07: native VC-5 codebook-17 entropy runs
+
+New `Vc5Runs` reads MSB-first codebook-17 magnitudes, sign suffixes and zero runs
+without allocating output storage. It bounds every run by the admitted band
+coefficient count, rejects truncated/unknown codes and requires the exact band
+end marker after the final coefficient. The numerical codebook is attributed to
+GoPro commit `446c736a38fb14f51343605c0780d347dc602f89`; its MIT license is retained
+at `crates/rrrah-decode/data/vc5-LICENSE-MIT`. Algorithm implementation is Rust.
+The first real HERO9 highpass block produces exactly 90828 quantized coefficients
+and reaches its valid end marker. This is framing/count validation, not yet an
+independent coefficient-value oracle or inverse-companding qualification.
+Sensor reconstruction and viewer routing remain unimplemented; GPR stays Pending.
+
+### 2026-10-07: independent GoPro VC-5 coefficient oracle
+
+A test-only adapter compiles the pinned, unmodified official GoPro `GetRlv` and
+`GetRun` with `table17.inc`, using a separate MSB-first host bit reader. The
+public Rust `vc5_entropy_dump` example and C oracle independently decode the
+first HERO9 channel's first highpass block (47692 bytes). All 90828 signed
+quantized coefficients are bit-exact, with zero differences. Source/block/
+reference-code/output hashes are retained in
+`docs/research/gpr-vc5-first-highpass-coefficient-oracle-2026-10-07.json`.
+Oracle build/run instructions and host adapter are in `scripts/vc5-oracle`.
+This qualifies entropy values for one real band; all other bands, inverse
+companding/quantization, wavelet reconstruction and final sensor equality remain
+required before GPR viewer support can be enabled.
+
+### 2026-10-07: all HERO9 VC-5 highpass coefficients match GoPro oracle
+
+`scripts/qualify-gpr-entropy.py` pins the official HERO9 source SHA256, extracts
+all 36 highpass blocks through channel/wavelet/subband framing and compares the
+public Rust coefficient dumper with unmodified official GoPro GetRun/GetRlv.
+All 22888656 signed quantized coefficients match bit-for-bit. Every block ends
+at its admitted coefficient count and valid end marker. A separate run of the
+committed qualification script reproduces every input/output hash and count.
+Per-band hashes/counts and source provenance are retained in
+`docs/research/gpr-vc5-all-highpass-coefficient-oracle-2026-10-07.json`.
+The measured 3.88-second diagnostic run includes C/Rust dump processes, disk
+writes and comparisons; it is not a viewer decode benchmark. This qualifies
+entropy output on this pinned file, not inverse companding, dequantization,
+wavelet reconstruction or final Bayer codes. GPR remains Pending.
+
+### 2026-10-07: native VC-5 inverse companding and dequantization
+
+New `vc5::dequantize` implements cubic inverse companding with exact integer
+arithmetic, multiplication by the quantization factor and signed i16 saturation.
+It refuses magnitudes outside the codebook, including i32::MIN, without overflow.
+All 4088 cases (every magnitude -255..255 and factors 0,1,12,24,48,96,144,65535)
+match the independent pinned GoPro companding/dequantize/pixel routines exactly.
+The original C files are unmodified; release NDEBUG selects reference saturation
+instead of debug range assertions. Golden and source hashes are retained under
+`tests/fixtures/vc5/dequantize-gopro*`. Rebuilding/re-running that oracle reproduces
+the golden exactly. Production uses Rust and no temporary buffers in this stage.
+Inverse wavelet, managed band allocation, final Bayer assembly and whole-sensor
+oracle qualification remain required; GPR is still Pending.
+
+### 2026-10-07: native horizontal VC-5 inverse 2–6 filter
+
+New `vc5::inverse_horizontal` writes into a caller-admitted row without temporary
+allocation. It applies left/right boundary filters, interior correction, signed
+arithmetic shifts and 14-bit output clipping; the final odd point is omitted for
+odd output widths. Invalid width or mismatched row extents are refused before
+any output write. An independent oracle executes the unchanged official GoPro
+InvertHorizontal16s function and original shift/clamp helpers. The permanent
+256-row corpus has 3200 outputs, widths 3–10, both output parities, signed inputs
+and explicit lower/upper saturation cases. Golden/source hashes are retained in
+`tests/fixtures/vc5/horizontal-gopro-reference.json`; oracle host/build instructions
+are in `scripts/vc5-oracle`. This is the no-prescale horizontal stage only:
+vertical reconstruction, prescale=2 behavior, managed bands and full sensor
+reconstruction remain required before GPR support is complete.
+
+### 2026-10-07: native VC-5 prescaled horizontal inverse
+
+`inverse_horizontal_prescaled` now admits the reference prescale values 0 and 2.
+The existing no-prescale API delegates to mode 0 without changing its 14-bit
+clipping. Mode 2 reverses the encoder scale with signed i16 saturation, retaining
+negative intermediate results instead of clipping them to zero. It writes into
+caller storage without allocation. An independently produced 256-row corpus
+(3200 values, odd/even output widths 3–10 source widths) matches the unchanged
+GoPro InvertHorizontalDescale16s function exactly, including 1502 negatively and
+275 positively saturated results. The original mode-0 corpus still matches.
+Golden and pinned-function hashes are in
+`tests/fixtures/vc5/horizontal-descaled-gopro-reference.json`.
+Vertical reconstruction, managed intermediate-band storage, Bayer reconstruction
+and a full sensor oracle remain required; GPR is not yet viewer-supported.
+
+### 2026-10-07: native VC-5 two-dimensional mode-0 reconstruction
+
+New `vc5::inverse_spatial` combines vertical border/interior filtering with the
+qualified horizontal filter. It admits exact four-band geometry, odd/even output
+extents and four-row scratch before writing; highpass magnitudes are checked
+before reconstruction. It dequantizes LH/HL/HH inputs, preserves signed i16
+vertical intermediates and uses caller-provided buffers without allocating.
+All 2280 samples in 32 independently generated images match the unchanged GoPro
+InvertSpatialQuant16s function and its horizontal/dequantization helpers exactly.
+Cases cover source widths/heights 3–6 and both output parities. Golden/reference
+hashes are in `tests/fixtures/vc5/spatial-gopro-reference.json`; test-only host and
+reproduction instructions are in `scripts/vc5-oracle`. Mode-2 spatial integration,
+managed band admission, cancellation between rows, real multilevel reconstruction
+and full Bayer sensor equality are still required. GPR remains Pending.
+
+### 2026-10-07: native VC-5 two-dimensional prescale=2 reconstruction
+
+`inverse_spatial_prescaled` now admits modes 0 and 2, sharing the signed vertical
+intermediate stage and selecting the independently qualified horizontal scale
+restoration. The existing mode-0 API retains its behavior. Mode 2 matches all
+2280 values in 32 independently generated images from unchanged official GoPro
+InvertSpatialQuantDescale16s, including all edge filters and odd/even extents.
+The mode-0 spatial and both horizontal regression corpora still pass.
+`tests/fixtures/vc5/spatial-descaled-gopro-reference.json` retains golden and
+original-function hashes. Production uses Rust with caller-provided scratch and
+output. Native multilevel reconstruction of real channels, managed band/output
+admission and cancellation, Bayer assembly, full sensor oracle, color and viewer
+qualification are still required. GPR remains Pending.
+
+### 2026-10-07: VC-5 managed entropy/output buffers and row cancellation
+
+`decode_highpass_managed` admits quantized band storage to the request budget
+before decoding, checks cancellation between entropy runs and retains the charge
+in a shared buffer. Invalid entropy input drops allocated storage. Reconstruction
+now accepts a cancellation callback checked before every source row; callers
+must discard partial output after cancellation. `reconstruct_managed` admits
+both output and four-row scratch to the same request/root budget, checks request
+cancellation before allocation and after reconstruction and returns shared output
+with retained ownership. A 3 x 3 -> 6 x 6 case requires 72 output plus 24 scratch
+bytes: 95-byte admission fails and releases all charges; 96 bytes succeeds, peaks
+at 96, retains only 72 after scratch drops and returns to zero when output drops.
+Tests also verify exact cancellation placement and unchanged later output rows.
+The managed entropy regression covers pre-allocation refusal, exact valid sample,
+retained ownership and full release on invalid source. Caller-owned compressed
+source and input bands must be accounted separately. Real multilevel integration
+and whole-sensor GPR qualification remain incomplete; GPR stays Pending.
+
+### 2026-10-07: native baseline VC-5 channel/band reconstruction index
+
+`vc5::index_raw` now maps all forty compressed blocks into a fixed four-channel,
+ten-band borrowed table with per-block quantization and lowpass precision. It
+records sensor dimensions and packed prescale, checks RAW format/pattern/channel
+admission, required tags, complete/unique band assignment and nonzero highpass
+quantization, without allocating or copying payloads. The pinned HERO9 regression
+verifies 5568 x 4176, packed prescale 10240, exact lowpass/highpass block sizes and
+observed quantization 24/12, and refuses a truncated final section. All thirteen
+VC-5 tests, including the explicitly enabled external source test, pass.
+Evidence: `docs/research/gpr-vc5-native-band-index-2026-10-07.log`.
+This index is the next input to managed multilevel reconstruction; full channel
+and Bayer decoding are not yet implemented and GPR remains Pending.
+
+### 2026-10-07: managed native three-level HERO9 channel reconstruction
+
+`vc5::decode_channel` now indexes a baseline component, unpacks its managed
+lowpass band, admits/decompresses three highpass bands per level and restores
+all three wavelet levels with request cancellation. Prescale is unpacked using
+GoPro's two-bit fields (deep-to-shallow 2,2,0 for HERO9). Earlier intermediates
+release as each new lowpass replaces them. Channel 0 yields 2784 x 2088, all
+5812992 signed i16 values matching independent GoPro entropy output and unchanged
+reference spatial functions exactly. The test-only host assembles the admitted
+bands explicitly; this is not yet a complete independent GPR sensor decoder.
+Measured managed output/scratch/band peak is 23263104 bytes, retained output
+11625984 bytes and zero after drop. Compressed source remains caller-owned.
+Evidence: `docs/research/gpr-vc5-channel-zero-reconstruction-2026-10-07.json`.
+Reproduction: native `vc5_channel_dump`, GoPro `spatial-file-main.c` host and
+`scripts/qualify-gpr-channel-oracle.py`. Other components, component-to-Bayer
+reconstruction, source-wide prescale/format variants and full sensor/color/viewer
+qualification remain required; GPR remains Pending.
+
+### 2026-10-07: all four HERO9 components reconstructed independently
+
+The native managed channel decoder and independent GoPro entropy/spatial host
+now match all four HERO9 components bit-for-bit: 23251968 signed i16 values in
+four 2784 x 2088 channels. Each channel run separately records admitted peak,
+retained output and zero managed bytes after release. Channel-oracle qualification
+now accepts `--channel 0..3`; per-channel hashes and accounting are in
+`docs/research/gpr-vc5-all-channel-reconstruction-2026-10-07.json`.
+These components are GS/RG/BG/GD rather than ready Bayer photosites. Inspection
+of unchanged official vc5_decoder/raw.c confirms required inverse component
+mixing around midpoint 2048, 12-bit clipping, inverse Protune log lookup and
+requested output-bit-depth scaling before RGGB/GBRG arrangement. Consequently
+plain interleaving would be incorrect. This final transform and its independent
+whole-sensor oracle still need implementation; GPR remains Pending.
+
+### 2026-10-07: native VC-5 inverse Protune/component-to-Bayer values
+
+`inverse_log12` and `components_to_bayer_cell` now implement the required final
+baseline RAW value transform: midpoint-2048 component differences, R/B doubling,
+G1/G2 combination, 12-bit clipping, inverse Protune curve and output-bit shift.
+All 4096 log-table codes match unchanged official SetupDecoderLogCurve exactly;
+Rust explicitly retains the reference f32 rounding before integer truncation.
+The immutable 8192-byte lazy static table uses no per-request heap buffer and is
+outside request budget accounting. Unsupported input log codes/precision refuse.
+All 768 independent C cell records match unchanged PackComponentsToRAW exactly,
+covering 12/14/16-bit value outputs and saturation/negative component cases.
+Golden and original source hashes:
+`tests/fixtures/vc5/bayer-transform-gopro-reference.json`.
+These are cell-value and reference-placement tests, not admission of every
+16-bit GPR format/layout. Managed full Bayer output assembly, full real-sensor
+comparison, DNG routing/color and cache/viewer qualification remain required.
+
+### 2026-10-07: full native managed HERO9 Bayer sensor equality
+
+`vc5::decode_bayer` preadmits final sensor output, reconstructs all four managed
+components, applies the qualified inverse log/component transform and assembles
+linear RGGB codes with cancellation between component rows. The explicit
+assembly helper also admits GBRG arrangement, but this real-file qualification
+is RGGB only. The full 5568 x 4176 HERO9 sensor, all 23251968 14-bit samples,
+matches the independent unchanged GoPro entropy/spatial/logcurve/packing routines
+bit-for-bit under the explicit test-host band assembly. The shared budget peaks
+at 104644992 bytes (output plus retained components and live reconstruction),
+retains 46503936 bytes of sensor output and returns to zero after release.
+Compressed source is caller-owned and outside this diagnostic budget accounting.
+Source/output hashes and scope are retained in
+`docs/research/gpr-vc5-full-sensor-oracle-2026-10-07.json`. Native diagnostic entry:
+`vc5_sensor_dump`; independent packing host: `scripts/vc5-oracle/bayer-file-main.c`.
+Tests refuse bad assembly geometry and cancellation before writes. Ordinary DNG
+Compression=9 routing, source admission, camera metadata/color, cache/swap/viewer
+qualification and broader GPR sources still remain; GPR stays Pending.
+
+### 2026-10-07: ordinary managed GPR sensor admission
+
+Native DNG Compression 9 now routes a single complete even-sized RGGB/GBRG tile through owned VC-5 reconstruction into managed mosaic ownership without pixel copies or duplicate output reservations. Extents must match the VC-5 header; linearization and other layouts are refused. WhiteLevel selects the 12/14/16-bit sensor range independently of the TIFF container width. All 23,251,968 HERO9 sensor values match the staged independent GoPro oracle. Source-inclusive managed peak is 111,408,770 bytes, retained sensor 46,503,936, after-drop zero. Other cameras, independent color, cache/swap/prefetch and rendered GPR qualification remain open; GPR is not yet generally qualified. See `research/gpr-native-dng-admission-2026-10-07.json`.
+
+### 2026-10-07: HERO9 GPR RAM, persistent cache, swap and Metal
+
+The ignored external-source `gpr_readback` integration passed on Metal Apple M4 Max. All independently referenced sensor samples and metadata survive persistent cache and swap exactly; full 128x96 native/cache/restored GPU frames match. RAM checks cover byte/count refusal, zero-TTL unpinned expiry, visible-pin preservation on impossible limit shrink and shared-pixel hits. Swap pressure refusal retains the entry for a successful retry; final managed usage and queue bytes are zero. Render comparison shares native metadata and GPU processing, so it does not qualify independent camera color. Foreground preload/cancellation and other GPR cameras remain open. See `research/gpr-cache-swap-metal-2026-10-07.json`.
+
+### 2026-10-07: GPR gallery admission, preload and active cancellation
+
+Added GPR to image/RAW extension candidates so gallery and RAW prefetch include it. The external HERO9 app preload test covers allocation pressure refusal, native retry, shared RAM hits at zero free memory, exact disk restore, stale-generation refusal and preserved visible pin; final root usage is zero. A separate thread test advances generation only after managed peak exceeds source plus final sensor, proving cancellation during intermediate VC-5 reconstruction and complete lease release. Both readback tests and preload test pass. Multi-path previous/next GPR windows, independent rendered color and other cameras remain open. See `research/gpr-prefetch-cancellation-2026-10-07.json`.
+
+### 2026-10-07: bounded GPR previous/next windows
+
+Application preload testing now exercises five HERO9 copies with distinct source timestamps/cache keys, previous=1 and next=2 in both directions. All six planned visits pass production RAW preload, nearest-direction priority and pointer-identical warm hits with zero free root memory. A two-entry/93,007,872-byte RAM limit retains the visible frame and exactly one neighbour; managed usage equals that bound after each visit and zero after release. These are repeated same-camera sources, not cross-camera qualification. Independent color, other camera variants and hardware qualification gaps remain. See `research/gpr-neighbour-windows-2026-10-07.json`.
+
+### 2026-10-07: official HERO5/6/7 and both Fusion sensors
+
+Downloaded five additional samples from pinned GoPro GPR commit `446c736a38fb14f51343605c0780d347dc602f89`; source hashes are recorded. Ordinary NativeRawDecoder admits both Fusion sensors (3104x3000) and HERO5/6/7 (4000x3000) under a 128MiB root. All 54,624,000 sensor values match the staged independent unchanged GoPro entropy, inverse spatial and Bayer packing functions exactly, including rounded wavelet extents for Fusion. `scripts/qualify-gpr-camera-sensors.py` reproduces comparison with pinned source hashes and existing external C oracle hosts. This remains staged-function qualification, not an independent full SDK parser or rendered color oracle. See `research/gpr-official-camera-admission-2026-10-07.json` and `research/gpr-official-camera-sensor-oracle-2026-10-07.json`.
+
+### 2026-10-07: malformed GPR admission
+
+External HERO9 mutation testing confirms dimension disagreement, unsupported WhiteLevel, invalid VC-5 signature and one-byte truncation produce errors before managed sensor allocation, with managed used/peak zero. Test-host source Vec is outside this budget; this is structural admission coverage, not all entropy-corruption classes. Full default decode regression remains green. See `research/gpr-damaged-admission-2026-10-07.json`.
+
+### 2026-10-07: complete independent GoPro SDK oracle
+
+Built the unmodified pinned GoPro SDK externally in Release. Complete gpr_tools GPR-to-RAW conversion matches all six native sensor outputs (77,875,968 values) exactly, superseding the staged-function parser limitation for this corpus. HERO9 SDK GPR-to-DNG conversion also permits independent LibRaw 0.22.2 unpack: sensor remains exact and WB matches, but camera-to-sRGB matrices differ (maximum coefficient difference 0.12308195233241578). Rendered color remains unqualified; conversion metadata and illuminant-selection policies need investigation before accepting or changing color. SDK/LibRaw remain external oracles only. See `research/gpr-full-sdk-sensor-oracle-2026-10-07.json` and `research/gpr-sdk-libraw-color-diagnostic-2026-10-07.json`.
+
+### 2026-10-07: explain HERO9 independent color-matrix discrepancy
+
+Independent TIFF extraction proves ColorMatrix1/2, AsShotNeutral and CalibrationIlluminant1/2 are unchanged by SDK GPR-to-DNG conversion. A standalone Python f64/Gauss-Jordan calculation explains both outputs: native CM2 Bradford adaptation D65-to-D50 matches camera-to-sRGB within 3.85e-8, while LibRaw matches unadapted CM2 within 7.63e-8. Thus the 0.123 coefficient discrepancy is a white-point policy difference rather than sensor mismatch or changed SDK metadata. This proves implementation of the current native policy, not full DNG scene-illuminant interpolation or rendered-camera color accuracy. Production color is unchanged pending a full independent rendering contract. See `research/gpr-color-matrix-policy-2026-10-07.json`; reproducer `scripts/qualify-gpr-color-matrices.py`.
+
+### 2026-10-07: GPR default development includes gain maps
+
+Fixed a product omission: raw_development_opcodes now includes GPR, so HERO gain maps force default quality development. HERO9 gain-map area extends to row 4192 beyond the 4176-row sensor. Removed an incompatible pre-validation bound check; the existing area iterator intersects with the destination exactly as pinned SDK dng_gain_map.cpp ProcessArea does. Full HERO9 default development produces 5568x4176 output under a 1GiB budget and releases all managed bytes. All four HERO samples parse four list2 gain maps; Fusion optional unsupported WarpRectilinear remains omitted. 84 core tests plus external opcode and full-development tests pass. Prior direct-mosaic Metal comparisons did not exercise gain maps; independent developed/rendered color remains open. See `research/gpr-gain-map-development-2026-10-07.json`.
+
+### 2026-10-07: DNG gain-map normalized saturation
+
+Inspection of pinned official dng_opcode_GainMap::ProcessArea showed an additional numerical difference: SDK bounds value*gain at 1.0, while native multiplication retained over-range samples. The native opcode now bounds at the stage scale (1.0 for supported list2 GainMap), preserving the SDK upper-bound semantics. A compact 2x2 fixture with padded area tests overlap and highlights (0.75*2 becomes 1.0; 0.25*2 remains 0.5). All 85 core tests and full default HERO9 development pass; final managed usage is zero. Spatial interpolation and final developed/rendered-color oracle remain open. See `research/gpr-gain-map-saturation-2026-10-07.json`.
+
+### 2026-10-07: independent DNG SDK gain interpolation fixture
+
+An external C++ host links the unmodified pinned SDK dng_gain_map::Interpolate. Its 460-value fixture exercises a nonconstant 3x4 map on a 20x23 image, fractional positions, nonzero/negative origins and all edge clamps. Native gain_at differs by at most 3e-7. The fixture is now included in default core tests without an SDK runtime dependency. Provenance and hash: `tests/fixtures/dng/gain-map-sdk.json`; host: `scripts/gain-map-sdk-oracle.cpp`. This is spatial single-plane interpolation qualification, not full developed color.
+
+### 2026-10-07: developed GPR float swap and Metal
+
+HERO9 now has a distinct post-development integration: native full sensor, four real list2 gain maps and default develop_raw produce a managed 5568x4176 RGBA32Float raster. All 93,007,872 float component bits and color-space metadata survive RasterSwapCache exactly. Full 128x96 native/restored frames match on Metal Apple M4 Max and contain visible nonzero image data. Budget pressure refuses restore without invalidating entry; retry succeeds; final root usage and queue are zero. This proves transport of corrected pixels, not independent rendered-color fidelity. See `research/gpr-developed-float-swap-metal-2026-10-07.json`.
+
+### 2026-10-07: full GPR quality cancellation and pressure
+
+Application prepare_quality_raw cancellation is now exercised on HERO9 after live retained managed bytes exceed 256MiB, proving float-development allocation rather than pre-cancelled sensor decode. Generation change returns cancellation and releases all managed buffers. A separate 128MiB root admits the full native sensor but refuses quality development while preserving all 23,251,968 source samples and exactly 46,503,936 retained sensor bytes; final drop returns root usage to zero. See `research/gpr-quality-cancellation-pressure-2026-10-07.json`.
+
+### 2026-10-07: measured native GPR import baseline
+
+Existing raw_import_timing measured HERO9 warm-source import over five verified repetitions after one warmup: wall p50 2308.45ms/p95 2340.60ms; source p50 0.459ms; native decode p50 2307.87ms. All full sensor hashes and metadata match, and managed usage returns to zero each repetition. Own code uses workspace dev opt-level=1 (dependencies=3), so this is a development baseline, not release or full-viewer speed. Inspection identifies magnitude prefix matching linear codebook scans as an optimization candidate; its causal impact needs a paired change measurement. See `research/gpr-native-import-timing-baseline-2026-10-07.json`.
+
+### 2026-10-07: native VC-5 prefix tree improves warm sensor import
+
+Replaced per-prefix linear scans over 264 codes with an immutable compile-time 527-node prefix tree (3162 bytes, no heap allocation). Const construction asserts prefix-free uniqueness and complete node count; a unit test resolves every original codeword with exact consumed bit count. Sequential same-dev-build HERO9 five-run measurements improve wall p50 from 2308.45ms to 564.26ms (4.09x), p95 from 2340.60ms to 568.99ms, without changing full sensor BLAKE3 or 111,408,770-byte managed peak. Re-decoding all six sources after optimization matches all 77,875,968 full-SDK reference values exactly. These are dev warm sensor-import measurements, not release or end-to-end viewer speed; timings were sequential rather than interleaved. See `research/gpr-vc5-prefix-tree-performance-2026-10-07.json`.
+
+### 2026-10-07: VC-5 optimization lifecycle revalidation
+
+After the production prefix-tree optimization all three external GPR integration tests pass: active native reconstruction cancellation, sensor RAM/persistent/swap/Metal preservation, and corrected developed RGBA32Float swap/Metal preservation. Adapter is Metal Apple M4 Max. Updated the GPR catalog entry to reflect full SDK sensor corpus and actual development/lifecycle tests while retaining Pending for independent final color, Fusion warp and unqualified variants. See `research/gpr-prefix-lifecycle-regression-2026-10-07.json`.
+
+### 2026-10-07: stable VC-5 sensor headers
+
+Native indexing now refuses conflicting repeated sensor dimensions, channel count, image format, pattern dimensions and component count, matching its single-representation reconstruction contract. Explicit zero first values are tracked rather than treated as missing. This prevents last-header reinterpretation of earlier indexed bands; per-band quantization and channel/subband navigation remain mutable. Fourteen compact adversaries and all 19 VC-5 tests including official HERO9 pass. See `research/gpr-vc5-stable-header-2026-10-07.json`.
+
+### 2026-10-07: independent rectilinear coordinate oracle
+
+Native square-pixel rectilinear source-coordinate evaluation now matches 300 external SDK points with mixed radial/tangential coefficients and an asymmetric optical center within 1e-11. The host calls unchanged pinned SDK EvaluateRatio/EvaluateTangential and explicitly assembles square-pixel geometry. Fixture and provenance are in `tests/fixtures/dng/rectilinear-sdk.f64le` and `.json`; default core tests include them. Image resampling, non-square pixel aspect and full SDK image-warp qualification remain open; Fusion correction is not yet enabled.
+
+### 2026-10-07: exact SDK bicubic warp weights
+
+Implemented native DNG warp 4x4 bicubic weights (A=-0.75), with SDK 1/32-phase quantization and f32 normalization. An external host links unchanged SDK dng_resample_weights_2d. All 16,384 float weight bits across 1024 phases match exactly in default tests. All 89 core tests pass. Image sampling, border extension, cancellation and pipeline admission remain open; this does not yet enable Fusion correction. Fixture provenance: `tests/fixtures/dng/bicubic-sdk.json`; host `scripts/bicubic-sdk-oracle.cpp`.
+
+### 2026-10-07: native Fusion rectilinear warp in development
+
+Enabled opcode1 parsing and validated one/three-plane square-pixel rectilinear list3 corrections. Native development combines independently checked coordinate functions and exact SDK quantized bicubic weights, repeated-edge sampling and normalized output clamping; cancellation is checked per row. RGB source copy is covered by the existing conservative development scratch reservation. Official Fusion-back default quality now triggers its real warp, produces 3104x3000 output different from no-op development, and releases all managed buffers. All 90 core tests pass. Full independent SDK warped image/edge comparison, non-square aspect and corrected Fusion GPU/swap qualification remain open; do not claim full rendered equivalence. See `research/gpr-fusion-native-warp-2026-10-07.json`.

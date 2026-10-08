@@ -1,5 +1,5 @@
 //! Native, budgeted EPS vector state. Paths use immutable persistent nodes;
-//! rendering, clipping, text and image objects are not implemented here.
+//! clipping retains persistent paths; rendering, text and image objects live separately.
 use rrrah_core::{BufferError, MemoryBudget, MutableBuffer, SharedBuffer};
 
 pub type EpsMatrix = [f64; 6];
@@ -58,6 +58,8 @@ pub enum EpsPaintKind {
     Stroke,
     FillNonZero,
     FillEvenOdd,
+    ClipNonZero,
+    ClipEvenOdd,
 }
 #[derive(Debug, Clone, Copy)]
 pub struct EpsPaint {
@@ -67,6 +69,7 @@ pub struct EpsPaint {
     pub style: EpsStrokeStyle,
     pub node_count: usize,
     head: Option<usize>,
+    pub(crate) clip: Option<usize>,
 }
 #[derive(Debug, Clone, Copy)]
 pub struct EpsGraphicsLimits {
@@ -109,6 +112,7 @@ pub enum EpsGraphicsError {
 }
 #[derive(Debug, Clone, Copy)]
 struct State {
+    clip: Option<usize>,
     matrix: EpsMatrix,
     style: EpsStrokeStyle,
     head: Option<usize>,
@@ -120,6 +124,7 @@ struct State {
 impl Default for State {
     fn default() -> Self {
         Self {
+            clip: None,
             matrix: IDENTITY,
             style: EpsStrokeStyle::default(),
             head: None,
@@ -202,6 +207,7 @@ impl EpsGraphics {
                 style: state.style,
                 node_count: 0,
                 head: None,
+                clip: None,
             },
         )?;
         if cancelled() {
@@ -385,6 +391,92 @@ impl EpsGraphics {
             point(m, [p[4], p[5]])?,
         )
     }
+    /// Circular user-space arc represented by cubic pieces of at most 90 degrees.
+    /// Signed radius is retained. Multi-turn sweeps are bounded by the node arena.
+    /// A failed or cancelled operation restores the entire previous active path.
+    pub fn arc<F: FnMut() -> bool>(
+        &mut self,
+        coords: [f64; 5],
+        clockwise: bool,
+        mut cancelled: F,
+    ) -> Result<(), EpsGraphicsError> {
+        let [x, y, radius, angle1, angle2] = finite(coords)?;
+        let direction = if clockwise { -1. } else { 1. };
+        let mut sweep = (angle2 - angle1) * direction;
+        finite([sweep])?;
+        if sweep < 0. {
+            sweep = sweep.rem_euclid(360.);
+        }
+        let pieces = (sweep / 90.).ceil();
+        // Check before float-to-integer conversion or any path mutation.
+        if pieces > self.nodes.len() as f64 {
+            return Err(EpsGraphicsError::Limit(EpsGraphicsLimit::Nodes));
+        }
+        let pieces = pieces as usize;
+        let initial_nodes = 1 + usize::from(self.state.point.is_some() && self.state.closed);
+        self.admit_nodes(
+            pieces
+                .checked_add(initial_nodes)
+                .ok_or(EpsGraphicsError::Limit(EpsGraphicsLimit::Nodes))?,
+        )?;
+        let previous = self.state;
+        let previous_used = self.used_nodes;
+        let result = (|| {
+            if cancelled() {
+                return Err(EpsGraphicsError::Cancelled);
+            }
+            let start = angle1.rem_euclid(360.).to_radians();
+            let trig = |angle: f64| {
+                // Preserve exact axis endpoints instead of tiny sin(pi) residuals.
+                let degrees = angle.to_degrees().rem_euclid(360.);
+                if degrees == 0. {
+                    (0., 1.)
+                } else if degrees == 90. {
+                    (1., 0.)
+                } else if degrees == 180. {
+                    (0., -1.)
+                } else if degrees == 270. {
+                    (-1., 0.)
+                } else {
+                    angle.sin_cos()
+                }
+            };
+            let (s, c) = trig(start);
+            let first = finite([x + radius * c, y + radius * s])?;
+            if self.state.point.is_some() {
+                self.line_to(first[0], first[1])?;
+            } else {
+                self.move_to(first[0], first[1])?;
+            }
+            for index in 0..pieces {
+                if cancelled() {
+                    return Err(EpsGraphicsError::Cancelled);
+                }
+                let a = start + direction * (index as f64 * 90.).to_radians();
+                let b = start + direction * sweep.min((index + 1) as f64 * 90.).to_radians();
+                let (sa, ca) = trig(a);
+                let (sb, cb) = trig(b);
+                let k = (4. / 3.) * ((b - a) / 4.).tan();
+                self.curve_to([
+                    x + radius * (ca - k * sa),
+                    y + radius * (sa + k * ca),
+                    x + radius * (cb + k * sb),
+                    y + radius * (sb - k * cb),
+                    x + radius * cb,
+                    y + radius * sb,
+                ])?;
+            }
+            if cancelled() {
+                return Err(EpsGraphicsError::Cancelled);
+            }
+            Ok(())
+        })();
+        if result.is_err() {
+            self.state = previous;
+            self.used_nodes = previous_used;
+        }
+        result
+    }
     pub fn relative_curve_to(&mut self, coords: [f64; 6]) -> Result<(), EpsGraphicsError> {
         let p = finite(coords)?;
         self.curve_device(
@@ -467,6 +559,63 @@ impl EpsGraphics {
         self.state = saved;
         result
     }
+    /// Numeric rectclip clears the current path on success. Failure restores it.
+    pub fn clip_rectangle(
+        &mut self,
+        x: f64,
+        y: f64,
+        width: f64,
+        height: f64,
+    ) -> Result<(), EpsGraphicsError> {
+        finite([x, y, width, height, x + width, y + height])?;
+        self.admit_nodes(5)?;
+        if self.used_paints == self.paints.len() {
+            return Err(EpsGraphicsError::Limit(EpsGraphicsLimit::Paints));
+        }
+        let saved = self.state;
+        let used = self.used_nodes;
+        let result = (|| {
+            self.new_path();
+            self.move_to(x, y)?;
+            self.line_to(x + width, y)?;
+            self.line_to(x + width, y + height)?;
+            self.line_to(x, y + height)?;
+            self.close_path()?;
+            self.clip(false)?;
+            self.new_path();
+            Ok(())
+        })();
+        if result.is_err() {
+            self.state = saved;
+            self.used_nodes = used;
+        }
+        result
+    }
+    /// Intersect clipping with the immutable current path without consuming it.
+    /// Clip records share the admitted paint arena and refer only to earlier clips.
+    pub fn clip(&mut self, even_odd: bool) -> Result<(), EpsGraphicsError> {
+        if self.used_paints == self.paints.len() {
+            return Err(EpsGraphicsError::Limit(EpsGraphicsLimit::Paints));
+        }
+        self.paints[self.used_paints] = EpsPaint {
+            kind: if even_odd {
+                EpsPaintKind::ClipEvenOdd
+            } else {
+                EpsPaintKind::ClipNonZero
+            },
+            matrix: self.state.matrix,
+            style: self.state.style,
+            node_count: self.state.length,
+            head: self.state.head,
+            clip: self.state.clip,
+        };
+        self.state.clip = Some(self.used_paints);
+        self.used_paints += 1;
+        Ok(())
+    }
+    pub fn init_clip(&mut self) {
+        self.state.clip = None;
+    }
     pub fn paint(&mut self, kind: EpsPaintKind) -> Result<(), EpsGraphicsError> {
         if self.state.length != 0 {
             if self.used_paints == self.paints.len() {
@@ -478,6 +627,7 @@ impl EpsGraphics {
                 style: self.state.style,
                 node_count: self.state.length,
                 head: self.state.head,
+                clip: self.state.clip,
             };
             self.used_paints += 1;
         }
@@ -614,8 +764,37 @@ impl EpsVectorScene {
         }
         Ok(output.freeze())
     }
+    /// Ordered paint and clip records; clip records establish state and do not paint.
     pub fn paints(&self) -> &[EpsPaint] {
         &self.paints[..self.length]
+    }
+    /// Exact device-space path equality for a bounded one-mask renderer cache.
+    pub(crate) fn same_clip_path<F: FnMut() -> bool>(
+        &self,
+        first: usize,
+        second: usize,
+        mut cancelled: F,
+    ) -> Result<bool, EpsGraphicsError> {
+        if cancelled() {
+            return Err(EpsGraphicsError::Cancelled);
+        }
+        let a = self.paints().get(first).ok_or(EpsGraphicsError::Range)?;
+        let b = self.paints().get(second).ok_or(EpsGraphicsError::Range)?;
+        if a.kind != b.kind || a.node_count != b.node_count {
+            return Ok(false);
+        }
+        let (mut left, mut right) = (a.head, b.head);
+        while let (Some(x), Some(y)) = (left, right) {
+            if cancelled() {
+                return Err(EpsGraphicsError::Cancelled);
+            }
+            if self.nodes[x].segment != self.nodes[y].segment {
+                return Ok(false);
+            }
+            left = self.nodes[x].previous;
+            right = self.nodes[y].previous;
+        }
+        Ok(left.is_none() && right.is_none())
     }
     /// Copies a painted path in source order into caller-owned scratch. A size
     /// error writes nothing; cancellation may leave a partial destination, which
@@ -654,6 +833,120 @@ impl EpsVectorScene {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn numeric_rectclip_clears_success_and_preserves_failed_path_and_arena() {
+        let root = MemoryBudget::new(100_000);
+        for max_nodes in [6, 12] {
+            let mut g = EpsGraphics::new(
+                EpsGraphicsLimits {
+                    max_nodes,
+                    max_paints: 2,
+                    max_saved_states: 1,
+                },
+                &root,
+                || false,
+            )
+            .unwrap();
+            g.move_to(1., 2.).unwrap();
+            g.line_to(3., 4.).unwrap();
+            let used = g.arena_nodes_used();
+            if max_nodes == 6 {
+                assert!(g.clip_rectangle(0., 0., 1., 1.).is_err());
+                assert_eq!(g.current_point().unwrap(), [3., 4.]);
+                assert_eq!(g.arena_nodes_used(), used);
+            } else {
+                g.scale(2., 1.).unwrap();
+                let current = g.current_point().unwrap();
+                assert!(g.clip_rectangle(f64::MAX / 4., 0., f64::MAX / 2., 1.).is_err());
+                assert_eq!(g.current_point().unwrap(), current);
+                assert_eq!(g.arena_nodes_used(), used);
+                assert_eq!(g.used_paints, 0);
+                g.gsave().unwrap();
+                g.clip_rectangle(7., 7., -6., -6.).unwrap();
+                assert_eq!(g.node_count(), 0);
+                assert!(matches!(g.current_point(), Err(EpsGraphicsError::NoCurrentPoint)));
+                assert_eq!(g.state.clip, Some(0));
+                g.grestore().unwrap();
+                assert_eq!(g.current_point().unwrap(), current);
+                assert_eq!(g.state.clip, None);
+            }
+            drop(g);
+            assert_eq!(root.used(), 0);
+        }
+    }
+    #[test]
+    fn clipping_keeps_path_and_restores_saved_branches_with_bounded_records() {
+        let root = MemoryBudget::new(100_000);
+        let mut g = EpsGraphics::new(
+            EpsGraphicsLimits {
+                max_nodes: 8,
+                max_paints: 3,
+                max_saved_states: 1,
+            },
+            &root,
+            || false,
+        )
+        .unwrap();
+        g.move_to(1., 2.).unwrap();
+        g.line_to(3., 4.).unwrap();
+        g.clip(false).unwrap();
+        assert_eq!(g.node_count(), 2);
+        assert_eq!(g.current_point().unwrap(), [3., 4.]);
+        g.gsave().unwrap();
+        g.new_path();
+        g.clip(true).unwrap();
+        g.init_clip();
+        g.grestore().unwrap();
+        g.paint(EpsPaintKind::Stroke).unwrap();
+        assert_eq!(g.paints[2].clip, Some(0));
+        assert!(matches!(
+            g.clip(false),
+            Err(EpsGraphicsError::Limit(EpsGraphicsLimit::Paints))
+        ));
+        assert_eq!(g.state.clip, Some(0));
+        drop(g);
+        assert_eq!(root.used(), 0);
+    }
+    #[test]
+    fn arcs_preserve_turns_transform_and_roll_back_failed_paths() {
+        let root = MemoryBudget::new(100_000);
+        {
+            let mut g = EpsGraphics::new(limits(), &root, || false).unwrap();
+            g.scale(2., 3.).unwrap();
+            g.arc([1., 2., 4., 0., 720.], false, || false).unwrap();
+            assert_eq!(g.node_count(), 9);
+            assert_eq!(g.current_point().unwrap(), [5., 2.]);
+            let used = g.arena_nodes_used();
+            let current = g.current_point().unwrap();
+            let mut ticks = 0;
+            assert!(matches!(
+                g.arc([0., 0., 2., 360., 0.], true, || {
+                    ticks += 1;
+                    ticks == 3
+                }),
+                Err(EpsGraphicsError::Cancelled)
+            ));
+            assert_eq!(g.arena_nodes_used(), used);
+            assert_eq!(g.current_point().unwrap(), current);
+            for args in [
+                [0., 0., 1., 0., 1e30],
+                [f64::MAX, 0., f64::MAX, 0., 90.],
+                [0., 0., 1., f64::NAN, 90.],
+            ] {
+                assert!(g.arc(args, false, || false).is_err());
+                assert_eq!(g.arena_nodes_used(), used);
+                assert_eq!(g.current_point().unwrap(), current);
+            }
+            g.new_path();
+            g.arc([0., 0., -2., 0., 90.], false, || false).unwrap();
+            assert_eq!(g.current_point().unwrap(), [0., -2.]);
+            g.new_path();
+            g.arc([0., 0., 2., 90., 0.], false, || false).unwrap();
+            assert_eq!(g.node_count(), 4);
+            assert_eq!(g.current_point().unwrap(), [2., 0.]);
+        }
+        assert_eq!(root.used(), 0);
+    }
     #[test]
     fn prepared_path_admits_exact_storage_transforms_and_releases_failed_output() {
         let source_root = MemoryBudget::new(100_000);

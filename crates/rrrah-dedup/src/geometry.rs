@@ -467,6 +467,37 @@ pub fn verify_projective(
     policy: GeometryPolicy,
     cancel: impl Fn() -> bool,
 ) -> Result<Option<ProjectiveEvidence>, GeometryError> {
+    verify_projective_selected(points, policy, cancel, |_| true)
+}
+
+/// Exhaustively select only models valid on both full image rectangles.
+/// Invalid candidates are excluded before ranking and after refinement; a
+/// stronger ineligible model cannot hide a weaker eligible model. Geometry is
+/// not copy identity. All hypotheses still consume the supplied work limit.
+///
+/// # Errors
+/// Zero dimensions, invalid policy/points, budget exhaustion or cancellation.
+pub fn verify_projective_for_domains(
+    points: &[Correspondence],
+    policy: GeometryPolicy,
+    source: (u32, u32),
+    target: (u32, u32),
+    cancel: impl Fn() -> bool,
+) -> Result<Option<ProjectiveEvidence>, GeometryError> {
+    if source.0 == 0 || source.1 == 0 || target.0 == 0 || target.1 == 0 {
+        return Err(GeometryError::Invalid);
+    }
+    verify_projective_selected(points, policy, cancel, |transform| {
+        projective_domain_eligible(transform, source, target)
+    })
+}
+
+fn verify_projective_selected(
+    points: &[Correspondence],
+    policy: GeometryPolicy,
+    cancel: impl Fn() -> bool,
+    eligible: impl Fn(ProjectiveTransform) -> bool,
+) -> Result<Option<ProjectiveEvidence>, GeometryError> {
     let tolerance2 = validate(points, policy, &cancel)?;
     if policy.min_inliers < 4 {
         return Err(GeometryError::Invalid);
@@ -490,6 +521,9 @@ pub fn verify_projective(
                             Err(GeometryError::Invalid) => continue,
                             Err(error) => return Err(error),
                         };
+                    if !eligible(transform) {
+                        continue;
+                    }
                     let mut inliers = Vec::new();
                     inliers
                         .try_reserve_exact(points.len())
@@ -531,7 +565,7 @@ pub fn verify_projective(
             }
         }
     }
-    refine_projective_evidence(points, policy, tolerance2, best, hypotheses, &cancel)
+    refine_projective_evidence(points, policy, tolerance2, best, hypotheses, &cancel, &eligible)
 }
 
 fn refine_projective_evidence(
@@ -541,6 +575,7 @@ fn refine_projective_evidence(
     mut best: Option<ProjectiveEvidence>,
     hypotheses: u64,
     cancel: &impl Fn() -> bool,
+    eligible: &impl Fn(ProjectiveTransform) -> bool,
 ) -> Result<Option<ProjectiveEvidence>, GeometryError> {
     if cancel() {
         return Err(GeometryError::Cancelled);
@@ -566,7 +601,8 @@ fn refine_projective_evidence(
                         squared_error += residual;
                     }
                 }
-                if squared_error.is_finite()
+                if eligible(transform)
+                    && squared_error.is_finite()
                     && inliers.len() >= policy.min_inliers
                     && spread(points, &inliers, &cancel)?
                     && (inliers.len() > previous.inliers.len()
@@ -904,6 +940,61 @@ pub fn verify_projective_sampled(
     sampling: ProjectiveSamplingPolicy,
     cancel: impl Fn() -> bool,
 ) -> Result<Option<ProjectiveEvidence>, GeometryError> {
+    verify_projective_sampled_selected(points, policy, sampling, cancel, |_| true)
+}
+
+/// Sample only models valid on both whole-image rectangles, including refinement.
+/// Corner denominator signs must agree in each forward/inverse domain. This
+/// selects geometry, without relaxing correspondence or pixel thresholds.
+///
+/// # Errors
+/// Zero dimensions, invalid geometry policy, work limits or cancellation.
+pub fn verify_projective_sampled_for_domains(
+    points: &[Correspondence],
+    policy: GeometryPolicy,
+    sampling: ProjectiveSamplingPolicy,
+    source: (u32, u32),
+    target: (u32, u32),
+    cancel: impl Fn() -> bool,
+) -> Result<Option<ProjectiveEvidence>, GeometryError> {
+    if source.0 == 0 || source.1 == 0 || target.0 == 0 || target.1 == 0 {
+        return Err(GeometryError::Invalid);
+    }
+    verify_projective_sampled_selected(points, policy, sampling, cancel, |transform| {
+        projective_domain_eligible(transform, source, target)
+    })
+}
+
+pub(crate) fn projective_domain_eligible(
+    transform: ProjectiveTransform,
+    source: (u32, u32),
+    target: (u32, u32),
+) -> bool {
+    let Ok(inverse) = transform.inverse() else {
+        return false;
+    };
+    let valid = |model: ProjectiveTransform, (w, h): (u32, u32)| {
+        let values = [
+            [0., 0.],
+            [f64::from(w - 1), 0.],
+            [0., f64::from(h - 1)],
+            [f64::from(w - 1), f64::from(h - 1)],
+        ]
+        .map(|[x, y]| model.matrix[2][0] * x + model.matrix[2][1] * y + model.matrix[2][2]);
+        values
+            .iter()
+            .all(|v| v.is_finite() && *v != 0. && v.is_sign_positive() == values[0].is_sign_positive())
+    };
+    valid(transform, source) && valid(inverse, target)
+}
+
+fn verify_projective_sampled_selected(
+    points: &[Correspondence],
+    policy: GeometryPolicy,
+    sampling: ProjectiveSamplingPolicy,
+    cancel: impl Fn() -> bool,
+    eligible: impl Fn(ProjectiveTransform) -> bool,
+) -> Result<Option<ProjectiveEvidence>, GeometryError> {
     let tolerance2 = validate(points, policy, &cancel)?;
     if policy.min_inliers < 4 || sampling.trials == 0 || sampling.seed == 0 {
         return Err(GeometryError::Invalid);
@@ -941,6 +1032,9 @@ pub fn verify_projective_sampled(
             Err(GeometryError::Invalid) => continue,
             Err(e) => return Err(e),
         };
+        if !eligible(transform) {
+            continue;
+        }
         let mut inliers = Vec::new();
         inliers
             .try_reserve_exact(points.len())
@@ -978,5 +1072,13 @@ pub fn verify_projective_sampled(
             });
         }
     }
-    refine_projective_evidence(points, policy, tolerance2, best, sampling.trials, &cancel)
+    refine_projective_evidence(
+        points,
+        policy,
+        tolerance2,
+        best,
+        sampling.trials,
+        &cancel,
+        &eligible,
+    )
 }

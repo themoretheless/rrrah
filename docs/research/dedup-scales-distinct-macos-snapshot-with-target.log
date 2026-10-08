@@ -1,0 +1,115 @@
+   Compiling moxcms v0.8.1 (/Users/themoretheless/.codex/tmp/rrrah-dedup-scales-distinct-linux-snapshot-20261007/vendor/moxcms)
+   Compiling rrrah-memory v0.1.0 (/Users/themoretheless/.codex/tmp/rrrah-dedup-scales-distinct-linux-snapshot-20261007/crates/rrrah-memory)
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/.codex/tmp/rrrah-dedup-scales-distinct-linux-snapshot-20261007/crates/rrrah-dedup)
+   Compiling rrrah-core v0.1.0 (/Users/themoretheless/.codex/tmp/rrrah-dedup-scales-distinct-linux-snapshot-20261007/crates/rrrah-core)
+   Compiling image v0.25.10
+   Compiling hayro-interpret v0.7.0 (/Users/themoretheless/.codex/tmp/rrrah-dedup-scales-distinct-linux-snapshot-20261007/vendor/hayro-interpret)
+   Compiling hayro v0.7.1 (/Users/themoretheless/.codex/tmp/rrrah-dedup-scales-distinct-linux-snapshot-20261007/vendor/hayro)
+   Compiling jxl-oxide v0.12.6
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/.codex/tmp/rrrah-dedup-scales-distinct-linux-snapshot-20261007/crates/rrrah-decode)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 44.93s
+     Running tests/gradient.rs (/Users/themoretheless/Documents/Sources/rrrah/target/debug/deps/gradient-b6db68f2539cce08)
+
+running 9 tests
+test dominant_gradient_orientation_analytic_angles_flat_and_limits ... ok
+test gradient_affine_light_flat_refusals_and_cancel ... ok
+test gradient_matching_mutual_ties_admission_and_cancel ... ok
+test independently_rotated_texture_and_alpha_refusal ... ok
+test rotated_uniform_patches_never_create_descriptors ... ok
+test managed_spatial_pyramid_matches_unmanaged_and_releases_last_owner ... ok
+test spatial_gradient_selection_preserves_recipe_and_cell_limits ... ok
+test extracted_gradients_identity_unrelated_work_and_cancel ... ok
+test gradient_pyramid_independent_double_size_coordinates_and_work ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+
+     Running tests/gradient_distinct_locations.rs (/Users/themoretheless/Documents/Sources/rrrah/target/debug/deps/gradient_distinct_locations-99c8bd51d2edd0c6)
+
+running 4 tests
+test distinct_location_work_validation_and_atomic_cancellation ... ok
+test managed_distinct_match_admission_last_owner_and_cancellation ... ok
+test nearby_scale_duplicates_preserve_distinct_landmarks_and_reject_ambiguity ... ok
+test distinct_location_results_equal_independent_sorted_distance_oracle ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/gradient_interpolated.rs (/Users/themoretheless/Documents/Sources/rrrah/target/debug/deps/gradient_interpolated-a561bd88a8307aed)
+
+running 4 tests
+test interpolated_cells_reduce_one_pixel_edge_localization_error ... ok
+test interpolated_recipe_flat_alpha_work_and_cancellation_refusals ... ok
+test interpolated_recipe_preserves_independent_quarter_turn_and_affine_light ... ok
+test explicit_recipe_pyramid_preserves_positions_limits_cancel_and_managed_ownership ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/gradient_scale.rs (/Users/themoretheless/Documents/Sources/rrrah/target/debug/deps/gradient_scale-46e80a2c4638168a)
+
+running 5 tests
+test scale_admission_can_cancel_before_allocating ... ok
+test admission_and_cancellation_return_no_partial_features ... ok
+test managed_scales_exact_peak_last_owner_and_cancellation ... ok
+test spatial_scale_selection_recipe_limits_and_owned_memory ... ok
+test intermediate_scale_recovers_authored_reduction_without_acceptance_relaxation ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.43s
+
+     Running tests/gradient_scale_files.rs (/Users/themoretheless/Documents/Sources/rrrah/target/debug/deps/gradient_scale_files-bb10e6c0211261b6)
+
+running 9 tests
+test scale_list_cancellation_precedes_file_and_iterator_access ... ok
+test scaled_files_confirm_pixels_and_refuse_unrelated ... ok
+test scale_file_admission_and_cancellation_are_atomic ... ok
+test changed_source_refuses_scale_evidence_and_restored_retry_succeeds ... ok
+test spatial_collection_scale_edges_equal_fresh_pair_confirmation ... ok
+test collection_scale_edges_equal_fresh_pair_confirmation ... ok
+test intermediate_scale_files_retain_authored_rotations_and_enlargements ... ok
+test collection_scale_mutation_and_cancellation_remove_partial_results ... ok
+test spatial_scale_regions_match_fresh_supplied_model_confirmation ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 8.10s
+
+     Running tests/projective_domains.rs (/Users/themoretheless/Documents/Sources/rrrah/target/debug/deps/projective_domains-dc78ed5e0a10f21c)
+
+running 4 tests
+test supported_horizon_model_is_excluded_from_whole_domains ... ok
+test admissible_model_matches_original_and_cancellation_is_atomic ... ok
+test inverse_horizon_is_rejected_even_when_forward_domain_is_valid ... ok
+test valid_alternative_survives_a_stronger_horizon_consensus ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/projective_geometry.rs (/Users/themoretheless/Documents/Sources/rrrah/target/debug/deps/projective_geometry-3bd13cac7034d64d)
+
+running 14 tests
+test invalid_horizon_and_cancel_checkpoints ... ok
+test perspective_inverse_grid_catches_unsampled_edit ... ok
+test perspective_mapping_and_permutations ... ok
+test perspective_pixels_hdr_edits_horizon_and_cancel ... ok
+test full_support_refinement_beats_minimal_hypotheses_on_noisy_points ... ok
+test projective_filter_preserves_strict_edits_and_terminal_cancellation ... ok
+test robust_perspective_outliers_budget_and_cancellation ... ok
+test sampled_projective_cancellation_discards_models_and_retry_is_deterministic ... ok
+test sampled_projective_recovers_large_outlier_set_with_fixed_work ... ok
+test registration_portfolio_admits_shared_work_and_discards_partial_models_on_cancel ... ok
+test registration_candidates_keep_independent_full_grid_evidence_and_shared_limits ... ok
+test perspective_photometric_fit_preserves_unfitted_errors_and_limits ... ok
+test photometric_registration_keeps_geometry_under_affine_encoded_light_change ... ok
+test pixel_registration_reduces_known_offset_and_obeys_terminal_limits ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+

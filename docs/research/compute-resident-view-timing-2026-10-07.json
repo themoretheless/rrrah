@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-07",
+  "feature": "Existing raw_view_timing raster compute mode now uses resident GPU output and buffer-to-texture copy rather than CPU readback and reupload",
+  "adapter": "Metal Apple M4 Max",
+  "profile": "dev optimized with debuginfo",
+  "viewport": [
+    1920,
+    1080
+  ],
+  "exposure_stops": 1,
+  "warmup_iterations": 3,
+  "measured_iterations": 15,
+  "samples": [
+    {
+      "source": "tests/fixtures/raster/pattern.profiled.png",
+      "p50_ms": 1.318,
+      "p95_ms": 2.145,
+      "cpu_peak_bytes": 6476,
+      "gpu_peak_bytes": 16400,
+      "log": "/tmp/rrrah-resident-profiled-view-timing.log"
+    },
+    {
+      "source": "tests/fixtures/raster/float-none-rec709-declared.exr",
+      "p50_ms": 1.44,
+      "p95_ms": 2.452,
+      "cpu_peak_bytes": 650,
+      "gpu_peak_bytes": 400,
+      "log": "/tmp/rrrah-resident-hdr-view-timing.log"
+    }
+  ],
+  "ownership": "CPU used is asserted zero after each iteration; CPU and GPU used asserted zero after renderer drop",
+  "hdr_fixture": {
+    "source": "tests/fixtures/raster/float-none.exr",
+    "source_sha256": "88344458798562089f167540141169058f9b77444e55945e7f07b461112efe89",
+    "sha256": "237d1030caf9022f441458e8a90b718df4fe07f24e473b0bcf827d1b0ac9628e",
+    "construction": "Authored explicit Rec.709 chromaticities added to existing float-none EXR header; absolute scanline chunk offsets relocated; compressed channel bytes unchanged. This declares interpretation for a controlled fixture, not inferred source color. Same operation is covered by declared_rec709_exr_prepares_hdr_without_changing_samples."
+  },
+  "limits": [
+    "Small fixtures; no large-image throughput claim",
+    "No same-workload before/after comparison; no speedup claim",
+    "Offscreen completed frame only, not physical HDR output",
+    "Radiance rle-hdr.hdr remains rejected with ColorTransformRequired because its RGB primaries are unspecified",
+    "Main-window compute routing remains incomplete",
+    "Local changes, not pushed"
+  ]
+}

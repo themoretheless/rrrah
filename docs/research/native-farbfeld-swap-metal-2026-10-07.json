@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-07",
+  "test": "native_farbfeld_preserves_u16_and_display_through_budgeted_swap",
+  "source": "tests/fixtures/raster/adjacent16.ff",
+  "adapter": "Apple M4 Max Metal",
+  "modes": [
+    "native RGBA16 swap",
+    "prepared linear RGBA32F swap"
+  ],
+  "checks": [
+    "native samples match direct independent big-endian extraction of fixture bytes",
+    "serialized native/prepared payload exact after restore",
+    "source color assumption and prepared linear color preserved",
+    "Metal frame exact before versus after disk transport",
+    "restore refusal under exhausted root budget leaves no occupancy",
+    "cancelled restore returns no frame and leaves no occupancy",
+    "one completed write and read per mode, queue drained, no swap errors",
+    "managed root returns to zero after all owners drop"
+  ],
+  "evidence": {
+    "log": "/tmp/rrrah-native-farbfeld-swap-metal.log",
+    "hdr_raster_swap_passed": 11,
+    "ignored": 1
+  },
+  "limits": [
+    "Small adjacent-value fixture, not large-image swap throughput",
+    "No physical HDR or NVIDIA/CUDA gate closure",
+    "Current format list still contains partial implementations and pending rows"
+  ],
+  "status": "local, not pushed"
+}

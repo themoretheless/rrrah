@@ -1,0 +1,31 @@
+{
+  "scope": "Delayed file writer overload with independent queue-byte and queue-count admission",
+  "rows": [
+    {
+      "queue_bytes": 524288,
+      "queue_count": 8,
+      "accepted": 48,
+      "rejected": 992,
+      "root_peak": 786432,
+      "queue_peak": 524288
+    },
+    {
+      "queue_bytes": 2097152,
+      "queue_count": 1,
+      "accepted": 42,
+      "rejected": 998,
+      "root_peak": 786432,
+      "queue_peak": 786432
+    }
+  ],
+  "source_requests_per_mode": 1024,
+  "retry_writes_per_mode": 16,
+  "exact_pixel_verification_for_every_accepted_write": true,
+  "final_managed_bytes": 0,
+  "failed": 0,
+  "log": "/tmp/rrrah-slow-swap-burst.log",
+  "limitations": [
+    "Queue peak can include the temporary reservation of a subsequently rejected payload; retained post-admission count checked separately.",
+    "Synthetic 256x256 rasters and 2ms codec I/O delay, not physical slow-disk benchmarking."
+  ]
+}

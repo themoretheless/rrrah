@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-07",
+  "feature": "PFM output preallocation admission and bounded cancellation checkpoints",
+  "contract": [
+    "Reserve RGBA32F output before allocation",
+    "Adopt buffer under same reservation without duplicate pixel credit",
+    "Optional memory budget retains unbudgeted API semantics",
+    "Cancellation checked before parsing and every 4096 pixels even for one very wide row",
+    "Existing row reversal, byte order and scale retained"
+  ],
+  "tests": {
+    "log": "/tmp/rrrah-pfm-admission-regression.log",
+    "passed": 963,
+    "ignored": 65,
+    "checks": [
+      "16-byte output budget succeeds and output is managed",
+      "15-byte budget refuses with used and peak zero",
+      "HDR and signed-zero sample bits retained",
+      "clone retains occupancy until last owner drops",
+      "Existing endian, scale, grayscale, malformed input and raster corpus tests pass"
+    ]
+  },
+  "limits": [
+    "No complete physical-viewer or color-primary qualification for PFM",
+    "Whole-source memory separately admitted by existing reader",
+    "No speedup claim"
+  ],
+  "status": "local, not pushed"
+}

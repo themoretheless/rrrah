@@ -1,0 +1,31 @@
+{
+  "status": "verified_native_periodic_capture_production_count_gates",
+  "positive_variants": 30,
+  "edited_negative_variants": 30,
+  "periods": [
+    3,
+    5,
+    7
+  ],
+  "all_phases_and_both_axes": true,
+  "fixed_radius": 7,
+  "image_dimensions": [
+    65,
+    65
+  ],
+  "bidirectional_compared_pixels": 2601,
+  "bidirectional_matched_pixels": 2601,
+  "coverage": 0.615621301775148,
+  "production_count_gates": {
+    "minimum_compared": 1000,
+    "minimum_coverage": 0.3,
+    "minimum_matched_fraction": 0.9
+  },
+  "native_returncode": 0,
+  "scope": "Supplied identity geometry and analytic ramps, finite periodic bands; pixel-stage positive admission counts and explicit negative residual/fit rejection. No recovered geometry, real screen-copy recovery, all-query precision or production default change. Current report supersedes prior smaller-test source pins.",
+  "input_hashes": {
+    "crates/rrrah-dedup/tests/periodic_capture.rs": "0ac7c1dbf0404a17b6657861977745f6b28ba63f6f41199523702f8b41f366f3",
+    "crates/rrrah-dedup/src/warp.rs": "1dee5d40b8fa2e4e4b9afb2f8899c64083f404686de6e08da476467c0ed57991",
+    "docs/research/dedup-periodic-capture-production-counts-macos.log": "7e6e83d27c299ae774d9924dccb91c48a1603800c42e588e67bf77788198fa1b"
+  }
+}

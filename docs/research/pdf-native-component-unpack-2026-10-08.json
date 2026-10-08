@@ -1,0 +1,26 @@
+{
+  "scope": "Admitted unpacking of already decompressed original PDF image components",
+  "tests": {
+    "passed": 84,
+    "failed": 0,
+    "ignored": 0,
+    "seconds": 0.13,
+    "log": "/tmp/rrrah-native-image-samples-final.log"
+  },
+  "implementation": "vendor/hayro-interpret/src/native_image_samples.rs",
+  "checks": [
+    "16-bit big-endian samples and reversed Decode preserve full component precision",
+    "Four original CMYK channels remain distinct",
+    "Packed one-bit rows skip byte-padding bits correctly",
+    "Decode endpoints outside unit range preserved for source coordinates",
+    "Every cooperative cancellation checkpoint drops admitted buffer credit",
+    "Admission refusal, truncated input and nonfinite Decode refuse without partial output",
+    "Legacy odd 16-bit byte payload refuses instead of indexing past buffer"
+  ],
+  "limitations": [
+    "Native unpacker not connected to ImageXObject stream decoding or recorder yet",
+    "Already decompressed byte input only; compressed filters/decompression allocations not admitted by this function",
+    "Alpha masks, transfer functions, native interpolation and color conversion remain separate",
+    "No production AI or Metal image qualification"
+  ]
+}

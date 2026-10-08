@@ -1,0 +1,40 @@
+{
+  "scope": "Graphics-state BG/BG2 and UCR/UCR2 transport to solid native paint; RGB-to-CMYK execution remains pending",
+  "source_sha256": {
+    "vendor/hayro-interpret/src/color.rs": "c2314b20747730314d8b9f3229175b1147779efe052066e98ede99cf75f3da70",
+    "vendor/hayro-interpret/src/interpret/state.rs": "3a78ee76ac6be18a468fd0b7b0a91bab72446875002ba4309cfb6d9f73824654",
+    "vendor/hayro-interpret/src/interpret/path.rs": "bd3892f139573f6b78e83e51ef76db46e180597148f4426f3509b0dd08531b56",
+    "vendor/hayro/src/native_paint.rs": "e2c24617e64ed68c3e57afc40b51376b736bb747993b7147fc8866fa8c1351eb",
+    "vendor/hayro/src/knockout_interpreter.rs": "0b690a3364474b84a01487b6a0e9cb266680cb08ab317a712489cfa9e8f6a725"
+  },
+  "renderer_controls": {
+    "passed": 102,
+    "failed": 0,
+    "ignored": 8,
+    "seconds": 2.1,
+    "log": "/tmp/rrrah-device-functions-final-controls.log"
+  },
+  "interpreter_baseline": {
+    "passed": 73,
+    "failed": 0,
+    "log": "/tmp/rrrah-device-functions-state-controls.log",
+    "note": "State transport before final transfer-function paint metadata preservation edit; final renderer suite recompiles final interpreter source"
+  },
+  "verified": [
+    "BG2 overrides BG regardless dictionary iteration order",
+    "UCR2 Default overrides invalid legacy UCR",
+    "Explicit exponential BG2 evaluated at0.5 yields0.2; legacy BG would yield0.5",
+    "Default state before gs and restored after form/q/Q",
+    "Invalid BG2 Identity and UCR2 null retained as Unresolved rather than silently becoming Default",
+    "Solid paint carries shared function metadata in admitted native paint payload"
+  ],
+  "defaults": "Device defaults stay unresolved policy declarations, not assumed identity functions",
+  "allocation_limit": "Native paint metadata is included in sizeofNativePaint credit. Shared Function backing allocations created by interpreter are not newly admitted here; bounded evaluation/preparation remains required.",
+  "remaining": [
+    "Explicit default output-device BG/UCR policy",
+    "Bounded function evaluation and RGB-to-CMYK execution",
+    "Shading/image conversion state propagation",
+    "Native scene frame integration and real AI pixel oracle"
+  ],
+  "production_native_compositor_enabled": false
+}

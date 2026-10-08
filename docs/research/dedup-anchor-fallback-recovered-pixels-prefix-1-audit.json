@@ -1,0 +1,38 @@
+{
+  "status": "verified_fallback_anchor_original_point_selection_independent_pixels",
+  "pairs": 1,
+  "directions": 2,
+  "rows": [
+    {
+      "query": "201303.jpg",
+      "direction": "forward",
+      "anchors": 11,
+      "counts": {
+        "sites": 275,
+        "valid_sites": 275,
+        "informative_pairs": 1516,
+        "agreeing_pairs": 1444
+      }
+    },
+    {
+      "query": "201303.jpg",
+      "direction": "reverse",
+      "anchors": 11,
+      "counts": {
+        "sites": 275,
+        "valid_sites": 275,
+        "informative_pairs": 1517,
+        "agreeing_pairs": 1438
+      }
+    }
+  ],
+  "pins": {
+    "docs/research/dedup-anchor-fallback-recovered-pixels-prefix-1.json": "4c617adf2319f8ce145f13e849c75e8583ad9dc7cba69b95a13d98c94f0e54e9",
+    "scripts/verify-dedup-rank-pixel-oracle.py": "60e6ff6a4ec5623fae3b0a8678a663c950fec6e92392a641fcaaae279e5ca4f3",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-anchor-fallback-prefix-pixels.py": "6335731a53593dc2969ad771a94e068b600fedd8f6ded647dbd88dbf8a06de7b",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/rank-pixel-dump": "fad4918ce76a15e249c2ea92bc6e6d8f63f92f9b2db9410bccbe465d7937070b",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/anchor-fallback-recovered-pixels/201300.rgba32": "cc69a629cd8e2f79777bc48197ab44d16dbf682fc7e89b4bf1153260a49ebf97",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/anchor-fallback-recovered-pixels/201303.rgba32": "c364710f7a8866b26306ae4585e84689ef36a761e58944098eb085a778432510"
+  },
+  "scope": "Frozen completed recovered prefix: all original automatic union points, independent aliases/bounds/bidirectional residuals/disjoint selection, exact NumPy original-normalized pixel count parity and support predicate. Native JPEG normalization shared via prior dumps; no independent decoder or full corpus/precision proof."
+}

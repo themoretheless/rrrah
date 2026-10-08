@@ -1,0 +1,42 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 47.69s
+     Running tests/gradient_scale_files.rs (target/debug/deps/gradient_scale_files-bb10e6c0211261b6)
+
+running 19 tests
+test scale_list_cancellation_precedes_file_and_iterator_access ... ok
+test scaled_files_confirm_pixels_and_refuse_unrelated ... ok
+test scale_file_admission_and_cancellation_are_atomic ... ok
+test distinct_managed_file_results_preserve_copy_refusal_and_last_owner ... ok
+test changed_source_refuses_scale_evidence_and_restored_retry_succeeds ... ok
+test area_distinct_file_keeps_original_confirmation_and_preio_admission ... ok
+test distinct_managed_file_cancel_mutation_and_restored_retry_release_credit ... ok
+test area_distinct_managed_file_cancel_mutation_and_restored_retry_release_credit ... ok
+test collection_scale_edges_equal_fresh_pair_confirmation ... ok
+test spatial_collection_scale_edges_equal_fresh_pair_confirmation ... ok
+test intermediate_scale_files_retain_authored_rotations_and_enlargements ... ok
+test distinct_managed_collection_matches_all_fresh_pairs_and_preiteration_admission ... ok
+test area_distinct_collection_matches_all_fresh_pairs_and_preiteration_admission ... ok
+test collection_scale_mutation_and_cancellation_remove_partial_results ... ok
+test area_distinct_regions_common_source_lifecycle_and_admission ... ok
+test distinct_managed_regions_common_source_lifecycle_and_admission ... ok
+test spatial_scale_regions_match_fresh_supplied_model_confirmation ... ok
+test distinct_managed_collection_cancel_changed_source_and_restored_retry ... ok
+test area_distinct_collection_cancel_changed_source_and_restored_retry ... ok
+
+test result: ok. 19 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 46.07s
+

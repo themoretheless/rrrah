@@ -1,0 +1,20 @@
+{
+  "scope": "Cancel stale foreground-worker directory scans before speculative preload planning",
+  "change": "Worker passes current load generation predicate to shared cancellable folder enumeration instead of uninterruptible scan_folder",
+  "ordinary_app_tests_passed": 170,
+  "failed": 0,
+  "ignored_external": 26,
+  "covered_controls": [
+    "Partial enumeration cancellation produces no path list",
+    "Newest folder scan publication",
+    "Queued navigation cancels active preload and decodes newest file",
+    "Pending foreground request deduplication and lifetime handling"
+  ],
+  "log": "/tmp/rrrah-app-cancellable-prefetch-scan-20261008.log",
+  "log_sha256": "a9ebb679e0ec4fd56af5fc8b9431dcb59660bf4b04df2eb8f82c93db1ebf7fd8",
+  "limitations": [
+    "Filesystem syscall or sorting cancellation waits until operation returns",
+    "Foreground worker still scans directory after each load; reuse of known bounded neighbour lists remains a performance opportunity",
+    "No physical window latency proof or new real-camera corpus qualification"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "backend": "Metal",
+  "adapter": "Apple M4 Max",
+  "compute": {
+    "dimensions": [
+      6188,
+      4120
+    ],
+    "pixels": 25494560,
+    "passed": 6,
+    "failed": 0,
+    "ignored": 0,
+    "gpu_peak_bytes": 1223738992,
+    "cpu_peak_bytes": 815825920,
+    "interleaved_end_to_end_ms": 6908.475,
+    "managed_end_to_end_ms": 3948.918,
+    "all_pixels_exact": true,
+    "final_tracked_memory_bytes": 0,
+    "log": "/tmp/rrrah-metal-full-sensor-final.log"
+  },
+  "eip_ttl_swap": {
+    "passed": 1,
+    "failed": 0,
+    "samples_exact": 25494560,
+    "metal_frame_dimensions": [
+      128,
+      96
+    ],
+    "frame_exact": true,
+    "pressure_refusal_recovers": true,
+    "final_tracked_memory_bytes": 0,
+    "log": "/tmp/rrrah-metal-eip-ttl-final.log"
+  },
+  "limitations": [
+    "Single compute timing samples include allocation, transfer and readback; not a throughput benchmark.",
+    "Selected authored EIP and EOS R8 source; not every EIP package.",
+    "NVIDIA and physical HDR luminance remain unverified."
+  ]
+}

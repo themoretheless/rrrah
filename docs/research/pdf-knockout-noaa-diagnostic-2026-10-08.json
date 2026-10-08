@@ -1,0 +1,341 @@
+{
+  "scope": "Poppler antialias disabling is diagnostic only, not a replacement qualification gate.",
+  "results": [
+    {
+      "fixture": "pdf-knockout-fractional-isolated",
+      "noaa_edge_8_8": [
+        223,
+        223,
+        255
+      ],
+      "noaa_difference_pixels": 76,
+      "noaa_max_error": 24,
+      "error_positions": [
+        [
+          8,
+          0,
+          24
+        ],
+        [
+          9,
+          0,
+          16
+        ],
+        [
+          10,
+          0,
+          16
+        ],
+        [
+          11,
+          0,
+          16
+        ],
+        [
+          12,
+          0,
+          16
+        ],
+        [
+          13,
+          0,
+          16
+        ],
+        [
+          14,
+          0,
+          16
+        ],
+        [
+          15,
+          0,
+          16
+        ],
+        [
+          16,
+          0,
+          16
+        ],
+        [
+          17,
+          0,
+          16
+        ],
+        [
+          18,
+          0,
+          16
+        ],
+        [
+          19,
+          0,
+          16
+        ],
+        [
+          20,
+          0,
+          16
+        ],
+        [
+          21,
+          0,
+          16
+        ],
+        [
+          22,
+          0,
+          16
+        ],
+        [
+          23,
+          0,
+          16
+        ],
+        [
+          24,
+          0,
+          16
+        ],
+        [
+          25,
+          0,
+          16
+        ],
+        [
+          26,
+          0,
+          16
+        ],
+        [
+          27,
+          0,
+          16
+        ]
+      ]
+    },
+    {
+      "fixture": "pdf-knockout-fractional-nonisolated",
+      "noaa_edge_8_8": [
+        223,
+        223,
+        255
+      ],
+      "noaa_difference_pixels": 76,
+      "noaa_max_error": 24,
+      "error_positions": [
+        [
+          8,
+          0,
+          24
+        ],
+        [
+          9,
+          0,
+          16
+        ],
+        [
+          10,
+          0,
+          16
+        ],
+        [
+          11,
+          0,
+          16
+        ],
+        [
+          12,
+          0,
+          16
+        ],
+        [
+          13,
+          0,
+          16
+        ],
+        [
+          14,
+          0,
+          16
+        ],
+        [
+          15,
+          0,
+          16
+        ],
+        [
+          16,
+          0,
+          16
+        ],
+        [
+          17,
+          0,
+          16
+        ],
+        [
+          18,
+          0,
+          16
+        ],
+        [
+          19,
+          0,
+          16
+        ],
+        [
+          20,
+          0,
+          16
+        ],
+        [
+          21,
+          0,
+          16
+        ],
+        [
+          22,
+          0,
+          16
+        ],
+        [
+          23,
+          0,
+          16
+        ],
+        [
+          24,
+          0,
+          16
+        ],
+        [
+          25,
+          0,
+          16
+        ],
+        [
+          26,
+          0,
+          16
+        ],
+        [
+          27,
+          0,
+          16
+        ]
+      ]
+    },
+    {
+      "fixture": "pdf-normal-overlap",
+      "noaa_edge_8_8": [
+        127,
+        0,
+        128
+      ],
+      "noaa_difference_pixels": 16,
+      "noaa_max_error": 127,
+      "error_positions": [
+        [
+          24,
+          0,
+          127
+        ],
+        [
+          24,
+          1,
+          127
+        ],
+        [
+          24,
+          2,
+          127
+        ],
+        [
+          24,
+          3,
+          127
+        ],
+        [
+          24,
+          4,
+          127
+        ],
+        [
+          24,
+          5,
+          127
+        ],
+        [
+          24,
+          6,
+          127
+        ],
+        [
+          24,
+          7,
+          127
+        ],
+        [
+          24,
+          8,
+          127
+        ],
+        [
+          24,
+          9,
+          127
+        ],
+        [
+          24,
+          10,
+          127
+        ],
+        [
+          24,
+          11,
+          127
+        ],
+        [
+          24,
+          12,
+          127
+        ],
+        [
+          24,
+          13,
+          127
+        ],
+        [
+          24,
+          14,
+          127
+        ],
+        [
+          24,
+          15,
+          127
+        ]
+      ]
+    }
+  ],
+  "analytic_area_comparison": {
+    "method": "Exact unit-pixel rectangle intersection: blue [8.5,31.5] x [0.5,15.5], red [0,24] x [0,16]; red opacity 1/16, blue opacity 1/8; float64 normal knockout equation against initial white, round only final RGB. No Poppler thresholds used.",
+    "results": [
+      {
+        "fixture": "pdf-knockout-fractional-isolated",
+        "analytic_max_error": 0,
+        "analytic_mean_error": 0.0,
+        "analytic_exact_channels": 1536,
+        "channels": 1536
+      },
+      {
+        "fixture": "pdf-knockout-fractional-nonisolated",
+        "analytic_max_error": 0,
+        "analytic_mean_error": 0.0,
+        "analytic_exact_channels": 1536,
+        "channels": 1536
+      }
+    ],
+    "interpretation": "Current prototype matches analytic area model within RGBA8 rounding. Poppler isolated/nonisolated edge difference disappears with AA disabled; not proof that isolation semantics are missing. General paths, correlations of overlapping subpixel shapes, and normative AA model remain unresolved."
+  }
+}

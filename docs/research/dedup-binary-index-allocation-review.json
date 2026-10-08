@@ -1,0 +1,16 @@
+{
+  "status": "source_review_only",
+  "source_hashes": {
+    "crates/rrrah-dedup/src/local_index.rs": "b35290716a8ec36aea39756e616ae61242c4b81520380feff3f2680e23b43244",
+    "crates/rrrah-dedup/src/visual.rs": "755c8718ed19c9388d9f6f8078b0823208b24d8dd46f5feca53029e3d0794715",
+    "crates/rrrah-dedup/tests/local_index.rs": "0e85a797693f1e4e745de45963573b8a3003d20f6c43b027258622dabdc0ac9e",
+    "crates/rrrah-dedup/tests/visual.rs": "54abd45e2151e3946ffd6ba589edcd0db3d9df3ea894f5d2204ede1eda9955a6"
+  },
+  "findings": [
+    "descriptor_file_pairs_shared allocates documents, seen IDs, flattened owner slots, per-query targets and pair counts without a memory-budget argument",
+    "LocalDescriptorIndex adapter repeats the canonical descriptor in five of eight fingerprint slots; VisualIndex inserts every slot even if the full four-channel variant repeats",
+    "Metadata credits added in local_collection cover only caller outer file/insufficient-ID arrays, not these internal allocations"
+  ],
+  "next_change": "Skip identical complete variants within one application ID while preserving full fingerprint comparison and exact metric retrieval; qualify independent exhaustive oracles, collision cases and cancellation.",
+  "limitations": "No runtime memory reduction or speed measured; no complete allocation guarantee."
+}

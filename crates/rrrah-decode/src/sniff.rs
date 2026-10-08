@@ -11,7 +11,8 @@ use std::{fs::File, io::Read, path::Path};
 /// Maximum number of header bytes examined by the sniffer.
 // PICT file-data-fork framing ends at byte 552 (512-byte application header,
 // 10-byte picture frame and 30-byte version/header prefix).
-pub(crate) const SNIFF_BYTES: usize = 552;
+// RPF channel-depth fields require its complete fixed 740-byte header.
+pub(crate) const SNIFF_BYTES: usize = 740;
 
 /// Coarse container classification from content alone.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

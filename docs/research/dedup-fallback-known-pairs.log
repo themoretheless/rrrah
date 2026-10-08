@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-fallback-known-pairs.py", line 16, in <module>
+    result=subprocess.run(argv,capture_output=True,text=True);verify();row={'original':a,'query':b,'argv':argv,'returncode':result.returncode,'stdout':result.stdout,'stderr':result.stderr}
+                                                              ~~~~~~^^
+  File "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-fallback-known-pairs.py", line 12, in verify
+    def verify():assert all(h(p)==v for p,v in pins.items())
+                        ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

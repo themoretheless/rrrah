@@ -1,0 +1,183 @@
+{
+  "status": "complete_external_heldout_color_diagnostic",
+  "input_hashes": {
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200500.jpg": "55d5ff8935ee354fd0d34e3db8346db2b79047db56d7543ce50617c95e0ba91f",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200501.jpg": "c9f9a86fe25fd5bba47af5130e2fcf441633355cc1d806039c86cc0d5bbde9a3",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200000.jpg": "688a1b76f0d16d8a139a387e990ee0aeedbff1444eb9132d128eec9bf9249db9",
+    "docs/research/dedup-screen-filter8.json": "24f2548d742443f4b6dfd8ae2a165174da65fefe84a5785d67fd927a27de7c18",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-screen-color-oracle-retry.py": "36916b2c98e8c6adc733b318abd6d9b2d362c5755b88a03909ce565389dba519",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-opencv-oracle/bin/python": "ac60cfe0268614638d0ffa35f3b0284fc7b3a11482723793455e17eeb278509e",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-opencv-oracle/lib/python3.12/site-packages/cv2/cv2.abi3.so": "4cef98e6fec1322e53fc8a1db6dea09b61f3af348672dfa2f5e41b6408be8c53"
+  },
+  "opencv_version": "4.12.0",
+  "numpy_version": "2.2.6",
+  "target_roi": [
+    240,
+    60,
+    80,
+    60
+  ],
+  "filter_radius": 8,
+  "residual_tolerance": 0.03,
+  "split": "Disjoint8x8 checker blocks; train parity0, holdout parity1",
+  "results": [
+    {
+      "case": "known_screen",
+      "training_samples": 2400,
+      "heldout_samples": 2400,
+      "training_source_variances": [
+        0.006911292876059374,
+        0.006450349944530753,
+        0.007464741170694609
+      ],
+      "diagonal_coefficients": [
+        [
+          0.5686776744613633,
+          0.04221456634541734
+        ],
+        [
+          0.776164834260838,
+          0.04914870662109583
+        ],
+        [
+          0.6310266301077493,
+          0.06144576777277988
+        ]
+      ],
+      "diagonal_heldout_fraction": 0.9054166666666666,
+      "diagonal_heldout_rmse": 0.014068895737046899,
+      "affine_coefficients": [
+        [
+          0.7986998520699293,
+          0.5007714047289796,
+          -0.16351833293098572
+        ],
+        [
+          -0.831523216995586,
+          -0.7071778624381473,
+          -0.7793650858057072
+        ],
+        [
+          0.5588014047091814,
+          0.9068817601477599,
+          1.503168716574915
+        ],
+        [
+          0.03720155727859801,
+          0.04264394673855582,
+          0.05425445035684709
+        ]
+      ],
+      "affine_rank": 4,
+      "affine_condition": 458.3561522927647,
+      "affine_bounds_admitted": true,
+      "affine_heldout_fraction": 0.9908333333333333,
+      "affine_heldout_rmse": 0.01035403409527001
+    },
+    {
+      "case": "unrelated",
+      "training_samples": 2400,
+      "heldout_samples": 2400,
+      "training_source_variances": [
+        0.00031374946253974305,
+        0.00035102053776259217,
+        0.00018470436247429008
+      ],
+      "diagonal_coefficients": [
+        [
+          0.7942308232390975,
+          0.1
+        ],
+        [
+          1.3468590469219666,
+          0.1
+        ],
+        [
+          1.4295387513457332,
+          0.1
+        ]
+      ],
+      "diagonal_heldout_fraction": 0.4425,
+      "diagonal_heldout_rmse": 0.058934259042685344,
+      "affine_coefficients": [
+        [
+          50.38311073651446,
+          58.27754601739597,
+          38.81411033081961
+        ],
+        [
+          -42.18334934953685,
+          -48.558621869109345,
+          -31.39559444457134
+        ],
+        [
+          -7.897622964792184,
+          -9.262488934368092,
+          -6.946761948655783
+        ],
+        [
+          0.1612112360091745,
+          0.2042281680536072,
+          0.18692035069965549
+        ]
+      ],
+      "affine_rank": 4,
+      "affine_condition": 4579.210933105802,
+      "affine_bounds_admitted": false
+    },
+    {
+      "case": "synthetic_exact_aligned",
+      "training_samples": 2400,
+      "heldout_samples": 2400,
+      "training_source_variances": [
+        0.006911292876059374,
+        0.006450349944530753,
+        0.007464741170694609
+      ],
+      "diagonal_coefficients": [
+        [
+          1.0,
+          0.0
+        ],
+        [
+          1.0,
+          0.0
+        ],
+        [
+          1.0,
+          0.0
+        ]
+      ],
+      "diagonal_heldout_fraction": 1.0,
+      "diagonal_heldout_rmse": 0.0,
+      "affine_coefficients": [
+        [
+          0.9999999999999994,
+          -4.947109291298936e-15,
+          -7.829957151696157e-16
+        ],
+        [
+          1.0919010318072733e-15,
+          1.000000000000004,
+          1.7045205064338938e-15
+        ],
+        [
+          -9.116695917939894e-16,
+          -1.0189717996230616e-16,
+          1.0
+        ],
+        [
+          4.194242929581166e-16,
+          3.45603703829568e-16,
+          6.037499372604818e-17
+        ]
+      ],
+      "affine_rank": 4,
+      "affine_condition": 458.3561522927647,
+      "affine_bounds_admitted": true,
+      "affine_heldout_fraction": 1.0,
+      "affine_heldout_rmse": 2.5694247225037777e-16
+    }
+  ],
+  "scope": "One fixed known ROI, actual unrelated image with normalized source-domain mapping and synthetic exact aligned control. External OpenCV gamma/grayscale-independent color decoding and resampling differ from native oracle. Full affine bounds are diagnostic, no production acceptance or independent geometry truth."
+}

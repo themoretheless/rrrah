@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-07",
+  "change": "Cooperatively cancellable RasterRenderer float validation/admission; viewer passes foreground generation predicate",
+  "semantics": "Initial check, validation checks every4096pixels, before and after memory admission; cancellation before texture creation preserves previous texture/bindings/uniforms and releases CPU-side GPU reservations; driver allocation/write calls after last check are not interruptible",
+  "actual_metal": {
+    "adapter": "Apple M4 Max",
+    "tests_passed": 8,
+    "tests_ignored": 2,
+    "log": "/tmp/rrrah-raster-upload-cancel-metal.log",
+    "new_test": "cancelled_upload_validation_and_admission_preserve_visible_texture",
+    "checkpoints": 6,
+    "replacement_dimensions": [
+      100,
+      100
+    ],
+    "verified": [
+      "exact previous GPU readback retained after every cancellation",
+      "GPU root remains only previous texture bytes",
+      "upload queue root zero after every cancellation",
+      "subsequent upload produces blue frame",
+      "all reservations zero after renderer drop"
+    ]
+  },
+  "viewer_build": {
+    "passed": true,
+    "log": "/tmp/rrrah-raster-upload-cancel-check.log"
+  },
+  "scope": "Metal offscreen cancellation and compile-checked foreground wiring; no physical navigation race, GPU-only compute exposure route or NVIDIA/HDR display proof",
+  "status": "local, not pushed"
+}

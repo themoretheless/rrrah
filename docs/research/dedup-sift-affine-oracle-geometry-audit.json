@@ -1,0 +1,36 @@
+{
+  "status": "verified_external_sift_native_geometry_controls",
+  "input_hashes": {
+    "docs/research/dedup-sift-affine-oracle-geometry.json": "ea4e71962beaa2d45c251b0b17bcdb651ae6d16daeb2bd7933f9b05dc46cce68",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-sift-affine-oracle-geometry.py": "d6842cfe82503b29218aa4fa50b4140fb2f724df407df38ca1bc27fed3212aeb",
+    "scripts/verify-dedup-scale-similarity-diagnostic.py": "41a4c0583f4a99677e716bae43ed976cfda409703fe2ec6236da3de5d4f897e4"
+  },
+  "verified_cases": 4,
+  "summary": [
+    {
+      "case": "exact",
+      "distinct_proposals": 561,
+      "native_model": true,
+      "inliers": 561
+    },
+    {
+      "case": "wrinkled",
+      "distinct_proposals": 48,
+      "native_model": false,
+      "inliers": 0
+    },
+    {
+      "case": "unrelated",
+      "distinct_proposals": 278,
+      "native_model": false,
+      "inliers": 0
+    },
+    {
+      "case": "screen",
+      "distinct_proposals": 233,
+      "native_model": true,
+      "inliers": 91
+    }
+  ],
+  "scope": "Pinned raw sources, Exif domains, distinct locations, external ratio arithmetic, native matrices and residuals, exact and unrelated control decisions. No independent SIFT descriptor oracle, pixel acceptance or broad precision."
+}

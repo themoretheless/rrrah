@@ -1,0 +1,29 @@
+{
+  "scope": "Sample-grid diagnostic; separate Adobe stage3 reconstruction from final tone rendering",
+  "sampled_pixels": 22620,
+  "sampling": "row/column 16 then every 32 pixels",
+  "native_vs_adobe_stage3_shared_native_wb_matrix": {
+    "mean_abs_per_channel": [
+      0.0024498735209879507,
+      0.0038634287749841952,
+      0.0072022836666602655
+    ],
+    "p95_abs": 0.015088839347718026,
+    "max_abs": 0.403902342278763
+  },
+  "native_srgb_encode_vs_adobe_final": {
+    "mean_abs_per_channel": [
+      0.08785479624344826,
+      0.10536839985753363,
+      0.13206639480834276
+    ],
+    "p95_abs": 0.2197369599143698,
+    "max_abs": 0.42822683907937387
+  },
+  "limitations": [
+    "Sample grid, not all pixels.",
+    "Stage3 uses native WB/matrix for both sides; not an independent color-transform test.",
+    "Final comparison omits viewer tone mapping and Adobe exposure/tone defaults; differences do not alone identify a decoder bug.",
+    "No GPR format promotion."
+  ]
+}

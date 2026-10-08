@@ -1,0 +1,488 @@
+{
+  "status": "analyzed_audited_prefix",
+  "pairs": 43,
+  "required_pairs": 229,
+  "supported": 25,
+  "omitted": 18,
+  "observed_stages": {
+    "spatial_model_without_pixel_support": 6,
+    "no_spatial_model": 12
+  },
+  "omissions": [
+    {
+      "query_id": "200101.jpg",
+      "observed_stage": "spatial_model_without_pixel_support",
+      "legacy_gradient_correspondences": [
+        1,
+        1
+      ],
+      "spatial_correspondences": 25,
+      "spatial_inliers": 15,
+      "spatial_geometry": [
+        [
+          2.120557058746007,
+          -0.17185326909993015,
+          -157.48267632664061
+        ],
+        [
+          0.08193745987778961,
+          2.110771560015629,
+          -44.86868867270019
+        ],
+        [
+          -0.00028333256397039124,
+          -0.0003656605279522263,
+          1.0718568639989337
+        ]
+      ],
+      "spatial_whole_pixels": {
+        "status": "ok",
+        "counts": [
+          [
+            1641,
+            14781,
+            76800
+          ],
+          [
+            6794,
+            73476,
+            76800
+          ]
+        ]
+      },
+      "spatial_regions_tested": 24,
+      "spatial_region_failures": {
+        "Some(InsufficientSamples { observed: 0, required: 1000 })": 2,
+        "pixel_policy_rejected": 6,
+        "Some(InsufficientSamples { observed: 421, required: 1000 })": 1,
+        "Some(InsufficientSamples { observed: 83, required: 1000 })": 1,
+        "Some(InsufficientSamples { observed: 890, required: 1000 })": 1,
+        "Some(InsufficientSamples { observed: 947, required: 1000 })": 1,
+        "Some(InsufficientSamples { observed: 917, required: 1000 })": 1,
+        "Some(InsufficientSamples { observed: 817, required: 1000 })": 1,
+        "Some(InsufficientSamples { observed: 970, required: 1000 })": 1,
+        "Some(InsufficientSamples { observed: 892, required: 1000 })": 1,
+        "Some(InsufficientSamples { observed: 943, required: 1000 })": 1,
+        "Some(InsufficientSamples { observed: 999, required: 1000 })": 1,
+        "Some(InsufficientSamples { observed: 972, required: 1000 })": 1,
+        "Some(InsufficientSamples { observed: 859, required: 1000 })": 1,
+        "Some(InsufficientSamples { observed: 801, required: 1000 })": 1,
+        "Some(InsufficientSamples { observed: 853, required: 1000 })": 1,
+        "Some(InsufficientSamples { observed: 825, required: 1000 })": 1,
+        "Some(InsufficientSamples { observed: 733, required: 1000 })": 1
+      }
+    },
+    {
+      "query_id": "200201.jpg",
+      "observed_stage": "no_spatial_model",
+      "legacy_gradient_correspondences": [
+        2,
+        6
+      ],
+      "spatial_correspondences": 20,
+      "spatial_inliers": 0,
+      "spatial_geometry": null,
+      "spatial_whole_pixels": null,
+      "spatial_regions_tested": 0,
+      "spatial_region_failures": {}
+    },
+    {
+      "query_id": "200301.jpg",
+      "observed_stage": "no_spatial_model",
+      "legacy_gradient_correspondences": [
+        1,
+        1
+      ],
+      "spatial_correspondences": 3,
+      "spatial_inliers": 0,
+      "spatial_geometry": null,
+      "spatial_whole_pixels": null,
+      "spatial_regions_tested": 0,
+      "spatial_region_failures": {}
+    },
+    {
+      "query_id": "200302.jpg",
+      "observed_stage": "no_spatial_model",
+      "legacy_gradient_correspondences": [
+        0,
+        0
+      ],
+      "spatial_correspondences": 3,
+      "spatial_inliers": 0,
+      "spatial_geometry": null,
+      "spatial_whole_pixels": null,
+      "spatial_regions_tested": 0,
+      "spatial_region_failures": {}
+    },
+    {
+      "query_id": "200401.jpg",
+      "observed_stage": "no_spatial_model",
+      "legacy_gradient_correspondences": [
+        0,
+        6
+      ],
+      "spatial_correspondences": 6,
+      "spatial_inliers": 0,
+      "spatial_geometry": null,
+      "spatial_whole_pixels": null,
+      "spatial_regions_tested": 0,
+      "spatial_region_failures": {}
+    },
+    {
+      "query_id": "200501.jpg",
+      "observed_stage": "no_spatial_model",
+      "legacy_gradient_correspondences": [
+        1,
+        4
+      ],
+      "spatial_correspondences": 14,
+      "spatial_inliers": 0,
+      "spatial_geometry": null,
+      "spatial_whole_pixels": null,
+      "spatial_regions_tested": 0,
+      "spatial_region_failures": {}
+    },
+    {
+      "query_id": "200601.jpg",
+      "observed_stage": "no_spatial_model",
+      "legacy_gradient_correspondences": [
+        1,
+        1
+      ],
+      "spatial_correspondences": 2,
+      "spatial_inliers": 0,
+      "spatial_geometry": null,
+      "spatial_whole_pixels": null,
+      "spatial_regions_tested": 0,
+      "spatial_region_failures": {}
+    },
+    {
+      "query_id": "200801.jpg",
+      "observed_stage": "spatial_model_without_pixel_support",
+      "legacy_gradient_correspondences": [
+        16,
+        16
+      ],
+      "spatial_correspondences": 67,
+      "spatial_inliers": 57,
+      "spatial_geometry": [
+        [
+          1.0784084742662492,
+          -0.059809082542000826,
+          -13.071321565062277
+        ],
+        [
+          0.05953495320629068,
+          0.6774332772236558,
+          -13.773251518908424
+        ],
+        [
+          5.861108440097087e-05,
+          -0.00039924646486356926,
+          1.0375986766283578
+        ]
+      ],
+      "spatial_whole_pixels": {
+        "status": "ok",
+        "counts": [
+          [
+            35028,
+            53628,
+            68160
+          ],
+          [
+            7023,
+            39694,
+            42880
+          ]
+        ]
+      },
+      "spatial_regions_tested": 32,
+      "spatial_region_failures": {
+        "pixel_policy_rejected": 30,
+        "Some(LowVariance { channel: 2 })": 2
+      }
+    },
+    {
+      "query_id": "200902.jpg",
+      "observed_stage": "no_spatial_model",
+      "legacy_gradient_correspondences": [
+        2,
+        2
+      ],
+      "spatial_correspondences": 11,
+      "spatial_inliers": 0,
+      "spatial_geometry": null,
+      "spatial_whole_pixels": null,
+      "spatial_regions_tested": 0,
+      "spatial_region_failures": {}
+    },
+    {
+      "query_id": "201303.jpg",
+      "observed_stage": "no_spatial_model",
+      "legacy_gradient_correspondences": [
+        0,
+        1
+      ],
+      "spatial_correspondences": 12,
+      "spatial_inliers": 0,
+      "spatial_geometry": null,
+      "spatial_whole_pixels": null,
+      "spatial_regions_tested": 0,
+      "spatial_region_failures": {}
+    },
+    {
+      "query_id": "201602.jpg",
+      "observed_stage": "spatial_model_without_pixel_support",
+      "legacy_gradient_correspondences": [
+        16,
+        23
+      ],
+      "spatial_correspondences": 29,
+      "spatial_inliers": 20,
+      "spatial_geometry": [
+        [
+          1.520480313357632,
+          -0.06421898494428559,
+          -5.619660336174633
+        ],
+        [
+          0.06970706161645093,
+          1.3237497844150394,
+          -175.34428668989494
+        ],
+        [
+          0.0007913366046282306,
+          -0.0006453780410286235,
+          0.987717503785957
+        ]
+      ],
+      "spatial_whole_pixels": {
+        "status": "ok",
+        "counts": [
+          [
+            424,
+            32811,
+            76800
+          ],
+          [
+            14660,
+            73470,
+            76800
+          ]
+        ]
+      },
+      "spatial_regions_tested": 28,
+      "spatial_region_failures": {
+        "pixel_policy_rejected": 28
+      }
+    },
+    {
+      "query_id": "201702.jpg",
+      "observed_stage": "spatial_model_without_pixel_support",
+      "legacy_gradient_correspondences": [
+        4,
+        3
+      ],
+      "spatial_correspondences": 40,
+      "spatial_inliers": 19,
+      "spatial_geometry": [
+        [
+          1.1690658523598765,
+          0.11461481382302652,
+          -80.65521275514347
+        ],
+        [
+          -0.09753970270366881,
+          1.329310871042726,
+          -37.02475228395724
+        ],
+        [
+          -0.0009238331361294335,
+          0.0014734860451153836,
+          0.8703624507538192
+        ]
+      ],
+      "spatial_whole_pixels": {
+        "status": "ok",
+        "counts": [
+          [
+            1597,
+            39150,
+            76800
+          ],
+          [
+            6301,
+            73326,
+            76800
+          ]
+        ]
+      },
+      "spatial_regions_tested": 32,
+      "spatial_region_failures": {
+        "Some(InsufficientSamples { observed: 275, required: 1000 })": 1,
+        "pixel_policy_rejected": 29,
+        "Some(InsufficientSamples { observed: 153, required: 1000 })": 1,
+        "Some(InsufficientSamples { observed: 959, required: 1000 })": 1
+      }
+    },
+    {
+      "query_id": "202001.jpg",
+      "observed_stage": "no_spatial_model",
+      "legacy_gradient_correspondences": [
+        1,
+        3
+      ],
+      "spatial_correspondences": 4,
+      "spatial_inliers": 0,
+      "spatial_geometry": null,
+      "spatial_whole_pixels": null,
+      "spatial_regions_tested": 0,
+      "spatial_region_failures": {}
+    },
+    {
+      "query_id": "202201.jpg",
+      "observed_stage": "no_spatial_model",
+      "legacy_gradient_correspondences": [
+        1,
+        3
+      ],
+      "spatial_correspondences": 3,
+      "spatial_inliers": 0,
+      "spatial_geometry": null,
+      "spatial_whole_pixels": null,
+      "spatial_regions_tested": 0,
+      "spatial_region_failures": {}
+    },
+    {
+      "query_id": "202301.jpg",
+      "observed_stage": "no_spatial_model",
+      "legacy_gradient_correspondences": [
+        2,
+        6
+      ],
+      "spatial_correspondences": 7,
+      "spatial_inliers": 0,
+      "spatial_geometry": null,
+      "spatial_whole_pixels": null,
+      "spatial_regions_tested": 0,
+      "spatial_region_failures": {}
+    },
+    {
+      "query_id": "202401.jpg",
+      "observed_stage": "spatial_model_without_pixel_support",
+      "legacy_gradient_correspondences": [
+        50,
+        69
+      ],
+      "spatial_correspondences": 250,
+      "spatial_inliers": 182,
+      "spatial_geometry": [
+        [
+          1.1582363129055322,
+          -0.005855902764335435,
+          -5.7272022539643785
+        ],
+        [
+          -0.0308921592914525,
+          1.162466661801754,
+          -3.4778965108516076
+        ],
+        [
+          -0.00010737084210298551,
+          -0.00013444484876465562,
+          1.0296006542202727
+        ]
+      ],
+      "spatial_whole_pixels": {
+        "status": "ok",
+        "counts": [
+          [
+            3914,
+            52162,
+            68160
+          ],
+          [
+            7423,
+            73476,
+            76800
+          ]
+        ]
+      },
+      "spatial_regions_tested": 32,
+      "spatial_region_failures": {
+        "pixel_policy_rejected": 32
+      }
+    },
+    {
+      "query_id": "202502.jpg",
+      "observed_stage": "no_spatial_model",
+      "legacy_gradient_correspondences": [
+        4,
+        3
+      ],
+      "spatial_correspondences": 7,
+      "spatial_inliers": 0,
+      "spatial_geometry": null,
+      "spatial_whole_pixels": null,
+      "spatial_regions_tested": 0,
+      "spatial_region_failures": {}
+    },
+    {
+      "query_id": "202602.jpg",
+      "observed_stage": "spatial_model_without_pixel_support",
+      "legacy_gradient_correspondences": [
+        25,
+        31
+      ],
+      "spatial_correspondences": 42,
+      "spatial_inliers": 26,
+      "spatial_geometry": [
+        [
+          1.3579478983554372,
+          -0.0002934872679687048,
+          -72.24634469356235
+        ],
+        [
+          -0.10690603521821997,
+          1.3199465019154426,
+          -5.335628471522483
+        ],
+        [
+          -0.00021108357222874864,
+          -0.0005750231963713258,
+          1.0888392991440907
+        ]
+      ],
+      "spatial_whole_pixels": {
+        "status": "ok",
+        "counts": [
+          [
+            2435,
+            36314,
+            76800
+          ],
+          [
+            7466,
+            73476,
+            76800
+          ]
+        ]
+      },
+      "spatial_regions_tested": 32,
+      "spatial_region_failures": {
+        "pixel_policy_rejected": 28,
+        "Some(InsufficientSamples { observed: 51, required: 1000 })": 1,
+        "Some(InsufficientSamples { observed: 339, required: 1000 })": 1,
+        "Some(InsufficientSamples { observed: 588, required: 1000 })": 1,
+        "Some(InsufficientSamples { observed: 261, required: 1000 })": 1
+      }
+    }
+  ],
+  "input_hashes": {
+    "docs/research/dedup-six-unique-current-229-prefix-43-snapshot.json": "70f788e88ee2922fdda9ae9ccbe4a4694332dce6766974cb3940ad2722e208f8",
+    "docs/research/dedup-six-unique-current-229-prefix-43-audit.json": "16a01d1b541f450a153990c9fbe1334d1224f69f6d8623132c5be9a8287b327a",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/analyze-dedup-six-omissions.py": "1d5f5c975ea9a35353cfd16d2fd44fc83adffa05805f0b7df51d78f9dce0ae8a"
+  },
+  "scope": "Observed spatial-lane rejection stages only; no inferred ground-truth geometry, threshold relaxation, or new recall measurement."
+}

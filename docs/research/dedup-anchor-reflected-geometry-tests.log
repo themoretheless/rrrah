@@ -1,0 +1,46 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+warning: variable `H` should have a snake case name
+   --> crates/rrrah-dedup/tests/candidate_reflected_geometry.rs:126:9
+    |
+126 |     let H=geometry.transform.matrix;
+    |         ^ help: convert the identifier to snake case: `h`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: `rrrah-dedup` (test "candidate_reflected_geometry") generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 29.73s
+     Running tests/anchor_geometry_search.rs (target/debug/deps/anchor_geometry_search-81387ce10a1e7c93)
+
+running 1 test
+test geometry_only_anchor_pipeline_equals_legacy_anchor_confirmation ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 24.55s
+
+     Running tests/anchor_reflected_geometry.rs (target/debug/deps/anchor_reflected_geometry-6c481a72016d9799)
+
+running 1 test
+test reflected_file_search_common_lifecycle_and_original_pixel_parity ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 18.08s
+
+     Running tests/candidate_reflected_geometry.rs (target/debug/deps/candidate_reflected_geometry-5302ed0b21633dc3)
+
+running 1 test
+test reflected_geometry_recovers_original_coordinate_mirror_and_refuses_before_io ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.09s
+

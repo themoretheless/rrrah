@@ -1,0 +1,80 @@
+{
+  "scope": "Test-only compositor real-AI diagnostic; no production qualification",
+  "poppler_version": "pdftoppm version 26.10.0",
+  "rows": [
+    {
+      "fixture": "VectorApple.ai",
+      "page": 0,
+      "width": 301,
+      "height": 246,
+      "peak_admitted_bytes": 56220376,
+      "final_admitted_bytes": 0,
+      "status": "replayed",
+      "events": 2755,
+      "knockout_groups": 7,
+      "source_sha256": "c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06",
+      "exact": false,
+      "different_pixels": 33161,
+      "max_channel_error": 216,
+      "mean_absolute_error": 3.8021860285048033,
+      "rgba_sha256": "0ab576ab1e9920f50988c9ca2e2012c97b0d90e24ee1081d48bd95316455c05e",
+      "oracle_rgb_sha256": "57b154a1760616b953cea6b8f5672ec413882128b1a8f9ecbe800e721b52b591"
+    },
+    {
+      "fixture": "one.ai",
+      "page": 0,
+      "width": 1366,
+      "height": 768,
+      "peak_admitted_bytes": 93377984,
+      "final_admitted_bytes": 0,
+      "status": "replayed",
+      "events": 8,
+      "knockout_groups": 0,
+      "source_sha256": "97786949c268233a446e1738fb9c2f941e4d109811bd2f972948cdb7a45d64b4",
+      "exact": false,
+      "different_pixels": 2790,
+      "max_channel_error": 115,
+      "mean_absolute_error": 0.09860088000244022,
+      "rgba_sha256": "d5c8bce21084b1de6ccf509e6831a85b65231441668b033d09038eba7b919a8c",
+      "oracle_rgb_sha256": "d04c5ca83cfef9a672ed59480378acbe12221c1512e00cc0f80c86c6f7db58d7"
+    },
+    {
+      "fixture": "one.ai",
+      "page": 1,
+      "width": 177,
+      "height": 175,
+      "peak_admitted_bytes": 2602956,
+      "final_admitted_bytes": 0,
+      "status": "replayed",
+      "events": 1,
+      "knockout_groups": 0,
+      "source_sha256": "97786949c268233a446e1738fb9c2f941e4d109811bd2f972948cdb7a45d64b4",
+      "exact": true,
+      "different_pixels": 0,
+      "max_channel_error": 0,
+      "mean_absolute_error": 0.0,
+      "rgba_sha256": "89db416a84fdc983853717f5fd73690c020e6feced867d1a3d4e02873f9d7e36",
+      "oracle_rgb_sha256": "9e754d40c23ce882917a696aca9cb873a6cd863ca40a6e1ee2d6a41255e414c8"
+    }
+  ],
+  "all_pages_exact": false,
+  "verification": {
+    "prototype_tests_passed": 64,
+    "prototype_tests_failed": 0,
+    "ignored_external_diagnostics": 5,
+    "explicit_corpus_diagnostic_passed": true,
+    "pixel_gate_passed": false
+  },
+  "implementation": {
+    "scope": "Test-only PDF compositor; production renderer unchanged",
+    "group_storage": "f64 premultiplied initial/current colors and independent f64 shape/alpha; f64 group opacity retained from parsed source. Leaf paint/raster source and captured soft masks remain RGBA8.",
+    "readback": "PreciseBuffer retained until quantization, with precise spatial averaging helper. Existing generic spatial tile helper still quantizes samples before its reduction; precise tile integration pending.",
+    "budget": "Group frame buffers admitted at 80 bytes/pixel plus metadata. Readback output is separately admitted. 32KiB refusal regression remains enforced; all refusal/cancellation sweeps pass.",
+    "regression": "Nine valid knockout operations reproduce negative -2 red contribution under RGBA8 intermediates; precise computation extracts zero black RGB without broadening RGBA8 tolerance.",
+    "limits": "PreciseBuffer conservatively retains whole root frame credit until drop. Backend/parser/font allocations remain outside complete admission coverage. Other blend modes and production integration pending."
+  },
+  "baseline_comparison": {
+    "production_after_stencil_fix": "ai-after-stencil-alpha-poppler-2026-10-08.json",
+    "scope": "Different rendering pipelines; measured errors do not isolate a causal effect from precision alone."
+  }
+}

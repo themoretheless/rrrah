@@ -1,0 +1,33 @@
+{
+  "status": "verified_native_macos_and_linux",
+  "snapshot": "/Users/themoretheless/.codex/tmp/rrrah-dedup-scales-distinct-linux-snapshot-20261007",
+  "snapshot_manifest_sha256": "21858199b1ecd42a2715361bf84e3375cd5705b38321c9d1ccab1e5b4d6ba579",
+  "source_files": 2804,
+  "linux_session": 4227,
+  "macos_session": 27162,
+  "tests": [
+    "gradient_scale",
+    "gradient_scale_files",
+    "gradient_distinct_locations",
+    "projective_domains",
+    "projective_geometry",
+    "gradient",
+    "gradient_interpolated"
+  ],
+  "linux_log": "docs/research/dedup-scales-distinct-linux-native.log",
+  "macos_log": "docs/research/dedup-scales-distinct-macos-snapshot-with-target.log",
+  "macos_initial_attempt": {
+    "returncode": 101,
+    "reason": "Read-only snapshot cannot host target; external target selected for active run.",
+    "log": "docs/research/dedup-scales-distinct-macos-snapshot.log"
+  },
+  "scope": "Same fixed source/fixtures native macOS and ARM64 Linux; compilation/test outcome pending, no native Windows or full coverage claim.",
+  "macos_returncode": 0,
+  "macos_passed": 49,
+  "macos_log_sha256": "b477a027aa6028e5d5ba63eed700074b83567e2afb01f99e8d4a95edfc3e3e68",
+  "snapshot_files_reverified": 2804,
+  "linux_returncode": 0,
+  "linux_passed": 49,
+  "linux_log_sha256": "7766bfd6000b725938e2e1e4ea77fd6366f229dfe6c50a413970e1b0617984fe",
+  "snapshot_files_terminal_reverified": 2804
+}

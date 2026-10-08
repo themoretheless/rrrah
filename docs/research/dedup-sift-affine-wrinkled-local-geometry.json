@@ -1,0 +1,368 @@
+{
+  "status": "complete_native_local_geometry",
+  "input_hashes": {
+    "docs/research/dedup-sift-affine-oracle-geometry.json": "ea4e71962beaa2d45c251b0b17bcdb651ae6d16daeb2bd7933f9b05dc46cce68",
+    "docs/research/dedup-sift-affine-oracle-geometry-audit.json": "dda1e059af743f238e254943d9dc07ae79c0beb1ccde36410c5ed29897ad98e7",
+    "docs/research/dedup-sift-affine-wrinkled-points.txt": "ada5088b56622e7c452ea503fcf2abfd07130e7b72dd15f28e72017562845d98",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/partition-geometry-probe-wrinkled": "7f67a10480bf539f05051343756fd546290e10f04f9413e50a4c8b9390b2cc84"
+  },
+  "results": [
+    {
+      "divisions": 2,
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"regions\":[{\"target_domain\":[0.0, 0.0, 400.0, 300.0],\"point_indices\":[0, 3, 5, 7, 9, 10, 11, 13, 14, 15, 18, 21, 22, 25, 28, 30, 33, 36, 37, 38, 40, 43, 44, 46],\"matrix\":null,\"inliers\":[]},{\"target_domain\":[400.0, 0.0, 400.0, 300.0],\"point_indices\":[2, 6, 8, 12, 17, 20, 23, 24, 29, 31, 32, 34, 35, 39, 41, 42],\"matrix\":null,\"inliers\":[]},{\"target_domain\":[0.0, 300.0, 400.0, 300.0],\"point_indices\":[45, 47],\"matrix\":null,\"inliers\":[]},{\"target_domain\":[400.0, 300.0, 400.0, 300.0],\"point_indices\":[1, 4, 16, 19, 26, 27],\"matrix\":null,\"inliers\":[]}]}\n",
+      "stderr": "",
+      "evidence": {
+        "status": "ok",
+        "regions": [
+          {
+            "target_domain": [
+              0.0,
+              0.0,
+              400.0,
+              300.0
+            ],
+            "point_indices": [
+              0,
+              3,
+              5,
+              7,
+              9,
+              10,
+              11,
+              13,
+              14,
+              15,
+              18,
+              21,
+              22,
+              25,
+              28,
+              30,
+              33,
+              36,
+              37,
+              38,
+              40,
+              43,
+              44,
+              46
+            ],
+            "matrix": null,
+            "inliers": []
+          },
+          {
+            "target_domain": [
+              400.0,
+              0.0,
+              400.0,
+              300.0
+            ],
+            "point_indices": [
+              2,
+              6,
+              8,
+              12,
+              17,
+              20,
+              23,
+              24,
+              29,
+              31,
+              32,
+              34,
+              35,
+              39,
+              41,
+              42
+            ],
+            "matrix": null,
+            "inliers": []
+          },
+          {
+            "target_domain": [
+              0.0,
+              300.0,
+              400.0,
+              300.0
+            ],
+            "point_indices": [
+              45,
+              47
+            ],
+            "matrix": null,
+            "inliers": []
+          },
+          {
+            "target_domain": [
+              400.0,
+              300.0,
+              400.0,
+              300.0
+            ],
+            "point_indices": [
+              1,
+              4,
+              16,
+              19,
+              26,
+              27
+            ],
+            "matrix": null,
+            "inliers": []
+          }
+        ]
+      }
+    },
+    {
+      "divisions": 4,
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"regions\":[{\"target_domain\":[0.0, 0.0, 200.0, 150.0],\"point_indices\":[7, 25, 44],\"matrix\":null,\"inliers\":[]},{\"target_domain\":[200.0, 0.0, 200.0, 150.0],\"point_indices\":[0, 3, 18, 30, 33, 46],\"matrix\":null,\"inliers\":[]},{\"target_domain\":[400.0, 0.0, 200.0, 150.0],\"point_indices\":[2, 8, 42],\"matrix\":null,\"inliers\":[]},{\"target_domain\":[600.0, 0.0, 200.0, 150.0],\"point_indices\":[39],\"matrix\":null,\"inliers\":[]},{\"target_domain\":[0.0, 150.0, 200.0, 150.0],\"point_indices\":[9, 10, 11, 13, 28, 37],\"matrix\":null,\"inliers\":[]},{\"target_domain\":[200.0, 150.0, 200.0, 150.0],\"point_indices\":[5, 14, 15, 21, 22, 36, 38, 40, 43],\"matrix\":null,\"inliers\":[]},{\"target_domain\":[400.0, 150.0, 200.0, 150.0],\"point_indices\":[6, 12, 17, 23, 24, 29, 31, 32, 35, 41],\"matrix\":null,\"inliers\":[]},{\"target_domain\":[600.0, 150.0, 200.0, 150.0],\"point_indices\":[20, 34],\"matrix\":null,\"inliers\":[]},{\"target_domain\":[0.0, 300.0, 200.0, 150.0],\"point_indices\":[45],\"matrix\":null,\"inliers\":[]},{\"target_domain\":[200.0, 300.0, 200.0, 150.0],\"point_indices\":[],\"matrix\":null,\"inliers\":[]},{\"target_domain\":[400.0, 300.0, 200.0, 150.0],\"point_indices\":[1],\"matrix\":null,\"inliers\":[]},{\"target_domain\":[600.0, 300.0, 200.0, 150.0],\"point_indices\":[16, 27],\"matrix\":null,\"inliers\":[]},{\"target_domain\":[0.0, 450.0, 200.0, 150.0],\"point_indices\":[47],\"matrix\":null,\"inliers\":[]},{\"target_domain\":[200.0, 450.0, 200.0, 150.0],\"point_indices\":[],\"matrix\":null,\"inliers\":[]},{\"target_domain\":[400.0, 450.0, 200.0, 150.0],\"point_indices\":[19],\"matrix\":null,\"inliers\":[]},{\"target_domain\":[600.0, 450.0, 200.0, 150.0],\"point_indices\":[4, 26],\"matrix\":null,\"inliers\":[]}]}\n",
+      "stderr": "",
+      "evidence": {
+        "status": "ok",
+        "regions": [
+          {
+            "target_domain": [
+              0.0,
+              0.0,
+              200.0,
+              150.0
+            ],
+            "point_indices": [
+              7,
+              25,
+              44
+            ],
+            "matrix": null,
+            "inliers": []
+          },
+          {
+            "target_domain": [
+              200.0,
+              0.0,
+              200.0,
+              150.0
+            ],
+            "point_indices": [
+              0,
+              3,
+              18,
+              30,
+              33,
+              46
+            ],
+            "matrix": null,
+            "inliers": []
+          },
+          {
+            "target_domain": [
+              400.0,
+              0.0,
+              200.0,
+              150.0
+            ],
+            "point_indices": [
+              2,
+              8,
+              42
+            ],
+            "matrix": null,
+            "inliers": []
+          },
+          {
+            "target_domain": [
+              600.0,
+              0.0,
+              200.0,
+              150.0
+            ],
+            "point_indices": [
+              39
+            ],
+            "matrix": null,
+            "inliers": []
+          },
+          {
+            "target_domain": [
+              0.0,
+              150.0,
+              200.0,
+              150.0
+            ],
+            "point_indices": [
+              9,
+              10,
+              11,
+              13,
+              28,
+              37
+            ],
+            "matrix": null,
+            "inliers": []
+          },
+          {
+            "target_domain": [
+              200.0,
+              150.0,
+              200.0,
+              150.0
+            ],
+            "point_indices": [
+              5,
+              14,
+              15,
+              21,
+              22,
+              36,
+              38,
+              40,
+              43
+            ],
+            "matrix": null,
+            "inliers": []
+          },
+          {
+            "target_domain": [
+              400.0,
+              150.0,
+              200.0,
+              150.0
+            ],
+            "point_indices": [
+              6,
+              12,
+              17,
+              23,
+              24,
+              29,
+              31,
+              32,
+              35,
+              41
+            ],
+            "matrix": null,
+            "inliers": []
+          },
+          {
+            "target_domain": [
+              600.0,
+              150.0,
+              200.0,
+              150.0
+            ],
+            "point_indices": [
+              20,
+              34
+            ],
+            "matrix": null,
+            "inliers": []
+          },
+          {
+            "target_domain": [
+              0.0,
+              300.0,
+              200.0,
+              150.0
+            ],
+            "point_indices": [
+              45
+            ],
+            "matrix": null,
+            "inliers": []
+          },
+          {
+            "target_domain": [
+              200.0,
+              300.0,
+              200.0,
+              150.0
+            ],
+            "point_indices": [],
+            "matrix": null,
+            "inliers": []
+          },
+          {
+            "target_domain": [
+              400.0,
+              300.0,
+              200.0,
+              150.0
+            ],
+            "point_indices": [
+              1
+            ],
+            "matrix": null,
+            "inliers": []
+          },
+          {
+            "target_domain": [
+              600.0,
+              300.0,
+              200.0,
+              150.0
+            ],
+            "point_indices": [
+              16,
+              27
+            ],
+            "matrix": null,
+            "inliers": []
+          },
+          {
+            "target_domain": [
+              0.0,
+              450.0,
+              200.0,
+              150.0
+            ],
+            "point_indices": [
+              47
+            ],
+            "matrix": null,
+            "inliers": []
+          },
+          {
+            "target_domain": [
+              200.0,
+              450.0,
+              200.0,
+              150.0
+            ],
+            "point_indices": [],
+            "matrix": null,
+            "inliers": []
+          },
+          {
+            "target_domain": [
+              400.0,
+              450.0,
+              200.0,
+              150.0
+            ],
+            "point_indices": [
+              19
+            ],
+            "matrix": null,
+            "inliers": []
+          },
+          {
+            "target_domain": [
+              600.0,
+              450.0,
+              200.0,
+              150.0
+            ],
+            "point_indices": [
+              4,
+              26
+            ],
+            "matrix": null,
+            "inliers": []
+          }
+        ]
+      }
+    }
+  ],
+  "scope": "Fixed48 affine-simulated SIFT proposals; native2x2/4x4, min10/tol2/4096 trials. No pixel evidence or exhaustive local geometry proof."
+}

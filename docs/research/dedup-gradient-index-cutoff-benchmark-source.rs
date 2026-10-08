@@ -1,0 +1,6 @@
+use std::{hint::black_box,time::Instant};
+#[inline(never)]fn full(a:&[f64;128],b:&[f64;128],_:f64)->f64{a.iter().zip(b).map(|(a,b)|(a-b)*(a-b)).sum()}
+#[inline(never)]fn cutoff(a:&[f64;128],b:&[f64;128],r:f64)->f64{let mut sum=0.;for offset in (0..128).step_by(16){for c in offset..offset+16{let d=a[c]-b[c];sum+=d*d;}if sum>r{break}}sum}
+fn main(){let mut state=1u64;let mut rows=Vec::new();for _ in 0..512{let mut a=[0.;128];for v in &mut a{state=state.wrapping_mul(6364136223846793005).wrapping_add(1);*v=(state>>32)as f64+1.;}let norm=a.iter().map(|v|v*v).sum::<f64>().sqrt();for v in &mut a{*v/=norm;}rows.push(a)}
+for radius in [0.,0.1,0.5,4.]{for round in 0..4{let mut times=[0.;2];let mut counts=[0;2];let mut sums=[0.;2];for mode in if round%2==0{[0,1]}else{[1,0]}{let f=if mode==0{full}else{cutoff};let start=Instant::now();for _ in 0..8{for a in &rows[..32]{for b in &rows{let d=f(black_box(a),black_box(b),black_box(radius));if d<=radius{counts[mode]+=1;sums[mode]+=d;}}}}times[mode]=start.elapsed().as_secs_f64();}assert_eq!(counts[0],counts[1]);assert_eq!(sums[0],sums[1]);println!("{{\"radius\":{radius},\"round\":{round},\"full_seconds\":{},\"cutoff_seconds\":{},\"accepted\":{},\"exact_accepted_distance_sum\":{}}}",times[0],times[1],counts[0],sums[0]);}}
+}

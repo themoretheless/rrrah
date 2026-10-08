@@ -1,0 +1,103 @@
+{
+  "scope": "Native float soft-mask image alpha capture before display quantization",
+  "controls": {
+    "passed": 118,
+    "failed": 0,
+    "ignored": 10,
+    "seconds": 2.8,
+    "log": "/tmp/rrrah-native-soft-image-alpha-repaired.log"
+  },
+  "checks": [
+    "Separate mask stream decoded into admitted float alpha buffer",
+    "Original 16-bit alpha 32768/65535 preserved rather than rounded to 8 bits",
+    "Mask dimensions and interpolation retained separately from source image",
+    "Matte masks explicitly refuse with SoftMatte reason",
+    "Every actual native soft-mask image capture cancellation checkpoint latches failure and releases all tracked credit"
+  ],
+  "real_ai_pages": [
+    {
+      "fixture": "VectorApple.ai",
+      "page": 0,
+      "width": 301,
+      "height": 246,
+      "peak_admitted_bytes": 51154116,
+      "final_admitted_bytes": 0,
+      "status": "native_diagnostic",
+      "native_completed": false,
+      "capture_failed": false,
+      "capture_ms": 1857.989333,
+      "native_replay_ms": 13.46675,
+      "deadline_expired": false,
+      "events": 2755,
+      "native_paints": 463,
+      "raster_events": 3,
+      "raster_source_models": [
+        "event=3,model=None",
+        "event=1218,model=Some(Cmyk)",
+        "event=2298,model=Some(Cmyk)"
+      ],
+      "native_raster_components": [
+        "event=3,sample_count=Some(29488),refusal=None",
+        "event=1218,sample_count=Some(298224),refusal=None",
+        "event=2298,sample_count=Some(266084),refusal=None"
+      ],
+      "shading_events": 13,
+      "page_model": "Cmyk"
+    },
+    {
+      "fixture": "one.ai",
+      "page": 0,
+      "width": 1366,
+      "height": 768,
+      "peak_admitted_bytes": 168322584,
+      "final_admitted_bytes": 0,
+      "status": "native_diagnostic",
+      "native_completed": true,
+      "capture_failed": false,
+      "capture_ms": 2.4130000000000003,
+      "native_replay_ms": 2918.3164580000002,
+      "deadline_expired": false,
+      "events": 8,
+      "native_paints": 2,
+      "raster_events": 0,
+      "raster_source_models": [],
+      "native_raster_components": [],
+      "shading_events": 0,
+      "page_model": "Rgb"
+    },
+    {
+      "fixture": "one.ai",
+      "page": 1,
+      "width": 177,
+      "height": 175,
+      "peak_admitted_bytes": 4957320,
+      "final_admitted_bytes": 0,
+      "status": "native_diagnostic",
+      "native_completed": true,
+      "capture_failed": false,
+      "capture_ms": 0.049708,
+      "native_replay_ms": 68.471708,
+      "deadline_expired": false,
+      "events": 1,
+      "native_paints": 0,
+      "raster_events": 0,
+      "raster_source_models": [],
+      "native_raster_components": [],
+      "shading_events": 0,
+      "page_model": "Rgb"
+    }
+  ],
+  "source_hashes_verified": true,
+  "VectorApple_native_source_samples_captured": [
+    29488,
+    298224,
+    266084
+  ],
+  "limitations": [
+    "Native raster selection interpolation clipping and group compositing not implemented yet",
+    "Matte recovery color-key masks explicit binary masks embedded alpha and image transfer functions pending",
+    "Stream/filter allocations still outside component/alpha output admission",
+    "Optional capture duplicates compatibility decoding; not production optimized",
+    "No production AI or Metal integration qualification"
+  ]
+}

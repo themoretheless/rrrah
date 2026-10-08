@@ -1,0 +1,385 @@
+{
+  "gpu_backend": "metal",
+  "gpu_optional": false,
+  "storage_soak_seconds_per_mode": 0,
+  "gpu_policy_cycles": 0,
+  "full_sensor_compute": false,
+  "suites": [
+    {
+      "suite": "cache",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-cache",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target"
+      ],
+      "exit_code": 0,
+      "passed": 132,
+      "failed": 0,
+      "ignored": 2,
+      "ignored_tests": [
+        "test sustained_byte_cap_evicts_without_count_or_ttl_pressure ... ignored, manual sustained independent byte-cap qualification",
+        "test sustained_large_keyspace_delayed_swap_pressure_and_retry ... ignored, manual sustained delayed-I/O pressure qualification; default 60 seconds"
+      ],
+      "log": "/private/tmp/rrrah-metal-gpr-preload-integrated-20261008/cache.log",
+      "verified_execution": true
+    },
+    {
+      "suite": "cuda-host",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-cuda",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target"
+      ],
+      "exit_code": 0,
+      "passed": 5,
+      "failed": 0,
+      "ignored": 1,
+      "ignored_tests": [
+        "test tests::nvidia_full_output_boundaries_hdr_alpha_and_managed_limits ... ignored, requires CUDA-capable NVIDIA driver on 64-bit Linux/Windows; never a CPU fallback"
+      ],
+      "log": "/private/tmp/rrrah-metal-gpr-preload-integrated-20261008/cuda-host.log",
+      "verified_execution": true
+    },
+    {
+      "suite": "prefetch",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--bin",
+        "rrrah",
+        "prefetch",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target"
+      ],
+      "exit_code": 0,
+      "passed": 24,
+      "failed": 0,
+      "ignored": 6,
+      "ignored_tests": [
+        "test foreground_loader_tests::real_ai_pages_use_shared_ram_hits_and_independent_prefetch_keys ... ignored, requires pinned AI source corpus; set RRRAH_AI_CORPUS",
+        "test gallery::tests::eip_prefetch_restores_exact_sensor_and_fingerprints_complete_package ... ignored, requires authored EIP pair and local EOS R8 CR3",
+        "test gallery::tests::raw_prefetch_byte_limit_preserves_present_priority_neighbour ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture",
+        "test gallery::tests::raw_prefetch_count_limit_counts_retained_neighbours_after_missing_file ... ignored, requires external Sony DSC-F828 SRF fixture",
+        "test gallery::tests::raw_prefetch_count_limit_preserves_highest_priority_neighbour ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture",
+        "test gallery::tests::raw_prefetch_respects_shared_budget_and_recovers_after_release ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture"
+      ],
+      "log": "/private/tmp/rrrah-metal-gpr-preload-integrated-20261008/prefetch.log",
+      "verified_execution": true
+    },
+    {
+      "suite": "model-swap",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--bin",
+        "rrrah",
+        "model_swap",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target"
+      ],
+      "exit_code": 0,
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/private/tmp/rrrah-metal-gpr-preload-integrated-20261008/model-swap.log",
+      "verified_execution": true
+    },
+    {
+      "suite": "model-gpu",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--test",
+        "model_readback",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target"
+      ],
+      "exit_code": 0,
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/private/tmp/rrrah-metal-gpr-preload-integrated-20261008/model-gpu.log",
+      "verified_execution": true
+    },
+    {
+      "suite": "hdr-ttl-gpu",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--test",
+        "hdr_raster_swap",
+        "--test",
+        "ttl_swap_metal",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target"
+      ],
+      "exit_code": 0,
+      "passed": 14,
+      "failed": 0,
+      "ignored": 3,
+      "ignored_tests": [
+        "test pict_external_directbits_oracle_swap_pressure_and_metal ... ignored, requires actual GPU and external PICT/TwelveMonkeys corpus",
+        "test expired_eip_lease_and_swap_restore_match_original_cr3_metal_frame ... ignored, requires authored EIP and actual Metal GPU",
+        "test live_count_size_and_ttl_changes_preserve_hdr_frames_through_swap ... ignored, manual hardware qualification"
+      ],
+      "log": "/private/tmp/rrrah-metal-gpr-preload-integrated-20261008/hdr-ttl-gpu.log",
+      "verified_execution": true
+    },
+    {
+      "suite": "camera-color-gpu",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-gpu",
+        "--test",
+        "camera_color_readback",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target",
+        "--",
+        "--nocapture"
+      ],
+      "exit_code": 0,
+      "passed": 8,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/private/tmp/rrrah-metal-gpr-preload-integrated-20261008/camera-color-gpu.log",
+      "verified_execution": true
+    },
+    {
+      "suite": "gpu",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-gpu",
+        "--lib",
+        "--test",
+        "compute_readback",
+        "--test",
+        "readback",
+        "--test",
+        "raster_readback",
+        "--test",
+        "model_readback",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target"
+      ],
+      "exit_code": 0,
+      "passed": 80,
+      "failed": 0,
+      "ignored": 6,
+      "ignored_tests": [
+        "test full_sensor_linear_exposure_chunked_readback ... ignored, allocates about 0.8 GB of GPU buffers; full-resolution local qualification",
+        "test full_sensor_managed_exposure_budgets_and_checks_every_pixel ... ignored, full-resolution managed compute uses about 2 GB of tracked buffers",
+        "test fusion_back_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires corrected production Fusion linear dumps; display transport qualification",
+        "test fusion_front_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires corrected production Fusion linear dumps; display transport qualification",
+        "test hero9_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires production HERO9 scene-linear dump; transport qualification, not demosaic/color oracle",
+        "test qualified_sd10_linear_raster_full_frame_display_readback ... ignored, requires qualified X3F linear sRGB PPM and a physical GPU"
+      ],
+      "log": "/private/tmp/rrrah-metal-gpr-preload-integrated-20261008/gpu.log",
+      "verified_execution": true
+    },
+    {
+      "suite": "gpr-native-color",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-decode",
+        "--test",
+        "gpr_color_oracle",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target",
+        "--",
+        "--ignored",
+        "--nocapture"
+      ],
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/private/tmp/rrrah-metal-gpr-preload-integrated-20261008/gpr-native-color.log",
+      "verified_execution": true
+    },
+    {
+      "suite": "gpr-preload-app",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--bin",
+        "rrrah",
+        "gpr_preload_tests",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target",
+        "--",
+        "--ignored",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/private/tmp/rrrah-metal-gpr-preload-integrated-20261008/gpr-preload-app.log",
+      "verified_execution": true
+    },
+    {
+      "suite": "gpr-default-quality-app",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--bin",
+        "rrrah",
+        "gpr_development_tests",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target",
+        "--",
+        "--ignored",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/private/tmp/rrrah-metal-gpr-preload-integrated-20261008/gpr-default-quality-app.log",
+      "verified_execution": true
+    },
+    {
+      "suite": "gpr-fusion-quality-app",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--bin",
+        "rrrah",
+        "fusion_warp_tests",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target",
+        "--",
+        "--ignored",
+        "--nocapture"
+      ],
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/private/tmp/rrrah-metal-gpr-preload-integrated-20261008/gpr-fusion-quality-app.log",
+      "verified_execution": true
+    },
+    {
+      "suite": "gpr-highlight-support",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-decode",
+        "--test",
+        "gpr_highlight_support",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target",
+        "--",
+        "--ignored",
+        "--nocapture"
+      ],
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/private/tmp/rrrah-metal-gpr-preload-integrated-20261008/gpr-highlight-support.log",
+      "verified_execution": true
+    }
+  ],
+  "complete_suite_execution": true,
+  "limitations": [
+    "Passing host CUDA tests does not qualify NVIDIA hardware.",
+    "Metal readback does not qualify physical HDR display.",
+    "Ignored tests are unverified, not passing.",
+    "These regression suites do not prove all 100 formats or sustained slow-disk workloads."
+  ],
+  "external_viewer_inputs": {
+    "HERO5.GPR": {
+      "path": "/private/tmp/rrrah-gpr-investigation/HERO5.GPR",
+      "sha256": "cf4bf90f2cff3ed36e2e51a632078537d1eddc1149279de4ecce1cb2c1879d5b"
+    },
+    "HERO6.GPR": {
+      "path": "/private/tmp/rrrah-gpr-investigation/HERO6.GPR",
+      "sha256": "82e8abdbe66db44e08f01078fe3174cd77d8a9414844f0526cd2d8177cec9778"
+    },
+    "HERO7.GPR": {
+      "path": "/private/tmp/rrrah-gpr-investigation/HERO7.GPR",
+      "sha256": "0c2003137feb0ca7c9a8adf6cd832bc8fba7ff1b89cf5d77822b22558b9a20fe"
+    },
+    "HERO9.GPR": {
+      "path": "/private/tmp/rrrah-gpr-investigation/HERO9.GPR",
+      "sha256": "9249208a3482d6d71d39575210fe19ab3dd737e5e446a4d0718d4bd9d3c4358b"
+    },
+    "Fusion-back.GPR": {
+      "path": "/private/tmp/rrrah-gpr-investigation/Fusion-back.GPR",
+      "sha256": "c03eccdc334dc5b35cf6385799b219f4c9a0bc18ccbe70fe433237d98f352247"
+    },
+    "Fusion-front.GPR": {
+      "path": "/private/tmp/rrrah-gpr-investigation/Fusion-front.GPR",
+      "sha256": "096f8eba6a39739bb6cea4b835464c9b35d8ef2c6e6a622e3c3d1760221f32b2"
+    },
+    "HERO9-sensor-oracle": {
+      "path": "/private/tmp/rrrah-gpr-stage2-comparison-20261007/sensor.u16le",
+      "sha256": "6592240ad9710edba5190fd1fd17c951cdb9f2359cedd3d2ab6728efaafcf882"
+    }
+  },
+  "all_executed_suites_verified": true
+}

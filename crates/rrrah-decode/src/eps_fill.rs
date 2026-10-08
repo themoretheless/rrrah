@@ -1,6 +1,6 @@
 //! Native scanline coverage for flattened EPS paths in raster coordinates.
 use crate::{EpsPathSegment, EpsPoint};
-use rrrah_core::{BufferError, MemoryBudget, SharedBuffer};
+use rrrah_core::{BufferError, MemoryBudget, MutableBuffer, SharedBuffer};
 
 #[derive(Debug, Clone, Copy)]
 pub struct EpsFillLimits {
@@ -101,8 +101,59 @@ pub fn fill_eps_path<F: FnMut() -> bool>(
     even_odd: bool,
     limits: EpsFillLimits,
     budget: &MemoryBudget,
-    mut cancelled: F,
+    cancelled: F,
 ) -> Result<SharedBuffer<u8>, EpsFillError> {
+    fill_path_coverage::<u8, _>(path, width, height, even_odd, limits, budget, cancelled)
+        .map(MutableBuffer::freeze)
+}
+
+trait SampleCoverage: Copy {
+    fn zero() -> Self;
+    fn add(&mut self, bit: usize);
+    fn finish(&mut self, total: usize);
+}
+impl SampleCoverage for u8 {
+    fn zero() -> Self {
+        0
+    }
+    fn add(&mut self, _bit: usize) {
+        *self += 1;
+    }
+    fn finish(&mut self, total: usize) {
+        *self = ((usize::from(*self) * 255 + total / 2) / total) as u8;
+    }
+}
+impl SampleCoverage for u64 {
+    fn zero() -> Self {
+        0
+    }
+    fn add(&mut self, bit: usize) {
+        *self |= 1u64 << bit;
+    }
+    fn finish(&mut self, _total: usize) {}
+}
+/// Preserve individual subpixel membership so clip intersections are exact,
+/// rather than multiplying averaged coverage values.
+pub(crate) fn fill_eps_path_sample_mask<F: FnMut() -> bool>(
+    path: &[EpsPathSegment],
+    width: u32,
+    height: u32,
+    even_odd: bool,
+    limits: EpsFillLimits,
+    budget: &MemoryBudget,
+    cancelled: F,
+) -> Result<MutableBuffer<u64>, EpsFillError> {
+    fill_path_coverage::<u64, _>(path, width, height, even_odd, limits, budget, cancelled)
+}
+fn fill_path_coverage<T: SampleCoverage, F: FnMut() -> bool>(
+    path: &[EpsPathSegment],
+    width: u32,
+    height: u32,
+    even_odd: bool,
+    limits: EpsFillLimits,
+    budget: &MemoryBudget,
+    mut cancelled: F,
+) -> Result<MutableBuffer<T>, EpsFillError> {
     let pixels = (width as usize)
         .checked_mul(height as usize)
         .ok_or(EpsFillError::Limit)?;
@@ -140,9 +191,9 @@ pub fn fill_eps_path<F: FnMut() -> bool>(
         // Geometry has been fully validated and cancellation-polled above.
         // Empty/move-only/horizontal paths cannot contribute coverage.
         tick()?;
-        let output = budget.try_buffer(pixels, 0u8)?;
+        let output = budget.try_buffer(pixels, T::zero())?;
         tick()?;
-        return Ok(output.freeze());
+        return Ok(output);
     }
     let mut storage = budget.try_buffer(
         count,
@@ -173,7 +224,7 @@ pub fn fill_eps_path<F: FnMut() -> bool>(
     let mut active_count = 0usize;
     let mut next_edge = 0usize;
     tick()?;
-    let mut output = budget.try_buffer(pixels, 0u8)?;
+    let mut output = budget.try_buffer(pixels, T::zero())?;
     let samples = usize::from(limits.samples);
     let subwidth = (width as usize).checked_mul(samples).ok_or(EpsFillError::Limit)?;
     for row in 0..height as usize {
@@ -233,7 +284,7 @@ pub fn fill_eps_path<F: FnMut() -> bool>(
                     let end = (x * samples as f64 - 0.5).ceil().clamp(0., subwidth as f64) as usize;
                     for sample in first..end {
                         tick()?;
-                        output[row * width as usize + sample / samples] += 1;
+                        output[row * width as usize + sample / samples].add(sy * samples + sample % samples);
                     }
                 }
                 while index < active && crossings[index].x == x {
@@ -250,10 +301,10 @@ pub fn fill_eps_path<F: FnMut() -> bool>(
     let total = samples * samples;
     for value in output.iter_mut() {
         tick()?;
-        *value = ((usize::from(*value) * 255 + total / 2) / total) as u8;
+        value.finish(total);
     }
     tick()?;
-    Ok(output.freeze())
+    Ok(output)
 }
 fn sort<T, K: Fn(&T) -> f64, F: FnMut() -> Result<(), EpsFillError>>(
     values: &mut [T],

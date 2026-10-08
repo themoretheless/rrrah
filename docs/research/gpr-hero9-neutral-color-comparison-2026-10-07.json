@@ -1,0 +1,23 @@
+{
+  "scope": "Native scene-linear sRGB encode versus Adobe camera render with identity tone curve, zero shadows and net-zero baseline exposure",
+  "dimensions": [
+    5568,
+    4176
+  ],
+  "sampled_pixels": 22620,
+  "mean_abs_per_channel": [
+    0.005135016854358699,
+    0.006823524839830681,
+    0.013787364466043318
+  ],
+  "p95_abs": 0.03171024877154033,
+  "max_abs": 0.33874908550490945,
+  "oracle_sha256": "4be7a847dc517d4fde4021c4d3dd200166caab710fcfdc773853e9e3edcbf575",
+  "oracle_source_sha256": "0176ecdeb18e4431506338acfa78e1f344d91eff48a84b6c90e821a9bc5949ec",
+  "log": "/tmp/rrrah-gpr-neutral-render.log",
+  "limitations": [
+    "Grid sampling, not full-frame qualification.",
+    "Demosaic and camera-color implementation differ; no tolerance or format promotion established.",
+    "Independent oracle modified only to select neutral rendering parameters."
+  ]
+}

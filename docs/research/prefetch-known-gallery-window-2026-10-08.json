@@ -1,0 +1,21 @@
+{
+  "scope": "Avoid repeated directory enumeration for app navigation with an established gallery",
+  "change": "LoadRequest retains optional precomputed directional neighbour paths; worker uses them directly for speculative cache preload and only falls back to cancellable scan when gallery context is unknown",
+  "known_empty_window": "Some(empty) disables fallback scan; None preserves unknown-context fallback",
+  "controls": [
+    "Rapid pending request replacement retains exact supplied paths",
+    "Known empty window preserved distinctly from None",
+    "170 ordinary app tests passed"
+  ],
+  "passed": 170,
+  "failed": 0,
+  "ignored_external": 26,
+  "log": "/tmp/rrrah-app-known-prefetch-window-final-20261008.log",
+  "log_sha256": "9c12d2a3ab6b7e5be48b18e96d2ec7e1856c255366c956c8fd406a63242d334b",
+  "limitations": [
+    "No before/after physical UI latency benchmark",
+    "Unknown initial folder context may still trigger duplicate background enumeration",
+    "Per-neighbour content classification and decoding still perform bounded file I/O",
+    "Collection path metadata not included in pixel memory budget"
+  ]
+}

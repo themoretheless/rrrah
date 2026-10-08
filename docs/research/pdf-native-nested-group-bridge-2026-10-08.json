@@ -1,0 +1,28 @@
+{
+  "scope": "Test-only same-coordinate native nested group opening/closing; full event-scene replay and cross-space boundaries pending",
+  "source_sha256": "aa8ebc9e4eb5e9ced73d89350e2075a9f87f407a100e0506ddc60b96b4744d13",
+  "suite": {
+    "passed": 104,
+    "failed": 0,
+    "ignored": 8,
+    "seconds": 2.26,
+    "log": "/tmp/rrrah-native-nested-group-controls.log"
+  },
+  "verified": [
+    "Non-knockout parent supplies current backdrop; knockout parent supplies initial backdrop to child",
+    "Isolated and nonisolated bluealpha0.5 child over opaque red with groupopacity0.5 both yield opaqueRGB0.75,0,0.25 after backdrop removal",
+    "Knockout parent distinguishes AISfalse finalalpha0.25 and AIStrue finalalpha0.75",
+    "Cancellation after a prior pixel update latches parent failure; contribution refuses partial output",
+    "Child construction admission failure latches parent failure",
+    "Child group only accepted when retained spaces share blending coordinates and pixel counts match"
+  ],
+  "allocation": "Group application does not allocate scratch; consumes existing admitted child buffers/metadata. Opening child separately admits wrapper metadata and three buffers.",
+  "remaining": [
+    "Native event stack replay and frame metadata containers",
+    "Different-group-space parent/backdrop and contribution transforms",
+    "Shading/images/masks",
+    "Default BG/UCR and admitted ICC transform cache",
+    "Real AI oracle qualification and production integration"
+  ],
+  "production_enabled": false
+}

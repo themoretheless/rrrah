@@ -1,0 +1,18 @@
+{
+  "status": "verified_native_linux_asymmetric_late_lifecycle",
+  "returncode": 0,
+  "tests": 29,
+  "suite_counts": [
+    6,
+    2,
+    2,
+    19
+  ],
+  "verified_snapshot_files": 2828,
+  "input_hashes": {
+    "docs/research/dedup-asymmetric-late-linux-snapshot.json": "c3b53a090bed45e3d66bec549aa057e3477aeec169ee24f3705a8352bc6d3869",
+    "docs/research/dedup-asymmetric-late-linux-native.log": "36a784c85e8063d9381246bc27fa3af4b97a6176a3b03213556274f79326b06e",
+    "scripts/run-dedup-linux-native.sh": "6483ff1214fa98d82c22a12574fc61be6ded61124e991c3efe09726b8aa874ee"
+  },
+  "scope": "Six compound tests including deferred cancellation, source replacement, reversed retry;2union,2smoothing,19scale. Entire read-only snapshot rehashed after terminal success. Finite controls, no broad recall or precision proof."
+}

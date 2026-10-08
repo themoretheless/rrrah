@@ -678,6 +678,7 @@ mod tests {
                 calibration_illuminant_1: None,
                 calibration_illuminant_2: None,
                 as_shot_neutral: None,
+                neutral_matrix_compatible: false,
             },
             storage,
         }

@@ -1,0 +1,17 @@
+{
+  "date": "2026-10-07",
+  "fix": "Discard one-mask EPS cache and retry native path/stroke preparation once only for nested BufferError::Capacity",
+  "reproductions": [
+    "1x1 output with 511-segment path emphasizes geometry scratch admission",
+    "128x128 same scene emphasizes sample-mask admission"
+  ],
+  "evidence": "For both sizes limit is generous peak minus one byte; tight render succeeds, exact RGBA matches, tight peak decreases and all output/scene roots release",
+  "validation": {
+    "passed": 958,
+    "failed": 0,
+    "ignored": 65,
+    "log": "/tmp/rrrah-eps-geometry-pressure-full.log"
+  },
+  "limits": "authored filled-path pressure reproduction; nested stroke-capacity handling implemented but not independently forced by this test; no real navigation or NVIDIA/HDR qualification",
+  "status": "local, not pushed"
+}

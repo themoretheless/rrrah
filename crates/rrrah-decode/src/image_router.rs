@@ -33,7 +33,7 @@ pub fn is_supported_image_path(path: &Path) -> bool {
                 "rgba", "bw", "ras", "sun", "sunras", "dds", "avif", "xbm", "xpm", "cur", "svg", "ora",
                 "pdf", "ai", "eps", "basis", "ktx2", "ktx", "pkm", "iff", "ilbm", "lbm", "pix", "astc", "heic",
                 "heif", "hif", "x3f", "pict", "pct", "kra", "xcf", "psd", "psb", "dcx", "mng", "sti", "wmf",
-                "emf", "jxl", "jp2", "j2k", "j2c", "jpc",
+                "emf", "jxl", "jp2", "j2k", "j2c", "jpc", "rpf",
             ]
             .iter()
             .any(|ext| s.eq_ignore_ascii_case(ext))
@@ -45,7 +45,7 @@ pub fn is_supported_image_path(path: &Path) -> bool {
 pub fn is_supported_raw_path(path: &Path) -> bool {
     path.extension().and_then(|s| s.to_str()).is_some_and(|s| {
         [
-            "crw", "cr3", "cr2", "dng", "gpr", "nef", "nrw", "arw", "sr2", "mrw", "erf", "kdc", "srw", "3fr", "fff",
+            "eip", "crw", "cr3", "cr2", "dng", "gpr", "nef", "nrw", "arw", "sr2", "mrw", "erf", "kdc", "srw", "3fr", "fff",
             "dcr", "mos", "iiq", "srf", "dcs", "orf", "pef", "ptx", "rw2", "rwl", "raw", "raf", "tif",
             "tiff",
         ]
@@ -55,10 +55,10 @@ pub fn is_supported_raw_path(path: &Path) -> bool {
 }
 
 pub fn image_source_kind(request: &DecodeRequest) -> Result<ImageSourceKind, RasterDecodeError> {
-    inspect_image_source(request).map(|(kind, _)| kind)
+    inspect_image_source(request).map(|(kind, _, _)| kind)
 }
 
-fn inspect_image_source(request: &DecodeRequest) -> Result<(ImageSourceKind, bool), RasterDecodeError> {
+fn inspect_image_source(request: &DecodeRequest) -> Result<(ImageSourceKind, bool, bool), RasterDecodeError> {
     request.check_cancelled()?;
     // Share one bounded header read between sensor and raster detection.
     let file = std::fs::File::open(&request.path).map_err(|source| DecodeError::Io {
@@ -72,11 +72,16 @@ fn inspect_image_source(request: &DecodeRequest) -> Result<(ImageSourceKind, boo
     let bytes = &header[..length];
     request.check_cancelled()?;
     let eps_candidate = crate::eps::has_magic(bytes);
-    Ok((classify_image_source(request, bytes)?, eps_candidate))
+    Ok((classify_image_source(request, bytes)?, eps_candidate, crate::rpf::has_magic(bytes)))
 }
 
 fn classify_image_source(request: &DecodeRequest, bytes: &[u8]) -> Result<ImageSourceKind, RasterDecodeError> {
-    if bytes.starts_with(b"FOVb") || crate::dicom::has_magic(bytes) {
+    // EIP opens the original sensor member. Its ZIP assets do not select an
+    // ORA/KRA raster or a preview, and Capture One adjustments are not applied.
+    if request.path.extension().is_some_and(|ext| ext.eq_ignore_ascii_case("eip")) {
+        return Ok(ImageSourceKind::Sensor);
+    }
+    if bytes.starts_with(b"FOVb") || crate::dicom::has_magic(bytes) || crate::rpf::has_magic(bytes) {
         return Ok(ImageSourceKind::Raster);
     }
     match sniff(&bytes) {
@@ -97,7 +102,7 @@ fn classify_image_source(request: &DecodeRequest, bytes: &[u8]) -> Result<ImageS
                 .is_some_and(|s| {
                     [
                         "dng", "nef", "nrw", "arw", "sr2", "mrw", "erf", "kdc", "srw", "3fr", "fff", "dcr",
-                        "mos", "iiq", "srf", "dcs", "pef", "ptx", "raw",
+                        "mos", "iiq", "srf", "dcs", "pef", "ptx", "raw", "mef",
                     ]
                     .iter()
                     .any(|ext| s.eq_ignore_ascii_case(ext))
@@ -174,10 +179,10 @@ pub fn decode_image_file(path: impl AsRef<Path>) -> Result<DecodedImage, RasterD
 }
 
 pub fn decode_image(request: &DecodeRequest) -> Result<DecodedImage, RasterDecodeError> {
-    let (kind, eps_candidate) = inspect_image_source(request)?;
+    let (kind, eps_candidate, rpf_candidate) = inspect_image_source(request)?;
     match kind {
         ImageSourceKind::Sensor => Ok(DecodedImage::Sensor(Box::new(NativeRawDecoder.decode(request)?))),
-        ImageSourceKind::Raster => Ok(DecodedImage::Raster(crate::raster::decode_raster_inspected(request, eps_candidate)?)),
+        ImageSourceKind::Raster => Ok(DecodedImage::Raster(crate::raster::decode_raster_inspected(request, eps_candidate, rpf_candidate)?)),
     }
 }
 
@@ -185,7 +190,7 @@ pub fn decode_image(request: &DecodeRequest) -> Result<DecodedImage, RasterDecod
 mod tests {
     #[test]
     fn cancelled_image_entrypoints_precede_header_io_and_memory_admission() {
-        for extension in ["png", "tiff", "cr3", "pdf", "nrrd", "unknown"] {
+        for extension in ["eip", "png", "tiff", "cr3", "pdf", "nrrd", "unknown"] {
             let mut request = crate::DecodeRequest::new(format!("/rrrah-absent-cancelled-image.{extension}"));
             request.cancellation = Some(crate::GenerationToken::new(
                 std::sync::Arc::new(std::sync::atomic::AtomicU64::new(2)),
@@ -258,9 +263,7 @@ mod tests {
         let budget = rrrah_core::MemoryBudget::new(128 * 1024 * 1024);
         let mut request = DecodeRequest::new(path);
         request.memory_budget = Some(budget.clone());
-        assert!(matches!(image_source_kind(&request),
-            Err(RasterDecodeError::Source(DecodeError::NativeDng(reason)))
-                if reason.contains("unsupported field type 4084")));
+        assert_eq!(image_source_kind(&request).unwrap(), ImageSourceKind::Sensor);
         let result = decode_image(&request);
         assert!(
             result.is_err(),
@@ -270,6 +273,24 @@ mod tests {
         assert_eq!(budget.used(), 0);
     }
     use super::*;
+
+    #[test]
+    fn unsupported_mef_tiff_remains_sensor_without_preview_or_full_read() {
+        let path = std::env::temp_dir().join(format!("rrrah-mef-routing-{}.MEF", std::process::id()));
+        // A rendered TIFF preview cannot establish that the RAW camera's
+        // sensor/color route is implemented. MEF stays a sensor request.
+        let fixture = Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../../tests/fixtures/raster/pattern.profiled.tif");
+        std::fs::copy(fixture, &path).unwrap();
+        let budget = rrrah_core::MemoryBudget::new(0);
+        let mut request = DecodeRequest::new(&path);
+        request.memory_budget = Some(budget.clone());
+        assert_eq!(image_source_kind(&request).unwrap(), ImageSourceKind::Sensor);
+        assert_eq!(budget.peak(), 0);
+        assert!(decode_image(&request).is_err());
+        assert_eq!(budget.used(), 0);
+        std::fs::remove_file(path).unwrap();
+    }
 
     #[test]
     fn camera_candidates_cover_all_native_backends_and_case() {

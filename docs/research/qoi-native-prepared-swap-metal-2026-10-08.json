@@ -1,0 +1,23 @@
+{
+  "scope": "QOI transfer flag and alpha native/prepared swap plus actual Metal display transport",
+  "backend": "Metal Apple M4 Max",
+  "passed": 1,
+  "failed": 0,
+  "variants": 4,
+  "source": "Authored 4x1 QOI_RGBA chunks with opaque, partial and zero alpha",
+  "checks": [
+    "All decoded source bytes including transparent RGB match authored values",
+    "Both color-space flags preserved and produce different displayed frames",
+    "Native and prepared swap payload byte identity",
+    "Restored Metal frame equals authored raster display",
+    "Full-pressure restore refusal, cancellation and retry",
+    "One swap write/read per variant and final root credit zero"
+  ],
+  "log": "/tmp/rrrah-qoi-swap-metal-final-20261008.log",
+  "log_sha256": "70a62a7cd2f0f68956724c5421e7a99210db3ad0b5bb68a15ec2223d421d770b",
+  "limitations": [
+    "Authored RGBA opcodes only; not independent producer corpus or all QOI opcodes",
+    "Display golden uses existing color preparation/renderer for a separately constructed source raster",
+    "No physical window presentation or HDR luminance measurement"
+  ]
+}

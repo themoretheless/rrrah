@@ -1,0 +1,28 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: unused variable: `cancel`
+   --> crates/rrrah-dedup/src/local_index.rs:715:5
+    |
+715 |     cancel: impl Fn() -> bool,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_cancel`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-dedup` (lib) generated 1 warning (run `cargo fix --lib -p rrrah-dedup` to apply 1 suggestion)
+    Finished `test` profile [optimized + debuginfo] target(s) in 3.83s
+     Running tests/mesh_rank.rs (target/debug/deps/mesh_rank-a63dbeea30c790dd)
+
+running 2 tests
+test summed_mesh_windows_match_direct_projective_windows_and_reject_inversion ... ok
+test cancellation_memory_reads_and_overflow_refuse_without_retaining_scratch ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/mesh_rank_regions.rs (target/debug/deps/mesh_rank_regions-bc58d81936d89947)
+
+running 3 tests
+test centers_outside_atlas_invalid_rectangles_and_unsupported_context_are_explicit ... ok
+test selected_centers_keep_whole_image_window_context_and_source_clip ... ok
+test every_observed_cancel_and_full_atlas_budget_refuse_without_scratch_leaks ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+

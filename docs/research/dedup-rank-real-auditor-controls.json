@@ -1,0 +1,47 @@
+{
+  "status": "passed",
+  "controls": [
+    {
+      "case": "valid",
+      "returncode": 0
+    },
+    {
+      "case": "site_count",
+      "returncode": 1
+    },
+    {
+      "case": "valid_count",
+      "returncode": 1
+    },
+    {
+      "case": "read_count",
+      "returncode": 1
+    },
+    {
+      "case": "agreement_overflow",
+      "returncode": 1
+    },
+    {
+      "case": "missing_case",
+      "returncode": 1
+    },
+    {
+      "case": "case_membership",
+      "returncode": 1
+    },
+    {
+      "case": "retained_memory",
+      "returncode": 1
+    },
+    {
+      "case": "source_hash",
+      "returncode": 1
+    }
+  ],
+  "input_hashes": {
+    "docs/research/dedup-rank-region-real.json": "0210d411304ebb100a7fb0800098f6ad914d4d85ff877e894f55e2e08f9e9de0",
+    "scripts/verify-dedup-rank-region-real.py": "164f0c82f44aca36a7675e5693940bad54e04c734d4917d800bea280f0d168cd",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/test-dedup-rank-real-auditor.py": "da7846575a722d48a2d3a10b09b98c741462e51f67292eac15a9d8e02c8ac458"
+  },
+  "scope": "One accepted valid report and eight rejected malformed controls. No pixel/rank agreement oracle or classifier precision qualification."
+}

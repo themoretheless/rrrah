@@ -1,0 +1,39 @@
+{
+  "status": "verified_native_primitive",
+  "exit_code": 0,
+  "tests": 5,
+  "input_hashes": {
+    "crates/rrrah-dedup/src/gradient_scale.rs": "67f5a1beeb5006117345a0ef10e196c5042b0634d31b03fe7f103e850f4650cb",
+    "crates/rrrah-dedup/tests/gradient_scale.rs": "9ab0cf26329ee7be7515b19991e3340c0d5dadfdd099d85733f515636e67fb3d",
+    "docs/research/dedup-spatial-gradient-scales-final.log": "8fe0a364228e973834c027c81ee3e41a83f857b95b53318bb1d867c8d158e665"
+  },
+  "scope": "Both histogram recipes, one-cell equality to global selection, bounded per-level output, managed/unmanaged exact parity, last-owner retention and one-byte-short refusal. No hard-crop file/collection recovery claimed.",
+  "file_collection_gate": {
+    "exit_code": 0,
+    "tests": 8,
+    "log": "docs/research/dedup-spatial-gradient-scale-files-native.log",
+    "scope": "Spatial and global file/collection routes, fresh proposed-edge parity and previously authored lifecycle/transform gates. Three real crop confirmations still running."
+  },
+  "three_crop_run": {
+    "status": "complete_no_recovered_crops",
+    "session_id": 17333,
+    "report": "docs/research/dedup-spatial-gradient-scales-three-crops.json",
+    "exit_code": 0,
+    "report_sha256": "1a29b6b47e93cb80efe87ec77764a6e791399bc63bd096b4586dbbc578c1913d",
+    "scope": "Three prior hard crop misses remain; direct/collection fields match, one model lacks pixel support and two models absent."
+  },
+  "regional_gate": {
+    "exit_code": 0,
+    "tests": 9,
+    "log": "docs/research/dedup-spatial-gradient-scale-regions-native.log",
+    "scope": "Known reduced copy has8regional supports; exact fresh supplied-model parity, whole remains independent. Three real crops not yet qualified."
+  },
+  "regional_three_crop_run": {
+    "status": "complete_no_recovery",
+    "session_id": 62825,
+    "report": "docs/research/dedup-spatial-gradient-scale-regions-three-crops.json",
+    "exit_code": 0,
+    "recovered_crops": 0,
+    "scope": "Three hard crop pairs remain omitted even with explicit bidirectional regional confirmation; do not promote as coverage solution."
+  }
+}

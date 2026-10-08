@@ -1,0 +1,48 @@
+{
+  "scope": "Previously ignored SD10 qualified linear fixture to full-frame Metal SDR sRGB output",
+  "backend": "Metal",
+  "adapter": "Apple M4 Max",
+  "dimensions": [
+    2267,
+    1513
+  ],
+  "pixels_checked": 3429971,
+  "passed": 1,
+  "failed": 0,
+  "ignored": 0,
+  "maximum_rgba8_deviation": 1,
+  "managed_cpu_final_used": 0,
+  "log": "/tmp/rrrah-metal-x3f-restored-final.log",
+  "inputs": {
+    "sd10.x3f": "ea436ba459a7478d7b338428656fae905469de269f928749f3388db2b7b0d53f",
+    "dcraw.c": "d18d9e43a096eea04eee2148e53068f8fa45ce95395d97128b1aa37b477eab43",
+    "linear-srgb.ppm": "00f64dc46ad86366f7da089c9ba37d4aec3462dd49595c2d2049ba0e0d0b68ff"
+  },
+  "independent_output_matches_prior_qualification_hash": true,
+  "oracle_compile": [
+    "cc",
+    "-O2",
+    "-ffp-contract=off",
+    "-DNO_JASPER",
+    "-DNO_JPEG",
+    "-DNO_LCMS",
+    "/tmp/rrrah-x3f-restored-20261007/dcraw.c",
+    "-lm",
+    "-o",
+    "/tmp/rrrah-x3f-restored-20261007/dcraw-reference"
+  ],
+  "oracle_command": [
+    "/tmp/rrrah-x3f-restored-20261007/dcraw-reference",
+    "-4",
+    "-W",
+    "-o",
+    "1",
+    "/tmp/rrrah-x3f-restored-20261007/linear-srgb.x3f"
+  ],
+  "limitations": [
+    "Offscreen SDR sRGB readback; not physical HDR measurement.",
+    "Selected SD10 fixture only.",
+    "Native container decode qualification from the earlier pinned report is not rerun by this GPU-only test.",
+    "External converter is an independent test oracle, not a production dependency."
+  ]
+}

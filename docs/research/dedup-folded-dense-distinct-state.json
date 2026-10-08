@@ -1,0 +1,61 @@
+{
+  "status": "verified_native_dense_spatial_distinct_proposal_diagnostic",
+  "landmarks": 194,
+  "original_landmarks_preserved": 156,
+  "candidate_counts": {
+    "positive_seeds": 702,
+    "unrelated_seeds": 454,
+    "eligible_positive": 40,
+    "eligible_unrelated": 0,
+    "retained_distinct_proposals": 38,
+    "duplicate_location_refusals": 2
+  },
+  "summary": [
+    {
+      "direction": "forward",
+      "radius": 0,
+      "before": 0.6459269601310561,
+      "after": 0.6663158809899111
+    },
+    {
+      "direction": "forward",
+      "radius": 3,
+      "before": 0.7255778640121477,
+      "after": 0.7517348412192502
+    },
+    {
+      "direction": "forward",
+      "radius": 8,
+      "before": 0.7862493742998117,
+      "after": 0.8052580488286741
+    },
+    {
+      "direction": "reverse",
+      "radius": 0,
+      "before": 0.5962913145635125,
+      "after": 0.6144749788609197
+    },
+    {
+      "direction": "reverse",
+      "radius": 3,
+      "before": 0.6500075107743627,
+      "after": 0.6769801868538016
+    },
+    {
+      "direction": "reverse",
+      "radius": 8,
+      "before": 0.7279635318858194,
+      "after": 0.757413878275499
+    }
+  ],
+  "pins": {
+    "docs/research/dedup-folded-dense-small-window-seed-diagnostic.json": "3fdbe45235a6c6a62e7cc3338d11a70c2c7f6ba42961b3125cd2fa4b7832a4fd",
+    "docs/research/dedup-folded-dense-small-window-seed-audit.json": "96d2d763478df48061ac9160c7094d763dba4a449f0ec369d1a59a95f97b482b",
+    "docs/research/dedup-folded-dense-small-window-proposal-admission.json": "05571bd36f7ae0ff0e11e1270d192e3df7366dd3700e95022f1578b28fefc7dc",
+    "docs/research/dedup-folded-dense-small-window-distinct-landmarks.txt": "658f331510c3bfb3891c5af39a38da1bac23a3d843c1493c23a36b1290a2ed15",
+    "docs/research/dedup-folded-dense-distinct-native-mesh-rank.jsonl": "097fa142836cf50b43c01c90b6472cad9a5aca4f2c421ae8dc39e814befc6a12",
+    "docs/research/dedup-folded-dense-small-window-native-mesh-rank.jsonl": "817e5beb9059248f2c1b7f436213ab3bc73f99f648d23d0ac14806a1375675b3",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/mesh-rank-probe-qualified": "6141ff164af99d457cc6ef43936ca509d7a7871365c0a90d6e8ac195f8073873"
+  },
+  "scope": "Smaller31-pixel window,16-pixel seed lattice; selected scores independently verified1156 cases. All38 distinct proposals pass whole native geometry plus six ordinal comparisons. New full-field counts lack independent audit; no native proposal API or copy admission."
+}

@@ -1,0 +1,71 @@
+{
+  "change": "Reject bodies incapable of encoding declared pixel count before output admission: one QOI byte emits at most 62 pixels. Preserve alpha encoded by chunks independently of channels header 3/4 and transfer flag 0/1.",
+  "tests": {
+    "unit_passed": 4,
+    "timing_ignored_not_run": 1,
+    "corpus_passed": 2,
+    "impossible_bodies": 4,
+    "valid_minimal_body_boundaries": [
+      1,
+      61,
+      62,
+      63,
+      124
+    ],
+    "header_combinations": 4,
+    "official_corpus_images": 8,
+    "malformed_corpus_cases": 45,
+    "cancellation_checkpoints": 9
+  },
+  "memory": "All four impossible-body controls have output budget used=0 and peak=0, including a 12 MP declaration with one encoded command. Unit controls exclude input-file admission.",
+  "independent_header_oracles": [
+    {
+      "channels": 3,
+      "flag": 0,
+      "source_sha256": "5ecef2ee74d8fb16164a982df0ca672861ba7fd1832406d7c22a8b025ee9a033",
+      "rgba_sha256": "964c2e9596e0a6bcd603b97b24bd76b26b309dd5d2b328f3f4cd1d169f3e9647",
+      "all_bytes_equal": true
+    },
+    {
+      "channels": 3,
+      "flag": 1,
+      "source_sha256": "4b8abc183dd464d526dd966a769a29cace1f8b6746d0a09c5c06c3b4772bc4af",
+      "rgba_sha256": "964c2e9596e0a6bcd603b97b24bd76b26b309dd5d2b328f3f4cd1d169f3e9647",
+      "all_bytes_equal": true
+    },
+    {
+      "channels": 4,
+      "flag": 0,
+      "source_sha256": "c2514ac01e616aaf6b4cb1d7940b2209590b8632ec52f243dcbf3470e591e20c",
+      "rgba_sha256": "964c2e9596e0a6bcd603b97b24bd76b26b309dd5d2b328f3f4cd1d169f3e9647",
+      "all_bytes_equal": true
+    },
+    {
+      "channels": 4,
+      "flag": 1,
+      "source_sha256": "2a1a1d7f58b08d4db033c693c88f27acba4815251b1f64b07cb59e2a9ebc4094",
+      "rgba_sha256": "964c2e9596e0a6bcd603b97b24bd76b26b309dd5d2b328f3f4cd1d169f3e9647",
+      "all_bytes_equal": true
+    }
+  ],
+  "oracle": "Pinned test-only official C decoder requested RGBA output; all bytes equal original all-opcodes oracle in all four combinations. No production C dependency.",
+  "source": {
+    "path": "crates/rrrah-decode/src/qoi_bounds.rs",
+    "sha256": "a27b06b59c92a21e61093d61e60e074e4f3d6dc830801529118c2529b4bed98a"
+  },
+  "logs": [
+    {
+      "path": "/tmp/rrrah-qoi-admission-header-20261008.log",
+      "sha256": "036ba31f7646b4489ea5ef7f779dd2dc40b54c7bba967311a44016fafdb3473c"
+    },
+    {
+      "path": "/tmp/rrrah-qoi-admission-corpus-20261008.log",
+      "sha256": "4691bf908cc363136351dcdf96742ac366d16c19b9848b984ea72ece7be4836b"
+    }
+  ],
+  "limitations": [
+    "Necessary compressed-length bound does not prove stream validity; strict command decoding remains mandatory.",
+    "No new performance claim or Metal/HDR hardware qualification from this control.",
+    "Four header permutations of one authored all-opcodes stream, not arbitrary producer files."
+  ]
+}

@@ -1,0 +1,37 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+warning: unused imports: `LocalFileError`, `ProjectiveComplementaryFilePolicy`, `ProjectivePortfolioFilePolicy`, `ProjectiveRegistrationPolicy`, `ProjectiveRegistrationPortfolioPolicy`, and `ProjectiveRegistrationTrustPolicy`
+  --> crates/rrrah-dedup/tests/gradient_collection.rs:49:13
+   |
+49 |             LocalFileError, ProjectiveComplementaryFilePolicy, ProjectivePortfolioFilePolicy,
+   |             ^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+54 |             ProjectiveRegistrationPolicy, ProjectiveRegistrationPortfolioPolicy,
+   |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+55 |             ProjectiveRegistrationTrustPolicy,
+   |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-dedup` (test "gradient_collection") generated 1 warning (run `cargo fix --test "gradient_collection" -p rrrah-dedup` to apply 1 suggestion)
+    Finished `test` profile [optimized + debuginfo] target(s) in 2.79s
+     Running tests/gradient_collection.rs (/Users/themoretheless/.codex/tmp/rrrah-dedup-atomic-20261006/target/debug/deps/gradient_collection-49de5e7e8322150c)
+
+running 1 test
+test gradient_collection_matches_direct_pairs_and_atomic_admission ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.55s
+

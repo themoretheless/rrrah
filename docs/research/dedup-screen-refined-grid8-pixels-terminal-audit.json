@@ -1,0 +1,36 @@
+{
+  "status": "verified_native_screen_local_model_pixel_experiments",
+  "verified_models": 2,
+  "summary": [
+    {
+      "target_domain": [
+        0.0,
+        0.0,
+        640.0,
+        480.0
+      ],
+      "outcome": "miss",
+      "local_support_count": 0,
+      "all_region_support_count": 0,
+      "best_eligible_inside_fraction": 0.7589583333333333
+    },
+    {
+      "target_domain": [
+        0.0,
+        0.0,
+        640.0,
+        480.0
+      ],
+      "outcome": "miss",
+      "local_support_count": 0,
+      "all_region_support_count": 0,
+      "best_eligible_inside_fraction": 0.7722181282240236
+    }
+  ],
+  "input_hashes": {
+    "docs/research/dedup-screen-refined-grid8-pixels.json": "eb9e542ac1dde284efe79004a31716dc2670f0f412c7a87906ca9681f47d986e",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-screen-refined-grid8-pixels.py": "450c0f6be2d22ad813b411cba1875cca2cce97018549cfe089432f7071198541",
+    "scripts/verify-dedup-scale-similarity-diagnostic.py": "41a4c0583f4a99677e716bae43ed976cfda409703fe2ec6236da3de5d4f897e4"
+  },
+  "scope": "Exact two native pixel-refined models retaining original geometry, input/source/Exif pins, regional original-pixel arithmetic and counts restricted to fitting target rectangles. Refusals retained. No independent resampling, true local geometry, negative precision or production integration proof."
+}

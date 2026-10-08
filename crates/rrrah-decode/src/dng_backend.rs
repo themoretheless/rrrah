@@ -26,11 +26,12 @@ const NATIVE_DECODE_FLAGS: u32 = DECODE_FULL_SENSOR_RAW
 ///
 /// The dependency digest is the same resolved-workspace lock digest used by
 /// the CR3 backend. The distinct backend ID prevents the two pixel contracts
-/// from ever sharing cache entries.
+/// from ever sharing cache entries. Adapter revision 2 invalidates stored
+/// color metadata from before AsShotNeutral-dependent dual-illuminant resolution.
 pub const NATIVE_DNG_MOSAIC_CONTRACT_1: MosaicRecipeManifest = MosaicRecipeManifest::new(
     NATIVE_DNG_BACKEND_ID,
     3,
-    1,
+    2,
     1,
     NATIVE_DECODE_FLAGS,
     crate::WORKSPACE_LOCK_DIGEST,
@@ -360,12 +361,15 @@ fn white_balance(image: &DngImage<'_>, indices: [usize; 3]) -> Result<[f32; 4], 
 
 fn xyz_to_camera(image: &DngImage<'_>, indices: [usize; 3]) -> Result<[[f32; 3]; 4], DecodeError> {
     let metadata = &image.metadata;
-    let Some(matrix) = select_xyz_to_camera_d65(
+    let resolved = if metadata.neutral_matrix_compatible {
+        select_xyz_to_camera_neutral(metadata)
+    } else { None };
+    let Some(matrix) = resolved.or_else(|| select_xyz_to_camera_d65(
         metadata.color_matrix_1.as_deref(),
         metadata.calibration_illuminant_1,
         metadata.color_matrix_2.as_deref(),
         metadata.calibration_illuminant_2,
-    ) else {
+    )) else {
         return crate::camtiff::color::profile(&metadata.make, &metadata.model)
             .ok_or_else(|| dng_adapt_error("no DNG color matrix or calibrated camera profile"));
     };
@@ -379,6 +383,19 @@ fn xyz_to_camera(image: &DngImage<'_>, indices: [usize; 3]) -> Result<[[f32; 3];
         return Err(dng_adapt_error("invalid DNG camera color matrix"));
     }
     Ok(result)
+}
+
+fn select_xyz_to_camera_neutral(metadata: &dng::DngMetadata) -> Option<[[f64; 3]; 3]> {
+    let candidate = |flat: &[f64], illuminant| {
+        (flat.len() == 9).then(|| DngColorMatrix {
+            xyz_to_camera: std::array::from_fn(|r| std::array::from_fn(|c| flat[r * 3 + c])),
+            illuminant,
+        })
+    };
+    let first = candidate(metadata.color_matrix_1.as_deref()?, metadata.calibration_illuminant_1)?;
+    let second = candidate(metadata.color_matrix_2.as_deref()?, metadata.calibration_illuminant_2)?;
+    let neutral: [f64; 3] = metadata.as_shot_neutral.as_deref()?.try_into().ok()?;
+    rrrah_core::resolve_dng_neutral_matrix(first, second, neutral)
 }
 
 /// Picks the D65-referenced `XYZ -> camera` matrix from the DNG calibration
@@ -578,6 +595,50 @@ mod tests {
     }
 
     #[test]
+    fn dual_illuminant_resolution_respects_calibration_contract() {
+        let bytes = color_fixture(true, true);
+        let mut image = dng::parse(&bytes).unwrap();
+        assert!(image.metadata.neutral_matrix_compatible);
+        image.metadata.color_matrix_1 = Some(vec![1.8331,-0.8166,-0.2478,0.1391,0.8961,-0.0367,0.0822,0.0662,0.2597]);
+        image.metadata.color_matrix_2 = Some(vec![1.0344,-0.421,-0.062,-0.2315,1.0625,0.1948,0.0093,0.1058,0.5541]);
+        image.metadata.calibration_illuminant_1 = Some(3);
+        image.metadata.calibration_illuminant_2 = Some(23);
+        image.metadata.as_shot_neutral = Some(vec![0.463768,1.0,0.565121]);
+        let resolved = xyz_to_camera(&image,[0,1,2]).unwrap();
+        assert!((resolved[0][0] - 1.0443232).abs() < 1e-6);
+        image.metadata.neutral_matrix_compatible = false;
+        assert_ne!(resolved, xyz_to_camera(&image,[0,1,2]).unwrap());
+    }
+
+    #[test]
+    fn calibration_tags_gate_neutral_solver_at_parse_time() {
+        for (tag, values, compatible) in [
+            (50727_u16, vec![1.0,1.0,1.0], true),
+            (50727, vec![1.1,1.0,1.0], false),
+            (50723, vec![1.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,1.0], true),
+            (50724, vec![1.1,0.0,0.0,0.0,1.0,0.0,0.0,0.0,1.0], false),
+            (50964, vec![1.0;9], false),
+            (50965, vec![1.0;9], false),
+        ] {
+            let mut bytes = color_fixture(true,true);
+            let count = usize::from(u16::from_le_bytes(bytes[8..10].try_into().unwrap()));
+            let offset = bytes.len() as u32;
+            for value in &values {
+                bytes.extend_from_slice(&((*value * 10000.0_f64).round() as u32).to_le_bytes());
+                bytes.extend_from_slice(&10000_u32.to_le_bytes());
+            }
+            let at = 10 + count * 12;
+            bytes[at..at+2].copy_from_slice(&tag.to_le_bytes());
+            bytes[at+2..at+4].copy_from_slice(&5_u16.to_le_bytes());
+            bytes[at+4..at+8].copy_from_slice(&(values.len() as u32).to_le_bytes());
+            bytes[at+8..at+12].copy_from_slice(&offset.to_le_bytes());
+            bytes[at+12..at+16].fill(0);
+            bytes[8..10].copy_from_slice(&((count+1) as u16).to_le_bytes());
+            assert_eq!(dng::parse(&bytes).unwrap().metadata.neutral_matrix_compatible,compatible,"tag {tag}");
+        }
+    }
+
+    #[test]
     fn dng_cfa_and_black_grid_are_anchored_to_full_sensor() {
         let active = dng::Rect {
             top: 1,
@@ -608,6 +669,13 @@ mod tests {
             &NATIVE_DNG_MOSAIC_CONTRACT_1.canonical_bytes()[28..60],
             &crate::NATIVE_EOS_R8_MOSAIC_CONTRACT_1.canonical_bytes()[28..60]
         );
+    }
+
+    #[test]
+    fn neutral_color_revision_invalidates_previously_cached_dng_metadata() {
+        let old = MosaicRecipeManifest::new(NATIVE_DNG_BACKEND_ID,3,1,1,NATIVE_DECODE_FLAGS,crate::WORKSPACE_LOCK_DIGEST);
+        assert_ne!(old.canonical_bytes(),NATIVE_DNG_MOSAIC_CONTRACT_1.canonical_bytes());
+        assert_eq!(&NATIVE_DNG_MOSAIC_CONTRACT_1.canonical_bytes()[16..20],&2_u32.to_le_bytes());
     }
 
     #[test]

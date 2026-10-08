@@ -1,0 +1,172 @@
+{
+  "scope": "Independent Poppler comparison of authored native isolated Gray group over RGB",
+  "strict_whole_image_passed": false,
+  "interior_color_samples_exact": true,
+  "comparisons": [
+    {
+      "options": [],
+      "exact": false,
+      "different_pixels": 16,
+      "max_channel_error": 16,
+      "different_coordinates": [
+        [
+          24,
+          0
+        ],
+        [
+          24,
+          1
+        ],
+        [
+          24,
+          2
+        ],
+        [
+          24,
+          3
+        ],
+        [
+          24,
+          4
+        ],
+        [
+          24,
+          5
+        ],
+        [
+          24,
+          6
+        ],
+        [
+          24,
+          7
+        ],
+        [
+          24,
+          8
+        ],
+        [
+          24,
+          9
+        ],
+        [
+          24,
+          10
+        ],
+        [
+          24,
+          11
+        ],
+        [
+          24,
+          12
+        ],
+        [
+          24,
+          13
+        ],
+        [
+          24,
+          14
+        ],
+        [
+          24,
+          15
+        ]
+      ],
+      "oracle_sha256": "7e7a4735365c677970555e285cc85935d88c612b3b367da3d2cfa9ab9953f54f"
+    },
+    {
+      "options": [
+        "-aaVector",
+        "no"
+      ],
+      "exact": false,
+      "different_pixels": 16,
+      "max_channel_error": 127,
+      "different_coordinates": [
+        [
+          24,
+          0
+        ],
+        [
+          24,
+          1
+        ],
+        [
+          24,
+          2
+        ],
+        [
+          24,
+          3
+        ],
+        [
+          24,
+          4
+        ],
+        [
+          24,
+          5
+        ],
+        [
+          24,
+          6
+        ],
+        [
+          24,
+          7
+        ],
+        [
+          24,
+          8
+        ],
+        [
+          24,
+          9
+        ],
+        [
+          24,
+          10
+        ],
+        [
+          24,
+          11
+        ],
+        [
+          24,
+          12
+        ],
+        [
+          24,
+          13
+        ],
+        [
+          24,
+          14
+        ],
+        [
+          24,
+          15
+        ]
+      ],
+      "oracle_sha256": "9b3f69d1a97e8fdf2d5b385c55a8629ee3d608a65a2256bb811582dc84ab5b22"
+    }
+  ],
+  "source_sha256": "9e7bb0af51886bfeacfe3c983714d1fc7f82e685c97ab0691fd738a11a566569",
+  "native_rgb_sha256": "97b48f209138e8dd0c8077cf2ab208dfcb0d4ce3f83c5a823cb72b4e2240e59a",
+  "poppler_version": "pdftoppm version 26.10.0\nCopyright 2005-2026 The Poppler Developers - http://poppler.freedesktop.org\nCopyright 1996-2011, 2022 Glyph & Cog, LLC",
+  "artifact_directory": "/tmp/rrrah-native-gray-independent-20261008",
+  "controls_log": "/tmp/rrrah-native-gray-export-controls.log",
+  "ordinary_tests": {
+    "passed": 112,
+    "failed": 0,
+    "ignored": 10
+  },
+  "limitations": [
+    "All mismatches lie on geometric x=24 boundary; cause not conclusively qualified",
+    "Disabling vector antialiasing changes magnitude, not location, and does not make the image exact",
+    "No relaxed pixel gate; production AI remains unqualified",
+    "Test-only native compositor; no production or Metal integration"
+  ]
+}

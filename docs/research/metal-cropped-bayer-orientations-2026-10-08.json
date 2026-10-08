@@ -1,0 +1,37 @@
+{
+  "scope": "Cropped Bayer RAW Metal rendering across all eight EXIF orientations",
+  "backend": "Metal Apple M4 Max",
+  "passed": 1,
+  "failed": 0,
+  "ignored": 0,
+  "sensor": [
+    71,
+    57
+  ],
+  "crop": [
+    3,
+    5,
+    65,
+    49
+  ],
+  "cfa_patterns": [
+    "RGGB",
+    "BGGR",
+    "GRBG",
+    "GBRG"
+  ],
+  "orientations": 8,
+  "cases": 32,
+  "checked_pixels": 101920,
+  "tiled_vs_default": "bit exact",
+  "tile_size": 32,
+  "tile_halo": 1,
+  "cpu_preview_maximum_allowed_rgb8_error": 2,
+  "distinct_green_white_balance": true,
+  "log": "/tmp/rrrah-metal-bayer-orientation-20261008.log",
+  "log_sha256": "82838727c2c042de597ac0c018907fafc6ac11f9411c9e1a6a1e86d93ac50e7b",
+  "limitations": [
+    "Synthetic full-resolution preview agreement; no real-camera quality oracle or downsample qualification",
+    "Does not qualify calibrated HDR luminance or NVIDIA"
+  ]
+}

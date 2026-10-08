@@ -1,0 +1,37 @@
+{
+  "scope": "Fresh production viewer quality-selection/cancellation regressions after color and clipping mask fixes",
+  "suites": [
+    {
+      "name": "gpr_development_tests",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "elapsed_seconds": 14.43,
+      "checks": [
+        "HERO9 corrections select quality development without explicit settings",
+        "navigation cancels admitted float development and releases memory",
+        "small-budget refusal retains immutable sensor for retry"
+      ]
+    },
+    {
+      "name": "fusion_warp_tests",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "elapsed_seconds": 11.84,
+      "checks": [
+        "Fusion geometry selects quality development by default",
+        "corrected channels differ from uncorrected image",
+        "corrected and plain scene-linear frames fit managed budget and release all ownership"
+      ]
+    }
+  ],
+  "inputs": {
+    "RRRAH_GPR_SOURCE": "/tmp/rrrah-gpr-investigation/HERO9.GPR",
+    "RRRAH_GPR_CORPUS": "/tmp/rrrah-gpr-investigation"
+  },
+  "limitations": [
+    "These are native app-selection/control-path tests; separate Metal readback and live EDR reports establish GPU/display behavior.",
+    "Common ten-suite report contains 277 executions; these three executions were run separately afterward."
+  ]
+}

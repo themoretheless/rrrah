@@ -1,0 +1,44 @@
+{
+  "scope": "Test-only native same-coordinate solid-path event replay with nested groups; not production rendering or complete AI qualification",
+  "source_sha256": {
+    "vendor/hayro/src/native_frame.rs": "9938949d8d4b3333116139552fb215dad0866bbc8c58a73d2d19bf8f8098e669",
+    "vendor/hayro/src/knockout_interpreter.rs": "f582132da57df06566e38a1788d99c8b61d5a0c9e94e33bcd10020f236106221"
+  },
+  "suite": {
+    "passed": 106,
+    "failed": 0,
+    "ignored": 8,
+    "seconds": 2.23,
+    "log": "/tmp/rrrah-native-solid-scene-final-controls.log"
+  },
+  "verified": [
+    "Actual PDF fill/group events replay through admitted native PaintFrame buffers",
+    "Normal red/blue overlap with native alpha0.5 yields opaqueRGB0.5,0,0.5",
+    "Knockout red/blue overlap yields blue with exact alpha0.5",
+    "Opaque yellow backdrop plus knockout bluealpha0.5 yields opaqueRGB0.5,0.5,0.5",
+    "Root finish preserves backdrop; child closing removes backdrop before contribution",
+    "Representative2x1 native scene all admission refusal points and all cancellation checkpoints refuse partial output and release all credits",
+    "Successful replay leaves only output pixel storage credit; dropping output releases final credit"
+  ],
+  "supported": [
+    "Native solid fill events, including previously admitted stroke outlines converted to fills",
+    "Blend/AlphaSource state",
+    "Same-coordinate/inherited nested transparency groups",
+    "MaskNone event",
+    "Prepared global polygon clips"
+  ],
+  "allocation": "Exact admitted frame-stack metadata, temporary backdrop buffer, root/child frame metadata and buffers, and polygon shape scratch. Per-path color sampling currently repeated per pixel; prepare-once optimization pending.",
+  "limits": {
+    "pixels": 16777216,
+    "events": 1000000
+  },
+  "remaining": [
+    "Raster/shading/active soft-mask native events",
+    "Different group coordinates and parent-boundary transforms",
+    "Concrete default BG/UCR and admitted ICC transform cache",
+    "Sampled cubic and exact calculator integer semantics",
+    "Real AI native replay/oracle qualification",
+    "Production/Metal integration"
+  ],
+  "production_enabled": false
+}

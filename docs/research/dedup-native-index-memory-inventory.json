@@ -1,0 +1,54 @@
+{
+  "status": "source_allocation_inventory",
+  "source_hashes": {
+    "crates/rrrah-dedup/src/lib.rs": "5e6d604a293635330ae5aa1729761e73d5ef817fd03b90d432f7cde118a76d9b",
+    "crates/rrrah-dedup/src/visual.rs": "6a208217d6dfa4264be625f0294386b5064cf367e5a0c726c7b7ea9188ccf509",
+    "crates/rrrah-dedup/src/local_index.rs": "3491233bc692267be42f9dcbfa87d247c7b0f9b9478824e6d7cd8e3aa20345bc"
+  },
+  "allocations": [
+    {
+      "owner": "HammingIndex",
+      "retained": [
+        "nodes Vec<Node> capacity",
+        "per-node other_ids HashSet<u64> allocation and control bytes",
+        "per-node children Vec<(u32,usize)> capacity"
+      ],
+      "temporary": [
+        "search traversal stack Vec<usize>",
+        "search results Vec<Candidate>"
+      ],
+      "required_action": "Reserve before each capacity growth; retain credits through index lifetime; release search credits on cancellation and work fallback."
+    },
+    {
+      "owner": "VisualIndex",
+      "retained": [
+        "entries HashMap<u64,Fingerprint> allocation and control bytes",
+        "distinct-variant slots Vec<u64>",
+        "four HammingIndex channel instances"
+      ],
+      "temporary": [
+        "candidate IDs HashSet<u64>",
+        "ordered IDs Vec<u64>",
+        "matches Vec<VisualCandidate>"
+      ],
+      "required_action": "Budget exact table allocation layout or replace tables with flat managed storage; preserve opaque-ID and metric parity."
+    },
+    {
+      "owner": "descriptor_file_pairs",
+      "retained": [
+        "temporary documents Vec and seen HashSet",
+        "pair counts HashMap"
+      ],
+      "temporary": [
+        "per-feature targets HashSet",
+        "LocalDescriptorIndex::search found HashMap and results Vec"
+      ],
+      "already_managed": [
+        "flattened feature owner table",
+        "fingerprint construction staging (current tests in progress)"
+      ],
+      "required_action": "Account working storage without counting released staging as persistent index memory."
+    }
+  ],
+  "scope": "Source-derived allocation inventory, not measured sizes or a process RSS guarantee. HashMap/HashSet capacity*element size omits bucket/control layout and cannot prove a byte ceiling."
+}

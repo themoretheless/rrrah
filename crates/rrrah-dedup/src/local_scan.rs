@@ -126,6 +126,8 @@ pub enum LocalFileError {
     Geometry(#[from] GeometryError),
     #[error(transparent)]
     Pixels(#[from] WarpError),
+    #[error(transparent)]
+    Rank(#[from] crate::local_rank::LocalRankError),
 }
 #[derive(Debug)]
 pub struct LocalFileEvidence {
@@ -622,6 +624,38 @@ fn compare_local_file_views_with_extractor<T>(
         &dyn Fn() -> bool,
     ) -> Result<T, LocalFileError>,
 ) -> Result<T, LocalFileError> {
+    compare_local_file_views_with_matcher(
+        left,
+        right,
+        policy,
+        signals,
+        budget,
+        cancel,
+        extract,
+        |a, b, cancel| match_features(a, b, policy.matching, cancel),
+        verify,
+    )
+}
+#[allow(clippy::too_many_arguments)] // Share source/dependency and sticky-cancellation guards across descriptors.
+fn compare_local_file_views_with_matcher<T, F>(
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    policy: LocalFilePolicy,
+    signals: ComparisonSignals,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+    extract: impl Fn(
+        &crate::linear::LinearRgbaView<'_>,
+        &dyn Fn() -> bool,
+    ) -> Result<rrrah_core::SharedBuffer<F>, LocalError>,
+    matching: impl Fn(&[F], &[F], &dyn Fn() -> bool) -> Result<Vec<Correspondence>, LocalError>,
+    verify: impl FnOnce(
+        &crate::linear::LinearRgbaView<'_>,
+        &crate::linear::LinearRgbaView<'_>,
+        Vec<Correspondence>,
+        &dyn Fn() -> bool,
+    ) -> Result<T, LocalFileError>,
+) -> Result<T, LocalFileError> {
     validate_selected_policy(policy, signals)?;
     let latch = Cell::new(false);
     let cancelled = || {
@@ -650,7 +684,7 @@ fn compare_local_file_views_with_extractor<T>(
             .map_err(CachedError::from)?;
         let af = extract(&av, &cancelled)?;
         let bf = extract(&bv, &cancelled)?;
-        let matches = match_features(&af, &bf, policy.matching, cancelled)?;
+        let matches = matching(&af, &bf, &cancelled)?;
         let evidence = verify(&av, &bv, matches, &cancelled)?;
         first.verify(cancelled)?;
         second.verify(cancelled)?;
@@ -2345,6 +2379,436 @@ pub struct ProjectivePyramidPhotometricFilePolicy {
     pub fit_mode: crate::warp::PhotometricFitMode,
 }
 
+/// Gradient descriptor matching remains separate from binary-feature distances.
+#[derive(Debug, Clone, Copy)]
+pub struct ProjectiveGradientPyramidFilePolicy {
+    pub search: ProjectivePyramidPhotometricFilePolicy,
+    pub matching: crate::gradient::GradientMatchPolicy,
+    pub max_total_gradient_samples: u64,
+}
+
+/// Managed gradients, geometry and pixels share the same immutable selected-file
+/// lifecycle and terminal source/dependency/cancellation guards as binary search.
+///
+/// # Errors
+/// Invalid policy, source/decode changes, resource limits or cancellation.
+pub fn compare_local_files_projective_gradient_pyramid(
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    policy: ProjectiveGradientPyramidFilePolicy,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<ProjectivePhotometricFileEvidence, LocalFileError> {
+    compare_local_files_projective_gradient_pyramid_with_recipe(
+        left,
+        right,
+        policy,
+        crate::gradient::GradientCellRecipe::Fixed,
+        budget,
+        cancel,
+    )
+}
+
+/// Explicit descriptor recipe on the same managed, source-guarded file lifecycle.
+/// Corner selection, matching, geometry and pixel acceptance policies are unchanged.
+///
+/// # Errors
+/// Invalid policy, source/decode changes, resource limits or cancellation.
+pub fn compare_local_files_projective_gradient_pyramid_with_recipe(
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    policy: ProjectiveGradientPyramidFilePolicy,
+    recipe: crate::gradient::GradientCellRecipe,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<ProjectivePhotometricFileEvidence, LocalFileError> {
+    compare_gradient_pyramid_selected(
+        left,
+        right,
+        policy,
+        recipe,
+        None,
+        None,
+        None,
+        None,
+        budget,
+        cancel,
+        |e, _| Ok(e),
+    )
+}
+
+/// Source-guarded gradient file comparison with explicit per-level spatial quotas.
+/// Geometry, photometric fit and final pixel admission retain the supplied policy.
+///
+/// # Errors
+/// Invalid grid/policy before source access, limits, source changes or cancellation.
+pub fn compare_local_files_projective_spatial_gradient_pyramid_with_recipe(
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    policy: ProjectiveGradientPyramidFilePolicy,
+    recipe: crate::gradient::GradientCellRecipe,
+    spatial: SpatialFeaturePolicy,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<ProjectivePhotometricFileEvidence, LocalFileError> {
+    compare_gradient_pyramid_selected(
+        left,
+        right,
+        policy,
+        recipe,
+        Some(spatial),
+        None,
+        None,
+        None,
+        budget,
+        cancel,
+        |e, _| Ok(e),
+    )
+}
+
+/// Source-guarded comparison using explicit intermediate reduction factors.
+/// Factors select the descriptor recipe; matching, geometry and pixel policies
+/// retain their supplied definitions. Invalid factors refuse before source IO.
+///
+/// # Errors
+/// Invalid scale/policy, resource refusal, source changes or cancellation.
+pub fn compare_local_files_projective_gradient_scales_with_recipe(
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    policy: ProjectiveGradientPyramidFilePolicy,
+    recipe: crate::gradient::GradientCellRecipe,
+    factors: &[f64],
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<ProjectivePhotometricFileEvidence, LocalFileError> {
+    if factors.is_empty() || factors.len() > policy.search.max_levels {
+        return Err(LocalError::Budget.into());
+    }
+    let mut previous = 0.;
+    for &factor in factors {
+        if cancel() {
+            return Err(LocalFileError::Cancelled);
+        }
+        if !factor.is_finite() || factor < 1. || factor <= previous {
+            return Err(LocalError::Invalid.into());
+        }
+        previous = factor;
+    }
+    compare_gradient_pyramid_selected(
+        left,
+        right,
+        policy,
+        recipe,
+        None,
+        Some(factors),
+        None,
+        None,
+        budget,
+        cancel,
+        |e, _| Ok(e),
+    )
+}
+
+/// Explicit intermediate scales and spatial quotas in the shared file lifecycle.
+/// Both selection policies belong to descriptor/cache identity. Pixel and
+/// domain-qualified geometry acceptance retain the supplied thresholds.
+/// # Errors
+/// Invalid scale/grid/policy before IO, budgets, source changes or cancellation.
+pub fn compare_local_files_projective_spatial_gradient_scales_with_recipe(
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    policy: ProjectiveGradientPyramidFilePolicy,
+    recipe: crate::gradient::GradientCellRecipe,
+    factors: &[f64],
+    spatial: SpatialFeaturePolicy,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<ProjectivePhotometricFileEvidence, LocalFileError> {
+    if factors.is_empty() || factors.len() > policy.search.max_levels {
+        return Err(LocalError::Budget.into());
+    }
+    let mut previous = 0.;
+    for &factor in factors {
+        if cancel() {
+            return Err(LocalFileError::Cancelled);
+        }
+        if !factor.is_finite() || factor < 1. || factor <= previous {
+            return Err(LocalError::Invalid.into());
+        }
+        previous = factor;
+    }
+    compare_gradient_pyramid_selected(
+        left,
+        right,
+        policy,
+        recipe,
+        Some(spatial),
+        Some(factors),
+        None,
+        None,
+        budget,
+        cancel,
+        |e, _| Ok(e),
+    )
+}
+
+/// Explicit distinct-location multiscale matching with managed result payloads.
+/// Matcher scratch is admitted before matching; retained correspondence/inlier
+/// credits follow their last shared owners. All source and cancellation guards
+/// execute after result adoption. Geometry/decoder allocation completeness and
+/// whole-process RSS are not established by this API.
+/// # Errors
+/// Invalid radius/scales/grid/policy, work/memory limits, source change or cancellation.
+pub fn compare_local_files_projective_spatial_gradient_scales_distinct_managed(
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    policy: ProjectiveGradientPyramidFilePolicy,
+    recipe: crate::gradient::GradientCellRecipe,
+    factors: &[f64],
+    spatial: SpatialFeaturePolicy,
+    competitor_radius: f64,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<crate::managed_evidence::ManagedProjectivePhotometricFileEvidence, LocalFileError> {
+    if !competitor_radius.is_finite() || competitor_radius < 0. || !competitor_radius.powi(2).is_finite() {
+        return Err(LocalError::Invalid.into());
+    }
+    if factors.is_empty() || factors.len() > policy.search.max_levels {
+        return Err(LocalError::Budget.into());
+    }
+    let mut previous = 0.;
+    for &factor in factors {
+        if cancel() {
+            return Err(LocalFileError::Cancelled);
+        }
+        if !factor.is_finite() || factor < 1. || factor <= previous {
+            return Err(LocalError::Invalid.into());
+        }
+        previous = factor;
+    }
+    compare_gradient_pyramid_selected(
+        left,
+        right,
+        policy,
+        recipe,
+        Some(spatial),
+        Some(factors),
+        Some(competitor_radius),
+        None,
+        budget,
+        cancel,
+        |e, cancel| {
+            crate::managed_evidence::manage_projective_file_evidence(e, budget, cancel).map_err(Into::into)
+        },
+    )
+}
+
+/// Explicit area-resampled candidate extraction with distinct-location matching.
+/// Original decoded views still supply geometric and pixel confirmation. Area
+/// tap admission precedes resampling; result payload and source guards share
+/// the managed file lifecycle. No complete decoder/geometry/RSS bound is claimed.
+/// # Errors
+/// Invalid radius/scales/grid/policy, work or memory limits, mutation, cancellation.
+pub fn compare_local_files_projective_spatial_gradient_scales_area_distinct_managed(
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    policy: ProjectiveGradientPyramidFilePolicy,
+    recipe: crate::gradient::GradientCellRecipe,
+    factors: &[f64],
+    spatial: SpatialFeaturePolicy,
+    competitor_radius: f64,
+    max_resample_taps: u64,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<crate::managed_evidence::ManagedProjectivePhotometricFileEvidence, LocalFileError> {
+    if !competitor_radius.is_finite() || competitor_radius < 0. || !competitor_radius.powi(2).is_finite() {
+        return Err(LocalError::Invalid.into());
+    }
+    if factors.is_empty() || factors.len() > policy.search.max_levels {
+        return Err(LocalError::Budget.into());
+    }
+    let mut previous = 0.;
+    for &factor in factors {
+        if cancel() {
+            return Err(LocalFileError::Cancelled);
+        }
+        if !factor.is_finite() || factor < 1. || factor <= previous {
+            return Err(LocalError::Invalid.into());
+        }
+        previous = factor;
+    }
+    if max_resample_taps == 0 && factors.iter().any(|&f| f > 1.) {
+        return Err(LocalError::Budget.into());
+    }
+    compare_gradient_pyramid_selected(
+        left,
+        right,
+        policy,
+        recipe,
+        Some(spatial),
+        Some(factors),
+        Some(competitor_radius),
+        Some(max_resample_taps),
+        budget,
+        cancel,
+        |e, cancel| {
+            crate::managed_evidence::manage_projective_file_evidence(e, budget, cancel).map_err(Into::into)
+        },
+    )
+}
+
+fn compare_gradient_pyramid_selected<T>(
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    policy: ProjectiveGradientPyramidFilePolicy,
+    recipe: crate::gradient::GradientCellRecipe,
+    spatial: Option<SpatialFeaturePolicy>,
+    scales: Option<&[f64]>,
+    distinct_radius: Option<f64>,
+    area_taps: Option<u64>,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+    finish: impl FnOnce(ProjectivePhotometricFileEvidence, &dyn Fn() -> bool) -> Result<T, LocalFileError>,
+) -> Result<T, LocalFileError> {
+    if let Some(grid) = spatial {
+        validate_spatial(grid, policy.search.local.extract.max_features)?;
+    }
+    validate_projective_gradient_pyramid_file_policy(&policy)?;
+    let p = policy.search;
+    let matching = policy.matching;
+    let pyramid = crate::pyramid::PyramidPolicy {
+        local: p.local.extract,
+        max_levels: p.max_levels,
+        max_total_pixels: p.max_total_pixels,
+        max_total_features: p.max_total_features,
+    };
+    let matcher_credit = std::cell::RefCell::new(None);
+    compare_local_file_views_with_matcher(
+        left,
+        right,
+        p.local,
+        (None, None, None, false),
+        budget,
+        cancel,
+        |view, cancel| {
+            if let Some(factors) = scales {
+                if let (Some(grid), Some(limit)) = (spatial, area_taps) {
+                    return crate::gradient_scale::extract_spatial_gradient_scales_area_managed(
+                        view,
+                        pyramid,
+                        factors,
+                        policy.max_total_gradient_samples,
+                        recipe,
+                        (grid.columns, grid.rows, grid.max_per_cell),
+                        limit,
+                        budget,
+                        cancel,
+                    );
+                }
+                if let Some(grid) = spatial {
+                    crate::gradient_scale::extract_spatial_gradient_scales_managed(
+                        view,
+                        pyramid,
+                        factors,
+                        policy.max_total_gradient_samples,
+                        recipe,
+                        (grid.columns, grid.rows, grid.max_per_cell),
+                        budget,
+                        cancel,
+                    )
+                } else {
+                    crate::gradient_scale::extract_gradient_scales_managed(
+                        view,
+                        pyramid,
+                        factors,
+                        policy.max_total_gradient_samples,
+                        recipe,
+                        budget,
+                        cancel,
+                    )
+                }
+            } else if let Some(grid) = spatial {
+                crate::gradient::extract_spatial_gradient_pyramid_with_recipe_managed(
+                    view,
+                    pyramid,
+                    policy.max_total_gradient_samples,
+                    recipe,
+                    (grid.columns, grid.rows, grid.max_per_cell),
+                    budget,
+                    cancel,
+                )
+            } else {
+                crate::gradient::extract_gradient_pyramid_with_recipe_managed(
+                    view,
+                    pyramid,
+                    policy.max_total_gradient_samples,
+                    recipe,
+                    budget,
+                    cancel,
+                )
+            }
+        },
+        |a, b, cancel| {
+            if let Some(radius) = distinct_radius {
+                if cancel() {
+                    return Err(LocalError::Cancelled);
+                }
+                let bytes = a
+                    .len()
+                    .checked_add(b.len())
+                    .and_then(|n| n.checked_mul(std::mem::size_of::<(f64, f64, usize)>()))
+                    .and_then(|n| {
+                        a.len()
+                            .min(b.len())
+                            .checked_mul(std::mem::size_of::<Correspondence>())
+                            .and_then(|v| n.checked_add(v))
+                    })
+                    .and_then(|n| u64::try_from(n).ok())
+                    .ok_or(LocalError::Budget)?;
+                *matcher_credit.borrow_mut() =
+                    Some(budget.try_reserve(bytes).map_err(|_| LocalError::Budget)?);
+                crate::gradient::match_gradients_distinct_locations(a, b, matching, radius, cancel)
+            } else {
+                crate::gradient::match_gradients(a, b, matching, cancel)
+            }
+        },
+        |a, b, correspondences, cancel| {
+            let e =
+                verify_projective_pyramid_views_selected(a, b, correspondences, p, scales.is_some(), cancel)?;
+            finish(e, cancel)
+        },
+    )
+}
+
+pub(crate) fn validate_projective_gradient_pyramid_file_policy(
+    policy: &ProjectiveGradientPyramidFilePolicy,
+) -> Result<(), LocalFileError> {
+    let p = policy.search;
+    validate_projective_pyramid_file_policy(&p)?;
+    let matching = policy.matching;
+    if !matching.max_squared_distance.is_finite()
+        || !(0. ..=4.).contains(&matching.max_squared_distance)
+        || !matching.squared_ratio.is_finite()
+        || matching.squared_ratio <= 0.
+        || matching.squared_ratio >= 1.
+    {
+        return Err(LocalError::Invalid.into());
+    }
+    let required = u64::try_from(p.local.extract.max_features)
+        .ok()
+        .and_then(|n| n.checked_mul(512))
+        .and_then(|n| {
+            u64::try_from(p.max_levels)
+                .ok()
+                .and_then(|levels| n.checked_mul(levels))
+        })
+        .ok_or(LocalError::Budget)?;
+    if required > policy.max_total_gradient_samples {
+        return Err(LocalError::Budget.into());
+    }
+    Ok(())
+}
+
 /// Compare selected files with managed scale-pyramid features and an explicit
 /// bounded color fit. Geometry is estimated once; no registration or implicit
 /// color assumption is applied. Evidence keeps strict and fitted residuals.
@@ -2481,6 +2945,9 @@ pub struct ProjectivePyramidRegionsFilePolicy {
 }
 #[derive(Debug, Clone, Copy)]
 pub struct ProjectiveRegionFileEvidence {
+    /// Both fitted pixel grids satisfy the applied file policy's sample,
+    /// coverage and residual-match gates. This never asserts whole-image equality.
+    pub accepted_region: bool,
     pub domains: [crate::warp::PixelRectangle; 2],
     pub pixels: Option<crate::warp::ProjectiveRegionPhotometricEvidence>,
     pub fit_failure: Option<PhotometricFitFailure>,
@@ -2492,6 +2959,17 @@ pub struct ProjectivePyramidRegionsFileEvidence {
     /// No geometry means no regional pixel verification was attempted.
     /// The reservation follows shared ownership until the final owner is dropped.
     pub regions: rrrah_core::SharedBuffer<ProjectiveRegionFileEvidence>,
+}
+impl ProjectivePyramidRegionsFileEvidence {
+    /// Count local confirmations under the applied policy, keeping the whole
+    /// candidate independent. Overlapping regions are not a union-area estimate.
+    #[must_use]
+    pub fn region_support_count(&self) -> usize {
+        self.regions
+            .iter()
+            .filter(|region| region.accepted_region)
+            .count()
+    }
 }
 /// Confirm declared regions inside the shared selected-frame source lifecycle.
 /// Regional fits never promote a whole-image candidate. Every domain is validated
@@ -2508,12 +2986,51 @@ pub fn compare_local_files_projective_pyramid_regions(
     budget: &MemoryBudget,
     cancel: impl Fn() -> bool,
 ) -> Result<ProjectivePyramidRegionsFileEvidence, LocalFileError> {
+    compare_projective_pyramid_region_domains(left, right, policy, domains, None, budget, cancel)
+}
+
+/// Build uniform candidate regions from the fitted geometry and confirm them
+/// within the same decoded-source lifecycle. Regional evidence never changes
+/// the whole-image candidate. Declared cell/work limits are checked before I/O.
+///
+/// # Errors
+/// Invalid grid/policy, phase budgets, decoding/source changes or cancellation.
+pub fn compare_local_files_projective_pyramid_region_grid(
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    policy: ProjectivePyramidRegionsFilePolicy,
+    grid: (u32, u32),
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<ProjectivePyramidRegionsFileEvidence, LocalFileError> {
+    compare_projective_pyramid_region_domains(left, right, policy, &[], Some(grid), budget, cancel)
+}
+
+fn compare_projective_pyramid_region_domains(
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    policy: ProjectivePyramidRegionsFilePolicy,
+    domains: &[[crate::warp::PixelRectangle; 2]],
+    grid: Option<(u32, u32)>,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<ProjectivePyramidRegionsFileEvidence, LocalFileError> {
     let p = policy.search;
     validate_projective_pyramid_file_policy(&p)?;
-    if domains.is_empty() || policy.max_regions == 0 {
+    if grid.is_some_and(|(x, y)| x == 0 || y == 0) {
         return Err(LocalFileError::InvalidPolicy);
     }
-    if domains.len() > policy.max_regions {
+    let domain_count = match grid {
+        Some((x, y)) => u64::from(x)
+            .checked_mul(u64::from(y))
+            .and_then(|n| usize::try_from(n).ok())
+            .ok_or(WarpError::Budget)?,
+        None => domains.len(),
+    };
+    if domain_count == 0 || policy.max_regions == 0 {
+        return Err(LocalFileError::InvalidPolicy);
+    }
+    if domain_count > policy.max_regions {
         return Err(WarpError::Budget.into());
     }
     for pair in domains {
@@ -2521,7 +3038,7 @@ pub fn compare_local_files_projective_pyramid_regions(
             crate::warp::validate_rectangle(*region, (u32::MAX, u32::MAX))?;
         }
     }
-    let phases = u64::try_from(domains.len())
+    let phases = u64::try_from(domain_count)
         .ok()
         .and_then(|n| n.checked_add(1))
         .ok_or(WarpError::Budget)?;
@@ -2534,8 +3051,7 @@ pub fn compare_local_files_projective_pyramid_regions(
     if work > policy.max_total_sample_pairs {
         return Err(WarpError::Budget.into());
     }
-    let bytes = domains
-        .len()
+    let bytes = domain_count
         .checked_mul(std::mem::size_of::<ProjectiveRegionFileEvidence>())
         .and_then(|n| u64::try_from(n).ok())
         .ok_or(LocalError::Budget)?;
@@ -2560,6 +3076,37 @@ pub fn compare_local_files_projective_pyramid_regions(
             }
             let retained = budget.try_reserve(bytes).map_err(|_| LocalError::Budget)?;
             let whole = verify_projective_pyramid_views(a, b, correspondences, p, cancel)?;
+            let generated = if let (Some(grid), Some(geometry)) = (grid, &whole.geometry) {
+                Some(crate::region_grid::projective_grid_domains(
+                    a.dimensions(),
+                    b.dimensions(),
+                    geometry.transform,
+                    grid,
+                    policy.max_regions,
+                    budget,
+                    cancel,
+                )?)
+            } else {
+                None
+            };
+            let domains = generated.as_ref().map_or(domains, |buffer| buffer.as_ref());
+            // A fitting refusal can lack retained unfitted pixels. In that case
+            // obtain them once for the shared geometry, rather than per region.
+            let shared_unfitted = if let Some(g) = &whole.geometry {
+                Some(match whole.unfitted {
+                    Some(e) => e,
+                    None => crate::warp::verify_projective_filtered(
+                        a,
+                        b,
+                        g.transform,
+                        p.photometric.residual,
+                        p.filter,
+                        cancel,
+                    )?,
+                })
+            } else {
+                None
+            };
             let mut regions = Vec::new();
             regions
                 .try_reserve_exact(domains.len())
@@ -2570,8 +3117,8 @@ pub fn compare_local_files_projective_pyramid_regions(
                 }
                 let mut pixels = None;
                 let mut fit_failure = None;
-                if let Some(g) = &whole.geometry {
-                    match crate::warp::verify_projective_regions_photometric_filtered(
+                if let (Some(g), Some(unfitted)) = (&whole.geometry, shared_unfitted) {
+                    match crate::warp::verify_projective_regions_with_unfitted(
                         a,
                         b,
                         g.transform,
@@ -2579,6 +3126,7 @@ pub fn compare_local_files_projective_pyramid_regions(
                         p.photometric,
                         p.filter,
                         p.fit_mode,
+                        unfitted,
                         cancel,
                     ) {
                         Ok(e) => pixels = Some(e),
@@ -2586,7 +3134,11 @@ pub fn compare_local_files_projective_pyramid_regions(
                         Err(error) => return Err(error.into()),
                     }
                 }
+                let accepted_region = pixels
+                    .as_ref()
+                    .is_some_and(|e| accepted_photometric(&e.fitted, p.local));
                 regions.push(ProjectiveRegionFileEvidence {
+                    accepted_region,
                     domains: *pair,
                     pixels,
                     fit_failure,
@@ -2605,9 +3157,30 @@ fn verify_projective_pyramid_views(
     policy: ProjectivePyramidPhotometricFilePolicy,
     cancel: &dyn Fn() -> bool,
 ) -> Result<ProjectivePhotometricFileEvidence, LocalFileError> {
+    verify_projective_pyramid_views_selected(a, b, correspondences, policy, false, cancel)
+}
+
+fn verify_projective_pyramid_views_selected(
+    a: &crate::linear::LinearRgbaView<'_>,
+    b: &crate::linear::LinearRgbaView<'_>,
+    correspondences: Vec<Correspondence>,
+    policy: ProjectivePyramidPhotometricFilePolicy,
+    domains: bool,
+    cancel: &dyn Fn() -> bool,
+) -> Result<ProjectivePhotometricFileEvidence, LocalFileError> {
     let p = policy.local;
-    let geometry =
-        crate::geometry::verify_projective_sampled(&correspondences, p.geometry, policy.sampling, cancel)?;
+    let geometry = if domains {
+        crate::geometry::verify_projective_sampled_for_domains(
+            &correspondences,
+            p.geometry,
+            policy.sampling,
+            a.dimensions(),
+            b.dimensions(),
+            cancel,
+        )?
+    } else {
+        crate::geometry::verify_projective_sampled(&correspondences, p.geometry, policy.sampling, cancel)?
+    };
     let mut pixels = None;
     let mut unfitted = None;
     let mut fit_failure = None;
@@ -2882,6 +3455,220 @@ pub(crate) fn validate_projective_complementary_filter_portfolio_policy(
     }
     Ok(())
 }
+
+#[derive(Debug, Clone, Copy)]
+pub struct ProjectiveComplementaryGradientPolicy {
+    pub base: ProjectiveComplementaryFilterPortfolioPolicy,
+    pub gradient: ProjectiveGradientPyramidFilePolicy,
+    pub max_total_comparisons: u64,
+    pub max_total_hypotheses: u64,
+    pub max_total_sample_pairs: u64,
+    /// Two gradient extractions on the shared decoded views.
+    pub max_total_gradient_samples: u64,
+}
+#[derive(Debug)]
+pub struct ProjectiveComplementaryGradientEvidence {
+    pub base: ProjectiveComplementaryFilterPortfolioEvidence,
+    pub gradient: ProjectivePhotometricFileEvidence,
+    pub accepted_searches: [bool; 4],
+    pub candidate: bool,
+}
+/// All four confirmation lanes finish before source/dependency/cancellation
+/// admission. A successful lane never hides another lane's resource error.
+///
+/// # Errors
+/// Invalid/incompatible policy, cumulative/phase limits or source/decode/cancel.
+pub fn compare_local_files_projective_complementary_gradient(
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    policy: ProjectiveComplementaryGradientPolicy,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<ProjectiveComplementaryGradientEvidence, LocalFileError> {
+    validate_projective_complementary_gradient_policy(&policy)?;
+    let (base, gradient) = compare_local_files_projective_complementary_gradient_inner(
+        left,
+        right,
+        policy.base.searches,
+        Some(policy.base.secondary),
+        Some(policy.gradient),
+        budget,
+        cancel,
+    )?;
+    let gradient = gradient.ok_or(LocalFileError::InvalidPolicy)?;
+    let accepted_searches = [
+        base.accepted_searches[0],
+        base.accepted_searches[1],
+        base.accepted_searches[2],
+        gradient.candidate,
+    ];
+    Ok(ProjectiveComplementaryGradientEvidence {
+        base,
+        gradient,
+        accepted_searches,
+        candidate: accepted_searches.into_iter().any(|v| v),
+    })
+}
+/// Five searches: the original four plus an explicitly interpolated descriptor.
+#[derive(Debug, Clone, Copy)]
+pub struct ProjectiveComplementaryGradientPortfolioPolicy {
+    pub primary: ProjectiveComplementaryGradientPolicy,
+    pub interpolated: ProjectiveGradientPyramidFilePolicy,
+    pub max_total_comparisons: u64,
+    pub max_total_hypotheses: u64,
+    pub max_total_sample_pairs: u64,
+    /// All four gradient extractions, across two images and two recipes.
+    pub max_total_gradient_samples: u64,
+}
+
+#[derive(Debug)]
+pub struct ProjectiveComplementaryGradientPortfolioEvidence {
+    pub primary: ProjectiveComplementaryGradientEvidence,
+    pub interpolated: ProjectivePhotometricFileEvidence,
+    pub accepted_searches: [bool; 5],
+    pub candidate: bool,
+}
+
+/// Decode once and finish all five searches before the shared source/dependency
+/// and terminal cancellation guards. No positive lane hides a later work error.
+///
+/// # Errors
+/// Incompatible policy, checked cumulative/phase limits, source/decode or cancellation.
+pub fn compare_local_files_projective_complementary_gradient_portfolio(
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    policy: ProjectiveComplementaryGradientPortfolioPolicy,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<ProjectiveComplementaryGradientPortfolioEvidence, LocalFileError> {
+    validate_projective_complementary_gradient_portfolio_policy(&policy)?;
+    let p = policy.primary;
+    let (base, gradient, interpolated) =
+        compare_local_files_projective_complementary_gradient_portfolio_inner(
+            left,
+            right,
+            p.base.searches,
+            Some(p.base.secondary),
+            Some(p.gradient),
+            Some(policy.interpolated),
+            budget,
+            cancel,
+        )?;
+    let gradient = gradient.ok_or(LocalFileError::InvalidPolicy)?;
+    let interpolated = interpolated.ok_or(LocalFileError::InvalidPolicy)?;
+    let accepted = [
+        base.accepted_searches[0],
+        base.accepted_searches[1],
+        base.accepted_searches[2],
+        gradient.candidate,
+    ];
+    let primary = ProjectiveComplementaryGradientEvidence {
+        base,
+        gradient,
+        accepted_searches: accepted,
+        candidate: accepted.into_iter().any(|v| v),
+    };
+    let accepted_searches = [
+        accepted[0],
+        accepted[1],
+        accepted[2],
+        accepted[3],
+        interpolated.candidate,
+    ];
+    Ok(ProjectiveComplementaryGradientPortfolioEvidence {
+        primary,
+        interpolated,
+        accepted_searches,
+        candidate: accepted_searches.into_iter().any(|v| v),
+    })
+}
+
+pub(crate) fn validate_projective_complementary_gradient_portfolio_policy(
+    policy: &ProjectiveComplementaryGradientPortfolioPolicy,
+) -> Result<(), LocalFileError> {
+    validate_projective_complementary_gradient_policy(&policy.primary)?;
+    validate_projective_gradient_pyramid_file_policy(&policy.interpolated)?;
+    let a = policy.primary.base.searches.pyramid.local.decode;
+    let b = policy.interpolated.search.local.decode;
+    if a.max_frames != b.max_frames || a.max_pixels != b.max_pixels || a.max_file_bytes != b.max_file_bytes {
+        return Err(LocalFileError::InvalidPolicy);
+    }
+    let comparisons = policy
+        .primary
+        .max_total_comparisons
+        .checked_add(policy.interpolated.matching.max_comparisons)
+        .ok_or(LocalError::Budget)?;
+    let hypotheses = policy
+        .primary
+        .max_total_hypotheses
+        .checked_add(policy.interpolated.search.sampling.trials)
+        .ok_or(GeometryError::Budget)?;
+    let samples = policy
+        .primary
+        .max_total_sample_pairs
+        .checked_add(policy.interpolated.search.filter.filter.max_sample_pairs)
+        .ok_or(WarpError::Budget)?;
+    let gradients = policy
+        .interpolated
+        .max_total_gradient_samples
+        .checked_mul(2)
+        .and_then(|n| policy.primary.max_total_gradient_samples.checked_add(n))
+        .ok_or(LocalError::Budget)?;
+    if comparisons > policy.max_total_comparisons || gradients > policy.max_total_gradient_samples {
+        return Err(LocalError::Budget.into());
+    }
+    if hypotheses > policy.max_total_hypotheses {
+        return Err(GeometryError::Budget.into());
+    }
+    if samples > policy.max_total_sample_pairs {
+        return Err(WarpError::Budget.into());
+    }
+    Ok(())
+}
+
+fn validate_projective_complementary_gradient_policy(
+    policy: &ProjectiveComplementaryGradientPolicy,
+) -> Result<(), LocalFileError> {
+    validate_projective_complementary_filter_portfolio_policy(&policy.base)?;
+    validate_projective_gradient_pyramid_file_policy(&policy.gradient)?;
+    let a = policy.base.searches.pyramid.local.decode;
+    let b = policy.gradient.search.local.decode;
+    if a.max_frames != b.max_frames || a.max_pixels != b.max_pixels || a.max_file_bytes != b.max_file_bytes {
+        return Err(LocalFileError::InvalidPolicy);
+    }
+    let comparisons = policy
+        .base
+        .searches
+        .max_total_comparisons
+        .checked_add(policy.gradient.matching.max_comparisons)
+        .ok_or(LocalError::Budget)?;
+    let hypotheses = policy
+        .base
+        .searches
+        .max_total_hypotheses
+        .checked_add(policy.gradient.search.sampling.trials)
+        .ok_or(GeometryError::Budget)?;
+    let samples = policy
+        .base
+        .max_total_sample_pairs
+        .checked_add(policy.gradient.search.filter.filter.max_sample_pairs)
+        .ok_or(WarpError::Budget)?;
+    let gradients = policy
+        .gradient
+        .max_total_gradient_samples
+        .checked_mul(2)
+        .ok_or(LocalError::Budget)?;
+    if comparisons > policy.max_total_comparisons || gradients > policy.max_total_gradient_samples {
+        return Err(LocalError::Budget.into());
+    }
+    if hypotheses > policy.max_total_hypotheses {
+        return Err(GeometryError::Budget.into());
+    }
+    if samples > policy.max_total_sample_pairs {
+        return Err(WarpError::Budget.into());
+    }
+    Ok(())
+}
 fn compare_local_files_projective_complementary_inner(
     left: &DecodeRequest,
     right: &DecodeRequest,
@@ -2890,6 +3677,50 @@ fn compare_local_files_projective_complementary_inner(
     budget: &MemoryBudget,
     cancel: impl Fn() -> bool,
 ) -> Result<ProjectiveComplementaryFilterPortfolioEvidence, LocalFileError> {
+    compare_local_files_projective_complementary_gradient_inner(
+        left, right, policy, secondary, None, budget, cancel,
+    )
+    .map(|(base, _)| base)
+}
+#[allow(clippy::too_many_arguments)]
+fn compare_local_files_projective_complementary_gradient_inner(
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    policy: ProjectiveComplementaryFilePolicy,
+    secondary: Option<ColorFilterPolicy>,
+    gradient: Option<ProjectiveGradientPyramidFilePolicy>,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<
+    (
+        ProjectiveComplementaryFilterPortfolioEvidence,
+        Option<ProjectivePhotometricFileEvidence>,
+    ),
+    LocalFileError,
+> {
+    compare_local_files_projective_complementary_gradient_portfolio_inner(
+        left, right, policy, secondary, gradient, None, budget, cancel,
+    )
+    .map(|(base, gradient, _)| (base, gradient))
+}
+#[allow(clippy::too_many_arguments)] // All four lanes share terminal source/cancellation guards.
+fn compare_local_files_projective_complementary_gradient_portfolio_inner(
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    policy: ProjectiveComplementaryFilePolicy,
+    secondary: Option<ColorFilterPolicy>,
+    gradient: Option<ProjectiveGradientPyramidFilePolicy>,
+    interpolated: Option<ProjectiveGradientPyramidFilePolicy>,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<
+    (
+        ProjectiveComplementaryFilterPortfolioEvidence,
+        Option<ProjectivePhotometricFileEvidence>,
+        Option<ProjectivePhotometricFileEvidence>,
+    ),
+    LocalFileError,
+> {
     validate_projective_complementary_file_policy(&policy)?;
     let p = policy.pyramid;
     let pyramid = crate::pyramid::PyramidPolicy {
@@ -2936,20 +3767,65 @@ fn compare_local_files_projective_complementary_inner(
                 .as_ref()
                 .is_some_and(|e| accepted_photometric(&e.fitted, p.local));
             let all = [accepted_searches[0], accepted_searches[1], secondary_accepted];
-            Ok(ProjectiveComplementaryFilterPortfolioEvidence {
-                searches: ProjectiveComplementaryFileEvidence {
-                    registration,
-                    pyramid,
-                    accepted_searches,
-                    candidate,
+            let verify_gradient = |g, recipe| verify_gradient_file_views(a, b, g, recipe, budget, cancel);
+            let gradient = gradient
+                .map(|g| verify_gradient(g, crate::gradient::GradientCellRecipe::Fixed))
+                .transpose()?;
+            let interpolated = interpolated
+                .map(|g| verify_gradient(g, crate::gradient::GradientCellRecipe::Interpolated))
+                .transpose()?;
+            Ok((
+                ProjectiveComplementaryFilterPortfolioEvidence {
+                    searches: ProjectiveComplementaryFileEvidence {
+                        registration,
+                        pyramid,
+                        accepted_searches,
+                        candidate,
+                    },
+                    secondary_pixels,
+                    secondary_fit_failure,
+                    accepted_searches: all,
+                    candidate: all.into_iter().any(|x| x),
                 },
-                secondary_pixels,
-                secondary_fit_failure,
-                accepted_searches: all,
-                candidate: all.into_iter().any(|x| x),
-            })
+                gradient,
+                interpolated,
+            ))
         },
     )
+}
+fn verify_gradient_file_views(
+    a: &crate::linear::LinearRgbaView<'_>,
+    b: &crate::linear::LinearRgbaView<'_>,
+    g: ProjectiveGradientPyramidFilePolicy,
+    recipe: crate::gradient::GradientCellRecipe,
+    budget: &MemoryBudget,
+    cancel: &dyn Fn() -> bool,
+) -> Result<ProjectivePhotometricFileEvidence, LocalFileError> {
+    let p = g.search;
+    let pyramid = crate::pyramid::PyramidPolicy {
+        local: p.local.extract,
+        max_levels: p.max_levels,
+        max_total_pixels: p.max_total_pixels,
+        max_total_features: p.max_total_features,
+    };
+    let af = crate::gradient::extract_gradient_pyramid_with_recipe_managed(
+        a,
+        pyramid,
+        g.max_total_gradient_samples,
+        recipe,
+        budget,
+        cancel,
+    )?;
+    let bf = crate::gradient::extract_gradient_pyramid_with_recipe_managed(
+        b,
+        pyramid,
+        g.max_total_gradient_samples,
+        recipe,
+        budget,
+        cancel,
+    )?;
+    let matches = crate::gradient::match_gradients(&af, &bf, g.matching, cancel)?;
+    verify_projective_pyramid_views(a, b, matches, p, cancel)
 }
 pub(crate) fn validate_projective_complementary_file_policy(
     policy: &ProjectiveComplementaryFilePolicy,
@@ -2990,4 +3866,814 @@ pub(crate) fn validate_projective_complementary_file_policy(
         return Err(WarpError::Budget.into());
     }
     Ok(())
+}
+
+/// Regional pixel evidence under a supplied candidate model, with fresh file guards.
+#[derive(Debug)]
+pub struct ProjectiveTransformedRegionsFileEvidence {
+    pub transform: crate::geometry::ProjectiveTransform,
+    pub regions: rrrah_core::SharedBuffer<ProjectiveRegionFileEvidence>,
+}
+impl ProjectiveTransformedRegionsFileEvidence {
+    /// Local confirmations only; overlapping regions do not imply union area.
+    #[must_use]
+    pub fn region_support_count(&self) -> usize {
+        self.regions
+            .iter()
+            .filter(|region| region.accepted_region)
+            .count()
+    }
+}
+/// Decode a selected frame from each source and confirm automatically generated
+/// regions under a supplied model. Source/dependency snapshots and sticky
+/// cancellation protect the full comparison, including rejected regions.
+/// The model never substitutes for bidirectional pixel evidence.
+///
+/// # Errors
+/// Invalid model/grid/policy, cumulative work/memory admission, decoding,
+/// source/dependency changes or cancellation discard all partial regions.
+pub fn compare_local_files_projective_region_grid_transform(
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    transform: crate::geometry::ProjectiveTransform,
+    policy: ProjectivePyramidRegionsFilePolicy,
+    grid: (u32, u32),
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<ProjectiveTransformedRegionsFileEvidence, LocalFileError> {
+    compare_region_grid_transform(left, right, transform, policy, grid, false, budget, cancel)
+}
+
+/// Confirm grids anchored on both files under one supplied candidate model.
+/// The same guarded source lifecycle and bidirectional pixel admission apply
+/// to every region. Local supports do not imply whole-image equality or union area.
+///
+/// # Errors
+/// Invalid policy/model, cumulative limits, source changes or cancellation.
+pub fn compare_local_files_projective_bidirectional_region_grid_transform(
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    transform: crate::geometry::ProjectiveTransform,
+    policy: ProjectivePyramidRegionsFilePolicy,
+    grid: (u32, u32),
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<ProjectiveTransformedRegionsFileEvidence, LocalFileError> {
+    compare_region_grid_transform(left, right, transform, policy, grid, true, budget, cancel)
+}
+
+#[allow(clippy::too_many_arguments)]
+fn compare_region_grid_transform(
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    transform: crate::geometry::ProjectiveTransform,
+    policy: ProjectivePyramidRegionsFilePolicy,
+    grid: (u32, u32),
+    bidirectional: bool,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<ProjectiveTransformedRegionsFileEvidence, LocalFileError> {
+    validate_projective_pyramid_file_policy(&policy.search)?;
+    transform.inverse()?;
+    if grid.0 == 0 || grid.1 == 0 || policy.max_regions == 0 {
+        return Err(LocalFileError::InvalidPolicy);
+    }
+    let cells = u64::from(grid.0)
+        .checked_mul(u64::from(grid.1))
+        .and_then(|n| n.checked_mul(if bidirectional { 2 } else { 1 }))
+        .ok_or(WarpError::Budget)?;
+    if cells > u64::try_from(policy.max_regions).map_err(|_| WarpError::Budget)? {
+        return Err(WarpError::Budget.into());
+    }
+    let work = cells
+        .checked_add(1)
+        .and_then(|n| n.checked_mul(policy.search.filter.filter.max_sample_pairs))
+        .ok_or(WarpError::Budget)?;
+    if work > policy.max_total_sample_pairs {
+        return Err(WarpError::Budget.into());
+    }
+    compare_local_file_views_with_extractor(
+        left,
+        right,
+        policy.search.local,
+        (None, None, None, false),
+        budget,
+        cancel,
+        |_, cancel| {
+            if cancel() {
+                return Err(LocalError::Cancelled);
+            }
+            budget
+                .try_reserve(0)
+                .map_err(|_| LocalError::Budget)?
+                .try_adopt(Vec::new())
+                .map_err(|_| LocalError::Budget)
+        },
+        |a, b, _, cancel| {
+            let regions = if bidirectional {
+                crate::region_transform::verify_projective_bidirectional_region_grid_views(
+                    a, b, transform, policy, grid, budget, cancel,
+                )?
+            } else {
+                crate::region_transform::verify_projective_region_grid_views(
+                    a, b, transform, policy, grid, budget, cancel,
+                )?
+            };
+            Ok(ProjectiveTransformedRegionsFileEvidence { transform, regions })
+        },
+    )
+}
+
+/// Explicit distinct-location scale matching plus independent both-image region grids.
+#[derive(Debug, Clone, Copy)]
+pub struct ProjectiveDistinctScaleRegionsFilePolicy {
+    pub gradient: ProjectiveGradientPyramidFilePolicy,
+    pub recipe: crate::gradient::GradientCellRecipe,
+    pub spatial: SpatialFeaturePolicy,
+    pub competitor_radius: f64,
+    pub grid: (u32, u32),
+    pub max_regions: usize,
+    /// Whole confirmation plus the supplied-model regional phase, before source IO.
+    pub max_total_sample_pairs: u64,
+}
+#[derive(Debug)]
+pub struct ManagedProjectiveDistinctScaleRegionsFileEvidence {
+    pub whole: crate::managed_evidence::ManagedProjectivePhotometricFileEvidence,
+    pub regions: Option<ProjectiveTransformedRegionsFileEvidence>,
+}
+
+/// Both phases execute under a common source snapshot/cancellation lifecycle.
+/// Retained vector payloads are managed; local supports never promote whole-image
+/// acceptance. Decoder and geometry allocation completeness/RSS remain separate.
+/// # Errors
+/// Invalid policy/scales/grid, work/memory refusal, source mutation or cancellation.
+pub fn compare_local_files_projective_spatial_gradient_scale_regions_distinct_managed(
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    config: ProjectiveDistinctScaleRegionsFilePolicy,
+    factors: &[f64],
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<ManagedProjectiveDistinctScaleRegionsFileEvidence, LocalFileError> {
+    compare_distinct_scale_regions_selected(left, right, config, factors, None, budget, cancel)
+}
+
+/// Area-resampled candidate extraction with common whole/regional source guards.
+/// The original decoded pixels retain all existing confirmation thresholds.
+/// # Errors
+/// Invalid policies, area/work/memory refusal, source mutation or cancellation.
+pub fn compare_local_files_projective_spatial_gradient_scale_regions_area_distinct_managed(
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    config: ProjectiveDistinctScaleRegionsFilePolicy,
+    factors: &[f64],
+    max_resample_taps: u64,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<ManagedProjectiveDistinctScaleRegionsFileEvidence, LocalFileError> {
+    compare_distinct_scale_regions_selected(
+        left,
+        right,
+        config,
+        factors,
+        Some(max_resample_taps),
+        budget,
+        cancel,
+    )
+}
+
+fn compare_distinct_scale_regions_selected(
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    config: ProjectiveDistinctScaleRegionsFilePolicy,
+    factors: &[f64],
+    area_taps: Option<u64>,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<ManagedProjectiveDistinctScaleRegionsFileEvidence, LocalFileError> {
+    let latch = Cell::new(false);
+    let cancelled = || {
+        let value = latch.get()
+            || cancel()
+            || [left, right].iter().any(|r| {
+                r.cancellation
+                    .as_ref()
+                    .is_some_and(rrrah_decode::GenerationToken::is_cancelled)
+            });
+        latch.set(value);
+        value
+    };
+    let cells = validate_distinct_scale_regions_file_policy(config, factors, &cancelled)?;
+    if area_taps == Some(0) && factors.iter().any(|&f| f > 1.) {
+        return Err(LocalError::Budget.into());
+    }
+    let samples = config.gradient.search.filter.filter.max_sample_pairs;
+    let result = (|| {
+        let first = ContentSnapshot::read(
+            &left.path,
+            config.gradient.search.local.decode.max_file_bytes,
+            cancelled,
+        )?;
+        let second = ContentSnapshot::read(
+            &right.path,
+            config.gradient.search.local.decode.max_file_bytes,
+            cancelled,
+        )?;
+        let whole = if let Some(limit) = area_taps {
+            compare_local_files_projective_spatial_gradient_scales_area_distinct_managed(
+                left,
+                right,
+                config.gradient,
+                config.recipe,
+                factors,
+                config.spatial,
+                config.competitor_radius,
+                limit,
+                budget,
+                cancelled,
+            )?
+        } else {
+            compare_local_files_projective_spatial_gradient_scales_distinct_managed(
+                left,
+                right,
+                config.gradient,
+                config.recipe,
+                factors,
+                config.spatial,
+                config.competitor_radius,
+                budget,
+                cancelled,
+            )?
+        };
+        let model = whole
+            .registered_transform
+            .or_else(|| whole.geometry.as_ref().map(|g| g.transform));
+        let regions = if let Some(model) = model {
+            Some(
+                compare_local_files_projective_bidirectional_region_grid_transform(
+                    left,
+                    right,
+                    model,
+                    ProjectivePyramidRegionsFilePolicy {
+                        search: config.gradient.search,
+                        max_regions: config.max_regions,
+                        max_total_sample_pairs: cells
+                            .checked_add(1)
+                            .and_then(|n| n.checked_mul(samples))
+                            .ok_or(LocalError::Budget)?,
+                    },
+                    config.grid,
+                    budget,
+                    cancelled,
+                )?,
+            )
+        } else {
+            None
+        };
+        first.verify(cancelled)?;
+        second.verify(cancelled)?;
+        Ok(ManagedProjectiveDistinctScaleRegionsFileEvidence { whole, regions })
+    })();
+    if cancelled() {
+        Err(LocalFileError::Cancelled)
+    } else {
+        result
+    }
+}
+
+pub(crate) fn validate_distinct_scale_regions_file_policy(
+    config: ProjectiveDistinctScaleRegionsFilePolicy,
+    factors: &[f64],
+    cancel: &impl Fn() -> bool,
+) -> Result<u64, LocalFileError> {
+    validate_projective_gradient_pyramid_file_policy(&config.gradient)?;
+    validate_spatial(config.spatial, config.gradient.search.local.extract.max_features)?;
+    if config.grid.0 == 0 || config.grid.1 == 0 || config.max_regions == 0 {
+        return Err(LocalFileError::InvalidPolicy);
+    }
+    if !config.competitor_radius.is_finite()
+        || config.competitor_radius < 0.
+        || !config.competitor_radius.powi(2).is_finite()
+    {
+        return Err(LocalError::Invalid.into());
+    }
+    let cells = u64::from(config.grid.0)
+        .checked_mul(u64::from(config.grid.1))
+        .and_then(|n| n.checked_mul(2))
+        .ok_or(LocalError::Budget)?;
+    if cells > u64::try_from(config.max_regions).map_err(|_| LocalError::Budget)? {
+        return Err(LocalError::Budget.into());
+    }
+    let samples = config.gradient.search.filter.filter.max_sample_pairs;
+    let total = cells
+        .checked_add(2)
+        .and_then(|n| n.checked_mul(samples))
+        .ok_or(LocalError::Budget)?;
+    if total > config.max_total_sample_pairs {
+        return Err(LocalError::Budget.into());
+    }
+    if factors.is_empty() || factors.len() > config.gradient.search.max_levels {
+        return Err(LocalError::Budget.into());
+    }
+    let mut previous = 0.;
+    for &factor in factors {
+        if cancel() {
+            return Err(LocalFileError::Cancelled);
+        }
+        if !factor.is_finite() || factor < 1. || factor <= previous {
+            return Err(LocalError::Invalid.into());
+        }
+        previous = factor;
+    }
+    Ok(cells)
+}
+
+/// Explicit low-contrast plus smoothed-candidate union. This policy is opt-in;
+/// all geometry and regional confirmation thresholds are inherited unchanged.
+#[derive(Debug, Clone, Copy)]
+pub struct ProjectiveCandidateUnionRegionsFilePolicy {
+    pub search: ProjectiveDistinctScaleRegionsFilePolicy,
+    pub low_contrast_corner_score: f64,
+    pub smoothing_radius: u32,
+    pub max_smoothing_taps_per_image: u64,
+    pub max_area_taps_per_extraction: u64,
+    pub max_total_gradient_samples: u64,
+    pub max_total_match_comparisons: u64,
+    pub max_union_points: usize,
+    pub max_union_comparisons: u64,
+}
+#[derive(Debug)]
+pub struct ManagedProjectiveCandidateUnionRegionsFileEvidence {
+    pub correspondences: rrrah_core::SharedBuffer<crate::geometry::Correspondence>,
+    pub geometry: Option<crate::managed_evidence::ManagedProjectiveGeometry>,
+    pub regions: Option<ProjectiveTransformedRegionsFileEvidence>,
+}
+/// Fresh extraction of both candidate recipes, managed deterministic union and
+/// original-pixel regional confirmation under a common source/cancellation guard.
+/// Local supports never constitute whole-image acceptance. Smoothing, features,
+/// matcher scratch and retained vectors are managed; decoder and geometry
+/// construction allocation completeness remain separate requirements.
+/// # Errors
+/// Invalid policies, checked aggregate work/memory refusal, source changes or cancellation.
+pub fn compare_local_files_projective_candidate_union_regions_managed(
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    config: ProjectiveCandidateUnionRegionsFilePolicy,
+    factors: &[f64],
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<ManagedProjectiveCandidateUnionRegionsFileEvidence, LocalFileError> {
+    compare_local_files_projective_candidate_union_regions_with_smoothing_managed(
+        left,
+        right,
+        config,
+        factors,
+        [config.smoothing_radius; 2],
+        budget,
+        cancel,
+    )
+}
+
+/// Explicit per-input candidate smoothing for asymmetric capture blur.
+/// Radii are ordered like the file arguments and affect candidate extraction
+/// only. Original-pixel confirmation, source guards and acceptance are unchanged.
+/// This opt-in evidence does not establish whole-image equality.
+/// # Errors
+/// Invalid smoothing/policies, work or memory refusal, source drift or cancellation.
+pub fn compare_local_files_projective_candidate_union_regions_with_smoothing_managed(
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    config: ProjectiveCandidateUnionRegionsFilePolicy,
+    factors: &[f64],
+    smoothing_radii: [u32; 2],
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<ManagedProjectiveCandidateUnionRegionsFileEvidence, LocalFileError> {
+    candidate_union_files_managed(left, right, config, factors, smoothing_radii, true, None, budget, cancel)
+}
+
+#[derive(Debug)]
+pub struct ManagedCandidateUnionGeometryFileEvidence {
+    pub correspondences: rrrah_core::SharedBuffer<crate::geometry::Correspondence>,
+    pub geometry: Option<crate::managed_evidence::ManagedProjectiveGeometry>,
+}
+/// Extract the same complete native point union and domain-eligible model without
+/// regional pixel/color confirmation. Source/dependency guards and cancellation
+/// cover extraction and fitting. Callers must independently confirm pixels;
+/// these descriptor/geometric proposals never establish identity or local support.
+pub fn find_projective_candidate_union_geometry_files_managed(
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    config: ProjectiveCandidateUnionRegionsFilePolicy,
+    factors: &[f64],
+    smoothing_radii: [u32; 2],
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<ManagedCandidateUnionGeometryFileEvidence, LocalFileError> {
+    let evidence = candidate_union_files_managed(left, right, config, factors, smoothing_radii, false, None, budget, cancel)?;
+    Ok(ManagedCandidateUnionGeometryFileEvidence { correspondences: evidence.correspondences, geometry: evidence.geometry })
+}
+
+/// Explicit reflected source descriptors for low-contrast and smoothed proposals.
+/// All landmarks and geometric domains remain in original image coordinates.
+/// Admits both maximum feature sets'128-bin permutations before file IO;
+/// reflected feature storage is managed. Geometry never establishes pixel support.
+/// # Errors
+/// Policies, reflection/work/memory budgets, source changes or cancellation.
+pub fn find_projective_candidate_union_reflected_geometry_files_managed(
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    config: ProjectiveCandidateUnionRegionsFilePolicy,
+    factors: &[f64],
+    smoothing_radii: [u32; 2],
+    maximum_reflection_bins: u64,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<ManagedCandidateUnionGeometryFileEvidence, LocalFileError> {
+    let evidence = candidate_union_files_managed(left, right, config, factors,
+        smoothing_radii, false, Some(maximum_reflection_bins), budget, cancel)?;
+    Ok(ManagedCandidateUnionGeometryFileEvidence {
+        correspondences: evidence.correspondences, geometry: evidence.geometry,
+    })
+}
+
+pub(crate) fn validate_candidate_reflection_bins(
+    config: ProjectiveCandidateUnionRegionsFilePolicy,
+    limit: u64,
+) -> Result<(), LocalFileError> {
+    let required = u64::try_from(config.search.gradient.search.max_total_features)
+        .map_err(|_| LocalError::Budget)?.checked_mul(256).ok_or(LocalError::Budget)?;
+    if required > limit { return Err(LocalError::Budget.into()); }
+    Ok(())
+}
+
+fn candidate_union_files_managed(
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    config: ProjectiveCandidateUnionRegionsFilePolicy,
+    factors: &[f64],
+    smoothing_radii: [u32; 2],
+    confirm_regions: bool,
+    reflection_bins: Option<u64>,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<ManagedProjectiveCandidateUnionRegionsFileEvidence, LocalFileError> {
+    let latch = Cell::new(false);
+    let cancelled = || {
+        let value = latch.get()
+            || cancel()
+            || [left, right].iter().any(|r| {
+                r.cancellation
+                    .as_ref()
+                    .is_some_and(rrrah_decode::GenerationToken::is_cancelled)
+            });
+        latch.set(value);
+        value
+    };
+    let cells = validate_candidate_union_regions_file_policy(config, factors, &cancelled)?;
+    if let Some(limit) = reflection_bins {
+        validate_candidate_reflection_bins(config, limit)?;
+    }
+    let gradient = config.search.gradient;
+    let mut low = gradient;
+    low.search.local.extract.minimum_corner_score = config.low_contrast_corner_score;
+    let result = (|| {
+        let first =
+            ContentSnapshot::read(&left.path, gradient.search.local.decode.max_file_bytes, cancelled)?;
+        let second = ContentSnapshot::read(
+            &right.path,
+            gradient.search.local.decode.max_file_bytes,
+            cancelled,
+        )?;
+        let a = decode_selected_frame_bounded(left, gradient.search.local.decode, budget, cancelled)?;
+        let b = decode_selected_frame_bounded(right, gradient.search.local.decode, budget, cancelled)?;
+        let av = a
+            .view(cancelled)
+            .map_err(crate::decode::FileError::from)
+            .map_err(CachedError::from)?;
+        let bv = b
+            .view(cancelled)
+            .map_err(crate::decode::FileError::from)
+            .map_err(CachedError::from)?;
+        let extract = |view: &crate::linear::LinearRgbaView<'_>, g: ProjectiveGradientPyramidFilePolicy| {
+            crate::gradient_scale::extract_spatial_gradient_scales_area_managed(
+                view,
+                crate::pyramid::PyramidPolicy {
+                    local: g.search.local.extract,
+                    max_levels: g.search.max_levels,
+                    max_total_pixels: g.search.max_total_pixels,
+                    max_total_features: g.search.max_total_features,
+                },
+                factors,
+                g.max_total_gradient_samples,
+                config.search.recipe,
+                (
+                    config.search.spatial.columns,
+                    config.search.spatial.rows,
+                    config.search.spatial.max_per_cell,
+                ),
+                config.max_area_taps_per_extraction,
+                budget,
+                cancelled,
+            )
+        };
+        let original_matches = {
+            let mut af = extract(&av, low)?;
+            if let Some(limit) = reflection_bins {
+                af = crate::gradient::reflect_gradient_features_managed(&af, limit, budget, cancelled)?;
+            }
+            let bf = extract(&bv, low)?;
+            crate::gradient::match_gradients_distinct_locations_managed(
+                &af,
+                &bf,
+                gradient.matching,
+                config.search.competitor_radius,
+                budget,
+                cancelled,
+            )?
+        };
+        let source_dimensions = av.dimensions();
+        let target_dimensions = bv.dimensions();
+        let smoothed_matches = {
+            let aa = crate::gradient_scale::smooth_gradient_candidates_managed(
+                &av,
+                smoothing_radii[0],
+                config.max_smoothing_taps_per_image,
+                budget,
+                cancelled,
+            )?;
+            let bb = crate::gradient_scale::smooth_gradient_candidates_managed(
+                &bv,
+                smoothing_radii[1],
+                config.max_smoothing_taps_per_image,
+                budget,
+                cancelled,
+            )?;
+            let (aw, ah) = source_dimensions;
+            let (bw, bh) = target_dimensions;
+            // Original candidate pixels are no longer needed once both smoothed
+            // views exist. Release them before reserving descriptor scratch.
+            drop((a, b));
+            let av = crate::linear::LinearRgbaView::new(
+                aw,
+                ah,
+                &aa,
+                gradient.search.local.decode.max_pixels,
+                cancelled,
+            )
+            .map_err(|e| match e {
+                crate::pixels::PixelError::Layout => LocalError::Invalid,
+                crate::pixels::PixelError::Budget => LocalError::Budget,
+                crate::pixels::PixelError::Cancelled => LocalError::Cancelled,
+            })?;
+            let bv = crate::linear::LinearRgbaView::new(
+                bw,
+                bh,
+                &bb,
+                gradient.search.local.decode.max_pixels,
+                cancelled,
+            )
+            .map_err(|e| match e {
+                crate::pixels::PixelError::Layout => LocalError::Invalid,
+                crate::pixels::PixelError::Budget => LocalError::Budget,
+                crate::pixels::PixelError::Cancelled => LocalError::Cancelled,
+            })?;
+            let mut af = extract(&av, gradient)?;
+            if let Some(limit) = reflection_bins {
+                af = crate::gradient::reflect_gradient_features_managed(&af, limit, budget, cancelled)?;
+            }
+            let bf = extract(&bv, gradient)?;
+            crate::gradient::match_gradients_distinct_locations_managed(
+                &af,
+                &bf,
+                gradient.matching,
+                config.search.competitor_radius,
+                budget,
+                cancelled,
+            )?
+        };
+        let correspondences = crate::correspondence_union::union_correspondences_distinct_managed(
+            &[&original_matches, &smoothed_matches],
+            config.search.competitor_radius,
+            config.max_union_points,
+            config.max_union_comparisons,
+            budget,
+            cancelled,
+        )?;
+        drop((original_matches, smoothed_matches));
+        let model = crate::geometry::verify_projective_sampled_for_domains(
+            &correspondences,
+            gradient.search.local.geometry,
+            gradient.search.sampling,
+            source_dimensions,
+            target_dimensions,
+            cancelled,
+        )?;
+        let regions = if let Some(model) = model.as_ref().filter(|_| confirm_regions) {
+            Some(
+                compare_local_files_projective_bidirectional_region_grid_transform(
+                    left,
+                    right,
+                    model.transform,
+                    ProjectivePyramidRegionsFilePolicy {
+                        search: gradient.search,
+                        max_regions: config.search.max_regions,
+                        max_total_sample_pairs: cells
+                            .checked_add(1)
+                            .and_then(|n| n.checked_mul(gradient.search.filter.filter.max_sample_pairs))
+                            .ok_or(LocalError::Budget)?,
+                    },
+                    config.search.grid,
+                    budget,
+                    cancelled,
+                )?,
+            )
+        } else {
+            None
+        };
+        let geometry = if let Some(model) = model {
+            let bytes = model
+                .inliers
+                .capacity()
+                .checked_mul(std::mem::size_of::<usize>())
+                .and_then(|v| u64::try_from(v).ok())
+                .ok_or(LocalError::Budget)?;
+            let inliers = budget
+                .try_reserve(bytes)
+                .map_err(|_| LocalError::Budget)?
+                .try_adopt(model.inliers)
+                .map_err(|_| LocalError::Budget)?;
+            Some(crate::managed_evidence::ManagedProjectiveGeometry {
+                transform: model.transform,
+                inliers,
+                squared_error: model.squared_error,
+                hypotheses: model.hypotheses,
+            })
+        } else {
+            None
+        };
+        first.verify(cancelled)?;
+        second.verify(cancelled)?;
+        Ok(ManagedProjectiveCandidateUnionRegionsFileEvidence {
+            correspondences,
+            geometry,
+            regions,
+        })
+    })();
+    if cancelled() {
+        Err(LocalFileError::Cancelled)
+    } else {
+        result
+    }
+}
+
+/// Explicit cumulative admission for symmetric and both asymmetric attempts.
+#[derive(Debug, Clone, Copy)]
+pub struct ProjectiveCandidateUnionFallbackFilePolicy {
+    pub search: ProjectiveCandidateUnionRegionsFilePolicy,
+    pub asymmetric_radius: u32,
+    pub max_total_gradient_samples: u64,
+    pub max_total_match_comparisons: u64,
+    pub max_total_union_comparisons: u64,
+}
+
+#[derive(Debug)]
+pub struct ManagedProjectiveCandidateUnionFallbackFileEvidence {
+    pub evidence: ManagedProjectiveCandidateUnionRegionsFileEvidence,
+    pub smoothing_radii: [u32; 2],
+    pub attempted_recipes: u32,
+}
+
+/// Preserve symmetric positives, then try each asymmetric order on a miss.
+/// A common content guard spans every attempt. Refusals stop the operation;
+/// they are never interpreted as misses. Unsuccessful attempts release their
+/// retained evidence before the next attempt. Pixel acceptance is unchanged.
+/// # Errors
+/// Cumulative admission, resource refusal, cancellation or source drift.
+pub fn compare_local_files_projective_candidate_union_fallback_regions_managed(
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    config: ProjectiveCandidateUnionFallbackFilePolicy,
+    factors: &[f64],
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<ManagedProjectiveCandidateUnionFallbackFileEvidence, LocalFileError> {
+    let latch = Cell::new(false);
+    let cancelled = || {
+        let value = latch.get()
+            || cancel()
+            || [left, right].iter().any(|r| {
+                r.cancellation
+                    .as_ref()
+                    .is_some_and(rrrah_decode::GenerationToken::is_cancelled)
+            });
+        latch.set(value);
+        value
+    };
+    validate_candidate_union_fallback_file_policy(config, factors, &cancelled)?;
+    let result = (|| {
+        let limit = config.search.search.gradient.search.local.decode.max_file_bytes;
+        let first = ContentSnapshot::read(&left.path, limit, cancelled)?;
+        let second = ContentSnapshot::read(&right.path, limit, cancelled)?;
+        let recipes = [
+            [config.search.smoothing_radius; 2],
+            [config.asymmetric_radius, 0],
+            [0, config.asymmetric_radius],
+        ];
+        for (index, radii) in recipes.into_iter().enumerate() {
+            let evidence = compare_local_files_projective_candidate_union_regions_with_smoothing_managed(
+                left,
+                right,
+                config.search,
+                factors,
+                radii,
+                budget,
+                cancelled,
+            )?;
+            first.verify(cancelled)?;
+            second.verify(cancelled)?;
+            if index == 2
+                || evidence
+                    .regions
+                    .as_ref()
+                    .is_some_and(|r| r.region_support_count() > 0)
+            {
+                return Ok(ManagedProjectiveCandidateUnionFallbackFileEvidence {
+                    evidence,
+                    smoothing_radii: radii,
+                    attempted_recipes: (index + 1) as u32,
+                });
+            }
+            drop(evidence);
+        }
+        unreachable!("three recipes always produce a terminal outcome")
+    })();
+    if cancelled() {
+        Err(LocalFileError::Cancelled)
+    } else {
+        result
+    }
+}
+
+pub(crate) fn validate_candidate_union_fallback_file_policy(
+    config: ProjectiveCandidateUnionFallbackFilePolicy,
+    factors: &[f64],
+    cancel: &impl Fn() -> bool,
+) -> Result<(), LocalFileError> {
+    validate_candidate_union_regions_file_policy(config.search, factors, cancel)?;
+    for (per_attempt, allowed) in [
+        (
+            config.search.max_total_gradient_samples,
+            config.max_total_gradient_samples,
+        ),
+        (
+            config.search.max_total_match_comparisons,
+            config.max_total_match_comparisons,
+        ),
+        (
+            config.search.max_union_comparisons,
+            config.max_total_union_comparisons,
+        ),
+    ] {
+        if per_attempt.checked_mul(3).ok_or(LocalError::Budget)? > allowed {
+            return Err(LocalError::Budget.into());
+        }
+    }
+    Ok(())
+}
+
+pub(crate) fn validate_candidate_union_regions_file_policy(
+    config: ProjectiveCandidateUnionRegionsFilePolicy,
+    factors: &[f64],
+    cancel: &impl Fn() -> bool,
+) -> Result<u64, LocalFileError> {
+    let cells = validate_distinct_scale_regions_file_policy(config.search, factors, cancel)?;
+    let mut low = config.search.gradient;
+    low.search.local.extract.minimum_corner_score = config.low_contrast_corner_score;
+    validate_projective_gradient_pyramid_file_policy(&low)?;
+    let gradient = config.search.gradient;
+    let total_samples = gradient
+        .max_total_gradient_samples
+        .checked_mul(4)
+        .ok_or(LocalError::Budget)?;
+    let total_matches = gradient
+        .matching
+        .max_comparisons
+        .checked_mul(2)
+        .ok_or(LocalError::Budget)?;
+    let union_n = u64::try_from(config.max_union_points).map_err(|_| LocalError::Budget)?;
+    let union_work = union_n
+        .checked_mul(union_n.saturating_sub(1))
+        .ok_or(LocalError::Budget)?
+        / 2;
+    if config.max_union_points == 0
+        || total_samples > config.max_total_gradient_samples
+        || total_matches > config.max_total_match_comparisons
+        || union_work > config.max_union_comparisons
+        || config.max_smoothing_taps_per_image == 0
+        || (config.max_area_taps_per_extraction == 0 && factors.iter().any(|&v| v > 1.))
+    {
+        return Err(LocalError::Budget.into());
+    }
+    Ok(cells)
 }

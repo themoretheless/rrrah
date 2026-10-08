@@ -1,0 +1,765 @@
+{
+  "scope": "Authored minimal RGB PDF reproduction; parent nonisolated, two isolated child groups; red full opacity, blue half opacity. Fixtures differ only parent K flag. Independent Poppler 72dpi center comparison.",
+  "cases": [
+    {
+      "mode": "knockout",
+      "fixture": "tests/fixtures/raster/pdf-knockout-overlap.pdf",
+      "sha256": "6d3c7dd5c0dfe516fd13e5ff673480331c6909307cae87903ae0afeb389ccd45",
+      "oracle_center_rgb": [
+        127,
+        127,
+        255
+      ]
+    },
+    {
+      "mode": "normal",
+      "fixture": "tests/fixtures/raster/pdf-normal-overlap.pdf",
+      "sha256": "ecfa8fccde82bd16268f002b07ecdb571b631ffe1e202dfce2035cd84132cf71",
+      "oracle_center_rgb": [
+        127,
+        0,
+        128
+      ]
+    },
+    {
+      "mode": "knockout-transparent-child",
+      "fixture": "tests/fixtures/raster/pdf-knockout-transparent-child.pdf",
+      "sha256": "294d3b484cab37aca086f48b8a8ceffd42a53bc439339f6cf90a22592f02146c",
+      "oracle_center_rgb": [
+        255,
+        255,
+        255
+      ],
+      "native_center_rgba": [
+        255,
+        0,
+        0,
+        255
+      ]
+    },
+    {
+      "mode": "knockout-colored-backdrop",
+      "fixture": "tests/fixtures/raster/pdf-knockout-colored-backdrop.pdf",
+      "sha256": "098387f075cf3fdc503ff2cfd479a0869e4de4caf667b3ce04cb0e745b301ded",
+      "oracle_center_rgb": [
+        127,
+        127,
+        127
+      ],
+      "background": "yellow"
+    }
+  ],
+  "pending_regression": "crates/rrrah-decode/tests/pdf_knockout.rs",
+  "native_regression_result": {
+    "command": "cargo test -p rrrah-decode --test pdf_knockout --locked --offline --target-dir /tmp/rrrah-required-corpus-target -- --include-ignored",
+    "exit_code": 101,
+    "passed": 1,
+    "failed": 3,
+    "failure": "Half-opacity, zero-opacity and colored-initial-backdrop knockout cases fail; ordinary group control passes.",
+    "status": "Intentionally ignored with explicit pending-implementation reason in default suite; explicitly executed here and confirmed failing."
+  },
+  "implementation_requirements": [
+    "Propagate /I and /K through interpreter device group interface; current API carries opacity, mask and blend only.",
+    "Track object shape separately from alpha; zero-opacity child shape still replaces earlier child.",
+    "Preserve group initial backdrop for non-isolated groups; do not substitute clearing the entire child bounding box.",
+    "Nested child groups are single knockout elements. Preserve normal-group control behavior.",
+    "Admit shape/backdrop storage before allocation, retain credit through compositing, and poll cancellation."
+  ],
+  "backend_inspection": {
+    "renderer": "vendor/hayro/src/renderer.rs",
+    "group_parser": "vendor/hayro-interpret/src/x_object.rs",
+    "device": "vendor/hayro-interpret/src/device.rs",
+    "vello_cpu_version": "0.0.8",
+    "finding": "RenderContext.push_layer exposes clip, blend, opacity, mask, filter; no knockout/shape parameter. Integration needs explicit shape handling, not a blend mode substitution."
+  },
+  "interpreter_progress": {
+    "status": "Form parser retains /I and /K and passes both through new Device.push_transparency_group_with_properties method. Default device adapter delegates to legacy method; renderer compositing remains pending.",
+    "unit_test": "x_object::transparency_group_properties_tests::preserves_independent_isolation_and_knockout_flags",
+    "unit_result": {
+      "passed": 1,
+      "failed": 0
+    },
+    "ordinary_render_control": {
+      "passed": 1,
+      "pending_ignored": 2
+    },
+    "compatibility": "Existing analysis devices retain legacy group callback through default adapter."
+  },
+  "compositor_prototype": {
+    "source": "vendor/hayro/src/knockout_compositor.rs",
+    "scope": "Test-only premultiplied RGBA8 normal-blend algebra and admitted output buffer. PDF renderer integration pending.",
+    "equation": "source + (shape - source_alpha) * initial_backdrop + (1 - shape) * previous_result",
+    "checks_passed": 71,
+    "checks_failed": 0,
+    "oracle_rounding": "Half-blue on yellow differs by at most one code from Poppler center; full PDF regression allows one code.",
+    "pending": "Independent shape rendering, initial group backdrop capture, bounded admitted buffer storage, cancellation, and all PDF object types.",
+    "buffer_memory": "Exactly 4 bytes per output pixel requested before allocation; source, shape, previous and backdrop are borrowed and must be admitted separately by eventual renderer.",
+    "buffer_checks": [
+      "4096-byte output credit retained until buffer drop",
+      "Admission refusal preserves previous input",
+      "Cancellation after partial internal processing releases credit and returns no partial result",
+      "Invalid late source pixel releases credit",
+      "Mismatched lengths rejected before admission"
+    ],
+    "backdrop_selection": "Test-only helper distinguishes parent initial/current backdrop; knockout non-isolated child gets initial, ordinary non-isolated child gets current, isolated child gets transparent.",
+    "backdrop_removal": {
+      "status": "Test-only RGBA8 normal-blend prototype",
+      "requires": "Independently tracked group alpha, not composited result alpha",
+      "checks": [
+        "Opaque white and yellow backdrop contributions removed",
+        "Transparent and partially transparent backdrop contributions removed",
+        "Invalid alpha/color combination rejected; at most one intermediate rounding code tolerated"
+      ],
+      "pending": "Actual group coverage/alpha accumulation, raster capture and integration."
+    },
+    "group_coverage": {
+      "status": "Test-only independent accumulated shape and group alpha",
+      "shape": "union(previous_shape, source_shape)",
+      "ordinary_alpha": "union(previous_alpha, source_alpha)",
+      "knockout_alpha": "source_alpha + (1 - source_shape) * previous_alpha",
+      "constant_alpha": "Scales group alpha; shape remains unchanged unless alpha-is-shape is true",
+      "exhaustive_check": "All 32896 valid 8-bit source shape/alpha pairs, three initial states and both knockout modes preserve alpha <= shape",
+      "pending": "Populate from actual rasterized PDF object coverage and alpha."
+    },
+    "engine_shape_experiment": {
+      "source": "rasterize_path_shape in vendor/hayro/src/knockout_compositor.rs",
+      "status": "Test-only filled and stroked path shape rasterization using vello_cpu RenderContext",
+      "verified": [
+        "Real transformed path with fractional edge retains partial coverage",
+        "Device-coordinate clipping removes coverage outside clip",
+        "Pixel storage admission requested before backend construction",
+        "Cancellation before admission does not allocate",
+        "EvenOdd hole remains unpainted and preserves previous knockout content",
+        "NonZero fill of identical subpaths retains filled interior",
+        "Stroke width and dash gaps with butt caps preserved",
+        "Round caps expand coverage into gaps independently of butt-cap case",
+        "Nested clip intersection excludes pixels outside either region",
+        "EvenOdd clip hole stays uncovered inside another clip",
+        "Clip fill rules are set independently from object fill rules"
+      ],
+      "pixel_storage_bound": "5 bytes per pixel for RGBA staging plus alpha extraction; retained credit is conservative after staging drops",
+      "limitations": [
+        "Backend scene/resource allocations are not yet admitted",
+        "Opaque backend render call has cancellation checks before and after, not inside",
+        "No glyph/image/soft-mask or PDF replay support yet",
+        "No production group integration"
+      ]
+    },
+    "full_frame_shape_composition": {
+      "test": "engine_shapes_and_buffer_compositor_reproduce_full_overlap_fixture",
+      "status": "Passed; actual engine rectangle masks feed admitted buffer compositor",
+      "extent": [
+        32,
+        16
+      ],
+      "scope": "All 512 pixels in each white/yellow backdrop and half-opacity/zero-opacity blue case. Integer-aligned authored paths only; PDF interpretation and nested groups not exercised.",
+      "tolerance": "At most one code for half-opacity oracle rounding; exact for zero-opacity restoration",
+      "next": "Pass PDF interpreter path/group callbacks into compositing experiment; retain full integration regression failures until production supports them."
+    },
+    "interpreter_callback_replay": {
+      "source": "vendor/hayro/src/knockout_interpreter.rs",
+      "status": "Test-only; actual native PDF parser and interpreter feed recorded path/group callbacks to experimental replay",
+      "verified": [
+        "Nested parent I=false/K=true and child I=true/K=false flags survive to device",
+        "Child opacity 0.5 survives while child paint alpha resets inside group",
+        "All 512 pixels checked for knockout half-opacity, zero-opacity, yellow-backdrop and normal-group control",
+        "Nonisolated group backdrop is removed using separately accumulated group alpha before parent compositing",
+        "Exhaustive cancellation at every observed replay checkpoint returns None and no partial image; includes group transitions, pixel loops and shape-render boundary checks",
+        "Replay frame/backdrop/coverage buffers, stack metadata and source scratch admitted before their allocation",
+        "Every replay admission refusal returns None and releases all tracked credit",
+        "Every observed cancellation checkpoint releases all tracked replay credit",
+        "Returned image retains conservative root-frame pixel credit until drop",
+        "Replay forwards full captured clip stack and each clip fill rule through borrowed iterator; no clip-list clone during replay"
+      ],
+      "pixel_tolerance": "At most one RGBA8 code; full-frame integer-aligned authored geometry",
+      "limitations": [
+        "Captured recorder scene/clip/path storage and backend render resources are not production-admitted",
+        "Initial PDF interpretation/recording has no new cancellation hook; backend raster call still only checked before/after",
+        "Only normal-blend NonZero solid filled paths currently replayed; other object operations explicitly fail the experiment",
+        "Glyphs, images, patterns, masks and production integration remain pending",
+        "Authored PDF callback tests still use full-canvas clips; nested nontrivial clips currently checked at shape-engine level"
+      ],
+      "managed_test_scope": "32x16 authored fixture: tracked replay/frame/pixel/scratch credit stays within 32KiB test limit. This is not total backend memory or RSS; captured scene and backend resources remain outside this accounting."
+    },
+    "pdf_clip_restoration": "Actual native PDF callbacks: clipped knockout half/zero-opacity child, then drawing outside the old clip after Q; all 512 pixels checked in both cases.",
+    "pdf_evenodd_replay": "Native interpreter f* callback retains EvenOdd fill rule; nested half-opacity child hole preserves prior red knockout content. All 512 pixels checked. Test-only; production renderer unchanged.",
+    "pdf_stroke_replay": "Actual native PDF callbacks preserve stroke width/caps/join/miter/dash/offset. Authored butt-cap dashed stroke checks all 512 pixels at half and zero child opacity; gaps retain previous red while zero-opacity covered shape clears it. Prototype only; hairline minimum-width policy, other object types and production integration pending.",
+    "replay_fault_coverage": "Every admission refusal and every cancellation checkpoint swept for three actual authored PDFs: normal filled rectangles, EvenOdd hole, clipped zero-opacity dashed stroke. All admitted credits return to zero on failure; no partial output. Dash f64 storage admitted before collection and retained until stroke drop.",
+    "replay_dimensions": "Test-only replay derives count, frame credit, scratch and raster dimensions from recorder surface; checked frame byte arithmetic; zero-sized surfaces refused before admission. Authored PDF scaled to 64x32 and 96x48: every pixel checked, frame admission scales exactly with count. Full real artwork and production renderer integration still pending.",
+    "spatial_reduction": {
+      "status": "Test-only, production integration pending",
+      "scope": "Borrowed premultiplied spatial input, independently admitted 4-byte/output-pixel buffer, checked dimensions and accumulator overflow, cancellation every 256 samples and before/after allocation, credit retained until drop.",
+      "verification": "Correlated actual PDF edge now uses helper after 2x composition and gives exact analytic [191,191,255,255]. Cancellation/refusal/invalid-late-sample releases output credit, no partial output.",
+      "remaining": "Current replay allocates whole supersampled page; bounded tiling and all PDF object types still required. Finite supersampling is approximate for arbitrary curves."
+    },
+    "spatial_tiles": {
+      "status": "Test-only tile assembly, production integration pending",
+      "pixel_storage": "One admitted full-resolution output plus one supersampled tile and reduced tile. Renderer group frame/scratch storage is limited to tile size, multiplied by nesting depth.",
+      "verification": "Real authored native interpreter replay with translated tile transforms, tile edges 3/7/16 including partial edge tiles. Every pixel exactly matches whole-page 2x composition then reduction; supersampled surface at most 4*edge^2 pixels.",
+      "limitations": [
+        "Scene/parser/backend allocations still not all admitted",
+        "General curves only approximately sampled",
+        "All object types, masks, blend modes and production integration remain pending",
+        "No measured throughput gain yet; borrowed-scene replay still visits every event per tile. Curves, transforms, image/text and soft-mask clip combinations still require verification."
+      ],
+      "failure_sweep": "Every admission and cancellation point in tile assembly/production callback/reduction swept. All credits return to zero; no partial output; successful output retains only 2048-byte credit. Tracked pixel credit <=3028 bytes for 32x16 output, factor2, edge7. Generic test producer; native interpreter failure checks remain separate.",
+      "overflow": "Maximum spatial tile dimensions/bytes validated before output allocation or producer invocation.",
+      "scene_reuse": "Native interpreter records once at original dimensions; tile replay borrows unchanged events, paths and clips. Object transforms and device clip transforms composed with tile translation/scale. Three tile sizes still match complete spatial render exactly.",
+      "clip_seam_verification": "Borrowed scene tested on three authored PDFs and tile edges3/7/16. Nested fractional rectangular clip plus EvenOdd hole, rounded dashed stroke with nonzero dash phase, Q restoration followed by outside-clip green draw, and zero-opacity EvenOdd child. All512 output pixels exactly match whole 2x render after reduction in all9 combinations."
+    },
+    "scene_admission": {
+      "status": "Test-only opt-in admission for recorded scene payloads",
+      "coverage": "Event vector metadata growth, path elements, cloned clip list/path elements, dash data, guard list entries; admission before clone or vector reserve. Credits conservatively retained through scene drop. Failed capture stops subsequent allocation and prevents replay.",
+      "verification": "Actual authored clipped dashed PDF: every capture admission denied in turn; no subsequent admissions, no partial replay/frame allocation, all credits return to zero when scene dropped.",
+      "limits": "Parser/input/cache allocations and backend resources excluded; no complete RSS bound. Observed capture cancellation/refusal now halts next interpreter operator; heavy individual operation can still continue until callback/check.",
+      "recording_cancellation": "Opt-in cancellation before parser entry, before capture, after admission before reserve/clone, and final recording check. Every callback-recording checkpoint swept on actual authored clipped dashed PDF; cancelled scene cannot admit replay frames, all scene credit released on drop."
+    },
+    "outline_text": {
+      "status": "Test-only outline glyph conversion to recorded paths",
+      "verification": "Actual authored PDF Type1 Helvetica H fill/stroke/invisible modes. Both fill/stroke record two paths and show correct fully covered knockout interior; invisible text records no paths and leaves white canvas. Full37 test suite passes.",
+      "limitations": "Font outline extraction allocates before retained-path capture admission; font caches/parser excluded. No universal glyph fidelity qualification; production knockout integration pending."
+    },
+    "type3_text": {
+      "status": "Test-only native Type3 command replay for path-based authored glyph",
+      "verification": "Own Type3 d1 rectangular H glyph in red/half-blue knockout children: recorded two paths, expected half-blue interior, 3-pixel tiles match whole2x composition/reduction for all512 output pixels.38prototype tests passed.",
+      "production_change": "Type3ShapeGlyphDevice forwards Device::should_stop to inner device, preserving operator cancellation within Type3 shape interpretation.",
+      "limits": "Image/stencil Type3 glyphs and colored resources depend on remaining image/pattern/mask support. Not universal Type3 qualification; production knockout integration pending.",
+      "operator_cancellation": "Production Type3 rendering checks stop before state clone and stream decode, during glyph-kind classification, and via forwarded shape-device operator checks. Authored20000 q/Q program after d1 and adversarial delayed-d1 program both cancel exactly at poll50, enter one glyph, capture no drawn path, and do not scan remaining operators. No interruption inside stream decompression itself."
+    },
+    "raster_capture": {
+      "status": "Test-only nearest/bilinear RGB/luma sampling",
+      "verification": "Actual inline ASCIIHex RGB PDF decoded1x1 blue pixel, owned RGB retained without copy, no alpha, valid transform and active clip retained.40prototype tests pass.",
+      "memory": "Scene budget requests4bytes per declared pixel plus clips/event metadata before decode; dimensions validated against declaration before storing. Cancellation forwarded into native raster decoding.",
+      "limits": "Decode scratch/input/cache memory not all admitted. Changed decoder dimensions rejected. Stencil unsupported; actual interpolated PDF oracle, per-pixel alpha/mask-specific interpolation and minification filtering still need qualification. No production knockout integration.",
+      "tile_verification": "Authored inline1x1 blue image under half-opacity child knocks out previous red region. All512 pixels checked against white/half-blue expected; edge7 tiled2x composition exactly matches whole2x render/reduction. Source4bytes per tile pixel admitted; geometric shape separately rasterized with clip transforms.",
+      "interpolation_check": "Two RGB samples: transparent red and opaque blue midpoint yields premultiplied[0,0,128,128], with no red fringe. Opaque midpoint[128,0,128,255]; border clamping, nonfinite coordinates and mismatched alpha dimensions checked. Existing native inline RGB/tile regression still passes.",
+      "external_oracle": "Actual2x1 RGB PDF: nearest exact vsPoppler; bilinear max52,MAE12.88671875,191different pixels. Interpolation remains unqualified; do not integrate as fidelity fix. Report pdf-knockout-image-poppler-2026-10-08.json."
+    },
+    "stencil_raster": {
+      "status": "Test-only stencil shape independent from solid paint opacity",
+      "verified": "Authored2x1 one-bit stencil over red, half and zero child opacity; all512pixels checked. Stencil-painted region replaces prior shape, mask hole preserves red. Stencil alpha modifies shape separately from child opacity.",
+      "limits": "Pattern paint/filtering unqualified; source/decode allocations not fully admitted; production knockout integration pending."
+    },
+    "shading_capture": {
+      "status": "Test-only owned encoded shading paint and per-spatial-sample replay",
+      "verification": "Actual authored DeviceRGB axial black-white gradient under half-opacity child over red knockout parent. All512pixels match analytic ramp within1code; edge7 tiled2x output exactly matches whole2x composition/reduction. Authored shading BBox with fractional edges preserves red outside clip; edge3 and edge7 tiled2x match whole2x exactly. Replay cancellation and admission refusal sweep now also covers authored BBox gradient; cancellation polled every256 source samples and tile inverse computed once per path. Asymmetric BBox transformed with translation(4,2) and nonuniform scale(2,2.5): capture-time transform versus replay-time transform match all4608pixels exactly; recorded BBox equals independently transformed rectangle. Concentric DeviceRGB radial gradient in actual authored PDF matches independent distance/radius model at512pixels within1code; edge7 tiled output bit-identical to whole.",
+      "admission": "Encoded paint wrapper credit requested before encoding; native encode receives cancellation/admission hooks.",
+      "limits": "Shading BBox captured from interpreter device coordinates and replayed with tile transform; broader transformed pattern qualification remains pending. Tiling patterns unsupported. Mesh encoding sampling density, memory/color-space allocations, radial/function/mesh oracle qualification still pending. Production knockout integration pending. Radial proof currently limited to concentric zero-to-positive radius with both extends; displaced circles and other functions remain unqualified."
+    },
+    "soft_mask_conversion": {
+      "scope": "Test-only admitted conversion helper; not yet wired to interpreter replay or production renderer",
+      "verification": "Alpha, device RGB luminosity, inverted transfer, transparent premultiplication, invalid inputs and all cancellation checkpoints checked; retained output credit and zero credit after cancellation/refusal. Authored valid PDF Alpha/Luminosity masks interpreted into a transparent replay backdrop: opaque gray half-page gives alpha255 or luminosity128, uncovered half remains0 at all512pixels. Six actual PDF configurations (Alpha/Luminosity, opacity1/.5, optional inverted Type2 transfer): probe conversion and production crate::render each match independent expected opacity at all512pixels within1code; black RGB remains0. Full prototype suite52passed/4ignored, followed by focused production comparison pass. Expanded to9PDF configurations: white /BC ignored for Alpha, white /BC contributes to Luminosity (unpainted255, half-opacity gray191), then inverted transfer applies after background composition. All4608pixels checked against independent expectation and production renderer within1code. Full suite52passed/4ignored.",
+      "limits": "Mask scenes now captured and applied in opt-in replay with shared admission/cancellation; ordinary/nested Alpha and DeviceRGB Luminosity with black/white backdrop verified. ICC luminosity, arbitrary transfer interpolation, transparency-group scope and production integration remain pending."
+    },
+    "opacity_mask_application": {
+      "scope": "Test-only opt-in mask scene capture and path/raster replay",
+      "verification": "Zero/half/full mask scales RGB and alpha; geometry shape remains separate. Knockout zero-mask child replaces prior red with initial white; genuinely absent shape preserves red. All cancel checkpoints release credit, refusal/length mismatch handled. Nine authored PDF configurations now also replay masked black page fill against white; all4608pixels match production alpha-composed-on-white within1code. Masks replay from owned scene at tile transform, then opacity is applied before object composition. Nine masked PDFs at2x: edge3/7 tiles exactly match whole spatial composition/reduction (18 comparisons). Half-opacity Alpha fixture stops at every replay cancellation checkpoint; every admission refusal returns no partial image and releases all tracked bytes. Full54test suite passed before added admission sweep, focused mask test passed after. All9mask variants also tested with q /M gs fill Q followed by unmasked green fill. Every green pixel is opaque in prototype and production; remaining masked pixels preserve prior checks. Both3/7tile2x variants and all replay cancel/admission refusal sweeps pass for scoped case too. Total18PDF configurations,54passed/4ignored. Nested Alpha mask of opacity.5 inside outer mask now recorded recursively:36PDF configurations cover nested/ordinary and restored/unrestored states, Alpha/Luminosity/background/transfer. Expected compounded alpha64 and luminosity32 verified with production;2x edge3/7 tiles match whole. Full54passed/4ignored after correcting overflow in test expectation arithmetic. Mask capture shares Rc admission callback and cancellation through recursive scenes; pre-admits event/wrapper/diagnostic metadata, uses hooks during diagnostic replay/conversion and checks LUT batches. Every capture admission denial for nested/ordinary half-opacity Alpha fixture marks scene failed and releases all tracked credit on drop. Operator-only cancellation regression preserved. Full54passed/4ignored. Exhaustive capture cancellation at every observed poll for ordinary/nested half-opacity Alpha, each with and without q/Q restoration: recorder fails, partial scene rejected before replay admission, all tracked bytes0 after drop. Full54passed/4ignored. Group mask now moves into child frame on Push, clears from child object state, and scales extracted group contribution on Pop, retaining independent group shape. Scoped fixtures now draw isolated group containing two fully overlapping opaque black fills before unmasked green. All18group-mask configurations, including nested masks, match production expectations; tiled2x and capture/replay cancellation/admission sweeps pass. Full54passed/4ignored. Added18nonisolated group-mask configurations on opaque red backdrop: two overlapping half-opacity black children produce independent group alpha192, masked once before source-over. Expected red=(255-round(mask*192/255)) checked independently and against production; nested/restoration,2xtiles and fault sweeps pass. Total54PDF configurations; full54tests passed/4ignored. Added18knockout-parent configurations: opaque red child followed by masked nonisolated child with two half-opacity black fills. Independent expected mask values and group alpha192 give gray255-round(mask*192/255); zero-mask regions replace red with parent initial white.2xtiles and every capture/replay fault sweep pass.72PDF configurations total,54tests passed/4ignored. Production is deliberately excluded as knockout oracle because it still ignores K.",
+      "limits": "Deeper/adversarial nested mask capture, independent external knockout-mask oracle and broader nonisolated fractional shapes, fractional-edge independent mask oracle, nontrivial transfer LUT rounding, Broader AIS=true coverage, backend allocations and production integration pending. Capture remains opt-in diagnostic mode.",
+      "external_oracle": "72authored PDFs versus Poppler26.10.0: no exact fixtures, max RGB error87 with AA. KO cases show interior gray versus red-tinted output, so discrepancy is not purely geometry AA. No-AA diagnostic also fails strict equality, max255; needs further localization. See pdf-mask-poppler-2026-10-08.json. Analytical and self-consistency checks do not establish correctness; production integration withheld.",
+      "external_oracle_followup": "Calling discrepancy a model error was premature. Source snapshot Splash::composite uses source alpha as pipe.shape. Diagnostic substituting group alpha192 for independent shape255 exactly explains36interior sample comparisons across18KO fixtures (max0), retaining63of prior red. Child isolation derivative does not change interiors. Installed26.10.0 source and independent normative/second-renderer audit remain pending; no semantic workaround integrated. No-AA max255 includes mask boundary column16: binarization extends mask onto that column. Strict original gate still fails.",
+      "independent_renderers": "72authored PDFs checked with Quartz (45exact) and PDFium153.0.7999.0 (12exact), max255 includes edges. KO interior half-alpha sample: prototype159/159/159, Poppler159/96/96, Quartz159/0/0, PDFium160/0/0. These differing outcomes prevent oracle-only semantic decision; independent normative/implementation audit required. Scripts/render-pdf-quartz-oracle.swift reproduces Quartz outputs. No production changes.",
+      "normative_audit": "PDF 32000-1:2008 sections 11.4.6, 11.6.4.3 and 11.6.6 support independent group shape, opacity-mask application once and knockout-parent initial backdrop. See pdf-knockout-normative-audit-2026-10-08.json. This does not prove full conformance or resolve all engine differences."
+    },
+    "alpha_source": {
+      "scope": "Production interpreter parses and restores AIS, with default-compatible Device callback; only test compositor implements AIS compositing. Production Renderer still ignores callback.",
+      "implementation": "AIS defaults false. Synchronize before paths, text, forms, images, shadings, and q/Q restoration; Type3 forwards callback. Replay snapshots AIS on group entry, scales group shape for constant alpha, scales mask shape only for AIS true, retains independent premultiplied alpha.",
+      "verification": "59 passed, 0 failed, 4 diagnostic tests ignored. Added zero/half/full group opacity, normal and knockout groups, q/Q restoration, full versus 3/7 tiles, separate path/group constants (half times half), authored group alpha mask, and every shape-mask cancellation checkpoint. rrrah-decode cargo check locked/offline passed.",
+      "limits": "Test-only compositing. Broader raster/SMask alpha-source cases, fractional mask coverage, complex paints, adversarial resource bounds and production integration remain pending."
+    },
+    "separable_blends": {
+      "implemented_test_only": [
+        "Normal",
+        "Multiply",
+        "Screen",
+        "HardLight"
+      ],
+      "verification": "61 checks passed, 0 failed, 5 external diagnostics ignored; real AI report explicitly generated with complete page inventory, pinned hashes and strict full-plane Poppler comparison.",
+      "corpus_report": "ai-compositor-first-corpus-2026-10-08.json",
+      "remaining": "All pinned AI pages replay. Strict Poppler equality and whole-versus-tile equality still fail on VectorApple and one.ai page0. Other blend modes, full backend admission, tile reproducibility and production integration pending."
+    },
+    "precise_group_intermediates": {
+      "scope": "Test-only; no production integration",
+      "report": "ai-compositor-precise-corpus-2026-10-08.json",
+      "verification": {
+        "prototype_tests_passed": 64,
+        "prototype_tests_failed": 0,
+        "ignored_external_diagnostics": 5,
+        "explicit_corpus_diagnostic_passed": true,
+        "pixel_gate_passed": false
+      },
+      "implementation": {
+        "scope": "Test-only PDF compositor; production renderer unchanged",
+        "group_storage": "f64 premultiplied initial/current colors and independent f64 shape/alpha; f64 group opacity retained from parsed source. Leaf paint/raster source and captured soft masks remain RGBA8.",
+        "readback": "PreciseBuffer retained until quantization, with precise spatial averaging helper. Existing generic spatial tile helper still quantizes samples before its reduction; precise tile integration pending.",
+        "budget": "Group frame buffers admitted at 80 bytes/pixel plus metadata. Readback output is separately admitted. 32KiB refusal regression remains enforced; all refusal/cancellation sweeps pass.",
+        "regression": "Nine valid knockout operations reproduce negative -2 red contribution under RGBA8 intermediates; precise computation extracts zero black RGB without broadening RGBA8 tolerance.",
+        "limits": "PreciseBuffer conservatively retains whole root frame credit until drop. Backend/parser/font allocations remain outside complete admission coverage. Other blend modes and production integration pending."
+      }
+    },
+    "precise_spatial_tiles": {
+      "report": "ai-compositor-precise-tiles-2026-10-08.json",
+      "scope": {
+        "scope": "Test-only precise spatial tile compositor; no production integration",
+        "tiles": "Float group samples are reduced before RGBA8 quantization. The new producer interface retains PreciseBuffer.",
+        "verified": "Correlated fractional edge (analytical [191,191,255]) matches precise whole output for 3/7/16 tile edges. Every output/tile admission refusal and cancellation checkpoint discards output and releases all credit. Overflow rejected before producer/admission.",
+        "real_corpus": "64x64 tiles, factor1, capture once and reuse scene; whole/tiled comparisons reverified from saved payloads and hashes. 1 VectorApple and 13 one.ai page0 pixels differ by maximum1 channel code. one.ai page1 is exact.",
+        "memory_units": "Peak admitted bytes, not RSS. Tiled peaks include retained full RGBA comparison image plus captured scene credits. Whole peak includes full float frame stack. Final credit0 on all pages.",
+        "timing": "One local diagnostic run; not a statistical performance benchmark.",
+        "pending": "Localize raster/coordinate or paint-sampling differences; broader fractional shapes/masks, other blend modes, full backend allocation admission and production integration."
+      },
+      "verification": {
+        "prototype_tests_passed": 65,
+        "prototype_tests_failed": 0,
+        "ignored_diagnostics": 5,
+        "explicit_real_ai_diagnostic_passed": true,
+        "test_pass_means": "No unexpected failure or credit leak. Exact tile and external pixel gates remain false."
+      }
+    },
+    "tile_coverage_trace": {
+      "report": "ai-compositor-tile-coverage-trace-2026-10-08.json",
+      "finding": "All14 RGB-differing sample positions have differing independently rasterized path shape. one.ai samples belong to color fills events1/4; VectorApple sample belongs to shading fill event2103. Every observed shape difference is exactly1/255. This localizes the discrepancy before blend/color composition.",
+      "next": "Build an authored contour reproducer and establish stable global-coordinate geometry/coverage before offsetting tile storage. Preserve strict tile equality gate."
+    },
+    "authored_tile_curve_reproducer": {
+      "report": "pdf-authored-curve-tile-reproducer-2026-10-08.json",
+      "result": "Own circle cubic path: pixel341,317 has whole16 versus translated/cropped tile17; positive full-contour translation control16. Regular65checks pass,6diagnostics ignored, explicit reproducer passes by detecting mismatch.",
+      "remaining": "Test identical negative coordinate translation without contour clipping, and stable global curve flattening/coverage. Do not assume whole coverage16 is the normative golden solely from backend output.",
+      "negative_controls_report": "pdf-authored-curve-negative-controls-2026-10-08.json",
+      "independent_area_oracle": "60-digit Decimal integration gives alpha63 for exact own cubic pixel area; backend whole16 and tile17 both fail this reference. Native curve accuracy and tile reproducibility require work before production integration. Reference does not alone prove general PDF conformance failure."
+    },
+    "global_curve_preflatten_experiment": {
+      "report": "pdf-global-preflatten-experiment-2026-10-08.json",
+      "assessment": "Global kurbo preflatten at0.001 and0.0001 pixel tolerance produces alpha63 in whole and tile, matching the independent cubic area at the selected pixel. Default backend cubic path gives16/17. The0.01 polygon gives62/62. This demonstrates that a tighter global curve approximation can resolve this authored point without changing blend/color formulas.",
+      "limits": [
+        "One independently verified curve/pixel and one tile translation; does not prove complete image/tile equality.",
+        "Preflatten controls allocate test-only scratch without admission; a bounded implementation must count/reserve geometry before expansion.",
+        "Stroke/dash/clip semantics, large transforms, adversarial path complexity, real AI corpus quality and performance require qualification.",
+        "Experiment not yet enabled in recorder or production renderer."
+      ]
+    },
+    "admitted_global_contour": {
+      "report": "pdf-admitted-global-contour-2026-10-08.json",
+      "scope": "Test-only bounded device-space contour preparation; not connected to recorder or production renderer",
+      "verification": {
+        "passed": 68,
+        "failed": 0,
+        "ignored": 6,
+        "independent_accuracy": "Own cubic area alpha63 preserved in full512x384 and translated64x64 tile at0.0001 pixel tolerance.",
+        "resource_behavior": "Vertex budget8 refused before admission; memory admission refusal returnsNone; quadratic every-cancel checkpoint sweep returnsNone and releases all acquired bytes; nonfinite curve refused before admission."
+      },
+      "pending": [
+        "Connect admitted preparation to recorded fill/clip geometry and qualify real AI corpus.",
+        "Qualify strokes/dashes, evenodd holes, large transforms, degeneracies and self-intersections.",
+        "Measure time/memory on large path collections and pressure; underlying backend allocations remain separately pending.",
+        "Production renderer integration and original strict image gates remain incomplete."
+      ]
+    },
+    "admitted_global_contour_corpus": {
+      "report": "ai-admitted-global-contours-2026-10-08.json",
+      "comparison": {
+        "before_report": "ai-compositor-precise-tiles-2026-10-08.json",
+        "after": "Tile differences14 to4 (max1 each); one.ai page0 full-plane errormax115 to58 and MAE0.09860088 to0.03263692. VectorApple MAE3.80218603 to3.79785089. Neither strict external nor tile equality passes.",
+        "memory_regression": "VectorApple full peak56.22MB to158.83MB; tiled comparison peak16.94MB to119.55MB, including retained baseline. Need shared repeated clip geometry before product integration.",
+        "units": "Admitted bytes, not RSS; all final admitted bytes0."
+      },
+      "pending": [
+        "Share repeated prepared clip geometry without copying per paint, with collision-safe keys and admission.",
+        "Resolve remaining4whole-versus-tile pixel differences; qualify broader clipping/stroke/scale semantics.",
+        "Pass original strict AI corpus gate and integrate bounded cancellation-aware compositor into production."
+      ]
+    }
+  },
+  "interpreter_operator_stop": {
+    "implementation": "Device::should_stop default false; interpreter checks before parsing next typed operator, before annotations and between annotations. Renderer uses existing shading cancellation hook; prototype recorder stops on observed cancellation/admission failure.",
+    "verification": "35 prototype tests passed including recording cancellation/admission sweeps. Production rrrah-decode pdf_knockout ordinary-group control passed; four pending knockout tests remain ignored.",
+    "limits": "No interruption inside parsing an individual operator, input stream decompression, heavy resource decode or backend rasterization. Partial output must be discarded by caller. Knockout production integration pending.",
+    "operator_only_verification": "Authored PDF containing20000 q/Q operators without drawing: cancellation at pre-next-operator polls2/3/1002 stops immediately, exact hook count verified, no capture admissions, no events. This distinguishes true operator stop from merely skipping draw callbacks."
+  },
+  "stencil_double_opacity_fix": {
+    "scope": "Production interpreter fix, independent of pending knockout compositor integration",
+    "change": "After pushing image group carrying graphics alpha, reset local stroke/nonstroke alpha to1; restored with saved image state. Prevent stencil paint from applying same alpha twice.",
+    "verification": "Before fix prototype local .5 image alpha yielded[223,223,255] where .5 child times .5 image should yield[191,191,255]. After fix44prototype tests pass. Separate production crate::render regression confirms expected quarter-opacity blue on white.",
+    "limitations": "Pattern stencil paint and independent external stencil oracle still need qualification. General knockout integration remains pending.",
+    "real_ai_verification": "Fresh production dump rebuilt, pinned original VectorApple.ai and one.ai rerun against Poppler. All3pages are byte-identical to prior native baseline: Apple33167different/max214, one-page0 2522different/max58, one-page1 exact. Fix affects authored stencil case, does not solve current real AI discrepancies; strict gate still fails. ai-after-stencil-alpha-poppler-2026-10-08.json."
+  },
+  "shared_global_contour_corpus": {
+    "report": "docs/research/ai-shared-global-contours-2026-10-08.json",
+    "all_payloads_identical_to_prior": true,
+    "production_enabled": false
+  },
+  "canonical_global_f32_corpus": {
+    "report": "docs/research/ai-canonical-global-f32-2026-10-08.json",
+    "tile_edges": [
+      31,
+      64,
+      127
+    ],
+    "all_nine_page_tile_comparisons_exact": true,
+    "production_enabled": false
+  },
+  "prepared_transform_gate": {
+    "report": "docs/research/pdf-prepared-transform-gate-2026-10-08.json",
+    "passed": false,
+    "cases": 45,
+    "failing_cases": 2,
+    "production_enabled": false
+  },
+  "stroke_outline_gutter_diagnostic": {
+    "report": "docs/research/pdf-stroke-outline-gutter-diagnostic-2026-10-08.json",
+    "passed": false,
+    "checks_passed": 72,
+    "checks_failed": 1,
+    "production_enabled": false
+  },
+  "stroke_half_area_isolation": {
+    "report": "docs/research/pdf-stroke-half-area-raster-isolation-2026-10-08.json",
+    "expected_alpha": 128,
+    "backend_whole_alpha": 128,
+    "backend_tile_alpha": 127,
+    "production_enabled": false
+  },
+  "native_global_polygon_area": {
+    "report": "docs/research/pdf-native-global-polygon-area-2026-10-08.json",
+    "independent_half_area_alpha": 128,
+    "focused_checks_passed": 3,
+    "production_enabled": false
+  },
+  "native_global_polygon_tile_replay": {
+    "report": "docs/research/pdf-native-global-polygon-tile-replay-2026-10-08.json",
+    "all_45_transform_cases_exact": true,
+    "native_mask_configs": 72,
+    "native_mask_tile_comparisons": 144,
+    "prototype_checks_passed": 78,
+    "prototype_checks_failed": 1,
+    "production_enabled": false
+  },
+  "native_polygon_exact_scratch_performance": {
+    "report": "docs/research/pdf-native-polygon-exact-scratch-performance-2026-10-08.json",
+    "user_cpu_median_old_seconds": 2.81,
+    "user_cpu_median_new_seconds": 1.9,
+    "prototype_checks_passed": 78,
+    "prototype_checks_failed": 1,
+    "production_enabled": false
+  },
+  "admitted_stroke_run_preparation": {
+    "report": "docs/research/pdf-admitted-stroke-run-preparation-2026-10-08.json",
+    "focused_checks_passed": 4,
+    "production_enabled": false,
+    "outline_geometry_integrated": false
+  },
+  "admitted_stroke_outlines": {
+    "report": "docs/research/pdf-admitted-stroke-outlines-2026-10-08.json",
+    "prototype_checks_passed": 89,
+    "prototype_checks_failed": 0,
+    "production_enabled": false,
+    "transform_tile_cases_exact": 45
+  },
+  "real_ai_admitted_native_strokes": {
+    "report": "docs/research/ai-admitted-native-strokes-2026-10-08.json",
+    "pages_replayed": 1,
+    "pages_refused": 2,
+    "all_final_admitted_bytes_zero": true,
+    "production_enabled": false
+  },
+  "admitted_polygon_row_reuse": {
+    "report": "docs/research/pdf-admitted-polygon-row-reuse-2026-10-08.json",
+    "prototype_checks_passed": 90,
+    "prototype_checks_failed": 0,
+    "transform_tile_cases_exact": 45,
+    "production_enabled": false,
+    "real_pages_whole_replayed": 3,
+    "real_pages_tiles_exact": 2,
+    "real_pages_tile_deadline_refused": 1
+  },
+  "native_soft_mask_cache": {
+    "report": "docs/research/pdf-native-soft-mask-cache-2026-10-08.json",
+    "prototype_checks_passed": 90,
+    "prototype_checks_failed": 0,
+    "whole_real_images_unchanged_by_mask_cache": 3,
+    "VectorApple_tile_deadline_qualified": false,
+    "production_enabled": false
+  },
+  "empty_clipped_path_replay": {
+    "report": "docs/research/pdf-empty-clipped-path-replay-2026-10-08.json",
+    "existing_checks_passed": 90,
+    "new_check_passed": 1,
+    "real_whole_pages_replayed": 3,
+    "real_tiled_pages_exact": 2,
+    "real_tiled_pages_refused": 1,
+    "production_enabled": false
+  },
+  "admitted_row_crossings": {
+    "report": "docs/research/pdf-admitted-row-crossings-2026-10-08.json",
+    "prototype_checks_passed": 91,
+    "prototype_checks_failed": 0,
+    "real_pages_tiles_exact": 2,
+    "VectorApple_deadline_qualified": false,
+    "production_enabled": false
+  },
+  "native_path_stage_profile": {
+    "report": "docs/research/pdf-native-path-stage-profile-2026-10-08.json",
+    "prototype_checks_passed": 91,
+    "logged_shape_ms": 32371.549479,
+    "logged_total_ms": 33909.922087,
+    "production_enabled": false
+  },
+  "pixel_local_vertex_cuts": {
+    "report": "docs/research/pdf-pixel-local-vertex-cuts-2026-10-08.json",
+    "prototype_checks_passed": 92,
+    "prototype_checks_failed": 0,
+    "real_pages_tiles_exact": 3,
+    "all_real_whole_images_unchanged": true,
+    "VectorApple_capture_ms": 1315.029291,
+    "VectorApple_whole_ms": 3271.532792,
+    "VectorApple_tiles_ms": 7235.329042,
+    "production_enabled": false
+  },
+  "group_color_space_audit": {
+    "report": "docs/research/pdf-group-color-space-audit-2026-10-08.json",
+    "native_color_access_test_passed": 1,
+    "page_space_transport_verified_missing": true,
+    "oracle_mismatch_cause_proven": false,
+    "production_enabled": false
+  },
+  "group_color_space_transport": {
+    "report": "docs/research/pdf-group-color-space-transport-2026-10-08.json",
+    "prototype_checks_passed": 93,
+    "prototype_checks_failed": 0,
+    "native_space_pixel_blending_enabled": false,
+    "production_enabled": false
+  },
+  "native_component_blending": {
+    "report": "docs/research/pdf-native-component-blending-2026-10-08.json",
+    "prototype_checks_passed": 98,
+    "prototype_checks_failed": 0,
+    "new_native_blend_controls_passed": 5,
+    "scene_integration_enabled": false,
+    "production_enabled": false
+  },
+  "admitted_native_paint_capture": {
+    "report": "docs/research/pdf-admitted-native-paint-capture-2026-10-08.json",
+    "prototype_checks_passed": 99,
+    "prototype_checks_failed": 0,
+    "real_payloads_identical": 6,
+    "all_real_pages_tiles_exact": true,
+    "native_frame_blending_enabled": false,
+    "production_enabled": false
+  },
+  "admitted_native_group_frames": {
+    "report": "docs/research/pdf-admitted-native-group-frames-2026-10-08.json",
+    "prototype_checks_passed": 101,
+    "prototype_checks_failed": 0,
+    "native_frame_scene_integration_enabled": false,
+    "production_enabled": false
+  },
+  "native_coordinate_bridge": {
+    "report": "docs/research/pdf-native-coordinate-bridge-2026-10-08.json",
+    "prototype_checks_passed": 101,
+    "prototype_checks_failed": 0,
+    "coordinate_identity_checks_passed": 1,
+    "cross_space_transform_enabled": false,
+    "production_enabled": false
+  },
+  "native_icc_transform": {
+    "report": "docs/research/pdf-native-icc-transform-2026-10-08.json",
+    "controls_passed": 2,
+    "renderer_controls_passed": 101,
+    "native_scene_integration_enabled": false,
+    "production_enabled": false
+  },
+  "native_device_rgb_float": {
+    "report": "docs/research/pdf-native-device-rgb-float-2026-10-08.json",
+    "interpreter_controls_passed": 3,
+    "renderer_controls_passed": 101,
+    "production_enabled": false
+  },
+  "native_calibrated_rgb_float": {
+    "report": "docs/research/pdf-native-calibrated-rgb-float-2026-10-08.json",
+    "color_controls_passed": 4,
+    "renderer_controls_passed": 101,
+    "group_conformance_qualified": false,
+    "production_enabled": false
+  },
+  "native_gray_cmyk_boundaries": {
+    "report": "docs/research/pdf-native-gray-cmyk-boundaries-2026-10-08.json",
+    "interpreter_tests_passed": 73,
+    "renderer_tests_passed": 101,
+    "production_enabled": false
+  },
+  "device_conversion_functions_state": {
+    "report": "docs/research/pdf-device-conversion-functions-state-2026-10-08.json",
+    "renderer_controls_passed": 102,
+    "rgb_cmyk_execution_enabled": false,
+    "production_enabled": false
+  },
+  "bounded_explicit_bg_ucr": {
+    "report": "docs/research/pdf-bounded-explicit-bg-ucr-2026-10-08.json",
+    "interpreter_tests_passed": 75,
+    "renderer_tests_passed": 102,
+    "supported_function_types": [
+      2
+    ],
+    "default_device_policy_resolved": false,
+    "production_enabled": false
+  },
+  "bounded_scalar_stitching": {
+    "report": "docs/research/pdf-bounded-scalar-stitching-2026-10-08.json",
+    "interpreter_tests_passed": 77,
+    "renderer_tests_passed": 102,
+    "supported_bounded_function_types": [
+      2,
+      3
+    ],
+    "production_enabled": false
+  },
+  "bounded_scalar_sampled": {
+    "report": "docs/research/pdf-bounded-scalar-sampled-2026-10-08.json",
+    "interpreter_tests_passed": 79,
+    "renderer_tests_passed": 102,
+    "supported_bounded_function_types": [
+      0,
+      2,
+      3
+    ],
+    "sampled_order": 1,
+    "production_enabled": false
+  },
+  "bounded_scalar_calculator": {
+    "report": "docs/research/pdf-bounded-scalar-calculator-2026-10-08.json",
+    "interpreter_tests_passed": 81,
+    "renderer_tests_passed": 102,
+    "supported_bounded_function_types": [
+      0,
+      2,
+      3,
+      4
+    ],
+    "sampled_order": 1,
+    "production_enabled": false
+  },
+  "native_paint_frame_bridge": {
+    "report": "docs/research/pdf-native-paint-frame-bridge-2026-10-08.json",
+    "renderer_tests_passed": 103,
+    "solid_paint_native_frame_bridge": true,
+    "full_native_scene_replay_enabled": false,
+    "production_enabled": false
+  },
+  "native_nested_group_bridge": {
+    "report": "docs/research/pdf-native-nested-group-bridge-2026-10-08.json",
+    "renderer_tests_passed": 104,
+    "same_coordinate_group_bridge": true,
+    "full_native_scene_replay_enabled": false,
+    "production_enabled": false
+  },
+  "native_solid_scene_replay": {
+    "report": "docs/research/pdf-native-solid-scene-replay-2026-10-08.json",
+    "renderer_tests_passed": 106,
+    "same_coordinate_solid_scene_replay_enabled": true,
+    "complete_native_scene_replay_enabled": false,
+    "production_enabled": false
+  },
+  "native_prepared_solid_paint": {
+    "report": "docs/research/pdf-native-prepared-solid-paint-2026-10-08.json",
+    "renderer_tests_passed": 107,
+    "cpu_microbenchmark_ratio": 6.698209985810502,
+    "overall_speedup_qualified": false,
+    "production_enabled": false
+  },
+  "native_alpha_soft_masks": {
+    "report": "docs/research/pdf-native-alpha-soft-masks-2026-10-08.json",
+    "renderer_tests_passed": 108,
+    "native_alpha_mask_replay": true,
+    "luminosity_mask_replay": false,
+    "production_enabled": false
+  },
+  "native_device_luminosity_masks": {
+    "report": "docs/research/pdf-native-device-luminosity-masks-2026-10-08.json",
+    "renderer_tests_passed": 109,
+    "device_luminosity_mask_replay": true,
+    "calibrated_luminosity_mask_replay": false,
+    "production_enabled": false
+  },
+  "native_invalid_mask_transfer": {
+    "report": "docs/research/pdf-native-invalid-mask-transfer-2026-10-08.json",
+    "scope": "Test-only native solid scene replay",
+    "passed": 110,
+    "failed": 0,
+    "ignored": 9,
+    "invalid_transfer_refuses_replay": true,
+    "credit_release_verified": true,
+    "production_ai_qualification": false
+  },
+  "native_isolated_group_spaces": {
+    "report": "docs/research/pdf-native-isolated-group-spaces-2026-10-08.json",
+    "production_qualification": false
+  },
+  "native_isolated_gray_event_replay": {
+    "report": "docs/research/pdf-native-isolated-gray-event-replay-2026-10-08.json",
+    "production_qualification": false
+  },
+  "native_gray_group_poppler": {
+    "report": "docs/research/pdf-native-gray-group-poppler-2026-10-08.json",
+    "strict_whole_image_passed": false
+  },
+  "native_gray_boundary_renderers": {
+    "report": "docs/research/pdf-native-gray-boundary-renderers-2026-10-08.json",
+    "native_72dpi_cairo_exact": true,
+    "default_splash_exact": false,
+    "production_qualification": false
+  },
+  "native_nonisolated_space_inheritance": {
+    "report": "docs/research/pdf-native-nonisolated-space-inheritance-2026-10-08.json",
+    "production_qualification": false,
+    "clarification": "Earlier cross-space nonisolated limitation is resolved by required inheritance, not backdrop color conversion"
+  },
+  "real_ai_native_solid_diagnostic": {
+    "report": "docs/research/pdf-real-ai-native-solid-diagnostic-2026-10-08.json",
+    "native_pages_completed": 2,
+    "native_pages_refused": 1,
+    "pixel_qualification": false,
+    "production_qualification": false
+  },
+  "native_real_ai_pixels": {
+    "report": "docs/research/pdf-native-real-ai-pixels-2026-10-08.json",
+    "one_page_0_poppler_different_pixels": 2494,
+    "one_page_1_exact": true,
+    "VectorApple_first_refusal": "Raster event index 3",
+    "production_qualification": false
+  },
+  "retained_native_raster_spaces": {
+    "report": "docs/research/pdf-retained-native-raster-spaces-2026-10-08.json",
+    "native_raster_decode_complete": false
+  },
+  "native_image_component_unpack": {
+    "report": "docs/research/pdf-native-component-unpack-2026-10-08.json",
+    "stream_decode_integration": false,
+    "production_qualification": false
+  },
+  "native_image_stream_components": {
+    "report": "docs/research/pdf-native-image-stream-components-2026-10-08.json",
+    "stream_decode_integration": true,
+    "native_raster_compositing": false,
+    "production_qualification": false
+  },
+  "native_image_refusal_cancellation": {
+    "report": "docs/research/pdf-native-image-refusal-cancellation-2026-10-08.json",
+    "VectorApple_confirmed_refusals": "Mask for all three raster events",
+    "production_qualification": false
+  },
+  "native_soft_image_alpha": {
+    "report": "docs/research/pdf-native-soft-image-alpha-2026-10-08.json",
+    "VectorApple_native_image_components_captured": 3,
+    "native_raster_compositing": false,
+    "production_qualification": false
+  },
+  "native_raster_sampling": {
+    "report": "docs/research/pdf-native-raster-sampling-2026-10-08.json",
+    "native_event_integration": false,
+    "production_qualification": false
+  },
+  "native_raster_event_replay": {
+    "report": "docs/research/pdf-native-raster-event-replay-2026-10-08.json",
+    "VectorApple_next_refusal": "Shading event index 9",
+    "production_qualification": false
+  }
+}

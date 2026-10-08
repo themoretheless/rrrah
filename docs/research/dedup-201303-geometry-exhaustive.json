@@ -1,0 +1,23 @@
+{
+  "status": "verified_native_exhaustive_four_point_miss",
+  "returncode": 0,
+  "query": "201303.jpg",
+  "points": 42,
+  "combinations": 111930,
+  "tolerance": 2,
+  "minimum_inliers": 10,
+  "whole_domain_filter_used": false,
+  "result": {
+    "exhaustive_combinations": 111930,
+    "matrix": null,
+    "inliers": []
+  },
+  "scope": "Every distinct four-point subset evaluated by current native solver, without whole-domain eligibility filtering; no qualifying model returned. Not a proof about all continuous homographies, independently correct features, nonrigid models or pixel identity. No acceptance change.",
+  "input_hashes": {
+    "docs/research/dedup-201303-geometry-exhaustive.log": "91b5d0263dc528549799afad1406dc4ce873541844358cdb8c69b0b0a64ba328",
+    "crates/rrrah-dedup/examples/geometry_exhaustive_probe.rs": "e954acb742ced03cb14b24d3fafb16aaccbcf5f1d176d1ccefc2d78d6a1f1ec5",
+    "crates/rrrah-dedup/src/geometry.rs": "d5a4cae5e9aaa9c7b8ade16ae385392ff50c1409ac9850b7fb98e1e9c1eca4d9",
+    "docs/research/dedup-201303-geometry-points.txt": "bc43f510d6b856a43e87ddbd122bb51bee8b56e0c634934a8cbd07387314e6d9",
+    "docs/research/dedup-updated-additional-failures-checkpoint-1.json": "36b83a3d78edbaafd51a4feeb3a9589692927b0be6d4554536bd7e4e9764d671"
+  }
+}

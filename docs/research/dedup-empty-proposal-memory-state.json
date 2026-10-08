@@ -1,0 +1,19 @@
+{
+  "status": "macos_three_tests_pass",
+  "initial_exit_code": 101,
+  "initial_log": "docs/research/dedup-empty-proposal-memory-adversary.log",
+  "fixed_session": 90683,
+  "fixed_log": "docs/research/dedup-empty-proposal-memory-fixed-macos.log",
+  "source_before": {
+    "crates/rrrah-dedup/src/local_collection.rs": "ff86fb6a743ce8838682ea70689a35172ac7293731c36496a6ee5f80b8afcff0",
+    "crates/rrrah-dedup/tests/five_region_admission.rs": "187262dd8ae5d5334f1345a1aa2df15d5ca6d3ac1a7423407907d34ec8675d7b"
+  },
+  "scope": "Reserve min(declared pair cap,actual file-owner unordered pairs), so empty collections admit zero-memory budget. Prior live five integration job9179 predates this correction; do not attribute its results to latest source.",
+  "fixed_exit_code": 0,
+  "test_count": 3,
+  "source_after": {
+    "crates/rrrah-dedup/src/local_collection.rs": "ff86fb6a743ce8838682ea70689a35172ac7293731c36496a6ee5f80b8afcff0",
+    "crates/rrrah-dedup/tests/five_region_admission.rs": "187262dd8ae5d5334f1345a1aa2df15d5ca6d3ac1a7423407907d34ec8675d7b"
+  },
+  "selected_sources_unchanged": true
+}

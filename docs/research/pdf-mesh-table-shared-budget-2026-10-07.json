@@ -1,0 +1,22 @@
+{
+  "scope": "Shared managed admission of PDF mesh sample hash-table storage",
+  "implementation": "Use pinned hashbrown 0.16.1 with the existing Fx hasher. Before each table growth reserve a conservative bound including buckets, control bytes and alignment. Keep old and new reservations concurrently during rehashing. Check allocation_size against the admitted bound after growth. Retain the final reservation alongside the table and drop table storage before its credit.",
+  "active_tests": [
+    "encode::sample_bounds_tests::table_growth_refusal_releases_old_and_new_credit",
+    "pdf::precise_fill_tests::tensor_triangle_storage_is_admitted_before_materialization"
+  ],
+  "verified": [
+    "Every observed table growth independently refuses and releases all retained credit.",
+    "Successful table storage remains covered by credit until the returned map drops.",
+    "Real authored tensor decode succeeds at exact observed shared peak; one byte less refuses during map growth and releases all credit.",
+    "All 61 previously recorded source-page pixels or refusals remain unchanged."
+  ],
+  "validation": {"decoder_library_passed": 973, "ignored": 66, "vendor_focused_passed": 3, "failed": 0},
+  "logs": ["/tmp/rrrah-pdf-mesh-map-budget-final.log", "/tmp/rrrah-pdf-mesh-map-budget-unit.log"],
+  "limitations": [
+    "Table admission is conservative rather than an exact process allocator cap.",
+    "SmallVec color components above four require separate heap accounting.",
+    "Patch visibility inventory, source parser objects and other renderer allocations remain unaccounted.",
+    "Broader runtime performance qualification after table admission is still pending."
+  ]
+}

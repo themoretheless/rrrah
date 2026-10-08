@@ -1,0 +1,25 @@
+{
+  "status": "macos_exact_limit_and_collection_verified",
+  "session_id": 44070,
+  "source_before": "bbed5c7b88a9e25c9eba916c13e6b7fc9ad8d7ec65f35feaa50a906130531a50",
+  "scope": "Two full-width source IDs: exact 32-byte scratch admission, 31-byte refusal, every callback cancellation, clone ownership and zero-input/zero-budget. Existing fixed Linux snapshot predates helper extraction.",
+  "collection_session_id": 64456,
+  "collection_source_before": {
+    "crates/rrrah-dedup/src/local_collection.rs": "bbed5c7b88a9e25c9eba916c13e6b7fc9ad8d7ec65f35feaa50a906130531a50",
+    "crates/rrrah-dedup/tests/gradient_collection.rs": "ae9bc33cc19f084a87f6ea8725b97b20db5e498f664bcfcae01b62079b1dd996"
+  },
+  "source_after": "bbed5c7b88a9e25c9eba916c13e6b7fc9ad8d7ec65f35feaa50a906130531a50",
+  "exit_code": 0,
+  "passed_tests": 1,
+  "collection_source_after": {
+    "crates/rrrah-dedup/src/local_collection.rs": "bbed5c7b88a9e25c9eba916c13e6b7fc9ad8d7ec65f35feaa50a906130531a50",
+    "crates/rrrah-dedup/tests/gradient_collection.rs": "ae9bc33cc19f084a87f6ea8725b97b20db5e498f664bcfcae01b62079b1dd996"
+  },
+  "collection_exit_code": 0,
+  "collection_passed_tests": 1,
+  "linux_session_id": 60509,
+  "linux_state": "docs/research/dedup-gradient-metadata-linux-state.json",
+  "linux_exit_code": 0,
+  "linux_passed_tests": 2,
+  "linux_scope": "Immutable metadata/helper snapshot. This predates six-family integration; not qualification of later collection sources."
+}

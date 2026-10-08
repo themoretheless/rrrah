@@ -1,0 +1,1697 @@
+{
+  "status": "terminal",
+  "input_hashes": {
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/affine-color-grid-image-probe-screen": "23cded82982629900fb16d6e7634cb75943e4bfb59d29449af68cf21cc0b0f53",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200500.jpg": "55d5ff8935ee354fd0d34e3db8346db2b79047db56d7543ce50617c95e0ba91f",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200501.jpg": "c9f9a86fe25fd5bba47af5130e2fcf441633355cc1d806039c86cc0d5bbde9a3",
+    "docs/research/dedup-screen-global-translation-anchor.txt": "1b8e317bbe3718c339b81a58e6400bc60e9f3ef0fa661273ca3dae5c62ef115d",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/prepared.json": "6ba843f8f09419efb8ccec9b5d84cc8f086d1dc74ec222f5aa2acae29f9fff01",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-native-screen-affine-color-grid.py": "9ea285ddd2bd85fd8b0aeede8313755eee31481afedc627457484d65caafd82d",
+    "crates/rrrah-dedup/examples/affine_color_grid_image_probe.rs": "d2a68a55bef81705c4ae9043c5951af0d4d98ae70fa0593bb2eb38a7407bf2b2",
+    "crates/rrrah-dedup/src/affine_region_grid.rs": "0abb5873a0a41f29caee7c975149bd6c851e2e5578b3257790296856cbde2108",
+    "crates/rrrah-dedup/src/affine_region.rs": "776c71abfb8e1c8ef30236541bc4f1882b2ce28aa60a7aeb4105c63c2b5809c1",
+    "crates/rrrah-dedup/src/region_footprint.rs": "3d93a2aecdbc0d5f03f69a5fa2df344fc9a2284265f9fcecfc99b3b00b29787d",
+    "crates/rrrah-dedup/src/affine_color.rs": "2c6106f7e91c3b2a246f8a36a23e6adae57ed7bfdc7d65363c8e82efdc5de2aa",
+    "crates/rrrah-dedup/src/region_grid.rs": "4f67306b28206df499a613f25156c24f2ed5863c42cb325158c63b8f919aa892",
+    "crates/rrrah-dedup/src/lib.rs": "1fcdade41d89ae7ab8989e59ff83cabb6fa32aa5f7dd30361a6d2d556d78783b"
+  },
+  "grid": [
+    8,
+    8
+  ],
+  "required_maximum_regions": 64,
+  "minimum_samples": 1000,
+  "fraction": 0.9,
+  "scope": "Native automatic target-grid regions under supplied baseline geometry. No file guard, automatic feature geometry or broad precision claim.",
+  "returncode": 0,
+  "stdout": "{\"status\":\"ok\",\"regions\":[{\"domains\":[[2220, 508, 110, 147], [0, 0, 80, 60]],\"source_radius\":15,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[2219, 648, 108, 142], [80, 0, 80, 60]],\"source_radius\":14,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[2218, 785, 107, 138], [160, 0, 80, 60]],\"source_radius\":14,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[2216, 918, 106, 134], [240, 0, 80, 60]],\"source_radius\":14,\"directions\":[{\"training_samples\":2080,\"samples\":2080,\"matched\":1656,\"pixel_reads\":6014400},{\"training_samples\":5818,\"samples\":5818,\"matched\":3269,\"pixel_reads\":49263340}]},{\"domains\":[[2215, 1049, 105, 130], [320, 0, 80, 60]],\"source_radius\":14,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[2214, 1176, 104, 127], [400, 0, 80, 60]],\"source_radius\":13,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[2213, 1301, 102, 123], [480, 0, 80, 60]],\"source_radius\":13,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[2212, 1424, 101, 120], [560, 0, 80, 60]],\"source_radius\":13,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[2115, 516, 107, 145], [0, 60, 80, 60]],\"source_radius\":14,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[2115, 654, 105, 141], [80, 60, 80, 60]],\"source_radius\":14,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[2115, 790, 104, 137], [160, 60, 80, 60]],\"source_radius\":14,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[2115, 922, 103, 133], [240, 60, 80, 60]],\"source_radius\":14,\"directions\":[{\"training_samples\":2400,\"samples\":2400,\"matched\":2383,\"pixel_reads\":6936000},{\"training_samples\":6523,\"samples\":6524,\"matched\":6191,\"pixel_reads\":54862635}]},{\"domains\":[[2114, 1052, 103, 129], [320, 60, 80, 60]],\"source_radius\":14,\"directions\":[{\"training_samples\":2400,\"samples\":2400,\"matched\":2346,\"pixel_reads\":6936000},{\"training_samples\":6368,\"samples\":6365,\"matched\":6317,\"pixel_reads\":53542265}]},{\"domains\":[[2114, 1179, 101, 125], [400, 60, 80, 60]],\"source_radius\":13,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[2114, 1302, 100, 122], [480, 60, 80, 60]],\"source_radius\":13,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[2114, 1424, 99, 119], [560, 60, 80, 60]],\"source_radius\":13,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[2010, 524, 105, 144], [0, 120, 80, 60]],\"source_radius\":14,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[2011, 661, 104, 140], [80, 120, 80, 60]],\"source_radius\":14,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[2012, 795, 103, 136], [160, 120, 80, 60]],\"source_radius\":14,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[2013, 927, 102, 131], [240, 120, 80, 60]],\"source_radius\":14,\"directions\":[{\"training_samples\":2400,\"samples\":2400,\"matched\":1848,\"pixel_reads\":6936000},{\"training_samples\":6428,\"samples\":6441,\"matched\":5287,\"pixel_reads\":54114145}]},{\"domains\":[[2014, 1055, 101, 128], [320, 120, 80, 60]],\"source_radius\":13,\"directions\":[{\"training_samples\":2400,\"samples\":2400,\"matched\":1190,\"pixel_reads\":6936000},{\"training_samples\":6236,\"samples\":6242,\"matched\":6242,\"pixel_reads\":45482310}]},{\"domains\":[[2015, 1181, 100, 124], [400, 120, 80, 60]],\"source_radius\":13,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[2016, 1303, 99, 121], [480, 120, 80, 60]],\"source_radius\":13,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[2017, 1424, 98, 118], [560, 120, 80, 60]],\"source_radius\":13,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[1907, 531, 105, 143], [0, 180, 80, 60]],\"source_radius\":14,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[1910, 667, 103, 139], [80, 180, 80, 60]],\"source_radius\":14,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[1912, 800, 102, 135], [160, 180, 80, 60]],\"source_radius\":14,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[1914, 931, 101, 130], [240, 180, 80, 60]],\"source_radius\":13,\"directions\":[{\"training_samples\":2400,\"samples\":2400,\"matched\":595,\"pixel_reads\":6936000},{\"training_samples\":6260,\"samples\":6274,\"matched\":5406,\"pixel_reads\":45686430}]},{\"domains\":[[1916, 1058, 100, 127], [320, 180, 80, 60]],\"source_radius\":13,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"training_samples\":6070,\"samples\":6077,\"matched\":6077,\"pixel_reads\":44275815}]},{\"domains\":[[1918, 1183, 99, 123], [400, 180, 80, 60]],\"source_radius\":13,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[1920, 1305, 98, 120], [480, 180, 80, 60]],\"source_radius\":13,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[1922, 1424, 97, 117], [560, 180, 80, 60]],\"source_radius\":13,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[1806, 539, 104, 141], [0, 240, 80, 60]],\"source_radius\":14,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[1809, 674, 103, 137], [80, 240, 80, 60]],\"source_radius\":14,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[1813, 806, 101, 133], [160, 240, 80, 60]],\"source_radius\":14,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"training_samples\":6318,\"samples\":6336,\"matched\":2600,\"pixel_reads\":53210070}]},{\"domains\":[[1816, 935, 100, 129], [240, 240, 80, 60]],\"source_radius\":13,\"directions\":[{\"training_samples\":2400,\"samples\":2400,\"matched\":141,\"pixel_reads\":6936000},{\"training_samples\":6117,\"samples\":6129,\"matched\":3834,\"pixel_reads\":44636670}]},{\"domains\":[[1819, 1061, 99, 126], [320, 240, 80, 60]],\"source_radius\":13,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"training_samples\":5933,\"samples\":5939,\"matched\":3063,\"pixel_reads\":43273440}]},{\"domains\":[[1822, 1185, 98, 122], [400, 240, 80, 60]],\"source_radius\":13,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[1825, 1306, 97, 119], [480, 240, 80, 60]],\"source_radius\":13,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[1828, 1424, 96, 117], [560, 240, 80, 60]],\"source_radius\":13,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[1707, 546, 103, 140], [0, 300, 80, 60]],\"source_radius\":14,\"directions\":[{\"error\":\"Color(Uninformative)\"},{\"error\":\"Color(Uninformative)\"}]},{\"domains\":[[1711, 680, 102, 136], [80, 300, 80, 60]],\"source_radius\":14,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[1715, 811, 101, 132], [160, 300, 80, 60]],\"source_radius\":13,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"training_samples\":6174,\"samples\":6200,\"matched\":2785,\"pixel_reads\":45103230}]},{\"domains\":[[1719, 939, 100, 128], [240, 300, 80, 60]],\"source_radius\":13,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[1723, 1064, 99, 125], [320, 300, 80, 60]],\"source_radius\":13,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[1727, 1186, 98, 122], [400, 300, 80, 60]],\"source_radius\":13,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[1731, 1307, 97, 118], [480, 300, 80, 60]],\"source_radius\":13,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[1735, 1424, 96, 116], [560, 300, 80, 60]],\"source_radius\":12,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[1609, 553, 102, 139], [0, 360, 80, 60]],\"source_radius\":14,\"directions\":[{\"error\":\"Color(Uninformative)\"},{\"error\":\"Color(Uninformative)\"}]},{\"domains\":[[1614, 686, 101, 135], [80, 360, 80, 60]],\"source_radius\":13,\"directions\":[{\"error\":\"Color(Uninformative)\"},{\"error\":\"Color(Uninformative)\"}]},{\"domains\":[[1619, 816, 101, 131], [160, 360, 80, 60]],\"source_radius\":13,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[1624, 943, 100, 127], [240, 360, 80, 60]],\"source_radius\":13,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"training_samples\":5846,\"samples\":5853,\"matched\":4963,\"pixel_reads\":42642855}]},{\"domains\":[[1629, 1067, 99, 124], [320, 360, 80, 60]],\"source_radius\":13,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[1634, 1188, 98, 121], [400, 360, 80, 60]],\"source_radius\":13,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[1639, 1308, 97, 117], [480, 360, 80, 60]],\"source_radius\":12,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[1644, 1424, 95, 115], [560, 360, 80, 60]],\"source_radius\":12,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[1512, 560, 102, 138], [0, 420, 80, 60]],\"source_radius\":13,\"directions\":[{\"error\":\"Color(Uninformative)\"},{\"error\":\"Color(Uninformative)\"}]},{\"domains\":[[1518, 692, 102, 134], [80, 420, 80, 60]],\"source_radius\":13,\"directions\":[{\"error\":\"Color(Uninformative)\"},{\"error\":\"Color(Uninformative)\"}]},{\"domains\":[[1525, 820, 100, 131], [160, 420, 80, 60]],\"source_radius\":13,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[1531, 946, 99, 127], [240, 420, 80, 60]],\"source_radius\":13,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"training_samples\":4788,\"samples\":4795,\"matched\":3924,\"pixel_reads\":35223580}]},{\"domains\":[[1537, 1070, 98, 123], [320, 420, 80, 60]],\"source_radius\":13,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[1543, 1190, 97, 120], [400, 420, 80, 60]],\"source_radius\":12,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[1548, 1309, 96, 116], [480, 420, 80, 60]],\"source_radius\":12,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]},{\"domains\":[[1554, 1424, 95, 114], [560, 420, 80, 60]],\"source_radius\":12,\"directions\":[{\"error\":\"Color(Bounds)\"},{\"error\":\"Color(Bounds)\"}]}],\"managed_used\":0,\"managed_peak\":118947840}\n",
+  "stderr": "",
+  "evidence": {
+    "status": "ok",
+    "regions": [
+      {
+        "domains": [
+          [
+            2220,
+            508,
+            110,
+            147
+          ],
+          [
+            0,
+            0,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 15,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            2219,
+            648,
+            108,
+            142
+          ],
+          [
+            80,
+            0,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 14,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            2218,
+            785,
+            107,
+            138
+          ],
+          [
+            160,
+            0,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 14,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            2216,
+            918,
+            106,
+            134
+          ],
+          [
+            240,
+            0,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 14,
+        "directions": [
+          {
+            "training_samples": 2080,
+            "samples": 2080,
+            "matched": 1656,
+            "pixel_reads": 6014400
+          },
+          {
+            "training_samples": 5818,
+            "samples": 5818,
+            "matched": 3269,
+            "pixel_reads": 49263340
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            2215,
+            1049,
+            105,
+            130
+          ],
+          [
+            320,
+            0,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 14,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            2214,
+            1176,
+            104,
+            127
+          ],
+          [
+            400,
+            0,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 13,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            2213,
+            1301,
+            102,
+            123
+          ],
+          [
+            480,
+            0,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 13,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            2212,
+            1424,
+            101,
+            120
+          ],
+          [
+            560,
+            0,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 13,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            2115,
+            516,
+            107,
+            145
+          ],
+          [
+            0,
+            60,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 14,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            2115,
+            654,
+            105,
+            141
+          ],
+          [
+            80,
+            60,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 14,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            2115,
+            790,
+            104,
+            137
+          ],
+          [
+            160,
+            60,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 14,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            2115,
+            922,
+            103,
+            133
+          ],
+          [
+            240,
+            60,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 14,
+        "directions": [
+          {
+            "training_samples": 2400,
+            "samples": 2400,
+            "matched": 2383,
+            "pixel_reads": 6936000
+          },
+          {
+            "training_samples": 6523,
+            "samples": 6524,
+            "matched": 6191,
+            "pixel_reads": 54862635
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            2114,
+            1052,
+            103,
+            129
+          ],
+          [
+            320,
+            60,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 14,
+        "directions": [
+          {
+            "training_samples": 2400,
+            "samples": 2400,
+            "matched": 2346,
+            "pixel_reads": 6936000
+          },
+          {
+            "training_samples": 6368,
+            "samples": 6365,
+            "matched": 6317,
+            "pixel_reads": 53542265
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            2114,
+            1179,
+            101,
+            125
+          ],
+          [
+            400,
+            60,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 13,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            2114,
+            1302,
+            100,
+            122
+          ],
+          [
+            480,
+            60,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 13,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            2114,
+            1424,
+            99,
+            119
+          ],
+          [
+            560,
+            60,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 13,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            2010,
+            524,
+            105,
+            144
+          ],
+          [
+            0,
+            120,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 14,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            2011,
+            661,
+            104,
+            140
+          ],
+          [
+            80,
+            120,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 14,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            2012,
+            795,
+            103,
+            136
+          ],
+          [
+            160,
+            120,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 14,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            2013,
+            927,
+            102,
+            131
+          ],
+          [
+            240,
+            120,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 14,
+        "directions": [
+          {
+            "training_samples": 2400,
+            "samples": 2400,
+            "matched": 1848,
+            "pixel_reads": 6936000
+          },
+          {
+            "training_samples": 6428,
+            "samples": 6441,
+            "matched": 5287,
+            "pixel_reads": 54114145
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            2014,
+            1055,
+            101,
+            128
+          ],
+          [
+            320,
+            120,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 13,
+        "directions": [
+          {
+            "training_samples": 2400,
+            "samples": 2400,
+            "matched": 1190,
+            "pixel_reads": 6936000
+          },
+          {
+            "training_samples": 6236,
+            "samples": 6242,
+            "matched": 6242,
+            "pixel_reads": 45482310
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            2015,
+            1181,
+            100,
+            124
+          ],
+          [
+            400,
+            120,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 13,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            2016,
+            1303,
+            99,
+            121
+          ],
+          [
+            480,
+            120,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 13,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            2017,
+            1424,
+            98,
+            118
+          ],
+          [
+            560,
+            120,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 13,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            1907,
+            531,
+            105,
+            143
+          ],
+          [
+            0,
+            180,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 14,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            1910,
+            667,
+            103,
+            139
+          ],
+          [
+            80,
+            180,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 14,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            1912,
+            800,
+            102,
+            135
+          ],
+          [
+            160,
+            180,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 14,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            1914,
+            931,
+            101,
+            130
+          ],
+          [
+            240,
+            180,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 13,
+        "directions": [
+          {
+            "training_samples": 2400,
+            "samples": 2400,
+            "matched": 595,
+            "pixel_reads": 6936000
+          },
+          {
+            "training_samples": 6260,
+            "samples": 6274,
+            "matched": 5406,
+            "pixel_reads": 45686430
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            1916,
+            1058,
+            100,
+            127
+          ],
+          [
+            320,
+            180,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 13,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "training_samples": 6070,
+            "samples": 6077,
+            "matched": 6077,
+            "pixel_reads": 44275815
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            1918,
+            1183,
+            99,
+            123
+          ],
+          [
+            400,
+            180,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 13,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            1920,
+            1305,
+            98,
+            120
+          ],
+          [
+            480,
+            180,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 13,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            1922,
+            1424,
+            97,
+            117
+          ],
+          [
+            560,
+            180,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 13,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            1806,
+            539,
+            104,
+            141
+          ],
+          [
+            0,
+            240,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 14,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            1809,
+            674,
+            103,
+            137
+          ],
+          [
+            80,
+            240,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 14,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            1813,
+            806,
+            101,
+            133
+          ],
+          [
+            160,
+            240,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 14,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "training_samples": 6318,
+            "samples": 6336,
+            "matched": 2600,
+            "pixel_reads": 53210070
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            1816,
+            935,
+            100,
+            129
+          ],
+          [
+            240,
+            240,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 13,
+        "directions": [
+          {
+            "training_samples": 2400,
+            "samples": 2400,
+            "matched": 141,
+            "pixel_reads": 6936000
+          },
+          {
+            "training_samples": 6117,
+            "samples": 6129,
+            "matched": 3834,
+            "pixel_reads": 44636670
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            1819,
+            1061,
+            99,
+            126
+          ],
+          [
+            320,
+            240,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 13,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "training_samples": 5933,
+            "samples": 5939,
+            "matched": 3063,
+            "pixel_reads": 43273440
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            1822,
+            1185,
+            98,
+            122
+          ],
+          [
+            400,
+            240,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 13,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            1825,
+            1306,
+            97,
+            119
+          ],
+          [
+            480,
+            240,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 13,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            1828,
+            1424,
+            96,
+            117
+          ],
+          [
+            560,
+            240,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 13,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            1707,
+            546,
+            103,
+            140
+          ],
+          [
+            0,
+            300,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 14,
+        "directions": [
+          {
+            "error": "Color(Uninformative)"
+          },
+          {
+            "error": "Color(Uninformative)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            1711,
+            680,
+            102,
+            136
+          ],
+          [
+            80,
+            300,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 14,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            1715,
+            811,
+            101,
+            132
+          ],
+          [
+            160,
+            300,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 13,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "training_samples": 6174,
+            "samples": 6200,
+            "matched": 2785,
+            "pixel_reads": 45103230
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            1719,
+            939,
+            100,
+            128
+          ],
+          [
+            240,
+            300,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 13,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            1723,
+            1064,
+            99,
+            125
+          ],
+          [
+            320,
+            300,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 13,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            1727,
+            1186,
+            98,
+            122
+          ],
+          [
+            400,
+            300,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 13,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            1731,
+            1307,
+            97,
+            118
+          ],
+          [
+            480,
+            300,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 13,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            1735,
+            1424,
+            96,
+            116
+          ],
+          [
+            560,
+            300,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 12,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            1609,
+            553,
+            102,
+            139
+          ],
+          [
+            0,
+            360,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 14,
+        "directions": [
+          {
+            "error": "Color(Uninformative)"
+          },
+          {
+            "error": "Color(Uninformative)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            1614,
+            686,
+            101,
+            135
+          ],
+          [
+            80,
+            360,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 13,
+        "directions": [
+          {
+            "error": "Color(Uninformative)"
+          },
+          {
+            "error": "Color(Uninformative)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            1619,
+            816,
+            101,
+            131
+          ],
+          [
+            160,
+            360,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 13,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            1624,
+            943,
+            100,
+            127
+          ],
+          [
+            240,
+            360,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 13,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "training_samples": 5846,
+            "samples": 5853,
+            "matched": 4963,
+            "pixel_reads": 42642855
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            1629,
+            1067,
+            99,
+            124
+          ],
+          [
+            320,
+            360,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 13,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            1634,
+            1188,
+            98,
+            121
+          ],
+          [
+            400,
+            360,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 13,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            1639,
+            1308,
+            97,
+            117
+          ],
+          [
+            480,
+            360,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 12,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            1644,
+            1424,
+            95,
+            115
+          ],
+          [
+            560,
+            360,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 12,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            1512,
+            560,
+            102,
+            138
+          ],
+          [
+            0,
+            420,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 13,
+        "directions": [
+          {
+            "error": "Color(Uninformative)"
+          },
+          {
+            "error": "Color(Uninformative)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            1518,
+            692,
+            102,
+            134
+          ],
+          [
+            80,
+            420,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 13,
+        "directions": [
+          {
+            "error": "Color(Uninformative)"
+          },
+          {
+            "error": "Color(Uninformative)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            1525,
+            820,
+            100,
+            131
+          ],
+          [
+            160,
+            420,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 13,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            1531,
+            946,
+            99,
+            127
+          ],
+          [
+            240,
+            420,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 13,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "training_samples": 4788,
+            "samples": 4795,
+            "matched": 3924,
+            "pixel_reads": 35223580
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            1537,
+            1070,
+            98,
+            123
+          ],
+          [
+            320,
+            420,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 13,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            1543,
+            1190,
+            97,
+            120
+          ],
+          [
+            400,
+            420,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 12,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            1548,
+            1309,
+            96,
+            116
+          ],
+          [
+            480,
+            420,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 12,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      },
+      {
+        "domains": [
+          [
+            1554,
+            1424,
+            95,
+            114
+          ],
+          [
+            560,
+            420,
+            80,
+            60
+          ]
+        ],
+        "source_radius": 12,
+        "directions": [
+          {
+            "error": "Color(Bounds)"
+          },
+          {
+            "error": "Color(Bounds)"
+          }
+        ]
+      }
+    ],
+    "managed_used": 0,
+    "managed_peak": 118947840
+  },
+  "both_direction_fraction_supports": 2
+}

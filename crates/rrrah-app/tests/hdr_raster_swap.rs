@@ -885,3 +885,162 @@ fn qualify_u8_raster_transport(
     assert_eq!(swap.stats().writes, 1);
     assert_eq!(swap.stats().reads, 2);
 }
+
+#[test]
+fn native_farbfeld_preserves_u16_and_display_through_budgeted_swap() {
+    let gpu = common::qualification_gpu().expect("actual GPU required");
+    eprintln!("native Farbfeld adapter: {}", gpu.adapter_name());
+    let path = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("../../tests/fixtures/raster/adjacent16.ff");
+    for prepared_swap in [false, true] {
+        let budget = rrrah_core::MemoryBudget::new(1024 * 1024);
+        let mut request = rrrah_decode::DecodeRequest::new(path.clone());
+        request.memory_budget = Some(budget.clone());
+        let native = rrrah_decode::decode_raster(&request).unwrap();
+        let bytes = std::fs::read(&path).unwrap();
+        let RasterPixels::Rgba16(values) = native.pixels() else { panic!() };
+        let expected: Vec<u16> = bytes[16..].chunks_exact(2)
+            .map(|v| u16::from_be_bytes([v[0], v[1]])).collect();
+        assert_eq!(&values[..], expected.as_slice());
+        let prepared = rrrah_decode::prepare_raster_for_display_with_budget(&native, Some(&budget)).unwrap();
+        let parameters = ViewParameters { zoom: 1.0, ..view() };
+        let expected_frame = gpu.render_raster(&prepared, parameters, [64,64]).pixels;
+        let frame = if prepared_swap { drop(native); prepared } else { drop(prepared); native };
+        let weight = frame.capacity_bytes();
+        let color = frame.color_space().clone();
+        let mut expected_payload = Vec::new();
+        rrrah_cache::SwapPayload::write_payload(&frame, &mut expected_payload).unwrap();
+        let directory = tempfile::tempdir().unwrap();
+        let swap: rrrah_cache::RasterSwapCache<u8> = rrrah_cache::ImageSwapCache::new_with_budgets(
+            directory.path(), rrrah_cache::ImageSwapConfig {
+                limits: rrrah_cache::CacheLimits { max_bytes:4096, max_entries:Some(1), ttl:None },
+                queue_bytes:weight, queue_count:1, restore_bytes:weight,
+            }, rrrah_core::MemoryBudget::new(weight), budget.clone()).unwrap();
+        swap.enqueue(1, frame); swap.wait_idle().unwrap();
+        assert_eq!(budget.used(), 0);
+        let pressure = budget.try_reserve(budget.limit()).unwrap();
+        assert!(swap.try_get(&1, || false).is_err());
+        drop(pressure);
+        assert!(swap.try_get(&1, || true).unwrap().is_none());
+        assert_eq!(budget.used(), 0);
+        let restored = swap.try_get(&1, || false).unwrap().unwrap();
+        assert_eq!(restored.color_space(), &color);
+        let mut payload = Vec::new();
+        rrrah_cache::SwapPayload::write_payload(&restored, &mut payload).unwrap();
+        assert_eq!(payload, expected_payload);
+        let display = rrrah_decode::prepare_raster_for_display_with_budget(&restored, Some(&budget)).unwrap();
+        assert_eq!(gpu.render_raster(&display, parameters, [64,64]).pixels, expected_frame);
+        drop(display); drop(restored);
+        assert_eq!(budget.used(), 0);
+        assert_eq!(swap.stats().reads, 1);
+        assert_eq!(swap.stats().writes, 1);
+        assert_eq!(swap.stats().queued_bytes, 0);
+        assert_eq!(swap.stats().errors, 0);
+    }
+}
+
+#[test]
+fn icc_images_prepare_and_restore_exactly_for_linear_hdr_metal() {
+    let fixtures = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster");
+    for name in ["pattern.profiled.png", "pattern.profiled.tif"] {
+        let root = rrrah_core::MemoryBudget::new(4 * 1024 * 1024);
+        let mut request = rrrah_decode::DecodeRequest::new(fixtures.join(name));
+        request.memory_budget = Some(root.clone());
+        let decoded = rrrah_decode::decode_raster(&request).unwrap();
+        let RasterColorSpace::Icc(profile) = decoded.color_space() else { panic!("ICC missing") };
+        let profile = profile.clone();
+        let prepared = rrrah_decode::prepare_raster_for_display_with_budget(&decoded, Some(&root)).unwrap();
+        assert_eq!(prepared.color_space(), &RasterColorSpace::LinearSrgb);
+        let expected = render_hdr_float_metal(&prepared);
+        assert!(expected.chunks_exact(4).any(|pixel| pixel[..3].iter().any(|&v| v > 0x3c00 && v < 0x7c00)), "HDR exposure was clipped to SDR");
+        let directory = tempfile::tempdir().unwrap();
+        let swap: rrrah_cache::RasterSwapCache<u8> = rrrah_cache::ImageSwapCache::new_with_budgets(
+            directory.path(), rrrah_cache::ImageSwapConfig {
+                limits: rrrah_cache::CacheLimits::bytes(1024 * 1024), queue_bytes: 1024 * 1024,
+                queue_count: 2, restore_bytes: 1024 * 1024,
+            }, rrrah_core::MemoryBudget::new(1024 * 1024), root.clone()).unwrap();
+        swap.enqueue(1, decoded);
+        swap.wait_idle().unwrap();
+        drop(prepared);
+        assert_eq!(root.used(), 0);
+        let pressure = root.try_reserve(root.limit()).unwrap();
+        assert!(swap.try_get(&1, || false).is_err());
+        drop(pressure);
+        let restored = swap.try_get(&1, || false).unwrap().unwrap();
+        assert_eq!(restored.color_space(), &RasterColorSpace::Icc(profile));
+        let prepared = rrrah_decode::prepare_raster_for_display_with_budget(&restored, Some(&root)).unwrap();
+        assert_eq!(render_hdr_float_metal(&prepared), expected, "{name}: HDR float frame changed through ICC swap");
+        drop(prepared);
+        drop(restored);
+        drop(swap);
+        assert_eq!(root.used(), 0);
+    }
+}
+
+#[test]
+fn qoi_transfer_flags_and_alpha_survive_native_prepared_swap_and_metal() {
+    let gpu = common::qualification_gpu().expect("actual GPU required");
+    eprintln!("QOI transport adapter: {}", gpu.adapter_name());
+    let rgba = [128u8, 64, 32, 255, 16, 96, 192, 128, 240, 10, 50, 0, 80, 160, 240, 255];
+    let directory = tempfile::tempdir().unwrap();
+    let mut prior_frame = None;
+    for flag in [0u8, 1] {
+        // Authored QOI_RGBA chunks, not an encoder/decoder round trip.
+        let mut bytes = b"qoif".to_vec();
+        bytes.extend(4u32.to_be_bytes());
+        bytes.extend(1u32.to_be_bytes());
+        bytes.extend([4, flag]);
+        for pixel in rgba.chunks_exact(4) { bytes.push(0xff); bytes.extend(pixel); }
+        bytes.extend([0, 0, 0, 0, 0, 0, 0, 1]);
+        let path = directory.path().join(format!("transfer-{flag}.qoi"));
+        std::fs::write(&path, bytes).unwrap();
+        let color = if flag == 0 { RasterColorSpace::Srgb } else { RasterColorSpace::LinearSrgb };
+        let golden = DecodedRaster::new(4, 1, RasterPixels::Rgba8(Arc::new(rgba.to_vec()).into()), color.clone())
+            .unwrap().to_linear_srgb().unwrap();
+        let parameters = ViewParameters { zoom: 1.0, ..view() };
+        let expected_frame = gpu.render_raster(&golden, parameters, [64, 64]).pixels;
+        if let Some(prior) = prior_frame.replace(expected_frame.clone()) {
+            assert_ne!(prior, expected_frame, "QOI transfer flag did not affect display");
+        }
+        for prepared_swap in [false, true] {
+            let budget = rrrah_core::MemoryBudget::new(1024 * 1024);
+            let mut request = rrrah_decode::DecodeRequest::new(&path);
+            request.memory_budget = Some(budget.clone());
+            let native = rrrah_decode::decode_raster(&request).unwrap();
+            assert_eq!(native.color_space(), &color);
+            let RasterPixels::Rgba8(pixels) = native.pixels() else { panic!() };
+            assert_eq!(&pixels[..], &rgba);
+            let prepared = rrrah_decode::prepare_raster_for_display_with_budget(&native, Some(&budget)).unwrap();
+            assert_eq!(gpu.render_raster(&prepared, parameters, [64, 64]).pixels, expected_frame);
+            let frame = if prepared_swap { drop(native); prepared } else { drop(prepared); native };
+            let weight = frame.capacity_bytes();
+            let swap_dir = tempfile::tempdir().unwrap();
+            let swap: rrrah_cache::RasterSwapCache<u8> = rrrah_cache::ImageSwapCache::new_with_budgets(
+                swap_dir.path(), rrrah_cache::ImageSwapConfig {
+                    limits: rrrah_cache::CacheLimits { max_bytes:4096, max_entries:Some(1), ttl:None },
+                    queue_bytes:weight, queue_count:1, restore_bytes:weight,
+                }, rrrah_core::MemoryBudget::new(weight), budget.clone()).unwrap();
+            let mut expected_payload = Vec::new();
+            rrrah_cache::SwapPayload::write_payload(&frame, &mut expected_payload).unwrap();
+            swap.enqueue(1, frame);
+            swap.wait_idle().unwrap();
+            assert_eq!(budget.used(), 0);
+            let held = budget.try_reserve(budget.limit()).unwrap();
+            assert!(swap.try_get(&1, || false).is_err());
+            drop(held);
+            assert!(swap.try_get(&1, || true).unwrap().is_none());
+            assert_eq!(budget.used(), 0);
+            let restored = swap.try_get(&1, || false).unwrap().unwrap();
+            let mut payload = Vec::new();
+            rrrah_cache::SwapPayload::write_payload(&restored, &mut payload).unwrap();
+            assert_eq!(payload, expected_payload);
+            let display = rrrah_decode::prepare_raster_for_display_with_budget(&restored, Some(&budget)).unwrap();
+            assert_eq!(gpu.render_raster(&display, parameters, [64,64]).pixels, expected_frame);
+            drop(display); drop(restored);
+            assert_eq!(budget.used(), 0);
+            assert_eq!(swap.stats().reads, 1);
+            assert_eq!(swap.stats().writes, 1);
+            assert_eq!(swap.stats().errors, 0);
+        }
+    }
+}

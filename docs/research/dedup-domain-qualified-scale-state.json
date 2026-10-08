@@ -1,0 +1,30 @@
+{
+  "status": "verified_native_domain_gate",
+  "session_id": 81715,
+  "source_hashes": {
+    "crates/rrrah-dedup/src/geometry.rs": "d5a4cae5e9aaa9c7b8ade16ae385392ff50c1409ac9850b7fb98e1e9c1eca4d9",
+    "crates/rrrah-dedup/src/local_scan.rs": "c48a2f930d62e1993c2f0eef2071d007eb8990acf18a1a39e69b7646356800ad",
+    "crates/rrrah-dedup/tests/projective_domains.rs": "722401ede6e9a2e0e83ff0210a1dccc57886c2a7ca6078e0a0f9a0b7cf6fb3b5",
+    "crates/rrrah-dedup/tests/gradient_scale_files.rs": "281d67f48e21c9ea511ba63fb962101d3f6bc0cdd91230acd8b3d9f4f49d7178"
+  },
+  "geometry_tests_exit_code": 0,
+  "geometry_tests": 16,
+  "scope": "Explicit scale path only; previous geometry API retains original selection. Whole-domain eligibility applies to hypothesis selection and refinement.",
+  "file_exit_code": 0,
+  "file_tests": 5,
+  "formerly_failed_pair": "processed_ok_candidate_false",
+  "probe": {
+    "path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/gradient-scales-probe-domain-qualified",
+    "sha256": "f278674f6bee8ea5a3a482450a4d76988cb0cb9dd87764e88a0af510fddc11d1"
+  },
+  "alternative_model_gate": {
+    "exit_code": 0,
+    "tests": 4,
+    "log": "docs/research/dedup-domain-qualified-alternative-models.log",
+    "input_hashes": {
+      "crates/rrrah-dedup/tests/projective_domains.rs": "4cfac9c70a35bdbb438435570a61bb7f44997d07e139e0d2808a40084ddb8ae3",
+      "docs/research/dedup-domain-qualified-alternative-models.log": "249b93bf929bec075b7357ae3da64922e1b31e0e099240a2ef0c7a652a1687c6"
+    },
+    "scope": "Forward/inverse horizon rejection, unchanged admissible result, cancellation, weaker valid alternative selected with4096hypotheses. The same mixed fixture at512hypotheses returned no model; bounded sampling does not guarantee discovery."
+  }
+}

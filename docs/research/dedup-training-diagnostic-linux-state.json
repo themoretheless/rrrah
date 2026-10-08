@@ -1,0 +1,37 @@
+{
+  "status": "verified_native_linux_training_diagnostic",
+  "returncode": 0,
+  "tests": 28,
+  "suite_counts": {
+    "affine_candidate_search": 1,
+    "affine_color": 4,
+    "affine_color_heldout_negative": 1,
+    "affine_region": 8,
+    "affine_region_file": 5,
+    "affine_region_grid": 2,
+    "region_footprint": 5,
+    "affine_region_input_contract": 2
+  },
+  "verified_snapshot_files": 2859,
+  "input_hashes": {
+    "docs/research/dedup-training-diagnostic-linux-snapshot.json": "3c4c50b68da0618defa4deba1ca03f0105cd0cfd402a48fef47a282edf400871",
+    "docs/research/dedup-training-diagnostic-linux-native.log": "4e64a92a3cdebf57c8fec5065326eda191bed8f7d08874534aff2593374c9015",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-training-diagnostic-linux.py": "9354c2e4baffbd18ad21108bcebd76e39c5fdf2d756fd3be37e40635d52e49c4"
+  },
+  "current_code_test_hashes": {
+    "crates/rrrah-dedup/src/affine_color.rs": "2c6106f7e91c3b2a246f8a36a23e6adae57ed7bfdc7d65363c8e82efdc5de2aa",
+    "crates/rrrah-dedup/src/affine_region.rs": "77d3167e0b2fd56f4b7a5f603a4eb292922a1334f9e2369dc325be783a253ad5",
+    "crates/rrrah-dedup/src/affine_region_file.rs": "d5e22d164564cb87ba874f9c536690bd8b5cba891ce8691c5927b0e00a55eef2",
+    "crates/rrrah-dedup/src/affine_region_grid.rs": "b01cb34cbed59e004ad42aa22bf604bc2e509eb71654033d8aacd60d95a464bf",
+    "crates/rrrah-dedup/src/region_footprint.rs": "663baa931592b2c0f03a367afc686c21165eafe4060690d7568a94f0673452c0",
+    "crates/rrrah-dedup/tests/affine_candidate_search.rs": "4f350b8d19d69162da2d7e74f7f0315ae4a579364056e3a4faed98d74e82018f",
+    "crates/rrrah-dedup/tests/affine_color.rs": "8959184229b61487025a8eabbedac32d09ea70c42b5d06a461a17c74f2b93dee",
+    "crates/rrrah-dedup/tests/affine_color_heldout_negative.rs": "96c2d7c1e768b41d31da765966da2642a4f39d61dbbf0607ed746af5ef003af6",
+    "crates/rrrah-dedup/tests/affine_region.rs": "3495ffc59f6bfeced22de75d1a3dae63da5f82ae45d4d15e8ad8743ca37463c0",
+    "crates/rrrah-dedup/tests/affine_region_file.rs": "abb36960a5ff877b34bca405d7f54f05f4d1dffcb4c73055b2515b807430ec11",
+    "crates/rrrah-dedup/tests/affine_region_grid.rs": "d9fafcfc7df4f7709632a4ba40f491dad6602f8b4e3645257fc488f492fd3e03",
+    "crates/rrrah-dedup/tests/region_footprint.rs": "591da868138a374cceab7dfdc4021b654fdf24596a65867390dad5fe544d4953",
+    "crates/rrrah-dedup/tests/affine_region_input_contract.rs": "8c7b5641b12160d57502243fb48eaf0f6a9108a3bca7b520a6112054f5c30c22"
+  },
+  "scope": "Native Linux aarch64 eight focused suites; all immutable snapshot bytes verified. Current new modules/tests match. Current Cargo manifest has additional measurement examples outside this snapshot; snapshot is preserved, no Windows/broad corpus/full RSS proof."
+}

@@ -1,0 +1,33 @@
+{
+  "scope": "Normative audit of authored PDF knockout/opacity-mask prototype; not production integration",
+  "source": {
+    "url": "https://raw.githubusercontent.com/adobe/dc-acrobat-sdk-docs/master/docs/pdfstandards/PDF32000_2008.pdf",
+    "sha256": "9de0ca9e8570d6209e8bd48a355be8eb6ec376acfc3fc3ae97cd8730351417ff",
+    "bytes": 22491828,
+    "standard": "PDF 32000-1:2008"
+  },
+  "findings": [
+    {
+      "section": "8.4 graphics state / Table 52",
+      "rule": "Initial alpha-source flag is false: soft masks and alpha constants specify opacity, not shape."
+    },
+    {
+      "section": "11.4.6, printed pp. 338-339",
+      "rule": "Knockout interpolation uses source shape separately from opacity; groups subsequently painted into knockout parents must retain separate shape."
+    },
+    {
+      "section": "11.6.4.3",
+      "rule": "AIS false assigns soft-mask values to opacity. AIS true assigns them to shape."
+    },
+    {
+      "section": "11.6.6, printed p. 351",
+      "rule": "Non-isolated child of knockout parent uses parent initial backdrop. Group entry resets blend mode, alpha constants and soft mask; group exit restores previous graphics state and paints union shape with accumulated opacity."
+    }
+  ],
+  "assessment": "Current authored AIS-default-false prototype model agrees with these rules. External-renderer disagreement alone does not justify replacing group shape with alpha. This is a formula audit, not full conformance proof.",
+  "pending": [
+    "Audit current renderer implementations and broader authored cases, including fractional coverage and AIS true.",
+    "Integrate correct production compositor with bounded allocation and cancellation.",
+    "Re-run actual AI artwork strict pixel gates; currently failing."
+  ]
+}

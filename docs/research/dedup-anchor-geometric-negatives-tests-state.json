@@ -1,0 +1,11 @@
+{
+  "status": "verified_authored_exact_geometry_unrelated_textures",
+  "tests": 4,
+  "negative_pixel_cases": 16,
+  "pins": {
+    "docs/research/dedup-anchor-geometric-negatives-tests.log": "5d564246bed39b164d40a28ec005335419d17b0e39c8ddf3c926f9733145f92e",
+    "crates/rrrah-dedup/src/anchor_rank.rs": "1fa1c562b107f026f40c8649a890f72e66bba1bf78cbfdd716ef55482b3552ce",
+    "crates/rrrah-dedup/tests/anchor_rank.rs": "58f10296e34d2629946eb58324272c479cf23ac162eed053c277c9ee40bfeac5"
+  },
+  "scope": "Eight independent deterministic textures with exact identity geometry, 20 anchors, full coverage and >=1000 informative pairs each direction; rejected both filter0 and8. Synthetic supplied points, not descriptor-retrieved real hard negatives or semantic precision. Previous Linux test file preserved byte-for-byte."
+}

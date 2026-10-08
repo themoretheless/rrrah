@@ -1,0 +1,126 @@
+{
+  "status": "complete_native_color_diagnostic",
+  "input_hashes": {
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/affine-color-footprint-image-probe-screen": "d00c3e7819f442e8a901054d7707c71f7540816945b9eebc2f020eefc2e41570",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200500.jpg": "55d5ff8935ee354fd0d34e3db8346db2b79047db56d7543ce50617c95e0ba91f",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200501.jpg": "c9f9a86fe25fd5bba47af5130e2fcf441633355cc1d806039c86cc0d5bbde9a3",
+    "docs/research/dedup-screen-global-translation-anchor.txt": "1b8e317bbe3718c339b81a58e6400bc60e9f3ef0fa661273ca3dae5c62ef115d",
+    "docs/research/dedup-screen-filter8.json": "24f2548d742443f4b6dfd8ae2a165174da65fefe84a5785d67fd927a27de7c18",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/prepared.json": "6ba843f8f09419efb8ccec9b5d84cc8f086d1dc74ec222f5aa2acae29f9fff01",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-native-screen-affine-color-footprint.py": "6cf5eb06ca0e8dea926476e1a3b6c1e96d3206d08e02cc80f795916b1b401688",
+    "crates/rrrah-dedup/examples/affine_color_footprint_image_probe.rs": "56a861a785c390c117dfe48fb2eeb0c2573c14c14e52428031cd888aef9a117a",
+    "crates/rrrah-dedup/src/affine_color.rs": "2c6106f7e91c3b2a246f8a36a23e6adae57ed7bfdc7d65363c8e82efdc5de2aa"
+  },
+  "required_directions": 2,
+  "forward_roi": [
+    240,
+    60,
+    80,
+    60
+  ],
+  "reverse_roi": [
+    2115,
+    922,
+    103,
+    133
+  ],
+  "forward_filter_radius": 8,
+  "reverse_filter_radius": 14,
+  "maximum_pixel_reads": 64000000,
+  "tolerance": 0.03,
+  "minimum_variance": 1e-05,
+  "maximum_coefficient": 5,
+  "maximum_offset": 0.1,
+  "scope": "Native rrrah decoding and mapped-linear box samples in both directions; disjoint8x8 checker training/heldout. Mapped centers restricted to opposite ROI as in existing regional comparison; whole-image filter support retained. Fixed known ROI, no negative image controls or default promotion; sample vectors separately bounded outside decode credit.",
+  "returncode": 0,
+  "stdout": "{\"status\":\"ok\",\"directions\":[{\"direction\":\"forward\",\"domain\":[240, 60, 80, 60],\"training_samples\":2400,\"heldout_samples\":2400,\"filter_radius\":8,\"pixel_reads\":6936000,\"evidence\":{\"matrix\":[[0.813240119723698, -0.8532574723819688, 0.563487976108282], [0.5110999873986231, -0.7289140977253687, 0.9138741794024049], [-0.15384758950472577, -0.7973691536366658, 1.5096794116916423]],\"offset\":[0.03718082444223339, 0.04157156784192059, 0.05426340684679257],\"samples\":2400,\"matched\":2383,\"squared_error\":0.7623946566728763}},{\"direction\":\"reverse\",\"domain\":[2115, 922, 103, 133],\"training_samples\":6523,\"heldout_samples\":6524,\"filter_radius\":14,\"pixel_reads\":54862635,\"evidence\":{\"matrix\":[[-0.36699660236053955, 2.3744704057768056, -0.9622202305079325], [-0.4219183047078592, 2.243760034971446, -0.8112830255941264], [-0.07450103160569868, 1.4381484096443995, -0.05363470691031249]],\"offset\":[-0.029281520720750964, -0.02399090548117669, -0.04366662444326064],\"samples\":6524,\"matched\":6191,\"squared_error\":4.419867318872585}}],\"managed_used\":0,\"managed_peak\":118947840,\"scope\":\"One fixed ROI pair, native opaque display-range decoder and mapped box forward radius8, reverse geometry-derived radius; separate checker training/heldout, coefficients5/offset0.1, tolerance0.03. Pair vectors bounded separately, outside decode credit. Centers restricted to opposite ROI; filter taps retain whole-image support. Diagnostic only, no copy decision.\"}\n",
+  "stderr": "",
+  "evidence": {
+    "status": "ok",
+    "directions": [
+      {
+        "direction": "forward",
+        "domain": [
+          240,
+          60,
+          80,
+          60
+        ],
+        "training_samples": 2400,
+        "heldout_samples": 2400,
+        "filter_radius": 8,
+        "pixel_reads": 6936000,
+        "evidence": {
+          "matrix": [
+            [
+              0.813240119723698,
+              -0.8532574723819688,
+              0.563487976108282
+            ],
+            [
+              0.5110999873986231,
+              -0.7289140977253687,
+              0.9138741794024049
+            ],
+            [
+              -0.15384758950472577,
+              -0.7973691536366658,
+              1.5096794116916423
+            ]
+          ],
+          "offset": [
+            0.03718082444223339,
+            0.04157156784192059,
+            0.05426340684679257
+          ],
+          "samples": 2400,
+          "matched": 2383,
+          "squared_error": 0.7623946566728763
+        }
+      },
+      {
+        "direction": "reverse",
+        "domain": [
+          2115,
+          922,
+          103,
+          133
+        ],
+        "training_samples": 6523,
+        "heldout_samples": 6524,
+        "filter_radius": 14,
+        "pixel_reads": 54862635,
+        "evidence": {
+          "matrix": [
+            [
+              -0.36699660236053955,
+              2.3744704057768056,
+              -0.9622202305079325
+            ],
+            [
+              -0.4219183047078592,
+              2.243760034971446,
+              -0.8112830255941264
+            ],
+            [
+              -0.07450103160569868,
+              1.4381484096443995,
+              -0.05363470691031249
+            ]
+          ],
+          "offset": [
+            -0.029281520720750964,
+            -0.02399090548117669,
+            -0.04366662444326064
+          ],
+          "samples": 6524,
+          "matched": 6191,
+          "squared_error": 4.419867318872585
+        }
+      }
+    ],
+    "managed_used": 0,
+    "managed_peak": 118947840,
+    "scope": "One fixed ROI pair, native opaque display-range decoder and mapped box forward radius8, reverse geometry-derived radius; separate checker training/heldout, coefficients5/offset0.1, tolerance0.03. Pair vectors bounded separately, outside decode credit. Centers restricted to opposite ROI; filter taps retain whole-image support. Diagnostic only, no copy decision."
+  }
+}

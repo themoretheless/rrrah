@@ -1,0 +1,33 @@
+{
+  "status": "verified_updated_release_union_prefix",
+  "verified_rows": 2,
+  "required_pairs": 229,
+  "counts": {
+    "local_supported": 2,
+    "miss": 0,
+    "native_error": 0
+  },
+  "summary": [
+    {
+      "query": "200001.jpg",
+      "outcome": "local_supported",
+      "matches": 288,
+      "inliers": 102,
+      "support_count": 80
+    },
+    {
+      "query": "200101.jpg",
+      "outcome": "local_supported",
+      "matches": 122,
+      "inliers": 50,
+      "support_count": 8
+    }
+  ],
+  "input_hashes": {
+    "docs/research/dedup-combined-domain-release-original-full-checkpoint-2-current.json": "0a6878c12a8941b374eaa3fe8c62ad8adb0d0ee9197e016780abcebed154a9a6",
+    "scripts/verify-dedup-scale-similarity-diagnostic.py": "41a4c0583f4a99677e716bae43ed976cfda409703fe2ec6236da3de5d4f897e4",
+    "scripts/dedup_jpeg_domain.py": "a9986aabe3428100e1b061a70f6fb7f1f87e1b6c8552484b550e764a04746921",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-combined-domain-release-original-full.py": "de0896fcae112284d87d6fae755294e8f73a79def3a4ad3b3d78eba6ce4157b8"
+  },
+  "scope": "Source/archive hashes, ordered origin pairs, same-recipe positive parity, typed stdout, distinct locations, geometry residuals and regional arithmetic/domain bounds. Errors remain unresolved denominator rows. No whole identity, semantic precision, full-pixel resampling oracle or indexed full-collection proof."
+}

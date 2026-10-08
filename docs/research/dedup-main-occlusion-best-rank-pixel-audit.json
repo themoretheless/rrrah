@@ -1,0 +1,133 @@
+{
+  "status": "verified_independent_best_occlusion_rank_pixel_counts",
+  "comparisons": 12,
+  "summary": [
+    {
+      "query": "214402.jpg",
+      "region_index": 79,
+      "direction": "forward",
+      "filter_radius": 0,
+      "valid_sites": 7500,
+      "informative_pairs": 57178,
+      "agreeing_pairs": 47775,
+      "minimum_contrast_boundary_margin": 3.0074834823602334e-06
+    },
+    {
+      "query": "214402.jpg",
+      "region_index": 79,
+      "direction": "forward",
+      "filter_radius": 3,
+      "valid_sites": 7500,
+      "informative_pairs": 55707,
+      "agreeing_pairs": 52299,
+      "minimum_contrast_boundary_margin": 1.856005274696211e-06
+    },
+    {
+      "query": "214402.jpg",
+      "region_index": 79,
+      "direction": "forward",
+      "filter_radius": 8,
+      "valid_sites": 7500,
+      "informative_pairs": 52460,
+      "agreeing_pairs": 49880,
+      "minimum_contrast_boundary_margin": 4.4304834512665786e-07
+    },
+    {
+      "query": "214402.jpg",
+      "region_index": 79,
+      "direction": "reverse",
+      "filter_radius": 0,
+      "valid_sites": 33082,
+      "informative_pairs": 245741,
+      "agreeing_pairs": 197578,
+      "minimum_contrast_boundary_margin": 5.868534433866104e-07
+    },
+    {
+      "query": "214402.jpg",
+      "region_index": 79,
+      "direction": "reverse",
+      "filter_radius": 3,
+      "valid_sites": 33082,
+      "informative_pairs": 242626,
+      "agreeing_pairs": 216429,
+      "minimum_contrast_boundary_margin": 1.0025239704624517e-07
+    },
+    {
+      "query": "214402.jpg",
+      "region_index": 79,
+      "direction": "reverse",
+      "filter_radius": 8,
+      "valid_sites": 33082,
+      "informative_pairs": 232030,
+      "agreeing_pairs": 220603,
+      "minimum_contrast_boundary_margin": 3.7829297399715606e-07
+    },
+    {
+      "query": "212602.jpg",
+      "region_index": 89,
+      "direction": "forward",
+      "filter_radius": 0,
+      "valid_sites": 7500,
+      "informative_pairs": 51561,
+      "agreeing_pairs": 38520,
+      "minimum_contrast_boundary_margin": 2.0857751370940286e-07
+    },
+    {
+      "query": "212602.jpg",
+      "region_index": 89,
+      "direction": "forward",
+      "filter_radius": 3,
+      "valid_sites": 7500,
+      "informative_pairs": 49751,
+      "agreeing_pairs": 40180,
+      "minimum_contrast_boundary_margin": 1.657433767576072e-08
+    },
+    {
+      "query": "212602.jpg",
+      "region_index": 89,
+      "direction": "forward",
+      "filter_radius": 8,
+      "valid_sites": 7500,
+      "informative_pairs": 49619,
+      "agreeing_pairs": 41337,
+      "minimum_contrast_boundary_margin": 3.8180991652082136e-07
+    },
+    {
+      "query": "212602.jpg",
+      "region_index": 89,
+      "direction": "reverse",
+      "filter_radius": 0,
+      "valid_sites": 14217,
+      "informative_pairs": 93213,
+      "agreeing_pairs": 67973,
+      "minimum_contrast_boundary_margin": 1.419126987632982e-07
+    },
+    {
+      "query": "212602.jpg",
+      "region_index": 89,
+      "direction": "reverse",
+      "filter_radius": 3,
+      "valid_sites": 14217,
+      "informative_pairs": 88772,
+      "agreeing_pairs": 70695,
+      "minimum_contrast_boundary_margin": 4.0240606342771545e-08
+    },
+    {
+      "query": "212602.jpg",
+      "region_index": 89,
+      "direction": "reverse",
+      "filter_radius": 8,
+      "valid_sites": 14217,
+      "informative_pairs": 86486,
+      "agreeing_pairs": 70794,
+      "minimum_contrast_boundary_margin": 1.858415899459384e-07
+    }
+  ],
+  "pins": {
+    "docs/research/dedup-main-occlusion-all-rank-regions.json": "4f52fef41df23c1b1e6b3575670626a5a1caa34d8d268140b59f1e848ad82184",
+    "docs/research/dedup-main-occlusion-all-rank-regions-audit.json": "32d393aba88b5d1914eec532b7c30473f82e7f1b82575a8b910d55ebcfc7f665",
+    "scripts/verify-dedup-rank-pixel-oracle.py": "60e6ff6a4ec5623fae3b0a8678a663c950fec6e92392a641fcaaae279e5ca4f3",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-main-occlusion-best-rank-pixels.py": "a0f6747051aa194cfb525feaa10cff24b2838b4fd3189b7f76007fb0c6bdcdbc"
+  },
+  "scope": "Independent inverse matrix, bilinear luminance and sliding window means/ordinal counts. Twelve exact count checks on two best existing regions. Shared normalized native decoder pixels; no independent decoding, copy admission, held-out selection or broad negative precision."
+}

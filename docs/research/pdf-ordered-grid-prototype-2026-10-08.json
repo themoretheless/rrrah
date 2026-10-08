@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-08",
+  "status": "test-only prototype; production AI fidelity remains pending",
+  "source": "vendor/hayro-interpret/src/encode/ordered_grid.rs",
+  "method": "8x8 spatial samples per covered pixel; later triangles overwrite earlier samples",
+  "memory_scope": "Fixed sample storage per covered pixel independent of overlap count; total storage still scales with covered pixels and color components",
+  "validation_command": "python3 scripts/test-pdf-mesh-bounds.py --filter ordered_grid --target-dir /tmp/rrrah-required-corpus-target",
+  "validation_result": {
+    "passed": 6,
+    "failed": 0,
+    "ignored": 0,
+    "execution_seconds": 0.05
+  },
+  "required_checks": [
+    "Later geometry replaces hidden color",
+    "Partial overlap preserves the visible earlier portion",
+    "Admission refusal and cancellation return no partial result",
+    "One and 1024 overlapping rectangles have equal peak admission and release all credit",
+    "Cancellation immediately after admission releases the newly allocated credit",
+    "Folded mapping y=4v(1-v) selects the larger-v inverse branch; mean color agrees with the analytic inverse within 0.005"
+  ],
+  "limitations": [
+    "Synthetic tests do not establish real AI fidelity or speed",
+    "Subpixel coverage is approximated by a fixed grid",
+    "Production patch traversal currently orders u before v; a v-major grid is available only to the test prototype",
+    "Averaging color components before conversion requires investigation for nonlinear color spaces",
+    "Real VectorApple and one.ai comparison and full-image memory/runtime measurements are required before integration"
+  ],
+  "current_production_comparison": "docs/research/ai-current-poppler-2026-10-08.json",
+  "reference": "https://opensource.adobe.com/dc-acrobat-sdk-docs/pdfstandards/pdfreference1.4.pdf",
+  "real_source_experiment": {
+    "preparer": "scripts/prepare-ai-ordered-grid-experiment.py",
+    "comparison": "docs/research/ai-ordered-grid-poppler-2026-10-08.json",
+    "timing": "docs/research/ai-ordered-grid-timing-2026-10-08.json",
+    "decision": "Do not integrate: no meaningful real-image fidelity gain, higher runtime and memory. Synthetic painter-order correctness does not explain the dominant AI discrepancy.",
+    "VectorApple_current_mean_absolute_channel_error": 4.0111507261252015,
+    "VectorApple_experiment_mean_absolute_channel_error": 4.011227255129694
+  }
+}

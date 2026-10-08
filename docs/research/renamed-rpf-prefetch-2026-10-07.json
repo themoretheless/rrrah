@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-07",
+  "feature": "Foreground raster/model neighbour queue admits raw-suffixed raster content",
+  "implementation": "Existing fast extension filter retained; RAW extension candidates otherwise excluded now use bounded common source classifier and enter foreground raster neighbour plan when content is raster",
+  "evidence": {
+    "log": "/tmp/rrrah-renamed-rpf-prefetch.log",
+    "app_passed": 164,
+    "app_ignored": 24,
+    "checks": [
+      "synthetic RPF copied to CR3 suffix is an admitted neighbour",
+      "actual configured preloader decodes renamed RPF",
+      "HDR sample .125 and pixel aspect 1.5 retained",
+      "remaining RPF interpretation cache and swap tests pass",
+      "managed root fully released after all owners drop"
+    ]
+  },
+  "limits": [
+    "Unknown-extension files remain outside ordinary folder listing",
+    "Separate sensor prefetch pool may still attempt a raw-suffixed raster and needs its own classifier filter",
+    "No large-folder scan or cold-disk timing claim"
+  ],
+  "status": "local, not pushed"
+}

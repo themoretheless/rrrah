@@ -1,0 +1,34 @@
+{
+  "status": "capacity_fixture_passed_before_writable_fixture_edit",
+  "session_id": 70786,
+  "source_before": {
+    "crates/rrrah-dedup/src/local_collection.rs": "bf8086a15071c0edbe3978a8db9b1b2817d193f1ec3ea70b3910890fde3b49da",
+    "crates/rrrah-dedup/tests/gradient_collection.rs": "62a07d35c21c81b5da6d1257f39f9a1cbd673161716d0a26a470ed9ed390f36c"
+  },
+  "scope": "Gradient retrieval source-ID and insufficient-ID scratch now reserve before allocation; no full allocator/RSS or combined-family qualification.",
+  "linux_snapshot_note": "The ongoing fixed Linux snapshot predates this metadata change.",
+  "initial_exit_code": 0,
+  "initial_passed_tests": 0,
+  "initial_scope": "Raster-only invocation excluded the decode-gated collection test; no fixture qualification.",
+  "retry_session_id": 8600,
+  "source_after": {
+    "crates/rrrah-dedup/src/local_collection.rs": "bf8086a15071c0edbe3978a8db9b1b2817d193f1ec3ea70b3910890fde3b49da",
+    "crates/rrrah-dedup/tests/gradient_collection.rs": "62a07d35c21c81b5da6d1257f39f9a1cbd673161716d0a26a470ed9ed390f36c"
+  },
+  "retry_exit_code": 0,
+  "passed_tests": 1,
+  "capacity_session_id": 81381,
+  "capacity_source_before": {
+    "crates/rrrah-dedup/src/local_collection.rs": "f4643ff77db2240bbf487c1e887413375b8310425afda8819d24bfb9dd7141fc",
+    "crates/rrrah-dedup/tests/gradient_collection.rs": "62a07d35c21c81b5da6d1257f39f9a1cbd673161716d0a26a470ed9ed390f36c"
+  },
+  "capacity_exit_code": 0,
+  "capacity_passed_tests": 1,
+  "capacity_source_after": {
+    "crates/rrrah-dedup/src/local_collection.rs": "f4643ff77db2240bbf487c1e887413375b8310425afda8819d24bfb9dd7141fc",
+    "crates/rrrah-dedup/tests/gradient_collection.rs": "ae9bc33cc19f084a87f6ea8725b97b20db5e498f664bcfcae01b62079b1dd996"
+  },
+  "capacity_source_drift": [
+    "crates/rrrah-dedup/tests/gradient_collection.rs"
+  ]
+}

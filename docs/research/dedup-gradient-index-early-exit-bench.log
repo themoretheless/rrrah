@@ -1,0 +1,69 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+warning: function `gradient_file_pairs` is never used
+   --> crates/rrrah-dedup/examples/../../../docs/research/dedup-gradient-index-before-distance-early-exit.rs:171:8
+    |
+171 | pub fn gradient_file_pairs(
+    |        ^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: struct `GradientFilePairReport` is never constructed
+   --> crates/rrrah-dedup/examples/../../../docs/research/dedup-gradient-index-before-distance-early-exit.rs:196:12
+    |
+196 | pub struct GradientFilePairReport {
+    |            ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `gradient_file_pair_report` is never used
+   --> crates/rrrah-dedup/examples/../../../docs/research/dedup-gradient-index-before-distance-early-exit.rs:203:8
+    |
+203 | pub fn gradient_file_pair_report(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `gradient_file_pairs` is never used
+   --> crates/rrrah-dedup/examples/../src/gradient_index.rs:176:8
+    |
+176 | pub fn gradient_file_pairs(
+    |        ^^^^^^^^^^^^^^^^^^^
+
+warning: struct `GradientFilePairReport` is never constructed
+   --> crates/rrrah-dedup/examples/../src/gradient_index.rs:201:12
+    |
+201 | pub struct GradientFilePairReport {
+    |            ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `gradient_file_pair_report` is never used
+   --> crates/rrrah-dedup/examples/../src/gradient_index.rs:208:8
+    |
+208 | pub fn gradient_file_pair_report(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `rrrah-dedup` (example "gradient_index_early_exit_bench") generated 6 warnings
+    Finished `dev` profile [optimized + debuginfo] target(s) in 4.83s
+     Running `target/debug/examples/gradient_index_early_exit_bench`
+{"round":0,"backend":0,"seconds":1.2865730420000001,"queries":1024,"entries":4096,"hits":512}
+{"round":0,"backend":1,"seconds":1.074345,"queries":1024,"entries":4096,"hits":512}
+{"round":1,"backend":1,"seconds":2.075860417,"queries":1024,"entries":4096,"hits":512}
+{"round":1,"backend":0,"seconds":1.5163054169999999,"queries":1024,"entries":4096,"hits":512}
+{"round":2,"backend":0,"seconds":1.56312,"queries":1024,"entries":4096,"hits":512}
+{"round":2,"backend":1,"seconds":0.99347225,"queries":1024,"entries":4096,"hits":512}
+{"round":3,"backend":1,"seconds":1.02772225,"queries":1024,"entries":4096,"hits":512}
+{"round":3,"backend":0,"seconds":1.609308916,"queries":1024,"entries":4096,"hits":512}
+{"round":4,"backend":0,"seconds":2.687485583,"queries":1024,"entries":4096,"hits":512}
+{"round":4,"backend":1,"seconds":0.917241083,"queries":1024,"entries":4096,"hits":512}
+{"round":5,"backend":1,"seconds":0.865087334,"queries":1024,"entries":4096,"hits":512}
+{"round":5,"backend":0,"seconds":1.015213917,"queries":1024,"entries":4096,"hits":512}
+{"status":"complete_exact_paired_retrieval","memory_used":0}

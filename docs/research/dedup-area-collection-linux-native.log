@@ -1,0 +1,77 @@
+   Compiling moxcms v0.8.1 (/workspace/vendor/moxcms)
+   Compiling image v0.25.10
+   Compiling hayro-interpret v0.7.0 (/workspace/vendor/hayro-interpret)
+   Compiling rrrah-memory v0.1.0 (/workspace/crates/rrrah-memory)
+   Compiling rrrah-core v0.1.0 (/workspace/crates/rrrah-core)
+   Compiling hayro v0.7.1 (/workspace/vendor/hayro)
+   Compiling jxl-oxide v0.12.6
+   Compiling rrrah-dedup v0.1.0 (/workspace/crates/rrrah-dedup)
+   Compiling rrrah-decode v0.1.0 (/workspace/crates/rrrah-decode)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+warning: linker stderr: /validation/sysroot/usr/bin/ld: /validation/target/debug/deps/libjpegxr-8d01a0594e000fc4.rlib(2e643c6506a180d9-strenc.o): in function `StrIOEncInit':
+         /validation/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/jpegxr-0.3.1/jxrlib/image/encode/strenc.c:485:(.text.StrIOEncInit+0xf0): the use of `tmpnam' is dangerous, better use `mkstemp'
+  |
+  = note: `#[warn(linker_messages)]` on by default
+
+warning: linker stdout: /validation/sysroot/usr/bin/ld: /validation/target/debug/deps/libjpegxr-8d01a0594e000fc4.rlib(2e643c6506a180d9-strenc.o): note: the message above does not take linker garbage collection into account
+
+warning: `rrrah-dedup` (test "gradient_scale_files") generated 2 warnings
+warning: `rrrah-dedup` (test "gradient_distinct_locations") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "managed_evidence") generated 2 warnings (2 duplicates)
+    Finished `test` profile [optimized + debuginfo] target(s) in 5m 08s
+     Running tests/gradient_distinct_locations.rs (/validation/target/debug/deps/gradient_distinct_locations-93a23ba61fb8e965)
+
+running 4 tests
+test distinct_location_work_validation_and_atomic_cancellation ... ok
+test nearby_scale_duplicates_preserve_distinct_landmarks_and_reject_ambiguity ... ok
+test managed_distinct_match_admission_last_owner_and_cancellation ... ok
+test distinct_location_results_equal_independent_sorted_distance_oracle ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/gradient_scale_files.rs (/validation/target/debug/deps/gradient_scale_files-187b304a591586f5)
+
+running 19 tests
+test area_distinct_managed_file_cancel_mutation_and_restored_retry_release_credit ... ok
+test area_distinct_file_keeps_original_confirmation_and_preio_admission ... ok
+test changed_source_refuses_scale_evidence_and_restored_retry_succeeds ... ok
+test area_distinct_collection_matches_all_fresh_pairs_and_preiteration_admission ... ok
+test collection_scale_edges_equal_fresh_pair_confirmation ... ok
+test area_distinct_regions_common_source_lifecycle_and_admission ... ok
+test collection_scale_mutation_and_cancellation_remove_partial_results ... ok
+test distinct_managed_collection_matches_all_fresh_pairs_and_preiteration_admission ... ok
+test distinct_managed_file_cancel_mutation_and_restored_retry_release_credit ... ok
+test distinct_managed_file_results_preserve_copy_refusal_and_last_owner ... ok
+test intermediate_scale_files_retain_authored_rotations_and_enlargements ... ok
+test scale_file_admission_and_cancellation_are_atomic ... ok
+test scale_list_cancellation_precedes_file_and_iterator_access ... ok
+test distinct_managed_regions_common_source_lifecycle_and_admission ... ok
+test scaled_files_confirm_pixels_and_refuse_unrelated ... ok
+test spatial_collection_scale_edges_equal_fresh_pair_confirmation ... ok
+test spatial_scale_regions_match_fresh_supplied_model_confirmation ... ok
+test area_distinct_collection_cancel_changed_source_and_restored_retry ... ok
+test distinct_managed_collection_cancel_changed_source_and_restored_retry ... ok
+
+test result: ok. 19 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 70.91s
+
+     Running tests/managed_evidence.rs (/validation/target/debug/deps/managed_evidence-6ec9eb8deb0218c8)
+
+running 2 tests
+test evidence_adoption_preserves_allocations_capacity_and_independent_last_owners ... ok
+test evidence_adoption_cancellation_discards_all_stages_and_handles_absent_geometry ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

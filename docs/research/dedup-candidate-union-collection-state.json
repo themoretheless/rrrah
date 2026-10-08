@@ -1,0 +1,19 @@
+{
+  "status": "verified_native_macos_collection_and_regressions",
+  "passed_tests": 23,
+  "input_hashes": {
+    "crates/rrrah-dedup/src/local_scan.rs": "2197dfd3ba8073a9dbff0f90806960221d979d212d3ad95ca4f9bb42f36ac361",
+    "crates/rrrah-dedup/src/local_collection.rs": "5cc78a4f53f5d331c302f88b95e9b00507e780c7a2d8775cb92c2bed804e103f",
+    "crates/rrrah-dedup/tests/candidate_union_files.rs": "7a159b2ec6fe4eda924f5a42c27e576b4b6681eae46bbf1e80292ab6194008ce",
+    "crates/rrrah-dedup/tests/gradient_scale_files.rs": "e9aeaf64db678895841ee804d63f31ba0d52a89d6f0326a52f6f5f4d9444e503",
+    "docs/research/dedup-candidate-union-collection-macos.log": "96a27b5559fd0688663523b3a0ca57a9d0a433308890d5491a75b00ca09e1df3"
+  },
+  "scope": "23 native macOS authored/regression tests plus independently verified real two-source known crop collection/file parity (17 correspondences,10 inliers,47 regions). Current Linux and broader collection recall/precision remain pending.",
+  "real_crop_status": "verified_fresh_collection_file_parity",
+  "real_crop_exit_code": 0,
+  "real_crop_audit": "docs/research/dedup-fresh-candidate-union-collection-200301-audit.json",
+  "real_crop_matches": 17,
+  "real_crop_inliers": 10,
+  "real_crop_support_count": 47,
+  "real_crop_managed_peak": 378759952
+}

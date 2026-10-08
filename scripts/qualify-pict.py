@@ -56,7 +56,7 @@ checks = [('native', ['cargo', 'test', '-p', 'rrrah-decode', '--lib', 'pict::'],
            ['--include-ignored', '--nocapture'], 23)]
 if args.metal:
     checks.append(('metal', ['cargo', 'test', '-p', 'rrrah', '--test', 'hdr_raster_swap', 'pict_'],
-                   ['--ignored', '--nocapture'], 3))
+                   ['--include-ignored', '--nocapture'], 3))
 for name, prefix, suffix, count in checks:
     command = prefix + ['--locked', '--target-dir', str(args.target_dir.resolve()), '--'] + suffix
     completed = subprocess.run(command, cwd=root, env=environment, capture_output=True, text=True, timeout=300)
@@ -64,7 +64,7 @@ for name, prefix, suffix, count in checks:
     log = args.report.with_name(args.report.stem + f'-{name}.log')
     log.write_text(output)
     passed = completed.returncode == 0 and f'{count} passed; 0 failed; 0 ignored' in output
-    adapters = [line for line in output.splitlines() if line.startswith('PICT adapter:')]
+    adapters = [line for line in output.splitlines() if line.startswith('Raster transport adapter:')]
     if name == 'metal':
         passed = passed and len(adapters) == 7 and all('Metal ' in line for line in adapters)
     report['checks'].append({'name': name, 'passed': passed, 'command': command,

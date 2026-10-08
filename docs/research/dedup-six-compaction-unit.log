@@ -1,0 +1,102 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+error[E0308]: mismatched types
+    --> crates/rrrah-dedup/src/local_collection.rs:2574:68
+     |
+2574 |                 return compact_portfolio(result, retained, budget, cancel);
+     |                        -----------------                           ^^^^^^ types differ in mutability
+     |                        |
+     |                        arguments to this function are incorrect
+     |
+     = note: expected mutable reference `&mut _`
+                        found reference `&dyn Fn() -> bool`
+note: function defined here
+    --> crates/rrrah-dedup/src/local_collection.rs:2321:4
+     |
+2321 | fn compact_portfolio<T: Copy>(
+     |    ^^^^^^^^^^^^^^^^^
+...
+2325 |     cancel: &mut impl FnMut() -> bool,
+     |     ---------------------------------
+
+warning: taking a mutable reference to a `const` item
+    --> crates/rrrah-dedup/src/managed_metric.rs:218:59
+     |
+ 218 |                     .search(query, radius, entries.len(), &mut usize::MAX, &budget, || false)
+     |                                                           ^^^^^^^^^^^^^^^
+     |
+     = note: each usage of a `const` item creates a new temporary
+     = note: the mutable reference will refer to this temporary, not the original `const` item
+note: `const` item defined here
+    --> /Users/themoretheless/.rustup/toolchains/stable-aarch64-apple-darwin/lib/rustlib/src/rust/library/core/src/num/uint_macros.rs:51:9
+     |
+  51 |           pub const MAX: Self = !0;
+     |           ^^^^^^^^^^^^^^^^^^^
+     |
+    ::: /Users/themoretheless/.rustup/toolchains/stable-aarch64-apple-darwin/lib/rustlib/src/rust/library/core/src/num/mod.rs:1449:5
+     |
+1449 | /     uint_impl! {
+1450 | |         Self = usize,
+1451 | |         ActualT = u64,
+1452 | |         SignedT = isize,
+...    |
+1472 | |         bound_condition = " on 64-bit targets",
+1473 | |     }
+     | |_____- in this macro invocation
+     = note: `#[warn(const_item_mutation)]` on by default
+     = note: this warning originates in the macro `uint_impl` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+warning: taking a mutable reference to a `const` item
+    --> crates/rrrah-dedup/src/managed_metric.rs:237:36
+     |
+ 237 |             index.search(0, 64, 0, &mut usize::MAX, &budget, || false),
+     |                                    ^^^^^^^^^^^^^^^
+     |
+     = note: each usage of a `const` item creates a new temporary
+     = note: the mutable reference will refer to this temporary, not the original `const` item
+note: `const` item defined here
+    --> /Users/themoretheless/.rustup/toolchains/stable-aarch64-apple-darwin/lib/rustlib/src/rust/library/core/src/num/uint_macros.rs:51:9
+     |
+  51 |           pub const MAX: Self = !0;
+     |           ^^^^^^^^^^^^^^^^^^^
+     |
+    ::: /Users/themoretheless/.rustup/toolchains/stable-aarch64-apple-darwin/lib/rustlib/src/rust/library/core/src/num/mod.rs:1449:5
+     |
+1449 | /     uint_impl! {
+1450 | |         Self = usize,
+1451 | |         ActualT = u64,
+1452 | |         SignedT = isize,
+...    |
+1472 | |         bound_condition = " on 64-bit targets",
+1473 | |     }
+     | |_____- in this macro invocation
+     = note: this warning originates in the macro `uint_impl` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+warning: taking a mutable reference to a `const` item
+    --> crates/rrrah-dedup/src/managed_metric.rs:242:37
+     |
+ 242 |             index.search(0, 64, 96, &mut usize::MAX, &budget, || true),
+     |                                     ^^^^^^^^^^^^^^^
+     |
+     = note: each usage of a `const` item creates a new temporary
+     = note: the mutable reference will refer to this temporary, not the original `const` item
+note: `const` item defined here
+    --> /Users/themoretheless/.rustup/toolchains/stable-aarch64-apple-darwin/lib/rustlib/src/rust/library/core/src/num/uint_macros.rs:51:9
+     |
+  51 |           pub const MAX: Self = !0;
+     |           ^^^^^^^^^^^^^^^^^^^
+     |
+    ::: /Users/themoretheless/.rustup/toolchains/stable-aarch64-apple-darwin/lib/rustlib/src/rust/library/core/src/num/mod.rs:1449:5
+     |
+1449 | /     uint_impl! {
+1450 | |         Self = usize,
+1451 | |         ActualT = u64,
+1452 | |         SignedT = isize,
+...    |
+1472 | |         bound_condition = " on 64-bit targets",
+1473 | |     }
+     | |_____- in this macro invocation
+     = note: this warning originates in the macro `uint_impl` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+For more information about this error, try `rustc --explain E0308`.
+warning: `rrrah-dedup` (lib test) generated 3 warnings
+error: could not compile `rrrah-dedup` (lib test) due to 1 previous error; 3 warnings emitted

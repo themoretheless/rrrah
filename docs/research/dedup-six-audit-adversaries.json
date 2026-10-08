@@ -1,0 +1,57 @@
+{
+  "status": "verified_six_audit_adversaries",
+  "report_sha256": "3e4927f8439f52f0d8f34429d38975ecfc4f44e94bba71515439fc881eaaa9e3",
+  "results": [
+    {
+      "case": "baseline",
+      "accepted": true,
+      "exit_code": 0
+    },
+    {
+      "case": "integer_region_flag",
+      "accepted": false,
+      "exit_code": 1
+    },
+    {
+      "case": "impossible_pixel_counts",
+      "accepted": false,
+      "exit_code": 1
+    },
+    {
+      "case": "shifted_region",
+      "accepted": false,
+      "exit_code": 1
+    },
+    {
+      "case": "whole_promotion",
+      "accepted": false,
+      "exit_code": 1
+    },
+    {
+      "case": "legacy_decision_changed",
+      "accepted": false,
+      "exit_code": 1
+    },
+    {
+      "case": "excess_memory",
+      "accepted": false,
+      "exit_code": 1
+    },
+    {
+      "case": "missing_result",
+      "accepted": false,
+      "exit_code": 1
+    },
+    {
+      "case": "duplicate_query",
+      "accepted": false,
+      "exit_code": 1
+    },
+    {
+      "case": "native_failure",
+      "accepted": false,
+      "exit_code": 1
+    }
+  ],
+  "scope": "Report integrity only; no extra native accuracy measurement."
+}

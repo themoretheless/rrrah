@@ -1,0 +1,38 @@
+{
+  "status": "verified_native_macos",
+  "passed_tests": 7,
+  "files": 15,
+  "equal_pairs": 55,
+  "visible_edit_pairs_excluded": 50,
+  "orders": [
+    "forward",
+    "reverse"
+  ],
+  "formats": [
+    "png",
+    "tiff",
+    "tga",
+    "webp",
+    "qoi"
+  ],
+  "input_hashes": {
+    "docs/research/dedup-alpha-cross-encoding-indexed-test-source.rs": "ec9a0f7b14789e8f283a44e6ca7ab68db14e40c287bd845686c83e57f1d7350b",
+    "docs/research/dedup-alpha-cross-encoding-indexed-macos.log": "98ef0f1a1ccacfdbda64f5396ecd09d916698280fd93a06048fa9cb72ad7936b",
+    "crates/rrrah-dedup/tests/fixtures/raster-equality/alpha-base.png": "7c31e35f06d0f60ee37ed4d21f50e631207358df371c852154c36b2b9138e7d5",
+    "crates/rrrah-dedup/tests/fixtures/raster-equality/alpha-base.qoi": "0da0ac197f20084490876af388d46a6232c24f2e5af5ba1f6a14272eebff6c09",
+    "crates/rrrah-dedup/tests/fixtures/raster-equality/alpha-base.tga": "c268ce9e4f2b8136690df0d98e3ccaf26c1414e0adc9bdce79cdd44dd8542323",
+    "crates/rrrah-dedup/tests/fixtures/raster-equality/alpha-base.tiff": "43eb026995022b809357eb78c1c786d4175d550f6ad8ee44de76e66a2a13ead7",
+    "crates/rrrah-dedup/tests/fixtures/raster-equality/alpha-base.webp": "a344aa1f1a4d25c066af750f853916a894cc7c4b34085b99c75c0d38a04ce261",
+    "crates/rrrah-dedup/tests/fixtures/raster-equality/alpha-changed.png": "d54fc840368d3bc9ea0713f7ca81b7ab6a4a5cce8e5478494f385bbd4bfebfbc",
+    "crates/rrrah-dedup/tests/fixtures/raster-equality/alpha-changed.qoi": "b869cf7b4ddadd318157d11056f30d281ecccc56c05b94be2205962d501816f9",
+    "crates/rrrah-dedup/tests/fixtures/raster-equality/alpha-changed.tga": "ed98791df37180ddcab78e0794bf7e5f08434c0b99e89b76cfb32ba3f68c47f0",
+    "crates/rrrah-dedup/tests/fixtures/raster-equality/alpha-changed.tiff": "8bf6d6ee26b43e63f0c742df2681419998e09dd967381fe16c65cfaf75c10f37",
+    "crates/rrrah-dedup/tests/fixtures/raster-equality/alpha-changed.webp": "2b4e6c0132364aa7f62257f8967525a00c1d12ea81d7805f6be376378edcbfa0",
+    "crates/rrrah-dedup/tests/fixtures/raster-equality/alpha-hidden.png": "41e5ced0ae674ebcfeb741f3ed4a0ac35c6b6ab91f6d8463019ea98b8c9c9757",
+    "crates/rrrah-dedup/tests/fixtures/raster-equality/alpha-hidden.qoi": "c92850e83d3d6cbb8abff51c3109b87216ab49a426daaaca2170561ce4bdf7d1",
+    "crates/rrrah-dedup/tests/fixtures/raster-equality/alpha-hidden.tga": "01b6388877919e51b7cf86833300f1213fe0a2bb25ef71094edd847b3e009815",
+    "crates/rrrah-dedup/tests/fixtures/raster-equality/alpha-hidden.tiff": "a9bac41f6ba2da4139699159be7fbc4be3f42d087392ccb34198632455e68627",
+    "crates/rrrah-dedup/tests/fixtures/raster-equality/alpha-hidden.webp": "869d0c99bf63957a37a272e8176ad37c2efe833b7e0afb8c83364c781c10aa43"
+  },
+  "scope": "Independent alpha lossless encodings, hidden RGB ignored, visible edit forms separate five-file group; all 105 relationships classified by expected 55 retrieved equal pairs and 50 excluded pairs. Managed credit released. Finite macOS fixture, not broad HDR/ICC or Linux qualification."
+}

@@ -1,0 +1,23 @@
+{
+  "scope": "Common EIP sensor route refusal contracts",
+  "cases": [
+    "Non-ZIP payload",
+    "Preview/settings without RAW",
+    "Unsupported CAP member",
+    "Ambiguous two RAW members",
+    "Malformed PEF with preview member",
+    "Stored RAW payload with corrupted CRC"
+  ],
+  "verification": [
+    "Each is classified Sensor and refuses through decode_image without raster fallback",
+    "All managed source/output credit released after refusal",
+    "Zero-budget requests refuse with structured DecodeError::Memory, occupancy and peak zero",
+    "EIP added to cancellation and image-index precedence tests for common/native entrypoints"
+  ],
+  "tests": "965 passed, zero failures, 65 ignored",
+  "log": "/tmp/rrrah-eip-common-refusals.log",
+  "limitations": [
+    "Authored invalid packages; not complete EIP fuzzing",
+    "No added support for Capture One edits"
+  ]
+}

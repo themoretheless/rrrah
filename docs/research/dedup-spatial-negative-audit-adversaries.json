@@ -1,0 +1,52 @@
+{
+  "status": "verified_audit_adversaries",
+  "report_sha256": "24d1f0de32082dd8590bff10d1c2a1450fbb48dac570b8f5197e8b3fe2a27fe0",
+  "results": [
+    {
+      "case": "baseline",
+      "accepted": true,
+      "exit_code": 0
+    },
+    {
+      "case": "integer_candidate",
+      "accepted": false,
+      "exit_code": 1
+    },
+    {
+      "case": "changed_whole_decision",
+      "accepted": false,
+      "exit_code": 1
+    },
+    {
+      "case": "negative_inliers",
+      "accepted": false,
+      "exit_code": 1
+    },
+    {
+      "case": "invented_region_support",
+      "accepted": false,
+      "exit_code": 1
+    },
+    {
+      "case": "missing_result",
+      "accepted": false,
+      "exit_code": 1
+    },
+    {
+      "case": "duplicated_pair",
+      "accepted": false,
+      "exit_code": 1
+    },
+    {
+      "case": "failed_native_execution",
+      "accepted": false,
+      "exit_code": 1
+    },
+    {
+      "case": "changed_probe_pin",
+      "accepted": false,
+      "exit_code": 1
+    }
+  ],
+  "scope": "Report integrity only; no additional native accuracy measurement."
+}

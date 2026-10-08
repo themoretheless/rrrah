@@ -1,0 +1,47 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: unused variable: `cancel`
+   --> crates/rrrah-dedup/src/local_index.rs:715:5
+    |
+715 |     cancel: impl Fn() -> bool,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_cancel`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-dedup` (lib) generated 1 warning (run `cargo fix --lib -p rrrah-dedup` to apply 1 suggestion)
+    Finished `test` profile [optimized + debuginfo] target(s) in 2.22s
+     Running tests/local_rank_cached.rs (target/debug/deps/local_rank_cached-5de1ec09a568fa53)
+
+running 3 tests
+test all_1016_original_points_require_prepaid_checks_without_truncation ... ok
+test cached_bidirectional_local_support_matches_direct_for_identity_and_perspective ... ok
+test cached_aggregate_context_limits_and_every_cancel_release_all_credits ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.21s
+
+     Running tests/mesh_rank_regions.rs (target/debug/deps/mesh_rank_regions-bc58d81936d89947)
+
+running 3 tests
+test centers_outside_atlas_invalid_rectangles_and_unsupported_context_are_explicit ... ok
+test selected_centers_keep_whole_image_window_context_and_source_clip ... ok
+test every_observed_cancel_and_full_atlas_budget_refuse_without_scratch_leaks ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/piecewise_local_rank.rs (target/debug/deps/piecewise_local_rank-898107eb3a32d0ac)
+
+running 2 tests
+test combined_piecewise_requires_mesh_consistent_regional_witnesses ... ok
+test piecewise_aggregate_work_and_every_cancel_release_scratch ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.31s
+
+     Running tests/piecewise_warp.rs (target/debug/deps/piecewise_warp-a32c558a36b8be7c)
+
+running 4 tests
+test curved_grid_is_continuous_invertible_and_shared_credit_is_retained ... ok
+test inverted_degenerate_duplicate_overlapping_and_t_junction_faces_refuse ... ok
+test source_only_overlap_and_input_aliases_are_rejected ... ok
+test exact_memory_and_work_admission_and_every_checkpoint_cancel_are_atomic ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

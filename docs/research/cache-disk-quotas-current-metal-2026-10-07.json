@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-07",
+  "scope": "Current cache disk quota/TTL and actual Metal cache-policy qualification",
+  "fix": "Declare bytemuck as app dev dependency used by shared GPU readback test helper; lockfile adds only existing bytemuck dependency edge",
+  "evidence": {
+    "cache": {
+      "command": "cargo test -p rrrah-cache --lib --locked --offline",
+      "log": "/tmp/rrrah-cache-current-quotas.log",
+      "passed": 122,
+      "ignored": 0,
+      "covered_tests": [
+        "raster_disk_byte_count_ttl_and_queue_limits_are_independent",
+        "idle_ttl_maintenance_releases_files_and_quota_but_keeps_live_handles",
+        "ttl_worker_reclaims_idle_swap_without_foreground_calls",
+        "ttl_worker_reclaims_swap_under_continuous_barriers"
+      ]
+    },
+    "metal": {
+      "command": "RRRAH_GPU_BACKEND=metal cargo test -p rrrah --test ttl_swap_metal --locked --offline -- --include-ignored --nocapture",
+      "log": "/tmp/rrrah-ttl-all-limits-metal.log",
+      "adapter": "Apple M4 Max",
+      "passed": 3,
+      "ignored": 0,
+      "tests": [
+        "expired_hdr_lease_and_swap_restore_preserve_metal_frame_and_float_bits",
+        "expired_real_cr3_lease_and_swap_restore_preserve_metal_frame",
+        "live_count_size_and_ttl_changes_preserve_hdr_frames_through_swap"
+      ]
+    }
+  },
+  "limits": [
+    "Controlled fixtures and temporary local storage",
+    "No large real-collection or cold-disk navigation latency claim",
+    "Physical HDR display and NVIDIA/CUDA gates remain open",
+    "Does not qualify all 100 format variants"
+  ],
+  "status": "local, not pushed"
+}

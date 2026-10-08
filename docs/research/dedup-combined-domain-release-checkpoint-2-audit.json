@@ -1,0 +1,29 @@
+{
+  "status": "verified_repeat_prefix",
+  "summary": [
+    {
+      "query": "200301.jpg",
+      "outcome": "local_supported",
+      "matches": 17,
+      "inliers": 10,
+      "regions": 47,
+      "managed_peak": 300766880
+    },
+    {
+      "query": "200701.jpg",
+      "outcome": "local_supported",
+      "matches": 2029,
+      "inliers": 1123,
+      "regions": 96,
+      "managed_peak": 429618400
+    }
+  ],
+  "input_hashes": {
+    "docs/research/dedup-combined-domain-release-checkpoint-2.json": "4c6a524e065dee0f17e79a2232143d681bbd6b87dc28da39b8e655b21a7748c3",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-combined-domain-release.py": "a868e5c4a93bed67143b4e9a45e74e9b043f0841e410829eab4b9a2f5a94bac8",
+    "scripts/verify-dedup-scale-similarity-diagnostic.py": "41a4c0583f4a99677e716bae43ed976cfda409703fe2ec6236da3de5d4f897e4",
+    "docs/research/dedup-combined-domain-budget-checkpoint-2-audit.json": "c72871d948887dd73ea66ffd621eccdc0bdbebb45e5f6756b62da8e7943c07da",
+    "scripts/dedup_jpeg_domain.py": "a9986aabe3428100e1b061a70f6fb7f1f87e1b6c8552484b550e764a04746921"
+  },
+  "scope": "Five release comparisons with canonical debug parity; original input pins, canonical positive parity, model/region arithmetic, oriented bounds and managed memory. Errors retained. No whole identity, full229 recall, full-RSS or independent pixel-resampling proof."
+}

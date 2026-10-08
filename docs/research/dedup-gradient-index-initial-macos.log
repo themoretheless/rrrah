@@ -1,0 +1,11 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+error[E0432]: unresolved import `rrrah_core`
+ --> crates/rrrah-dedup/src/gradient_index.rs:6:5
+  |
+6 | use rrrah_core::{MemoryBudget, SharedBuffer};
+  |     ^^^^^^^^^^ use of unresolved module or unlinked crate `rrrah_core`
+  |
+  = help: if you wanted to use a crate named `rrrah_core`, use `cargo add rrrah_core` to add it to your `Cargo.toml`
+
+For more information about this error, try `rustc --explain E0432`.
+error: could not compile `rrrah-dedup` (lib) due to 1 previous error

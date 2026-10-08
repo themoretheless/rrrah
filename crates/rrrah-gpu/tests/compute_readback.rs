@@ -534,3 +534,78 @@ fn full_sensor_linear_exposure_chunked_readback() {
         times[2], times[4]
     );
 }
+
+#[test]
+fn resident_exposure_preserves_hdr_tail_and_budgeted_gpu_ownership() {
+    let instance = common::headless_instance();
+    let adapter = pollster::block_on(common::request_adapter(
+        &instance,
+        &wgpu::RequestAdapterOptions::default(),
+    ))
+    .expect("actual GPU required");
+    eprintln!("resident exposure adapter: {:?}", adapter.get_info());
+    let (device, queue) =
+        pollster::block_on(adapter.request_device(&wgpu::DeviceDescriptor::default())).unwrap();
+    let compute = rrrah_gpu::LinearExposureCompute::new(&device);
+    let input = vec![[4., -2., 0.125, 0.375]; 8200];
+    let bytes = input.len() as u64 * 16;
+    let root = rrrah_core::MemoryBudget::new(bytes * 2 + 16);
+    for checkpoint in 1..=6 {
+        let mut polls = 0;
+        assert!(matches!(
+            compute.execute_resident(&queue, &input, 1., &root, || {
+                polls += 1;
+                polls == checkpoint
+            }),
+            Err(rrrah_gpu::ExposureError::Cancelled)
+        ));
+        assert_eq!(root.used(), 0);
+    }
+    let refused = rrrah_core::MemoryBudget::new(bytes * 2 + 15);
+    assert!(
+        compute
+            .execute_resident(&queue, &input, 1., &refused, || false)
+            .is_err()
+    );
+    assert_eq!(refused.used(), 0);
+    let output = compute
+        .execute_resident(&queue, &input, 1., &root, || false)
+        .unwrap();
+    assert_eq!(output.pixels(), 8200);
+    let readback = device.create_buffer(&wgpu::BufferDescriptor {
+        label: Some("test-only resident exposure oracle readback"),
+        size: bytes,
+        usage: wgpu::BufferUsages::MAP_READ | wgpu::BufferUsages::COPY_DST,
+        mapped_at_creation: false,
+    });
+    let mut encoder = device.create_command_encoder(&Default::default());
+    encoder.copy_buffer_to_buffer(output.buffer(), 0, &readback, 0, bytes);
+    queue.submit([encoder.finish()]);
+    let (tx, rx) = std::sync::mpsc::channel();
+    readback
+        .slice(..)
+        .map_async(wgpu::MapMode::Read, move |r| tx.send(r).unwrap());
+    device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
+    rx.recv().unwrap().unwrap();
+    let mapped = readback.slice(..).get_mapped_range().unwrap();
+    let values: &[[f32; 4]] = bytemuck::cast_slice(&mapped);
+    assert_eq!(values.len(), 8200);
+    assert!(values.iter().all(|p| *p == [8., -4., 0.25, 0.375]));
+    drop(mapped);
+    readback.unmap();
+    assert_eq!(root.used(), bytes);
+    let held = output.clone();
+    drop(output);
+    assert_eq!(root.used(), bytes);
+    let downstream = held.resource_lease();
+    drop(held);
+    assert_eq!(root.used(), bytes);
+    drop(downstream);
+    assert_eq!(root.used(), 0);
+    let abandoned = compute
+        .execute_resident(&queue, &input, 1., &root, || false)
+        .unwrap();
+    drop(abandoned);
+    device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
+    assert_eq!(root.used(), 0);
+}

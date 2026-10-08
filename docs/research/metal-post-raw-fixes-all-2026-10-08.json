@@ -1,0 +1,93 @@
+{
+  "scope": "All ordinary rrrah-gpu suites after Bayer boundary and minification coordinate fixes",
+  "backend": "Metal Apple M4 Max",
+  "gpu_optional": false,
+  "exit_code": 0,
+  "suites": [
+    {
+      "passed": 49,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "passed": 12,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "passed": 4,
+      "failed": 0,
+      "ignored": 2
+    },
+    {
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "passed": 10,
+      "failed": 0,
+      "ignored": 4
+    },
+    {
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "passed": 11,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "passed": 3,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0
+    }
+  ],
+  "totals": {
+    "passed": 106,
+    "failed": 0,
+    "ignored": 7
+  },
+  "ignored_cases": [
+    "test full_sensor_linear_exposure_chunked_readback ... ignored, allocates about 0.8 GB of GPU buffers; full-resolution local qualification",
+    "test full_sensor_managed_exposure_budgets_and_checks_every_pixel ... ignored, full-resolution managed compute uses about 2 GB of tracked buffers",
+    "test fusion_back_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires corrected production Fusion linear dumps; display transport qualification",
+    "test fusion_front_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires corrected production Fusion linear dumps; display transport qualification",
+    "test hero9_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires production HERO9 scene-linear dump; transport qualification, not demosaic/color oracle",
+    "test qualified_sd10_linear_raster_full_frame_display_readback ... ignored, requires qualified X3F linear sRGB PPM and a physical GPU",
+    "test full_f828_managed_rgbe_matches_cpu_reference ... ignored, requires independent DSC-F828 full-sensor dump; authored four-channel normalization, not as-shot color qualification"
+  ],
+  "log": "/tmp/rrrah-metal-post-raw-fixes-all-20261008.log",
+  "log_sha256": "f1683524877a10877a013f52b847c4bfc4d0faaf748a4f45080d9e4e0ad2212b",
+  "limitations": [
+    "Ignored external full-sensor cases were not rerun in this command",
+    "Does not prove universal format qualification, NVIDIA, or calibrated HDR luminance"
+  ]
+}

@@ -1,0 +1,357 @@
+{
+  "status": "complete_native_experiment",
+  "input_hashes": {
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/partition-geometry-probe-wrinkled": "7f67a10480bf539f05051343756fd546290e10f04f9413e50a4c8b9390b2cc84",
+    "docs/research/dedup-wrinkled-dense-distinct-points.txt": "6be9d916b06908c3a6e44f69327060da477a00a4d861a60da4fc30e2578ac7d4",
+    "docs/research/dedup-wrinkled-dense-patches-bounded.json": "3819432baaed269ef06bcddc2ca21e3de84335f82f67557ba7ca7094c2d8869b",
+    "docs/research/dedup-wrinkled-dense-patches-bounded-audit.json": "fdb2dc131f17186f5ef4980ce6d1c8d3eac50fb65d5c2fe5dab8718ad339bddd",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-wrinkled-dense-distinct-partitions.py": "38b46191908ba6341d8497fc5991896674d44bbf681e416de4bbbb48e8af5fef",
+    "crates/rrrah-dedup/examples/partition_geometry_probe.rs": "3d88e1d6dcd341cd3bb8ce4950e33a1699cde8497ec7076363f7984d4ac894d4"
+  },
+  "results": [
+    {
+      "divisions": 1,
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"regions\":[{\"target_domain\":[0.0, 0.0, 800.0, 600.0],\"point_indices\":[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],\"matrix\":null,\"inliers\":[]}]}\n",
+      "stderr": "",
+      "evidence": {
+        "status": "ok",
+        "regions": [
+          {
+            "target_domain": [
+              0.0,
+              0.0,
+              800.0,
+              600.0
+            ],
+            "point_indices": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17,
+              18,
+              19,
+              20
+            ],
+            "matrix": null,
+            "inliers": []
+          }
+        ]
+      }
+    },
+    {
+      "divisions": 2,
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"regions\":[{\"target_domain\":[0.0, 0.0, 400.0, 300.0],\"point_indices\":[2, 3, 4, 8, 10, 12, 14, 17, 18],\"matrix\":null,\"inliers\":[]},{\"target_domain\":[400.0, 0.0, 400.0, 300.0],\"point_indices\":[0, 1, 7, 9, 15, 16, 19],\"matrix\":null,\"inliers\":[]},{\"target_domain\":[0.0, 300.0, 400.0, 300.0],\"point_indices\":[6, 13, 20],\"matrix\":null,\"inliers\":[]},{\"target_domain\":[400.0, 300.0, 400.0, 300.0],\"point_indices\":[5, 11],\"matrix\":null,\"inliers\":[]}]}\n",
+      "stderr": "",
+      "evidence": {
+        "status": "ok",
+        "regions": [
+          {
+            "target_domain": [
+              0.0,
+              0.0,
+              400.0,
+              300.0
+            ],
+            "point_indices": [
+              2,
+              3,
+              4,
+              8,
+              10,
+              12,
+              14,
+              17,
+              18
+            ],
+            "matrix": null,
+            "inliers": []
+          },
+          {
+            "target_domain": [
+              400.0,
+              0.0,
+              400.0,
+              300.0
+            ],
+            "point_indices": [
+              0,
+              1,
+              7,
+              9,
+              15,
+              16,
+              19
+            ],
+            "matrix": null,
+            "inliers": []
+          },
+          {
+            "target_domain": [
+              0.0,
+              300.0,
+              400.0,
+              300.0
+            ],
+            "point_indices": [
+              6,
+              13,
+              20
+            ],
+            "matrix": null,
+            "inliers": []
+          },
+          {
+            "target_domain": [
+              400.0,
+              300.0,
+              400.0,
+              300.0
+            ],
+            "point_indices": [
+              5,
+              11
+            ],
+            "matrix": null,
+            "inliers": []
+          }
+        ]
+      }
+    },
+    {
+      "divisions": 4,
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"regions\":[{\"target_domain\":[0.0, 0.0, 200.0, 150.0],\"point_indices\":[8],\"matrix\":null,\"inliers\":[]},{\"target_domain\":[200.0, 0.0, 200.0, 150.0],\"point_indices\":[10, 12],\"matrix\":null,\"inliers\":[]},{\"target_domain\":[400.0, 0.0, 200.0, 150.0],\"point_indices\":[15],\"matrix\":null,\"inliers\":[]},{\"target_domain\":[600.0, 0.0, 200.0, 150.0],\"point_indices\":[7, 9, 19],\"matrix\":null,\"inliers\":[]},{\"target_domain\":[0.0, 150.0, 200.0, 150.0],\"point_indices\":[4],\"matrix\":null,\"inliers\":[]},{\"target_domain\":[200.0, 150.0, 200.0, 150.0],\"point_indices\":[2, 3, 14, 17, 18],\"matrix\":null,\"inliers\":[]},{\"target_domain\":[400.0, 150.0, 200.0, 150.0],\"point_indices\":[1],\"matrix\":null,\"inliers\":[]},{\"target_domain\":[600.0, 150.0, 200.0, 150.0],\"point_indices\":[0, 16],\"matrix\":null,\"inliers\":[]},{\"target_domain\":[0.0, 300.0, 200.0, 150.0],\"point_indices\":[6, 13],\"matrix\":null,\"inliers\":[]},{\"target_domain\":[200.0, 300.0, 200.0, 150.0],\"point_indices\":[],\"matrix\":null,\"inliers\":[]},{\"target_domain\":[400.0, 300.0, 200.0, 150.0],\"point_indices\":[],\"matrix\":null,\"inliers\":[]},{\"target_domain\":[600.0, 300.0, 200.0, 150.0],\"point_indices\":[],\"matrix\":null,\"inliers\":[]},{\"target_domain\":[0.0, 450.0, 200.0, 150.0],\"point_indices\":[20],\"matrix\":null,\"inliers\":[]},{\"target_domain\":[200.0, 450.0, 200.0, 150.0],\"point_indices\":[],\"matrix\":null,\"inliers\":[]},{\"target_domain\":[400.0, 450.0, 200.0, 150.0],\"point_indices\":[],\"matrix\":null,\"inliers\":[]},{\"target_domain\":[600.0, 450.0, 200.0, 150.0],\"point_indices\":[5, 11],\"matrix\":null,\"inliers\":[]}]}\n",
+      "stderr": "",
+      "evidence": {
+        "status": "ok",
+        "regions": [
+          {
+            "target_domain": [
+              0.0,
+              0.0,
+              200.0,
+              150.0
+            ],
+            "point_indices": [
+              8
+            ],
+            "matrix": null,
+            "inliers": []
+          },
+          {
+            "target_domain": [
+              200.0,
+              0.0,
+              200.0,
+              150.0
+            ],
+            "point_indices": [
+              10,
+              12
+            ],
+            "matrix": null,
+            "inliers": []
+          },
+          {
+            "target_domain": [
+              400.0,
+              0.0,
+              200.0,
+              150.0
+            ],
+            "point_indices": [
+              15
+            ],
+            "matrix": null,
+            "inliers": []
+          },
+          {
+            "target_domain": [
+              600.0,
+              0.0,
+              200.0,
+              150.0
+            ],
+            "point_indices": [
+              7,
+              9,
+              19
+            ],
+            "matrix": null,
+            "inliers": []
+          },
+          {
+            "target_domain": [
+              0.0,
+              150.0,
+              200.0,
+              150.0
+            ],
+            "point_indices": [
+              4
+            ],
+            "matrix": null,
+            "inliers": []
+          },
+          {
+            "target_domain": [
+              200.0,
+              150.0,
+              200.0,
+              150.0
+            ],
+            "point_indices": [
+              2,
+              3,
+              14,
+              17,
+              18
+            ],
+            "matrix": null,
+            "inliers": []
+          },
+          {
+            "target_domain": [
+              400.0,
+              150.0,
+              200.0,
+              150.0
+            ],
+            "point_indices": [
+              1
+            ],
+            "matrix": null,
+            "inliers": []
+          },
+          {
+            "target_domain": [
+              600.0,
+              150.0,
+              200.0,
+              150.0
+            ],
+            "point_indices": [
+              0,
+              16
+            ],
+            "matrix": null,
+            "inliers": []
+          },
+          {
+            "target_domain": [
+              0.0,
+              300.0,
+              200.0,
+              150.0
+            ],
+            "point_indices": [
+              6,
+              13
+            ],
+            "matrix": null,
+            "inliers": []
+          },
+          {
+            "target_domain": [
+              200.0,
+              300.0,
+              200.0,
+              150.0
+            ],
+            "point_indices": [],
+            "matrix": null,
+            "inliers": []
+          },
+          {
+            "target_domain": [
+              400.0,
+              300.0,
+              200.0,
+              150.0
+            ],
+            "point_indices": [],
+            "matrix": null,
+            "inliers": []
+          },
+          {
+            "target_domain": [
+              600.0,
+              300.0,
+              200.0,
+              150.0
+            ],
+            "point_indices": [],
+            "matrix": null,
+            "inliers": []
+          },
+          {
+            "target_domain": [
+              0.0,
+              450.0,
+              200.0,
+              150.0
+            ],
+            "point_indices": [
+              20
+            ],
+            "matrix": null,
+            "inliers": []
+          },
+          {
+            "target_domain": [
+              200.0,
+              450.0,
+              200.0,
+              150.0
+            ],
+            "point_indices": [],
+            "matrix": null,
+            "inliers": []
+          },
+          {
+            "target_domain": [
+              400.0,
+              450.0,
+              200.0,
+              150.0
+            ],
+            "point_indices": [],
+            "matrix": null,
+            "inliers": []
+          },
+          {
+            "target_domain": [
+              600.0,
+              450.0,
+              200.0,
+              150.0
+            ],
+            "point_indices": [
+              5,
+              11
+            ],
+            "matrix": null,
+            "inliers": []
+          }
+        ]
+      }
+    }
+  ],
+  "scope": "All image,2x2,4x4 native projective fits of the same deterministic distinct-location dense proposals. Fixed min10/tolerance2/4096 trials; no pixel acceptance or independent geometry completeness proof."
+}

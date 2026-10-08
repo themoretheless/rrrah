@@ -1,0 +1,72 @@
+{
+  "scope": "Group blending-color-space transport audit and native paint access foundation; no conformance claim",
+  "fixture": {
+    "name": "VectorApple.ai",
+    "sha256": "c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06",
+    "page0_transparency_group_space": "DeviceCMYK"
+  },
+  "verified_omissions": [
+    "TransparencyGroupProperties carries only isolated and knockout, no group blending color space",
+    "Form draw callback passes those properties but does not resolve or forward group /CS",
+    "Recorder root frame does not preserve page /Group /CS",
+    "RecordedPaint::Color converts original components to RGBA8 before blending"
+  ],
+  "implementation": {
+    "file": "vendor/hayro-interpret/src/color.rs",
+    "source_sha256": "d463f66279188df55f38f6ef2b2500a00a4149a8783b36e7b617635478b17313",
+    "accessors": [
+      "Color::color_space",
+      "Color::components",
+      "Color::opacity",
+      "ColorSpace::num_components"
+    ],
+    "ownership": "Borrow existing original component and space storage; no added conversion or allocation"
+  },
+  "test": {
+    "name": "native_color_access_tests::preserves_native_components_and_opacity_across_display_conversion",
+    "passed": 1,
+    "failed": 0,
+    "coverage": [
+      "CMYK4,RGB3,Gray1 native channels preserved",
+      "Opacity0.37 remains native precision after display conversion"
+    ]
+  },
+  "authored_oracle": {
+    "scope": "Authored group-color-space test oracle, no product qualification",
+    "oracle": "pdftoppm version 26.10.0",
+    "only_changed_semantic_field": "Transparency group /CS",
+    "paint": "Two overlapping native CMYK fills, opacity0.5, isolated normal group",
+    "rows": [
+      {
+        "group_space": "DeviceRGB",
+        "pdf_sha256": "62dd2cadf57d49460337e693227da6c6e8b120ff9fcc4abe0bab0592162b43cc",
+        "interior_rgb": [
+          181,
+          106,
+          193
+        ],
+        "rgb_sha256": "35e0f5850c657f2522ee636fe11cf3ab248c20c88367a6beccec1fcc7cc751d5"
+      },
+      {
+        "group_space": "DeviceCMYK",
+        "pdf_sha256": "5211b6708a2b44db38e2b3623a69e40041cb6569611993841c55e374ca0a3751",
+        "interior_rgb": [
+          181,
+          106,
+          193
+        ],
+        "rgb_sha256": "35e0f5850c657f2522ee636fe11cf3ab248c20c88367a6beccec1fcc7cc751d5"
+      }
+    ],
+    "distinct_interior_colors": false
+  },
+  "causal_limit": "Paired authored isolated Normal-blend group spaces produced identical Poppler output. This does not establish the cause of real-AI disagreement. RGB conversion/profile choice, group blending space and transparency each still require independent isolation.",
+  "visual_comparison": "/tmp/rrrah-ai-apple-comparison.png",
+  "remaining": [
+    "Propagate resolved page/form group spaces with inheritance and explicit resolution failures",
+    "Retain native paint/color data through admitted scene capture",
+    "Implement and qualify device-space compositing and group boundary conversions",
+    "Independent RGB/CMYK/profile oracles and production routing"
+  ],
+  "production_enabled": false
+}

@@ -1,0 +1,24 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+    Finished `test` profile [optimized + debuginfo] target(s) in 1.25s
+     Running tests/gradient_empty.rs (/Users/themoretheless/.codex/tmp/rrrah-dedup-atomic-20261006/target/debug/deps/gradient_empty-5d2e14e01297da6f)
+
+running 1 test
+test empty_gradient_inputs_honor_terminal_cancellation_and_retry ... FAILED
+
+failures:
+
+---- empty_gradient_inputs_honor_terminal_cancellation_and_retry stdout ----
+
+thread 'empty_gradient_inputs_honor_terminal_cancellation_and_retry' (2219384) panicked at crates/rrrah-dedup/tests/gradient_empty.rs:17:9:
+assertion failed: matches!(match_gradients(left, right, policy, ||
+    { calls.set(calls.get() + 1); calls.get() == terminal }),
+    Err(LocalError::Cancelled))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    empty_gradient_inputs_honor_terminal_cancellation_and_retry
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p rrrah-dedup --test gradient_empty`

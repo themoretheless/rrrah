@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-07",
+  "test": "foreground_loader_tests::mixed_gallery_reversals_bound_prefetch_and_release_managed_pixels",
+  "scope": "Actual foreground display-cache and raster preloader helpers; gallery directional neighbour planner; no window or GPU in this test",
+  "iterations": 120,
+  "sources": [
+    "pattern.profiled.png",
+    "gif-animation-disposal-3.gif",
+    "float-none-rec709-declared.exr",
+    "rle-hdr-rec709-declared.hdr"
+  ],
+  "limits": {
+    "managed_memory_bytes": 1048576,
+    "cache_bytes": 65536,
+    "cache_entries": 2,
+    "prefetch_behind": 1,
+    "prefetch_ahead": 2,
+    "ttl": null
+  },
+  "assertions": [
+    "cache count and resident bytes remain within configured limits after each neighbour",
+    "visible float samples remain bit-exact throughout prefetch",
+    "foreground RAM hit shares original storage under exhausted managed budget",
+    "obsolete generation preloads fail without changing memory occupancy or cache count",
+    "all managed memory released after cache drop"
+  ],
+  "evidence": {
+    "focused_log": "/tmp/rrrah-mixed-gallery-pressure.log",
+    "focused_passed": 1,
+    "full_app_log": "/tmp/rrrah-app-navigation-full.log",
+    "full_app_passed": 162,
+    "full_app_ignored": 24
+  },
+  "remaining": [
+    "This does not measure navigation latency or cold storage throughput",
+    "Small authored fixtures; large real collections still require stress qualification",
+    "TTL and disk swap not exercised by this new test",
+    "No complete qualification of all 100 formats"
+  ],
+  "status": "local, not pushed"
+}

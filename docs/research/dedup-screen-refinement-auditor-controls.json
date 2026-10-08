@@ -1,0 +1,40 @@
+{
+  "status": "verified_scale_equivalence_and_four_rejections",
+  "input_hashes": {
+    "docs/research/dedup-screen-original-refinement-work.json": "ae3f78ad68063f305b1e46ee7630de107ebdf2e0a049e39cdbcaa2d7ee69a982",
+    "scripts/verify-dedup-screen-original-refinement-work.py": "2cf46e881ede66a00f37c80c2b84349bfc2450e3c706ce6570cd41db2c38acc0"
+  },
+  "controls": [
+    {
+      "control": "scale_small",
+      "accepted": true,
+      "verified": true
+    },
+    {
+      "control": "scale_large",
+      "accepted": true,
+      "verified": true
+    },
+    {
+      "control": "wrong_initial",
+      "accepted": false,
+      "verified": true
+    },
+    {
+      "control": "singular",
+      "accepted": false,
+      "verified": true
+    },
+    {
+      "control": "used_memory",
+      "accepted": false,
+      "verified": true
+    },
+    {
+      "control": "stdout_mismatch",
+      "accepted": false,
+      "verified": true
+    }
+  ],
+  "scope": "Two mathematically equivalent scalar representations retain identical inlier evidence; four malformed provenance/model/memory/stdout controls rejected. No pixel objective oracle."
+}

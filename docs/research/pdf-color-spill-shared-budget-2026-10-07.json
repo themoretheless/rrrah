@@ -1,0 +1,18 @@
+{
+  "scope": "Managed color-component spill storage during PDF mesh construction and sampling",
+  "implementation": "For more than four components, reserve a conservative power-of-two capacity bound including overlap during SmallVec growth. Generated patch arrays admit three vertex color buffers per triangle plus bounded two-row generation scratch. Triangle sampling admits transformed vertex clones and one interpolation buffer. Sample table growth includes per-bucket stored color spill capacity, retained until the map drops. Inline RGB/RGBA components add no spill reservation.",
+  "active_test": "encode::sample_bounds_tests::table_growth_and_multicomponent_spills_release_credit",
+  "verified": [
+    "Nine-component stored sample arrays actually spill to heap and are covered together with measured table allocation_size.",
+    "Managed sampling preserves every coverage and component bit relative to sampling without a memory limit.",
+    "Refusal at each admission checkpoint releases all previously retained scratch and table credit.",
+    "Dropping the completed map releases all retained credit."
+  ],
+  "validation": {"decoder_library_passed": 973, "ignored": 66, "vendor_focused_passed": 3, "failed": 0},
+  "logs": ["/tmp/rrrah-pdf-color-spill-budget.log", "/tmp/rrrah-pdf-color-spill-unit.log"],
+  "limitations": [
+    "Admission is conservative; component-buffer allocator capacity is not charged with byte-exact precision.",
+    "The nine-component qualification is synthetic mesh sampling, not full camera or real PDF DeviceN color qualification.",
+    "Function/color-space evaluation temporaries, source parsing, visibility inventory and other renderer allocations still require accounting."
+  ]
+}

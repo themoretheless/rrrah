@@ -1,0 +1,32 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 14.52s
+     Running tests/anchor_rank_driven_collection.rs (target/debug/deps/anchor_rank_driven_collection-c100307c396604ca)
+
+running 1 test
+test rank_driven_indexed_collection_matches_all_direct_pairs ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 30.92s
+
+     Running tests/gradient_candidate_smoothing.rs (target/debug/deps/gradient_candidate_smoothing-d0e5eb8143a588cf)
+
+running 3 tests
+test smoothing_matches_independent_footprints_and_exact_last_owner_credit ... ok
+test zero_radius_exact_bits_half_memory_and_all_cancellation_points ... ok
+test work_memory_opacity_and_every_cancellation_refuse_without_retained_output ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

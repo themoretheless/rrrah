@@ -1,0 +1,82 @@
+{
+  "kind": "authored circle cubic path",
+  "attempt": 0,
+  "center": [
+    320.125,
+    220.375
+  ],
+  "radius": 99.1875,
+  "path_tolerance": 0.1,
+  "viewport": [
+    512,
+    384
+  ],
+  "tile_origin": [
+    320,
+    256
+  ],
+  "tile_size": [
+    64,
+    64
+  ],
+  "pixel": [
+    341,
+    317
+  ],
+  "whole_coverage": 16,
+  "tile_coverage": 17,
+  "translated_full_coverage": 16,
+  "negative_uncropped_controls": [
+    {
+      "translation": [
+        -64,
+        -64
+      ],
+      "coverage": 16
+    },
+    {
+      "translation": [
+        -192,
+        -64
+      ],
+      "coverage": 16
+    },
+    {
+      "translation": [
+        -128,
+        -96
+      ],
+      "coverage": 16
+    }
+  ],
+  "same_offset_large_view_coverage": 17,
+  "independent_cubic_area": {
+    "method": "Solve monotone cubic x(t) at pixel vertical edges, integrate -(y(t)-317)*x_derivative(t) polynomial exactly between parameters; curve stays inside vertical pixel bounds.",
+    "control_points": [
+      [
+        419.3125,
+        220.375
+      ],
+      [
+        419.3125,
+        275.11807149199865
+      ],
+      [
+        374.86807149199865,
+        319.5625
+      ],
+      [
+        320.125,
+        319.5625
+      ]
+    ],
+    "coverage": 0.24892551058155732,
+    "coverage_times_255": 63.476005198297116,
+    "rounded_rgba8_alpha": 63,
+    "precision": "Float64 analytical antiderivative with96-step monotone root bisection; no flattening/raster backend.",
+    "provenance": "Own generated Circle path, kurbo0.13.1 uses4cubic arms0.551915024494 at radius/tolerance ratio991.875."
+  },
+  "assessment": "Negative full-contour controls retain16; same tile offset with larger viewport retains17. Shrinking right/bottom viewport is not necessary to reproduce the mismatch. Specific near-origin coordinate arithmetic and left/top contour culling remain unseparated.",
+  "area_oracle_report": "pdf-authored-cubic-area-oracle-2026-10-08.json",
+  "area_reference_limit": "Analytical pixel area is the selected geometric reference; PDF antialiasing implementations need not require this exact area quantization. This fixture does not alone prove general PDF nonconformance."
+}

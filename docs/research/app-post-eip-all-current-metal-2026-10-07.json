@@ -1,0 +1,17 @@
+{
+  "scope": "All default rrrah app test targets after EIP common route, GPR/CRW source-owner imports and MEF metadata overlap check",
+  "backend": "metal",
+  "adapter": "Apple M4 Max (GPU qualification helpers)",
+  "command": "RRRAH_GPU_BACKEND=metal cargo test -p rrrah --tests --locked --offline --target-dir /tmp/rrrah-required-corpus-target",
+  "suites": 43,
+  "passed": 210,
+  "failed": 0,
+  "ignored": 82,
+  "log": "/tmp/rrrah-app-post-eip-all.log",
+  "limitations": [
+    "Manual EIP tests requiring environment fixtures are ignored by this broad command and were executed separately",
+    "Other ignored corpus/manual tests remain unqualified by this run",
+    "No physical HDR display or NVIDIA/CUDA verification",
+    "Existing cache dead-code warning appears; this run does not establish Clippy cleanliness"
+  ]
+}

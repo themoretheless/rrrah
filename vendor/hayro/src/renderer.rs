@@ -21,6 +21,8 @@ use vello_cpu::{
 };
 
 pub(crate) struct Renderer {
+    pub(crate) shading_admission: Option<Arc<dyn Fn(usize) -> Option<Box<dyn std::any::Any + Send + Sync>> + Send + Sync>>,
+    pub(crate) shading_cancelled: Option<Arc<dyn Fn() -> bool + Send + Sync>>,
     pub(crate) ctx: RenderContext,
     pub(crate) inside_pattern: bool,
     pub(crate) soft_mask_cache: HashMap<u128, Mask>,
@@ -30,6 +32,8 @@ pub(crate) struct Renderer {
     pub(crate) scaler: Scaler,
     // TODO: Remove this once vello_cpu bug with non-transparent images is fixed
     image_transparency_stack: Vec<bool>,
+    // Declared last so renderer-owned image storage drops before its credit.
+    shading_guards: Rc<std::cell::RefCell<Vec<Box<dyn std::any::Any + Send + Sync>>>>,
 }
 
 #[derive(Clone, Copy)]
@@ -50,6 +54,9 @@ impl Renderer {
             ctx: RenderContext::new_with(width, height, settings),
             inside_pattern: false,
             soft_mask_cache: HashMap::default(),
+            shading_admission: cache.shading_admission.clone(),
+            shading_guards: Rc::new(std::cell::RefCell::new(Vec::new())),
+            shading_cancelled: cache.shading_cancelled.clone(),
             outline_cache: cache.outline_cache.clone(),
             cur_mask: None,
             in_type3_glyph: false,
@@ -102,6 +109,9 @@ impl Renderer {
                 ),
                 inside_pattern: false,
                 soft_mask_cache: HashMap::default(),
+                shading_admission: self.shading_admission.clone(),
+                shading_guards: self.shading_guards.clone(),
+                shading_cancelled: self.shading_cancelled.clone(),
                 outline_cache: self.outline_cache.clone(),
                 cur_mask: None,
                 in_type3_glyph: false,
@@ -458,9 +468,30 @@ impl Renderer {
                             self.ctx.height() as f64,
                         ));
 
-                        let encoded = s.encode();
-                        let (image, width, height, transform, may_have_transparency) =
-                            render_shading_texture(bbox, &encoded);
+                        let cancelled = || self.shading_cancelled.as_ref().is_some_and(|check| check());
+                        let admit = |bytes| {
+                            if let Some(admit) = &self.shading_admission { admit(bytes) }
+                            else { Some(Box::new(()) as Box<dyn std::any::Any + Send + Sync>) }
+                        };
+                        let Some(encoded) = s.encode_with_sample_bounds_cancel_and_admission(Some(bbox), &cancelled, &admit) else {
+                            self.ctx.set_paint(AlphaColor::<Srgb>::new([0.0; 4]));
+                            return None;
+                        };
+                        if let Some(admit) = &self.shading_admission {
+                            let width = (bbox.width() as f32).max(1.0).ceil() as usize;
+                            let height = (bbox.height() as f32).max(1.0).ceil() as usize;
+                            let bytes = width.checked_mul(height).and_then(|pixels| pixels.checked_mul(size_of::<PremulRgba8>()));
+                            let Some(guard) = bytes.and_then(|bytes| admit(bytes)) else {
+                                self.ctx.set_paint(AlphaColor::<Srgb>::new([0.0; 4]));
+                                return None;
+                            };
+                            self.shading_guards.borrow_mut().push(guard);
+                        }
+                        let Some((image, width, height, transform, may_have_transparency)) =
+                            render_shading_texture(bbox, &encoded, &cancelled) else {
+                                self.ctx.set_paint(AlphaColor::<Srgb>::new([0.0; 4]));
+                                return None;
+                            };
                         let may_have_transparency =
                             may_have_transparency || self.force_images_may_have_transparency();
                         paint_transform = path_transform.inverse() * transform;
@@ -520,7 +551,10 @@ impl Renderer {
                             cur_mask: None,
                             inside_pattern: true,
                             soft_mask_cache: HashMap::default(),
-                            outline_cache: self.outline_cache.clone(),
+                            shading_admission: self.shading_admission.clone(),
+                shading_guards: self.shading_guards.clone(),
+                shading_cancelled: self.shading_cancelled.clone(),
+                outline_cache: self.outline_cache.clone(),
                             in_type3_glyph: false,
                             scaler: self.scaler,
                             image_transparency_stack: Vec::new(),
@@ -688,6 +722,10 @@ impl Renderer {
 }
 
 impl<'a> Device<'a> for Renderer {
+    fn should_stop(&mut self) -> bool {
+        self.shading_cancelled.as_ref().is_some_and(|check| check())
+    }
+
     fn draw_image(&mut self, image: hayro_interpret::Image<'a, '_>, mut transform: Affine) {
         self.ctx.set_paint_transform(Affine::IDENTITY);
         self.ctx.set_aliasing_threshold(Some(1));
@@ -703,7 +741,8 @@ impl<'a> Device<'a> for Renderer {
 
         match image {
             hayro_interpret::Image::Stencil(s) => {
-                s.with_stencil(
+                let cancelled = self.shading_cancelled.clone();
+                s.with_stencil_and_cancel(
                     |stencil, paint| {
                         transform *= Affine::scale_non_uniform(
                             stencil.scale_factors.0 as f64,
@@ -782,7 +821,10 @@ impl<'a> Device<'a> for Renderer {
                                         ),
                                         inside_pattern: false,
                                         soft_mask_cache: HashMap::default(),
-                                        outline_cache: self.outline_cache.clone(),
+                                        shading_admission: self.shading_admission.clone(),
+                shading_guards: self.shading_guards.clone(),
+                shading_cancelled: self.shading_cancelled.clone(),
+                outline_cache: self.outline_cache.clone(),
                                         cur_mask: None,
                                         in_type3_glyph: false,
                                         scaler: self.scaler,
@@ -823,10 +865,12 @@ impl<'a> Device<'a> for Renderer {
                         };
                     },
                     Some((target_width, target_height)),
+                    &|| cancelled.as_ref().is_some_and(|check| check()),
                 );
             }
             hayro_interpret::Image::Raster(r) => {
-                r.with_rgba(
+                let cancelled = self.shading_cancelled.clone();
+                r.with_rgba_and_cancel(
                     |image, alpha| {
                         let (sx, sy) = image.scale_factors();
                         transform *= Affine::scale_non_uniform(sx as f64, sy as f64);
@@ -834,6 +878,7 @@ impl<'a> Device<'a> for Renderer {
                         self.draw_image(image, alpha);
                     },
                     Some((target_width, target_height)),
+                    &|| cancelled.as_ref().is_some_and(|check| check()),
                 );
             }
         }
@@ -870,7 +915,7 @@ impl<'a> Device<'a> for Renderer {
 
                 self.soft_mask_cache
                     .entry(m.cache_key())
-                    .or_insert_with(|| draw_soft_mask(&m, settings, width, height))
+                    .or_insert_with(|| draw_soft_mask(&m, settings, width, height, self.shading_cancelled.clone(), self.shading_admission.clone(), self.shading_guards.clone()))
                     .clone()
             }),
             None,
@@ -896,7 +941,7 @@ impl<'a> Device<'a> for Renderer {
 
             self.soft_mask_cache
                 .entry(m.cache_key())
-                .or_insert_with(|| draw_soft_mask(&m, settings, width, height))
+                .or_insert_with(|| draw_soft_mask(&m, settings, width, height, self.shading_cancelled.clone(), self.shading_admission.clone(), self.shading_guards.clone()))
                 .clone()
         });
         if let Some(mask) = self.cur_mask.clone() {
@@ -983,26 +1028,40 @@ impl<'a> Device<'a> for Renderer {
 fn render_shading_texture(
     path_bbox: Rect,
     shading_pattern: &EncodedShadingPattern,
-) -> (Vec<PremulRgba8>, u32, u32, Affine, bool) {
+    cancelled: &dyn Fn() -> bool,
+) -> Option<(Vec<PremulRgba8>, u32, u32, Affine, bool)> {
+    render_shading_texture_impl(path_bbox, shading_pattern.base_transform, |point| shading_pattern.sample(point), cancelled)
+}
+
+fn render_shading_texture_impl<F: Fn(Point) -> [f32; 4]>(
+    path_bbox: Rect,
+    base_transform: Affine,
+    sample: F,
+    cancelled: &dyn Fn() -> bool,
+) -> Option<(Vec<PremulRgba8>, u32, u32, Affine, bool)> {
+    if cancelled() { return None; }
     let base_width = (path_bbox.width() as f32).max(1.0);
     let base_height = (path_bbox.height() as f32).max(1.0);
 
     let width = (base_width).ceil() as u32;
     let height = (base_height).ceil() as u32;
 
-    let (x_advance, y_advance) = x_y_advances(&shading_pattern.base_transform);
+    let (x_advance, y_advance) = x_y_advances(&base_transform);
 
     let mut buf = vec![PremulRgba8::from_u32(0); width as usize * height as usize];
-    let mut start_point = shading_pattern.base_transform
+    if cancelled() { return None; }
+    let mut start_point = base_transform
         * Affine::translate((0.5, 0.5))
         * Point::new(path_bbox.x0, path_bbox.y0);
     let mut may_have_transparency = false;
 
     for row in buf.chunks_exact_mut(width as usize) {
+        if cancelled() { return None; }
         let mut point = start_point;
 
-        for pixel in row {
-            let sample = shading_pattern.sample(point);
+        for (index, pixel) in row.iter_mut().enumerate() {
+            if index % 64 == 0 && cancelled() { return None; }
+            let sample = sample(point);
             *pixel = AlphaColor::<Srgb>::new(sample).premultiply().to_rgba8();
             may_have_transparency |= pixel.a != 255;
 
@@ -1012,21 +1071,70 @@ fn render_shading_texture(
         start_point += y_advance;
     }
 
-    (
+    if cancelled() { return None; }
+    Some((
         buf,
         width,
         height,
         Affine::translate((path_bbox.x0, path_bbox.y0)),
         may_have_transparency,
-    )
+    ))
 }
 
-fn draw_soft_mask(mask: &SoftMask<'_>, settings: RenderSettings, width: u16, height: u16) -> Mask {
+#[cfg(test)]
+mod renderer_cancellation_tests {
+    use super::*;
+    use std::cell::Cell;
+
+    #[test]
+    fn texture_cancellation_never_returns_partial_pixels() {
+        let bounds = Rect::new(0.25, 0.75, 130.25, 9.75);
+        let samples = Cell::new(0);
+        let sample = |point: Point| {
+            samples.set(samples.get() + 1);
+            [(point.x / 140.) as f32, (point.y / 12.) as f32, 0.5, 0.75]
+        };
+        let checkpoints = Cell::new(0);
+        let (pixels, width, height, transform, transparent) = render_shading_texture_impl(
+            bounds, Affine::IDENTITY, sample,
+            &|| { checkpoints.set(checkpoints.get() + 1); false },
+        ).unwrap();
+        assert_eq!((width, height), (130, 9));
+        assert_eq!(transform, Affine::translate((bounds.x0, bounds.y0)));
+        assert!(transparent);
+        assert_eq!(samples.get(), 130 * 9);
+        for (index, pixel) in pixels.iter().enumerate() {
+            let point = Point::new(bounds.x0 + 0.5 + (index % 130) as f64,
+                                   bounds.y0 + 0.5 + (index / 130) as f64);
+            let expected = AlphaColor::<Srgb>::new([
+                (point.x / 140.) as f32, (point.y / 12.) as f32, 0.5, 0.75,
+            ]).premultiply().to_rgba8();
+            assert_eq!(pixel.to_u32(), expected.to_u32());
+        }
+        let count = checkpoints.get();
+        assert!(count > 30);
+        for stop in 1..=count {
+            let current = Cell::new(0);
+            samples.set(0);
+            assert!(render_shading_texture_impl(bounds, Affine::IDENTITY, sample, &|| {
+                current.set(current.get() + 1);
+                current.get() == stop
+            }).is_none(), "checkpoint {stop}/{count}");
+            assert_eq!(current.get(), stop);
+            if stop <= 3 { assert_eq!(samples.get(), 0); }
+        }
+    }
+}
+
+fn draw_soft_mask(mask: &SoftMask<'_>, settings: RenderSettings, width: u16, height: u16, shading_cancelled: Option<Arc<dyn Fn() -> bool + Send + Sync>>, shading_admission: Option<Arc<dyn Fn(usize) -> Option<Box<dyn std::any::Any + Send + Sync>> + Send + Sync>>, shading_guards: Rc<std::cell::RefCell<Vec<Box<dyn std::any::Any + Send + Sync>>>>) -> Mask {
     let mut renderer = Renderer {
         ctx: RenderContext::new_with(width, height, derive_settings(&settings)),
         inside_pattern: false,
         cur_mask: None,
         soft_mask_cache: HashMap::default(),
+        shading_admission,
+        shading_guards,
+        shading_cancelled,
         outline_cache: Rc::new(std::cell::RefCell::new(HashMap::new())),
         in_type3_glyph: false,
         scaler: Scaler::new(ResamplingFunction::CatmullRom),

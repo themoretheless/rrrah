@@ -1,0 +1,55 @@
+{
+  "date": "2026-10-08",
+  "scope": "Admitted source-space BVH for native triangle shading in test-only PDF compositor",
+  "source_sha256": "8c5cc0210761120a4f96b1fa497a21261db7626d826986e74f415c34f813966b",
+  "construction": "Balanced median splits; fixed retained triangle/component records, source-order index array, and at most twice as many node slots as source triangles; capacity admitted before allocations",
+  "query": "Fixed 32-slot stack; inclusive AABB pruning; choose highest original source index among containing triangles; no query heap allocation",
+  "results": {
+    "interpreter": {
+      "passed": 95,
+      "failed": 0,
+      "ignored": 0
+    },
+    "renderer_compositor": {
+      "passed": 122,
+      "failed": 0,
+      "ignored": 10
+    },
+    "independent_source_order_control": {
+      "triangles": 1085,
+      "queries": 1024,
+      "max_cancellation_checkpoints_per_query": 50,
+      "expected": "Reverse original triangle list with existing geometry containment; every source component compared exactly"
+    }
+  },
+  "logs": [
+    {
+      "path": "/tmp/rrrah-native-mesh-index-all-20261008.log",
+      "sha256": "8980cac5ae16b34d8c5a321e5262ce07ff19cb5153929b1487e061d6e2cb5e0f"
+    },
+    {
+      "path": "/tmp/rrrah-native-mesh-index-work-20261008.log",
+      "sha256": "ca9f5499feae81a2c5922c1da174a4e3ced9b9b276547b959d051cd85690ba8f"
+    },
+    {
+      "path": "/tmp/rrrah-native-mesh-index-renderer-all-20261008.log",
+      "sha256": "473eadbef3a3dc2224ad1fa2e45571d0a0751db1b4541800f433d923ce3d2b96"
+    }
+  ],
+  "verified": [
+    "Original source order wins despite tree sorting",
+    "Outside-root and inside-bounds/outside-triangle samples are transparent",
+    "Optional original color functions and affine CMYK sampling remain exact",
+    "Actual Type4 PDF stream replay remains exact for every pixel",
+    "Admission/cancellation capture releases retained geometry/index credit",
+    "Existing native compositor regressions preserved"
+  ],
+  "limitations": [
+    "Sparse authored control measures bounded query work, not universal wall-clock acceleration",
+    "Sort cancellation is checked before and after each median sort, not within comparisons",
+    "Original PDF parsing and test oracle allocations precede source admission",
+    "Tensor/Coons source capture still unsupported; real AI event 9 unresolved",
+    "Test-only compositor is not production AI or Metal integration",
+    "Physical HDR and NVIDIA hardware not qualified"
+  ]
+}

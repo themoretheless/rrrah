@@ -1,0 +1,33 @@
+{
+  "status": "verified_native_fallback_collection_known_pairs",
+  "required_pairs": 2,
+  "verified_pairs": 2,
+  "summary": [
+    {
+      "query": "200301.jpg",
+      "attempted_recipes": 1,
+      "smoothing_radii": [
+        2,
+        2
+      ],
+      "support_count": 47
+    },
+    {
+      "query": "201303.jpg",
+      "attempted_recipes": 2,
+      "smoothing_radii": [
+        4,
+        0
+      ],
+      "support_count": 46
+    }
+  ],
+  "input_hashes": {
+    "docs/research/dedup-fallback-collection-known-pairs.json": "f396fdf776b44590a763088688078e906475bed9513b212840ab738629ebb7ad",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-fallback-collection-known-pairs.py": "c5634b298e67abcbd228c2ed497448fda2fafeea001605544cc30ec902023738",
+    "docs/research/dedup-combined-domain-release.json": "e83833cc0cf1538708e005af03cb3a1169f4dc0fb4f0e263db2a5f50367e7e27",
+    "docs/research/dedup-201303-asymmetric4.json": "2183362a96de2116008e0de67edda4d72e099588b34427150b43de37e27c784e",
+    "scripts/verify-dedup-scale-similarity-diagnostic.py": "41a4c0583f4a99677e716bae43ed976cfda409703fe2ec6236da3de5d4f897e4"
+  },
+  "scope": "Exact canonical geometry/pixel evidence parity with pinned symmetric200301 and asymmetric201303; typed resources and stdout. Two indexed positives only: retrieval necessarily retained each accepted pair in the native diagnostic; no all-corpus or negative precision, broad collection or independent pixel oracle."
+}

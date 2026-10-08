@@ -1,0 +1,85 @@
+   Compiling rrrah-dedup v0.1.0 (/workspace/crates/rrrah-dedup)
+warning: unused variable: `cancel`
+   --> crates/rrrah-dedup/src/local_index.rs:715:5
+    |
+715 |     cancel: impl Fn() -> bool,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_cancel`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-dedup` (lib) generated 1 warning (run `cargo fix --lib -p rrrah-dedup` to apply 1 suggestion)
+    Finished `test` profile [optimized + debuginfo] target(s) in 2m 23s
+     Running tests/diagonal_proposals.rs (/validation/target/debug/deps/diagonal_proposals-5d8e82256a057059)
+
+running 2 tests
+test diagonal_proposal_preserves_landmarks_and_passes_complete_mesh_validation ... ok
+test cancellation_budgets_and_invalid_indices_have_no_partial_output ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/mesh_grid.rs (/validation/target/debug/deps/mesh_grid-8839c62b5234deef)
+
+running 2 tests
+test both_directions_match_point_queries_and_preserve_holes_and_credit ... ok
+test every_cancel_and_one_short_memory_work_refuse_without_partial_grid ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/mesh_landmark_admission.rs (/validation/target/debug/deps/mesh_landmark_admission-423c4d7ec8561768)
+
+running 3 tests
+test original_points_are_preserved_and_duplicate_proposals_are_explicit ... ok
+test aliases_and_malformed_scored_evidence_are_invalid ... ok
+test every_cancel_and_budget_refusal_return_no_partial_landmarks ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/mesh_rank.rs (/validation/target/debug/deps/mesh_rank-e1d92bb949b4d4d6)
+
+running 2 tests
+test summed_mesh_windows_match_direct_projective_windows_and_reject_inversion ... ok
+test cancellation_memory_reads_and_overflow_refuse_without_retaining_scratch ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/mesh_refine.rs (/validation/target/debug/deps/mesh_refine-a09591ae38d4cfb0)
+
+running 3 tests
+test flat_support_and_invalid_visible_samples_are_explicit ... ok
+test known_translation_is_recovered_without_using_validation_for_selection ... ok
+test cancellation_and_prepaid_read_limits_leave_no_partial_proposals ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/piecewise_warp.rs (/validation/target/debug/deps/piecewise_warp-4f0c06930711b092)
+
+running 4 tests
+test curved_grid_is_continuous_invertible_and_shared_credit_is_retained ... ok
+test exact_memory_and_work_admission_and_every_checkpoint_cancel_are_atomic ... ok
+test inverted_degenerate_duplicate_overlapping_and_t_junction_faces_refuse ... ok
+test source_only_overlap_and_input_aliases_are_rejected ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/rank_region.rs (/validation/target/debug/deps/rank_region-8a6cb19b326d1a1e)
+
+running 7 tests
+test filtered_overflow_and_mid_window_cancel_return_no_partial_evidence ... ok
+test flat_pixels_budget_and_cancellation_do_not_produce_evidence ... ok
+test filter_zero_preserves_evidence_and_callback_work ... ok
+test independent_textures_are_not_high_agreement_evidence ... ok
+test invalid_domains_policy_alpha_and_scene_range_are_explicit ... ok
+test nonlinear_monotone_transfer_preserves_local_order_but_inversion_does_not ... ok
+test filtered_identity_matches_independent_box_counts_and_read_budget ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/triangulation.rs (/validation/target/debug/deps/triangulation-08755861a498c8f8)
+
+running 3 tests
+test grid_topology_is_deterministic_and_passes_source_validation ... ok
+test invalid_budget_and_every_cancellation_release_credit ... ok
+test seeded_clouds_match_independent_hull_and_empty_circumcircle_oracles ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

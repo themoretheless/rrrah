@@ -1,0 +1,88 @@
+{
+  "kind": "authored circle cubic path",
+  "attempt": 0,
+  "center": [
+    320.125,
+    220.375
+  ],
+  "radius": 99.1875,
+  "path_tolerance": 0.1,
+  "viewport": [
+    512,
+    384
+  ],
+  "tile_origin": [
+    320,
+    256
+  ],
+  "tile_size": [
+    64,
+    64
+  ],
+  "pixel": [
+    341,
+    317
+  ],
+  "whole_coverage": 16,
+  "tile_coverage": 17,
+  "translated_full_coverage": 16,
+  "negative_uncropped_controls": [
+    {
+      "translation": [
+        -64,
+        -64
+      ],
+      "coverage": 16
+    },
+    {
+      "translation": [
+        -192,
+        -64
+      ],
+      "coverage": 16
+    },
+    {
+      "translation": [
+        -128,
+        -96
+      ],
+      "coverage": 16
+    }
+  ],
+  "same_offset_large_view_coverage": 17,
+  "preflatten_controls": [
+    {
+      "tolerance": 0.01,
+      "vertices": 238,
+      "whole": 62,
+      "tile": 62
+    },
+    {
+      "tolerance": 0.001,
+      "vertices": 742,
+      "whole": 63,
+      "tile": 63
+    },
+    {
+      "tolerance": 0.0001,
+      "vertices": 2339,
+      "whole": 63,
+      "tile": 63
+    }
+  ],
+  "scope": "Own generated cubic path experiment, test-only; main recorder and production renderer are unchanged.",
+  "independent_area_oracle": "pdf-authored-cubic-area-oracle-2026-10-08.json",
+  "assessment": "Global kurbo preflatten at0.001 and0.0001 pixel tolerance produces alpha63 in whole and tile, matching the independent cubic area at the selected pixel. Default backend cubic path gives16/17. The0.01 polygon gives62/62. This demonstrates that a tighter global curve approximation can resolve this authored point without changing blend/color formulas.",
+  "verification": {
+    "passed": 66,
+    "failed": 0,
+    "ignored": 6,
+    "new_regression": "global_curve_preflatten_matches_independent_cubic_area_at_reproducer"
+  },
+  "limits": [
+    "One independently verified curve/pixel and one tile translation; does not prove complete image/tile equality.",
+    "Preflatten controls allocate test-only scratch without admission; a bounded implementation must count/reserve geometry before expansion.",
+    "Stroke/dash/clip semantics, large transforms, adversarial path complexity, real AI corpus quality and performance require qualification.",
+    "Experiment not yet enabled in recorder or production renderer."
+  ]
+}

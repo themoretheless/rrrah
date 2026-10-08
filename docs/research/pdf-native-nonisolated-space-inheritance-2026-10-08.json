@@ -1,0 +1,28 @@
+{
+  "scope": "Test-only native PDF replay: nonisolated groups inherit immediate parent blending coordinates",
+  "passed": 113,
+  "failed": 0,
+  "ignored": 10,
+  "filtered": 1,
+  "seconds": 2.79,
+  "log": "/tmp/rrrah-native-nonisolated-inheritance-verified.log",
+  "specification": "ISO 32000-1 section 11.7.2: nonisolated groups inherit parent color space",
+  "source": "https://opensource.adobe.com/dc-acrobat-sdk-docs/standards/pdfstandards/pdf/PDF32000_2008.pdf",
+  "checks": [
+    "Explicit DeviceGray ignored for nonisolated group nested in RGB",
+    "Normal blend isolated and nonisolated authored PDF controls preserve expected color and opacity",
+    "Multiply in nonisolated group yields RGB 0.625 0 0; distinguishes inherited RGB from incorrect Gray blending",
+    "All allocation refusal and cancellation checkpoints for the nonisolated authored PDF release all tracked bytes"
+  ],
+  "implementation": [
+    "Keep independent spaces only for isolated groups",
+    "Use immediate parent frame for nonisolated backdrop and coordinates",
+    "Shared native float group-output conversion helper; no RGB8 intermediate"
+  ],
+  "limitations": [
+    "Not production AI qualification or Metal integration",
+    "ICC boundary transform construction admission pending",
+    "Real AI rasters and shading native replay incomplete",
+    "Default Splash geometric edge mismatch remains open"
+  ]
+}

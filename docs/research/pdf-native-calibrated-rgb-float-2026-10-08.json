@@ -1,0 +1,41 @@
+{
+  "scope": "Float extraction of existing calibrated display policy, plus test-only native paint DeviceRGB bridge; no group-boundary conformance claim",
+  "sources": {
+    "vendor/hayro-interpret/src/color.rs": "594d1532a3321fddabdd751359fe095cb179f32ae6fcd62d2e1a1b3259345087",
+    "vendor/hayro/src/native_paint.rs": "a914241fff26e29778b78edea4ac756682576a3b0d72d9dfac712636cb0713af"
+  },
+  "color_controls": {
+    "passed": 4,
+    "failed": 0,
+    "log": "/tmp/rrrah-calibrated-float-controls.log"
+  },
+  "renderer_controls": {
+    "passed": 101,
+    "failed": 0,
+    "ignored": 8,
+    "seconds": 3.33,
+    "log": "/tmp/rrrah-calibrated-float-renderer-controls.log"
+  },
+  "verified": [
+    "CalGray luminance1/8 maps to107.1/255 under existing cube-root display policy",
+    "CalGray and CalRGB zero input maps to black",
+    "CalRGB preserves non8bit fractions",
+    "Changing CalRGB gamma changes output",
+    "Nonfinite gamma/sample and wrong destination rejected"
+  ],
+  "normal_display_path": "CalRGB display conversion shares the extracted float kernel and rounds only at output. Invalid calibration now refuses instead of propagating nonfinite intermediates.",
+  "limits": [
+    "CalGray existing display policy ignores black-point values and white-point X/Z; this extraction preserves that behavior and is not full calibration qualification",
+    "CalRGB existing adaptation and black-point policy has not been independently qualified",
+    "Destination Gray/CMYK, admitted transform cache and actual native frame replay integration remain incomplete"
+  ],
+  "production_native_compositor_enabled": false,
+  "full_interpreter_suite": {
+    "passed": 72,
+    "failed": 0,
+    "ignored": 0,
+    "filtered": 0,
+    "seconds": 0.23,
+    "log": "/tmp/rrrah-calibrated-float-interpreter-full.log"
+  }
+}

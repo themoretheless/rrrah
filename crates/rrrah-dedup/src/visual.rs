@@ -34,7 +34,8 @@ pub struct VisualIndex {
 }
 
 impl VisualIndex {
-    /// Index all eight transform variants under a finite entry budget.
+    /// Index distinct complete transform variants under a finite entry budget.
+    /// Repeated variants share retrieval work; final comparison retains all eight.
     ///
     /// # Errors
     /// Rejects duplicate ids, entry excess, internal slot overflow or cancellation.
@@ -59,7 +60,15 @@ impl VisualIndex {
                 return Err(VisualError::Budget);
             }
             index.entries.try_reserve(1).map_err(|_| VisualError::Budget)?;
-            for variant in fingerprint.variants {
+            for (variant_index, variant) in fingerprint.variants.iter().copied().enumerate() {
+                if cancel() {
+                    return Err(VisualError::Cancelled);
+                }
+                // Repeated complete variants cannot add a new metric candidate.
+                // Keep the original fingerprint for the final exact comparison.
+                if fingerprint.variants[..variant_index].contains(&variant) {
+                    continue;
+                }
                 let slot = u64::try_from(index.slots.len()).map_err(|_| VisualError::Budget)?;
                 crate::local::reserve_slot(&mut index.slots, max_entries.saturating_mul(8))
                     .map_err(|_| VisualError::Budget)?;
@@ -180,5 +189,58 @@ impl VisualIndex {
             return Err(VisualError::Cancelled);
         }
         Ok(matches)
+    }
+}
+
+#[cfg(test)]
+mod distinct_variant_tests {
+    use super::*;
+    #[test]
+    fn repeated_complete_variants_preserve_all_ids_and_exact_metric() {
+        let a = [0_u64; 4];
+        let b = [u64::MAX, 0, 17, 34];
+        let fingerprint = Fingerprint {
+            variants: [a, b, a, b, a, b, a, b],
+            mean_linear_rgb: [0.; 3],
+            luminance_stddev: 0.5,
+        };
+        let entries = vec![(1, fingerprint.clone()), (u64::MAX, fingerprint.clone())];
+        let index = VisualIndex::new(entries.clone(), 2, || false).unwrap();
+        assert_eq!(index.slots.len(), 4); // Two distinct variants for each opaque ID.
+        for allow in [false, true] {
+            for radius in [0, 1, 4, 64, 128, 255, 256, u32::MAX] {
+                let mut expected = entries
+                    .iter()
+                    .filter_map(|(id, other)| {
+                        let evidence = fingerprint.compare(other, allow);
+                        (evidence.distance <= radius).then_some(VisualCandidate { id: *id, evidence })
+                    })
+                    .collect::<Vec<_>>();
+                expected.sort_unstable_by_key(|e| (e.evidence.distance, e.id));
+                assert_eq!(
+                    index.search(&fingerprint, radius, allow, || false).unwrap(),
+                    expected
+                );
+            }
+        }
+        let calls = std::cell::Cell::new(0usize);
+        drop(
+            VisualIndex::new(entries.clone(), 2, || {
+                calls.set(calls.get() + 1);
+                false
+            })
+            .unwrap(),
+        );
+        let total = calls.get();
+        for stop in [1, total / 2, total] {
+            calls.set(0);
+            assert!(matches!(
+                VisualIndex::new(entries.clone(), 2, || {
+                    calls.set(calls.get() + 1);
+                    calls.get() == stop
+                }),
+                Err(VisualError::Cancelled)
+            ));
+        }
     }
 }

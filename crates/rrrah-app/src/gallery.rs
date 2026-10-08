@@ -23,7 +23,6 @@ use std::{
     time::Duration,
 };
 
-pub const MAX_ITEMS: usize = 10_000;
 pub const THUMB_EDGE: u32 = 256;
 /// Number of neighbours decoded ahead/behind the current frame.
 pub const PREFETCH_BEHIND: usize = 2;
@@ -334,22 +333,18 @@ impl RawPrefetcher {
                             };
                             let mut recipe_request = DecodeRequest::new(&path);
                             recipe_request.cancellation = Some(token.clone());
-                            if path.extension().is_some_and(|extension| {
-                                extension.eq_ignore_ascii_case("tif")
-                                    || extension.eq_ignore_ascii_case("tiff")
-                            }) {
-                                match rrrah_decode::image_source_kind(&recipe_request) {
-                                    Ok(rrrah_decode::ImageSourceKind::Raster) => {
-                                        worker_telemetry.record_prefetch_skipped(command.generation);
-                                        continue;
-                                    }
-                                    Ok(rrrah_decode::ImageSourceKind::Sensor) => {}
-                                    Err(_) => {
-                                        worker_telemetry.record_prefetch_failure(command.generation);
-                                        continue;
-                                    }
+                            match rrrah_decode::image_source_kind(&recipe_request) {
+                                Ok(rrrah_decode::ImageSourceKind::Raster) => {
+                                    worker_telemetry.record_prefetch_skipped(command.generation);
+                                    continue;
+                                }
+                                Ok(rrrah_decode::ImageSourceKind::Sensor) => {}
+                                Err(_) => {
+                                    worker_telemetry.record_prefetch_failure(command.generation);
+                                    continue;
                                 }
                             }
+                            recipe_request.memory_budget = managed_budget.clone();
                             let Ok(recipe) = NativeRawDecoder.mosaic_recipe(&recipe_request) else {
                                 worker_telemetry.record_prefetch_failure(command.generation);
                                 continue;
@@ -705,15 +700,26 @@ pub fn is_supported(path: &Path) -> bool {
 }
 
 pub fn scan_folder(folder: &Path) -> Vec<PathBuf> {
-    let Ok(entries) = std::fs::read_dir(folder) else {
-        return Vec::new();
-    };
-    let paths = entries.filter_map(Result::ok).filter_map(|entry| {
+    scan_folder_with_cancel(folder, &|| false).unwrap_or_default()
+}
+
+pub(crate) fn scan_folder_with_cancel(folder: &Path, cancelled: &dyn Fn() -> bool) -> Option<Vec<PathBuf>> {
+    if cancelled() { return None; }
+    let Ok(entries) = std::fs::read_dir(folder) else { return Some(Vec::new()) };
+    let mut paths = Vec::new();
+    for entry in entries.filter_map(Result::ok) {
+        if cancelled() { return None; }
         let path = entry.path();
-        let metadata = std::fs::symlink_metadata(&path).ok()?;
-        (metadata.file_type().is_file() && is_supported(&path)).then_some(path)
-    });
-    smallest_paths(paths, MAX_ITEMS)
+        let Ok(metadata) = std::fs::symlink_metadata(&path) else { continue };
+        if metadata.file_type().is_file() && is_supported(&path) {
+            let name = path.file_name().map(|name| name.to_string_lossy().to_ascii_lowercase()).unwrap_or_default();
+            paths.push((name, path));
+        }
+    }
+    if cancelled() { return None; }
+    paths.sort_unstable();
+    if cancelled() { return None; }
+    Some(paths.into_iter().map(|(_, path)| path).collect())
 }
 
 /// Keep only the first `limit` sorted paths while scanning, rather than retaining
@@ -738,6 +744,72 @@ fn smallest_paths(paths: impl Iterator<Item = PathBuf>, limit: usize) -> Vec<Pat
     kept.into_sorted_vec().into_iter().map(|(_, path)| path).collect()
 }
 
+pub struct FolderScanReady {
+    pub generation: u64,
+    pub folder: PathBuf,
+    pub paths: Vec<PathBuf>,
+    pub tiles: Vec<FolderTile>,
+}
+
+pub struct FolderScanner {
+    tx: Sender<(u64, PathBuf)>,
+    pending: Receiver<(u64, PathBuf)>,
+    rx: Receiver<FolderScanReady>,
+    generation: Arc<AtomicU64>,
+    publication: Arc<Mutex<()>>,
+}
+impl FolderScanner {
+    pub fn new() -> Self {
+        let (tx, jobs) = bounded::<(u64, PathBuf)>(1);
+        let pending = jobs.clone();
+        let (ready, rx) = bounded(1);
+        let generation = Arc::new(AtomicU64::new(0));
+        let current = generation.clone();
+        let publication = Arc::new(Mutex::new(()));
+        let worker_publication = publication.clone();
+        let spawn = thread::Builder::new().name("rrrah-folder-scan".into()).spawn(move || {
+            while let Ok((generation, folder)) = jobs.recv() {
+                let cancelled = || current.load(Ordering::Acquire) != generation;
+                let Some(paths) = scan_folder_with_cancel(&folder, &cancelled) else { continue };
+                if cancelled() { continue; }
+                let tiles = sibling_folder_tiles_with_cancel(&folder, &cancelled);
+                let _guard = worker_publication.lock().unwrap_or_else(std::sync::PoisonError::into_inner);
+                if !cancelled() {
+                    let _ = ready.try_send(FolderScanReady { generation, folder, paths, tiles });
+                }
+            }
+        });
+        if let Err(error) = spawn {
+            log::warn!("failed to start folder scan worker: {error}");
+        }
+        Self { tx, pending, rx, generation, publication }
+    }
+    pub fn submit(&self, folder: PathBuf) -> u64 {
+        let _guard = self.publication.lock().unwrap_or_else(std::sync::PoisonError::into_inner);
+        let generation = self.generation.fetch_add(1, Ordering::AcqRel).wrapping_add(1);
+        while self.pending.try_recv().is_ok() {}
+        while self.rx.try_recv().is_ok() {}
+        let _ = self.tx.try_send((generation, folder));
+        generation
+    }
+    pub fn try_recv(&self) -> Result<Option<FolderScanReady>, crossbeam_channel::TryRecvError> {
+        let _guard = self.publication.lock().unwrap_or_else(std::sync::PoisonError::into_inner);
+        match self.rx.try_recv() {
+            Ok(ready) => Ok(Some(ready)),
+            Err(crossbeam_channel::TryRecvError::Empty) => Ok(None),
+            Err(error) => Err(error),
+        }
+    }
+}
+impl Drop for FolderScanner {
+    fn drop(&mut self) {
+        let _guard = self.publication.lock().unwrap_or_else(std::sync::PoisonError::into_inner);
+        self.generation.fetch_add(1, Ordering::AcqRel);
+        while self.pending.try_recv().is_ok() {}
+        while self.rx.try_recv().is_ok() {}
+    }
+}
+
 /// One folder tile in the filmstrip: the directory plus its cover image (the
 /// first supported file in deterministic name order).
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -751,6 +823,10 @@ pub struct FolderTile {
 /// the parent plus one readdir per subdirectory, no recursion, no symlink
 /// following.
 pub fn sibling_folder_tiles(folder: &Path) -> Vec<FolderTile> {
+    sibling_folder_tiles_with_cancel(folder, &|| false)
+}
+
+fn sibling_folder_tiles_with_cancel(folder: &Path, cancelled: &dyn Fn() -> bool) -> Vec<FolderTile> {
     let Some(parent) = folder.parent() else {
         return Vec::new();
     };
@@ -758,6 +834,7 @@ pub fn sibling_folder_tiles(folder: &Path) -> Vec<FolderTile> {
         return Vec::new();
     };
     let mut tiles = entries
+        .take_while(|_| !cancelled())
         .filter_map(Result::ok)
         .filter_map(|entry| {
             let path = entry.path();
@@ -765,7 +842,7 @@ pub fn sibling_folder_tiles(folder: &Path) -> Vec<FolderTile> {
             if !metadata.file_type().is_dir() {
                 return None;
             }
-            let cover = first_supported_image(&path)?;
+            let cover = first_supported_image_with_cancel(&path, cancelled)?;
             Some(FolderTile { folder: path, cover })
         })
         .collect::<Vec<_>>();
@@ -778,9 +855,10 @@ pub fn sibling_folder_tiles(folder: &Path) -> Vec<FolderTile> {
     tiles
 }
 
-fn first_supported_image(folder: &Path) -> Option<PathBuf> {
+fn first_supported_image_with_cancel(folder: &Path, cancelled: &dyn Fn() -> bool) -> Option<PathBuf> {
     let candidates = std::fs::read_dir(folder)
         .ok()?
+        .take_while(|_| !cancelled())
         .filter_map(Result::ok)
         .filter_map(|entry| {
             let path = entry.path();
@@ -799,7 +877,27 @@ mod tests {
     }
 
     #[test]
+    #[ignore = "manual 100000 actual directory entries; enumeration without image decode"]
+    fn folder_scan_retains_all_hundred_thousand_supported_files() {
+        let directory = tempfile::tempdir().unwrap();
+        for index in (0..100_000).rev() {
+            std::fs::File::create(directory.path().join(format!("{index:06}.png"))).unwrap();
+        }
+        std::fs::File::create(directory.path().join("ignore.txt")).unwrap();
+        std::fs::create_dir(directory.path().join("directory.png")).unwrap();
+        let start = std::time::Instant::now();
+        let paths = scan_folder(directory.path());
+        assert_eq!(paths.len(), 100_000);
+        for (index, path) in paths.iter().enumerate() {
+            assert_eq!(path.file_name().unwrap().to_str().unwrap(), format!("{index:06}.png"));
+        }
+        assert_eq!(paths.last().unwrap(), &directory.path().join("099999.png"));
+        eprintln!("100k directory enumeration: seconds={} retained=100000", start.elapsed().as_secs_f64());
+    }
+
+    #[test]
     fn streaming_folder_limit_preserves_sorted_prefix_and_name_ties() {
+        const MAX_ITEMS: usize = 10_000;
         let mut paths: Vec<_> = (0..MAX_ITEMS * 3)
             .rev()
             .map(|i| PathBuf::from(format!("{i:06}.CR3")))
@@ -939,6 +1037,139 @@ mod tests {
     }
 
     #[test]
+    fn folder_scanner_reports_worker_disconnect_instead_of_waiting_forever() {
+        let (tx, pending) = bounded(1);
+        let (ready, rx) = bounded::<FolderScanReady>(1);
+        drop(ready);
+        let scanner = FolderScanner {
+            tx, pending, rx, generation: Arc::new(AtomicU64::new(0)),
+            publication: Arc::new(Mutex::new(())),
+        };
+        scanner.submit(PathBuf::from("unavailable"));
+        assert!(matches!(scanner.try_recv(), Err(crossbeam_channel::TryRecvError::Disconnected)));
+    }
+
+    #[test]
+    fn dropping_folder_scanner_cancels_generation_and_stops_idle_worker() {
+        let scanner = FolderScanner::new();
+        let generation = scanner.generation.clone();
+        let ready = scanner.rx.clone();
+        let before = generation.load(Ordering::Acquire);
+        drop(scanner);
+        assert_eq!(generation.load(Ordering::Acquire), before + 1);
+        assert!(matches!(ready.recv_timeout(Duration::from_secs(5)),
+            Err(crossbeam_channel::RecvTimeoutError::Disconnected)));
+    }
+
+    #[test]
+    fn folder_scan_cancels_during_enumeration_without_partial_publication() {
+        let directory = tempfile::tempdir().unwrap();
+        for index in 0..100 { write_file(&directory.path().join(format!("{index}.png"))); }
+        let polls = std::cell::Cell::new(0);
+        assert!(scan_folder_with_cancel(directory.path(), &|| {
+            polls.set(polls.get() + 1);
+            polls.get() >= 10
+        }).is_none());
+        assert_eq!(polls.get(), 10);
+        assert_eq!(scan_folder(directory.path()).len(), 100);
+    }
+
+    #[test]
+    fn folder_scanner_replaces_pending_and_published_stale_folders() {
+        let root = tempfile::tempdir().unwrap();
+        let first = root.path().join("first");
+        let latest = root.path().join("latest");
+        std::fs::create_dir(&first).unwrap();
+        std::fs::create_dir(&latest).unwrap();
+        write_file(&first.join("old.png"));
+        write_file(&latest.join("new.png"));
+        let scanner = FolderScanner::new();
+        for _ in 0..100 {
+            scanner.submit(first.clone());
+            scanner.submit(latest.clone());
+            assert!(scanner.pending.len() <= 1);
+        }
+        let generation = scanner.submit(latest.clone());
+        let deadline = std::time::Instant::now() + Duration::from_secs(5);
+        let result = loop {
+            if let Some(result) = scanner.try_recv().unwrap() { break result; }
+            assert!(std::time::Instant::now() < deadline, "folder scanner did not finish");
+            std::thread::yield_now();
+        };
+        assert_eq!(result.generation, generation);
+        assert_eq!(result.folder, latest);
+        assert_eq!(result.paths, [result.folder.join("new.png")]);
+        assert_eq!(result.tiles.len(), 2);
+        // A ready previous result must also be drained by replacement.
+        scanner.submit(first.clone());
+        let deadline = std::time::Instant::now() + Duration::from_secs(5);
+        while scanner.rx.is_empty() {
+            assert!(std::time::Instant::now() < deadline);
+            std::thread::yield_now();
+        }
+        let generation = scanner.submit(latest.clone());
+        let deadline = std::time::Instant::now() + Duration::from_secs(5);
+        let result = loop {
+            if let Some(result) = scanner.try_recv().unwrap() { break result; }
+            assert!(std::time::Instant::now() < deadline);
+            std::thread::yield_now();
+        };
+        assert_eq!(result.generation, generation);
+        assert_eq!(result.folder, latest);
+    }
+
+    #[test]
+    fn thumbnail_submit_evaluates_only_queue_capacity_from_large_lazy_source() {
+        let evaluated = std::cell::Cell::new(0);
+        let prefetcher = Prefetcher::new(4, |_| None);
+        for _ in 0..1000 {
+            evaluated.set(0);
+            prefetcher.submit((0..100_000).map(|index| {
+                evaluated.set(evaluated.get() + 1);
+                assert!(evaluated.get() <= 4, "evaluated distant thumbnail jobs");
+                ThumbnailJob { index, source: PathBuf::from(format!("{index}.png")), edge: THUMB_EDGE }
+            }));
+            assert_eq!(evaluated.get(), 4);
+            assert!(prefetcher.pending.len() <= 4);
+        }
+    }
+
+    #[test]
+    fn large_gallery_rapid_jumps_keep_only_latest_bounded_prefetch_command() {
+        let paths: Vec<_> = (0..100_000).map(|index| PathBuf::from(format!("{index}.cr3"))).collect();
+        let mut worker = raw_prefetcher_without_worker();
+        worker.window = PrefetchWindow { behind: 2, ahead: 5 };
+        let mut last_generation = 0;
+        for step in 0..10_000usize {
+            let selected = (step * 7919) % paths.len();
+            let direction = if step % 2 == 0 { NavDirection::Forward } else { NavDirection::Backward };
+            worker.begin_foreground();
+            assert!(worker.pending.is_empty());
+            worker.finish_foreground_and_submit(&paths, selected, direction);
+            assert_eq!(worker.pending.len(), 1);
+            // A second navigation arrives before a worker consumes the first.
+            let latest = (selected + 37) % paths.len();
+            worker.finish_foreground_and_submit(&paths, latest, direction);
+            assert_eq!(worker.pending.len(), 1);
+            let command = worker.pending.try_recv().unwrap();
+            assert!(command.generation > last_generation);
+            assert_eq!(command.generation, worker.generation.load(Ordering::Acquire));
+            last_generation = command.generation;
+            assert!(command.paths.len() <= 7);
+            let expected_indices: Vec<_> = match direction {
+                NavDirection::Forward => (1..=5).filter_map(|delta| latest.checked_add(delta).filter(|&x| x < paths.len()))
+                    .chain((1..=2).filter_map(|delta| latest.checked_sub(delta))).collect(),
+                NavDirection::Backward => (1..=5).filter_map(|delta| latest.checked_sub(delta))
+                    .chain((1..=2).filter_map(|delta| latest.checked_add(delta).filter(|&x| x < paths.len()))).collect(),
+                NavDirection::None => unreachable!(),
+            };
+            assert_eq!(command.paths, expected_indices.into_iter().map(|index| paths[index].clone()).collect::<Vec<_>>());
+            assert!(!command.paths.contains(&paths[latest]));
+            assert!(worker.pending.is_empty());
+        }
+    }
+
+    #[test]
     fn mixed_gallery_submits_raw_neighbours_from_raster_or_model_selection() {
         let paths: Vec<_> = ["0.cr3", "1.png", "2.nef", "3.obj", "4.arw", "5.jpg"]
             .into_iter()
@@ -960,8 +1191,25 @@ mod tests {
         );
     }
     #[test]
-    fn raw_worker_skips_ordinary_tiff_without_decoding_failure() {
+    fn raw_worker_skips_rasters_even_with_raw_suffix_without_decoding_failure() {
         let directory = tempfile::tempdir().unwrap();
+        let raster = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster/pattern.tif");
+        let renamed = directory.path().join("renamed.CR3");
+        std::fs::copy(&raster, &renamed).unwrap();
+        let rpf = directory.path().join("render.NEF");
+        let mut bytes = vec![0u8; 744];
+        for (at, value) in [(2,1u16),(10,1),(20,3),(22,1),(26,0xfffd),(658,32),(662,32)] {
+            bytes[at..at+2].copy_from_slice(&value.to_be_bytes());
+        }
+        bytes[400..413].copy_from_slice(b"3ds max : ( )");
+        bytes[740..744].copy_from_slice(&744u32.to_be_bytes());
+        for _ in 0..4 {
+            bytes.extend(8u16.to_be_bytes());
+            bytes.extend(0.5f32.to_bits().to_be_bytes());
+            bytes.extend(1.0f32.to_bits().to_be_bytes());
+        }
+        std::fs::write(&rpf,bytes).unwrap();
+        for source in [raster, renamed, rpf] {
         let budget = rrrah_cache::MemoryBudget::new(4096);
         let telemetry = Arc::new(CacheTelemetry::new(true, 4096));
         let worker = RawPrefetcher::with_budget(
@@ -975,7 +1223,7 @@ mod tests {
         );
         let paths = [
             PathBuf::from("selected.png"),
-            PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster/pattern.tif"),
+            source,
         ];
         worker.finish_foreground_and_submit(&paths, 0, NavDirection::Forward);
         let deadline = std::time::Instant::now() + Duration::from_secs(5);
@@ -996,6 +1244,7 @@ mod tests {
                 .entries,
             0
         );
+        }
     }
 
     #[test]
@@ -1301,6 +1550,54 @@ mod tests {
         assert_eq!(root.used(), 0);
         assert_eq!(reference_root.used(), 0);
     }
+    #[test]
+    #[ignore = "requires authored EIP pair and local EOS R8 CR3"]
+    fn eip_prefetch_restores_exact_sensor_and_fingerprints_complete_package() {
+        let packages = [PathBuf::from(std::env::var("RRRAH_EIP_APP_FIRST").unwrap()), PathBuf::from(std::env::var("RRRAH_EIP_APP_SECOND").unwrap())];
+        let first_fingerprint = SourceFingerprint::from_path(&packages[0]).unwrap();
+        let second_fingerprint = SourceFingerprint::from_path(&packages[1]).unwrap();
+        assert_eq!(first_fingerprint.file_size, second_fingerprint.file_size);
+        assert_eq!(first_fingerprint.modified_ns, second_fingerprint.modified_ns);
+        assert_ne!(first_fingerprint.sampled_blake3, second_fingerprint.sampled_blake3);
+        let original = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/IMG_9043.CR3");
+        let reference_root = rrrah_cache::MemoryBudget::new(96 * 1024 * 1024);
+        let mut reference_request = DecodeRequest::new(original);
+        reference_request.memory_budget = Some(reference_root.clone());
+        let reference = NativeRawDecoder.decode(&reference_request).unwrap().mosaic;
+        let directory = tempfile::tempdir().unwrap();
+        let budget = rrrah_cache::MemoryBudget::new(96 * 1024 * 1024);
+        let telemetry = Arc::new(CacheTelemetry::new(true, 128 * 1024 * 1024));
+        let mut limits = rrrah_cache::CacheLimits::bytes(128 * 1024 * 1024);
+        limits.max_entries = Some(1);
+        let worker = RawPrefetcher::with_budget(Some(directory.path().to_owned()), false, Arc::new(DecodeGate::new()), telemetry.clone(), PrefetchWindow { behind: 1, ahead: 1 }, limits, Some(budget.clone()));
+        let mut keys = Vec::new();
+        for (index, package) in packages.iter().enumerate() {
+            let mut request = DecodeRequest::new(package);
+            request.memory_budget = Some(budget.clone());
+            let key = CacheKey::for_mosaic_recipe(&SourceFingerprint::from_path(package).unwrap(), 0, NativeRawDecoder.mosaic_recipe(&request).unwrap());
+            keys.push(key);
+            let paths = if index == 0 { vec![PathBuf::from("selected.eip"), package.clone()] } else { vec![package.clone(), PathBuf::from("selected.eip")] };
+            worker.finish_foreground_and_submit(&paths, if index == 0 { 0 } else { 1 }, if index == 0 { NavDirection::Forward } else { NavDirection::Backward });
+            let deadline = std::time::Instant::now() + Duration::from_secs(10);
+            while telemetry.snapshot().prefetch_completed == 0 && std::time::Instant::now() < deadline { std::thread::sleep(Duration::from_millis(1)); }
+            assert_eq!(telemetry.snapshot().prefetch_failures, 0);
+            assert_eq!(telemetry.snapshot().prefetch_stored, 1);
+            assert_eq!(budget.used(), 0);
+            let cache = rrrah_cache::DiskMosaicCache::new(directory.path());
+            assert_eq!(cache.usage().unwrap().entries, 1);
+            let restored = cache.load_with_budget(key, &budget).unwrap().unwrap().mosaic;
+            assert_eq!(restored.metadata, reference.metadata);
+            assert_eq!(restored.pixels, reference.pixels);
+            drop(restored);
+            assert_eq!(budget.used(), 0);
+        }
+        assert_ne!(keys[0], keys[1], "different settings packages must not share a sensor cache key");
+        drop(worker);
+        drop(reference);
+        assert_eq!(reference_root.used(), 0);
+        eprintln!("EIP forward/backward preload: two complete-package keys, one disk entry, all sensor samples exact, managed peak={}, final=0", budget.peak());
+    }
+
     #[test]
     #[ignore = "requires local EOS R8 tests/IMG_9043.CR3 fixture"]
     fn raw_prefetch_count_limit_preserves_highest_priority_neighbour() {

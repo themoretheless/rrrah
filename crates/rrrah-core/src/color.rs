@@ -1,3 +1,6 @@
+mod dng_neutral;
+pub use dng_neutral::resolve_dng_neutral_matrix;
+
 /// IEC 61966-2-1 / D65 linear sRGB to CIE XYZ matrix.
 pub const SRGB_TO_XYZ_D65: [[f32; 3]; 3] = [
     [0.412_456_4, 0.357_576_1, 0.180_437_5],

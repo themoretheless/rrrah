@@ -1,0 +1,27 @@
+{
+  "status": "verified_native_primitive",
+  "input_hashes": {
+    "crates/rrrah-dedup/src/gradient_scale.rs": "e564ec76acfd0693b53328316d273a283bd2dc87a68a12a481069a53ef2348e4",
+    "crates/rrrah-dedup/tests/gradient_scale.rs": "2bfd86cb1e1015ae60ae515fe6d4ca97d58ccb51d7bf63cf868d909cbc8494a3",
+    "docs/research/dedup-gradient-scale-native-final.log": "c5d46d2bf157c3019b1476469211a65c714b6ef9bb9e6b06962965caf36ab0e6",
+    "docs/research/dedup-gradient-scale-native.log": "dba05b235613d62d0a09da071d321371554e0c66b3e1bbd95728794674487b14"
+  },
+  "positive_correct_correspondences": 264,
+  "positive_total_correspondences": 269,
+  "same_recipe_dyadic_correct_correspondences": 11,
+  "negative_correspondences": 0,
+  "known_transform_grid_squared_error_bound": 4,
+  "final_tests": 2,
+  "related_tests": 12,
+  "scope": "Explicit bilinear intermediate-scale primitive, unmanaged allocations. Known reduction geometry qualified on16grid points. No pixel confirmation, collection integration, broad recall or managed-memory qualification.",
+  "managed_gate": {
+    "exit_code": 0,
+    "tests": 3,
+    "input_hashes": {
+      "crates/rrrah-dedup/src/gradient_scale.rs": "acf70f25058f870dbebef324dcc6c2a0b223fb7d622f322e5b1a8631648015ac",
+      "crates/rrrah-dedup/tests/gradient_scale.rs": "59df1c8790f4d762da074395922ce6f4e0d1ab93ef5db72639488b95cbd59f00",
+      "docs/research/dedup-gradient-scale-managed-native.log": "a5d974542b60b511ddf3955b31e7f570c947d8689dfd9ee99762eaec099e8ff3"
+    },
+    "scope": "Exact measured peak succeeds; one byte less refuses; shared last-owner retention and first/middle/final cancellation release all credit. Caller input excluded; no process RSS or file/collection qualification."
+  }
+}

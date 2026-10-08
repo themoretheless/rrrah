@@ -1,0 +1,35 @@
+{
+  "scope": "Delayed swap with physical file-count and byte-cap assertions",
+  "duration_seconds": 60.018323834,
+  "cycles": 438,
+  "pressure_refusals": 438,
+  "disk_peak_bytes": 4195328,
+  "disk_peak_objects": 16,
+  "disk_max_bytes": 8388608,
+  "disk_max_objects": 16,
+  "physical_limits_checked_each_cycle": true,
+  "final_managed_bytes": 0,
+  "passed": 2,
+  "failed": 0,
+  "log": "/tmp/rrrah-sustained-physical-limits.log",
+  "limitations": [
+    "Physical bytes are logical file lengths, not allocated filesystem blocks.",
+    "Byte cap was respected but not reached; count cap was reached.",
+    "TTL deletion can race enumeration; files already removed are ignored.",
+    "This new physical-quota check ran for 60 seconds; the earlier 600-second run did not contain it."
+  ],
+  "independent_idle_ttl": {
+    "passed": 1,
+    "failed": 0,
+    "objects_written": 8,
+    "pixel_bytes_per_object": 262144,
+    "ttl_seconds": 2,
+    "size_limit": 8388608,
+    "count_limit": 100,
+    "physical_files_final": 0,
+    "quota_bytes_final": 0,
+    "managed_bytes_final": 0,
+    "log": "/tmp/rrrah-swap-independent-idle-ttl.log",
+    "scope": "No new writes/restores/prune calls during idle interval; background worker reclaims files and quota. Final wait_idle synchronizes completion."
+  }
+}

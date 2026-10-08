@@ -1,0 +1,2385 @@
+{
+  "scope": "Independent PDFium mask oracle; no production dependency",
+  "version": "153.0.7999.0",
+  "exact": 12,
+  "max_error": 255,
+  "root": "/tmp/rrrah-pdf-mask-pdfium-20261008",
+  "fixtures": [
+    {
+      "fixture": "ko-false-color-false-nested-false-restore-false-Alpha-0.5-bc-false-invert-false.pdf",
+      "different_pixels": 256,
+      "max_error": 1,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            127,
+            127,
+            127
+          ],
+          "pdfium": [
+            128,
+            128,
+            128
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            255,
+            255
+          ],
+          "pdfium": [
+            255,
+            255,
+            255
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-false-nested-false-restore-false-Alpha-0.5-bc-false-invert-true.pdf",
+      "different_pixels": 256,
+      "max_error": 1,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            128,
+            128,
+            128
+          ],
+          "pdfium": [
+            127,
+            127,
+            127
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            0,
+            0,
+            0
+          ],
+          "pdfium": [
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-false-nested-false-restore-false-Alpha-0.5-bc-true-invert-false.pdf",
+      "different_pixels": 256,
+      "max_error": 1,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            127,
+            127,
+            127
+          ],
+          "pdfium": [
+            128,
+            128,
+            128
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            255,
+            255
+          ],
+          "pdfium": [
+            255,
+            255,
+            255
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-false-nested-false-restore-false-Alpha-1-bc-false-invert-false.pdf",
+      "different_pixels": 0,
+      "max_error": 0,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            0,
+            0,
+            0
+          ],
+          "pdfium": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            255,
+            255
+          ],
+          "pdfium": [
+            255,
+            255,
+            255
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-false-nested-false-restore-false-Luminosity-0.5-bc-false-invert-false.pdf",
+      "different_pixels": 256,
+      "max_error": 1,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            191,
+            191,
+            191
+          ],
+          "pdfium": [
+            192,
+            192,
+            192
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            255,
+            255
+          ],
+          "pdfium": [
+            255,
+            255,
+            255
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-false-nested-false-restore-false-Luminosity-0.5-bc-false-invert-true.pdf",
+      "different_pixels": 256,
+      "max_error": 1,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            64,
+            64,
+            64
+          ],
+          "pdfium": [
+            63,
+            63,
+            63
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            0,
+            0,
+            0
+          ],
+          "pdfium": [
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-false-nested-false-restore-false-Luminosity-0.5-bc-true-invert-false.pdf",
+      "different_pixels": 0,
+      "max_error": 0,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            64,
+            64,
+            64
+          ],
+          "pdfium": [
+            64,
+            64,
+            64
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            0,
+            0,
+            0
+          ],
+          "pdfium": [
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-false-nested-false-restore-false-Luminosity-0.5-bc-true-invert-true.pdf",
+      "different_pixels": 0,
+      "max_error": 0,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            191,
+            191,
+            191
+          ],
+          "pdfium": [
+            191,
+            191,
+            191
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            255,
+            255
+          ],
+          "pdfium": [
+            255,
+            255,
+            255
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-false-nested-false-restore-false-Luminosity-1-bc-false-invert-false.pdf",
+      "different_pixels": 0,
+      "max_error": 0,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            127,
+            127,
+            127
+          ],
+          "pdfium": [
+            127,
+            127,
+            127
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            255,
+            255
+          ],
+          "pdfium": [
+            255,
+            255,
+            255
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-false-nested-false-restore-true-Alpha-0.5-bc-false-invert-false.pdf",
+      "different_pixels": 256,
+      "max_error": 1,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            127,
+            127,
+            127
+          ],
+          "pdfium": [
+            128,
+            128,
+            128
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            255,
+            255
+          ],
+          "pdfium": [
+            255,
+            255,
+            255
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-false-nested-false-restore-true-Alpha-0.5-bc-false-invert-true.pdf",
+      "different_pixels": 256,
+      "max_error": 1,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            128,
+            128,
+            128
+          ],
+          "pdfium": [
+            127,
+            127,
+            127
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            0,
+            0,
+            0
+          ],
+          "pdfium": [
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-false-nested-false-restore-true-Alpha-0.5-bc-true-invert-false.pdf",
+      "different_pixels": 256,
+      "max_error": 1,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            127,
+            127,
+            127
+          ],
+          "pdfium": [
+            128,
+            128,
+            128
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            255,
+            255
+          ],
+          "pdfium": [
+            255,
+            255,
+            255
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-false-nested-false-restore-true-Alpha-1-bc-false-invert-false.pdf",
+      "different_pixels": 0,
+      "max_error": 0,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            0,
+            0,
+            0
+          ],
+          "pdfium": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            255,
+            255
+          ],
+          "pdfium": [
+            255,
+            255,
+            255
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-false-nested-false-restore-true-Luminosity-0.5-bc-false-invert-false.pdf",
+      "different_pixels": 256,
+      "max_error": 1,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            191,
+            191,
+            191
+          ],
+          "pdfium": [
+            192,
+            192,
+            192
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            255,
+            255
+          ],
+          "pdfium": [
+            255,
+            255,
+            255
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-false-nested-false-restore-true-Luminosity-0.5-bc-false-invert-true.pdf",
+      "different_pixels": 256,
+      "max_error": 1,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            64,
+            64,
+            64
+          ],
+          "pdfium": [
+            63,
+            63,
+            63
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            0,
+            0,
+            0
+          ],
+          "pdfium": [
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-false-nested-false-restore-true-Luminosity-0.5-bc-true-invert-false.pdf",
+      "different_pixels": 0,
+      "max_error": 0,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            64,
+            64,
+            64
+          ],
+          "pdfium": [
+            64,
+            64,
+            64
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            0,
+            0,
+            0
+          ],
+          "pdfium": [
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-false-nested-false-restore-true-Luminosity-0.5-bc-true-invert-true.pdf",
+      "different_pixels": 0,
+      "max_error": 0,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            191,
+            191,
+            191
+          ],
+          "pdfium": [
+            191,
+            191,
+            191
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            255,
+            255
+          ],
+          "pdfium": [
+            255,
+            255,
+            255
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-false-nested-false-restore-true-Luminosity-1-bc-false-invert-false.pdf",
+      "different_pixels": 0,
+      "max_error": 0,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            127,
+            127,
+            127
+          ],
+          "pdfium": [
+            127,
+            127,
+            127
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            255,
+            255
+          ],
+          "pdfium": [
+            255,
+            255,
+            255
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-false-nested-true-restore-false-Alpha-0.5-bc-false-invert-false.pdf",
+      "different_pixels": 256,
+      "max_error": 1,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            191,
+            191,
+            191
+          ],
+          "pdfium": [
+            192,
+            192,
+            192
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            255,
+            255
+          ],
+          "pdfium": [
+            255,
+            255,
+            255
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-false-nested-true-restore-false-Alpha-0.5-bc-false-invert-true.pdf",
+      "different_pixels": 256,
+      "max_error": 1,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            64,
+            64,
+            64
+          ],
+          "pdfium": [
+            63,
+            63,
+            63
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            0,
+            0,
+            0
+          ],
+          "pdfium": [
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-false-nested-true-restore-false-Alpha-0.5-bc-true-invert-false.pdf",
+      "different_pixels": 256,
+      "max_error": 1,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            191,
+            191,
+            191
+          ],
+          "pdfium": [
+            192,
+            192,
+            192
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            255,
+            255
+          ],
+          "pdfium": [
+            255,
+            255,
+            255
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-false-nested-true-restore-false-Alpha-1-bc-false-invert-false.pdf",
+      "different_pixels": 256,
+      "max_error": 1,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            127,
+            127,
+            127
+          ],
+          "pdfium": [
+            128,
+            128,
+            128
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            255,
+            255
+          ],
+          "pdfium": [
+            255,
+            255,
+            255
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-false-nested-true-restore-false-Luminosity-0.5-bc-false-invert-false.pdf",
+      "different_pixels": 256,
+      "max_error": 1,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            223,
+            223,
+            223
+          ],
+          "pdfium": [
+            224,
+            224,
+            224
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            255,
+            255
+          ],
+          "pdfium": [
+            255,
+            255,
+            255
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-false-nested-true-restore-false-Luminosity-0.5-bc-false-invert-true.pdf",
+      "different_pixels": 256,
+      "max_error": 1,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            32,
+            32,
+            32
+          ],
+          "pdfium": [
+            31,
+            31,
+            31
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            0,
+            0,
+            0
+          ],
+          "pdfium": [
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-false-nested-true-restore-false-Luminosity-0.5-bc-true-invert-false.pdf",
+      "different_pixels": 0,
+      "max_error": 0,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            32,
+            32,
+            32
+          ],
+          "pdfium": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            0,
+            0,
+            0
+          ],
+          "pdfium": [
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-false-nested-true-restore-false-Luminosity-0.5-bc-true-invert-true.pdf",
+      "different_pixels": 0,
+      "max_error": 0,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            223,
+            223,
+            223
+          ],
+          "pdfium": [
+            223,
+            223,
+            223
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            255,
+            255
+          ],
+          "pdfium": [
+            255,
+            255,
+            255
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-false-nested-true-restore-false-Luminosity-1-bc-false-invert-false.pdf",
+      "different_pixels": 256,
+      "max_error": 1,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            191,
+            191,
+            191
+          ],
+          "pdfium": [
+            192,
+            192,
+            192
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            255,
+            255
+          ],
+          "pdfium": [
+            255,
+            255,
+            255
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-false-nested-true-restore-true-Alpha-0.5-bc-false-invert-false.pdf",
+      "different_pixels": 256,
+      "max_error": 1,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            191,
+            191,
+            191
+          ],
+          "pdfium": [
+            192,
+            192,
+            192
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            255,
+            255
+          ],
+          "pdfium": [
+            255,
+            255,
+            255
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-false-nested-true-restore-true-Alpha-0.5-bc-false-invert-true.pdf",
+      "different_pixels": 256,
+      "max_error": 1,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            64,
+            64,
+            64
+          ],
+          "pdfium": [
+            63,
+            63,
+            63
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            0,
+            0,
+            0
+          ],
+          "pdfium": [
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-false-nested-true-restore-true-Alpha-0.5-bc-true-invert-false.pdf",
+      "different_pixels": 256,
+      "max_error": 1,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            191,
+            191,
+            191
+          ],
+          "pdfium": [
+            192,
+            192,
+            192
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            255,
+            255
+          ],
+          "pdfium": [
+            255,
+            255,
+            255
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-false-nested-true-restore-true-Alpha-1-bc-false-invert-false.pdf",
+      "different_pixels": 256,
+      "max_error": 1,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            127,
+            127,
+            127
+          ],
+          "pdfium": [
+            128,
+            128,
+            128
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            255,
+            255
+          ],
+          "pdfium": [
+            255,
+            255,
+            255
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-false-nested-true-restore-true-Luminosity-0.5-bc-false-invert-false.pdf",
+      "different_pixels": 256,
+      "max_error": 1,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            223,
+            223,
+            223
+          ],
+          "pdfium": [
+            224,
+            224,
+            224
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            255,
+            255
+          ],
+          "pdfium": [
+            255,
+            255,
+            255
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-false-nested-true-restore-true-Luminosity-0.5-bc-false-invert-true.pdf",
+      "different_pixels": 256,
+      "max_error": 1,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            32,
+            32,
+            32
+          ],
+          "pdfium": [
+            31,
+            31,
+            31
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            0,
+            0,
+            0
+          ],
+          "pdfium": [
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-false-nested-true-restore-true-Luminosity-0.5-bc-true-invert-false.pdf",
+      "different_pixels": 0,
+      "max_error": 0,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            32,
+            32,
+            32
+          ],
+          "pdfium": [
+            32,
+            32,
+            32
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            0,
+            0,
+            0
+          ],
+          "pdfium": [
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-false-nested-true-restore-true-Luminosity-0.5-bc-true-invert-true.pdf",
+      "different_pixels": 0,
+      "max_error": 0,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            223,
+            223,
+            223
+          ],
+          "pdfium": [
+            223,
+            223,
+            223
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            255,
+            255
+          ],
+          "pdfium": [
+            255,
+            255,
+            255
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-false-nested-true-restore-true-Luminosity-1-bc-false-invert-false.pdf",
+      "different_pixels": 256,
+      "max_error": 1,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            191,
+            191,
+            191
+          ],
+          "pdfium": [
+            192,
+            192,
+            192
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            255,
+            255
+          ],
+          "pdfium": [
+            255,
+            255,
+            255
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-true-nested-false-restore-true-Alpha-0.5-bc-false-invert-false.pdf",
+      "different_pixels": 256,
+      "max_error": 1,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            159,
+            0,
+            0
+          ],
+          "pdfium": [
+            160,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            0,
+            0
+          ],
+          "pdfium": [
+            255,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-true-nested-false-restore-true-Alpha-0.5-bc-false-invert-true.pdf",
+      "different_pixels": 384,
+      "max_error": 1,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            159,
+            0,
+            0
+          ],
+          "pdfium": [
+            160,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            63,
+            0,
+            0
+          ],
+          "pdfium": [
+            64,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-true-nested-false-restore-true-Alpha-0.5-bc-true-invert-false.pdf",
+      "different_pixels": 256,
+      "max_error": 1,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            159,
+            0,
+            0
+          ],
+          "pdfium": [
+            160,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            0,
+            0
+          ],
+          "pdfium": [
+            255,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-true-nested-false-restore-true-Alpha-1-bc-false-invert-false.pdf",
+      "different_pixels": 256,
+      "max_error": 1,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            63,
+            0,
+            0
+          ],
+          "pdfium": [
+            64,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            0,
+            0
+          ],
+          "pdfium": [
+            255,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-true-nested-false-restore-true-Luminosity-0.5-bc-false-invert-false.pdf",
+      "different_pixels": 256,
+      "max_error": 1,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            207,
+            0,
+            0
+          ],
+          "pdfium": [
+            208,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            0,
+            0
+          ],
+          "pdfium": [
+            255,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-true-nested-false-restore-true-Luminosity-0.5-bc-false-invert-true.pdf",
+      "different_pixels": 384,
+      "max_error": 1,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            111,
+            0,
+            0
+          ],
+          "pdfium": [
+            112,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            63,
+            0,
+            0
+          ],
+          "pdfium": [
+            64,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-true-nested-false-restore-true-Luminosity-0.5-bc-true-invert-false.pdf",
+      "different_pixels": 384,
+      "max_error": 1,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            111,
+            0,
+            0
+          ],
+          "pdfium": [
+            112,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            63,
+            0,
+            0
+          ],
+          "pdfium": [
+            64,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-true-nested-false-restore-true-Luminosity-0.5-bc-true-invert-true.pdf",
+      "different_pixels": 256,
+      "max_error": 1,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            207,
+            0,
+            0
+          ],
+          "pdfium": [
+            208,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            0,
+            0
+          ],
+          "pdfium": [
+            255,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-true-nested-false-restore-true-Luminosity-1-bc-false-invert-false.pdf",
+      "different_pixels": 256,
+      "max_error": 1,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            159,
+            0,
+            0
+          ],
+          "pdfium": [
+            160,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            0,
+            0
+          ],
+          "pdfium": [
+            255,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-true-nested-true-restore-true-Alpha-0.5-bc-false-invert-false.pdf",
+      "different_pixels": 256,
+      "max_error": 1,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            207,
+            0,
+            0
+          ],
+          "pdfium": [
+            208,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            0,
+            0
+          ],
+          "pdfium": [
+            255,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-true-nested-true-restore-true-Alpha-0.5-bc-false-invert-true.pdf",
+      "different_pixels": 384,
+      "max_error": 1,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            111,
+            0,
+            0
+          ],
+          "pdfium": [
+            112,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            63,
+            0,
+            0
+          ],
+          "pdfium": [
+            64,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-true-nested-true-restore-true-Alpha-0.5-bc-true-invert-false.pdf",
+      "different_pixels": 256,
+      "max_error": 1,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            207,
+            0,
+            0
+          ],
+          "pdfium": [
+            208,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            0,
+            0
+          ],
+          "pdfium": [
+            255,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-true-nested-true-restore-true-Alpha-1-bc-false-invert-false.pdf",
+      "different_pixels": 256,
+      "max_error": 1,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            159,
+            0,
+            0
+          ],
+          "pdfium": [
+            160,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            0,
+            0
+          ],
+          "pdfium": [
+            255,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-true-nested-true-restore-true-Luminosity-0.5-bc-false-invert-false.pdf",
+      "different_pixels": 256,
+      "max_error": 1,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            231,
+            0,
+            0
+          ],
+          "pdfium": [
+            232,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            0,
+            0
+          ],
+          "pdfium": [
+            255,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-true-nested-true-restore-true-Luminosity-0.5-bc-false-invert-true.pdf",
+      "different_pixels": 384,
+      "max_error": 1,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            87,
+            0,
+            0
+          ],
+          "pdfium": [
+            88,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            63,
+            0,
+            0
+          ],
+          "pdfium": [
+            64,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-true-nested-true-restore-true-Luminosity-0.5-bc-true-invert-false.pdf",
+      "different_pixels": 384,
+      "max_error": 1,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            87,
+            0,
+            0
+          ],
+          "pdfium": [
+            88,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            63,
+            0,
+            0
+          ],
+          "pdfium": [
+            64,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-true-nested-true-restore-true-Luminosity-0.5-bc-true-invert-true.pdf",
+      "different_pixels": 256,
+      "max_error": 1,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            231,
+            0,
+            0
+          ],
+          "pdfium": [
+            232,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            0,
+            0
+          ],
+          "pdfium": [
+            255,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-false-color-true-nested-true-restore-true-Luminosity-1-bc-false-invert-false.pdf",
+      "different_pixels": 256,
+      "max_error": 1,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            207,
+            0,
+            0
+          ],
+          "pdfium": [
+            208,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            0,
+            0
+          ],
+          "pdfium": [
+            255,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-true-color-true-nested-false-restore-true-Alpha-0.5-bc-false-invert-false.pdf",
+      "different_pixels": 384,
+      "max_error": 255,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            159,
+            159,
+            159
+          ],
+          "pdfium": [
+            160,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            255,
+            255
+          ],
+          "pdfium": [
+            255,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-true-color-true-nested-false-restore-true-Alpha-0.5-bc-false-invert-true.pdf",
+      "different_pixels": 384,
+      "max_error": 159,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            159,
+            159,
+            159
+          ],
+          "pdfium": [
+            160,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            63,
+            63,
+            63
+          ],
+          "pdfium": [
+            64,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-true-color-true-nested-false-restore-true-Alpha-0.5-bc-true-invert-false.pdf",
+      "different_pixels": 384,
+      "max_error": 255,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            159,
+            159,
+            159
+          ],
+          "pdfium": [
+            160,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            255,
+            255
+          ],
+          "pdfium": [
+            255,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-true-color-true-nested-false-restore-true-Alpha-1-bc-false-invert-false.pdf",
+      "different_pixels": 384,
+      "max_error": 255,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            63,
+            63,
+            63
+          ],
+          "pdfium": [
+            64,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            255,
+            255
+          ],
+          "pdfium": [
+            255,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-true-color-true-nested-false-restore-true-Luminosity-0.5-bc-false-invert-false.pdf",
+      "different_pixels": 384,
+      "max_error": 255,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            207,
+            207,
+            207
+          ],
+          "pdfium": [
+            208,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            255,
+            255
+          ],
+          "pdfium": [
+            255,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-true-color-true-nested-false-restore-true-Luminosity-0.5-bc-false-invert-true.pdf",
+      "different_pixels": 384,
+      "max_error": 111,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            111,
+            111,
+            111
+          ],
+          "pdfium": [
+            112,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            63,
+            63,
+            63
+          ],
+          "pdfium": [
+            64,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-true-color-true-nested-false-restore-true-Luminosity-0.5-bc-true-invert-false.pdf",
+      "different_pixels": 384,
+      "max_error": 111,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            111,
+            111,
+            111
+          ],
+          "pdfium": [
+            112,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            63,
+            63,
+            63
+          ],
+          "pdfium": [
+            64,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-true-color-true-nested-false-restore-true-Luminosity-0.5-bc-true-invert-true.pdf",
+      "different_pixels": 384,
+      "max_error": 255,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            207,
+            207,
+            207
+          ],
+          "pdfium": [
+            208,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            255,
+            255
+          ],
+          "pdfium": [
+            255,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-true-color-true-nested-false-restore-true-Luminosity-1-bc-false-invert-false.pdf",
+      "different_pixels": 384,
+      "max_error": 255,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            159,
+            159,
+            159
+          ],
+          "pdfium": [
+            160,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            255,
+            255
+          ],
+          "pdfium": [
+            255,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-true-color-true-nested-true-restore-true-Alpha-0.5-bc-false-invert-false.pdf",
+      "different_pixels": 384,
+      "max_error": 255,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            207,
+            207,
+            207
+          ],
+          "pdfium": [
+            208,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            255,
+            255
+          ],
+          "pdfium": [
+            255,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-true-color-true-nested-true-restore-true-Alpha-0.5-bc-false-invert-true.pdf",
+      "different_pixels": 384,
+      "max_error": 111,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            111,
+            111,
+            111
+          ],
+          "pdfium": [
+            112,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            63,
+            63,
+            63
+          ],
+          "pdfium": [
+            64,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-true-color-true-nested-true-restore-true-Alpha-0.5-bc-true-invert-false.pdf",
+      "different_pixels": 384,
+      "max_error": 255,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            207,
+            207,
+            207
+          ],
+          "pdfium": [
+            208,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            255,
+            255
+          ],
+          "pdfium": [
+            255,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-true-color-true-nested-true-restore-true-Alpha-1-bc-false-invert-false.pdf",
+      "different_pixels": 384,
+      "max_error": 255,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            159,
+            159,
+            159
+          ],
+          "pdfium": [
+            160,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            255,
+            255
+          ],
+          "pdfium": [
+            255,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-true-color-true-nested-true-restore-true-Luminosity-0.5-bc-false-invert-false.pdf",
+      "different_pixels": 384,
+      "max_error": 255,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            231,
+            231,
+            231
+          ],
+          "pdfium": [
+            232,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            255,
+            255
+          ],
+          "pdfium": [
+            255,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-true-color-true-nested-true-restore-true-Luminosity-0.5-bc-false-invert-true.pdf",
+      "different_pixels": 384,
+      "max_error": 87,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            87,
+            87,
+            87
+          ],
+          "pdfium": [
+            88,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            63,
+            63,
+            63
+          ],
+          "pdfium": [
+            64,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-true-color-true-nested-true-restore-true-Luminosity-0.5-bc-true-invert-false.pdf",
+      "different_pixels": 384,
+      "max_error": 87,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            87,
+            87,
+            87
+          ],
+          "pdfium": [
+            88,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            63,
+            63,
+            63
+          ],
+          "pdfium": [
+            64,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-true-color-true-nested-true-restore-true-Luminosity-0.5-bc-true-invert-true.pdf",
+      "different_pixels": 384,
+      "max_error": 255,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            231,
+            231,
+            231
+          ],
+          "pdfium": [
+            232,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            255,
+            255
+          ],
+          "pdfium": [
+            255,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "ko-true-color-true-nested-true-restore-true-Luminosity-1-bc-false-invert-false.pdf",
+      "different_pixels": 384,
+      "max_error": 255,
+      "interior": [
+        {
+          "x": 4,
+          "prototype": [
+            207,
+            207,
+            207
+          ],
+          "pdfium": [
+            208,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 20,
+          "prototype": [
+            255,
+            255,
+            255
+          ],
+          "pdfium": [
+            255,
+            0,
+            0
+          ]
+        }
+      ]
+    }
+  ]
+}

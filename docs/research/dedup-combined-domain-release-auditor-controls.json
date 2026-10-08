@@ -1,0 +1,17 @@
+{
+  "status": "parser_controls_passed",
+  "rejected_cases": [
+    "truncated_terminal",
+    "wrong_query",
+    "bool_returncode",
+    "bool_peak",
+    "stdout_disagreement",
+    "native_error"
+  ],
+  "input_hashes": {
+    "docs/research/dedup-combined-domain-release-checkpoint-1.json": "502a1c2d1f3a1baf0276c073a2cd3ad3fddd5eaaa03c8890cb6983e93a35e97e",
+    "scripts/verify-dedup-combined-domain-release.py": "a868e5c4a93bed67143b4e9a45e74e9b043f0841e410829eab4b9a2f5a94bac8",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/check-dedup-combined-domain-release-auditor.py": "ae055f3769f4e8ec8557dd43204410a81e6ed2d9d41461ba4ccb11508dad5ea2"
+  },
+  "scope": "Six synthetic report corruptions rejected and actual first-row prefix accepted. No additional native comparisons or corpus recall."
+}

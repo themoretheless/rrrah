@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-07",
+  "feature": "Explicit pixel aspect retained across color preparation, streaming swap payload and standard raster GPU upload",
+  "payload": "RRRAST2 uses reserved bytes 60..64 for explicit positive finite f32 aspect; RRRAST1 writing retained for unspecified aspect and old records remain readable; header length stays 64",
+  "integration": [
+    "RPF explicit file raster API attaches validated producer aspect while retaining existing tuple return",
+    "ordinary RasterRenderer upload validates physical width before texture mutation and applies aspect automatically",
+    "core linear and ICC preparation preserve aspect"
+  ],
+  "tests": {
+    "cache_log": "/tmp/rrrah-aspect-payload.log",
+    "cache_passed": 123,
+    "decode_log": "/tmp/rrrah-rpf-aspect-decode.log",
+    "decode_passed": 963,
+    "decode_ignored": 65,
+    "rpf_metal_log": "/tmp/rrrah-rpf-aspect-payload-metal.log",
+    "rpf_passed": 2,
+    "raster_metal_log": "/tmp/rrrah-aspect-default-renderer.log",
+    "raster_passed": 10,
+    "raster_ignored": 1
+  },
+  "limits": [
+    "RPF common gallery interpretation routing remains incomplete",
+    "Aspect in resident compute transfer still needs explicit caller transport",
+    "No physical HDR or NVIDIA qualification"
+  ],
+  "status": "local, not pushed"
+}

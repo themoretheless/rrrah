@@ -1,0 +1,21 @@
+{
+  "status": "verified_terminal_native_all_features_tests",
+  "returncode": 0,
+  "tests_passed": 491,
+  "result_groups": 81,
+  "ignored": 0,
+  "pinned_files_verified": 346,
+  "dependency_scope_limit": "Concurrent PDF source/test updates after compilation are outside this running gate; terminal tests qualify compiled artifacts and pinned core/decode/dedup sources, not newer PDF changes.",
+  "known_unpinned_dependency_source_drift": [
+    "crates/rrrah-decode/tests/pdf_knockout.rs",
+    "vendor/hayro-interpret/src/device.rs",
+    "vendor/hayro-interpret/src/x_object.rs",
+    "vendor/hayro/src/lib.rs"
+  ],
+  "input_hashes": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-all-features-current-20261008-pins.json": "ddba5afcaff96e4e5aafdb3b2394e6f173ebd3db352a96225e9a63c6b7593420",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-all-features-current-20261008.log": "ad0af974ad38e8908e09b3beacd1391e50cb1138a9e24acffd7c3e6afa91e864",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-all-features-current.py": "ef99b247b1e2c3b75dccb8305e6dbb99e9cccf7c8639c096cf098416ab62a05e"
+  },
+  "scope": "Terminal native macOS all-feature rrrah-dedup suite:491 tests,0 failures/ignored/filtered.346 pinned core/decode/dedup source,manifest,test/example files remain current. Concurrent unpinned PDF dependency/test changes after compilation are excluded; this does not qualify current entire workspace, Linux decode/corpus, Windows, or all-case duplicate recall/precision."
+}

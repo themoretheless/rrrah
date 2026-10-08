@@ -1,0 +1,29 @@
+{
+  "status": "verified_native_linux_mesh_rank_geometry",
+  "returncode": 0,
+  "tests": 20,
+  "suites": {
+    "rank_region": 7,
+    "triangulation": 3,
+    "diagonal_proposals": 2,
+    "piecewise_warp": 4,
+    "mesh_grid": 2,
+    "mesh_rank": 2
+  },
+  "snapshot_files": 2896,
+  "current_snapshot_files_verified": 2891,
+  "unexercised_pdf_source_drift": [
+    "crates/rrrah-decode/tests/pdf_knockout.rs",
+    "vendor/hayro-interpret/src/device.rs",
+    "vendor/hayro-interpret/src/x_object.rs",
+    "vendor/hayro/src/lib.rs"
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-mesh-linux-snapshot.json": "86778e2e6ed18683172016eae859712767795bee635848ca81a4a12cd261da55",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-mesh-linux-native.log": "9828b4831375b7320e2bea99e77fdfffcf2b9d54057da23e132cbb67bc138bc2",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-mesh-raster-dependency-tree.log": "1fb5a13db6bdb3e4b5b95ddf5b10baee6583fffe1b3649c8a036692f79dab446",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/run-dedup-linux-mesh.sh": "be44effa842ffb13b8d165ee180195fddbee73fcf38bb0b2f68d521efc6dd015",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-mesh-linux.py": "c180970d4e3b8bc6c4d958c5b5efcae29fd9b9802ed3292173c4f5887a3c33ce"
+  },
+  "scope": "Native Linux aarch64 raster-only tests: rank, target triangulation, source diagonal proposals, piecewise conformity, atlas and mesh rank. All snapshot files intact and exercised core/dedup current files match. Concurrent PDF/decode source changes are excluded by the raster dependency graph. No Linux decode/real corpus, Windows or full crate suite claim."
+}

@@ -12,6 +12,11 @@ fn source(kind: &str) -> String {
         match kind {
             "degenerate" => writeln!(code, "10 {y} moveto 10 {y} lineto stroke").unwrap(),
             "empty" => writeln!(code, "newpath fill").unwrap(),
+            "clipped" => writeln!(
+                code,
+                "gsave 128 128 256 256 rectclip 10 {y} 480 12 rectfill grestore"
+            )
+            .unwrap(),
             "fills" => writeln!(code, "10 {y} 480 12 rectfill").unwrap(),
             "strokes" => writeln!(code, "10 {y} 480 12 rectstroke").unwrap(),
             "curves" => writeln!(
@@ -32,7 +37,7 @@ fn main() {
     let directory = std::env::temp_dir().join(format!("rrrah-eps-pipeline-{}", std::process::id()));
     std::fs::create_dir(&directory).unwrap();
     let mut cases = Vec::new();
-    for kind in ["fills", "strokes", "curves", "empty", "degenerate"] {
+    for kind in ["fills", "strokes", "curves", "empty", "degenerate", "clipped"] {
         let source = source(kind);
         let path = directory.join(format!("{kind}.eps"));
         std::fs::write(&path, &source).unwrap();
@@ -52,8 +57,22 @@ fn main() {
             let RasterPixels::Rgba8(pixels) = frame.pixels() else {
                 panic!("unexpected native pixels")
             };
-            if kind == "empty" || kind == "degenerate" { assert!(pixels.iter().all(|&p| p == 0)); }
-            else { assert!(pixels.chunks_exact(4).any(|p| p[3] != 0)); }
+            if kind == "empty" || kind == "degenerate" {
+                assert!(pixels.iter().all(|&p| p == 0));
+            } else {
+                assert!(pixels.chunks_exact(4).any(|p| p[3] != 0));
+            }
+            if kind == "clipped" {
+                // Analytical integer-aligned intersections, independent of the clip rasterizer.
+                for (index, pixel) in pixels.chunks_exact(4).enumerate() {
+                    let x = index % 512;
+                    let y = 511 - index / 512;
+                    let inside = (128..384).contains(&x)
+                        && (128..384).contains(&y)
+                        && (0..20).any(|i| (10 + i * 24..22 + i * 24).contains(&y));
+                    assert_eq!(pixel, if inside { &[255, 0, 0, 255] } else { &[0, 0, 0, 0] });
+                }
+            }
             let hash = blake3::hash(pixels).to_hex().to_string();
             if let Some(expected) = &expected_hash {
                 assert_eq!(&hash, expected);

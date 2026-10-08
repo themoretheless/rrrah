@@ -1,0 +1,53 @@
+{
+  "change": "Bounded native PDF Function evaluation accepts one input and up to four original color components for Type2 exponential functions, without RGB conversion or heap scratch. Other function types retain only their previously bounded scalar path.",
+  "scope": "Prerequisite for native AI/PDF shading replay. Not yet connected to the native shading recorder/replayer or production viewer.",
+  "tests": {
+    "function_suite_passed": 57,
+    "failed": 0,
+    "new_tests": 2,
+    "component_cancellation_boundaries": 6
+  },
+  "analytical_references": [
+    "RGB: [0.3125,0.5,0.75] at input 0.5 with linear Type2",
+    "CMYK: independently authored endpoint/clamped midpoint values for four channels with exponent 2, per-channel Range and input Domain clamping"
+  ],
+  "failure_cases": [
+    "C0/C1 width mismatch",
+    "reversed input domain",
+    "reversed later output range after earlier scratch components evaluated",
+    "negative base fractional power",
+    "NaN/Inf input",
+    "empty, wrong or excessive output width",
+    "cancellation at entry, each of four output components and final pre-publication boundary"
+  ],
+  "output_contract": "Public evaluator commits caller output only after complete finite successful evaluation and final cancellation check. All failures/cancellations retain original output values.",
+  "bound": "Four f32 stack components; multi-output path Type2 only. Existing scalar fallback retains 4096 work and 32 nesting limits. Parsing/admission of retained PDF function metadata is separate.",
+  "sources": [
+    {
+      "path": "vendor/hayro-interpret/src/function/mod.rs",
+      "sha256": "1e8b936070fd523345c85ab841e2653251be8ed4eb9213dbbe4a8230f3317c29"
+    },
+    {
+      "path": "vendor/hayro-interpret/src/function/type2.rs",
+      "sha256": "715af8b2d07f1a92cc12bcdd08197f1623b2d85e224faf657670b70eaf764dfb"
+    }
+  ],
+  "log": {
+    "path": "/tmp/rrrah-pdf-native-color-functions-20261008.log",
+    "sha256": "ad9be3617677c446829e8930ba133ad5fd1e44157807ae4d918baa7b6d8acdfb"
+  },
+  "command": [
+    "python3",
+    "scripts/test-pdf-mesh-bounds.py",
+    "--filter",
+    "function::",
+    "--target-dir",
+    "/tmp/rrrah-required-corpus-target"
+  ],
+  "limitations": [
+    "Native shading Type3 stitching, sampled/calculator multi-output and original-component capture remain open.",
+    "Real VectorApple.ai shading event has not been replayed by this change; AI remains unqualified.",
+    "Results retain existing function f32 precision, not full original PDF decimal precision.",
+    "No image/Poppler/Metal/HDR qualification or performance improvement claimed."
+  ]
+}

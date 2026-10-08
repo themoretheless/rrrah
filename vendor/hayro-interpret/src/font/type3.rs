@@ -110,6 +110,7 @@ impl<'a> Type3<'a> {
         paint: &Paint<'a>,
         device: &mut impl Device<'a>,
     ) -> Option<()> {
+        if device.should_stop() { return None; }
         let mut state = glyph.state.clone();
         let root_transform =
             transform * glyph_transform * self.matrix * Affine::scale(UNITS_PER_EM as f64);
@@ -121,6 +122,7 @@ impl<'a> Type3<'a> {
 
         let name = self.glyph_simulator.glyph_to_string(glyph.glyph_id)?;
         let program = self.char_procs.get(&name)?;
+        if device.should_stop() { return None; }
         let decoded = program.decoded().ok()?;
         let iter = TypedIter::new(decoded.as_ref());
 
@@ -128,7 +130,9 @@ impl<'a> Type3<'a> {
             let mut iter = iter.clone();
             let mut is_shape_glyph = true;
 
-            while let Some(op) = iter.next() {
+            loop {
+                if device.should_stop() { return None; }
+                let Some(op) = iter.next() else { break; };
                 match op {
                     TypedInstruction::ShapeGlyph(_) => {
                         break;
@@ -197,6 +201,12 @@ impl<'a, 'b, T: Device<'a>> Type3ShapeGlyphDevice<'a, 'b, T> {
 
 // Only filling, stroking of paths and stencil masks are allowed.
 impl<'a, T: Device<'a>> Device<'a> for Type3ShapeGlyphDevice<'a, '_, T> {
+    fn should_stop(&mut self) -> bool { self.inner.should_stop() }
+
+    fn set_alpha_source(&mut self, alpha_is_shape: bool) {
+        self.inner.set_alpha_source(alpha_is_shape);
+    }
+
     fn set_soft_mask(&mut self, m: Option<SoftMask<'a>>) {
         self.inner.set_soft_mask(m);
     }

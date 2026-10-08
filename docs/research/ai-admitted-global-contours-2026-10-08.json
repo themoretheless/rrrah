@@ -1,0 +1,182 @@
+{
+  "scope": "Opt-in test compositor with admitted global fill/clip preparation; no production renderer change",
+  "poppler_version": "pdftoppm version 26.10.0",
+  "rows": [
+    {
+      "fixture": "VectorApple.ai",
+      "page": 0,
+      "width": 301,
+      "height": 246,
+      "peak_admitted_bytes": 158825960,
+      "final_admitted_bytes": 0,
+      "status": "replayed",
+      "events": 2755,
+      "knockout_groups": 7,
+      "whole_replay_ms": 1557.579084,
+      "tile_edge": 64,
+      "tile_replay_ms": 2178.2277090000002,
+      "tile_different_pixels": 1,
+      "tile_peak_admitted_bytes": 119546828,
+      "tile_retained_comparison_baseline_bytes": 116891156,
+      "source_sha256": "c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06",
+      "exact": false,
+      "different_pixels": 33183,
+      "max_channel_error": 214,
+      "mean_absolute_error": 3.797850885485599,
+      "rgba_sha256": "3bf38605cd084ee5e08aad25b734f97e5c59a9f36ee3bb20dc7691fbc8c5f51a",
+      "oracle_rgb_sha256": "57b154a1760616b953cea6b8f5672ec413882128b1a8f9ecbe800e721b52b591",
+      "tile_exact": false,
+      "tile_max_channel_error": 1,
+      "tile_difference_examples": [
+        {
+          "x": 153,
+          "y": 165,
+          "whole": [
+            193,
+            54,
+            54,
+            255
+          ],
+          "tile": [
+            192,
+            54,
+            54,
+            255
+          ]
+        }
+      ],
+      "tile_rgba_sha256": "835a667ef6c3f9f0243fcd334cae725ff2374bbf03188dfcdea56be4df763098"
+    },
+    {
+      "fixture": "one.ai",
+      "page": 0,
+      "width": 1366,
+      "height": 768,
+      "peak_admitted_bytes": 93836912,
+      "final_admitted_bytes": 0,
+      "status": "replayed",
+      "events": 8,
+      "knockout_groups": 0,
+      "whole_replay_ms": 61.1275,
+      "tile_edge": 64,
+      "tile_replay_ms": 77.38725000000001,
+      "tile_different_pixels": 3,
+      "tile_peak_admitted_bytes": 9225328,
+      "tile_retained_comparison_baseline_bytes": 4664288,
+      "source_sha256": "97786949c268233a446e1738fb9c2f941e4d109811bd2f972948cdb7a45d64b4",
+      "exact": false,
+      "different_pixels": 2494,
+      "max_channel_error": 58,
+      "mean_absolute_error": 0.0326369189238653,
+      "rgba_sha256": "08d4bcdbf955acb0ac0d4f45488712302bd8babfff588fd986b726f568cef293",
+      "oracle_rgb_sha256": "d04c5ca83cfef9a672ed59480378acbe12221c1512e00cc0f80c86c6f7db58d7",
+      "tile_exact": false,
+      "tile_max_channel_error": 1,
+      "tile_difference_examples": [
+        {
+          "x": 1150,
+          "y": 249,
+          "whole": [
+            48,
+            48,
+            48,
+            255
+          ],
+          "tile": [
+            49,
+            49,
+            49,
+            255
+          ]
+        },
+        {
+          "x": 453,
+          "y": 391,
+          "whole": [
+            13,
+            13,
+            13,
+            255
+          ],
+          "tile": [
+            14,
+            14,
+            14,
+            255
+          ]
+        },
+        {
+          "x": 453,
+          "y": 403,
+          "whole": [
+            13,
+            13,
+            13,
+            255
+          ],
+          "tile": [
+            14,
+            14,
+            14,
+            255
+          ]
+        }
+      ],
+      "tile_rgba_sha256": "c9a2ed18076f97b340e8b7df5e03a71d27f437815455530e0cd81a90e62b06d4"
+    },
+    {
+      "fixture": "one.ai",
+      "page": 1,
+      "width": 177,
+      "height": 175,
+      "peak_admitted_bytes": 2602956,
+      "final_admitted_bytes": 0,
+      "status": "replayed",
+      "events": 1,
+      "knockout_groups": 0,
+      "whole_replay_ms": 0.2515,
+      "tile_edge": 64,
+      "tile_replay_ms": 0.283333,
+      "tile_different_pixels": 0,
+      "tile_peak_admitted_bytes": 592920,
+      "tile_retained_comparison_baseline_bytes": 124956,
+      "source_sha256": "97786949c268233a446e1738fb9c2f941e4d109811bd2f972948cdb7a45d64b4",
+      "exact": true,
+      "different_pixels": 0,
+      "max_channel_error": 0,
+      "mean_absolute_error": 0.0,
+      "rgba_sha256": "89db416a84fdc983853717f5fd73690c020e6feced867d1a3d4e02873f9d7e36",
+      "oracle_rgb_sha256": "9e754d40c23ce882917a696aca9cb873a6cd863ca40a6e1ee2d6a41255e414c8",
+      "tile_exact": true,
+      "tile_max_channel_error": 0,
+      "tile_difference_examples": [],
+      "tile_rgba_sha256": "89db416a84fdc983853717f5fd73690c020e6feced867d1a3d4e02873f9d7e36"
+    }
+  ],
+  "all_pages_exact": false,
+  "all_tiled_pages_match": false,
+  "verification": {
+    "regular_tests_passed": 69,
+    "failed": 0,
+    "ignored": 6,
+    "explicit_real_corpus_diagnostic_passed": true,
+    "capture_refusal_sweep": "Every admission on authored curved fill capture refused in turn; replay refuses before allocating incomplete output and all geometry credit released."
+  },
+  "implementation": {
+    "enable": "RRRAH_AI_GLOBAL_CONTOUR=1; disabled by default in test recorder",
+    "geometry": "Fill path prepared in global device coordinates; fill-associated clips prepared globally with identity transform; pixel tolerance0.0001, maximum1Mvertices, depth32. Nested soft-mask recorders inherit mode.",
+    "lifetime": "Geometry and credit metadata are admitted; moved prepared paths do not get an extra geometry clone; guards retained after scene storage for correct drop order.",
+    "limits": "Strokes and raster-associated clip preparation remain unchanged. Geometry currently duplicated for repeated clip paths; backend/parser/font allocations remain outside complete admission coverage."
+  },
+  "comparison": {
+    "before_report": "ai-compositor-precise-tiles-2026-10-08.json",
+    "after": "Tile differences14 to4 (max1 each); one.ai page0 full-plane errormax115 to58 and MAE0.09860088 to0.03263692. VectorApple MAE3.80218603 to3.79785089. Neither strict external nor tile equality passes.",
+    "memory_regression": "VectorApple full peak56.22MB to158.83MB; tiled comparison peak16.94MB to119.55MB, including retained baseline. Need shared repeated clip geometry before product integration.",
+    "units": "Admitted bytes, not RSS; all final admitted bytes0."
+  },
+  "pending": [
+    "Share repeated prepared clip geometry without copying per paint, with collision-safe keys and admission.",
+    "Resolve remaining4whole-versus-tile pixel differences; qualify broader clipping/stroke/scale semantics.",
+    "Pass original strict AI corpus gate and integrate bounded cancellation-aware compositor into production."
+  ]
+}

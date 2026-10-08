@@ -1,0 +1,21 @@
+{
+  "scope": "Production renderer and test-only prototype exactly match each other and independent Poppler on own32x16 stencil PDF, quarter and zero opacity; not general knockout qualification.",
+  "results": [
+    {
+      "fixture": "stencil-quarter-opacity",
+      "sha256": "bcd2a80267bf122549128075df0c39153dea89dc0c19a4db4db40a48934f995f",
+      "max_error": 0,
+      "different_pixels": 0,
+      "mae": 0.0
+    },
+    {
+      "fixture": "stencil-zero-opacity",
+      "sha256": "8f05b245201c31f22668ae63ea732251355050e9cf17a86c7901676989e27a61",
+      "max_error": 0,
+      "different_pixels": 0,
+      "mae": 0.0
+    }
+  ],
+  "oracle_version": "pdftoppm version 26.10.0\nCopyright 2005-2026 The Poppler Developers - http://poppler.freedesktop.org\nCopyright 1996-2011, 2022 Glyph & Cog, LLC",
+  "reproduction": "RRRAH_STENCIL_ORACLE_OUTPUT=/tmp/fresh-stencil-dir python3 scripts/test-pdf-mesh-bounds.py --renderer --filter stencil_opacity_external_oracle_dump --include-ignored --target-dir /tmp/rrrah-required-corpus-target"
+}

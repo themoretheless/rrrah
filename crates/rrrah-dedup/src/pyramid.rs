@@ -27,7 +27,7 @@ pub fn extract_pyramid(
     policy: PyramidPolicy,
     cancel: impl Fn() -> bool,
 ) -> Result<Vec<Feature>, LocalError> {
-    extract_levels(image, policy, &cancel, false)
+    extract_levels(image, policy, &cancel, false, None)
 }
 
 /// Area-downsampled oriented BRIEF pyramid, with positions in source pixels.
@@ -41,7 +41,32 @@ pub fn extract_oriented_pyramid(
     policy: PyramidPolicy,
     cancel: impl Fn() -> bool,
 ) -> Result<Vec<Feature>, LocalError> {
-    extract_levels(image, policy, &cancel, true)
+    extract_levels(image, policy, &cancel, true, None)
+}
+
+/// Oriented pyramid with an independent spatial quota at each level.
+/// Grid cells are normalized to that level; returned positions remain in the
+/// original image. Quotas change detector selection, not matching thresholds.
+/// This primitive uses fallible allocations but has no managed reservation.
+///
+/// # Errors
+/// Invalid grid, exceeded pixel/feature/corner budgets or cancellation.
+pub fn extract_spatial_oriented_pyramid(
+    image: &LinearRgbaView<'_>,
+    policy: PyramidPolicy,
+    columns: usize,
+    rows: usize,
+    max_per_cell: usize,
+    cancel: impl Fn() -> bool,
+) -> Result<Vec<Feature>, LocalError> {
+    if columns == 0 || rows == 0 || max_per_cell == 0 {
+        return Err(LocalError::Invalid);
+    }
+    let cells = columns.checked_mul(rows).ok_or(LocalError::Budget)?;
+    if cells > policy.local.max_features {
+        return Err(LocalError::Budget);
+    }
+    extract_levels(image, policy, &cancel, true, Some((columns, rows, max_per_cell)))
 }
 
 /// Reserve conservative pyramid scratch and retained feature capacity before
@@ -56,6 +81,42 @@ pub fn extract_oriented_pyramid_managed(
     policy: PyramidPolicy,
     budget: &rrrah_core::MemoryBudget,
     cancel: impl Fn() -> bool,
+) -> Result<rrrah_core::SharedBuffer<Feature>, LocalError> {
+    extract_oriented_pyramid_managed_inner(image, policy, budget, cancel, None)
+}
+
+/// Reserve spatial-grid scratch and feature ownership before extracting.
+/// Reservations last until the final returned feature owner drops.
+///
+/// # Errors
+/// Invalid grid/policy, checked admission/allocation excess or cancellation.
+#[cfg(feature = "raster")]
+pub fn extract_spatial_oriented_pyramid_managed(
+    image: &LinearRgbaView<'_>,
+    policy: PyramidPolicy,
+    columns: usize,
+    rows: usize,
+    max_per_cell: usize,
+    budget: &rrrah_core::MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<rrrah_core::SharedBuffer<Feature>, LocalError> {
+    if columns == 0 || rows == 0 || max_per_cell == 0 {
+        return Err(LocalError::Invalid);
+    }
+    let cells = columns.checked_mul(rows).ok_or(LocalError::Budget)?;
+    if cells > policy.local.max_features {
+        return Err(LocalError::Budget);
+    }
+    extract_oriented_pyramid_managed_inner(image, policy, budget, cancel, Some((columns, rows, max_per_cell)))
+}
+
+#[cfg(feature = "raster")]
+fn extract_oriented_pyramid_managed_inner(
+    image: &LinearRgbaView<'_>,
+    policy: PyramidPolicy,
+    budget: &rrrah_core::MemoryBudget,
+    cancel: impl Fn() -> bool,
+    spatial: Option<(usize, usize, usize)>,
 ) -> Result<rrrah_core::SharedBuffer<Feature>, LocalError> {
     if policy.max_levels == 0
         || !policy.local.minimum_corner_score.is_finite()
@@ -92,8 +153,17 @@ pub fn extract_oriented_pyramid_managed(
         .checked_mul(std::mem::size_of::<(f64, usize, usize)>())
         .and_then(|n| u64::try_from(n).ok())
         .ok_or(LocalError::Budget)?;
+    let grid_bytes = spatial
+        .map_or(Some(0), |(columns, rows, _)| {
+            columns
+                .checked_mul(rows)?
+                .checked_mul(std::mem::size_of::<usize>())
+                .and_then(|n| u64::try_from(n).ok())
+        })
+        .ok_or(LocalError::Budget)?;
     let work = scratch
-        .checked_add(corners)
+        .checked_add(grid_bytes)
+        .and_then(|n| n.checked_add(corners))
         .and_then(|n| n.checked_add(local_features.checked_mul(2)?))
         .and_then(|n| n.checked_add(feature_bytes))
         .ok_or(LocalError::Budget)?;
@@ -101,7 +171,7 @@ pub fn extract_oriented_pyramid_managed(
     let retained = budget
         .try_reserve(feature_bytes)
         .map_err(|_| LocalError::Budget)?;
-    let features = extract_oriented_pyramid(image, policy, &cancel)?;
+    let features = extract_levels(image, policy, &cancel, true, spatial)?;
     if cancel() {
         return Err(LocalError::Cancelled);
     }
@@ -113,7 +183,41 @@ fn extract_levels(
     policy: PyramidPolicy,
     cancel: &impl Fn() -> bool,
     oriented: bool,
+    spatial: Option<(usize, usize, usize)>,
 ) -> Result<Vec<Feature>, LocalError> {
+    extract_custom_levels(
+        image,
+        policy,
+        cancel,
+        |view| {
+            if let Some((columns, rows, max_per_cell)) = spatial {
+                crate::local::extract_spatial_oriented(
+                    view,
+                    policy.local,
+                    columns,
+                    rows,
+                    max_per_cell,
+                    cancel,
+                )
+            } else if oriented {
+                crate::local::extract_multiscale_oriented(view, policy.local, cancel)
+            } else {
+                extract(view, policy.local, cancel)
+            }
+        },
+        |feature: &mut Feature, scale| {
+            feature.position = feature.position.map(|v| (v + 0.5) * f64::from(scale) - 0.5);
+        },
+    )
+}
+
+pub(crate) fn extract_custom_levels<T>(
+    image: &LinearRgbaView<'_>,
+    policy: PyramidPolicy,
+    cancel: &impl Fn() -> bool,
+    extractor: impl Fn(&LinearRgbaView<'_>) -> Result<Vec<T>, LocalError>,
+    map_position: impl Fn(&mut T, u32),
+) -> Result<Vec<T>, LocalError> {
     if policy.max_levels == 0 {
         return Err(LocalError::Invalid);
     }
@@ -138,11 +242,7 @@ fn extract_levels(
         } else {
             *image
         };
-        let mut features = if oriented {
-            crate::local::extract_multiscale_oriented(&view, policy.local, cancel)?
-        } else {
-            extract(&view, policy.local, cancel)?
-        };
+        let mut features = extractor(&view)?;
         if features.len() > policy.max_total_features.saturating_sub(result.len()) {
             return Err(LocalError::Budget);
         }
@@ -155,7 +255,7 @@ fn extract_levels(
             if cancel() {
                 return Err(LocalError::Cancelled);
             }
-            feature.position = feature.position.map(|v| (v + 0.5) * f64::from(scale) - 0.5);
+            map_position(feature, scale);
         }
         result.extend(features);
         if level + 1 == policy.max_levels || width < 2 || height < 2 {

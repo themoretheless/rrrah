@@ -187,6 +187,15 @@ fn rpf_non_square_pixels_match_physical_rectangle_on_gpu() {
         expected
     );
     assert_ne!(gpu.render_raster(&native, view, [128, 64]).pixels, expected);
+    let native = native.with_pixel_aspect(Some(aspect)).unwrap();
+    assert_eq!(gpu.render_raster(&native, view, [128, 64]).pixels, expected);
+    let mut payload = Vec::new();
+    rrrah_cache::write_raster_payload(&mut payload, &native).unwrap();
+    let restored = rrrah_cache::read_raster_payload_with_length(
+        &mut payload.as_slice(), payload.len() as u64, &root).unwrap();
+    assert_eq!(restored.pixel_aspect(), Some(aspect));
+    assert_eq!(gpu.render_raster(&restored, view, [128, 64]).pixels, expected);
+    drop(restored);
     drop(golden);
     drop(native);
     drop(image);

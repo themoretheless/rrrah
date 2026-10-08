@@ -1,0 +1,32 @@
+{
+  "status": "verified_parser_rejection_controls",
+  "rejected_corrupt_reports": 4,
+  "valid_base_verified_rows": 0,
+  "results": [
+    {
+      "case": "incomplete-terminal",
+      "returncode": 1,
+      "stderr": "Traceback (most recent call last):\n  File \"/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-asymmetric4-original-full.py\", line 24, in <module>\n    if r['status']=='complete' or not a.checkpoint:assert len(r['results'])==229\n                                                          ^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+    },
+    {
+      "case": "changed-denominator",
+      "returncode": 1,
+      "stderr": "Traceback (most recent call last):\n  File \"/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-asymmetric4-original-full.py\", line 8, in <module>\n    assert r['max_combined_domain_pixels']==12800000 and r['required_pairs']==229 and all(h(k)==v for k,v in r['input_hashes'].items())\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+    },
+    {
+      "case": "boolean-returncode",
+      "returncode": 1,
+      "stderr": "Traceback (most recent call last):\n  File \"/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-asymmetric4-original-full.py\", line 18, in <module>\n    control=r['positive_control'];assert type(control['returncode']) is int and control['returncode']==0 and canonical(json.loads(control['stdout']))==canonical(control['evidence'])\n                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+    },
+    {
+      "case": "raw-positive-mismatch",
+      "returncode": 1,
+      "stderr": "Traceback (most recent call last):\n  File \"/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-asymmetric4-original-full.py\", line 18, in <module>\n    control=r['positive_control'];assert type(control['returncode']) is int and control['returncode']==0 and canonical(json.loads(control['stdout']))==canonical(control['evidence'])\n                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+    }
+  ],
+  "input_hashes": {
+    "docs/research/dedup-asymmetric4-original-full-checkpoint-0-initial.json": "1da038beb1c4f9ce94d5a0d0da983f34c483af4138be5bac762ade47220e4abe",
+    "scripts/verify-dedup-asymmetric4-original-full.py": "7cd1505fb739e645c1ec02d6ad545e70e5e48ec7f5036bcfa71f58e7908439a6"
+  },
+  "scope": "Valid positive prerequisite/source pins and four synthetic corruptions. No native full-corpus recall or exhaustive auditor correctness claim."
+}

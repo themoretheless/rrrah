@@ -1,0 +1,51 @@
+{
+  "status": "passed",
+  "input_hashes": {
+    "docs/research/dedup-folded-witness-common-footprint-regions.json": "435f2e627d862171a18b74d97c3a6f8d755e33eaaff54ff45488a9452f9cf3da",
+    "scripts/verify-dedup-folded-witness-common-footprint-regions.py": "318d6e5f110a12521b9a24ba1c38c1b3bb5fa7d019aed758d10c30560f285bd0",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/test-dedup-folded-witness-auditor.py": "ee672ce32923a2aca430a760e448ec06fa041fd9611f1e08f85976da91008cdf"
+  },
+  "controls": [
+    {
+      "case": "valid",
+      "returncode": 0
+    },
+    {
+      "case": "shifted_domain",
+      "returncode": 1
+    },
+    {
+      "case": "changed_model",
+      "returncode": 1
+    },
+    {
+      "case": "radius",
+      "returncode": 1
+    },
+    {
+      "case": "sample_count",
+      "returncode": 1
+    },
+    {
+      "case": "matched_count",
+      "returncode": 1
+    },
+    {
+      "case": "false_support",
+      "returncode": 1
+    },
+    {
+      "case": "duplicate_case",
+      "returncode": 1
+    },
+    {
+      "case": "wrong_footprint",
+      "returncode": 1
+    },
+    {
+      "case": "input_digest",
+      "returncode": 1
+    }
+  ],
+  "scope": "One valid six-case report and nine deliberately malformed controls. Not pixel resampling or broad fold recovery."
+}

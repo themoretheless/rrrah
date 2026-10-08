@@ -1,0 +1,22 @@
+{
+  "status": "verified_mixed_paired_index_microbenchmark",
+  "terminal_session": 65007,
+  "terminal_exit": 0,
+  "rounds": 6,
+  "entries": 4096,
+  "queries": 1024,
+  "exact_hits_per_backend": 512,
+  "median_seconds": {
+    "0": 1.265415167,
+    "1": 0.60512825
+  },
+  "observed_ratio": 2.091152027689998,
+  "pins": {
+    "docs/research/dedup-gradient-index-borrow-bench-mixed.log": "84b3c443dd0974c7cf159e39e374a07a8741021225ce2216b4c6f37b99dc2b2e",
+    "crates/rrrah-dedup/examples/gradient_index_borrow_bench.rs": "15406ec11affe21d9378116f01d31bc2dcac2dfd45d47f7a929eaf709f1076a0",
+    "crates/rrrah-dedup/src/gradient_index.rs": "93bb8bd3cdc98e7e5d45e7bdb055f9a1d37ea339b4e562cb28eb62024bd217cc",
+    "docs/research/dedup-gradient-index-before-borrowed-distance.rs": "03be302107178d5ed01fbad85416c4ebca2fa8737d56eda27f6ca465ef59a8fb",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/gradient-index-borrow-mixed-bench-qualified": "dc76111dd199e518d15279ab8665b0a12c81af2968f821db6b3505549aedd7a8"
+  },
+  "scope": "Same-process native old/new modules, alternating order, exact all ID/f64 results asserted for512positive/512negative queries, managed index released. Concurrent jobs and dev optimized profile; microbenchmark only, not real collection/process memory or whole-library speedup."
+}

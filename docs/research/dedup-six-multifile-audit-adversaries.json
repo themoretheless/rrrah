@@ -1,0 +1,61 @@
+{
+  "status": "verified_auditor_rejections",
+  "cases": [
+    {
+      "case": "synthetic_baseline",
+      "returncode": 0,
+      "audit_created": true
+    },
+    {
+      "case": "missing_pair",
+      "returncode": 1,
+      "audit_created": false
+    },
+    {
+      "case": "duplicate_pair",
+      "returncode": 1,
+      "audit_created": false
+    },
+    {
+      "case": "integer_candidate",
+      "returncode": 1,
+      "audit_created": false
+    },
+    {
+      "case": "boolean_file_id",
+      "returncode": 1,
+      "audit_created": false
+    },
+    {
+      "case": "boolean_peak",
+      "returncode": 1,
+      "audit_created": false
+    },
+    {
+      "case": "excess_memory",
+      "returncode": 1,
+      "audit_created": false
+    },
+    {
+      "case": "changed_spatial_decision",
+      "returncode": 1,
+      "audit_created": false
+    },
+    {
+      "case": "changed_region_count",
+      "returncode": 1,
+      "audit_created": false
+    },
+    {
+      "case": "missing_region_lane",
+      "returncode": 1,
+      "audit_created": false
+    }
+  ],
+  "input_hashes": {
+    "docs/research/dedup-six-regions-six-file-pair-oracle.json": "cd4e8cbca4aa5120d54aa8a8d460e0c7059d7971370375535403c14bf69fef82",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-six-multifile-parity.py": "83410f014bcc56b7c930dcd513fc9e6c39a07f9c97bfdcc7c4475cc178e9f889",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/check-dedup-six-multifile-audit-adversaries.py": "e31d098097ef36835eb87ab36d3240a507869c7372c7aecfd9e3a1ea44d069d2"
+  },
+  "scope": "Synthetic baseline derived from15 pair records plus9 corruptions; auditor behavior only, no successful native six-source collection claim."
+}

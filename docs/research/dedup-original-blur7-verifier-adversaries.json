@@ -1,0 +1,51 @@
+{
+  "status": "verified_parser_adversaries",
+  "rejected_cases": [
+    {
+      "case": "invalid_inlier",
+      "rejected": true
+    },
+    {
+      "case": "impossible_pixel_counts",
+      "rejected": true
+    },
+    {
+      "case": "unsupported_acceptance",
+      "rejected": true
+    },
+    {
+      "case": "model_outlier",
+      "rejected": true
+    },
+    {
+      "case": "boolean_managed_used",
+      "rejected": true
+    },
+    {
+      "case": "unreleased_payload",
+      "rejected": true
+    },
+    {
+      "case": "over_budget_peak",
+      "rejected": true
+    },
+    {
+      "case": "changed_region_domain",
+      "rejected": true
+    },
+    {
+      "case": "false_source_pin",
+      "rejected": true
+    },
+    {
+      "case": "raw_output_disagreement",
+      "rejected": true
+    }
+  ],
+  "input_hashes": {
+    "docs/research/dedup-original-managed-remaining-crops-prefix1-snapshot.json": "bb3e1e61d0c9b596be7855d5fb15150ecf41db29ba642ba66f02c4d9be7fac81",
+    "scripts/verify-dedup-original-blur7.py": "4756425f5480aab1bbc659d4e68f72eb668462920583e5241a3fa044d94b7878",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/test-dedup-original-blur7-verifier.py": "34dc837daf9abed75e43fc9a3e6bc6577d13b6c6e4198579d1253a137c028287"
+  },
+  "scope": "Audit parser control derives from existing radius3 native file evidence, not a radius7 run. Ten corrupted records rejected without publishing audit output."
+}

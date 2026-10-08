@@ -1,0 +1,49 @@
+    Blocking waiting for file lock on build directory
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/.codex/tmp/rrrah-dedup-feature-release-snapshot-20261008/crates/rrrah-dedup)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 1m 57s
+     Running tests/anchor_rank_driven_collection.rs (target/debug/deps/anchor_rank_driven_collection-c100307c396604ca)
+
+running 1 test
+test rank_driven_indexed_collection_matches_all_direct_pairs ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 28.25s
+
+     Running tests/anchor_reflection_collection.rs (target/debug/deps/anchor_reflection_collection-881ce1b2204d2bf4)
+
+running 3 tests
+test six_phase_collection_caps_refuse_before_iteration_and_cancel_wins ... ok
+test indexed_mirror_equals_direct_original_pixel_confirmation ... ok
+test foreign_pairs_are_rejected_by_indexed_and_all_direct_reflected_searches has been running for over 60 seconds
+test foreign_pairs_are_rejected_by_indexed_and_all_direct_reflected_searches ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 120.88s
+
+     Running tests/anchor_reflection_collection_cancel.rs (target/debug/deps/anchor_reflection_collection_cancel-310cb8387d2dc0fd)
+
+running 1 test
+test reflected_collection_early_and_extraction_cancellation_releases_all_memory ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/anchor_reflection_collection_lifecycle.rs (target/debug/deps/anchor_reflection_collection_lifecycle-53871b94503778d1)
+
+running 1 test
+test reflected_collection_mid_late_cancel_mutation_and_restored_reverse_edges has been running for over 60 seconds
+test reflected_collection_mid_late_cancel_mutation_and_restored_reverse_edges ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1103.54s
+

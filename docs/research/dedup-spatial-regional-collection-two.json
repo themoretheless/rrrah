@@ -1,0 +1,1016 @@
+{
+  "status": "complete",
+  "input_hashes": {
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/photo-probe-spatial-gradient-regional-collection": "b1d8b738526de253617b831116c027b1b5da3dbabdd4039ead7a6260e3a74883",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/prepared.json": "6ba843f8f09419efb8ccec9b5d84cc8f086d1dc74ec222f5aa2acae29f9fff01",
+    "docs/research/dedup-spatial-gradient-collection-two.json": "291cb94b45c71dfae3b66bab4043e9ef2df1273ddf2858fc4b6c7f6820ad6942",
+    "docs/research/dedup-spatial-models-regions-two.json": "9ffd5e352366e164e7f6bd84918c9ff9d39399c11e23248959f2168ec50c0b69"
+  },
+  "image_hashes": {
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/original/201300.png": "ef6318721c14bd43dc815382b7de5a451ce2f68ae4668d243d796db135ce1bfd",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/strong/201301.png": "e029a30aef86e7ca70577d227f710ff659f5a96fdf4782b18fe8f3718d94adad",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/original/204600.png": "e54221e8ff92dc12f76f524dca49c5c0f7542b036b58bea8f6965d680eb49c88",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/strong/204601.png": "a3558385c7e014747106d40ff5baba5ade52a1f88bf48bcdd02118c3831658a8"
+  },
+  "required_queries": [
+    "201301.jpg",
+    "204601.jpg"
+  ],
+  "results": [
+    {
+      "query_id": "201301.jpg",
+      "files": [
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/original/201300.png",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/strong/201301.png"
+      ],
+      "evidence": {
+        "status": "ok",
+        "correspondences": 26,
+        "inliers": 11,
+        "geometry": [
+          [
+            3.7476933888286807,
+            0.12736825919731687,
+            -219.80133195191138
+          ],
+          [
+            0.05496636781084152,
+            3.6564219150726385,
+            -79.9637211938139
+          ],
+          [
+            0.0007966122447698032,
+            0.0008682323203178086,
+            0.8802844907400023
+          ]
+        ],
+        "pixels": {
+          "status": "ok",
+          "counts": [
+            [
+              5198,
+              5379,
+              76800
+            ],
+            [
+              68585,
+              76930,
+              80320
+            ]
+          ]
+        },
+        "candidate": false,
+        "managed_used_after_drop": 0,
+        "managed_peak": 19435392,
+        "retrieved": true,
+        "indexed_features": 1842,
+        "descriptor_hits": 228662,
+        "spatial_grid": [
+          4,
+          4,
+          32
+        ],
+        "regional_geometry": [
+          [
+            3.7476933888286807,
+            0.12736825919731687,
+            -219.80133195191138
+          ],
+          [
+            0.05496636781084152,
+            3.6564219150726385,
+            -79.9637211938139
+          ],
+          [
+            0.0007966122447698032,
+            0.0008682323203178086,
+            0.8802844907400023
+          ]
+        ],
+        "regions": [
+          {
+            "domains": [
+              [
+                0,
+                0,
+                80,
+                60
+              ],
+              [
+                0,
+                0,
+                86,
+                147
+              ]
+            ],
+            "accepted_region": false,
+            "counts": null,
+            "fit_failure": "Some(InsufficientSamples { observed: 692, required: 1000 })"
+          },
+          {
+            "domains": [
+              [
+                80,
+                0,
+                80,
+                60
+              ],
+              [
+                84,
+                0,
+                236,
+                142
+              ]
+            ],
+            "accepted_region": true,
+            "counts": [
+              [
+                2263,
+                2263,
+                4800
+              ],
+              [
+                29417,
+                31346,
+                33512
+              ]
+            ],
+            "fit_failure": "None"
+          },
+          {
+            "domains": [
+              [
+                0,
+                60,
+                80,
+                60
+              ],
+              [
+                0,
+                144,
+                89,
+                107
+              ]
+            ],
+            "accepted_region": false,
+            "counts": null,
+            "fit_failure": "Some(InsufficientSamples { observed: 557, required: 1000 })"
+          },
+          {
+            "domains": [
+              [
+                80,
+                60,
+                80,
+                60
+              ],
+              [
+                87,
+                139,
+                233,
+                112
+              ]
+            ],
+            "accepted_region": false,
+            "counts": [
+              [
+                1741,
+                1867,
+                4800
+              ],
+              [
+                20168,
+                23903,
+                26096
+              ]
+            ],
+            "fit_failure": "None"
+          },
+          {
+            "domains": [
+              [
+                57,
+                20,
+                23,
+                18
+              ],
+              [
+                0,
+                0,
+                80,
+                62
+              ]
+            ],
+            "accepted_region": false,
+            "counts": null,
+            "fit_failure": "Some(InsufficientSamples { observed: 230, required: 1000 })"
+          },
+          {
+            "domains": [
+              [
+                78,
+                20,
+                23,
+                18
+              ],
+              [
+                80,
+                0,
+                80,
+                62
+              ]
+            ],
+            "accepted_region": false,
+            "counts": null,
+            "fit_failure": "Some(InsufficientSamples { observed: 273, required: 1000 })"
+          },
+          {
+            "domains": [
+              [
+                99,
+                20,
+                24,
+                18
+              ],
+              [
+                160,
+                0,
+                80,
+                62
+              ]
+            ],
+            "accepted_region": false,
+            "counts": null,
+            "fit_failure": "Some(InsufficientSamples { observed: 286, required: 1000 })"
+          },
+          {
+            "domains": [
+              [
+                121,
+                19,
+                25,
+                19
+              ],
+              [
+                240,
+                0,
+                80,
+                62
+              ]
+            ],
+            "accepted_region": false,
+            "counts": null,
+            "fit_failure": "Some(InsufficientSamples { observed: 272, required: 1000 })"
+          },
+          {
+            "domains": [
+              [
+                56,
+                37,
+                23,
+                19
+              ],
+              [
+                0,
+                62,
+                80,
+                63
+              ]
+            ],
+            "accepted_region": false,
+            "counts": null,
+            "fit_failure": "Some(InsufficientSamples { observed: 292, required: 1000 })"
+          },
+          {
+            "domains": [
+              [
+                77,
+                37,
+                24,
+                19
+              ],
+              [
+                80,
+                62,
+                80,
+                63
+              ]
+            ],
+            "accepted_region": false,
+            "counts": null,
+            "fit_failure": "Some(InsufficientSamples { observed: 362, required: 1000 })"
+          },
+          {
+            "domains": [
+              [
+                99,
+                37,
+                25,
+                19
+              ],
+              [
+                160,
+                62,
+                80,
+                63
+              ]
+            ],
+            "accepted_region": false,
+            "counts": null,
+            "fit_failure": "Some(InsufficientSamples { observed: 381, required: 1000 })"
+          },
+          {
+            "domains": [
+              [
+                122,
+                37,
+                25,
+                20
+              ],
+              [
+                240,
+                62,
+                80,
+                63
+              ]
+            ],
+            "accepted_region": false,
+            "counts": null,
+            "fit_failure": "Some(InsufficientSamples { observed: 339, required: 1000 })"
+          },
+          {
+            "domains": [
+              [
+                56,
+                54,
+                23,
+                20
+              ],
+              [
+                0,
+                125,
+                80,
+                63
+              ]
+            ],
+            "accepted_region": false,
+            "counts": null,
+            "fit_failure": "Some(InsufficientSamples { observed: 309, required: 1000 })"
+          },
+          {
+            "domains": [
+              [
+                77,
+                54,
+                24,
+                20
+              ],
+              [
+                80,
+                125,
+                80,
+                63
+              ]
+            ],
+            "accepted_region": false,
+            "counts": null,
+            "fit_failure": "Some(InsufficientSamples { observed: 396, required: 1000 })"
+          },
+          {
+            "domains": [
+              [
+                99,
+                54,
+                25,
+                21
+              ],
+              [
+                160,
+                125,
+                80,
+                63
+              ]
+            ],
+            "accepted_region": false,
+            "counts": null,
+            "fit_failure": "Some(InsufficientSamples { observed: 418, required: 1000 })"
+          },
+          {
+            "domains": [
+              [
+                122,
+                55,
+                26,
+                20
+              ],
+              [
+                240,
+                125,
+                80,
+                63
+              ]
+            ],
+            "accepted_region": false,
+            "counts": null,
+            "fit_failure": "Some(InsufficientSamples { observed: 367, required: 1000 })"
+          },
+          {
+            "domains": [
+              [
+                55,
+                71,
+                24,
+                21
+              ],
+              [
+                0,
+                188,
+                80,
+                63
+              ]
+            ],
+            "accepted_region": false,
+            "counts": null,
+            "fit_failure": "Some(InsufficientSamples { observed: 271, required: 1000 })"
+          },
+          {
+            "domains": [
+              [
+                77,
+                72,
+                24,
+                21
+              ],
+              [
+                80,
+                188,
+                80,
+                63
+              ]
+            ],
+            "accepted_region": false,
+            "counts": null,
+            "fit_failure": "Some(InsufficientSamples { observed: 337, required: 1000 })"
+          },
+          {
+            "domains": [
+              [
+                99,
+                72,
+                26,
+                22
+              ],
+              [
+                160,
+                188,
+                80,
+                63
+              ]
+            ],
+            "accepted_region": false,
+            "counts": null,
+            "fit_failure": "Some(InsufficientSamples { observed: 352, required: 1000 })"
+          },
+          {
+            "domains": [
+              [
+                122,
+                73,
+                27,
+                22
+              ],
+              [
+                240,
+                188,
+                80,
+                63
+              ]
+            ],
+            "accepted_region": false,
+            "counts": null,
+            "fit_failure": "Some(InsufficientSamples { observed: 323, required: 1000 })"
+          }
+        ],
+        "region_support_count": 1,
+        "scope": "Public managed gradient file API with source/dependency/cancellation guards; fixed three-level geometry and radius3 confirmation."
+      }
+    },
+    {
+      "query_id": "204601.jpg",
+      "files": [
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/original/204600.png",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/strong/204601.png"
+      ],
+      "evidence": {
+        "status": "ok",
+        "correspondences": 18,
+        "inliers": 13,
+        "geometry": [
+          [
+            2.4102101452421842,
+            0.06246732813206879,
+            -159.7371257504683
+          ],
+          [
+            0.0957076702201742,
+            2.3967281101833238,
+            -250.16198834758794
+          ],
+          [
+            0.0009549483755813451,
+            0.0003794543012638222,
+            0.8609476075683051
+          ]
+        ],
+        "pixels": {
+          "status": "ok",
+          "counts": [
+            [
+              5103,
+              7181,
+              76800
+            ],
+            [
+              27967,
+              42149,
+              45120
+            ]
+          ]
+        },
+        "candidate": false,
+        "managed_used_after_drop": 0,
+        "managed_peak": 16623488,
+        "retrieved": true,
+        "indexed_features": 1385,
+        "descriptor_hits": 53093,
+        "spatial_grid": [
+          4,
+          4,
+          32
+        ],
+        "regional_geometry": [
+          [
+            2.4102101452421842,
+            0.06246732813206879,
+            -159.7371257504683
+          ],
+          [
+            0.0957076702201742,
+            2.3967281101833238,
+            -250.16198834758794
+          ],
+          [
+            0.0009549483755813451,
+            0.0003794543012638222,
+            0.8609476075683051
+          ]
+        ],
+        "regions": [
+          {
+            "domains": [
+              [
+                0,
+                60,
+                80,
+                60
+              ],
+              [
+                0,
+                0,
+                40,
+                45
+              ]
+            ],
+            "accepted_region": false,
+            "counts": null,
+            "fit_failure": "Some(InsufficientSamples { observed: 195, required: 1000 })"
+          },
+          {
+            "domains": [
+              [
+                80,
+                60,
+                80,
+                60
+              ],
+              [
+                38,
+                0,
+                103,
+                49
+              ]
+            ],
+            "accepted_region": false,
+            "counts": null,
+            "fit_failure": "Some(InsufficientSamples { observed: 639, required: 1000 })"
+          },
+          {
+            "domains": [
+              [
+                0,
+                120,
+                80,
+                60
+              ],
+              [
+                0,
+                41,
+                43,
+                153
+              ]
+            ],
+            "accepted_region": false,
+            "counts": null,
+            "fit_failure": "Some(InsufficientSamples { observed: 842, required: 1000 })"
+          },
+          {
+            "domains": [
+              [
+                80,
+                120,
+                80,
+                60
+              ],
+              [
+                41,
+                45,
+                100,
+                142
+              ]
+            ],
+            "accepted_region": true,
+            "counts": [
+              [
+                2313,
+                2400,
+                4800
+              ],
+              [
+                12009,
+                13001,
+                14200
+              ]
+            ],
+            "fit_failure": "None"
+          },
+          {
+            "domains": [
+              [
+                0,
+                180,
+                80,
+                60
+              ],
+              [
+                0,
+                187,
+                46,
+                133
+              ]
+            ],
+            "accepted_region": false,
+            "counts": null,
+            "fit_failure": "Some(InsufficientSamples { observed: 844, required: 1000 })"
+          },
+          {
+            "domains": [
+              [
+                80,
+                180,
+                80,
+                60
+              ],
+              [
+                44,
+                181,
+                97,
+                139
+              ]
+            ],
+            "accepted_region": false,
+            "counts": [
+              [
+                1086,
+                2261,
+                4800
+              ],
+              [
+                5195,
+                11767,
+                13483
+              ]
+            ],
+            "fit_failure": "None"
+          },
+          {
+            "domains": [
+              [
+                62,
+                101,
+                17,
+                34
+              ],
+              [
+                0,
+                0,
+                35,
+                80
+              ]
+            ],
+            "accepted_region": false,
+            "counts": null,
+            "fit_failure": "Some(InsufficientSamples { observed: 309, required: 1000 })"
+          },
+          {
+            "domains": [
+              [
+                77,
+                100,
+                16,
+                35
+              ],
+              [
+                35,
+                0,
+                35,
+                80
+              ]
+            ],
+            "accepted_region": false,
+            "counts": null,
+            "fit_failure": "Some(InsufficientSamples { observed: 410, required: 1000 })"
+          },
+          {
+            "domains": [
+              [
+                91,
+                100,
+                17,
+                35
+              ],
+              [
+                70,
+                0,
+                35,
+                80
+              ]
+            ],
+            "accepted_region": false,
+            "counts": null,
+            "fit_failure": "Some(InsufficientSamples { observed: 431, required: 1000 })"
+          },
+          {
+            "domains": [
+              [
+                106,
+                99,
+                18,
+                36
+              ],
+              [
+                105,
+                0,
+                36,
+                80
+              ]
+            ],
+            "accepted_region": false,
+            "counts": null,
+            "fit_failure": "Some(InsufficientSamples { observed: 369, required: 1000 })"
+          },
+          {
+            "domains": [
+              [
+                61,
+                134,
+                17,
+                35
+              ],
+              [
+                0,
+                80,
+                35,
+                80
+              ]
+            ],
+            "accepted_region": false,
+            "counts": null,
+            "fit_failure": "Some(InsufficientSamples { observed: 363, required: 1000 })"
+          },
+          {
+            "domains": [
+              [
+                76,
+                134,
+                17,
+                35
+              ],
+              [
+                35,
+                80,
+                35,
+                80
+              ]
+            ],
+            "accepted_region": false,
+            "counts": null,
+            "fit_failure": "Some(InsufficientSamples { observed: 483, required: 1000 })"
+          },
+          {
+            "domains": [
+              [
+                91,
+                133,
+                17,
+                37
+              ],
+              [
+                70,
+                80,
+                35,
+                80
+              ]
+            ],
+            "accepted_region": false,
+            "counts": null,
+            "fit_failure": "Some(InsufficientSamples { observed: 510, required: 1000 })"
+          },
+          {
+            "domains": [
+              [
+                106,
+                133,
+                18,
+                37
+              ],
+              [
+                105,
+                80,
+                36,
+                80
+              ]
+            ],
+            "accepted_region": false,
+            "counts": null,
+            "fit_failure": "Some(InsufficientSamples { observed: 455, required: 1000 })"
+          },
+          {
+            "domains": [
+              [
+                61,
+                167,
+                16,
+                37
+              ],
+              [
+                0,
+                160,
+                35,
+                80
+              ]
+            ],
+            "accepted_region": false,
+            "counts": null,
+            "fit_failure": "Some(InsufficientSamples { observed: 375, required: 1000 })"
+          },
+          {
+            "domains": [
+              [
+                75,
+                167,
+                17,
+                37
+              ],
+              [
+                35,
+                160,
+                35,
+                80
+              ]
+            ],
+            "accepted_region": false,
+            "counts": null,
+            "fit_failure": "Some(InsufficientSamples { observed: 494, required: 1000 })"
+          },
+          {
+            "domains": [
+              [
+                90,
+                168,
+                18,
+                37
+              ],
+              [
+                70,
+                160,
+                35,
+                80
+              ]
+            ],
+            "accepted_region": false,
+            "counts": null,
+            "fit_failure": "Some(InsufficientSamples { observed: 522, required: 1000 })"
+          },
+          {
+            "domains": [
+              [
+                106,
+                168,
+                18,
+                38
+              ],
+              [
+                105,
+                160,
+                36,
+                80
+              ]
+            ],
+            "accepted_region": false,
+            "counts": null,
+            "fit_failure": "Some(InsufficientSamples { observed: 465, required: 1000 })"
+          },
+          {
+            "domains": [
+              [
+                60,
+                201,
+                17,
+                38
+              ],
+              [
+                0,
+                240,
+                35,
+                80
+              ]
+            ],
+            "accepted_region": false,
+            "counts": null,
+            "fit_failure": "Some(InsufficientSamples { observed: 355, required: 1000 })"
+          },
+          {
+            "domains": [
+              [
+                74,
+                202,
+                18,
+                38
+              ],
+              [
+                35,
+                240,
+                35,
+                80
+              ]
+            ],
+            "accepted_region": false,
+            "counts": null,
+            "fit_failure": "Some(InsufficientSamples { observed: 470, required: 1000 })"
+          },
+          {
+            "domains": [
+              [
+                90,
+                203,
+                17,
+                37
+              ],
+              [
+                70,
+                240,
+                35,
+                80
+              ]
+            ],
+            "accepted_region": false,
+            "counts": null,
+            "fit_failure": "Some(InsufficientSamples { observed: 487, required: 1000 })"
+          },
+          {
+            "domains": [
+              [
+                105,
+                204,
+                19,
+                36
+              ],
+              [
+                105,
+                240,
+                36,
+                80
+              ]
+            ],
+            "accepted_region": false,
+            "counts": null,
+            "fit_failure": "Some(InsufficientSamples { observed: 418, required: 1000 })"
+          }
+        ],
+        "region_support_count": 1,
+        "scope": "Public managed gradient file API with source/dependency/cancellation guards; fixed three-level geometry and radius3 confirmation."
+      }
+    }
+  ],
+  "scope": "Two native spatial regional collection confirmations; whole copies remain separate from local supports. No broad recall/precision or full-library qualification."
+}

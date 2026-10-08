@@ -1,0 +1,63 @@
+{
+  "status": "verified_paired_measurements",
+  "source_snapshot": "/Users/themoretheless/.codex/tmp/rrrah-dedup-scale-profile-snapshot-20261007",
+  "manifest_sha256": "3b5c90f470c1dac0352d7ad0aaf51b1dad7b8285bd17859bb5d3fbf4bf06a169",
+  "files": 2798,
+  "scope": "Same immutable source for debug/release; compilation not timing/behavior proof. Need output parity and alternating measured runs before performance claims.",
+  "session_id": 71585,
+  "paired_measurement_harness": {
+    "path": "scripts/measure-dedup-scale-build-profiles.py",
+    "sha256": "a5adf72109bb2aa6d4908d651a3bc0ce9b3b7f9217749e83db8cee2e76428d65",
+    "cases": "docs/research/dedup-scale-profile-cases.json",
+    "profiles": [
+      "debug",
+      "release"
+    ],
+    "modes": [
+      "direct",
+      "collection"
+    ],
+    "measured_repetitions": 5,
+    "warmup_repetitions": 1,
+    "status": "verified_exact_output_parity",
+    "scope": "Exact typed JSON output parity on every run; same-source and image pins rechecked; CPU and wall measurements with concurrent-load limitation."
+  },
+  "build_returncode": 0,
+  "measurement_returncode": 0,
+  "measurement_report": "docs/research/dedup-scale-profile-measurements.json",
+  "measurement_sha256": "abbf298a08cc63138a161dbee0708baeac738a305685ce4c783db04b14a70f52",
+  "verified_samples": 72,
+  "terminal_source_files_reverified": 2798,
+  "cpu_speed_ratios": [
+    {
+      "case": "200001.jpg",
+      "mode": "direct",
+      "debug_over_release": 2.2607625319260256
+    },
+    {
+      "case": "200001.jpg",
+      "mode": "collection",
+      "debug_over_release": 1.9768897894231836
+    },
+    {
+      "case": "200101.jpg",
+      "mode": "direct",
+      "debug_over_release": 1.4942495213217837
+    },
+    {
+      "case": "200101.jpg",
+      "mode": "collection",
+      "debug_over_release": 1.7467950078532926
+    },
+    {
+      "case": "200501.jpg",
+      "mode": "direct",
+      "debug_over_release": 2.0975234164152927
+    },
+    {
+      "case": "200501.jpg",
+      "mode": "collection",
+      "debug_over_release": 1.8626806336697808
+    }
+  ]
+}

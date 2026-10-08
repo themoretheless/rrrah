@@ -1,0 +1,96 @@
+{
+  "scope": "Native PDF image-stage typed refusals and cancellation propagation",
+  "controls": {
+    "passed": 117,
+    "failed": 0,
+    "ignored": 10,
+    "seconds": 2.85,
+    "log": "/tmp/rrrah-native-image-refusal-cancel-verified.log"
+  },
+  "checks": [
+    "Checked API preserves Mask TransferFunction Admission Decode Scaled ComponentData and Cancelled reasons",
+    "Native image cancellation latches capture failure; compatibility capture cannot continue afterward",
+    "Every cancellation checkpoint of actual 16-bit RGB image capture releases all tracked credit",
+    "Authored color-key masked image keeps compatibility alpha zero and explicit native Mask refusal"
+  ],
+  "real_ai_pages": [
+    {
+      "fixture": "VectorApple.ai",
+      "page": 0,
+      "width": 301,
+      "height": 246,
+      "peak_admitted_bytes": 48095496,
+      "final_admitted_bytes": 0,
+      "status": "native_diagnostic",
+      "native_completed": false,
+      "capture_failed": false,
+      "capture_ms": 2268.651208,
+      "native_replay_ms": 31.091417,
+      "deadline_expired": false,
+      "events": 2755,
+      "native_paints": 463,
+      "raster_events": 3,
+      "raster_source_models": [
+        "event=3,model=None",
+        "event=1218,model=Some(Cmyk)",
+        "event=2298,model=Some(Cmyk)"
+      ],
+      "native_raster_components": [
+        "event=3,sample_count=None,refusal=Some(Mask)",
+        "event=1218,sample_count=None,refusal=Some(Mask)",
+        "event=2298,sample_count=None,refusal=Some(Mask)"
+      ],
+      "shading_events": 13,
+      "page_model": "Cmyk"
+    },
+    {
+      "fixture": "one.ai",
+      "page": 0,
+      "width": 1366,
+      "height": 768,
+      "peak_admitted_bytes": 168322584,
+      "final_admitted_bytes": 0,
+      "status": "native_diagnostic",
+      "native_completed": true,
+      "capture_failed": false,
+      "capture_ms": 1.670583,
+      "native_replay_ms": 4208.907,
+      "deadline_expired": false,
+      "events": 8,
+      "native_paints": 2,
+      "raster_events": 0,
+      "raster_source_models": [],
+      "native_raster_components": [],
+      "shading_events": 0,
+      "page_model": "Rgb"
+    },
+    {
+      "fixture": "one.ai",
+      "page": 1,
+      "width": 177,
+      "height": 175,
+      "peak_admitted_bytes": 4957320,
+      "final_admitted_bytes": 0,
+      "status": "native_diagnostic",
+      "native_completed": true,
+      "capture_failed": false,
+      "capture_ms": 0.050583,
+      "native_replay_ms": 101.507875,
+      "deadline_expired": false,
+      "events": 1,
+      "native_paints": 0,
+      "raster_events": 0,
+      "raster_source_models": [],
+      "native_raster_components": [],
+      "shading_events": 0,
+      "page_model": "Rgb"
+    }
+  ],
+  "confirmed_blocker": "All three VectorApple raster component attempts refused for Mask",
+  "limitations": [
+    "Mask reason aggregates soft masks color-key masks and embedded alpha; actual producer mask subtype not yet classified",
+    "Native masked component decoding and compositing still incomplete",
+    "Filters/stream decompression allocation remains outside native component admission",
+    "Test-only recorder, no production AI or Metal integration qualification"
+  ]
+}

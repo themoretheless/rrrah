@@ -1,0 +1,30 @@
+{
+  "scope": "Bounded streaming of generated PDF mesh patch triangles through real viewer RAM/swap/Metal",
+  "problem": "Real VectorApple.ai failed a 64 MiB viewer qualification budget: generating every visible patch into one array requested 122890176 bytes while 2924186 bytes were already reserved.",
+  "implementation": "Generate patch triangle arrays lazily in original patch and triangle order. Admit space for at most two 722-triangle arrays during iterator handoff, with color spill and row scratch bounds. Accumulate the same sample map across all patches and normalize once. Shared table and texture admission are retained.",
+  "verified": {
+    "unchanged_full_pixels_or_refusals": 61,
+    "decoder_library_passed": 973,
+    "decoder_library_ignored": 66,
+    "vendor_focused_passed": 3,
+    "pdf_viewer_tests_including_ignored_passed": 6,
+    "adapter": "Metal Apple M4 Max",
+    "viewer_budget_bytes": 67108864,
+    "native_decode_managed_peaks": {
+      "VectorApple.ai:0": 5173610,
+      "one.ai:0": 8842074,
+      "one.ai:1": 655898
+    },
+    "final_managed_bytes": 0
+  },
+  "viewer_scope": "Selected PDF pages and AI sources; exact RAM lease, swap values and Metal frame preservation, authored tensor edge variants, profiled images and independently referenced soft masks.",
+  "oracle_correction": "Integer-edge alpha rectangle qualification uses its existing independent analytic unit-pixel area oracle. The Poppler reference has alpha 32 outside rectangle x=8 while the analytic oracle and pre-change decoder have alpha 0. Retain Poppler artifacts; qualify rectangle geometry in the separate exact-area test and color-mask band cases against their existing references.",
+  "current_cpu_timings": "docs/research/ai-streamed-patches-cpu-timing-2026-10-07.json",
+  "logs": ["/tmp/rrrah-pdf-streamed-patches.log", "/tmp/rrrah-pdf-streamed-patches-unit.log", "/tmp/rrrah-pdf-streamed-patches-metal-final.log"],
+  "prior_broad_app_run": {"suites": 43, "passed": 210, "ignored": 82, "failed": 0, "log": "/tmp/rrrah-app-post-pdf-memory.log", "scope": "Before streaming; latest post-streaming viewer verification is the six PDF tests."},
+  "limitations": [
+    "AI fidelity remains incomplete; unchanged native pixels do not establish correctness against all source variants.",
+    "Warm CPU timing is current-state evidence under uncontrolled machine load, not GPU presentation latency or a causal speed comparison.",
+    "Parser, patch visibility inventory, function/color-space temporaries and other renderer allocations still prevent a complete RSS-cap claim."
+  ]
+}

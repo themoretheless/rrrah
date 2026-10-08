@@ -1,0 +1,29 @@
+{
+  "scope": "Test-only native paint to same-coordinate blending pixel bridge; cross-space transforms and production integration pending",
+  "source_sha256": {
+    "vendor/hayro-interpret/src/color.rs": "1264de6835b4706d7b63d1da826408f306647f74f5e82723b4102202b85f6546",
+    "vendor/hayro/src/native_paint.rs": "3779fb84330f5ead3b1845936dfa7d7452dcdb2b61f81198ba7723928fd534e9"
+  },
+  "suite": {
+    "passed": 101,
+    "failed": 0,
+    "ignored": 8,
+    "seconds": 2.62,
+    "log": "/tmp/rrrah-native-coordinate-bridge-controls.log"
+  },
+  "coordinate_identity_test": {
+    "passed": 1,
+    "log": "/tmp/rrrah-native-coordinate-identity-controls.log"
+  },
+  "controls": [
+    "Device model mismatch rejected",
+    "Calibrated spaces require identical calibration",
+    "ICC coordinates accepted only for a shared profile object",
+    "Separately parsed ICC profiles conservatively require conversion",
+    "Native f32 components and opacity carried into f64 pixel without RGBA8 quantization",
+    "Nonfinite and out-of-range shape rejected"
+  ],
+  "cross_space_transform_enabled": false,
+  "native_scene_integration_enabled": false,
+  "production_enabled": false
+}

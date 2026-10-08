@@ -1,0 +1,36 @@
+{
+  "status": "verified_native_linux",
+  "session_id": 96285,
+  "source_snapshot": "/Users/themoretheless/.codex/tmp/rrrah-dedup-managed-distinct-regions-collection-linux-snapshot-20261007",
+  "source_files": 2810,
+  "manifest_sha256": "cc7fd846b0313fa00b6fdb270ea82892fb06763c2a6a63bbdcc94896f9b90413",
+  "tests": [
+    "managed_evidence",
+    "gradient_scale_files",
+    "gradient_distinct_locations"
+  ],
+  "expected_tests": 20,
+  "log": "docs/research/dedup-managed-regions-collection-linux-native-retry3.log",
+  "scope": "Fixed current snapshot: 20 native Linux tests pass for managed evidence, distinct-location matching and whole/regional file/collection APIs, including cancellation, changed-source edge removal and retry. Does not qualify full real corpus, Windows or complete decoder/geometry/RSS allocation bounds.",
+  "initial_exit_code": 101,
+  "initial_log": "docs/research/dedup-managed-regions-collection-linux-native.log",
+  "initial_failure": "linker could not find libgcc_s.so.1 in prepared sysroot",
+  "environment_repair": {
+    "source": "ubuntu:24.04 /lib/aarch64-linux-gnu/libgcc_s.so.1",
+    "destination": "prepared validation sysroot usr/lib/aarch64-linux-gnu/libgcc_s.so.1",
+    "sha256": "f2d3ad2bf0b61f6bc944cc37d7b6ab7f88d2582b41ff989ca164803f56cc5f20",
+    "merged_lib_path": "lib -> usr/lib",
+    "additional_libraries": {
+      "libstdc++.so.6": "6e3112d35cfc86db7ee85b27e1746f67408e2837ff8628b46386c3eabd5682a4",
+      "libz.so.1": "e3bc90ee8cce46778c2f46c2a3e580d3b930f7b455910f25ea400a0b797fb9dc"
+    }
+  },
+  "first_retry_exit_code": 101,
+  "first_retry_failure": "prepared sysroot missing merged /lib -> usr/lib path",
+  "second_retry_exit_code": 101,
+  "second_retry_failure": "libheif shared dependencies libstdc++.so.6 and libz.so.1 absent from sysroot",
+  "returncode": 0,
+  "passed": 20,
+  "log_sha256": "a17853dd08ced659ec3b6d7b68997bb1c62a62da29ea6b3021892241fa436698",
+  "snapshot_files_terminal_reverified": 2810
+}

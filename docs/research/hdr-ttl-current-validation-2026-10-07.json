@@ -1,0 +1,34 @@
+{
+  "scope": "Current HDR raster transport and live TTL/size/count policy on Metal",
+  "date": "2026-10-07",
+  "validation": {
+    "hdr_raster_swap": {
+      "passed": 11,
+      "failed": 0,
+      "filtered": 1
+    },
+    "ttl_swap_metal": {
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    }
+  },
+  "log": "/tmp/rrrah-hdr-ttl-available-validation.log",
+  "initial_attempt": {
+    "log": "/tmp/rrrah-hdr-ttl-current-validation.log",
+    "failure": "External PICT test requires absent RRRAH_PICT_CORPUS; 11 other tests passed, TTL suite did not run in this attempt."
+  },
+  "coverage": [
+    "HDR float bits and linear Metal output through swap",
+    "PQ/HLG AVIF transport and metadata",
+    "ICC raster and archive color",
+    "Live count/size/TTL changes across 128 HDR cycles",
+    "Expired visible leases and restore under pressure",
+    "Real CR3 and EIP Metal-frame equivalence after TTL and swap"
+  ],
+  "limitations": [
+    "External PICT/TwelveMonkeys corpus test excluded explicitly",
+    "Offscreen Metal evidence does not qualify physical HDR luminance, display headroom or NVIDIA/CUDA",
+    "Full-format correctness and sustained large-collection/slow-disk qualification remain incomplete"
+  ]
+}

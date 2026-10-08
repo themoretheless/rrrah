@@ -1,0 +1,83 @@
+{
+  "status": "integrated_tests_running",
+  "unit_session_id": 84067,
+  "source_before": {
+    "crates/rrrah-dedup/src/local_index.rs": "3bdc859d410b407713f1bb85cbb5cd03caf0f739bcbcac501c107975d2ad0db7",
+    "crates/rrrah-dedup/src/managed_metric.rs": "e0cbbe3c1168beb879de846fc255cd8b8ad5c26e98de6c27cf50e33508409303",
+    "crates/rrrah-dedup/src/managed_visual.rs": "820577cb145e7e14675a608fadfa5bf005d079c44a20f944dbfab9409fbf2015",
+    "crates/rrrah-dedup/src/lib.rs": "9476ab8fc2ac3ffbc5bc6c011d7a36424c0d4048d10c8b2558ddf1efc3ce5bc7"
+  },
+  "scope": "Five-family binary retrieval now uses flat managed channel trees, retained fingerprints/owners, and visual candidate scratch. Descriptor search found map, per-query targets, pair counts, collection metadata and decoder memory are not fully accounted.",
+  "minimal_session_id": 90851,
+  "collection_session_id": 2337,
+  "unit_exit_code": 0,
+  "source_after_unit": {
+    "crates/rrrah-dedup/src/local_index.rs": "3bdc859d410b407713f1bb85cbb5cd03caf0f739bcbcac501c107975d2ad0db7",
+    "crates/rrrah-dedup/src/managed_metric.rs": "e0cbbe3c1168beb879de846fc255cd8b8ad5c26e98de6c27cf50e33508409303",
+    "crates/rrrah-dedup/src/managed_visual.rs": "820577cb145e7e14675a608fadfa5bf005d079c44a20f944dbfab9409fbf2015",
+    "crates/rrrah-dedup/src/lib.rs": "9476ab8fc2ac3ffbc5bc6c011d7a36424c0d4048d10c8b2558ddf1efc3ce5bc7"
+  },
+  "unit_selected_sources_unchanged": true,
+  "minimal_exit_code": 0,
+  "minimal_passed_tests": 14,
+  "visual_oracle_session_id": 4063,
+  "visual_oracle_source_hash": "78d46214efbf94dfc49d11fb48f1dc009ab0467b5f12110dfa728f2de39739f9",
+  "source_change_during_collection": "Only a cfg(test) oracle module was added to managed_visual.rs; do not claim full source hashes unchanged for this live collection gate.",
+  "probe_build_source_before": {
+    "crates/rrrah-dedup/src/local_index.rs": "3bdc859d410b407713f1bb85cbb5cd03caf0f739bcbcac501c107975d2ad0db7",
+    "crates/rrrah-dedup/src/managed_metric.rs": "e0cbbe3c1168beb879de846fc255cd8b8ad5c26e98de6c27cf50e33508409303",
+    "crates/rrrah-dedup/src/managed_visual.rs": "78d46214efbf94dfc49d11fb48f1dc009ab0467b5f12110dfa728f2de39739f9",
+    "crates/rrrah-dedup/src/lib.rs": "9476ab8fc2ac3ffbc5bc6c011d7a36424c0d4048d10c8b2558ddf1efc3ce5bc7"
+  },
+  "probe_build_session_id": 79251,
+  "visual_oracle_exit_code": 0,
+  "visual_oracle_source_after": "78d46214efbf94dfc49d11fb48f1dc009ab0467b5f12110dfa728f2de39739f9",
+  "linux_source_before": {
+    "crates/rrrah-dedup/src/local_index.rs": "3bdc859d410b407713f1bb85cbb5cd03caf0f739bcbcac501c107975d2ad0db7",
+    "crates/rrrah-dedup/src/managed_metric.rs": "e0cbbe3c1168beb879de846fc255cd8b8ad5c26e98de6c27cf50e33508409303",
+    "crates/rrrah-dedup/src/managed_visual.rs": "78d46214efbf94dfc49d11fb48f1dc009ab0467b5f12110dfa728f2de39739f9",
+    "crates/rrrah-dedup/src/lib.rs": "9476ab8fc2ac3ffbc5bc6c011d7a36424c0d4048d10c8b2558ddf1efc3ce5bc7"
+  },
+  "linux_session_id": 26014,
+  "probe_build_exit_code": 0,
+  "probe_build_source_after": {
+    "crates/rrrah-dedup/src/local_index.rs": "3bdc859d410b407713f1bb85cbb5cd03caf0f739bcbcac501c107975d2ad0db7",
+    "crates/rrrah-dedup/src/managed_metric.rs": "e0cbbe3c1168beb879de846fc255cd8b8ad5c26e98de6c27cf50e33508409303",
+    "crates/rrrah-dedup/src/managed_visual.rs": "78d46214efbf94dfc49d11fb48f1dc009ab0467b5f12110dfa728f2de39739f9",
+    "crates/rrrah-dedup/src/lib.rs": "9476ab8fc2ac3ffbc5bc6c011d7a36424c0d4048d10c8b2558ddf1efc3ce5bc7"
+  },
+  "probe": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/photo-probe-managed-index",
+  "probe_sha256": "db8d6a9eedb5e5fceab08bf79cfd5e6164215ace49ec146b89c3dcc56a913ac5",
+  "controls_session_id": 58058,
+  "six_file_session_id": 86014,
+  "controls_report": "docs/research/dedup-managed-index-controls.json",
+  "six_file_report": "docs/research/dedup-managed-index-six-file.json",
+  "collection_exit_code": 0,
+  "collection_passed_tests": 2,
+  "collection_production_source_unchanged": true,
+  "collection_full_file_hashes_unchanged": false,
+  "collection_only_source_change": "Added cfg(test) oracle module; removal reconstructs exact pre-gate managed_visual.rs hash.",
+  "controls_exit_code": 0,
+  "controls_verified_pairs": 3,
+  "controls_native_fields_equal_except_peak": true,
+  "six_file_exit_code": 0,
+  "six_file_managed_peak": 47002800,
+  "six_file_maximum_resident_set_bytes": 59260928,
+  "six_file_all_native_fields_equal_except_peak": true,
+  "linux_library_passed_tests": 43,
+  "linux_status": "completed",
+  "linux_source_after_library": {
+    "crates/rrrah-dedup/src/local_index.rs": "3bdc859d410b407713f1bb85cbb5cd03caf0f739bcbcac501c107975d2ad0db7",
+    "crates/rrrah-dedup/src/managed_metric.rs": "e0cbbe3c1168beb879de846fc255cd8b8ad5c26e98de6c27cf50e33508409303",
+    "crates/rrrah-dedup/src/managed_visual.rs": "78d46214efbf94dfc49d11fb48f1dc009ab0467b5f12110dfa728f2de39739f9",
+    "crates/rrrah-dedup/src/lib.rs": "9476ab8fc2ac3ffbc5bc6c011d7a36424c0d4048d10c8b2558ddf1efc3ce5bc7"
+  },
+  "linux_exit_code": 0,
+  "linux_passed_tests": 60,
+  "linux_source_after": {
+    "crates/rrrah-dedup/src/local_index.rs": "3bdc859d410b407713f1bb85cbb5cd03caf0f739bcbcac501c107975d2ad0db7",
+    "crates/rrrah-dedup/src/managed_metric.rs": "e0cbbe3c1168beb879de846fc255cd8b8ad5c26e98de6c27cf50e33508409303",
+    "crates/rrrah-dedup/src/managed_visual.rs": "78d46214efbf94dfc49d11fb48f1dc009ab0467b5f12110dfa728f2de39739f9",
+    "crates/rrrah-dedup/src/lib.rs": "9476ab8fc2ac3ffbc5bc6c011d7a36424c0d4048d10c8b2558ddf1efc3ce5bc7"
+  }
+}

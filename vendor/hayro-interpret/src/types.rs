@@ -41,7 +41,18 @@ impl<'a, 'b> StencilImage<'a, 'b> {
         func: impl FnOnce(LumaData, &Paint<'a>),
         target_dimension: Option<(u32, u32)>,
     ) {
-        if let Some(decoded) = self.image_xobject.decoded_mask(target_dimension) {
+        self.with_stencil_and_cancel(func, target_dimension, &|| false);
+    }
+
+    /// Process stencil data with cooperative cancellation. Cancelled data is not published.
+    pub fn with_stencil_and_cancel(
+        &self,
+        func: impl FnOnce(LumaData, &Paint<'a>),
+        target_dimension: Option<(u32, u32)>,
+        cancelled: &dyn Fn() -> bool,
+    ) {
+        if let Some(decoded) = self.image_xobject.decoded_mask(target_dimension, cancelled) {
+            if cancelled() { return; }
             func(decoded.luma, &self.paint);
         }
     }
@@ -68,7 +79,101 @@ impl CacheKey for StencilImage<'_, '_> {
 /// A raster image.
 pub struct RasterImage<'a>(pub(crate) ImageXObject<'a>);
 
+/// Native alpha stage required by an image declaration.
+#[derive(Debug,Clone,Copy,PartialEq,Eq)]
+pub enum NativeRasterMaskKind {
+    /// Stencil image with paint supplied externally.
+    Stencil,
+    /// Separate grayscale soft-mask stream.
+    Soft,
+    /// Soft-mask stream with preblended color requiring Matte recovery.
+    SoftMatte,
+    /// Separate explicit binary-mask stream.
+    Explicit,
+    /// Transparent ranges in original integer components.
+    ColorKey,
+    /// Alpha stored inside the compressed image.
+    Embedded,
+    /// Unsupported or malformed mask declaration.
+    Unsupported,
+}
+
+/// Reason the original-component image stage could not complete.
+#[derive(Debug,Clone,Copy,PartialEq,Eq)]
+pub enum NativeRasterComponentsError {
+    /// Cooperative cancellation was observed.
+    Cancelled,
+    /// Native alpha-mask processing is required.
+    Mask(NativeRasterMaskKind),
+    /// Native image transfer-function processing is required.
+    TransferFunction,
+    /// Output buffer or metadata admission was refused.
+    Admission,
+    /// Stream decompression or image metadata could not be decoded.
+    Decode,
+    /// Decoder returned a scaled image; full source coordinates are required.
+    Scaled,
+    /// Component count, length, Decode array or sample data was invalid.
+    ComponentData,
+}
+
+/// Admitted original float alpha samples from a soft-mask image stream.
+pub struct NativeRasterAlpha {
+    pub(crate) width: u32,
+    pub(crate) height: u32,
+    pub(crate) interpolate: bool,
+    pub(crate) samples: crate::native_image_samples::NativeComponentSamples,
+    pub(crate) _credit: Box<dyn std::any::Any + Send + Sync>,
+}
+impl NativeRasterAlpha {
+    /// Exact mask width and height, which may differ from the source image.
+    pub fn dimensions(&self) -> (u32,u32) { (self.width,self.height) }
+    /// Original alpha values in [0,1], before display quantization.
+    pub fn samples(&self) -> &[f32] { self.samples.samples() }
+    /// The mask image interpolation preference.
+    pub fn interpolate(&self) -> bool { self.interpolate }
+}
+
+/// Original decoded image components before display color conversion.
+/// Supported soft-mask alpha is retained separately from source color samples.
+/// Other masks and transfer functions require additional native stages.
+pub struct NativeRasterComponents {
+    pub(crate) color_space: crate::color::ColorSpace,
+    pub(crate) width: u32,
+    pub(crate) height: u32,
+    pub(crate) interpolate: bool,
+    pub(crate) alpha: Option<NativeRasterAlpha>,
+    pub(crate) samples: crate::native_image_samples::NativeComponentSamples,
+    pub(crate) _credit: Box<dyn std::any::Any + Send + Sync>,
+}
+impl NativeRasterComponents {
+    /// Original resolved color coordinates.
+    pub fn color_space(&self) -> &crate::color::ColorSpace { &self.color_space }
+    /// Exact decoded width and height.
+    pub fn dimensions(&self) -> (u32,u32) { (self.width,self.height) }
+    /// Interleaved float source samples after the PDF Decode array.
+    pub fn samples(&self) -> &[f32] { self.samples.samples() }
+    /// Native soft-mask data, when the image has a supported soft mask.
+    pub fn alpha(&self) -> Option<&NativeRasterAlpha> { self.alpha.as_ref() }
+    /// Image interpolation preference.
+    pub fn interpolate(&self) -> bool { self.interpolate }
+}
+
 impl RasterImage<'_> {
+    /// Decode original float components with output-buffer admission.
+    /// Filters/stream decompression are managed separately. Soft-mask streams
+    /// without Matte are supported; other masks and transfer functions refuse.
+    pub fn native_components(
+        &self, cancelled: &dyn Fn() -> bool,
+        admit: &dyn Fn(usize) -> Option<Box<dyn std::any::Any + Send + Sync>>,
+    ) -> Option<NativeRasterComponents> { self.native_components_checked(cancelled,admit).ok() }
+
+    /// Decode original components and preserve the reason for any refusal.
+    pub fn native_components_checked(
+        &self, cancelled: &dyn Fn() -> bool,
+        admit: &dyn Fn(usize) -> Option<Box<dyn std::any::Any + Send + Sync>>,
+    ) -> Result<NativeRasterComponents,NativeRasterComponentsError> { self.0.native_components(cancelled,admit) }
+
     /// Perform some operation with the RGB and alpha channel of the image.
     ///
     /// The second argument allows you to give the image decoder a hint for
@@ -81,10 +186,19 @@ impl RasterImage<'_> {
         func: impl FnOnce(ImageData, Option<LumaData>),
         target_dimension: Option<(u32, u32)>,
     ) {
-        if let Some(decoded) = self.0.decoded_raster(target_dimension) {
-            func(decoded.image, decoded.alpha);
+        self.with_rgba_and_cancel(func, target_dimension, &|| false)
+    }
+
+    /// Decode with cooperative cancellation; no partial image reaches the callback.
+    pub fn with_rgba_and_cancel(&self, func: impl FnOnce(ImageData, Option<LumaData>), target_dimension: Option<(u32, u32)>, cancelled: &dyn Fn() -> bool) {
+        if let Some(decoded) = self.0.decoded_raster(target_dimension, cancelled) {
+            if !cancelled() { func(decoded.image, decoded.alpha); }
         }
     }
+
+    /// Resolved source coordinates before conversion to compatibility RGB.
+    /// Stencil images have no intrinsic color space.
+    pub fn color_space(&self) -> Option<&crate::color::ColorSpace> { self.0.color_space() }
 
     /// Return the underlying stream object.
     ///

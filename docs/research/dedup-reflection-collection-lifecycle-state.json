@@ -1,0 +1,19 @@
+{
+  "status": "targeted_macos_pass",
+  "terminal_exit_code": 0,
+  "tests": 1,
+  "duration_seconds": 1004.16,
+  "baseline_callback_count": 352891925,
+  "scope": "Three positive edges, source2mirror incident edges reflected. Callback cancellation1/mid/final returns no partial result and releases memory. Source2mid/late append mutation removes both incident edges, reports source2 issue and retains supported1-3. Restored bytes reversed traversal returns3supported edges, used0.",
+  "remaining": [
+    "other source/dependency mutation and both generation-token owners",
+    "late lifecycle Linux/Windows",
+    "broad real reflected precision/recall and memory scale"
+  ],
+  "sha256": {
+    "crates/rrrah-dedup/src/local_collection.rs": "f89dcd2b13d878568a29543c494a23111bc8e6c1c5c4f4de61562322de78d1dd",
+    "crates/rrrah-dedup/src/gradient_index.rs": "3bfb5160979eba9f9c237f6e969c87f9b4bec3cf396920ed905f10dc7d83ebbd",
+    "crates/rrrah-dedup/tests/anchor_reflection_collection_lifecycle.rs": "e34ffa8ef0937f9758824e1e1dea7ad3c01ef67ce9c78bf0e9bdd4dda715abcb",
+    "docs/research/dedup-reflection-collection-lifecycle-tests.log": "d7283a4fca0b00668e8da0ca509a1805f110dc2f2648ca26c87b5c15dc967ff3"
+  }
+}

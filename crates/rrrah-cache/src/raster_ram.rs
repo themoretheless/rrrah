@@ -54,6 +54,7 @@ impl<K: Clone + Eq + Hash + Send + 'static> RasterRamCache<K> {
         (shared
             && lease.width() == raster.width()
             && lease.height() == raster.height()
+            && lease.pixel_aspect() == raster.pixel_aspect()
             && lease.color_space() == raster.color_space())
         .then_some(lease)
     }
@@ -106,11 +107,16 @@ impl<K: Clone + Eq + Hash + Send + 'static> RasterRamCache<K> {
         }
         self.spill_expired();
         if let Some(frame) = self.entries.get_cloned(key) {
-            return Some(frame);
+            return (!cancelled()).then_some(frame);
         }
         loop {
             match self.swap.as_ref()?.try_get(key, &mut cancelled) {
                 Ok(Some(frame)) => {
+                    // A generation can change after stream verification but
+                    // before RAM publication and visible-pin transfer.
+                    if cancelled() {
+                        return None;
+                    }
                     if visible {
                         self.insert_visible(key.clone(), frame.clone());
                     } else {
@@ -121,7 +127,7 @@ impl<K: Clone + Eq + Hash + Send + 'static> RasterRamCache<K> {
                 Err(rrrah_memory::BufferError::Capacity { requested, limit, .. })
                     if visible && requested <= limit =>
                 {
-                    if !self.release_lru_unpinned() {
+                    if cancelled() || !self.release_lru_unpinned() {
                         return None;
                     }
                 }
@@ -207,6 +213,98 @@ mod tests {
         )
         .unwrap()
     }
+    #[test]
+    fn cancellation_after_ram_hit_does_not_return_a_stale_owner() {
+        let root = rrrah_core::MemoryBudget::new(64);
+        let mut cache = RasterRamCache::new(CacheLimits::bytes(64));
+        assert!(cache.insert_visible(2u64, raster().try_manage_pixels(&root).unwrap()));
+        let mut polls = 0;
+        assert!(
+            cache
+                .get_with_cancel(&2, || {
+                    polls += 1;
+                    polls == 2
+                })
+                .is_none()
+        );
+        assert_eq!(polls, 2);
+        assert_eq!(cache.visible, Some(2));
+        assert_eq!(cache.len(), 1);
+        assert_eq!(root.used(), 16);
+        drop(cache);
+        assert_eq!(root.used(), 0);
+    }
+
+    #[test]
+    fn cancellation_after_swap_read_preserves_visible_pin_and_retry() {
+        let parent = tempfile::tempdir().unwrap();
+        let root = rrrah_core::MemoryBudget::new(128);
+        let mut cache = RasterRamCache::new(CacheLimits::bytes(64));
+        cache.enable_swap(
+            crate::RasterSwapCache::new_with_budgets(
+                parent.path(),
+                crate::ImageSwapConfig {
+                    limits: CacheLimits::bytes(4096),
+                    queue_bytes: 64,
+                    queue_count: 2,
+                    restore_bytes: 64,
+                },
+                rrrah_core::MemoryBudget::new(64),
+                root.clone(),
+            )
+            .unwrap(),
+        );
+        assert!(cache.insert_visible(2u64, raster().try_manage_pixels(&root).unwrap()));
+        cache
+            .swap()
+            .unwrap()
+            .enqueue(1, raster().try_manage_pixels(&root).unwrap());
+        cache.swap().unwrap().wait_idle().unwrap();
+        assert_eq!(root.used(), 16);
+        let mut stream_polls = 0;
+        drop(
+            cache
+                .swap()
+                .unwrap()
+                .try_get(&1, || {
+                    stream_polls += 1;
+                    false
+                })
+                .unwrap()
+                .unwrap(),
+        );
+        assert_eq!(root.used(), 16);
+        // RAM lookup adds an entry check and a final publication check to the
+        // unchanged swap-read checkpoints. Cancel at that final boundary.
+        let target = stream_polls + 2;
+        let mut polls = 0;
+        assert!(
+            cache
+                .get_with_cancel(&1, || {
+                    polls += 1;
+                    polls == target
+                })
+                .is_none()
+        );
+        assert_eq!(polls, target);
+        assert_eq!(cache.visible, Some(2));
+        assert_eq!(cache.len(), 1);
+        assert_eq!(root.used(), 16);
+        assert_eq!(cache.swap().unwrap().stats().errors, 0);
+        let restored = cache.get_with_cancel(&1, || false).unwrap();
+        assert_eq!(cache.visible, Some(1));
+        let RasterPixels::Rgba32Float(values) = restored.pixels() else {
+            panic!()
+        };
+        assert_eq!(
+            values.iter().map(|v| v.to_bits()).collect::<Vec<_>>(),
+            [-0.0f32, 0.125, 128.0, 1.0].map(f32::to_bits)
+        );
+        drop(restored);
+        drop(cache);
+        assert_eq!(root.used(), 0);
+    }
+
     #[test]
     fn expired_hdr_raster_spills_before_new_admission() {
         let parent = tempfile::tempdir().unwrap();
@@ -554,5 +652,37 @@ mod managed_policy_tests {
         assert_eq!(budget.used(), 64);
         drop(held);
         assert_eq!(budget.used(), 0);
+    }
+}
+
+#[cfg(test)]
+mod aspect_lease_tests {
+    use super::*;
+    #[test]
+    fn visible_lease_requires_matching_geometry_even_for_shared_pixels() {
+        let root = rrrah_core::MemoryBudget::new(4);
+        let frame = DecodedRaster::new(
+            1,
+            1,
+            rrrah_core::RasterPixels::Rgba8(std::sync::Arc::new(vec![1, 2, 3, 255]).into()),
+            rrrah_core::RasterColorSpace::Srgb,
+        )
+        .unwrap()
+        .with_pixel_aspect(Some(2.0))
+        .unwrap()
+        .try_manage_pixels(&root)
+        .unwrap();
+        let mut cache = RasterRamCache::new(CacheLimits::bytes(4));
+        assert!(cache.insert_visible(1u8, frame.clone()));
+        let altered = frame.clone().with_pixel_aspect(Some(1.0)).unwrap();
+        assert!(cache.get_visible_lease_for(&altered).is_none());
+        let lease = cache.get_visible_lease_for(&frame).unwrap();
+        assert_eq!(lease.pixel_aspect(), Some(2.0));
+        drop(altered);
+        drop(frame);
+        drop(cache);
+        assert_eq!(root.used(), 4);
+        drop(lease);
+        assert_eq!(root.used(), 0);
     }
 }

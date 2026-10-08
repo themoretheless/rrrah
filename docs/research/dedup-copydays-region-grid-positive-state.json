@@ -1,0 +1,22 @@
+{
+  "session": 44369,
+  "status": "terminal_audited",
+  "required_pairs": 229,
+  "probe_sha256": "bf57b7b492ba368c9d25aa1cc8c55aa19348b8ae4bea9ff5032dcfb1b9ee7c94",
+  "verifier": "scripts/verify-dedup-regional-positives.py",
+  "reference": "docs/research/dedup-copydays-pyramid-blur-macos.json",
+  "scope": "All229 geometry-derived regional diagnostic pairs, all386 inputs verified. No regional ground-truth masks; supports not promoted to whole-copy decisions. All-query negatives still running.",
+  "exit_code": 0,
+  "audit": {
+    "completed_pairs": 229,
+    "status_counts": {
+      "ok": 229
+    },
+    "whole_candidates": 27,
+    "region_supported_pairs": 118,
+    "region_support_total": 672,
+    "regional_only_pairs": 91,
+    "verified_images": 386,
+    "scope": "Regional diagnostics; whole decisions and geometry equal fixed radius3 reference. Errors stay explicit; not full coverage."
+  }
+}

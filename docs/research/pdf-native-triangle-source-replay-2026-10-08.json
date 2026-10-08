@@ -1,0 +1,62 @@
+{
+  "date": "2026-10-08",
+  "scope": "Test-only native PDF compositor triangle shading source capture and replay",
+  "source_components": [
+    "DeviceGray",
+    "DeviceRGB",
+    "DeviceCMYK"
+  ],
+  "functions": "Original single/multiple Type2/Type3 bounded functions; no RGB lookup table",
+  "memory": "Fixed point/component triangle records admitted before copy; function/color metadata conservative retained capacity; credit released on cancellation or drop",
+  "results": {
+    "actual_type4_stream": {
+      "passed": 1,
+      "compared_pixels": 512,
+      "comparison": "Every original CMYK component exactly equal to independently computed linear gradient"
+    },
+    "renderer": {
+      "passed": 122,
+      "failed": 0,
+      "ignored": 10
+    },
+    "interpreter": {
+      "passed": 94,
+      "failed": 0,
+      "ignored": 0
+    }
+  },
+  "source_hashes": {
+    "vendor/hayro-interpret/src/encode/native_source.rs": "a428e21adc5bfa6d6eb67b12c2d169d72d66a5ce9d46d192d1225d0aeecea6ae",
+    "vendor/hayro/src/knockout_interpreter.rs": "6d27f3d560914571ca7774517143c7dc717949c8341921b7f5c9740fcdf7abf8"
+  },
+  "logs": [
+    {
+      "path": "/tmp/rrrah-native-triangle-replay-20261008.log",
+      "sha256": "58e633055cdc294ef3447d14444e33e2ef88f19cc0a13f0afa3dbf401f48f872"
+    },
+    {
+      "path": "/tmp/rrrah-native-triangle-renderer-all-20261008.log",
+      "sha256": "3f10e783ace2dfabb827885918c794befd1653ecf0261b696e8c30dea7008cbb"
+    },
+    {
+      "path": "/tmp/rrrah-native-triangle-interpreter-all-20261008.log",
+      "sha256": "3970a67b989bbb21609fc8f00783de90e325fb310502e8c5833d4b290502716a"
+    }
+  ],
+  "verified": [
+    "Source-space affine sampling",
+    "Barycentric original-component interpolation",
+    "Later overlapping triangle overrides earlier source triangle",
+    "Original optional function evaluated after parameter interpolation",
+    "Admission refusal before retained mesh allocation",
+    "Cancellation at every observed capture boundary releases all credit",
+    "Existing axial/radial and compositor regressions preserved"
+  ],
+  "limitations": [
+    "Triangle sampling currently scans source triangles, without spatial index or performance qualification",
+    "Original parser allocations precede capture and are not admitted by this source credit",
+    "Tensor/Coons meshes remain unsupported by this native source; real VectorApple event 9 remains unresolved",
+    "Production AI renderer and Metal pipeline do not use this test-only compositor",
+    "Ignored production fidelity tests remain ignored; this does not qualify AI or all 100 formats"
+  ]
+}

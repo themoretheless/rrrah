@@ -1,0 +1,26 @@
+{
+  "scope": "Authored EIP wrapping real CR3: native sensor, TTL/swap and physical Metal readback",
+  "backend": "Metal Apple M4 Max",
+  "passed": 1,
+  "failed": 0,
+  "sensor_samples": 25494560,
+  "frame": [
+    128,
+    96
+  ],
+  "exact_sensor_and_frame": true,
+  "swap_writes": 1,
+  "swap_reads": 1,
+  "pressure_refusal_retry": true,
+  "final_managed_bytes": 0,
+  "log": "/tmp/rrrah-metal-eip-final-refresh.log",
+  "inputs": {
+    "/tmp/rrrah-app-first.eip": "c78041f5bcb2cd0935cad10da6b311ce5f239c62407060046037ad2bb28c3c06",
+    "tests/IMG_9043.CR3": "d06cbb10e84882cf130430bdc88ed2652c2622b96dea8d6a854c09e3bee37e59"
+  },
+  "limitations": [
+    "Authored ZIP package, not Capture One producer qualification",
+    "No Capture One adjustments/profile/LCC qualification",
+    "Offscreen Metal readback, not calibrated HDR luminance"
+  ]
+}

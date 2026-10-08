@@ -1,0 +1,33 @@
+{
+  "status": "verified_asymmetric4_union_prefix",
+  "verified_rows": 2,
+  "required_pairs": 229,
+  "counts": {
+    "local_supported": 2,
+    "miss": 0,
+    "native_error": 0
+  },
+  "summary": [
+    {
+      "query": "200001.jpg",
+      "outcome": "local_supported",
+      "matches": 265,
+      "inliers": 100,
+      "support_count": 81
+    },
+    {
+      "query": "200101.jpg",
+      "outcome": "local_supported",
+      "matches": 220,
+      "inliers": 122,
+      "support_count": 7
+    }
+  ],
+  "input_hashes": {
+    "docs/research/dedup-asymmetric4-original-full-checkpoint-2-reverse-verified.json": "9193977fff16914a095dd61be939422593394333859e379d8e03e6f2d1a6243c",
+    "scripts/verify-dedup-scale-similarity-diagnostic.py": "41a4c0583f4a99677e716bae43ed976cfda409703fe2ec6236da3de5d4f897e4",
+    "scripts/dedup_jpeg_domain.py": "a9986aabe3428100e1b061a70f6fb7f1f87e1b6c8552484b550e764a04746921",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-asymmetric4-original-full.py": "7cd1505fb739e645c1ec02d6ad545e70e5e48ec7f5036bcfa71f58e7908439a6"
+  },
+  "scope": "Source/archive hashes, ordered origin pairs, same-recipe positive parity, typed stdout, distinct locations, geometry residuals and regional arithmetic/domain bounds. Errors remain unresolved denominator rows. No whole identity, semantic precision, full-pixel resampling oracle or indexed full-collection proof."
+}

@@ -1,0 +1,34 @@
+{
+  "scope": "Actual RawPrefetcher worker and DiskMosaicCache, original EOS R8 sensor from authored EIP",
+  "cases": [
+    "Forward next neighbour",
+    "Backward previous neighbour"
+  ],
+  "cache_limits": {
+    "entries": 1,
+    "bytes": 134217728
+  },
+  "managed_root_bytes": 100663296,
+  "peak_bytes": 73371346,
+  "verification": [
+    "All 25494560 sensor values and metadata restored exactly against native original CR3",
+    "One retained disk entry after each plan",
+    "Zero failures and one stored neighbour per plan",
+    "Zero root occupancy after worker publication and final restored sensor drop",
+    "Pair has identical original RAW, ZIP method, file size and mtime; five-byte settings difference produces different sampled BLAKE3 and cache key"
+  ],
+  "tests": {
+    "manual_eip_worker": "1 passed",
+    "app_units": "164 passed, zero failures, 25 ignored"
+  },
+  "limitations": [
+    "Authored ZIP, not Capture One-produced EIP",
+    "Capture One settings ignored for development",
+    "Source fingerprint samples whole package file at bounded offsets; it does not hash every byte",
+    "EIP RAM swap, GPU frames and TTL not yet qualified by this test"
+  ],
+  "logs": [
+    "/tmp/rrrah-eip-app-prefetch.log",
+    "/tmp/rrrah-eip-app-prefetch-all.log"
+  ]
+}

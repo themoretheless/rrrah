@@ -1,0 +1,33 @@
+{
+  "change": "RAW halo packing checks cancellation before allocation, every 64 output rows, and after final row",
+  "verification": [
+    "Large 514-row tile bit-exact against independent scalar clamp-to-edge oracle",
+    "All 11 large-tile checkpoints return cancellation",
+    "All 49 GPU upload checkpoints across nine tiles preserve previous Metal frame and free transient roots",
+    "Successful replacement after cancelled attempts changes frame"
+  ],
+  "tests": {
+    "gpu": [
+      [
+        "48",
+        "0",
+        "0"
+      ],
+      [
+        "11",
+        "0",
+        "0"
+      ]
+    ],
+    "app_units": "164 passed, zero failures, 25 ignored"
+  },
+  "logs": [
+    "/tmp/rrrah-raw-halo-cancel-final.log",
+    "/tmp/rrrah-raw-halo-cancel-app.log"
+  ],
+  "limits": [
+    "Row-padding stage and initial zero-initialization allocation do not poll internally",
+    "64-row interval is bounded work, not measured latency guarantee",
+    "No physical HDR or NVIDIA/CUDA qualification"
+  ]
+}

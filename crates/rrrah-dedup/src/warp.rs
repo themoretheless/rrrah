@@ -1150,6 +1150,59 @@ pub fn verify_projective_regions_photometric_filtered(
     }
     let whole_unfitted =
         verify_projective_filtered(source, target, transform, photometric.residual, filter, &cancel)?;
+    verify_projective_regions_with_unfitted(
+        source,
+        target,
+        transform,
+        regions,
+        photometric,
+        filter,
+        fit_mode,
+        whole_unfitted,
+        cancel,
+    )
+}
+/// Internal reuse requires evidence from the same immutable views, transform and
+/// policy. The file lifecycle owns those views and retains the original evidence.
+#[allow(clippy::too_many_arguments)]
+pub(crate) fn verify_projective_regions_with_unfitted(
+    source: &LinearRgbaView<'_>,
+    target: &LinearRgbaView<'_>,
+    transform: crate::geometry::ProjectiveTransform,
+    regions: [PixelRectangle; 2],
+    photometric: PhotometricPolicy,
+    filter: ColorFilterPolicy,
+    fit_mode: PhotometricFitMode,
+    whole_unfitted: ProjectiveFilteredEvidence,
+    cancel: impl Fn() -> bool,
+) -> Result<ProjectiveRegionPhotometricEvidence, WarpError> {
+    validate_photometric_policy(photometric)?;
+    validate_filter_policy(filter.filter)?;
+    let [sr, tr] = regions;
+    validate_rectangle(sr, source.dimensions())?;
+    validate_rectangle(tr, target.dimensions())?;
+    let (sw, sh) = source.dimensions();
+    let (tw, th) = target.dimensions();
+    let source_count = u64::from(sw) * u64::from(sh);
+    let target_count = u64::from(tw) * u64::from(th);
+    let full = source_count.checked_add(target_count).ok_or(WarpError::Budget)?;
+    let regional = (u64::from(sr.width) * u64::from(sr.height))
+        .checked_add(u64::from(tr.width) * u64::from(tr.height))
+        .ok_or(WarpError::Budget)?;
+    let side = u64::from(filter.filter.radius) * 2 + 1;
+    let work = regional
+        .checked_mul(2)
+        .and_then(|n| n.checked_mul(side * side))
+        .ok_or(WarpError::Budget)?;
+    if full > photometric.residual.max_source_pixels || work > filter.filter.max_sample_pairs {
+        return Err(WarpError::Budget);
+    }
+    if whole_unfitted.filter != filter
+        || whole_unfitted.strict.forward.source_pixels != source_count
+        || whole_unfitted.strict.reverse.source_pixels != target_count
+    {
+        return Err(WarpError::Invalid);
+    }
     let inverse = transform.inverse().map_err(|_| WarpError::Invalid)?;
     let grid = GridPolicy {
         reflected: false,
@@ -2084,4 +2137,142 @@ pub(crate) fn validate_registration_portfolio_policy(
         return Err(WarpError::Budget);
     }
     Ok(())
+}
+
+#[cfg(test)]
+mod regional_reuse_tests {
+    use super::*;
+    use std::cell::Cell;
+    #[test]
+    fn reused_whole_evidence_preserves_regions_and_reduces_observed_work() {
+        let values: Vec<f32> = (0..32)
+            .flat_map(|y| {
+                (0..32).flat_map(move |x| {
+                    [
+                        x as f32 / 32.,
+                        y as f32 / 32.,
+                        ((x * 7 + y * 11) % 29) as f32 / 29.,
+                        1.,
+                    ]
+                })
+            })
+            .collect();
+        let view = LinearRgbaView::new(32, 32, &values, 1024, || false).unwrap();
+        let transform = crate::geometry::ProjectiveTransform {
+            matrix: [[1., 0., 0.], [0., 1., 0.], [0., 0., 1.]],
+        };
+        let policy = PhotometricPolicy {
+            residual: WarpPolicy {
+                tolerance: 1e-6,
+                max_source_pixels: 2048,
+            },
+            minimum_samples: 16,
+            minimum_variance: 1e-5,
+            minimum_gain: 0.2,
+            maximum_gain: 5.,
+            maximum_offset: 0.1,
+        };
+        let filter = ColorFilterPolicy {
+            filter: FilterPolicy {
+                radius: 1,
+                max_sample_pairs: 100_000,
+            },
+            color_space: FilterColorSpace::LinearSrgb,
+        };
+        let domains = [
+            PixelRectangle {
+                x: 4,
+                y: 4,
+                width: 12,
+                height: 12,
+            },
+            PixelRectangle {
+                x: 16,
+                y: 16,
+                width: 12,
+                height: 12,
+            },
+        ];
+        let baseline = Cell::new(0);
+        let repeated = domains.map(|region| {
+            verify_projective_regions_photometric_filtered(
+                &view,
+                &view,
+                transform,
+                [region, region],
+                policy,
+                filter,
+                PhotometricFitMode::ConstrainedLeastSquares,
+                || {
+                    baseline.set(baseline.get() + 1);
+                    false
+                },
+            )
+            .unwrap()
+        });
+        let shared = Cell::new(0);
+        let unfitted = verify_projective_filtered(&view, &view, transform, policy.residual, filter, || {
+            shared.set(shared.get() + 1);
+            false
+        })
+        .unwrap();
+        for (region, expected) in domains.into_iter().zip(repeated) {
+            let actual = verify_projective_regions_with_unfitted(
+                &view,
+                &view,
+                transform,
+                [region, region],
+                policy,
+                filter,
+                PhotometricFitMode::ConstrainedLeastSquares,
+                unfitted,
+                || {
+                    shared.set(shared.get() + 1);
+                    false
+                },
+            )
+            .unwrap();
+            assert_eq!(actual, expected);
+        }
+        assert!(
+            shared.get() < baseline.get(),
+            "{} versus {}",
+            shared.get(),
+            baseline.get()
+        );
+        let mut mismatched = unfitted;
+        mismatched.filter.color_space = FilterColorSpace::EncodedSrgb;
+        assert_eq!(
+            verify_projective_regions_with_unfitted(
+                &view,
+                &view,
+                transform,
+                [domains[0]; 2],
+                policy,
+                filter,
+                PhotometricFitMode::ConstrainedLeastSquares,
+                mismatched,
+                || false
+            ),
+            Err(WarpError::Invalid)
+        );
+        let mut short = filter;
+        short.filter.max_sample_pairs = 5183;
+        let mut admitted = unfitted;
+        admitted.filter = short;
+        assert_eq!(
+            verify_projective_regions_with_unfitted(
+                &view,
+                &view,
+                transform,
+                [domains[0]; 2],
+                policy,
+                short,
+                PhotometricFitMode::ConstrainedLeastSquares,
+                admitted,
+                || false
+            ),
+            Err(WarpError::Budget)
+        );
+    }
 }

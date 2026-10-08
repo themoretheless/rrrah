@@ -1,0 +1,59 @@
+{
+  "date": "2026-10-07",
+  "implementation": "native clip/eoclip/initclip; immutable clip chains share admitted scene record arena; clipping retains active path and follows saved graphics state",
+  "specification": "https://www.adobe.com/jp/print/postscript/pdfs/PLRM.pdf",
+  "coverage": "u64 membership per pixel for up to 8x8 samples; paint and all clipping paths intersect individual bits before conversion to alpha; unclipped u8 coverage path preserved",
+  "qualification": {
+    "cases": [
+      "retained_open_clip",
+      "empty_clip",
+      "clip_rectangle",
+      "even_odd_hole",
+      "nested_intersection",
+      "saved_clip_restore",
+      "reset_clip"
+    ],
+    "native_exact_pixels": 448,
+    "metal_exact_pixels": 7168,
+    "normal_common_decode_route": true,
+    "native_samples": 4,
+    "oracle_samples": 1,
+    "scope": "authored open/closed axis-aligned clip boundaries, nested intersection, empty clip, eoclip hole, save/restore and initclip"
+  },
+  "oracle": {
+    "ghostscript_version": "10.05.1",
+    "binary_sha256": "e522a84dc98345933621efba59577afe76d8f2d241ae103a92e6ccd37812b290",
+    "source_sha256": "cb76721bc2ac8d35f1318aabcbab433b5e318da5e6b0c87fe422c98bf08da986"
+  },
+  "invariants": [
+    "clip nodes and records admitted to shared budget",
+    "clip records consume max_paints capacity",
+    "clip chains refer only to prior records",
+    "preflight counts clip traversal and composite work before RGBA allocation",
+    "subpixel identical clip is idempotent and disjoint clips have zero coverage for samples 1 through 8",
+    "refused output preallocation peak zero",
+    "cancellation discards output and releases temporary budget",
+    "gsave/grestore retains previous clipping branch and current path"
+  ],
+  "validation": {
+    "decoder": {
+      "passed": 956,
+      "failed": 0,
+      "ignored": 65,
+      "log": "/tmp/rrrah-eps-clipping-final-full.log"
+    },
+    "actual_metal": {
+      "passed": 9,
+      "failed": 0,
+      "log": "/tmp/rrrah-eps-clipping-metal.log"
+    }
+  },
+  "limits": [
+    "full EPS qualification remains open",
+    "clippath, rectclip, clipsave/cliprestore remain unsupported",
+    "independent curved/diagonal clipping and broad producer corpus remain unqualified",
+    "default Ghostscript fill-adjust and antialias differences remain recorded by existing strict gates",
+    "no physical HDR or NVIDIA evidence",
+    "local changes not pushed"
+  ]
+}

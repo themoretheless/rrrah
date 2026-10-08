@@ -236,3 +236,86 @@ fn malformed_associated_alpha_refuses_releases_memory_and_retries() {
         assert_eq!(budget.used(), 0);
     }
 }
+
+#[test]
+fn indexed_cross_encoding_collection_preserves_all_equal_pairs_and_one_pixel_negative() {
+    let budget = MemoryBudget::new(16 * 1024 * 1024);
+    let extensions = ["png", "tiff", "bmp", "ppm", "tga", "webp", "qoi"];
+    let mut files = extensions
+        .iter()
+        .enumerate()
+        .map(|(id, ext)| (id as u64, request(root().join(format!("opaque-base.{ext}")))))
+        .collect::<Vec<_>>();
+    files.push((7, request(root().join("opaque-changed.png"))));
+    let policy = rrrah_dedup::scan::PixelSearchPolicy {
+        decode: rrrah_dedup::decode::FingerprintPolicy {
+            recipe: [1; 32],
+            max_file_bytes: 1024 * 1024,
+            max_pixels: 1000,
+            max_frames: 10,
+            max_cache_entries: 0,
+        },
+        max_files: 8,
+        max_pairs: 28,
+    };
+    let expected = (0..7)
+        .flat_map(|a| (a + 1..7).map(move |b| (a, b)))
+        .collect::<Vec<_>>();
+    for reverse in [false, true] {
+        if reverse {
+            files.reverse();
+        }
+        let result =
+            rrrah_dedup::pixel_index::scan_indexed_pixels(files.clone(), policy, &budget, || false).unwrap();
+        assert_eq!(result.analysed, (0..8).collect::<Vec<_>>());
+        assert!(result.issues.is_empty() && result.source_issues.is_empty());
+        assert_eq!(result.indexed_decodes, 8);
+        assert_eq!(result.candidate_pairs, 21);
+        assert_eq!(result.pixels.equal, expected);
+        assert!(result.pixels.different.is_empty() && result.pixels.issues.is_empty());
+        assert_eq!(budget.used(), 0);
+    }
+}
+
+#[test]
+fn indexed_alpha_encodings_ignore_hidden_rgb_and_separate_visible_edits() {
+    let budget = MemoryBudget::new(16 * 1024 * 1024);
+    let extensions = ["png", "tiff", "tga", "webp", "qoi"];
+    let files = ["base", "hidden", "changed"]
+        .iter()
+        .enumerate()
+        .flat_map(|(group, variant)| {
+            extensions.iter().enumerate().map(move |(format, ext)| {
+                (
+                    (group * 5 + format) as u64,
+                    request(root().join(format!("alpha-{variant}.{ext}"))),
+                )
+            })
+        })
+        .collect::<Vec<_>>();
+    let expected = (0..15)
+        .flat_map(|a| (a + 1..15).filter_map(move |b| ((a < 10) == (b < 10)).then_some((a, b))))
+        .collect::<Vec<_>>();
+    assert_eq!(expected.len(), 55);
+    let policy = rrrah_dedup::scan::PixelSearchPolicy {
+        decode: rrrah_dedup::decode::FingerprintPolicy {
+            recipe: [1; 32],
+            max_file_bytes: 1024 * 1024,
+            max_pixels: 1000,
+            max_frames: 10,
+            max_cache_entries: 0,
+        },
+        max_files: 15,
+        max_pairs: 105,
+    };
+    for order in [files.clone(), files.into_iter().rev().collect()] {
+        let result = rrrah_dedup::pixel_index::scan_indexed_pixels(order, policy, &budget, || false).unwrap();
+        assert_eq!(result.analysed, (0..15).collect::<Vec<_>>());
+        assert!(result.issues.is_empty() && result.source_issues.is_empty());
+        assert_eq!(result.indexed_decodes, 15);
+        assert_eq!(result.candidate_pairs, 55);
+        assert_eq!(result.pixels.equal, expected);
+        assert!(result.pixels.different.is_empty() && result.pixels.issues.is_empty());
+        assert_eq!(budget.used(), 0);
+    }
+}

@@ -41,7 +41,8 @@ fn independently_referenced_soft_masks_preserve_ram_swap_and_metal() {
     qualify_pdf_swap_pages_impl(&corpus, &[
         ("soft-mask-device-rgb-bands.pdf", 0, (24, 8), 1),
         ("soft-mask-shared-group.pdf", 0, (24, 8), 1),
-        ("soft-mask-alpha-without-group-cs.pdf", 0, (16, 8), 1),
+        // The integer-edge alpha rectangle uses the independent area oracle
+        // below; Poppler's edge filtering adds coverage outside its geometry.
     ], Some("rgba"));
 }
 
@@ -68,6 +69,7 @@ fn qualify_pdf_swap_pages_impl(corpus: &std::path::Path, cases: &[(&str, usize, 
         request.image_index = index;
         request.memory_budget = Some(budget.clone());
         let native = rrrah_decode::decode_raster(&request).unwrap();
+        eprintln!("PDF native decode: {name} page={index} managed_peak={}", budget.peak());
         assert_eq!((native.width(), native.height()), extent);
         assert_eq!((native.image_index(), native.image_count()), (index, count));
         let prepared = rrrah_decode::prepare_raster_for_display_with_budget(&native, Some(&budget)).unwrap();
@@ -147,7 +149,7 @@ fn qualify_pdf_swap_pages_impl(corpus: &std::path::Path, cases: &[(&str, usize, 
             assert_eq!(gpu.render_raster(&display, parameters, [96, 64]).pixels, expected);
         }
         assert_eq!(budget.used(), 0);
-        eprintln!("PDF RAM/swap/GPU case passed: {name}");
+        eprintln!("PDF RAM/swap/GPU case passed: {name} page={index} managed_peak={} managed_final={}", budget.peak(), budget.used());
     }
 }
 

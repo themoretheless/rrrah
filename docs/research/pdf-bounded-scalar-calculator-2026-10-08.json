@@ -1,0 +1,52 @@
+{
+  "scope": "Bounded scalar calculator Type4 BG/UCR execution; native compositor remains test-only",
+  "source_sha256": {
+    "vendor/hayro-interpret/src/function/mod.rs": "317912cf7f5f4277e892c49bea5a794718dbcceb658f02710dfd976625752264",
+    "vendor/hayro-interpret/src/function/type4.rs": "df5511fb6ec353f2647d90a9a7c8f092548f1b3c94bbcf09535c26e71003a042",
+    "vendor/hayro/src/knockout_interpreter.rs": "0cdb3f8a509a8fe6373cc9c9f45a581786227564dc8ef736a5e80c4f67a249af"
+  },
+  "interpreter_suite": {
+    "passed": 81,
+    "failed": 0,
+    "seconds": 0.13,
+    "warnings": 0,
+    "log": "/tmp/rrrah-bounded-calculator-interpreter-clean.log"
+  },
+  "renderer_suite": {
+    "passed": 102,
+    "failed": 0,
+    "ignored": 8,
+    "seconds": 3.09,
+    "log": "/tmp/rrrah-bounded-calculator-renderer-controls.log"
+  },
+  "verified": [
+    "Numeric calculator0.2*x+0.1 atx0.5 yields0.2",
+    "Conditional branchesx0.2->0.4 andx0.75->1",
+    "Shift32 yields0 without panic",
+    "Calculator BG in authored PDF yields CMYK0.4,0.2,0,0.18 with independent alpha0.5",
+    "Every evaluated cancellation checkpoint refuses output",
+    "Stack overflow, work exhaustion, division/idiv byzero, negative sqrt, Boolean result and stack underflow refuse"
+  ],
+  "limits": {
+    "shared_work_steps": 4096,
+    "nested_depth": 32,
+    "argument_stack": 64,
+    "heap_scratch": 0
+  },
+  "general_interpreter_fixes": [
+    "Propagate stack push failures",
+    "Integer division uses checked_div",
+    "Shifts use checked_shl/checked_shr and unsigned_abs",
+    "Negative roll count magnitude avoids i32MIN overflow",
+    "Nonfinite arithmetic refuses before range clamp can mask it"
+  ],
+  "remaining": [
+    "Sampled cubic Order3",
+    "Function parsing/decompression/program/table admission",
+    "Exact integer calculator semantics and full conformance qualification",
+    "Explicit default BG/UCR output policy",
+    "Native scene frames and production integration",
+    "Real AI pixel qualification"
+  ],
+  "production_enabled": false
+}

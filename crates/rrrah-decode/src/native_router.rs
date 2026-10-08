@@ -151,6 +151,24 @@ macro_rules! dispatch {
     };
 }
 
+fn eip_request(request: &DecodeRequest) -> Option<DecodeRequest> {
+    if !request.path.extension().is_some_and(|ext| ext.eq_ignore_ascii_case("eip")) { return None; }
+    let mut bounded = request.clone();
+    if bounded.memory_budget.is_none() {
+        bounded.memory_budget = Some(rrrah_core::MemoryBudget::new(512 * 1024 * 1024));
+    }
+    Some(bounded)
+}
+
+fn eip_error(error: crate::EipError) -> DecodeError {
+    match error {
+        crate::EipError::Decode(error) => error,
+        crate::EipError::Memory(error) => DecodeError::Memory(error),
+        crate::EipError::Cancelled => DecodeError::Cancelled,
+        error => DecodeError::NativeCamera { format: "EIP original RAW", message: error.to_string() },
+    }
+}
+
 impl RawDecoder for NativeRawDecoder {
     fn mosaic_recipe(&self, request: &DecodeRequest) -> Result<MosaicRecipeManifest, DecodeError> {
         request.check_cancelled()?;
@@ -158,6 +176,9 @@ impl RawDecoder for NativeRawDecoder {
             return Err(DecodeError::UnsupportedImageIndex {
                 index: request.image_index,
             });
+        }
+        if let Some(request) = eip_request(request) {
+            return crate::eip_file_sensor_recipe(&request).map_err(eip_error);
         }
         dispatch!(NativeFormat::resolve(&request.path)?, mosaic_recipe, request)
     }
@@ -169,6 +190,9 @@ impl RawDecoder for NativeRawDecoder {
                 index: request.image_index,
             });
         }
+        if let Some(request) = eip_request(request) {
+            return crate::decode_eip_file_sensor(&request).map(|sensor| sensor.decoded).map_err(eip_error);
+        }
         dispatch!(NativeFormat::resolve(&request.path)?, decode, request)
     }
 }
@@ -178,7 +202,7 @@ mod tests {
     use super::*;
     #[test]
     fn unsupported_raw_index_precedes_format_resolution_and_source_io() {
-        for extension in ["cr3", "tiff", "gpr", "nef", "mrw", "unknown"] {
+        for extension in ["eip", "cr3", "tiff", "gpr", "nef", "mrw", "unknown"] {
             for index in [1, usize::MAX] {
                 let mut request = DecodeRequest::new(format!("/rrrah-absent-indexed-source.{extension}"));
                 request.image_index = index;
@@ -191,7 +215,7 @@ mod tests {
     }
     #[test]
     fn cancelled_router_refuses_before_opening_or_resolving_source() {
-        for extension in ["cr3", "tiff", "gpr", "nef", "unknown"] {
+        for extension in ["eip", "cr3", "tiff", "gpr", "nef", "unknown"] {
             let mut request = DecodeRequest::new(format!("/rrrah-absent-cancelled-source.{extension}"));
             request.cancellation = Some(crate::GenerationToken::new(
                 std::sync::Arc::new(std::sync::atomic::AtomicU64::new(2)),

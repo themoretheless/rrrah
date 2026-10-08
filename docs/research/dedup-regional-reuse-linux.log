@@ -1,0 +1,159 @@
+   Compiling moxcms v0.8.1 (/workspace/vendor/moxcms)
+   Compiling image v0.25.10
+   Compiling hayro-interpret v0.7.0 (/workspace/vendor/hayro-interpret)
+   Compiling hayro v0.7.1
+   Compiling jxl-oxide v0.12.6
+   Compiling rrrah-decode v0.1.0 (/workspace/crates/rrrah-decode)
+   Compiling rrrah-dedup v0.1.0 (/workspace/crates/rrrah-dedup)
+warning: linker stderr: /validation/sysroot/usr/bin/ld: /validation/target/debug/deps/libjpegxr-8d01a0594e000fc4.rlib(2e643c6506a180d9-strenc.o): in function `StrIOEncInit':
+         /validation/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/jpegxr-0.3.1/jxrlib/image/encode/strenc.c:485:(.text.StrIOEncInit+0xf0): the use of `tmpnam' is dangerous, better use `mkstemp'
+  |
+  = note: `#[warn(linker_messages)]` on by default
+
+warning: linker stdout: /validation/sysroot/usr/bin/ld: /validation/target/debug/deps/libjpegxr-8d01a0594e000fc4.rlib(2e643c6506a180d9-strenc.o): note: the message above does not take linker garbage collection into account
+
+warning: `rrrah-dedup` (test "filtered") generated 2 warnings
+warning: `rrrah-dedup` (test "warp") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "projective_geometry") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "photometric") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "projective_files") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (lib test) generated 2 warnings (2 duplicates)
+    Finished `test` profile [optimized + debuginfo] target(s) in 9m 51s
+     Running unittests src/lib.rs (/validation/target/debug/deps/rrrah_dedup-11c787c01071d7da)
+
+running 39 tests
+test cache::publication_tests::directory_sync_failure_reports_already_published_complete_cache ... ok
+test animated::timeline_key_tests::rational_sum_overflow_is_inconclusive_despite_direct_timeline_equality ... ok
+test animated::timeline_key_tests::zero_duration_timelines_ignore_pixels_but_retain_repetition ... ok
+test container::reuse_tests::candidate_collisions_and_signature_failures_cannot_replace_direct_evidence ... ok
+test container::reuse_tests::indexed_groups_remove_changed_sources_without_losing_healthy_edges ... ok
+test container::reuse_tests::retained_left_reuses_pixels_and_rejects_changed_source_and_cancellation ... ok
+test container::reuse_tests::retained_left_survives_memory_refusal_and_releases_before_row_change ... ok
+test container::reuse_tests::indexed_groups_keep_selected_pages_and_animation_scopes_separate ... ok
+test container::reuse_tests::signature_preparation_errors_remain_pair_issues_without_unique_classification ... ok
+test container::reuse_tests::stale_different_signatures_are_errors_and_equal_signatures_require_confirmation ... ok
+test container::reuse_tests::indexed_groups_keep_labels_under_collisions_failure_and_candidate_caps ... ok
+test exact::collision_tests::colliding_samples_and_full_hashes_still_partition_by_bytes ... ok
+test exact::collision_tests::final_content_validation_rejects_change_even_when_metadata_matches ... ok
+test exact::collision_tests::read_buffer_capacity_failure_is_explicit_and_retry_succeeds ... ok
+test exact::collision_tests::verified_observations_detect_metadata_invisible_pruned_mutations ... ok
+test exact::observed_snapshot_policy_tests::replacement_after_initial_metadata_cannot_bypass_observed_size_limit ... ok
+test local_scan::feature_memory_tests::grayscale_admission_accounts_for_other_owners_and_releases_on_cancel ... ok
+test local_scan::feature_memory_tests::retained_feature_storage_keeps_credit_until_last_owner ... ok
+test local_scan::reflected_model_confirmation_tests::a_rejected_second_model_does_not_convert_first_fit_failure_to_a_negative ... ok
+test local_scan::reflected_model_confirmation_tests::alternative_confirmation_cancel_and_work_limits_remain_terminal ... ok
+test local_scan::reflected_model_confirmation_tests::coefficient_bounds_and_low_variance_failures_are_also_model_specific ... ok
+test local_scan::reflected_model_confirmation_tests::exhausted_model_fits_preserve_first_inconclusive_reason ... ok
+test local_scan::reflected_model_confirmation_tests::insufficient_fit_support_in_first_model_does_not_hide_second_verified_model ... ok
+test local_scan::reflected_model_confirmation_tests::ordinary_alternative_models_recover_photometric_range_and_display_fits ... ok
+test local_scan::reflected_model_confirmation_tests::reflected_ranged_models_recover_fit_and_preserve_selected_domain ... ok
+test local_scan::reflected_model_confirmation_tests::selected_encoded_filter_retains_auxiliary_linear_failure ... ok
+test pages::page_key_tests::key_retains_page_order_and_count_independently_of_first_page ... ok
+test pixel_index::tests::injected_constant_keys_still_require_direct_pixel_confirmation ... ok
+test tests::collision_membership_keeps_arbitrary_order_and_pair_identity ... ok
+test tests::empty_and_duplicate_fingerprints ... ok
+test tests::indexed_search_matches_independent_exhaustive_scan ... ok
+test tests::traversal_work_exhaustion_is_distinct_from_failure ... ok
+test warp::bounded_fit_tests::boundary_fit_matches_exhaustive_rectangle_and_beats_independent_clipping ... ok
+test warp::encoded_signal_tests::extended_srgb_landmarks_match_independent_decimal_oracle_without_clipping ... ok
+test warp::encoded_signal_tests::transfer_precedes_premultiplication_and_bilinear_sampling ... ok
+test warp::regional_reuse_tests::reused_whole_evidence_preserves_regions_and_reduces_observed_work ... ok
+test container::reuse_tests::reused_pair_latches_every_cancellation_checkpoint_and_generation_token ... ok
+test container::reuse_tests::indexed_groups_cancel_without_partial_output_at_every_normal_checkpoint ... ok
+test container::reuse_tests::whole_signature_pipeline_cancels_at_every_checkpoint_without_report_or_leaks ... ok
+
+test result: ok. 39 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 12.15s
+
+     Running tests/filtered.rs (/validation/target/debug/deps/filtered-d867de14dcedac28)
+
+running 4 tests
+test complete_work_is_admitted_before_sampling_and_cancellation_has_no_partial_evidence ... ok
+test independently_known_box_mean_retains_strict_high_frequency_differences ... ok
+test broad_content_edits_and_alpha_changes_remain_visible_after_filtering ... ok
+test reflected_filter_retains_color_space_alpha_work_and_cancel_policy ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/photometric.rs (/validation/target/debug/deps/photometric-113a380a124d7c01)
+
+running 7 tests
+test bounded_fit_excludes_saturation_from_model_but_never_from_residuals ... ok
+test incomplete_fits_have_specific_reasons_instead_of_invalid_pixel_errors ... ok
+test explicit_display_projection_retains_hdr_disagreement_and_alpha_edits ... ok
+test known_channel_gains_offsets_and_spatial_edit_are_separate_evidence ... ok
+test flat_content_alpha_edits_limits_and_cancellation_do_not_disappear ... ok
+test reflected_gain_offset_preserves_strict_evidence_and_cancel_atomicity ... ok
+test reflected_range_and_display_keep_hdr_alpha_inverse_and_cancellation_evidence ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/projective_files.rs (/validation/target/debug/deps/projective_files-5e9a3727858667d9)
+
+running 28 tests
+test anchored_projective_collection_mutation_cancel_and_limits ... ok
+test anchored_projective_file_objective_never_bypasses_pixel_acceptance ... ok
+test complementary_collection_keeps_separate_matching_and_nested_source_lifecycle ... ok
+test filtered_projective_unrelated_pairs_and_lifecycle ... ok
+test indexed_projective_collection_finds_derivative_and_rejects_other_scene ... ok
+test combined_perspective_light_photos_require_all_six_positives_and_unrelated_rejection ... ok
+test indexed_projective_collection_mutation_cancel_and_limits ... ok
+test indexed_spatial_projective_matches_direct_pairs ... ok
+test perspective_generator_geometry_diagnostic ... ok
+test projective_photometric_collection_mutation_cancel_and_limits ... ok
+test anchored_projective_collection_matches_all_pairs_on_six_source_corpus has been running for over 60 seconds
+test complementary_files_preserve_both_searches_and_atomic_refusals has been running for over 60 seconds
+test projective_photometric_file_fit_keeps_strict_errors_and_refusals ... ok
+test pyramid_collection_and_nested_roots_match_direct_pairs_and_refusals ... ok
+test pyramid_photometric_files_preserve_identity_refusals_and_cancel_retry ... ok
+test real_file_projective_identity_and_terminal_refusals ... ok
+test anchored_projective_collection_matches_all_pairs_on_six_source_corpus ... ok
+test recursive_projective_collection_preserves_aliases_errors_and_requests ... ok
+test registration_phase_cancel_and_budget_return_no_partial_file_candidate ... ok
+test registration_policy_is_validated_before_source_io ... ok
+test indexed_projective_collection_matches_all_pairs_on_six_source_corpus has been running for over 60 seconds
+test complementary_files_preserve_both_searches_and_atomic_refusals ... ok
+test indexed_projective_collection_matches_all_pairs_on_six_source_corpus ... ok
+test registration_portfolio_collection_mutation_cancel_and_limits ... ok
+test registration_portfolio_files_preserve_both_residuals_and_atomic_refusals ... ok
+test sampled_projective_collection_mutation_cancel_and_limits ... ok
+test sampled_projective_files_preserve_pixels_and_terminal_refusals ... ok
+test spatial_projective_registration_preserves_identity_and_admission ... ok
+test real_preview_perspective_derivatives ... ok
+test registration_portfolio_collection_matches_all_pairs_on_six_source_corpus has been running for over 60 seconds
+test sampled_projective_collection_matches_all_pairs_on_six_source_corpus has been running for over 60 seconds
+test sampled_projective_collection_matches_all_pairs_on_six_source_corpus ... ok
+test registration_portfolio_collection_matches_all_pairs_on_six_source_corpus ... ok
+
+test result: ok. 28 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 193.47s
+
+     Running tests/projective_geometry.rs (/validation/target/debug/deps/projective_geometry-a0c0d4a40270267c)
+
+running 14 tests
+test full_support_refinement_beats_minimal_hypotheses_on_noisy_points ... ok
+test invalid_horizon_and_cancel_checkpoints ... ok
+test perspective_mapping_and_permutations ... ok
+test perspective_inverse_grid_catches_unsampled_edit ... ok
+test perspective_pixels_hdr_edits_horizon_and_cancel ... ok
+test projective_filter_preserves_strict_edits_and_terminal_cancellation ... ok
+test registration_candidates_keep_independent_full_grid_evidence_and_shared_limits ... ok
+test registration_portfolio_admits_shared_work_and_discards_partial_models_on_cancel ... ok
+test robust_perspective_outliers_budget_and_cancellation ... ok
+test sampled_projective_cancellation_discards_models_and_retry_is_deterministic ... ok
+test sampled_projective_recovers_large_outlier_set_with_fixed_work ... ok
+test perspective_photometric_fit_preserves_unfitted_errors_and_limits ... ok
+test photometric_registration_keeps_geometry_under_affine_encoded_light_change ... ok
+     Running tests/warp.rs (/validation/target/debug/deps/warp-7304949f40074d18)
+test pixel_registration_reduces_known_offset_and_obeys_terminal_limits ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s
+
+
+running 5 tests
+test bilinear_sampling_keeps_alpha_and_invisible_rgb_separate ... ok
+test crop_overlap_and_single_pixel_edits_are_explicit ... ok
+test reverse_verification_catches_edits_between_scaled_sample_centers ... ok
+test reflected_grids_preserve_hdr_alpha_and_inverse_with_atomic_cancel ... ok
+test explicit_projective_regions_retain_edits_domains_and_atomic_refusals ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+

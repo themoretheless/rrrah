@@ -1,0 +1,76 @@
+{
+  "status": "verified_auditor_rejections",
+  "cases": [
+    {
+      "case": "synthetic_baseline",
+      "returncode": 0,
+      "audit_created": true
+    },
+    {
+      "case": "missing_pair",
+      "returncode": 1,
+      "audit_created": false
+    },
+    {
+      "case": "duplicate_pair",
+      "returncode": 1,
+      "audit_created": false
+    },
+    {
+      "case": "integer_candidate",
+      "returncode": 1,
+      "audit_created": false
+    },
+    {
+      "case": "boolean_file_id",
+      "returncode": 1,
+      "audit_created": false
+    },
+    {
+      "case": "boolean_peak",
+      "returncode": 1,
+      "audit_created": false
+    },
+    {
+      "case": "excess_memory",
+      "returncode": 1,
+      "audit_created": false
+    },
+    {
+      "case": "changed_spatial_decision",
+      "returncode": 1,
+      "audit_created": false
+    },
+    {
+      "case": "changed_region_count",
+      "returncode": 1,
+      "audit_created": false
+    },
+    {
+      "case": "integer_hit_count",
+      "returncode": 1,
+      "audit_created": false
+    },
+    {
+      "case": "excess_features",
+      "returncode": 1,
+      "audit_created": false
+    },
+    {
+      "case": "excess_hits",
+      "returncode": 1,
+      "audit_created": false
+    },
+    {
+      "case": "missing_region_lane",
+      "returncode": 1,
+      "audit_created": false
+    }
+  ],
+  "input_hashes": {
+    "docs/research/dedup-six-regions-six-file-pair-oracle.json": "cd4e8cbca4aa5120d54aa8a8d460e0c7059d7971370375535403c14bf69fef82",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-six-multifile-parity.py": "682a71df05c8683bb7a249d790d43e81c60e1a41ab922580e139a1ab891f257d",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/check-dedup-six-multifile-audit-adversaries.py": "af251416647769bdadd86f060040e554c41b33139de051f2c059e47a123cfb9f"
+  },
+  "scope": "Synthetic baseline derived from15 pair records plus12 corruptions; auditor behavior only, no successful native six-source collection claim."
+}

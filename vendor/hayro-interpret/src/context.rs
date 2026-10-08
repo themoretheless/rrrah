@@ -207,6 +207,7 @@ impl<'a> Context<'a> {
             self.states.pop();
         }
 
+        device.set_alpha_source(self.get().graphics_state.alpha_is_shape);
         device.set_soft_mask(
             self.states
                 .last()

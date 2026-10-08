@@ -55,8 +55,23 @@ pub(crate) fn fill_path_impl<'a>(
     }
 
     let base_transform = context.get().ctm;
+    let original = path.unwrap_or(context.path());
+    let precise = if let Some(tolerance) = context.settings.fill_curve_tolerance {
+        if original.elements().iter().any(|element| matches!(element, PathEl::QuadTo(..) | PathEl::CurveTo(..))) {
+            match super::precise_fill::flatten_fill_bounded_with_admission_and_cancel(original, base_transform, tolerance, 65536, |bytes| {
+                if let Some(admit) = &context.settings.fill_curve_admission { admit(bytes).ok_or(()) }
+                else { Ok(Box::new(()) as Box<dyn std::any::Any + Send + Sync>) }
+            }, &|| context.settings.fill_curve_cancelled.as_ref().is_some_and(|cancelled| cancelled())) {
+                Ok(path) => Some(path),
+                Err(()) => { (context.settings.warning_sink)(crate::InterpreterWarning::FillCurveLimit); return; }
+            }
+        } else { None }
+    } else { None };
+    let path = precise.as_ref().map(|(path, _guard)| path).unwrap_or(original);
+
 
     let paint = get_paint(context, false);
+    device.set_alpha_source(context.get().graphics_state.alpha_is_shape);
     device.set_soft_mask(context.get().graphics_state.soft_mask.clone());
     device.set_blend_mode(context.get().graphics_state.blend_mode);
 
@@ -99,10 +114,7 @@ pub(crate) fn fill_path_impl<'a>(
         };
     };
 
-    match path {
-        None => draw(context.path()),
-        Some(path) => draw(path),
-    };
+    draw(path);
 }
 
 pub(crate) fn stroke_path_impl<'a>(
@@ -117,6 +129,7 @@ pub(crate) fn stroke_path_impl<'a>(
     let base_transform = context.get().ctm;
 
     let stroke_props = context.stroke_props();
+    device.set_alpha_source(context.get().graphics_state.alpha_is_shape);
     device.set_soft_mask(context.get().graphics_state.soft_mask.clone());
     device.set_blend_mode(context.get().graphics_state.blend_mode);
     let paint = get_paint(context, true);
@@ -152,10 +165,12 @@ pub(crate) fn get_paint<'a>(context: &Context<'a>, is_stroke: bool) -> Paint<'a>
             Paint::Color(Color::new(ColorSpace::device_gray(), smallvec![0.0], 0.0))
         }
     } else {
-        let color = Color::new(data.color_space, data.color, data.alpha);
+        let color = Color::new(data.color_space, data.color, data.alpha)
+            .with_conversion_functions(data.conversion_functions);
 
         if let Some(tf) = &data.transfer_function {
-            Paint::Color(Color::from_rgba(tf.apply(&color.to_rgba())))
+            Paint::Color(Color::from_rgba(tf.apply(&color.to_rgba()))
+                .with_conversion_functions(color.conversion_functions().clone()))
         } else {
             Paint::Color(color)
         }

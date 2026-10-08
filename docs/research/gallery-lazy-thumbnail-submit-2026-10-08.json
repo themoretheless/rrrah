@@ -1,0 +1,20 @@
+{
+  "scope": "Avoid eager materialization of every filmstrip thumbnail job before bounded queue submission",
+  "change": "submit_thumb_jobs passes lazy iterator to Prefetcher.submit; consumer evaluates at most queue capacity",
+  "new_control": {
+    "source_jobs": 100000,
+    "submissions": 1000,
+    "capacity": 4,
+    "evaluated_jobs_per_submission": 4
+  },
+  "ordinary_gallery_tests_passed": 30,
+  "failed": 0,
+  "ignored_external_tests": 9,
+  "log": "/tmp/rrrah-gallery-lazy-thumbnail-20261008.log",
+  "log_sha256": "1c79413241d06af61cd928e56f4da49b946c3802c7d8c454cfea388d69e0536f",
+  "limitations": [
+    "Uncached filtering can still inspect many already-cached tiles to find missing jobs",
+    "Folder enumeration and sibling-folder discovery still have synchronous UI call sites",
+    "This is bounded job construction, not full large-collection UI responsiveness qualification"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "scope": "Cooperative PDF shading texture cancellation and soft-mask predicate inheritance",
+  "implementation": "Texture generation polls before allocation, after allocation, at each row, every 64 pixels and before returning. It returns no partial buffer on cancellation. Soft-mask renderers receive the same predicate as their parent, and nested renderers inherit it.",
+  "active_test": "renderer::renderer_cancellation_tests::texture_cancellation_never_returns_partial_pixels",
+  "runner": "python3 scripts/test-pdf-mesh-bounds.py --renderer",
+  "verified": [
+    "130 by 9 texture with fractional origin matches independent coordinate/color evaluation at every pixel.",
+    "Cancellation at each checkpoint returns no partial texture; early cancellation evaluates no samples.",
+    "All 61 previously recorded source-page outputs or refusals remain unchanged."
+  ],
+  "validation": {
+    "renderer_focused_passed": 1,
+    "decoder_library_passed": 971,
+    "decoder_library_ignored": 66,
+    "failed": 0
+  },
+  "logs": ["/tmp/rrrah-pdf-texture-cancel-unit.log", "/tmp/rrrah-pdf-texture-cancel-decode.log"],
+  "remaining": [
+    "Final renderer flushing, general parsing and image resampling are not completely interruptible.",
+    "No wall-clock cancellation latency qualification or complete viewer switching test.",
+    "Complete shared-root admission of renderer textures and mesh allocations remains incomplete."
+  ]
+}

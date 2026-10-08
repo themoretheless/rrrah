@@ -1,0 +1,47 @@
+{
+  "date": "2026-10-07",
+  "feature": "GPU resident buffer-to-texture bulk copy for aligned packed rows",
+  "implementation": "RGBA32F row bytes divisible by 256 use one copy for all rows; other widths retain explicit aligned pitch single-row copies without padded CPU staging",
+  "example_command_reduction": {
+    "dimensions": [
+      64,
+      257
+    ],
+    "before": 257,
+    "after": 1
+  },
+  "evidence": {
+    "adapter": "Metal Apple M4 Max",
+    "log": "/tmp/rrrah-resident-bulk-tall-metal.log",
+    "compute_passed": 4,
+    "compute_ignored": 2,
+    "raster_passed": 10,
+    "raster_ignored": 1,
+    "reference_cases": [
+      [
+        7,
+        3
+      ],
+      [
+        16,
+        3
+      ],
+      [
+        64,
+        257
+      ]
+    ],
+    "checks": [
+      "GPU float output matches independent CPU multiplication",
+      "rendered frames byte-exact against CPU-exposed raster",
+      "cancellation preserves previous frame",
+      "resource budgets release after completion and last owner"
+    ]
+  },
+  "limits": [
+    "Command count reduction established by source; no latency speedup measured",
+    "Nonaligned rows still use separate copies",
+    "Physical HDR and NVIDIA/CUDA remain unqualified"
+  ],
+  "status": "local, not pushed"
+}

@@ -1,0 +1,26 @@
+{
+  "status": "verified_native_color_diagnostic_counts",
+  "input_hashes": {
+    "docs/research/dedup-native-screen-affine-color-clipped.json": "c38db740fb5ce15890812511d84d407788979eb0dc990e8f0d2a5282f1c84e09",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-native-screen-affine-color-clipped.py": "38409a6ed82ddbebde94b5d987cfd3c2b5ee98e10d751cca12149223b89852c3"
+  },
+  "summary": [
+    {
+      "direction": "forward",
+      "matched": 2383,
+      "samples": 2400,
+      "heldout_fraction": 0.9929166666666667,
+      "passes_fraction_0_9": true,
+      "coverage": 1.0
+    },
+    {
+      "direction": "reverse",
+      "matched": 5608,
+      "samples": 6524,
+      "heldout_fraction": 0.8595953402820355,
+      "passes_fraction_0_9": false,
+      "coverage": 0.9524052850573035
+    }
+  ],
+  "scope": "Typed two-direction fit/refusal, original image/Exif and model pins, counts/coverage/work and coefficient bounds. Independent opposite-ROI center membership and geometric filter-footprint bounds; whole-image filter support retained. No independent fitted-sample resampling, copy acceptance or negative precision proof."
+}

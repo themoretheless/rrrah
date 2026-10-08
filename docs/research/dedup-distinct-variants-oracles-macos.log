@@ -1,0 +1,43 @@
+    Blocking waiting for file lock on build directory
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 1m 33s
+     Running tests/local_index.rs (target/debug/deps/local_index-9aa10ecdb14f1c8c)
+
+running 7 tests
+test collision_buckets_recipes_and_limits_never_return_partial_results ... ok
+test descriptor_index_equals_independent_exhaustive_variant_search ... ok
+test file_pair_storage_limits_preserve_sorted_complete_results ... ok
+test reverse_matching_preserves_asymmetric_variant_metric_and_hit_limits ... ok
+test file_pair_retrieval_equals_exhaustive_distinct_query_feature_counts ... ok
+test indexed_mutual_matching_equals_exhaustive_ratios_for_every_recipe ... ok
+test extracted_rotation_and_scale_features_keep_exhaustive_correspondences ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.16s
+
+     Running tests/visual.rs (target/debug/deps/visual-ebf20522ee15b1ca)
+
+running 8 tests
+test cancellation_inside_large_collision_bucket_is_observed ... ok
+test cancelled_insertions_preserve_collision_buckets_and_deep_trees ... ok
+test duplicate_ids_budgets_and_cancel_do_not_return_partial_indexes ... ok
+test full_radius_direct_search_cancellation_never_returns_partial_matches ... ok
+test fallible_insert_enforces_total_ids_without_partial_mutation ... ok
+test fallible_search_result_caps_are_inconclusive_and_leave_index_unchanged ... ok
+test dense_adaptive_search_keeps_oracle_and_cancellation ... ok
+test complete_recipe_index_matches_exhaustive_oracle ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

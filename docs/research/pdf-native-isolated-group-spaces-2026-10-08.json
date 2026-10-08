@@ -1,0 +1,24 @@
+{
+  "scope": "Test-only native isolated group color-space bridge",
+  "passed": 111,
+  "failed": 0,
+  "ignored": 9,
+  "filtered": 1,
+  "seconds": 3.63,
+  "log": "/tmp/rrrah-native-isolated-space-verified.log",
+  "checks": [
+    "Isolated child starts transparent in declared blending coordinates",
+    "Gray quarter intensity at half coverage over red yields RGB 0.625 0.125 0.125 exactly",
+    "Scratch and all four child-frame admission failures release all tracked credit and latch parent failure",
+    "Cancellation refuses child and releases tracked credit",
+    "Interpreter routes declared isolated group space and validates nonisolated space against immediate parent"
+  ],
+  "limitations": [
+    "Not production AI qualification or Metal compositor integration",
+    "Cross-space nontransparent initial backdrops still refused",
+    "ICC group boundary transforms unsupported",
+    "Device/calibrated float conversion policies not universally color qualified",
+    "Float32 conversion boundary may round accumulated float64 blending samples",
+    "CMYK display transform construction admission remains unresolved"
+  ]
+}

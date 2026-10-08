@@ -1,0 +1,24 @@
+{
+  "status": "verified_native_linux_reflection_memory",
+  "tests": 12,
+  "suites": [
+    "gradient_reflection",
+    "gradient_candidate_smoothing",
+    "candidate_reflected_geometry",
+    "anchor_reflected_geometry",
+    "anchor_reflection_fallback",
+    "anchor_geometry_rank_fallback",
+    "anchor_rank_driven_collection",
+    "anchor_rank_driven_collection_preflight"
+  ],
+  "current_dedup_drift": [
+    "crates/rrrah-dedup/src/gradient_index.rs",
+    "crates/rrrah-dedup/src/local_collection.rs"
+  ],
+  "pins": {
+    "docs/research/dedup-reflection-memory-linux-snapshot.json": "66dc89a9d8801b233a43d6b60eb8f7bf4cde9c1022758082937d3224c9461d12",
+    "docs/research/dedup-reflection-memory-linux-retry.log": "280580f93de40b8345556d14587b252ef82857da584a08506857e95910bd036b",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-reflection-memory-linux.py": "69eb47c1a86217ab88e9deef1c97fda13d4e5c8e954da3d636e70035b848d72c"
+  },
+  "scope": "Native aarch64 Linux current reflected file portfolios, descriptor reflection, smoothing memory and indexed fixture/direct parity over prior frozen dependencies. No broad real reflection precision/recall, full package or Windows claim."
+}

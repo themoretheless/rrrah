@@ -1,0 +1,44 @@
+{
+  "scope": "Current optimized dev-build CR3 decode/swap to completed offscreen Metal frame and resident interaction timing",
+  "backend": "Metal Apple M4 Max",
+  "fixture": "tests/IMG_9043.CR3",
+  "fixture_sha256": "d06cbb10e84882cf130430bdc88ed2652c2622b96dea8d6a854c09e3bee37e59",
+  "viewport": [
+    1920,
+    1080
+  ],
+  "warmups": 3,
+  "memory_limit_each": 536870912,
+  "runs": {
+    "decode": {
+      "samples": 15,
+      "total_ms": {
+        "p50": 115.773,
+        "p95": 176.922
+      },
+      "csv": "/tmp/rrrah-metal-raw-timing-after-fixes-20261008.csv",
+      "csv_sha256": "b48b940ec9d15f14c3d4fa6fe91780ede1644b6516b19b75a3879b2bc8e3e28b",
+      "log": "/tmp/rrrah-metal-raw-timing-after-fixes-20261008.log",
+      "final_cpu_gpu_used": 0,
+      "resident_frames": 60
+    },
+    "swap": {
+      "samples": 15,
+      "total_ms": {
+        "p50": 107.101,
+        "p95": 134.399
+      },
+      "csv": "/tmp/rrrah-metal-swap-timing-after-fixes-20261008.csv",
+      "csv_sha256": "7f3d998a7dc5dbd6944a232291d8646b085da624383f943f714c3967bb36f9bd",
+      "log": "/tmp/rrrah-metal-swap-timing-after-fixes-20261008.log",
+      "final_cpu_gpu_used": 0,
+      "resident_frames": 60
+    }
+  },
+  "limitations": [
+    "Warm local filesystem after warmups; not cold-disk latency",
+    "Offscreen GPU completion, not swapchain presentation or physical display",
+    "Single real CR3 fixture; no universal RAW performance or before/after speedup claim",
+    "Optimized dev build and concurrent machine workload can affect timings"
+  ]
+}

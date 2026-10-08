@@ -1,0 +1,22 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: unused variable: `cancel`
+   --> crates/rrrah-dedup/src/local_index.rs:715:5
+    |
+715 |     cancel: impl Fn() -> bool,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_cancel`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-dedup` (lib) generated 1 warning (run `cargo fix --lib -p rrrah-dedup` to apply 1 suggestion)
+    Finished `test` profile [optimized + debuginfo] target(s) in 4.15s
+     Running tests/region_footprint.rs (target/debug/deps/region_footprint-a9806392177f1dbe)
+
+running 5 tests
+test inlier_domain_observes_mid_and_final_cancel_without_partial_result ... ok
+test inlier_domain_rejects_unbounded_indices_coordinates_and_work ... ok
+test inlier_domain_rounds_neighbors_and_stays_inside_fitting_region ... ok
+test invalid_horizon_singular_and_cancelled_refuse ... ok
+test scale_rotation_and_homography_magnitude_preserve_footprint ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

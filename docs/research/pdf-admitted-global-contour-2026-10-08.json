@@ -1,0 +1,21 @@
+{
+  "scope": "Test-only bounded device-space contour preparation; not connected to recorder or production renderer",
+  "implementation": {
+    "method": "Adaptive de Casteljau cubic subdivision with convex-hull distance bound to endpoint segment. Quadratics converted to cubics; move/line/close preserved. Transform applied before tolerance checks.",
+    "storage": "First pass counts vertices and checks limit; second pass fills an exactly reserved PathEl Vec after admission. Owned path drops before retained credit. No kurbo flatten scratch allocations.",
+    "limits": "Maximum subdivision depth32; explicit max_vertices and caller-supplied device-space tolerance. Nonfinite input and invalid settings refused; cancellation checked at operators and subdivision nodes."
+  },
+  "verification": {
+    "passed": 68,
+    "failed": 0,
+    "ignored": 6,
+    "independent_accuracy": "Own cubic area alpha63 preserved in full512x384 and translated64x64 tile at0.0001 pixel tolerance.",
+    "resource_behavior": "Vertex budget8 refused before admission; memory admission refusal returnsNone; quadratic every-cancel checkpoint sweep returnsNone and releases all acquired bytes; nonfinite curve refused before admission."
+  },
+  "pending": [
+    "Connect admitted preparation to recorded fill/clip geometry and qualify real AI corpus.",
+    "Qualify strokes/dashes, evenodd holes, large transforms, degeneracies and self-intersections.",
+    "Measure time/memory on large path collections and pressure; underlying backend allocations remain separately pending.",
+    "Production renderer integration and original strict image gates remain incomplete."
+  ]
+}

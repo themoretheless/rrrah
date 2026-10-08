@@ -1,0 +1,24 @@
+{
+  "status": "targeted_macos_pass",
+  "terminal_exit_code": 0,
+  "tests": 4,
+  "scope": [
+    "zero radius independent two-pass exact f32 bit oracle including signed zero, HDR, subnormal",
+    "zero radius 32-byte peak instead of64-byte two-buffer bound for2pixels",
+    "all zero-radius cancellation points, opacity refusal, one-short memory/work limits, released ownership",
+    "all indexed fixture pairs exact fresh direct point/anchor/recipe parity",
+    "unchanged nonzero-radius independent footprints and lifecycle"
+  ],
+  "source_note": "Post-test source differs only by formatting of added error branches.",
+  "remaining": [
+    "real collection512MiB success and measured process peak",
+    "native Linux and Windows"
+  ],
+  "sha256": {
+    "crates/rrrah-dedup/src/gradient_scale.rs": "0443736fb1e9d66e831669cdf24d6ef7ea5be87aa330a9bdaf4c992e149ce661",
+    "crates/rrrah-dedup/src/local_collection.rs": "3da21f510d79888b647b5efd5e17b23797a4a533a7b15e2c3f18bdca5b7b5ffe",
+    "crates/rrrah-dedup/tests/gradient_candidate_smoothing.rs": "8f3d8d3154ecc27cde031dd2a6f4ab37c5ea411e87ed00327d875be39ff4dcff",
+    "crates/rrrah-dedup/tests/anchor_rank_driven_collection.rs": "970f33a47e265818aabf15375a59fc3f3f4d3b654e65bfd28dcf5ef4b0db213e",
+    "docs/research/dedup-zero-radius-single-buffer-tests.log": "1cd0d38ef2329af659e9f52f502872c79bb2cda43b3fe3169a6044c0d7395980"
+  }
+}

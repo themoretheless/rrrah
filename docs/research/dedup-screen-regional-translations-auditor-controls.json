@@ -1,0 +1,25 @@
+{
+  "status": "verified_four_invalid_records_rejected",
+  "input_hashes": {
+    "docs/research/dedup-screen-regional-translations.json": "1dcf4880b591981d90941830a34b109b3181fc63cf2c5f3a8d4ec18fd4d1b082",
+    "scripts/verify-dedup-screen-regional-translations.py": "060e3424e5e9bd8d6ba2146fc1ff8455dc3df86afd559bb508d7128193953216"
+  },
+  "controls": [
+    {
+      "control": "wrong_mean",
+      "rejected": true
+    },
+    {
+      "control": "wrong_composition",
+      "rejected": true
+    },
+    {
+      "control": "wrong_membership",
+      "rejected": true
+    },
+    {
+      "control": "wrong_inliers",
+      "rejected": true
+    }
+  ]
+}

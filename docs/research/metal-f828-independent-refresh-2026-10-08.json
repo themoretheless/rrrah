@@ -1,0 +1,48 @@
+{
+  "scope": "Recreated independent Sony DSC-F828 sensor oracle and reran native decoder plus physical Metal full-sensor compute",
+  "oracle": "LibRaw 0.22.2-Release unpack, test-only scripts/raw-fixture-oracle.cpp",
+  "backend": "Metal Apple M4 Max",
+  "native_decoder_passed": 1,
+  "metal_passed": 1,
+  "failed": 0,
+  "dimensions": [
+    3360,
+    2460
+  ],
+  "gpu_channel_values_checked": 33062400,
+  "gpu_absolute_tolerance": 1e-05,
+  "final_tracked_cpu_gpu_bytes": 0,
+  "source_and_dump_hash_match_previous_report": true,
+  "inputs_and_logs": [
+    {
+      "path": "/tmp/rrrah-sony-f828.srf",
+      "bytes": 17393344,
+      "sha256": "07739f94bcab0c7e198d418ac65172d0dce04bb84a7683ecffd0bfe4b32f6d79"
+    },
+    {
+      "path": "/tmp/rrrah-srf-refresh-20261008.u16le",
+      "bytes": 16531200,
+      "sha256": "b3fc3d395950407a35d33392a97181fa51aac1afb0aa6b96d94a7eba00e95d42"
+    },
+    {
+      "path": "/tmp/rrrah-srf-refresh-20261008.json",
+      "bytes": 1000,
+      "sha256": "8e98926ddfb0947a6ca658a2945d4077b6c6a930a0bebdb6ee6475e9d291fd66"
+    },
+    {
+      "path": "/tmp/rrrah-metal-f828-refresh-20261008.log",
+      "bytes": 714,
+      "sha256": "9ad91990f10a5e15a832cec9ba952c74a84ce24893cfa8f258990c0da42d1312"
+    },
+    {
+      "path": "/tmp/rrrah-native-f828-refresh-20261008.log",
+      "bytes": 687,
+      "sha256": "38a99c1b484637be1999de0aa8f4e4fc9c150a1f70d8c1296f7ec80d6f828e09"
+    }
+  ],
+  "limitations": [
+    "Authored channel gains; not as-shot white balance or color qualification",
+    "Compute output compared with CPU reconstruction from independent unpacked samples",
+    "Physical HDR luminance and NVIDIA remain unverified"
+  ]
+}

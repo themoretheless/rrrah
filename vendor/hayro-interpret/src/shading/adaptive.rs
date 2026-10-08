@@ -47,14 +47,25 @@ struct Leaf {
     geometry: f64,
     color: f64,
 }
-type Edges = std::collections::BTreeMap<u32, std::collections::BTreeSet<u32>>;
+// Local edge points share one contiguous allocation per axis. Duplicates are
+// removed after collection, before any interior-range query.
+#[derive(Default)]
+struct Edges { points: Vec<(u32,u32)> }
+impl Edges {
+    fn insert(&mut self, fixed:u32, value:u32) {self.points.push((fixed,value));}
+    fn extend(&mut self, fixed:u32, values:impl Iterator<Item=u32>) {
+        self.points.extend(values.map(|value|(fixed,value)));
+    }
+    fn finish(&mut self) {self.points.sort_unstable();self.points.dedup();}
+}
 const PARAM_SCALE: f64 = 65536.;
 type EdgeKey = [u64; 8];
-struct Boundary {
+struct SharedEdgeSample { key: EdgeKey, parameter: u32, point: Point }
+struct Boundary<'a> {
     reversed: bool,
-    points: std::sync::Arc<std::collections::BTreeMap<u32, Point>>,
+    points: &'a [SharedEdgeSample],
 }
-impl Boundary {
+impl Boundary<'_> {
     fn local(&self, t: u32) -> u32 {
         if self.reversed { 65536 - t } else { t }
     }
@@ -182,7 +193,6 @@ fn tessellate_mesh<'a>(
     mut cancelled: impl FnMut() -> bool,
 ) -> Result<AdaptivePatchStats, AdaptivePatchError> {
     use std::borrow::Cow;
-    use std::collections::{BTreeMap, BTreeSet};
     if cancelled() {
         return Err(AdaptivePatchError::Cancelled);
     }
@@ -204,7 +214,7 @@ fn tessellate_mesh<'a>(
     let result = (|| {
         let mut planned = Vec::new();
         let mut minimum = 0;
-        let mut registry: BTreeMap<EdgeKey, ([Point; 4], BTreeSet<u32>)> = BTreeMap::new();
+        let mut shared: Vec<SharedEdgeSample> = Vec::new();
         let mut patch_edges = Vec::new();
         for source in patches {
             if cancelled() {
@@ -220,9 +230,6 @@ fn tessellate_mesh<'a>(
             minimum += leaves.len() * 2;
             let controls = boundary_controls(&patch);
             let edges = controls.map(canonical_edge);
-            for &(key, _, points) in &edges {
-                registry.entry(key).or_insert_with(|| (points, BTreeSet::new()));
-            }
             for leaf in &leaves {
                 if cancelled() {
                     return Err(AdaptivePatchError::Cancelled);
@@ -235,38 +242,29 @@ fn tessellate_mesh<'a>(
                     (3, u0 == 0, [v0, v1]),
                 ] {
                     if touches {
-                        let (key, reversed, _) = edges[edge];
-                        registry
-                            .get_mut(&key)
-                            .unwrap()
-                            .1
-                            .extend(values.map(|t| if reversed { 65536 - t } else { t }));
+                        let (key, reversed, controls) = edges[edge];
+                        for parameter in values.map(|t| if reversed {65536-t} else {t}) {
+                            if cancelled() {return Err(AdaptivePatchError::Cancelled);}
+                            let point=transform*curve_point(controls,parameter);
+                            if !point.x.is_finite() || !point.y.is_finite() {return Err(AdaptivePatchError::Invalid);}
+                            shared.push(SharedEdgeSample {key,parameter,point});
+                        }
                     }
                 }
             }
             patch_edges.push(edges);
             planned.push((patch, leaves));
         }
-        let mut shared = BTreeMap::new();
-        for (key, (points, parameters)) in registry {
-            let mut sampled = BTreeMap::new();
-            for t in parameters {
-                if cancelled() {
-                    return Err(AdaptivePatchError::Cancelled);
-                }
-                let p = transform * curve_point(points, t);
-                if !p.x.is_finite() || !p.y.is_finite() {
-                    return Err(AdaptivePatchError::Invalid);
-                }
-                sampled.insert(t, p);
-            }
-            shared.insert(key, std::sync::Arc::new(sampled));
-        }
+        if cancelled() {return Err(AdaptivePatchError::Cancelled);}
+        shared.sort_unstable_by_key(|sample|(sample.key,sample.parameter));
+        shared.dedup_by(|a,b|a.key==b.key && a.parameter==b.parameter);
+        if cancelled() {return Err(AdaptivePatchError::Cancelled);}
         let mut total = AdaptivePatchStats::default();
         for ((patch, leaves), edges) in planned.into_iter().zip(patch_edges) {
             let boundaries = edges.map(|(key, reversed, _)| Boundary {
                 reversed,
-                points: shared[&key].clone(),
+                points: &shared[shared.partition_point(|sample|sample.key<key)
+                    ..shared.partition_point(|sample|sample.key<=key)],
             });
             let mut remaining = limits;
             remaining.max_triangles -= total.triangles;
@@ -299,12 +297,11 @@ fn tessellate_mesh<'a>(
 }
 
 fn interior(edges: &Edges, fixed: u32, low: u32, high: u32) -> Vec<u32> {
-    use std::ops::Bound::Excluded;
-    edges
-        .get(&fixed)
-        .map(|values| values.range((Excluded(low), Excluded(high))).copied().collect())
-        .unwrap_or_default()
+    let start=edges.points.partition_point(|&point|point<=(fixed,low));
+    let end=edges.points.partition_point(|&point|point<(fixed,high));
+    edges.points[start..end].iter().map(|&(_,value)|value).collect()
 }
+
 fn patch_vertex(
     patch: &TensorProductPatch,
     transform: Affine,
@@ -324,7 +321,8 @@ fn patch_vertex(
             return None;
         };
         let local = (t * PARAM_SCALE).round() as u32;
-        edges[edge].points.get(&edges[edge].local(local)).copied()
+        edges[edge].points.binary_search_by_key(&edges[edge].local(local),|sample|sample.parameter)
+            .ok().map(|index|edges[edge].points[index].point)
     });
     let point = shared.unwrap_or_else(|| transform * patch.map_coordinate(uv));
     let colors = patch.interpolate(uv);
@@ -492,12 +490,14 @@ impl TensorProductPatch {
             .map(|v| f64::from(v.abs()))
             .fold(1., f64::max);
         let mut leaves = Vec::new();
-        let mut pending = vec![Cell {
-            grid,
-            uv: [0., 1., 0., 1.],
-            depth: 0,
-        }];
-        while let Some(cell) = pending.pop() {
+        // DFS keeps at most three siblings per level plus the current cell.
+        // Depth <=16 was validated above, so planning needs no heap stack.
+        let mut pending: [Option<Cell>;49]=std::array::from_fn(|_|None);
+        pending[0]=Some(Cell {grid,uv:[0.,1.,0.,1.],depth:0});
+        let mut pending_len=1;
+        while pending_len>0 {
+            pending_len-=1;
+            let cell=pending[pending_len].take().ok_or(AdaptivePatchError::Invalid)?;
             if cancelled() {
                 return Err(AdaptivePatchError::Cancelled);
             }
@@ -527,11 +527,9 @@ impl TensorProductPatch {
                     [um, u1, vm, v1],
                 ];
                 for (grid, uv) in split_grid(cell.grid).into_iter().zip(uv).rev() {
-                    pending.push(Cell {
-                        grid,
-                        uv,
-                        depth: cell.depth + 1,
-                    });
+                    if pending_len>=pending.len() {return Err(AdaptivePatchError::Invalid);}
+                    pending[pending_len]=Some(Cell {grid,uv,depth:cell.depth+1});
+                    pending_len+=1;
                 }
             }
         }
@@ -546,8 +544,8 @@ impl TensorProductPatch {
         boundaries: Option<&[Boundary; 4]>,
         cancelled: &mut impl FnMut() -> bool,
     ) -> Result<AdaptivePatchStats, AdaptivePatchError> {
-        let mut vertical = Edges::new();
-        let mut horizontal = Edges::new();
+        let mut vertical = Edges::default();
+        let mut horizontal = Edges::default();
         for leaf in &leaves {
             if cancelled() {
                 return Err(AdaptivePatchError::Cancelled);
@@ -555,8 +553,8 @@ impl TensorProductPatch {
             let [u0, u1, v0, v1] = leaf.uv.map(|v| (v * PARAM_SCALE).round() as u32);
             for x in [u0, u1] {
                 for y in [v0, v1] {
-                    vertical.entry(x).or_default().insert(y);
-                    horizontal.entry(y).or_default().insert(x);
+                    vertical.insert(x,y);
+                    horizontal.insert(y,x);
                 }
             }
         }
@@ -565,15 +563,18 @@ impl TensorProductPatch {
                 if cancelled() {
                     return Err(AdaptivePatchError::Cancelled);
                 }
-                let values = boundary.points.keys().map(|&t| boundary.local(t));
+                let values = boundary.points.iter().map(|sample|boundary.local(sample.parameter));
                 match edge {
-                    0 => horizontal.entry(0).or_default().extend(values),
-                    1 => vertical.entry(65536).or_default().extend(values),
-                    2 => horizontal.entry(65536).or_default().extend(values),
-                    _ => vertical.entry(0).or_default().extend(values),
+                    0 => horizontal.extend(0,values),
+                    1 => vertical.extend(65536,values),
+                    2 => horizontal.extend(65536,values),
+                    _ => vertical.extend(0,values),
                 }
             }
         }
+        if cancelled() { return Err(AdaptivePatchError::Cancelled); }
+        vertical.finish(); horizontal.finish();
+        if cancelled() { return Err(AdaptivePatchError::Cancelled); }
         let mut stats = AdaptivePatchStats::default();
         for leaf in leaves {
             if cancelled() {
@@ -716,5 +717,76 @@ impl super::CoonsPatch {
             control_points,
             colors: self.colors.clone(),
         })
+    }
+}
+
+#[cfg(test)]
+mod qualification_tests {
+    use super::*;
+    fn patch(x: f64, colors: [f32;4]) -> TensorProductPatch {
+        let indices = [[0,1,2,3],[11,12,13,4],[10,15,14,5],[9,8,7,6]];
+        let mut control_points=[Point::ZERO;16];
+        for u in 0..4 {for v in 0..4 {
+            control_points[indices[u][v]]=Point::new(x+u as f64*8./3.,v as f64*8./3.);
+        }}
+        TensorProductPatch {control_points,colors:colors.map(|v|smallvec::smallvec![v])}
+    }
+    fn limits() -> AdaptivePatchLimits {
+        AdaptivePatchLimits {pixel_error:0.01,component_error:0.01,max_depth:8,max_triangles:4096}
+    }
+    #[test]
+    fn bilinear_source_component_is_within_bound_at_independent_dense_samples() {
+        let source=patch(0.,[0.,0.,1.,0.]);
+        let mut output=Vec::new();
+        let stats=source.to_triangles_adaptive(Affine::IDENTITY,limits(),&mut output,||false).unwrap();
+        assert_eq!(stats.triangles,output.len());
+        assert!(stats.max_pixel_bound<=0.01 && stats.max_component_bound<=0.01);
+        for y in 0..99 {for x in 0..99 {
+            let u=(x as f64+0.317)/99.; let v=(y as f64+0.193)/99.;
+            let point=Point::new(u*8.,v*8.);
+            let triangle=output.iter().find(|t|t.contains_point(point)).expect("no holes in planar patch");
+            let actual=f64::from(triangle.interpolate(point)[0]);
+            assert!((actual-u*v).abs()<=stats.max_component_bound+1e-7);
+        }}
+    }
+    #[test]
+    fn unequal_patch_subdivision_welds_shared_boundary_and_preserves_source_color() {
+        let mut left=patch(0.,[0.125;4]); left.control_points[12].y+=2.;
+        let right=patch(8.,[0.875;4]);
+        let patches=[AdaptivePatchRef::Tensor(&left),AdaptivePatchRef::Tensor(&right)];
+        let mut output=Vec::new();let mut ranges=Vec::new();
+        tessellate_patch_mesh_adaptive_with_ranges(&patches,Affine::IDENTITY,limits(),&mut output,&mut ranges,||false).unwrap();
+        assert_eq!(ranges.len(),2); assert!(ranges[0].len()>ranges[1].len());
+        let boundary=|range:std::ops::Range<usize>| {
+            let mut points=Vec::new();
+            for triangle in &output[range] {for vertex in [&triangle.p0,&triangle.p1,&triangle.p2] {
+                if vertex.point.x==8. {points.push((vertex.point.x.to_bits(),vertex.point.y.to_bits()));}
+            }}
+            points.sort_unstable();points.dedup();points
+        };
+        let shared=boundary(ranges[0].clone());assert!(shared.len()>2);
+        assert_eq!(shared,boundary(ranges[1].clone()));
+        for (range,expected) in ranges.iter().zip([0.125,0.875]) {
+            for triangle in &output[range.clone()] {for vertex in [&triangle.p0,&triangle.p1,&triangle.p2] {assert_eq!(vertex.colors[0],expected);}}
+        }
+    }
+    #[test]
+    fn mesh_cancellation_and_triangle_limit_preserve_existing_output_and_ranges() {
+        let source=patch(0.,[0.;4]);let patches=[AdaptivePatchRef::Tensor(&source)];
+        let mut seed=Vec::new();source.to_triangles_adaptive(Affine::IDENTITY,limits(),&mut seed,||false).unwrap();
+        let original=seed[0].clone();
+        let polls=std::cell::Cell::new(0);
+        let mut output=vec![original.clone()];let mut ranges=vec![99..101];
+        tessellate_patch_mesh_adaptive_with_ranges(&patches,Affine::IDENTITY,limits(),&mut output,&mut ranges,||{polls.set(polls.get()+1);false}).unwrap();
+        let total=polls.get();
+        for target in 1..=total {
+            polls.set(0);let mut output=vec![original.clone()];let mut ranges=vec![99..101];
+            assert_eq!(tessellate_patch_mesh_adaptive_with_ranges(&patches,Affine::IDENTITY,limits(),&mut output,&mut ranges,||{polls.set(polls.get()+1);polls.get()>=target}).err(),Some(AdaptivePatchError::Cancelled));
+            assert_eq!(output.len(),1);assert_eq!(ranges,vec![99..101]);
+            assert_eq!(output[0].p0.point,original.p0.point);
+        }
+        let mut output=vec![original];let mut ranges=vec![99..101];let mut tight=limits();tight.max_triangles=1;
+        assert_eq!(tessellate_patch_mesh_adaptive_with_ranges(&patches,Affine::IDENTITY,tight,&mut output,&mut ranges,||false).err(),Some(AdaptivePatchError::TriangleLimit));
+        assert_eq!(output.len(),1);assert_eq!(ranges,vec![99..101]);
     }
 }

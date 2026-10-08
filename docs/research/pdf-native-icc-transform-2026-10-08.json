@@ -1,0 +1,36 @@
+{
+  "scope": "Explicit ICC-to-ICC native blending transform API; not wired into production or native scene replay",
+  "source_sha256": "4a4ea606b772433284b28c2597401ccb8af6999a6bfa168289282d8d774f5940",
+  "controls": {
+    "passed": 2,
+    "failed": 0,
+    "log": "/tmp/rrrah-native-icc-transform-verified-controls.log",
+    "gray_gamma_reference": "gamma1 input0.25 -> gamma2 output0.5 within0.0002",
+    "rgb_precision": "Non-8-bit-lattice output; same-sRGB roundtrip error bounded by half an8-bit interval, not exact profile equivalence",
+    "rejections": [
+      "wrong component count",
+      "nonfinite sample",
+      "out-of-range sample",
+      "unprofiled device destination"
+    ]
+  },
+  "renderer_regression": {
+    "passed": 101,
+    "failed": 0,
+    "ignored": 8,
+    "seconds": 2.79,
+    "log": "/tmp/rrrah-native-icc-renderer-controls.log"
+  },
+  "options": {
+    "prefer_fixed_point": false
+  },
+  "observed_limit": "Same-sRGB floating transform retained about0.000043 roundtrip error in the sampled red channel. Turning off fixed-point did not remove it. No image-oracle tolerance changed.",
+  "allocation": "Transform construction allocates inside moxcms; future admitted transform cache/budget integration required before bounded replay uses it. Sample conversion uses fixed stack storage.",
+  "remaining": [
+    "Device and calibrated-space conversion policy",
+    "Admitted transform cache and cancellation around construction",
+    "Native paint/group frame scene integration",
+    "Real AI pixel oracle qualification"
+  ],
+  "production_enabled": false
+}

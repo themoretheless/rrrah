@@ -36,58 +36,70 @@ fn managed_oriented_pyramid_admission_cancel_retry_and_last_owner_release() {
         max_total_pixels: 6000,
         max_total_features: 300,
     };
-    let expected = extract_oriented_pyramid(&view, policy, || false).unwrap();
-    assert!(!expected.is_empty());
-    let budget = MemoryBudget::new(4 * 1024 * 1024);
-    let calls = Cell::new(0);
-    let features = extract_oriented_pyramid_managed(&view, policy, &budget, || {
-        calls.set(calls.get() + 1);
-        false
-    })
-    .unwrap();
-    let checkpoints = calls.get();
-    assert_eq!(features.len(), expected.len());
-    for (a, b) in features.iter().zip(&expected) {
-        assert_eq!(a.position, b.position);
-        assert_eq!(a.recipe, b.recipe);
-        assert_eq!(a.descriptor, b.descriptor);
-        assert_eq!(a.quarter_turns, b.quarter_turns);
-    }
-    let retained = budget.used();
-    assert!(retained > 0);
-    let owner = features.clone();
-    drop(features);
-    assert_eq!(budget.used(), retained);
-    drop(owner);
-    assert_eq!(budget.used(), 0);
-    let peak = budget.peak();
-    for limit in [0, peak - 1] {
-        let small = MemoryBudget::new(limit);
-        assert!(matches!(
-            extract_oriented_pyramid_managed(&view, policy, &small, || false),
-            Err(LocalError::Budget)
-        ));
-        assert_eq!(small.used(), 0);
-    }
-    for stop in [1, checkpoints / 2, checkpoints] {
-        calls.set(0);
-        assert!(
-            matches!(
-                extract_oriented_pyramid_managed(&view, policy, &budget, || {
-                    calls.set(calls.get() + 1);
-                    calls.get() >= stop
-                }),
-                Err(LocalError::Cancelled)
-            ),
-            "stop={stop}"
-        );
+    for spatial in [false, true] {
+        let expected = if spatial {
+            rrrah_dedup::pyramid::extract_spatial_oriented_pyramid(&view, policy, 4, 4, 6, || false).unwrap()
+        } else {
+            extract_oriented_pyramid(&view, policy, || false).unwrap()
+        };
+        let run = |budget: &MemoryBudget, cancel: &dyn Fn() -> bool| {
+            if spatial {
+                rrrah_dedup::pyramid::extract_spatial_oriented_pyramid_managed(
+                    &view, policy, 4, 4, 6, budget, cancel,
+                )
+            } else {
+                extract_oriented_pyramid_managed(&view, policy, budget, cancel)
+            }
+        };
+        assert!(!expected.is_empty());
+        let budget = MemoryBudget::new(4 * 1024 * 1024);
+        let calls = Cell::new(0);
+        let features = run(&budget, &|| {
+            calls.set(calls.get() + 1);
+            false
+        })
+        .unwrap();
+        let checkpoints = calls.get();
+        assert_eq!(features.len(), expected.len());
+        for (a, b) in features.iter().zip(&expected) {
+            assert_eq!(a.position, b.position);
+            assert_eq!(a.recipe, b.recipe);
+            assert_eq!(a.descriptor, b.descriptor);
+            assert_eq!(a.quarter_turns, b.quarter_turns);
+        }
+        let retained = budget.used();
+        assert!(retained > 0);
+        let owner = features.clone();
+        drop(features);
+        assert_eq!(budget.used(), retained);
+        drop(owner);
         assert_eq!(budget.used(), 0);
+        let peak = budget.peak();
+        for limit in [0, peak - 1] {
+            let small = MemoryBudget::new(limit);
+            assert!(matches!(run(&small, &|| false), Err(LocalError::Budget)));
+            assert_eq!(small.used(), 0);
+        }
+        for stop in [1, checkpoints / 2, checkpoints] {
+            calls.set(0);
+            assert!(
+                matches!(
+                    run(&budget, &|| {
+                        calls.set(calls.get() + 1);
+                        calls.get() >= stop
+                    }),
+                    Err(LocalError::Cancelled)
+                ),
+                "stop={stop}"
+            );
+            assert_eq!(budget.used(), 0);
+        }
+        let exact = MemoryBudget::new(peak);
+        let retry = run(&exact, &|| false).unwrap();
+        assert_eq!(retry.len(), expected.len());
+        drop(retry);
+        assert_eq!(exact.used(), 0);
     }
-    let exact = MemoryBudget::new(peak);
-    let retry = extract_oriented_pyramid_managed(&view, policy, &exact, || false).unwrap();
-    assert_eq!(retry.len(), expected.len());
-    drop(retry);
-    assert_eq!(exact.used(), 0);
 }
 #[test]
 fn scale_is_estimated_from_extracted_multiresolution_features() {
@@ -342,6 +354,112 @@ fn oriented_pyramid_keeps_recipe_source_coordinates_and_admission() {
                 max_total_pixels: 1,
                 ..policy
             },
+            || false
+        ),
+        Err(LocalError::Budget)
+    ));
+}
+
+#[test]
+fn spatial_pyramid_preserves_level_coordinates_admission_and_cancellation() {
+    use rrrah_dedup::{
+        local::{LocalError, extract_spatial_oriented},
+        pyramid::extract_spatial_oriented_pyramid,
+    };
+    use std::cell::Cell;
+    let mut seed = 918273_u64;
+    let samples: Vec<f32> = (0..128 * 128)
+        .flat_map(|_| {
+            seed ^= seed << 13;
+            seed ^= seed >> 7;
+            seed ^= seed << 17;
+            let v = (seed & 255) as f32 / 255.;
+            [v, v, v, 1.]
+        })
+        .collect();
+    let view = LinearRgbaView::new(128, 128, &samples, 16384, || false).unwrap();
+    let p = PyramidPolicy {
+        local: LocalPolicy {
+            max_pixels: 16384,
+            max_candidates: 16384,
+            max_features: 100,
+            minimum_corner_score: 0.0001,
+        },
+        max_levels: 1,
+        max_total_pixels: 22000,
+        max_total_features: 300,
+    };
+    let expected = extract_spatial_oriented(&view, p.local, 4, 4, 6, || false).unwrap();
+    let single = extract_spatial_oriented_pyramid(&view, p, 4, 4, 6, || false).unwrap();
+    assert!(!single.is_empty());
+    assert_eq!(single.len(), expected.len());
+    for (a, b) in single.iter().zip(&expected) {
+        assert_eq!(a.position, b.position);
+        assert_eq!(a.recipe, b.recipe);
+        assert_eq!(a.descriptor, b.descriptor);
+        assert_eq!(a.quarter_turns, b.quarter_turns);
+    }
+    let p = PyramidPolicy { max_levels: 3, ..p };
+    let calls = Cell::new(0);
+    let full = extract_spatial_oriented_pyramid(&view, p, 4, 4, 6, || {
+        calls.set(calls.get() + 1);
+        false
+    })
+    .unwrap();
+    let checkpoints = calls.get();
+    assert!(full.len() > single.len());
+    assert!(
+        full.iter()
+            .all(|f| f.position.iter().all(|v| *v >= 0. && *v < 128.))
+    );
+    for stop in [1, checkpoints / 2, checkpoints] {
+        calls.set(0);
+        assert!(matches!(
+            extract_spatial_oriented_pyramid(&view, p, 4, 4, 6, || {
+                calls.set(calls.get() + 1);
+                calls.get() >= stop
+            }),
+            Err(LocalError::Cancelled)
+        ));
+    }
+    assert_eq!(
+        extract_spatial_oriented_pyramid(&view, p, 4, 4, 6, || false)
+            .unwrap()
+            .len(),
+        full.len()
+    );
+    assert!(matches!(
+        extract_spatial_oriented_pyramid(&view, p, 0, 4, 6, || false),
+        Err(LocalError::Invalid)
+    ));
+    assert!(matches!(
+        extract_spatial_oriented_pyramid(&view, p, usize::MAX, 2, 6, || false),
+        Err(LocalError::Budget)
+    ));
+    assert!(matches!(
+        extract_spatial_oriented_pyramid(
+            &view,
+            PyramidPolicy {
+                max_total_features: single.len() - 1,
+                ..p
+            },
+            4,
+            4,
+            6,
+            || false
+        ),
+        Err(LocalError::Budget)
+    ));
+    assert!(matches!(
+        extract_spatial_oriented_pyramid(
+            &view,
+            PyramidPolicy {
+                max_total_pixels: 16384,
+                ..p
+            },
+            4,
+            4,
+            6,
             || false
         ),
         Err(LocalError::Budget)

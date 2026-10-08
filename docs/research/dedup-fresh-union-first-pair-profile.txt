@@ -1,0 +1,150 @@
+Analysis of sampling gradient-scales-probe-fresh-candidate-union (pid 13895) every 1 millisecond
+Process:         gradient-scales-probe-fresh-candidate-union [13895]
+Path:            /Users/USER/*/gradient-scales-probe-fresh-candidate-union
+Load Address:    0x10250c000
+Identifier:      gradient-scales-probe-fresh-candidate-union
+Version:         0
+Code Type:       ARM64
+Platform:        macOS
+Parent Process:  Python [12617]
+Target Type:     live task
+
+Date/Time:       2026-10-07 14:53:59.451 +0400
+Launch Time:     2026-10-07 14:46:36.483 +0400
+OS Version:      macOS 26.7.1 (25G313)
+Report Version:  7
+Analysis Tool:   /usr/bin/sample
+
+Physical footprint:         106.5M
+Physical footprint (peak):  466.6M
+Idle exit:                  untracked
+----
+
+Call graph:
+    373 Thread_5425598   DispatchQueue_1: com.apple.main-thread  (serial)
+      373 start  (in dyld) + 6992  [0x18b7dc4e4]
+        373 main  (in gradient-scales-probe-fresh-candidate-union) + 52  [0x102521dfc]
+          373 _RNvNtCs82bWklYMk3w_3std2rt19lang_start_internal  (in gradient-scales-probe-fresh-candidate-union) + 952  [0x10326654c]
+            373 _RNCINvNtCs82bWklYMk3w_3std2rt10lang_startuE0CsW27FFGlC5x_21gradient_scales_probe  (in gradient-scales-probe-fresh-candidate-union) + 16  [0x1025c35c8]
+              373 _RINvNtNtCs82bWklYMk3w_3std3sys9backtrace28___rust_begin_short_backtraceFEuuECsW27FFGlC5x_21gradient_scales_probe  (in gradient-scales-probe-fresh-candidate-union) + 12  [0x10265bde4]  backtrace.rs:166
+                373 _RNvCsW27FFGlC5x_21gradient_scales_probe4main  (in gradient-scales-probe-fresh-candidate-union) + 1264  [0x102519378]  gradient_scales_probe.rs:83
+                  373 _RINvNtCs4AF6zQtdHWG_11rrrah_dedup10local_scan62compare_local_files_projective_candidate_union_regions_managedNCNvCsW27FFGlC5x_21gradient_scales_probe30diagnose_fresh_candidate_unions_0EB1N_  (in gradient-scales-probe-fresh-candidate-union) + 1324  [0x10259ad20]  local_scan.rs:3751
+                    373 _RNCINvNtCs4AF6zQtdHWG_11rrrah_dedup10local_scan62compare_local_files_projective_candidate_union_regions_managedNCNvCsW27FFGlC5x_21gradient_scales_probe30diagnose_fresh_candidate_unions_0Es1_0B1P_  (in gradient-scales-probe-fresh-candidate-union) + 3760  [0x1025aa058]  local_scan.rs:3775
+                      373 _RINvNtCs4AF6zQtdHWG_11rrrah_dedup10local_scan66compare_local_files_projective_bidirectional_region_grid_transformNCINvB2_62compare_local_files_projective_candidate_union_regions_managedNCNvCsW27FFGlC5x_21gradient_scales_probe30diagnose_fresh_candidate_unions_0E0EB31_  (in gradient-scales-probe-fresh-candidate-union) + 580  [0x10259b020]  local_scan.rs:3573
+                        373 _RINvNtCs4AF6zQtdHWG_11rrrah_dedup10local_scan39compare_local_file_views_with_extractorNtB2_40ProjectiveTransformedRegionsFileEvidenceNCINvB2_62compare_local_files_projective_candidate_union_regions_managedNCNvCsW27FFGlC5x_21gradient_scales_probe30diagnose_fresh_candidate_unions_0E0NCINvB2_29compare_region_grid_transformB27_Es1_0NCB4y_s2_0EB3l_  (in gradient-scales-probe-fresh-candidate-union) + 2392  [0x102593f98]  local_scan.rs:625
+                          373 _RNCINvNtCs4AF6zQtdHWG_11rrrah_dedup10local_scan29compare_region_grid_transformNCINvB4_62compare_local_files_projective_candidate_union_regions_managedNCNvCsW27FFGlC5x_21gradient_scales_probe30diagnose_fresh_candidate_unions_0E0Es2_0B2s_  (in gradient-scales-probe-fresh-candidate-union) + 152  [0x1025a381c]  local_scan.rs:3593
+                            373 _RINvNtCs4AF6zQtdHWG_11rrrah_dedup16region_transform24verify_region_grid_viewsRDINtNtNtCs8Mbv00yxnRz_4core3ops8function2FnuEp6OutputbEL_ECsW27FFGlC5x_21gradient_scales_probe  (in gradient-scales-probe-fresh-candidate-union) + 2044  [0x10269e7d8]
+                              373 _RINvNtCs4AF6zQtdHWG_11rrrah_dedup4warp39verify_projective_regions_with_unfittedRNCINvNtB4_16region_transform24verify_region_grid_viewsRDINtNtNtCs8Mbv00yxnRz_4core3ops8function2FnuEp6OutputbEL_E0ECsW27FFGlC5x_21gradient_scales_probe  (in gradient-scales-probe-fresh-candidate-union) + 1004  [0x102741c88]  warp.rs:1216
+                                333 _RINvNtCs4AF6zQtdHWG_11rrrah_dedup4warp35verify_photometric_rectangle_mappedNCINvB2_39verify_projective_regions_with_unfittedRNCINvNtB4_16region_transform24verify_region_grid_viewsRDINtNtNtCs8Mbv00yxnRz_4core3ops8function2FnuEp6OutputbEL_E0Es0_0RB1Y_ECsW27FFGlC5x_21gradient_scales_probe  (in gradient-scales-probe-fresh-candidate-union) + 916  [0x10273f7b4]  warp.rs:636
+                                + 225 _RINvNtCs4AF6zQtdHWG_11rrrah_dedup4warp18sample_pair_mappedNCINvB2_39verify_projective_regions_with_unfittedRNCINvNtB4_16region_transform24verify_region_grid_viewsRDINtNtNtCs8Mbv00yxnRz_4core3ops8function2FnuEp6OutputbEL_E0Es0_0RB1H_ECsW27FFGlC5x_21gradient_scales_probe  (in gradient-scales-probe-fresh-candidate-union) + 436  [0x10273da14]  warp.rs:1328
+                                + ! 152 _RNvNtCs4AF6zQtdHWG_11rrrah_dedup4warp20interpolate_in_space  (in gradient-scales-probe-fresh-candidate-union) + 504,528,...  [0x10278692c,0x102786944,...]
+                                + ! 72 _RNvNtCs4AF6zQtdHWG_11rrrah_dedup4warp20interpolate_in_space  (in gradient-scales-probe-fresh-candidate-union) + 360  [0x10278689c]
+                                + ! : 46 _RNvNtCs4AF6zQtdHWG_11rrrah_dedup4warp22premultiplied_in_space  (in gradient-scales-probe-fresh-candidate-union) + 660,24,...  [0x102786c78,0x1027869fc,...]
+                                + ! : 26 _RNvNtCs4AF6zQtdHWG_11rrrah_dedup4warp20interpolate_in_space  (in gradient-scales-probe-fresh-candidate-union) + 360  [0x10278689c]
+                                + ! :   26 _RNvNtCs4AF6zQtdHWG_11rrrah_dedup4warp22premultiplied_in_space  (in gradient-scales-probe-fresh-candidate-union) + 124,64,...  [0x102786a60,0x102786a24,...]
+                                + ! 1 _RINvNtCs4AF6zQtdHWG_11rrrah_dedup4warp18sample_pair_mappedNCINvB2_39verify_projective_regions_with_unfittedRNCINvNtB4_16region_transform24verify_region_grid_viewsRDINtNtNtCs8Mbv00yxnRz_4core3ops8function2FnuEp6OutputbEL_E0Es0_0RB1H_ECsW27FFGlC5x_21gradient_scales_probe  (in gradient-scales-probe-fresh-candidate-union) + 472  [0x10273da38]  warp.rs:0
+                                + 39 _RINvNtCs4AF6zQtdHWG_11rrrah_dedup4warp18sample_pair_mappedNCINvB2_39verify_projective_regions_with_unfittedRNCINvNtB4_16region_transform24verify_region_grid_viewsRDINtNtNtCs8Mbv00yxnRz_4core3ops8function2FnuEp6OutputbEL_E0Es0_0RB1H_ECsW27FFGlC5x_21gradient_scales_probe  (in gradient-scales-probe-fresh-candidate-union) + 500  [0x10273da54]  warp.rs:1331
+                                + ! 13 _RINvNtCs4AF6zQtdHWG_11rrrah_dedup4warp18sample_pair_mappedNCINvB2_39verify_projective_regions_with_unfittedRNCINvNtB4_16region_transform24verify_region_grid_viewsRDINtNtNtCs8Mbv00yxnRz_4core3ops8function2FnuEp6OutputbEL_E0Es0_0RB1H_ECsW27FFGlC5x_21gradient_scales_probe  (in gradient-scales-probe-fresh-candidate-union) + 540,500  [0x10273da7c,0x10273da54]  warp.rs:1331
+                                + ! 10 _RNvNtCs4AF6zQtdHWG_11rrrah_dedup4warp22premultiplied_in_space  (in gradient-scales-probe-fresh-candidate-union) + 660,0,...  [0x102786c78,0x1027869e4,...]
+                                + ! 8 _RINvNtCs4AF6zQtdHWG_11rrrah_dedup4warp18sample_pair_mappedNCINvB2_39verify_projective_regions_with_unfittedRNCINvNtB4_16region_transform24verify_region_grid_viewsRDINtNtNtCs8Mbv00yxnRz_4core3ops8function2FnuEp6OutputbEL_E0Es0_0RB1H_ECsW27FFGlC5x_21gradient_scales_probe  (in gradient-scales-probe-fresh-candidate-union) + 616,600  [0x10273dac8,0x10273dab8]  warp.rs:0
+                                + ! 8 _RINvNtCs4AF6zQtdHWG_11rrrah_dedup4warp18sample_pair_mappedNCINvB2_39verify_projective_regions_with_unfittedRNCINvNtB4_16region_transform24verify_region_grid_viewsRDINtNtNtCs8Mbv00yxnRz_4core3ops8function2FnuEp6OutputbEL_E0Es0_0RB1H_ECsW27FFGlC5x_21gradient_scales_probe  (in gradient-scales-probe-fresh-candidate-union) + 500  [0x10273da54]  warp.rs:1331
+                                + !   8 _RNvNtCs4AF6zQtdHWG_11rrrah_dedup4warp22premultiplied_in_space  (in gradient-scales-probe-fresh-candidate-union) + 64,92,...  [0x102786a24,0x102786a40,...]
+                                + 33 _RINvNtCs4AF6zQtdHWG_11rrrah_dedup4warp18sample_pair_mappedNCINvB2_39verify_projective_regions_with_unfittedRNCINvNtB4_16region_transform24verify_region_grid_viewsRDINtNtNtCs8Mbv00yxnRz_4core3ops8function2FnuEp6OutputbEL_E0Es0_0RB1H_ECsW27FFGlC5x_21gradient_scales_probe  (in gradient-scales-probe-fresh-candidate-union) + 324  [0x10273d9a4]  warp.rs:1324
+                                + ! 15 _RNvMs_NtCs4AF6zQtdHWG_11rrrah_dedup8geometryNtB4_19ProjectiveTransform5apply  (in gradient-scales-probe-fresh-candidate-union) + 112,184,...  [0x102789304,0x10278934c,...]
+                                + ! 13 _RINvNtCs4AF6zQtdHWG_11rrrah_dedup4warp18sample_pair_mappedNCINvB2_39verify_projective_regions_with_unfittedRNCINvNtB4_16region_transform24verify_region_grid_viewsRDINtNtNtCs8Mbv00yxnRz_4core3ops8function2FnuEp6OutputbEL_E0Es0_0RB1H_ECsW27FFGlC5x_21gradient_scales_probe  (in gradient-scales-probe-fresh-candidate-union) + 360,364,...  [0x10273d9c8,0x10273d9cc,...]  warp.rs:1324
+                                + ! 5 _RINvNtCs4AF6zQtdHWG_11rrrah_dedup4warp18sample_pair_mappedNCINvB2_39verify_projective_regions_with_unfittedRNCINvNtB4_16region_transform24verify_region_grid_viewsRDINtNtNtCs8Mbv00yxnRz_4core3ops8function2FnuEp6OutputbEL_E0Es0_0RB1H_ECsW27FFGlC5x_21gradient_scales_probe  (in gradient-scales-probe-fresh-candidate-union) + 404,392,...  [0x10273d9f4,0x10273d9e8,...]  warp.rs:1325
+                                + 17 _RINvNtCs4AF6zQtdHWG_11rrrah_dedup4warp18sample_pair_mappedNCINvB2_39verify_projective_regions_with_unfittedRNCINvNtB4_16region_transform24verify_region_grid_viewsRDINtNtNtCs8Mbv00yxnRz_4core3ops8function2FnuEp6OutputbEL_E0Es0_0RB1H_ECsW27FFGlC5x_21gradient_scales_probe  (in gradient-scales-probe-fresh-candidate-union) + 272  [0x10273d970]  warp.rs:1319
+                                + ! 8 _RNCINvNtCs4AF6zQtdHWG_11rrrah_dedup10local_scan37compare_local_file_views_with_matcherNtB4_40ProjectiveTransformedRegionsFileEvidenceNtNtB6_5local7FeatureNCINvB4_62compare_local_files_projective_candidate_union_regions_managedNCNvCsW27FFGlC5x_21gradient_scales_probe30diagnose_fresh_candidate_unions_0E0NCINvB4_29compare_region_grid_transformB2s_Es1_0NCINvB4_39compare_local_file_views_with_extractorB1m_B2s_B4R_NCB4T_s2_0E0B6C_E0B3G_  (in gradient-scales-probe-fresh-candidate-union) + 20  [0x1025a89c4]  local_scan.rs:660
+                                + ! 3 _RNCINvNtCs4AF6zQtdHWG_11rrrah_dedup10local_scan37compare_local_file_views_with_matcherNtB4_40ProjectiveTransformedRegionsFileEvidenceNtNtB6_5local7FeatureNCINvB4_62compare_local_files_projective_candidate_union_regions_managedNCNvCsW27FFGlC5x_21gradient_scales_probe30diagnose_fresh_candidate_unions_0E0NCINvB4_29compare_region_grid_transformB2s_Es1_0NCINvB4_39compare_local_file_views_with_extractorB1m_B2s_B4R_NCB4T_s2_0E0B6C_E0B3G_  (in gradient-scales-probe-fresh-candidate-union) + 60  [0x1025a89ec]  local_scan.rs:661
+                                + ! 3 _RNvXNtNtNtCs8Mbv00yxnRz_4core3ops8function5implsRDINtB4_2FnuEp6OutputbEL_IBN_uE4callCs4AF6zQtdHWG_11rrrah_dedup  (in gradient-scales-probe-fresh-candidate-union) + 4  [0x10278a080]
+                                + ! 1 _RINvNtCs4AF6zQtdHWG_11rrrah_dedup4warp18sample_pair_mappedNCINvB2_39verify_projective_regions_with_unfittedRNCINvNtB4_16region_transform24verify_region_grid_viewsRDINtNtNtCs8Mbv00yxnRz_4core3ops8function2FnuEp6OutputbEL_E0Es0_0RB1H_ECsW27FFGlC5x_21gradient_scales_probe  (in gradient-scales-probe-fresh-candidate-union) + 288  [0x10273d980]  warp.rs:1323
+                                + ! 1 _RNCINvNtCs4AF6zQtdHWG_11rrrah_dedup10local_scan37compare_local_file_views_with_matcherNtB4_40ProjectiveTransformedRegionsFileEvidenceNtNtB6_5local7FeatureNCINvB4_62compare_local_files_projective_candidate_union_regions_managedNCNvCsW27FFGlC5x_21gradient_scales_probe30diagnose_fresh_candidate_unions_0E0NCINvB4_29compare_region_grid_transformB2s_Es1_0NCINvB4_39compare_local_file_views_with_extractorB1m_B2s_B4R_NCB4T_s2_0E0B6C_E0B3G_  (in gradient-scales-probe-fresh-candidate-union) + 4  [0x1025a89b4]  local_scan.rs:659
+                                + ! 1 _RNCINvNtCs4AF6zQtdHWG_11rrrah_dedup10local_scan37compare_local_file_views_with_matcherNtB4_40ProjectiveTransformedRegionsFileEvidenceNtNtB6_5local7FeatureNCINvB4_62compare_local_files_projective_candidate_union_regions_managedNCNvCsW27FFGlC5x_21gradient_scales_probe30diagnose_fresh_candidate_unions_0E0NCINvB4_29compare_region_grid_transformB2s_Es1_0NCINvB4_39compare_local_file_views_with_extractorB1m_B2s_B4R_NCB4T_s2_0E0B6C_E0B3G_  (in gradient-scales-probe-fresh-candidate-union) + 164  [0x1025a8a54]  local_scan.rs:662
+                                + 14 _RNvNtCs4AF6zQtdHWG_11rrrah_dedup4warp20interpolate_in_space  (in gradient-scales-probe-fresh-candidate-union) + 136,116,...  [0x1027867bc,0x1027867a8,...]
+                                + 5 _RNCINvNtCs4AF6zQtdHWG_11rrrah_dedup10local_scan37compare_local_file_views_with_matcherNtB4_40ProjectiveTransformedRegionsFileEvidenceNtNtB6_5local7FeatureNCINvB4_62compare_local_files_projective_candidate_union_regions_managedNCNvCsW27FFGlC5x_21gradient_scales_probe30diagnose_fresh_candidate_unions_0E0NCINvB4_29compare_region_grid_transformB2s_Es1_0NCINvB4_39compare_local_file_views_with_extractorB1m_B2s_B4R_NCB4T_s2_0E0B6C_E0B3G_  (in gradient-scales-probe-fresh-candidate-union) + 144  [0x1025a8a40]  local_scan.rs:669
+                                38 _RINvNtCs4AF6zQtdHWG_11rrrah_dedup4warp35verify_photometric_rectangle_mappedNCINvB2_39verify_projective_regions_with_unfittedRNCINvNtB4_16region_transform24verify_region_grid_viewsRDINtNtNtCs8Mbv00yxnRz_4core3ops8function2FnuEp6OutputbEL_E0Es0_0RB1Y_ECsW27FFGlC5x_21gradient_scales_probe  (in gradient-scales-probe-fresh-candidate-union) + 2688  [0x10273fea0]  warp.rs:711
+                                + 17 _RINvNtCs4AF6zQtdHWG_11rrrah_dedup4warp18sample_pair_mappedNCINvB2_39verify_projective_regions_with_unfittedRNCINvNtB4_16region_transform24verify_region_grid_viewsRDINtNtNtCs8Mbv00yxnRz_4core3ops8function2FnuEp6OutputbEL_E0Es0_0RB1H_ECsW27FFGlC5x_21gradient_scales_probe  (in gradient-scales-probe-fresh-candidate-union) + 436  [0x10273da14]  warp.rs:1328
+                                + ! 15 _RNvNtCs4AF6zQtdHWG_11rrrah_dedup4warp20interpolate_in_space  (in gradient-scales-probe-fresh-candidate-union) + 544,408,...  [0x102786954,0x1027868cc,...]
+                                + ! 2 _RNvNtCs4AF6zQtdHWG_11rrrah_dedup4warp20interpolate_in_space  (in gradient-scales-probe-fresh-candidate-union) + 360  [0x10278689c]
+                                + !   1 _RNvNtCs4AF6zQtdHWG_11rrrah_dedup4warp20interpolate_in_space  (in gradient-scales-probe-fresh-candidate-union) + 360  [0x10278689c]
+                                + !   | 1 _RNvNtCs4AF6zQtdHWG_11rrrah_dedup4warp22premultiplied_in_space  (in gradient-scales-probe-fresh-candidate-union) + 64  [0x102786a24]
+                                + !   1 _RNvNtCs4AF6zQtdHWG_11rrrah_dedup4warp22premultiplied_in_space  (in gradient-scales-probe-fresh-candidate-union) + 660  [0x102786c78]
+                                + 14 _RINvNtCs4AF6zQtdHWG_11rrrah_dedup4warp18sample_pair_mappedNCINvB2_39verify_projective_regions_with_unfittedRNCINvNtB4_16region_transform24verify_region_grid_viewsRDINtNtNtCs8Mbv00yxnRz_4core3ops8function2FnuEp6OutputbEL_E0Es0_0RB1H_ECsW27FFGlC5x_21gradient_scales_probe  (in gradient-scales-probe-fresh-candidate-union) + 500  [0x10273da54]  warp.rs:1331
+                                + ! 14 _RINvNtCs4AF6zQtdHWG_11rrrah_dedup4warp18sample_pair_mappedNCINvB2_39verify_projective_regions_with_unfittedRNCINvNtB4_16region_transform24verify_region_grid_viewsRDINtNtNtCs8Mbv00yxnRz_4core3ops8function2FnuEp6OutputbEL_E0Es0_0RB1H_ECsW27FFGlC5x_21gradient_scales_probe  (in gradient-scales-probe-fresh-candidate-union) + 616,600  [0x10273dac8,0x10273dab8]  warp.rs:0
+                                + 3 _RINvNtCs4AF6zQtdHWG_11rrrah_dedup4warp18sample_pair_mappedNCINvB2_39verify_projective_regions_with_unfittedRNCINvNtB4_16region_transform24verify_region_grid_viewsRDINtNtNtCs8Mbv00yxnRz_4core3ops8function2FnuEp6OutputbEL_E0Es0_0RB1H_ECsW27FFGlC5x_21gradient_scales_probe  (in gradient-scales-probe-fresh-candidate-union) + 272  [0x10273d970]  warp.rs:1319
+                                + ! 1 _RINvNtCs4AF6zQtdHWG_11rrrah_dedup4warp18sample_pair_mappedNCINvB2_39verify_projective_regions_with_unfittedRNCINvNtB4_16region_transform24verify_region_grid_viewsRDINtNtNtCs8Mbv00yxnRz_4core3ops8function2FnuEp6OutputbEL_E0Es0_0RB1H_ECsW27FFGlC5x_21gradient_scales_probe  (in gradient-scales-probe-fresh-candidate-union) + 280  [0x10273d978]  warp.rs:1322
+                                + ! 1 _RNCINvNtCs4AF6zQtdHWG_11rrrah_dedup10local_scan37compare_local_file_views_with_matcherNtB4_40ProjectiveTransformedRegionsFileEvidenceNtNtB6_5local7FeatureNCINvB4_62compare_local_files_projective_candidate_union_regions_managedNCNvCsW27FFGlC5x_21gradient_scales_probe30diagnose_fresh_candidate_unions_0E0NCINvB4_29compare_region_grid_transformB2s_Es1_0NCINvB4_39compare_local_file_views_with_extractorB1m_B2s_B4R_NCB4T_s2_0E0B6C_E0B3G_  (in gradient-scales-probe-fresh-candidate-union) + 60  [0x1025a89ec]  local_scan.rs:661
+                                + ! 1 _RNvXNtNtNtCs8Mbv00yxnRz_4core3ops8function5implsRDINtB4_2FnuEp6OutputbEL_IBN_uE4callCs4AF6zQtdHWG_11rrrah_dedup  (in gradient-scales-probe-fresh-candidate-union) + 4  [0x10278a080]
+                                + 2 _RINvNtCs4AF6zQtdHWG_11rrrah_dedup4warp18sample_pair_mappedNCINvB2_39verify_projective_regions_with_unfittedRNCINvNtB4_16region_transform24verify_region_grid_viewsRDINtNtNtCs8Mbv00yxnRz_4core3ops8function2FnuEp6OutputbEL_E0Es0_0RB1H_ECsW27FFGlC5x_21gradient_scales_probe  (in gradient-scales-probe-fresh-candidate-union) + 324  [0x10273d9a4]  warp.rs:1324
+                                + ! 1 _RINvNtCs4AF6zQtdHWG_11rrrah_dedup4warp18sample_pair_mappedNCINvB2_39verify_projective_regions_with_unfittedRNCINvNtB4_16region_transform24verify_region_grid_viewsRDINtNtNtCs8Mbv00yxnRz_4core3ops8function2FnuEp6OutputbEL_E0Es0_0RB1H_ECsW27FFGlC5x_21gradient_scales_probe  (in gradient-scales-probe-fresh-candidate-union) + 360  [0x10273d9c8]  warp.rs:1324
+                                + ! 1 _RNvMs_NtCs4AF6zQtdHWG_11rrrah_dedup8geometryNtB4_19ProjectiveTransform5apply  (in gradient-scales-probe-fresh-candidate-union) + 112  [0x102789304]
+                                + 2 _RNvNtCs4AF6zQtdHWG_11rrrah_dedup4warp20interpolate_in_space  (in gradient-scales-probe-fresh-candidate-union) + 136  [0x1027867bc]
+                                2 _RINvNtCs4AF6zQtdHWG_11rrrah_dedup4warp35verify_photometric_rectangle_mappedNCINvB2_39verify_projective_regions_with_unfittedRNCINvNtB4_16region_transform24verify_region_grid_viewsRDINtNtNtCs8Mbv00yxnRz_4core3ops8function2FnuEp6OutputbEL_E0Es0_0RB1Y_ECsW27FFGlC5x_21gradient_scales_probe  (in gradient-scales-probe-fresh-candidate-union) + 2528  [0x10273fe00]  warp.rs:701
+                                  2 _RINvNtCs4AF6zQtdHWG_11rrrah_dedup4warp35verify_photometric_rectangle_mappedNCINvB2_39verify_projective_regions_with_unfittedRNCINvNtB4_16region_transform24verify_region_grid_viewsRDINtNtNtCs8Mbv00yxnRz_4core3ops8function2FnuEp6OutputbEL_E0Es0_0RB1Y_ECsW27FFGlC5x_21gradient_scales_probe  (in gradient-scales-probe-fresh-candidate-union) + 2536  [0x10273fe08]  warp.rs:0
+
+Total number in stack (recursive counted multiple, when >=5):
+        6       _RNvNtCs4AF6zQtdHWG_11rrrah_dedup4warp22premultiplied_in_space  (in gradient-scales-probe-fresh-candidate-union) + 0  [0x1027869e4]
+
+Sort by top of stack, same collapsed (when >= 5):
+        _RNvNtCs4AF6zQtdHWG_11rrrah_dedup4warp20interpolate_in_space  (in gradient-scales-probe-fresh-candidate-union)        183
+        _RNvNtCs4AF6zQtdHWG_11rrrah_dedup4warp22premultiplied_in_space  (in gradient-scales-probe-fresh-candidate-union)        92
+        _RINvNtCs4AF6zQtdHWG_11rrrah_dedup4warp18sample_pair_mappedNCINvB2_39verify_projective_regions_with_unfittedRNCINvNtB4_16region_transform24verify_region_grid_viewsRDINtNtNtCs8Mbv00yxnRz_4core3ops8function2FnuEp6OutputbEL_E0Es0_0RB1H_ECsW27FFGlC5x_21gradient_scales_probe  (in gradient-scales-probe-fresh-candidate-union)        57
+        _RNCINvNtCs4AF6zQtdHWG_11rrrah_dedup10local_scan37compare_local_file_views_with_matcherNtB4_40ProjectiveTransformedRegionsFileEvidenceNtNtB6_5local7FeatureNCINvB4_62compare_local_files_projective_candidate_union_regions_managedNCNvCsW27FFGlC5x_21gradient_scales_probe30diagnose_fresh_candidate_unions_0E0NCINvB4_29compare_region_grid_transformB2s_Es1_0NCINvB4_39compare_local_file_views_with_extractorB1m_B2s_B4R_NCB4T_s2_0E0B6C_E0B3G_  (in gradient-scales-probe-fresh-candidate-union)        19
+        _RNvMs_NtCs4AF6zQtdHWG_11rrrah_dedup8geometryNtB4_19ProjectiveTransform5apply  (in gradient-scales-probe-fresh-candidate-union)        16
+
+Binary Images:
+       0x10250c000 -        0x1037dda53 +gradient-scales-probe-fresh-candidate-union (0) <4459F930-BD00-39F3-9947-89FADF79A7C9> /Users/*/gradient-scales-probe-fresh-candidate-union
+       0x104224000 -        0x104227073 +libsharpyuv.0.1.2.dylib (0) <CFFA0A94-BBA9-3003-9D80-0B34E6BECB0C> /opt/homebrew/*/libsharpyuv.0.1.2.dylib
+       0x104268000 -        0x10429f3e7 +libde265.0.2.3.dylib (0) <BAB93974-2C34-35B5-877E-8EF8C5C1F0CD> /opt/homebrew/*/libde265.0.2.3.dylib
+       0x1043e8000 -        0x10448b84f +libdav1d.7.dylib (0) <E336E884-375F-383E-B9A1-5E9685FC5555> /opt/homebrew/*/libdav1d.7.dylib
+       0x1045a4000 -        0x1046a781b +libheif.1.23.6.dylib (0) <890BEF71-AF15-3999-AB65-5098004841D5> /opt/homebrew/*/libheif.1.23.6.dylib
+       0x104840000 -        0x104873e2f +libvmaf.3.dylib (0) <A29F9509-5876-379A-AF9F-43BF2525D3BE> /opt/homebrew/*/libvmaf.3.dylib
+       0x104eac000 -        0x1054a0dd0 +libx265.217.dylib (0) <8C13F415-2797-3FFD-A0F0-885BA87DB4D1> /opt/homebrew/*/libx265.217.dylib
+       0x10560c000 -        0x1059b105f +libaom.3.15.1.dylib (0) <A743731E-4B5D-3723-BC8B-357D5B53C8D0> /opt/homebrew/*/libaom.3.15.1.dylib
+       0x18b734000 -        0x18b786b4b  libobjc.A.dylib (951.7) <1D62B376-2303-376A-B993-9432A2004EB6> /usr/lib/libobjc.A.dylib
+       0x18b787000 -        0x18b7bbd58  libdyld.dylib (1387) <00D0926E-2EAD-3810-9D40-F8E1F054BDC9> /usr/lib/system/libdyld.dylib
+       0x18b7bc000 -        0x18b86f503  dyld (1.0.0 - 1387) <8B859F47-7C96-34F6-9D07-6F55CE3625C6> /usr/lib/dyld
+       0x18b870000 -        0x18b873228  libsystem_blocks.dylib (96) <B33F1440-9364-38E4-AF85-8A21BFF24324> /usr/lib/system/libsystem_blocks.dylib
+       0x18b874000 -        0x18b8c855f  libxpc.dylib (3102.160.5) <325B7B6F-A547-30B6-9417-94915D72B91E> /usr/lib/system/libxpc.dylib
+       0x18b8c9000 -        0x18b8e99ff  libsystem_trace.dylib (1861.160.4) <2DE27033-24FB-30FB-BF15-7BC4BB913EBA> /usr/lib/system/libsystem_trace.dylib
+       0x18b8ea000 -        0x18b9986b7  libcorecrypto.dylib (1922.160.10.700.1) <1AB30A65-3FE6-3A5A-9078-796D9D590B7C> /usr/lib/system/libcorecrypto.dylib
+       0x18b999000 -        0x18b9e9257  libsystem_malloc.dylib (812.160.5) <BE7DCE21-9656-3C9E-9B8A-A26D090CAEC3> /usr/lib/system/libsystem_malloc.dylib
+       0x18b9ea000 -        0x18ba3123f  libdispatch.dylib (1542.160.2) <80E75F3F-333F-38A8-A3DD-6279FCDB771B> /usr/lib/system/libdispatch.dylib
+       0x18ba32000 -        0x18ba34ffb  libsystem_featureflags.dylib (103) <5725BCFE-07F3-3629-9B44-551A435E2DE2> /usr/lib/system/libsystem_featureflags.dylib
+       0x18ba35000 -        0x18bab61e7  libsystem_c.dylib (1752.160.4) <3498CA79-EF40-3587-AD44-75187CEE7D95> /usr/lib/system/libsystem_c.dylib
+       0x18bab7000 -        0x18bb47ae7  libc++.1.dylib (2100.43) <D6EADBE3-BA0C-3862-B84A-3B907CF4641C> /usr/lib/libc++.1.dylib
+       0x18bb48000 -        0x18bb6275f  libc++abi.dylib (2100.43) <9106CD43-009C-3B85-8FC5-9CE451DC5B78> /usr/lib/libc++abi.dylib
+       0x18bb63000 -        0x18bba02f7  libsystem_kernel.dylib (12377.161.15.701.19) <9AA2E0EB-68FE-3A5C-A673-C09024878B22> /usr/lib/system/libsystem_kernel.dylib
+       0x18bba1000 -        0x18bbadb3b  libsystem_pthread.dylib (539.100.4) <275D7230-23C1-32EF-B22B-14F61E30AA89> /usr/lib/system/libsystem_pthread.dylib
+       0x18bbae000 -        0x18bbb6963  libsystem_platform.dylib (375.120.2) <3AF14164-15FE-3623-9EE3-46DE29FD5B5A> /usr/lib/system/libsystem_platform.dylib
+       0x18bbb7000 -        0x18bbe66eb  libsystem_info.dylib (600) <0037F576-2C50-36F0-9F36-6CB7A049D5B1> /usr/lib/system/libsystem_info.dylib
+       0x18fb89000 -        0x18fb92e5f  libsystem_darwin.dylib (1752.160.4) <B808D04B-2798-36C9-96F6-35534BDFCF11> /usr/lib/system/libsystem_darwin.dylib
+       0x18fff4000 -        0x1900061b6  libsystem_notify.dylib (348.160.3) <922BDCF4-CD33-3EEB-BC56-9DCAE54F8F65> /usr/lib/system/libsystem_notify.dylib
+       0x1922c5000 -        0x1922dff7b  libsystem_networkextension.dylib (2226.161.1.700.2) <83F224A4-40C4-3106-A97B-788D1D961DCB> /usr/lib/system/libsystem_networkextension.dylib
+       0x192362000 -        0x192379fdf  libsystem_asl.dylib (406) <FF6BE113-1093-3D23-8A55-E0A5B327CA8E> /usr/lib/system/libsystem_asl.dylib
+       0x193f1e000 -        0x193f26387  libsystem_symptoms.dylib (2169.160.3.701.1) <7F0D4E31-268A-3EBB-8A2C-30CCC771A5A5> /usr/lib/system/libsystem_symptoms.dylib
+       0x1981c3000 -        0x1981fb373  libsystem_containermanager.dylib (725.160.3.701.2) <1207D51D-2B9C-3B08-91DA-99A9D0394312> /usr/lib/system/libsystem_containermanager.dylib
+       0x1995d5000 -        0x1995d95d7  libsystem_configuration.dylib (1405.160.3.702.1) <0C344D77-0ED6-342F-BBCD-52C6593FAAAD> /usr/lib/system/libsystem_configuration.dylib
+       0x1995da000 -        0x1995e099f  libsystem_sandbox.dylib (2680.160.6.700.3) <57AC636C-C7C7-3A9B-A7CA-2ACD0458D721> /usr/lib/system/libsystem_sandbox.dylib
+       0x19ac35000 -        0x19ac381fb  libquarantine.dylib (196.160.2.700.3) <0C2FD596-CB4D-3B9B-8414-50338B7DEF1F> /usr/lib/system/libquarantine.dylib
+       0x19b3d4000 -        0x19b3dad03  libsystem_coreservices.dylib (191.5.1) <BF51842C-BC69-3725-9EB2-7A52804963F8> /usr/lib/system/libsystem_coreservices.dylib
+       0x19b963000 -        0x19b9a0a77  libsystem_m.dylib (3312.100.1) <E1EEE243-AA66-3CE8-8648-B4E2CD10589D> /usr/lib/system/libsystem_m.dylib
+       0x19b9a1000 -        0x19b9a1c9b  libcharset.1.dylib (115.120.2) <A2E8DF49-5A82-3DB3-88A1-D8E1B6516F8B> /usr/lib/libcharset.1.dylib
+       0x19b9a2000 -        0x19b9a5527  libmacho.dylib (1387) <F07DDA12-CC51-3CE9-AC26-D7B73C130F73> /usr/lib/system/libmacho.dylib
+       0x19b9bf000 -        0x19b9cc3a7  libcommonCrypto.dylib (600035) <EBA6E4D0-4DD2-33BB-BF95-48A58591AAAD> /usr/lib/system/libcommonCrypto.dylib
+       0x19b9cd000 -        0x19b9d6ca3  libunwind.dylib (2100.2) <81A35518-53E4-3519-B5BC-AE6A796E9DE1> /usr/lib/system/libunwind.dylib
+       0x19b9df000 -        0x19b9e9d2b  libcopyfile.dylib (240.160.2.703.1) <16861DD1-EA84-358E-A019-816FB5A69685> /usr/lib/system/libcopyfile.dylib
+       0x19b9ea000 -        0x19b9ed987  libcompiler_rt.dylib (103.3) <65D09B50-BE7D-3491-8547-6B85A3C2216D> /usr/lib/system/libcompiler_rt.dylib
+       0x19b9ee000 -        0x19b9f278b  libsystem_collections.dylib (1752.160.4) <34CEFA68-1E15-32F2-A5B1-97C0170A77C5> /usr/lib/system/libsystem_collections.dylib
+       0x19b9f3000 -        0x19b9f64cf  libsystem_secinit.dylib (168.100.7) <B6B286B6-6E08-3578-8AFC-E4C55697C760> /usr/lib/system/libsystem_secinit.dylib
+       0x19b9f7000 -        0x19b9f9bf7  libremovefile.dylib (85.100.6) <33530415-3DB6-3556-A59A-24C22681D632> /usr/lib/system/libremovefile.dylib
+       0x19b9fa000 -        0x19b9faf27  libkeymgr.dylib (31) <AD45B9EE-CE2B-3E1F-B96B-15F7F9FA3712> /usr/lib/system/libkeymgr.dylib
+       0x19b9fb000 -        0x19ba03e3f  libsystem_dnssd.dylib (2881.160.4.700.1) <865BFB9D-4EDD-3866-B0D8-E5FAB1D0C61F> /usr/lib/system/libsystem_dnssd.dylib
+       0x19ba04000 -        0x19ba0909b  libcache.dylib (95) <A13AF0DC-5928-38BE-97FF-E04C29EF96AF> /usr/lib/system/libcache.dylib
+       0x19ba0a000 -        0x19ba0bce3  libSystem.B.dylib (1356) <8A197E38-519D-32D1-9011-49E892FA320D> /usr/lib/libSystem.B.dylib
+       0x19ba44000 -        0x19ba4b2bb  libiconv.2.dylib (115.120.2) <20288349-686B-37CB-9D84-9566FCFFC979> /usr/lib/libiconv.2.dylib
+       0x28f6ef000 -        0x28f6f6349  libRosetta.dylib (367.9) <3DBB2990-262D-3776-8FAC-B88C0373DCF0> /usr/lib/libRosetta.dylib
+       0x291301000 -        0x291304a4b  libsystem_darwindirectory.dylib (122) <6246210A-5279-391D-8F58-E62A87CAB309> /usr/lib/system/libsystem_darwindirectory.dylib
+       0x291305000 -        0x29130f39b  libsystem_eligibility.dylib (319.160.17) <85C0486B-60BE-3E10-ABBF-DD74341B7376> /usr/lib/system/libsystem_eligibility.dylib
+       0x291310000 -        0x29131788b  libsystem_sanitizers.dylib (26.1) <A8C4F7FC-3443-35F7-B306-068D06237ED0> /usr/lib/system/libsystem_sanitizers.dylib
+       0x291318000 -        0x291318bbf  libsystem_trial.dylib (474.2.18.2.1) <83FF8DEB-1153-35BA-99C3-2AEF9B7559CD> /usr/lib/system/libsystem_trial.dylib

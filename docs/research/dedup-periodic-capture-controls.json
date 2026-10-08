@@ -1,0 +1,23 @@
+{
+  "status": "verified_native_controlled_periodic_capture",
+  "positive_variants": 30,
+  "edited_negative_variants": 30,
+  "periods": [
+    3,
+    5,
+    7
+  ],
+  "phases": "all phases for each period",
+  "directions": [
+    "horizontal",
+    "vertical"
+  ],
+  "geometry": "supplied identity, not recovered",
+  "acceptance": "all positive interior pixels match; broad edits fail 90% or bounded fit explicitly refuses",
+  "limitations": "Period-matched window sizes are known by construction. Does not solve unknown periods, perspective, screen color casts or Copydays200501. No default change. Native macOS only. Initial strict-fit refusal test expectation corrected; original failing log preserved.",
+  "input_hashes": {
+    "crates/rrrah-dedup/tests/periodic_capture.rs": "a5e745640192409631e9095792537b13bd3e2bcb0552bdc6843e748c4fc3e7f3",
+    "crates/rrrah-dedup/src/warp.rs": "1dee5d40b8fa2e4e4b9afb2f8899c64083f404686de6e08da476467c0ed57991",
+    "docs/research/dedup-periodic-capture-macos-retry.log": "57daf33907cfb2e93ab13a3593bc24a4c98973c3ff51d3011a4d079b757321a9"
+  }
+}

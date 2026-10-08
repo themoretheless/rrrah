@@ -1,0 +1,51 @@
+{
+  "kind": "authored circle cubic path",
+  "attempt": 0,
+  "center": [
+    320.125,
+    220.375
+  ],
+  "radius": 99.1875,
+  "path_tolerance": 0.1,
+  "viewport": [
+    512,
+    384
+  ],
+  "tile_origin": [
+    320,
+    256
+  ],
+  "tile_size": [
+    64,
+    64
+  ],
+  "pixel": [
+    341,
+    317
+  ],
+  "whole_coverage": 16,
+  "tile_coverage": 17,
+  "translated_full_coverage": 16,
+  "scope": "Own generated circle approximated by cubic path, no external artwork; test-only backend diagnostic.",
+  "control": {
+    "translation": [
+      64,
+      64
+    ],
+    "viewport": [
+      576,
+      448
+    ],
+    "whole_contour_inside_viewport": true,
+    "coverage": 16,
+    "assessment": "Positive translation with no crop matches whole coverage. This control does not yet separate negative coordinate translation from viewport culling in the tile case."
+  },
+  "verification": {
+    "regular_tests_passed": 65,
+    "failed": 0,
+    "ignored_diagnostics": 6,
+    "explicit_reproducer_passed": true,
+    "diagnostic_pass_means": "Detected and saved a strict whole-versus-tile coverage mismatch; not a correctness pass."
+  },
+  "pending": "Test identical negative coordinate translation without contour clipping, and stable global curve flattening/coverage. Do not assume whole coverage16 is the normative golden solely from backend output."
+}

@@ -239,6 +239,23 @@ pub(crate) fn parse(data: &[u8]) -> Result<DngImage<'_>, DngError> {
     let calibration_illuminant_1 = optional_u16_scoped(raw, &root.ifd, TAG_CALIBRATION_ILLUMINANT_1)?;
     let calibration_illuminant_2 = optional_u16_scoped(raw, &root.ifd, TAG_CALIBRATION_ILLUMINANT_2)?;
     let as_shot_neutral = parse_optional_vector(raw, &root.ifd, TAG_AS_SHOT_NEUTRAL, color_planes)?;
+    // The neutral solver currently handles the ColorMatrix-only contract.
+    // Non-identity calibration/analog gains and ForwardMatrix require their
+    // own transform; retain the existing profile path for those inputs.
+    let mut neutral_matrix_compatible = color_planes == 3;
+    for tag in [50723, 50724] { // CameraCalibration1/2
+        if let Some(values) = parse_optional_matrix(raw, &root.ifd, tag, color_planes * color_planes)? {
+            neutral_matrix_compatible &= values.iter().enumerate().all(|(i, v)|
+                (*v - if i / color_planes == i % color_planes { 1.0 } else { 0.0 }).abs() < 1e-12);
+        }
+    }
+    if let Some(values) = parse_optional_vector(raw, &root.ifd, 50727, color_planes)? {
+        neutral_matrix_compatible &= values.iter().all(|v| (*v - 1.0).abs() < 1e-12);
+    }
+    for tag in [50964, 50965] { // ForwardMatrix1/2
+        neutral_matrix_compatible &= raw.entry(tag)?.or(root.ifd.entry(tag)?).is_none();
+    }
+
     let orientation = parse_orientation(raw, &root.ifd)?;
     let metadata_elapsed = metadata_started.elapsed();
     let storage_plan_started = Instant::now();
@@ -279,6 +296,7 @@ pub(crate) fn parse(data: &[u8]) -> Result<DngImage<'_>, DngError> {
             calibration_illuminant_1,
             calibration_illuminant_2,
             as_shot_neutral,
+            neutral_matrix_compatible,
         },
         storage,
     })
@@ -522,6 +540,7 @@ pub(crate) struct DngMetadata {
     pub(crate) calibration_illuminant_2: Option<u16>,
     /// Camera-neutral coordinates from `AsShotNeutral`.
     pub(crate) as_shot_neutral: Option<Vec<f64>>,
+    pub(crate) neutral_matrix_compatible: bool,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]

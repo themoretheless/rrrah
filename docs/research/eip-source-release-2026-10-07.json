@@ -1,0 +1,37 @@
+{
+  "scope": "Explicit EIP file sensor import; original RAW only, no Capture One adjustments or normal viewer routing",
+  "camera": "Canon EOS R8, tests/IMG_9043.CR3",
+  "sensor_samples": 25494560,
+  "sensor_bytes": 50989120,
+  "raw_bytes": 22382226,
+  "cases": [
+    {
+      "zip": "stored",
+      "package_bytes": 22382344,
+      "released_peak_bytes": 73371346,
+      "retained_peak_bytes": 95753690
+    },
+    {
+      "zip": "deflated",
+      "package_bytes": 22124954,
+      "released_peak_bytes": 73371346,
+      "retained_peak_bytes": 95496300
+    }
+  ],
+  "verification": [
+    "All sensor samples and metadata equal native original CR3 decode",
+    "Retained ZIP comparison peak equals released peak plus package bytes",
+    "Exact peak budget succeeds; peak minus one refuses and releases reservations",
+    "Shared sensor clone retains credit until final drop; final root occupancy zero",
+    "Full decoder library: 963 passed, 65 ignored, zero failures"
+  ],
+  "logs": [
+    "/tmp/rrrah-eip-release-real.log",
+    "/tmp/rrrah-eip-release-final.log"
+  ],
+  "limitations": [
+    "Authored ZIP packages wrapping a real CR3, not Capture One-produced EIP",
+    "Managed allocations, not total process RSS",
+    "Other sensor backends not measured in this comparison"
+  ]
+}

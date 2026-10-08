@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-07",
+  "test": "raster_swap_viewer_tests::repeated_hdr_ttl_spill_and_restore_preserves_payload_without_decode",
+  "sources": [
+    "float-none-rec709-declared.exr",
+    "rle-hdr-rec709-declared.hdr"
+  ],
+  "restore_cycles_per_source": 64,
+  "total_restores": 128,
+  "limits": {
+    "managed_bytes": 65536,
+    "ram_cache_bytes": 4096,
+    "ram_cache_count": 1,
+    "ram_ttl_seconds": 0
+  },
+  "checks": [
+    "every expired resident transferred through actual asynchronous file swap",
+    "wait_idle ensures completed persistence before restore",
+    "each completed spill leaves RAM cache empty and managed root used zero",
+    "restores bypass decoder and color preparation",
+    "serialized payload is byte-exact including float HDR and metadata",
+    "count and bytes remain within limits",
+    "all memory released after cache drop"
+  ],
+  "evidence": {
+    "focused_log": "/tmp/rrrah-hdr-ttl-swap-repeat.log",
+    "full_log": "/tmp/rrrah-app-ttl-swap-full.log",
+    "app_passed": 163,
+    "app_ignored": 24
+  },
+  "limits_of_evidence": [
+    "Zero RAM TTL is deliberate deterministic expiry, not wall-clock navigation latency",
+    "Small authored files on local temporary storage, not cold storage or large collection",
+    "Disk TTL expiry and disk quota churn require separate qualification",
+    "No GPU work in this test"
+  ],
+  "status": "local, not pushed"
+}

@@ -1,0 +1,13 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+error[E0658]: use of unstable library feature `str_as_str`
+   --> crates/rrrah-dedup/tests/gradient_interpolated.rs:107:29
+    |
+107 |         assert_eq!(features.as_slice(), smooth);
+    |                             ^^^^^^^^
+    |
+    = note: see issue #130366 <https://github.com/rust-lang/rust/issues/130366> for more information
+
+For more information about this error, try `rustc --explain E0658`.
+error: could not compile `rrrah-dedup` (test "gradient_interpolated") due to 1 previous error
+warning: build failed, waiting for other jobs to finish...

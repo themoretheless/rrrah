@@ -1,0 +1,81 @@
+   Compiling rrrah-dedup v0.1.0 (/workspace/crates/rrrah-dedup)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+warning: linker stderr: /validation/sysroot/usr/bin/ld: /validation/target/debug/deps/libjpegxr-8d01a0594e000fc4.rlib(2e643c6506a180d9-strenc.o): in function `StrIOEncInit':
+         /validation/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/jpegxr-0.3.1/jxrlib/image/encode/strenc.c:485:(.text.StrIOEncInit+0xf0): the use of `tmpnam' is dangerous, better use `mkstemp'
+  |
+  = note: `#[warn(linker_messages)]` on by default
+
+warning: linker stdout: /validation/sysroot/usr/bin/ld: /validation/target/debug/deps/libjpegxr-8d01a0594e000fc4.rlib(2e643c6506a180d9-strenc.o): note: the message above does not take linker garbage collection into account
+
+warning: `rrrah-dedup` (test "candidate_union_files") generated 2 warnings
+warning: `rrrah-dedup` (test "gradient_candidate_smoothing") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "correspondence_union") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "gradient_scale_files") generated 2 warnings (2 duplicates)
+    Finished `test` profile [optimized + debuginfo] target(s) in 4m 01s
+     Running tests/candidate_union_files.rs (/validation/target/debug/deps/candidate_union_files-6b1f66d621cb76bc)
+
+running 6 tests
+test asymmetric_smoothing_keeps_original_pixel_confirmation_and_terminal_release ... ok
+test fresh_union_regions_match_supplied_model_and_refuse_unrelated ... ok
+test asymmetric_smoothing_late_cancellation_and_source_replacement_are_atomic ... ok
+test common_source_guard_cancellation_and_preio_aggregate_admission ... ok
+test union_collection_retains_every_fresh_positive_and_exact_pair_evidence ... ok
+test union_collection_removes_all_changed_source_edges_and_restores_reversed_retry has been running for over 60 seconds
+test union_collection_removes_all_changed_source_edges_and_restores_reversed_retry ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 68.97s
+
+     Running tests/correspondence_union.rs (/validation/target/debug/deps/correspondence_union-c08c1e7ba08fe9c5)
+
+running 2 tests
+test union_matches_independent_greedy_oracle_including_boundaries_duplicates_and_order ... ok
+test checked_admission_invalid_inputs_every_cancellation_and_retry ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/gradient_candidate_smoothing.rs (/validation/target/debug/deps/gradient_candidate_smoothing-4c9c870b97e62b93)
+
+running 2 tests
+test smoothing_matches_independent_footprints_and_exact_last_owner_credit ... ok
+test work_memory_opacity_and_every_cancellation_refuse_without_retained_output ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/gradient_scale_files.rs (/validation/target/debug/deps/gradient_scale_files-187b304a591586f5)
+
+running 19 tests
+test area_distinct_managed_file_cancel_mutation_and_restored_retry_release_credit ... ok
+test area_distinct_file_keeps_original_confirmation_and_preio_admission ... ok
+test area_distinct_collection_matches_all_fresh_pairs_and_preiteration_admission ... ok
+test changed_source_refuses_scale_evidence_and_restored_retry_succeeds ... ok
+test collection_scale_edges_equal_fresh_pair_confirmation ... ok
+test area_distinct_regions_common_source_lifecycle_and_admission ... ok
+test collection_scale_mutation_and_cancellation_remove_partial_results ... ok
+test distinct_managed_collection_matches_all_fresh_pairs_and_preiteration_admission ... ok
+test distinct_managed_file_cancel_mutation_and_restored_retry_release_credit ... ok
+test distinct_managed_file_results_preserve_copy_refusal_and_last_owner ... ok
+test intermediate_scale_files_retain_authored_rotations_and_enlargements ... ok
+test distinct_managed_regions_common_source_lifecycle_and_admission ... ok
+test scale_list_cancellation_precedes_file_and_iterator_access ... ok
+test scale_file_admission_and_cancellation_are_atomic ... ok
+test scaled_files_confirm_pixels_and_refuse_unrelated ... ok
+test spatial_collection_scale_edges_equal_fresh_pair_confirmation ... ok
+test spatial_scale_regions_match_fresh_supplied_model_confirmation ... ok
+test area_distinct_collection_cancel_changed_source_and_restored_retry ... ok
+test distinct_managed_collection_cancel_changed_source_and_restored_retry ... ok
+
+test result: ok. 19 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 50.46s
+

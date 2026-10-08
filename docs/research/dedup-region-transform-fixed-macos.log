@@ -1,0 +1,52 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+error[E0433]: cannot find module or crate `rrrah_memory` in this scope
+   --> crates/rrrah-decode/src/rpf.rs:935:36
+    |
+935 |             .map_err(|_| E::Memory(rrrah_memory::BufferError::Overflow))?;
+    |                                    ^^^^^^^^^^^^ use of unresolved module or unlinked crate `rrrah_memory`
+    |
+help: there is a crate or module with a similar name
+    |
+935 -             .map_err(|_| E::Memory(rrrah_memory::BufferError::Overflow))?;
+935 +             .map_err(|_| E::Memory(rrrah_core::BufferError::Overflow))?;
+    |
+
+error[E0433]: cannot find module or crate `rrrah_memory` in this scope
+   --> crates/rrrah-decode/src/rpf.rs:897:12
+    |
+897 |     Memory(rrrah_memory::BufferError),
+    |            ^^^^^^^^^^^^ use of unresolved module or unlinked crate `rrrah_memory`
+    |
+help: there is a crate or module with a similar name
+    |
+897 -     Memory(rrrah_memory::BufferError),
+897 +     Memory(rrrah_core::BufferError),
+    |
+
+error[E0433]: cannot find module or crate `rrrah_memory` in this scope
+   --> crates/rrrah-decode/src/rpf.rs:905:12
+    |
+905 |     bytes: rrrah_memory::SharedBuffer<u8>,
+    |            ^^^^^^^^^^^^ use of unresolved module or unlinked crate `rrrah_memory`
+    |
+help: there is a crate or module with a similar name
+    |
+905 -     bytes: rrrah_memory::SharedBuffer<u8>,
+905 +     bytes: rrrah_core::SharedBuffer<u8>,
+    |
+
+error[E0433]: cannot find module or crate `rrrah_memory` in this scope
+   --> crates/rrrah-decode/src/rpf.rs:928:18
+    |
+928 |         budget: &rrrah_memory::MemoryBudget,
+    |                  ^^^^^^^^^^^^ use of unresolved module or unlinked crate `rrrah_memory`
+    |
+help: there is a crate or module with a similar name
+    |
+928 -         budget: &rrrah_memory::MemoryBudget,
+928 +         budget: &rrrah_core::MemoryBudget,
+    |
+
+For more information about this error, try `rustc --explain E0433`.
+error: could not compile `rrrah-decode` (lib) due to 4 previous errors

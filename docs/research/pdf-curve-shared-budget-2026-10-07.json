@@ -1,0 +1,23 @@
+{
+  "scope": "PDF precise fill temporary geometry under the shared MemoryBudget",
+  "fixture": "tests/fixtures/pdf/cubic-parabola-area.pdf",
+  "implementation": "Count subdivision elements without allocating output, reserve path storage before allocation, and retain its reservation through path drawing.",
+  "active_test": "pdf::precise_fill_tests::precise_curve_storage_obeys_exact_shared_budget",
+  "verified": [
+    "Path geometry increases the shared peak above parser source and two raster reservations.",
+    "An exact observed peak budget succeeds with identical output pixels.",
+    "Only the final raster reservation survives a successful decode; dropping it releases all managed credit.",
+    "A budget one byte below the required peak returns a structured memory error before allocating path storage and releases all managed credit."
+  ],
+  "validation": {
+    "focused": {"passed": 3, "failed": 0},
+    "decoder_library": {"passed": 970, "failed": 0, "ignored": 66},
+    "log": "/tmp/rrrah-pdf-curve-budget-full.log"
+  },
+  "remaining": [
+    "Cancellation during subdivision planning and materialization",
+    "Performance qualification across real PDF-compatible AI files",
+    "Complete accounting of parser and renderer allocations; this is not a process RSS limit",
+    "Stroke, clipping and glyph curve precision qualification"
+  ]
+}

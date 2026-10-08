@@ -526,6 +526,12 @@ impl<K: Clone + Eq + Hash + Send + 'static, V: SwapPayload> ImageSwapCache<K, V>
             queued_bytes: self.queue_budget.used(),
         }
     }
+    /// Disk quota charged by completed blobs and active writes, including blobs
+    /// retained by an in-flight restore after their index entry was removed.
+    pub fn disk_usage(&self) -> std::io::Result<rrrah_swap::SwapUsage> {
+        self.store.usage().map_err(std::io::Error::other)
+    }
+
     /// Synchronization hook for tests/benchmarks; never call this from the render thread.
     pub fn wait_idle(&self) -> std::io::Result<()> {
         let (tx, rx) = mpsc::channel();

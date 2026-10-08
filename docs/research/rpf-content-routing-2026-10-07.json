@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-07",
+  "feature": "RPF content header candidate routing independent of extension",
+  "contract": [
+    "Fixed 740-byte stack-only probe checks revision, channel count, color depth and window bounds",
+    "Candidate routing still requires full native importer validation",
+    "Common image classification prioritizes recognized RPF content over sensor suffix",
+    "Explicit interpretation remains mandatory"
+  ],
+  "evidence": {
+    "log": "/tmp/rrrah-rpf-content-final.log",
+    "passed": 963,
+    "ignored": 65,
+    "checks": [
+      "RPF renamed PNG, CR3 and unknown suffix classifies as raster",
+      "decode_image and decode_raster preserve sample bits for both alpha interpretations",
+      "producer aspect retained",
+      "managed root released after each renamed decode",
+      "existing sniff, EPS and raster corpus tests pass"
+    ]
+  },
+  "investigation": "Initial common probe was 552 bytes and could not see RPF channel-depth fields; expanded to 740 and all renamed cases pass",
+  "limits": [
+    "Gallery listing unknown extensions and speculative preload filtering of raw-suffixed RPF require separate integration",
+    "No broad real-producer corpus or physical HDR/NVIDIA gate closure"
+  ],
+  "status": "local, not pushed"
+}

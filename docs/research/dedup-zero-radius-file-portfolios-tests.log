@@ -1,0 +1,40 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 57.85s
+     Running tests/anchor_geometry_rank_fallback.rs (target/debug/deps/anchor_geometry_rank_fallback-b4038e52fc30d3a7)
+
+running 1 test
+test rank_driven_fallback_admission_selection_cancel_and_release ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.47s
+
+     Running tests/anchor_reflected_geometry.rs (target/debug/deps/anchor_reflected_geometry-6c481a72016d9799)
+
+running 1 test
+test reflected_file_search_common_lifecycle_and_original_pixel_parity ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 14.80s
+
+     Running tests/anchor_reflection_fallback.rs (target/debug/deps/anchor_reflection_fallback-dd004838cd0bfb83)
+
+running 3 tests
+test all_eight_cumulative_caps_refuse_before_missing_io_and_cancel_wins ... ok
+test ordinary_mirror_and_foreign_select_correct_six_phase_recipes ... ok
+test six_phase_cancellation_and_both_source_mutations_release_memory ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 32.51s
+

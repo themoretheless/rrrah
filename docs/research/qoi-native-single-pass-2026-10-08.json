@@ -1,0 +1,79 @@
+{
+  "change": "Production native Rust QOI decoding validates framing and restores pixels in one pass. The standalone framing scanner and image QOI codec remain test-only timing references for this path.",
+  "backend": "CPU and physical Metal Apple M4 Max",
+  "tests": {
+    "unit_with_large_timing": 3,
+    "official_reference_and_malformed": 2,
+    "raster_regression": 30,
+    "raster_regression_ignored_unverified": 4,
+    "qoi_native_prepared_swap_metal": 1,
+    "official_reference_images": 8,
+    "malformed_cases": 45,
+    "native_cancellation_checkpoints": 9
+  },
+  "memory": "Output admitted before allocation; shared owners retain credit; pressure refusal and all cancellation checkpoints release partial output; rejected corpus inputs end with zero retained budget.",
+  "timing": [
+    {
+      "dense": false,
+      "pixels": 12000000,
+      "bytes": 193571,
+      "samples": 15,
+      "framing_p50_ms": 0.406,
+      "framing_p95_ms": 0.711958,
+      "codec_p50_ms": 5.267166,
+      "codec_p95_ms": 55.489084,
+      "native_p50_ms": 5.7875,
+      "native_p95_ms": 14.614959
+    },
+    {
+      "dense": true,
+      "pixels": 12000000,
+      "bytes": 60000022,
+      "samples": 15,
+      "framing_p50_ms": 48.645542,
+      "framing_p95_ms": 86.645916,
+      "codec_p50_ms": 144.375083,
+      "codec_p95_ms": 240.91025,
+      "native_p50_ms": 170.163042,
+      "native_p95_ms": 275.091833
+    }
+  ],
+  "warmups": 3,
+  "large_sample_equality": "Every RGBA byte of both 12 MP authored distributions compared to image codec in all 18 iterations each.",
+  "implementation": "Fill an admitted pre-sized RGBA byte span per command; no unsafe code or additional decoded pixel buffer. Header/end marker checked before allocation, command/trailing checks in decoding loop, no command checkpoint removal.",
+  "sources": [
+    {
+      "path": "crates/rrrah-decode/src/qoi_bounds.rs",
+      "sha256": "96de92528a7a387689deb50f50fe88d8fae4690c67d3a00c69e82072d4da4a19"
+    },
+    {
+      "path": "crates/rrrah-decode/src/raster.rs",
+      "sha256": "6f38bb11d5a2fd76e41e8f78304401577c34698a79b23f1f0f7d99759afba1db"
+    }
+  ],
+  "logs": [
+    {
+      "path": "/tmp/rrrah-qoi-native-span-cost-20261008.log",
+      "sha256": "b80f00919581d5456298aa3ebaa77c829e983310f69a9b3d70e4b9dfa6673fa2"
+    },
+    {
+      "path": "/tmp/rrrah-qoi-native-corpus-20261008.log",
+      "sha256": "1fbeb4c9df956cf1643f2c6c728838dc49b35199abb55915c4a905eaba4be4f1"
+    },
+    {
+      "path": "/tmp/rrrah-qoi-native-raster-regression-20261008.log",
+      "sha256": "ea4c6c5510dad272d526c1f9c7762d440f1b40da04e3352d70c201031914c80e"
+    },
+    {
+      "path": "/tmp/rrrah-qoi-native-swap-metal-20261008.log",
+      "sha256": "cac15980a9fde13cf5010d34bc7b65c85963e2962b53a13e220ba6c958fe5f53"
+    }
+  ],
+  "limitations": [
+    "CPU timing excludes filesystem I/O, GPU upload and presentation.",
+    "Concurrent machine builds affected timing; no universal speedup claim.",
+    "Separate reference-stage percentiles cannot be summed into an end-to-end percentile.",
+    "Timing requests have no cancellation token; injected cancellation and reservation lifecycle tested separately.",
+    "Photographic producer corpus, exhaustive malformed variants and physical HDR display remain unqualified."
+  ]
+}

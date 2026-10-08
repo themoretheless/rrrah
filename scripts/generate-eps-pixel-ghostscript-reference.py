@@ -55,12 +55,38 @@ if eps_import:
         ("arctangent_rotation_numeric_conversion", "1 0 0 setrgbcolor 7.9 cvi 1 cvr translate 1 0 atan rotate 0 0 4.9 cvi 4 cvr rectfill showpage"),
         ("power_computed_rectangle", "1 0 0 setrgbcolor 2 -1 exp 2 mul 1 2 2 exp 2 2 exp rectfill 0 0 1 setrgbcolor 3 3 9 0.5 exp 2 1 exp rectfill showpage"),
     ]
+arc_cases = "--arcs" in sys.argv
+if arc_cases:
+    cases = [
+        ("circle", "4 4 3 0 360 arc fill"),
+        ("clockwise_circle", "4 4 3 360 0 arcn fill"),
+        ("pie", "4 4 moveto 4 4 3 0 90 arc closepath fill"),
+        ("ellipse", "4 4 translate 1 0.5 scale 0 0 3 0 360 arc fill"),
+        ("twice_evenodd", "4 4 3 0 720 arc eofill"),
+        ("negative_radius", "4 4 -3 0 360 arc fill"),
+    ]
+clip_cases = "--clips" in sys.argv
+if clip_cases:
+    cases = [
+        ("retained_open_clip", "1 1 moveto 7 1 lineto 7 7 lineto 1 7 lineto clip fill"),
+        ("empty_clip", "newpath clip 0 0 8 8 rectfill"),
+        ("clip_rectangle", box + " clip newpath 0 0 8 8 rectfill"),
+        ("even_odd_hole", box + " " + hole + " eoclip newpath 0 0 8 8 rectfill"),
+        ("nested_intersection", box + " clip newpath 3 0 moveto 8 0 lineto 8 5 lineto 3 5 lineto clip newpath 0 0 8 8 rectfill"),
+        ("saved_clip_restore", "gsave " + box + " clip newpath 1 0 0 setrgbcolor 0 0 8 8 rectfill grestore 0 0 1 setrgbcolor 0 0 2 2 rectfill"),
+        ("numeric_rectclip", "1 1 6 6 rectclip 0 0 8 8 rectfill"),
+        ("negative_rectclip", "7 7 -6 -6 rectclip 0 0 8 8 rectfill"),
+        ("zero_rectclip", "1 1 0 6 rectclip 0 0 8 8 rectfill"),
+        ("reset_clip", "newpath clip initclip 0 0 8 8 rectfill"),
+    ]
 background = "1 setgray 0 0 moveto 8 0 lineto 8 8 lineto 0 8 lineto closepath fill 0 setgray "
+if clip_cases:
+    background = "initclip newpath " + background
 unadjusted = stroke and ("--no-stroke-adjust" in sys.argv or bevel_boundaries)
 prefix = "false setstrokeadjust " if unadjusted else ""
 zero_fill_adjust = "--zero-fill-adjust" in sys.argv
 if zero_fill_adjust:
-    if not bevel_boundaries:
+    if not (bevel_boundaries or arc_cases):
         raise SystemExit("zero fill adjustment currently qualifies bevel modes only")
     prefix += "0 0 .setfilladjust2 "
 source = "\n".join(background + prefix + program + (" rrrahEmit" if eps_import else " showpage") for _, program in cases).encode()
@@ -90,7 +116,7 @@ for name, program in cases:
     rgb = data[at:at + 192]
     assert len(rgb) == 192
     at += 192
-    references.append({"name": name, "source": background + prefix + program, "rgb": list(rgb)})
+    references.append({"name": name, "source": background + ("" if arc_cases else prefix) + program, "rgb": list(rgb)})
 assert at == len(data)
 metadata = result.stderr.decode().splitlines()
 version = next(row for row in metadata if row.count(".") == 2 and row.replace(".", "").isdigit())
@@ -106,6 +132,10 @@ if bevel_boundaries:
     destination = "tests/fixtures/eps/bevel-boundary-ghostscript-reference.json"
 if bevel_outlines:
     destination = "tests/fixtures/eps/bevel-outline-ghostscript-reference.json"
+if clip_cases:
+    destination = "tests/fixtures/eps/clip-pixel-ghostscript-reference.json"
+if arc_cases:
+    destination = "tests/fixtures/eps/arc-pixel-ghostscript-reference.json"
 if zero_fill_adjust:
     destination = destination.replace('-ghostscript-reference.json', '-zero-adjust-ghostscript-reference.json')
 Path(destination).write_text(json.dumps({

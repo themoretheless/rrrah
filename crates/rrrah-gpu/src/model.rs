@@ -42,7 +42,7 @@ impl ModelRenderer {
     }
 
     pub fn new(device: &wgpu::Device, target: wgpu::TextureFormat) -> Self {
-        assert!(target.is_srgb(), "model target must be sRGB");
+        assert!(target.is_srgb() || target == wgpu::TextureFormat::Rgba16Float, "model target must be sRGB or linear RGBA16Float");
         let shader = device.create_shader_module(wgpu::ShaderModuleDescriptor {
             label: Some("Rrrah model shader"),
             source: wgpu::ShaderSource::Wgsl(include_str!("../shaders/model_view.wgsl").into()),

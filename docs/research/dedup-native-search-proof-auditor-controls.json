@@ -1,0 +1,48 @@
+{
+  "status": "passed",
+  "input_hashes": {
+    "docs/research/dedup-native-screen-affine-color-search-proof.json": "e373c1fafeaa80c0880a7bbd293d6f53dba2f45f7ac0c2d90b792003ae756f20",
+    "scripts/verify-dedup-native-screen-affine-color-search-proof.py": "15e57f93102dc750b7d869c73f1d48fbd4ce70d39ea44efb17fcbaa00e717587",
+    "scripts/dedup_distinct_points.py": "06b11185c1fb92d52dac9327c814c5e89a719b0cd7cf8b48501fc5cea9b7b468",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/test-dedup-native-search-proof-auditor.py": "3d9ea25968d7c961accb5b0f6cf55d2cc1036a1775cf6dd02bdb13e9313ff33b"
+  },
+  "controls": [
+    {
+      "case": "valid",
+      "returncode": 0
+    },
+    {
+      "case": "duplicate_point",
+      "returncode": 1
+    },
+    {
+      "case": "missing_inlier",
+      "returncode": 1
+    },
+    {
+      "case": "false_residual",
+      "returncode": 1
+    },
+    {
+      "case": "shifted_domain",
+      "returncode": 1
+    },
+    {
+      "case": "missing_cell",
+      "returncode": 1
+    },
+    {
+      "case": "radius",
+      "returncode": 1
+    },
+    {
+      "case": "matched_count",
+      "returncode": 1
+    },
+    {
+      "case": "false_support",
+      "returncode": 1
+    }
+  ],
+  "scope": "One real valid report and eight malformed-report controls. No independent pixel resampling, upstream algorithm correctness or full case coverage claim."
+}

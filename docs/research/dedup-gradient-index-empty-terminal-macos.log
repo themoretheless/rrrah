@@ -1,0 +1,30 @@
+   Compiling hayro-interpret v0.7.0 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret)
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+   Compiling hayro v0.7.1
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 6.08s
+     Running tests/gradient_index.rs (/Users/themoretheless/.codex/tmp/rrrah-dedup-atomic-20261006/target/debug/deps/gradient_index-f3bfea84be6568b5)
+
+running 5 tests
+test admission_cancel_recipe_and_owned_reservation ... ok
+test file_proposal_cancellation_never_returns_partial_pairs ... ok
+test invalid_vectors_exact_memory_and_build_cancellation ... ok
+test retrieval_equals_exhaustive_including_boundaries_and_collisions ... ok
+test file_proposals_equal_exhaustive_without_ambiguity_loss ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

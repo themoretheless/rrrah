@@ -1,0 +1,19 @@
+{
+  "scope": "Shared managed admission for PDF shading texture pixel storage",
+  "implementation": "Renderer requests width*height*sizeof(PremulRgba8) before texture allocation. Admission uses the PDF request MemoryBudget and preserves concrete BufferError refusal. Shared guards propagate to nested renderers and soft masks, and remain alive through final render consumption. Each top-level render owns a fresh guard collection; RenderCache reuse does not accumulate texture reservations.",
+  "active_test": "pdf::precise_fill_tests::shading_texture_obeys_exact_shared_budget_and_releases_credit",
+  "fixture": "tests/fixtures/pdf/gradient-rgb.pdf",
+  "verified": [
+    "A full-page 12x8 texture increases managed peak by its 384-byte pixel buffer.",
+    "Exact peak budget succeeds with identical pixels; only final raster credit survives decode.",
+    "One byte below peak returns a structured memory error without admitting texture storage.",
+    "All managed credit is released on failure and after output drop."
+  ],
+  "validation": {"decoder_library_passed": 972, "ignored": 66, "renderer_focused_passed": 1, "failed": 0},
+  "logs": ["/tmp/rrrah-pdf-texture-budget-final.log", "/tmp/rrrah-pdf-texture-budget-renderer.log"],
+  "limitations": [
+    "Mesh sample maps, triangle arrays, parser structures and general renderer allocations still need shared admission.",
+    "This is pixel-storage accounting, not a complete allocator or RSS cap.",
+    "Reservations are conservative: individual shading texture credit stays until the top-level render completes."
+  ]
+}

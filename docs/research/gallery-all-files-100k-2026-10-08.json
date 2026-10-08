@@ -1,0 +1,31 @@
+{
+  "scope": "Remove silent 10000-entry folder truncation and verify actual 100000-file directory enumeration",
+  "change": "scan_folder retains and deterministically sorts all supported regular-file paths; bounded first-cover selection unchanged",
+  "actual_directory_supported_files": 100000,
+  "enumeration_seconds": 1.447336875,
+  "large_directory_test_passed": 1,
+  "ordinary_gallery_tests_passed": 29,
+  "ignored_external_gallery_tests": 9,
+  "failed": 0,
+  "checks": [
+    "All 100000 sorted paths retained including last entry",
+    "Unsupported file and directory with image suffix excluded",
+    "Existing sorted-prefix folder-cover, navigation and prefetch tests passed"
+  ],
+  "logs": [
+    {
+      "path": "/tmp/rrrah-gallery-100k-enumeration-20261008.log",
+      "sha256": "cac131ce806df9e93525fbf23cae337d1f8ed5db61ce02b83f3b1f61842ff55f"
+    },
+    {
+      "path": "/tmp/rrrah-gallery-post-unlimited-20261008.log",
+      "sha256": "cf80e7faff45916261604fb368765fd653e5991f4f473a4e5d51deef0c5f5f96"
+    }
+  ],
+  "limitations": [
+    "Empty PNG-named files qualify enumeration only, not image decode or display",
+    "All path metadata remains in memory; memory grows with directory size",
+    "Physical UI latency and mixed real 100000-photo collection not measured",
+    "External ignored gallery controls not rerun"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "status": "verified_early_exit_exact_index_oracle_and_mixed_benchmark",
+  "test_session": 92594,
+  "benchmark_session": 60164,
+  "terminal_exit": 0,
+  "tests": 7,
+  "rounds": 6,
+  "median_seconds": {
+    "0": 1.5397127085,
+    "1": 1.01059725
+  },
+  "observed_ratio": 1.5235670871853253,
+  "pins": {
+    "docs/research/dedup-gradient-index-early-exit-bench.log": "748614f1c4a74a91573d679076f67d4ba9ee145531eb10b8da94e33c73cfe456",
+    "docs/research/dedup-gradient-index-early-exit-tests.log": "df3e7034db95dce558ff1aa26fa7ced330a89193c7479c8faae2263f9a846814",
+    "crates/rrrah-dedup/src/gradient_index.rs": "705c2b76c0481c82fdaa6740483b9514a1dcfdf1f908d254713291251f8b41ca",
+    "crates/rrrah-dedup/tests/gradient_index.rs": "11427e37f6c528d4313289484c36d6502c4a3f7ce093a7d2eb681fff054657a6",
+    "crates/rrrah-dedup/examples/gradient_index_early_exit_bench.rs": "e5edc9c5fbeea90cf02f41b076ee9d5da7d30e44b81a28a922d5be55961e99e1",
+    "docs/research/dedup-gradient-index-before-distance-early-exit.rs": "93bb8bd3cdc98e7e5d45e7bdb055f9a1d37ea339b4e562cb28eb62024bd217cc",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/gradient-index-early-exit-mixed-bench-qualified": "8ca6af3ec918e18a27275c3844ea19bddd280b138ad521b9581bccfbba795186"
+  },
+  "scope": "Seven exact exhaustive/boundary/collision/cancellation/memory oracle tests pass. Six alternating1024query4096descriptor runs match all IDs/distances and512hits. Nonnegative partial sums reject only outside radius, retained sums preserve order and comparison admission unchanged. Concurrent timing spread; no real collection or current Linux early-exit claim."
+}

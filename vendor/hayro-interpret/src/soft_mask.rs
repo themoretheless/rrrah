@@ -30,17 +30,22 @@ pub enum MaskType {
 }
 
 /// A transfer function to apply to the opacity values of a mask.
-pub struct TransferFunction(Function);
+#[derive(Clone)]
+pub struct TransferFunction(Option<Function>);
 
 impl TransferFunction {
+    /// Evaluate the original scalar transfer function with bounded work.
+    pub fn apply_bounded(&self, value: f32, cancelled: &dyn Fn() -> bool) -> Option<f32> {
+        self.0.as_ref()?.eval_scalar_bounded(value,cancelled).map(|value| value.clamp(0.0,1.0))
+    }
     /// Apply the transfer function to the given value.
     ///
     /// The input value needs to be between 0 and 1 and the return value is
     /// guaranteed to be between 0 and 1.
     #[inline]
     pub fn apply(&self, val: f32) -> f32 {
-        self.0
-            .eval(smallvec![val])
+        self.0.as_ref()
+            .and_then(|function| function.eval(smallvec![val]))
             .and_then(|v| v.first().copied())
             .unwrap_or(0.0)
             .clamp(0.0, 1.0)
@@ -146,10 +151,12 @@ impl<'a> SoftMask<'a> {
         );
         let cs = cs.with_device_defaults(&context.device_color_defaults(&resources));
         let device_luminosity = cs.is_device();
-        let transfer_function = dict
-            .get::<Object<'_>>(TR)
-            .and_then(|o| Function::new(&o))
-            .map(TransferFunction);
+        let transfer_function = match dict.get::<Object<'_>>(TR) {
+            None => None,
+            Some(Object::Name(name)) if name.as_str() == "Identity" => None,
+            // Keep invalid declarations distinct from an absent/identity TR.
+            Some(object) => Some(TransferFunction(Function::new(&object))),
+        };
         let (mask_type, background) = match kind {
             MaskType::Luminosity => {
                 let color = dict

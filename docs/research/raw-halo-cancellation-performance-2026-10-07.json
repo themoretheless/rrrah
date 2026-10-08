@@ -1,0 +1,38 @@
+{
+  "scope": "Controlled CPU halo packing only, not end-to-end decode/display or GPU timing",
+  "baseline": "Same extracted production helper with cancellation checks removed; copy/fill algorithm and allocation remain identical",
+  "candidate": "Current helper with atomic generation load callback",
+  "build": "rustc --edition 2024 -O",
+  "host": "Apple M4 Max",
+  "warmup_pairs": 10,
+  "measured_pairs": 90,
+  "order": "Alternating order within each pair",
+  "source_sha256": "9bcc09896220b288b62f28a731fc84e3d4a5c8aa2d55218e602ce73d482db88a",
+  "harness": "docs/research/raw-halo-cancellation-benchmark-2026-10-07.rs",
+  "results": [
+    {
+      "tile": 512,
+      "baseline_median_ms": 0.017917,
+      "cancellable_median_ms": 0.017958,
+      "baseline_p95_ms": 0.018167,
+      "cancellable_p95_ms": 0.018208,
+      "samples": 90
+    },
+    {
+      "tile": 2048,
+      "baseline_median_ms": 0.244458,
+      "cancellable_median_ms": 0.24425,
+      "baseline_p95_ms": 0.250667,
+      "cancellable_p95_ms": 0.25175,
+      "samples": 90
+    }
+  ],
+  "validation": "Output buffers equal before timing for both tile sizes",
+  "interpretation": "Measured medians essentially unchanged in this controlled run; small differences do not establish a speedup or a broad no-overhead guarantee",
+  "limits": [
+    "Shared workstation",
+    "Standalone extracted helper compiler context differs from complete app",
+    "Row padding, GPU staging, decode and completed display excluded"
+  ],
+  "log": "/tmp/rrrah-halo-cancel-bench.log"
+}

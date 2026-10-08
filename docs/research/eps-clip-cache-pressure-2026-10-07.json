@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-07",
+  "fix": "Release optional one-mask EPS clip cache and retry paint-mask construction once only on BufferError::Capacity",
+  "reproduction": "128x128; initial rectangular clipped paint populates cache; next 511-segment zigzag paint under root limit one byte below generous-render peak",
+  "verified": [
+    "tight render succeeds after evicting cache",
+    "all RGBA pixels match generous render",
+    "tight peak below generous peak",
+    "both output roots and scene root release to zero"
+  ],
+  "scope": "paint sample-mask admission only; cancellation, geometry/work errors are not retried; other working-buffer admission remains separately bounded",
+  "tests": {
+    "passed": 958,
+    "failed": 0,
+    "ignored": 65,
+    "log": "/tmp/rrrah-eps-clip-pressure-full.log"
+  },
+  "status": "local, not pushed"
+}

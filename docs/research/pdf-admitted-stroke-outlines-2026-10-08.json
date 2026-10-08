@@ -1,0 +1,38 @@
+{
+  "scope": "Test-only native admitted stroke outlines and global polygon replay; production routing pending",
+  "source_sha256": {
+    "vendor/hayro/src/bounded_stroke.rs": "ecda3158343c0ccb8c0b9feab8cb514a5326976a106cf6b1bafb2da5d34369e8",
+    "vendor/hayro/src/bounded_stroke_outline.rs": "5d06453a1aac26f650016d94a72fc868b9df687fab1c1ba50c58345aece69ca8",
+    "vendor/hayro/src/polygon_coverage.rs": "edc325ad54e21a1b72e0a9ba7b32dcf6996e77af2c2395f1d292988ffbd392c5",
+    "vendor/hayro/src/knockout_interpreter.rs": "007d31dea66739eb747ca2eabf9ddfe2337c4fd22e8fd9f6c879db592dc97e9c"
+  },
+  "suite": {
+    "passed": 89,
+    "failed": 0,
+    "ignored": 8,
+    "filtered": 1,
+    "seconds": 13.26,
+    "log": "/tmp/rrrah-interior-hit-controls.log"
+  },
+  "controls": [
+    "Independent cap, join, miter-limit, closed seam, zero-length dash and device hairline areas",
+    "All stroke capture admission refusals and cancellation checkpoints release storage and refuse partial replay",
+    "Adjacent representable Y cuts retain positive area",
+    "45 authored full-image/tile transform cases byte exact"
+  ],
+  "implementation": [
+    "Two-pass admitted native stroke outline without kurbo stroke oracle",
+    "Original-metric stroke expansion followed by global transform",
+    "Pair intersections outside pixel no longer subdivide pixel integration",
+    "Per slab, left exterior edges accumulate initial winding and right exterior edges are excluded from hit sorting; only interior edges are sorted"
+  ],
+  "remaining": [
+    "Qualify large-file throughput and reduce remaining per-pixel repeated processing before production routing",
+    "Qualify curved dash arclength phase and larger real AI/PDF corpus",
+    "Production knockout integration and independent image oracle comparison"
+  ],
+  "production_enabled": false,
+  "nvidia": "Deferred by user",
+  "geometry_work_budget_per_pixel": 20000000,
+  "rotated_curved_fixture": "Passes without raising work budget"
+}

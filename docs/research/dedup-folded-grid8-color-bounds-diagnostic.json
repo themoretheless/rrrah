@@ -1,0 +1,714 @@
+{
+  "status": "complete_native_diagnostic",
+  "required_cases": 6,
+  "input_hashes": {
+    "docs/research/dedup-folded-grid8-common-footprint-regions.json": "1d03e8e1f1ad99e62c80abeef6c1c8f0b960c931552a16b2472702dedb567069",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/affine-color-common-footprint-bounds-diagnostic": "38c12fa68781cfa0edd53af5ca13691eca200aeb38ee28cf941a08909c6243af",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201700.jpg": "72a07e098b9628cf665612b9a9450da78cff914a06b08c403e56c7dc74d4b5ca",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/201702.jpg": "a2e4eaa90d3aba8cca4dc3382d710cc8564f07bea69eedf35ac550ecc0900a51",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-folded-grid8-color-bounds-diagnostic.py": "ac0a636d4772483a52aad4186b00eb68d864264cfbf3b3dbb90c89e9934a37b2",
+    "crates/rrrah-dedup/examples/affine_color_common_footprint_bounds_diagnostic.rs": "e91a1f5222be09959a272f9bf3553fac94830a52536a3538b270bae2da89350c",
+    "crates/rrrah-dedup/src/affine_color.rs": "2c6106f7e91c3b2a246f8a36a23e6adae57ed7bfdc7d65363c8e82efdc5de2aa",
+    "crates/rrrah-dedup/src/affine_region.rs": "f78364c0f7e23e2124dbfcfbaefff26a22ddc90213a7d110010379c939899ac3",
+    "crates/rrrah-dedup/src/affine_region_file.rs": "b1b7490ac3405427a7cef17980973fd2ee3431b0a6147b19eb201f1a13c8bb19"
+  },
+  "rows": [
+    {
+      "model_index": 0,
+      "domains": [
+        [
+          702,
+          458,
+          223,
+          162
+        ],
+        [
+          200,
+          150,
+          100,
+          75
+        ]
+      ],
+      "matrix": [
+        [
+          0.4185336656235676,
+          0.19846255337442598,
+          -203.71018899991643
+        ],
+        [
+          -0.05327827859488764,
+          0.5835200872062716,
+          -84.68744430343341
+        ],
+        [
+          -0.00022344441600046018,
+          0.0006183023850363254,
+          0.8382813553456121
+        ]
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-grid8-common-footprint-region-0-0-0.txt",
+      "input_sha256": "cea0f1f560587921a1d3e16fbce017e859c318c3f7cf28daab9532253ef3e8c7",
+      "original_status": "ok",
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"directions\":[{\"radius\":8,\"training_samples\":3760,\"samples\":3740,\"matched\":2458,\"pixel_reads\":10837500,\"matrix\":[[0.7096319288182096, 0.47461276126891816, -0.21621757646688192], [-0.07900300702073909, 0.8682497769844305, -0.05491461560813216], [0.107852612810315, 0.03777808835788954, 0.5354024557967836]],\"offset\":[-0.03650104607422926, -0.031693228896408465, -0.01171292192523496],\"maximum_absolute_coefficient\":0.8682497769844305,\"maximum_absolute_offset\":0.03650104607422926,\"original_bounds_admitted\":true},{\"radius\":8,\"training_samples\":16426,\"samples\":16423,\"matched\":8621,\"pixel_reads\":75946888,\"matrix\":[[1.3308897400426216, -0.9191410968006556, 0.5156152698013273], [0.4536266004644729, 0.42591118159855, 0.37469938753492427], [0.36239163184449463, -0.881432954619549, 2.0044406709299434]],\"offset\":[0.03547753974070604, 0.05018662033078228, 0.029973768345155083],\"maximum_absolute_coefficient\":2.0044406709299434,\"maximum_absolute_offset\":0.05018662033078228,\"original_bounds_admitted\":true}],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "evidence": {
+        "status": "ok",
+        "directions": [
+          {
+            "radius": 8,
+            "training_samples": 3760,
+            "samples": 3740,
+            "matched": 2458,
+            "pixel_reads": 10837500,
+            "matrix": [
+              [
+                0.7096319288182096,
+                0.47461276126891816,
+                -0.21621757646688192
+              ],
+              [
+                -0.07900300702073909,
+                0.8682497769844305,
+                -0.05491461560813216
+              ],
+              [
+                0.107852612810315,
+                0.03777808835788954,
+                0.5354024557967836
+              ]
+            ],
+            "offset": [
+              -0.03650104607422926,
+              -0.031693228896408465,
+              -0.01171292192523496
+            ],
+            "maximum_absolute_coefficient": 0.8682497769844305,
+            "maximum_absolute_offset": 0.03650104607422926,
+            "original_bounds_admitted": true
+          },
+          {
+            "radius": 8,
+            "training_samples": 16426,
+            "samples": 16423,
+            "matched": 8621,
+            "pixel_reads": 75946888,
+            "matrix": [
+              [
+                1.3308897400426216,
+                -0.9191410968006556,
+                0.5156152698013273
+              ],
+              [
+                0.4536266004644729,
+                0.42591118159855,
+                0.37469938753492427
+              ],
+              [
+                0.36239163184449463,
+                -0.881432954619549,
+                2.0044406709299434
+              ]
+            ],
+            "offset": [
+              0.03547753974070604,
+              0.05018662033078228,
+              0.029973768345155083
+            ],
+            "maximum_absolute_coefficient": 2.0044406709299434,
+            "maximum_absolute_offset": 0.05018662033078228,
+            "original_bounds_admitted": true
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      },
+      "supported_with_original_limits": false
+    },
+    {
+      "model_index": 1,
+      "domains": [
+        [
+          918,
+          468,
+          220,
+          161
+        ],
+        [
+          300,
+          150,
+          100,
+          75
+        ]
+      ],
+      "matrix": [
+        [
+          0.5841396054403898,
+          0.06449934069649939,
+          -280.9766937275939
+        ],
+        [
+          0.028074743749347954,
+          0.5231811541882987,
+          -125.22253061336158
+        ],
+        [
+          0.00030600642272842035,
+          0.00010197867584308398,
+          0.6397310430246039
+        ]
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-grid8-common-footprint-region-1-0-0.txt",
+      "input_sha256": "d0d078975b83ee6cac786ead1b8b7e3d2215ae0e502e6029ed8bc648906adef1",
+      "original_status": "ok",
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"directions\":[{\"radius\":8,\"training_samples\":3760,\"samples\":3740,\"matched\":2183,\"pixel_reads\":10837500,\"matrix\":[[1.9419037401737724, -0.3517383521369575, -0.25525302907739805], [1.0298717341714172, -0.009022628042084115, -0.005196803457892916], [1.3442025471495302, -1.299290793550358, 0.8178205511921598]],\"offset\":[-0.006927615090979472, 0.002678640532002702, 0.029635510250713065],\"maximum_absolute_coefficient\":1.9419037401737724,\"maximum_absolute_offset\":0.029635510250713065,\"original_bounds_admitted\":true},{\"radius\":8,\"training_samples\":15837,\"samples\":15861,\"matched\":10344,\"pixel_reads\":73285776,\"matrix\":[[0.5264801202151248, -0.9617152175768076, 0.9243089956898259], [-0.5431910134852538, 0.3612061547269412, 0.8583099195693347], [-1.0543478405679054, -0.052225153634904764, 2.0414732290800575]],\"offset\":[0.05746370228448679, 0.07551254536390511, 0.05613099532172883],\"maximum_absolute_coefficient\":2.0414732290800575,\"maximum_absolute_offset\":0.07551254536390511,\"original_bounds_admitted\":true}],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "evidence": {
+        "status": "ok",
+        "directions": [
+          {
+            "radius": 8,
+            "training_samples": 3760,
+            "samples": 3740,
+            "matched": 2183,
+            "pixel_reads": 10837500,
+            "matrix": [
+              [
+                1.9419037401737724,
+                -0.3517383521369575,
+                -0.25525302907739805
+              ],
+              [
+                1.0298717341714172,
+                -0.009022628042084115,
+                -0.005196803457892916
+              ],
+              [
+                1.3442025471495302,
+                -1.299290793550358,
+                0.8178205511921598
+              ]
+            ],
+            "offset": [
+              -0.006927615090979472,
+              0.002678640532002702,
+              0.029635510250713065
+            ],
+            "maximum_absolute_coefficient": 1.9419037401737724,
+            "maximum_absolute_offset": 0.029635510250713065,
+            "original_bounds_admitted": true
+          },
+          {
+            "radius": 8,
+            "training_samples": 15837,
+            "samples": 15861,
+            "matched": 10344,
+            "pixel_reads": 73285776,
+            "matrix": [
+              [
+                0.5264801202151248,
+                -0.9617152175768076,
+                0.9243089956898259
+              ],
+              [
+                -0.5431910134852538,
+                0.3612061547269412,
+                0.8583099195693347
+              ],
+              [
+                -1.0543478405679054,
+                -0.052225153634904764,
+                2.0414732290800575
+              ]
+            ],
+            "offset": [
+              0.05746370228448679,
+              0.07551254536390511,
+              0.05613099532172883
+            ],
+            "maximum_absolute_coefficient": 2.0414732290800575,
+            "maximum_absolute_offset": 0.07551254536390511,
+            "original_bounds_admitted": true
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      },
+      "supported_with_original_limits": false
+    },
+    {
+      "model_index": 2,
+      "domains": [
+        [
+          901,
+          621,
+          237,
+          167
+        ],
+        [
+          300,
+          225,
+          100,
+          75
+        ]
+      ],
+      "matrix": [
+        [
+          0.5062617385302625,
+          0.27772602508438665,
+          -357.04420718479287
+        ],
+        [
+          0.021408645253887637,
+          0.6772017774217518,
+          -229.74249486157413
+        ],
+        [
+          0.00016096869798490644,
+          0.0007406422371262621,
+          0.328921383682814
+        ]
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-grid8-common-footprint-region-2-0-0.txt",
+      "input_sha256": "3927155e992413005730f0750dc598e191a3643b67f122baeb848199957cda39",
+      "original_status": "refusal:Region(Color(Bounds))",
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"directions\":[{\"radius\":8,\"training_samples\":3760,\"samples\":3740,\"matched\":1981,\"pixel_reads\":10837500,\"matrix\":[[-0.25040398524878904, 0.6391623007447476, 0.19260862674840284], [-1.4165669894888466, 1.6921965093721478, 0.15558064262103313], [-0.6755105607160805, 0.45033813111285453, 0.6973096748296312]],\"offset\":[0.06340630948806929, 0.042429426450632024, 0.03156292384217782],\"maximum_absolute_coefficient\":1.6921965093721478,\"maximum_absolute_offset\":0.06340630948806929,\"original_bounds_admitted\":true},{\"radius\":8,\"training_samples\":17703,\"samples\":17736,\"matched\":10563,\"pixel_reads\":81934968,\"matrix\":[[0.036076637260429756, -0.7760844890134022, 1.828614514483596], [-0.5502325434463358, -0.015429195816021327, 1.7652797184209172], [-0.34534753487576464, -0.7707121195674566, 2.489680818933205]],\"offset\":[0.08748733828758834, 0.10130463063482163, 0.053538155651558714],\"maximum_absolute_coefficient\":2.489680818933205,\"maximum_absolute_offset\":0.10130463063482163,\"original_bounds_admitted\":false}],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "evidence": {
+        "status": "ok",
+        "directions": [
+          {
+            "radius": 8,
+            "training_samples": 3760,
+            "samples": 3740,
+            "matched": 1981,
+            "pixel_reads": 10837500,
+            "matrix": [
+              [
+                -0.25040398524878904,
+                0.6391623007447476,
+                0.19260862674840284
+              ],
+              [
+                -1.4165669894888466,
+                1.6921965093721478,
+                0.15558064262103313
+              ],
+              [
+                -0.6755105607160805,
+                0.45033813111285453,
+                0.6973096748296312
+              ]
+            ],
+            "offset": [
+              0.06340630948806929,
+              0.042429426450632024,
+              0.03156292384217782
+            ],
+            "maximum_absolute_coefficient": 1.6921965093721478,
+            "maximum_absolute_offset": 0.06340630948806929,
+            "original_bounds_admitted": true
+          },
+          {
+            "radius": 8,
+            "training_samples": 17703,
+            "samples": 17736,
+            "matched": 10563,
+            "pixel_reads": 81934968,
+            "matrix": [
+              [
+                0.036076637260429756,
+                -0.7760844890134022,
+                1.828614514483596
+              ],
+              [
+                -0.5502325434463358,
+                -0.015429195816021327,
+                1.7652797184209172
+              ],
+              [
+                -0.34534753487576464,
+                -0.7707121195674566,
+                2.489680818933205
+              ]
+            ],
+            "offset": [
+              0.08748733828758834,
+              0.10130463063482163,
+              0.053538155651558714
+            ],
+            "maximum_absolute_coefficient": 2.489680818933205,
+            "maximum_absolute_offset": 0.10130463063482163,
+            "original_bounds_admitted": false
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      },
+      "supported_with_original_limits": false
+    },
+    {
+      "model_index": 3,
+      "domains": [
+        [
+          921,
+          774,
+          224,
+          194
+        ],
+        [
+          300,
+          300,
+          100,
+          75
+        ]
+      ],
+      "matrix": [
+        [
+          0.2620747617172537,
+          -0.008466367402710728,
+          88.71579990098758
+        ],
+        [
+          -0.14305297283484375,
+          0.5163661150411557,
+          43.849341709565294
+        ],
+        [
+          -0.0006484883608691561,
+          0.00015022396560042368,
+          1.5563358993887488
+        ]
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-grid8-common-footprint-region-3-0-0.txt",
+      "input_sha256": "ac15215bf888d6b44cfc1c332db5e9002f7d69eb9043314965573e2dc1d410a9",
+      "original_status": "refusal:Region(Color(Bounds))",
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"directions\":[{\"radius\":8,\"training_samples\":3760,\"samples\":3740,\"matched\":1329,\"pixel_reads\":10837500,\"matrix\":[[2.633202174839824, -1.6341024543392408, 0.1422806510853941], [1.0208004535717399, -0.4480382326107002, 0.4315306316003418], [1.0705080138337042, -1.7068299905333029, 1.6388124607525725]],\"offset\":[0.1804962269107267, 0.17408910960079232, 0.1878738478133372],\"maximum_absolute_coefficient\":2.633202174839824,\"maximum_absolute_offset\":0.1878738478133372,\"original_bounds_admitted\":false},{\"radius\":8,\"training_samples\":16655,\"samples\":16674,\"matched\":5756,\"pixel_reads\":77056648,\"matrix\":[[0.6073847891803431, 0.6194098533629997, -0.3579430333763455], [0.08737279988090996, 1.397451587798328, -0.5487943672369233], [0.09502406801013404, 0.6248185627297473, 0.21717787504490996]],\"offset\":[-0.12270601530228728, -0.12291199342031517, -0.13428264176314497],\"maximum_absolute_coefficient\":1.397451587798328,\"maximum_absolute_offset\":0.13428264176314497,\"original_bounds_admitted\":false}],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "evidence": {
+        "status": "ok",
+        "directions": [
+          {
+            "radius": 8,
+            "training_samples": 3760,
+            "samples": 3740,
+            "matched": 1329,
+            "pixel_reads": 10837500,
+            "matrix": [
+              [
+                2.633202174839824,
+                -1.6341024543392408,
+                0.1422806510853941
+              ],
+              [
+                1.0208004535717399,
+                -0.4480382326107002,
+                0.4315306316003418
+              ],
+              [
+                1.0705080138337042,
+                -1.7068299905333029,
+                1.6388124607525725
+              ]
+            ],
+            "offset": [
+              0.1804962269107267,
+              0.17408910960079232,
+              0.1878738478133372
+            ],
+            "maximum_absolute_coefficient": 2.633202174839824,
+            "maximum_absolute_offset": 0.1878738478133372,
+            "original_bounds_admitted": false
+          },
+          {
+            "radius": 8,
+            "training_samples": 16655,
+            "samples": 16674,
+            "matched": 5756,
+            "pixel_reads": 77056648,
+            "matrix": [
+              [
+                0.6073847891803431,
+                0.6194098533629997,
+                -0.3579430333763455
+              ],
+              [
+                0.08737279988090996,
+                1.397451587798328,
+                -0.5487943672369233
+              ],
+              [
+                0.09502406801013404,
+                0.6248185627297473,
+                0.21717787504490996
+              ]
+            ],
+            "offset": [
+              -0.12270601530228728,
+              -0.12291199342031517,
+              -0.13428264176314497
+            ],
+            "maximum_absolute_coefficient": 1.397451587798328,
+            "maximum_absolute_offset": 0.13428264176314497,
+            "original_bounds_admitted": false
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      },
+      "supported_with_original_limits": false
+    },
+    {
+      "model_index": 4,
+      "domains": [
+        [
+          948,
+          926,
+          224,
+          190
+        ],
+        [
+          300,
+          375,
+          100,
+          75
+        ]
+      ],
+      "matrix": [
+        [
+          0.39212658878321727,
+          -0.3843393493436241,
+          315.2008130550762
+        ],
+        [
+          -0.055304485542662055,
+          0.12547122475862998,
+          331.58498360651697
+        ],
+        [
+          -0.0003169569337642831,
+          -0.0007749150589410392,
+          2.10725536133726
+        ]
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-grid8-common-footprint-region-4-0-0.txt",
+      "input_sha256": "e6ca160ca912ab4a55d11033601cd127bddd633a1951dd8cfc2d3b719c6b43a4",
+      "original_status": "refusal:Region(Color(Bounds))",
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"directions\":[{\"radius\":8,\"training_samples\":3760,\"samples\":3740,\"matched\":1753,\"pixel_reads\":10837500,\"matrix\":[[3.2627562899951785, -0.8727805137397248, -1.2269781515949205], [0.13780627264178047, 1.6470992775132534, -0.8151473357467558], [0.4996359881946679, -0.38788148440278314, 0.8959409404178862]],\"offset\":[0.2905273375594076, 0.27335847929972446, 0.29234941494727973],\"maximum_absolute_coefficient\":3.2627562899951785,\"maximum_absolute_offset\":0.29234941494727973,\"original_bounds_admitted\":false},{\"radius\":8,\"training_samples\":15426,\"samples\":15393,\"matched\":10125,\"pixel_reads\":71253528,\"matrix\":[[0.43585526258909174, -0.11671914734208502, 0.4166433221840861], [0.1562968507793005, 0.2573637731689369, 0.36602254581910726], [0.07877832993309727, -0.22247115623339925, 0.9236962468877102]],\"offset\":[-0.17703156187738425, -0.17886522781924916, -0.191328348213808],\"maximum_absolute_coefficient\":0.9236962468877102,\"maximum_absolute_offset\":0.191328348213808,\"original_bounds_admitted\":false}],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "evidence": {
+        "status": "ok",
+        "directions": [
+          {
+            "radius": 8,
+            "training_samples": 3760,
+            "samples": 3740,
+            "matched": 1753,
+            "pixel_reads": 10837500,
+            "matrix": [
+              [
+                3.2627562899951785,
+                -0.8727805137397248,
+                -1.2269781515949205
+              ],
+              [
+                0.13780627264178047,
+                1.6470992775132534,
+                -0.8151473357467558
+              ],
+              [
+                0.4996359881946679,
+                -0.38788148440278314,
+                0.8959409404178862
+              ]
+            ],
+            "offset": [
+              0.2905273375594076,
+              0.27335847929972446,
+              0.29234941494727973
+            ],
+            "maximum_absolute_coefficient": 3.2627562899951785,
+            "maximum_absolute_offset": 0.29234941494727973,
+            "original_bounds_admitted": false
+          },
+          {
+            "radius": 8,
+            "training_samples": 15426,
+            "samples": 15393,
+            "matched": 10125,
+            "pixel_reads": 71253528,
+            "matrix": [
+              [
+                0.43585526258909174,
+                -0.11671914734208502,
+                0.4166433221840861
+              ],
+              [
+                0.1562968507793005,
+                0.2573637731689369,
+                0.36602254581910726
+              ],
+              [
+                0.07877832993309727,
+                -0.22247115623339925,
+                0.9236962468877102
+              ]
+            ],
+            "offset": [
+              -0.17703156187738425,
+              -0.17886522781924916,
+              -0.191328348213808
+            ],
+            "maximum_absolute_coefficient": 0.9236962468877102,
+            "maximum_absolute_offset": 0.191328348213808,
+            "original_bounds_admitted": false
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      },
+      "supported_with_original_limits": false
+    },
+    {
+      "model_index": 5,
+      "domains": [
+        [
+          552,
+          1313,
+          232,
+          185
+        ],
+        [
+          100,
+          525,
+          100,
+          75
+        ]
+      ],
+      "matrix": [
+        [
+          0.5263407363635306,
+          -0.009458240418660044,
+          -187.21362387608607
+        ],
+        [
+          0.2008862480054409,
+          0.14165709504154317,
+          215.99279813634473
+        ],
+        [
+          0.00038649523544282923,
+          -0.00048028106311298916,
+          1.3946921373083754
+        ]
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-grid8-common-footprint-region-5-0-0.txt",
+      "input_sha256": "319688aa709c7595f45e7f27a3c764646f88858e0faf1d83ba712e710dd62d5a",
+      "original_status": "ok",
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"directions\":[{\"radius\":8,\"training_samples\":3356,\"samples\":3344,\"matched\":2689,\"pixel_reads\":10535500,\"matrix\":[[0.2679198477916237, 1.1596088104289044, -0.7211323412925192], [-0.13267276997648003, 1.000596328365161, -0.29547380128725065], [-0.11093107108606692, 0.42846164264023334, 0.2675925425004717]],\"offset\":[0.007624262012131511, 0.0006645653492860643, 0.008982510105122493],\"maximum_absolute_coefficient\":1.1596088104289044,\"maximum_absolute_offset\":0.008982510105122493,\"original_bounds_admitted\":true},{\"radius\":8,\"training_samples\":16524,\"samples\":16520,\"matched\":9932,\"pixel_reads\":82792960,\"matrix\":[[0.7184244733206735, 0.5356935250143876, 0.13908987524804792], [-0.48493059395812466, 2.2639930871624006, -0.08259082359832538], [-1.360785735263107, 2.7477043741765153, 0.4909591571608635]],\"offset\":[0.019868560253435585, 0.027344292975952034, 0.035824864967926306],\"maximum_absolute_coefficient\":2.7477043741765153,\"maximum_absolute_offset\":0.035824864967926306,\"original_bounds_admitted\":true}],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "evidence": {
+        "status": "ok",
+        "directions": [
+          {
+            "radius": 8,
+            "training_samples": 3356,
+            "samples": 3344,
+            "matched": 2689,
+            "pixel_reads": 10535500,
+            "matrix": [
+              [
+                0.2679198477916237,
+                1.1596088104289044,
+                -0.7211323412925192
+              ],
+              [
+                -0.13267276997648003,
+                1.000596328365161,
+                -0.29547380128725065
+              ],
+              [
+                -0.11093107108606692,
+                0.42846164264023334,
+                0.2675925425004717
+              ]
+            ],
+            "offset": [
+              0.007624262012131511,
+              0.0006645653492860643,
+              0.008982510105122493
+            ],
+            "maximum_absolute_coefficient": 1.1596088104289044,
+            "maximum_absolute_offset": 0.008982510105122493,
+            "original_bounds_admitted": true
+          },
+          {
+            "radius": 8,
+            "training_samples": 16524,
+            "samples": 16520,
+            "matched": 9932,
+            "pixel_reads": 82792960,
+            "matrix": [
+              [
+                0.7184244733206735,
+                0.5356935250143876,
+                0.13908987524804792
+              ],
+              [
+                -0.48493059395812466,
+                2.2639930871624006,
+                -0.08259082359832538
+              ],
+              [
+                -1.360785735263107,
+                2.7477043741765153,
+                0.4909591571608635
+              ]
+            ],
+            "offset": [
+              0.019868560253435585,
+              0.027344292975952034,
+              0.035824864967926306
+            ],
+            "maximum_absolute_coefficient": 2.7477043741765153,
+            "maximum_absolute_offset": 0.035824864967926306,
+            "original_bounds_admitted": true
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      },
+      "supported_with_original_limits": false
+    }
+  ],
+  "scope": "Diagnostic raw color fits only, with original coefficient5/offset0.1 acceptance flags recomputed. Same six models/ROIs and sampling. No threshold promotion, bounded optimizer or real fold recovery."
+}

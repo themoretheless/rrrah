@@ -1,0 +1,54 @@
+{
+  "scope": "Full-frame physical Metal display transport from prepared linear camera rasters",
+  "backend": "Metal Apple M4 Max",
+  "passed": 4,
+  "failed": 0,
+  "ignored": 0,
+  "log": "/tmp/rrrah-metal-full-camera-final.log",
+  "cases": [
+    {
+      "name": "Fusion-back",
+      "pixels": 9312000
+    },
+    {
+      "name": "Fusion-front",
+      "pixels": 9312000
+    },
+    {
+      "name": "HERO9",
+      "pixels": 23251968
+    },
+    {
+      "name": "SD10",
+      "pixels": 3429971
+    }
+  ],
+  "all_case_maximum_rgb8_deviation": 1,
+  "inputs": [
+    {
+      "path": "/tmp/rrrah-gpr-clipping-warp-after-20261007/Fusion-back.rgba32fle",
+      "sha256": "00d54286d47dab1e1a0e2d761e8f407e2dcdcdb0823e7ab91fd50f71e2a84df3",
+      "bytes": 148992000
+    },
+    {
+      "path": "/tmp/rrrah-gpr-clipping-warp-after-20261007/Fusion-front.rgba32fle",
+      "sha256": "37871b3f2f5f9de0933a8e3b05edf4e00a1ca9503fd3fe581a94ee5a51f20fa5",
+      "bytes": 148992000
+    },
+    {
+      "path": "/tmp/rrrah-gpr-full-quality-20261007/HERO9.rgba32fle",
+      "sha256": "5a13211dbf9c33a67125777d87bc85a950ac054ab051bfcfdf0175ec2475bb58",
+      "bytes": 372031488
+    },
+    {
+      "path": "/tmp/rrrah-x3f-restored-20261007/linear-srgb.ppm",
+      "sha256": "00f64dc46ad86366f7da089c9ba37d4aec3462dd49595c2d2049ba0e0d0b68ff",
+      "bytes": 20579845
+    }
+  ],
+  "limitations": [
+    "Prepared linear dumps; not a fresh end-to-end native camera decode/development qualification",
+    "SDR offscreen display readback; not physical HDR luminance",
+    "Selected fixtures only; not universal camera qualification"
+  ]
+}

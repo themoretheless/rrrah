@@ -1,0 +1,18 @@
+{
+  "status": "verified_authored_collection_parity_and_lifecycle",
+  "session_id": 33818,
+  "focused_parity_exit_code": 0,
+  "focused_parity_passed_tests": 1,
+  "log": "docs/research/dedup-distinct-managed-region-collection-suite.log",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/local_collection.rs": "5bb5f289411c182fafd08a9ab3e907ddb2d180e3701822bec7537102271eb16c",
+    "crates/rrrah-dedup/src/local_scan.rs": "512bfd8db37196e12ef1f2aef992314385e4d0975f1e4e38e06a42e865e6a302",
+    "crates/rrrah-dedup/tests/gradient_scale_files.rs": "0455f8306e0bfbbe758c68aee478b7f2e18848a9bacb5ccc7d3468916bfe1569",
+    "docs/research/dedup-distinct-managed-region-collection-tests.log": "98067204c25250eb7343f1558d0d17cd93cbbea801743c81487216479cc7e574",
+    "docs/research/dedup-distinct-managed-region-collection-suite.log": "82d964b3b837a41bf69069e01a5acc108a4e8dd8e9436e4feacc190d432b45e6"
+  },
+  "scope": "Native macOS: all 14 gradient-scale file/collection tests pass. New three-source managed distinct regional collection matches fresh all-pair evidence; cancellation releases retained credit; changing source 2 removes both incident edges while unchanged edge 1-3 survives; restoring bytes and reversed iteration restores all three edges. Not a full corpus, Linux/Windows or allocation-completeness qualification.",
+  "exit_code": 0,
+  "passed_tests": 14,
+  "elapsed_seconds": 68.65
+}

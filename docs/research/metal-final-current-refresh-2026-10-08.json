@@ -1,0 +1,54 @@
+{
+  "gpu": "Apple M4 Max",
+  "backend": "Metal",
+  "gpu_optional": false,
+  "suites": [
+    {
+      "log": "/tmp/rrrah-metal-final-current.log",
+      "passed": 88,
+      "failed": 0,
+      "ignored": 6
+    },
+    {
+      "log": "/tmp/rrrah-metal-final-hdr-policy-selected.log",
+      "passed": 15,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "log": "/tmp/rrrah-metal-final-full-sensor.log",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    }
+  ],
+  "passed": 105,
+  "policy_cycles": 12,
+  "full_sensor_pixels": 25494560,
+  "full_sensor_all_pixels_exact": true,
+  "managed_final_bytes": 0,
+  "excluded_external_fixture_tests": [
+    "pict_external_directbits_oracle_swap_pressure_and_metal",
+    "expired_eip_lease_and_swap_restore_match_original_cr3_metal_frame"
+  ],
+  "initial_unconfigured_external_fixture_run": {
+    "log": "/tmp/rrrah-metal-final-hdr-policy.log",
+    "exit_code": 101,
+    "reason": "External fixture environment missing; excluded explicitly in selected run"
+  },
+  "limitations": [
+    "All six initially ignored GPU cases now executed: two full-sensor compute and four full-camera raster readback tests; see followup reports",
+    "Full sensor exposure/readback does not qualify all RAW GPU demosaic",
+    "Physical calibrated HDR luminance and NVIDIA remain unverified",
+    "AI/PDF native prototype not production qualified"
+  ],
+  "external_fixture_followup": {
+    "pict": "docs/research/metal-pict-final-refresh-2026-10-08.json",
+    "eip": "docs/research/metal-eip-final-refresh-2026-10-08.json",
+    "both_passed": true
+  },
+  "full_camera_followup": {
+    "report": "docs/research/metal-full-camera-final-refresh-2026-10-08.json",
+    "passed": true
+  }
+}

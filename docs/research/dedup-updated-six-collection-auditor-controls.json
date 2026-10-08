@@ -1,0 +1,30 @@
+{
+  "status": "verified_six_collection_auditor_corruption_rejections",
+  "cases": [
+    {
+      "case": "incomplete_terminal",
+      "rejected": true
+    },
+    {
+      "case": "boolean_native_returncode",
+      "rejected": true
+    },
+    {
+      "case": "wrong_collection_budget",
+      "rejected": true
+    },
+    {
+      "case": "wrong_retrieved_flag",
+      "rejected": true
+    },
+    {
+      "case": "stdout_mismatch",
+      "rejected": true
+    }
+  ],
+  "input_hashes": {
+    "docs/research/dedup-updated-release-six-collection.json": "6380aad568d7d38fe6d50ec5261c8dceb3ee0f3bc592823aa2393b8a3fab1791",
+    "scripts/verify-dedup-updated-release-six-collection.py": "79623d2137ffc0fa9301110117d48cd080bd5357461e1a032cbea9333a84aefc"
+  },
+  "scope": "Five report corruption controls, not broader native precision or runtime coverage."
+}

@@ -1,0 +1,51 @@
+{
+  "status": "verified_native_linux_rank_driven_anchor_suites",
+  "tests": 78,
+  "suites": {
+    "candidate_geometry_only": 1,
+    "anchor_geometry_search": 1,
+    "anchor_fallback_search": 1,
+    "anchor_fallback_collection": 1,
+    "anchor_fallback_collection_lifecycle": 1,
+    "anchor_collection": 1,
+    "anchor_collection_preflight": 1,
+    "anchor_collection_scaled": 1,
+    "anchor_candidate_search": 1,
+    "anchor_rank_file": 3,
+    "anchor_rank": 4,
+    "local_rank": 5,
+    "local_rank_cached": 3,
+    "piecewise_local_rank": 2,
+    "piecewise_warp": 4,
+    "mesh_rank_regions": 3,
+    "projective_grid": 3,
+    "mesh_grid": 2,
+    "mesh_rank": 2,
+    "rank_region": 7,
+    "projective_exhaustive_domains": 3,
+    "projective_domains": 4,
+    "projective_geometry": 14,
+    "anchor_geometry_rank_fallback": 1,
+    "anchor_rank_driven_collection": 1,
+    "anchor_rank_driven_collection_preflight": 1,
+    "anchor_rank_driven_collection_lifecycle": 1,
+    "anchor_file_search_preflight": 1,
+    "anchor_geometry_smoothing": 1,
+    "anchor_geometry_collection": 1,
+    "anchor_geometry_collection_preflight": 1,
+    "anchor_geometry_collection_lifecycle": 1,
+    "anchor_fallback_collection_preflight": 1
+  },
+  "snapshot_files": 2960,
+  "current_dedup_drift": [
+    "crates/rrrah-dedup/src/gradient.rs",
+    "crates/rrrah-dedup/src/gradient_index.rs",
+    "crates/rrrah-dedup/tests/anchor_rank_driven_collection_preflight.rs"
+  ],
+  "pins": {
+    "docs/research/dedup-anchor-rank-driven-linux-snapshot.json": "01f45c4ad9b5ec887a54789719fd168c16101a26f0e790510d3af2296c4244a1",
+    "docs/research/dedup-anchor-rank-driven-linux-native.log": "196731421cb843bb3bbe8cd19c07b19a4ec92488c2467197c370716796f3f389",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-anchor-rank-driven-linux.py": "cee28aec4a26a160864038ed0457b42857fa050a9f79ebedfc3c6cb2a4dd167e"
+  },
+  "scope": "Native aarch64 Linux tests on frozen dedup bytes and prior frozen dependencies. Includes automatic rank-driven fallback and indexed collection parity/lifecycle/cumulative admission, geometry-only parity/cancellation/tokens/mutation/restore, fallback file and indexed collection direct parity/lifecycle/admission, existing rank/geometry regressions. No Windows, real corpus precision, all contract cases, full-package or current unrelated dependency claim."
+}

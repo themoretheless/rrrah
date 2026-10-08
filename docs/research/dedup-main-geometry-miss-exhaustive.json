@@ -1,0 +1,89 @@
+{
+  "status": "complete",
+  "input_hashes": {
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/geometry-miss-probe-qualified": "3a083af35462124068da4ddebe312a72e65e128a0b62006191f08ad665bb9702",
+    "docs/research/dedup-combined-domain-release-original-full.json": "e2f282391b1b5f0bef723c2d4575223a9ce6c41d2627c2efdfe7763b53d4e072",
+    "docs/research/dedup-main-problem-refusal-analysis.json": "ef4810515de761f230ae8408315f039384f843ce59344b133845a2093012781c",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-main-geometry-misses.py": "d8c94d8338f07217ee551a38304dd883128d6c63448f389ead14ba0f1158a3d1",
+    "crates/rrrah-dedup/src/geometry.rs": "d5a4cae5e9aaa9c7b8ade16ae385392ff50c1409ac9850b7fb98e1e9c1eca4d9",
+    "crates/rrrah-dedup/examples/geometry_miss_probe.rs": "1a04db84e5ad04ef0af89e8217eceb213d1d57dada87fc07f5cdb71f1045fa63",
+    "docs/research/dedup-main-geometry-miss-200302-points.txt": "fa5f7f72b2c387f1d0bbbc6b490082bfb7b834cf6997ea9914bf3b9307e6c933",
+    "docs/research/dedup-main-geometry-miss-201303-points.txt": "bc43f510d6b856a43e87ddbd122bb51bee8b56e0c634934a8cbd07387314e6d9",
+    "docs/research/dedup-main-geometry-miss-209401-points.txt": "c27bc764d116a401c76e1c13c8950429eedfbc24eb6bbc42e608d2fe32eff73a",
+    "docs/research/dedup-main-geometry-miss-210202-points.txt": "17ca111f810cf5dace7d9e7dc512499c5ee64ab3a22752722ef2f90ea6c086e7",
+    "docs/research/dedup-main-geometry-miss-211902-points.txt": "884391f4467bdd8bedca64e686592b818a8dd682ff5e7e2c11446754b2af7c84"
+  },
+  "results": [
+    {
+      "query": "200302.jpg",
+      "returncode": 0,
+      "evidence": {
+        "status": "no_model",
+        "points": 11
+      }
+    },
+    {
+      "query": "201303.jpg",
+      "returncode": 0,
+      "evidence": {
+        "status": "no_model",
+        "points": 42
+      }
+    },
+    {
+      "query": "209401.jpg",
+      "returncode": 0,
+      "evidence": {
+        "status": "no_model",
+        "points": 26
+      }
+    },
+    {
+      "query": "210202.jpg",
+      "returncode": 0,
+      "evidence": {
+        "status": "model",
+        "points": 32,
+        "matrix": [
+          [
+            0.4228688192104703,
+            -0.03972104198302735,
+            -11.633005617289768
+          ],
+          [
+            -0.13025481598063984,
+            0.20626299532425854,
+            173.72814975927838
+          ],
+          [
+            -0.00036228440413921053,
+            -0.0008394212115653509,
+            1.78744182903378
+          ]
+        ],
+        "inliers": [
+          5,
+          6,
+          7,
+          9,
+          10,
+          11,
+          12,
+          14,
+          15,
+          16
+        ],
+        "squared_error": 9.068685333811072
+      }
+    },
+    {
+      "query": "211902.jpg",
+      "returncode": 0,
+      "evidence": {
+        "status": "no_model",
+        "points": 30
+      }
+    }
+  ],
+  "scope": "Exhaustive native 4-point models on fixed sparse correspondences. All hypotheses admitted, min10 and target tolerance2 unchanged. Does not enforce whole-image horizon constraints or prove pixels/copy identity."
+}

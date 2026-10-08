@@ -1,0 +1,100 @@
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+error: float literals must have an integer part
+  --> crates/rrrah-dedup/tests/gradient_reflection.rs:15:50
+   |
+15 |             let value = (0.5 + 0.2 * (x as f64 * .31 + y as f64 * .17).sin()
+   |                                                  ^^^
+   |
+help: must have an integer part
+   |
+15 |             let value = (0.5 + 0.2 * (x as f64 * 0.31 + y as f64 * .17).sin()
+   |                                                  +
+
+error: float literals must have an integer part
+  --> crates/rrrah-dedup/tests/gradient_reflection.rs:15:67
+   |
+15 |             let value = (0.5 + 0.2 * (x as f64 * .31 + y as f64 * .17).sin()
+   |                                                                   ^^^
+   |
+help: must have an integer part
+   |
+15 |             let value = (0.5 + 0.2 * (x as f64 * .31 + y as f64 * 0.17).sin()
+   |                                                                   +
+
+error: float literals must have an integer part
+  --> crates/rrrah-dedup/tests/gradient_reflection.rs:16:19
+   |
+16 |                 + .15 * (x as f64 * .11 - y as f64 * .41).cos()) as f32;
+   |                   ^^^
+   |
+help: must have an integer part
+   |
+16 |                 + 0.15 * (x as f64 * .11 - y as f64 * .41).cos()) as f32;
+   |                   +
+
+error: float literals must have an integer part
+  --> crates/rrrah-dedup/tests/gradient_reflection.rs:16:37
+   |
+16 |                 + .15 * (x as f64 * .11 - y as f64 * .41).cos()) as f32;
+   |                                     ^^^
+   |
+help: must have an integer part
+   |
+16 |                 + .15 * (x as f64 * 0.11 - y as f64 * .41).cos()) as f32;
+   |                                     +
+
+error: float literals must have an integer part
+  --> crates/rrrah-dedup/tests/gradient_reflection.rs:16:54
+   |
+16 |                 + .15 * (x as f64 * .11 - y as f64 * .41).cos()) as f32;
+   |                                                      ^^^
+   |
+help: must have an integer part
+   |
+16 |                 + .15 * (x as f64 * .11 - y as f64 * 0.41).cos()) as f32;
+   |                                                      +
+
+error: float literals must have an integer part
+  --> crates/rrrah-dedup/tests/gradient_reflection.rs:26:27
+   |
+26 |         for angle in [0., .37, 1.1] {
+   |                           ^^^
+   |
+help: must have an integer part
+   |
+26 |         for angle in [0., 0.37, 1.1] {
+   |                           +
+
+error[E0308]: mismatched types
+  --> crates/rrrah-dedup/tests/gradient_reflection.rs:28:96
+   |
+27 |             let original = describe(&a, [32.25, 31.75], 1., angle, 256, || false).unwrap().unwrap();
+   |                                                                         -- the expected closure
+28 |             let mirrored = describe(&b, [30.75, 31.75], 1., std::f64::consts::PI - angle, 256, || false).unwrap().unwrap();
+   |                            -------- arguments to this function are incorrect                   ^^^^^^^^ expected closure, found a different closure
+   |
+   = note: expected closure `{closure@crates/rrrah-dedup/tests/gradient_reflection.rs:27:73: 27:75}`
+              found closure `{closure@crates/rrrah-dedup/tests/gradient_reflection.rs:28:96: 28:98}`
+   = note: no two closures, even if identical, have the same type
+   = help: consider boxing your closure and/or using it as a trait object
+
+For more information about this error, try `rustc --explain E0308`.
+error: could not compile `rrrah-dedup` (test "gradient_reflection") due to 7 previous errors

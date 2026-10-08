@@ -1,0 +1,29 @@
+{
+  "fix": "EIP inventory already admitted GPR, but extraction whitelist and sensor dispatch refused it; use existing native DNG/VC-5 source-owner pipeline and DNG recipe",
+  "source": "Pinned official HERO9.GPR",
+  "source_sha256": "9249208a3482d6d71d39575210fe19ab3dd737e5e446a4d0718d4bd9d3c4358b",
+  "cases": [
+    "stored",
+    "deflated"
+  ],
+  "verification": [
+    "Common decode_image returns Sensor",
+    "All 23251968 values and complete mosaic metadata equal native original GPR",
+    "Inner decoder recipe equals original GPR",
+    "Root retains only sensor weight on return and releases all credit on final drop"
+  ],
+  "managed_peak_bytes": 111408770,
+  "tests": {
+    "manual_real": "1 passed",
+    "decoder_library": "966 passed, zero failures, 66 ignored"
+  },
+  "logs": [
+    "/tmp/rrrah-eip-gpr-real.log",
+    "/tmp/rrrah-eip-gpr-final.log"
+  ],
+  "limitations": [
+    "Authored ZIP, not producer EIP",
+    "Preservation against native original; independent SDK sensor oracle recorded separately",
+    "No additional camera color qualification or Capture One adjustment support"
+  ]
+}

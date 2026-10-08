@@ -1,0 +1,67 @@
+{
+  "scope": "RAW Metal pixel-center mapping fixes minified Bayer footprint drift",
+  "backend": "Metal Apple M4 Max",
+  "before": {
+    "orientation": "Normal",
+    "cfa": "RGGB",
+    "output_pixel": [
+      0,
+      0
+    ],
+    "gpu": [
+      169,
+      126,
+      155,
+      255
+    ],
+    "cpu": [
+      164,
+      122,
+      151,
+      255
+    ]
+  },
+  "fix": "Map normalized crop coordinates through full crop size minus half a sensor pixel, preserving area-cell footprint centers",
+  "new_control": {
+    "sensor": [
+      71,
+      57
+    ],
+    "crop": [
+      3,
+      5,
+      64,
+      48
+    ],
+    "downsample": 4,
+    "cfa_patterns": 4,
+    "orientations": 8,
+    "cases": 32,
+    "pixels": 6144,
+    "tiled_vs_default": "bit exact",
+    "cpu_preview_tolerance_rgb8": 2
+  },
+  "suites": [
+    {
+      "name": "camera_color_readback",
+      "passed": 12
+    },
+    {
+      "name": "readback",
+      "passed": 11
+    },
+    {
+      "name": "rgbe_view_readback",
+      "passed": 2
+    }
+  ],
+  "failed": 0,
+  "ignored": 0,
+  "log": "/tmp/rrrah-metal-minification-fixed-20261008.log",
+  "log_sha256": "0a924350f0df2b6c50700436636d39b8fa1f0a203d402def78a2b83a7bce95d3",
+  "limitations": [
+    "Synthetic CPU/GPU consistency; not independent real-camera demosaic qualification",
+    "Noninteger scale and arbitrary panning need separate coverage",
+    "Physical HDR luminance and NVIDIA remain unverified"
+  ]
+}

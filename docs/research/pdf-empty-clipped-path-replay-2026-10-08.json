@@ -1,0 +1,91 @@
+{
+  "scope": "Test-only empty clipped path short circuit before source allocation and shading sampling",
+  "source_sha256": "1c9214da84014a0dc8783b6e1a97c3da2ce09b494607cc23212346b4745cb10a",
+  "validation": {
+    "existing_controls_passed": 90,
+    "existing_control_failures": 0,
+    "new_regression_passed": 1,
+    "initial_new_regression_fixture_error": "Expected transparent pixels while using default white backdrop; corrected test to explicit transparent backdrop, renderer unchanged",
+    "full_controls_log": "/tmp/rrrah-empty-path-final-controls.log",
+    "corrected_regression_log": "/tmp/rrrah-empty-path-focused.log"
+  },
+  "real_ai_rows": [
+    {
+      "fixture": "VectorApple.ai",
+      "page": 0,
+      "width": 301,
+      "height": 246,
+      "peak_admitted_bytes": 55658962,
+      "final_admitted_bytes": 0,
+      "status": "replayed",
+      "events": 2755,
+      "knockout_groups": 7,
+      "capture_ms": 7653.86925,
+      "capture_deadline_expired": false,
+      "whole_replay_ms": 21055.758166,
+      "tile_edge": 64,
+      "tile_replay_ms": 1290.387125,
+      "tile_different_pixels": null,
+      "tile_peak_admitted_bytes": 33385336,
+      "tile_retained_comparison_baseline_bytes": 31717912
+    },
+    {
+      "fixture": "one.ai",
+      "page": 0,
+      "width": 1366,
+      "height": 768,
+      "peak_admitted_bytes": 89640624,
+      "final_admitted_bytes": 0,
+      "status": "replayed",
+      "events": 8,
+      "knockout_groups": 0,
+      "capture_ms": 1.296667,
+      "capture_deadline_expired": false,
+      "whole_replay_ms": 1328.1771660000002,
+      "tile_edge": 64,
+      "tile_replay_ms": 5090.6365,
+      "tile_different_pixels": 0,
+      "tile_peak_admitted_bytes": 9209008,
+      "tile_retained_comparison_baseline_bytes": 4664352
+    },
+    {
+      "fixture": "one.ai",
+      "page": 1,
+      "width": 177,
+      "height": 175,
+      "peak_admitted_bytes": 2602964,
+      "final_admitted_bytes": 0,
+      "status": "replayed",
+      "events": 1,
+      "knockout_groups": 0,
+      "capture_ms": 0.044583000000000005,
+      "capture_deadline_expired": false,
+      "whole_replay_ms": 0.283958,
+      "tile_edge": 64,
+      "tile_replay_ms": 0.320584,
+      "tile_different_pixels": 0,
+      "tile_peak_admitted_bytes": 592928,
+      "tile_retained_comparison_baseline_bytes": 124964
+    }
+  ],
+  "payloads_identical_to_row_reuse": {
+    "one.ai-page-0.tile-64.rgba": true,
+    "one.ai-page-0.rgba": true,
+    "VectorApple.ai-page-0.rgba": true,
+    "one.ai-page-1.rgba": true,
+    "one.ai-page-1.tile-64.rgba": true
+  },
+  "controls": [
+    "All supported blends may skip zero shape path paint storage",
+    "Unsupported blends retain original refusal path even when shape empty",
+    "Cancellation checked at most every 256 coverage entries",
+    "Transparent empty path preserves transparent backdrop",
+    "Existing 45 authored transform/tile cases and admission/cancellation suites pass"
+  ],
+  "remaining": [
+    "VectorApple tiles still reach unchanged shared 30-second page deadline",
+    "Independent oracle discrepancies remain",
+    "Native production renderer routing pending"
+  ],
+  "production_enabled": false
+}

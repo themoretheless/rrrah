@@ -1,0 +1,15 @@
+{
+  "status": "verified_shared_anchor_policy_file_and_three_collections_macos",
+  "suites": 4,
+  "pins": {
+    "docs/research/dedup-anchor-shared-policy-preflight-tests.log": "42fe0735cef8935e950394eec841200efcf248b222f8cfc02201abface75e34f",
+    "docs/research/dedup-anchor-fallback-collection-preflight-tests.log": "a3c9360c57b50367f94690da3e787fa84d08b3f84777502f22c62296a04a221d",
+    "crates/rrrah-dedup/src/local_collection.rs": "5023b68f4a4bfdd893b9bcffa55f1f55be709d9fdfeb397ff23133f1d7410df7",
+    "crates/rrrah-dedup/src/anchor_rank.rs": "7803cef87c550f3a139f1752950afda720d4f2e935bc0977f5c64d188524bbc7",
+    "crates/rrrah-dedup/tests/anchor_collection_preflight.rs": "59f094555cc93001c737a231f5bd9ddcd616e159ba5942f6e945b7efb168e74f",
+    "crates/rrrah-dedup/tests/anchor_geometry_collection_preflight.rs": "590c4d83c5cf5fd252ae25bd8c87f2c1bfe3decf8cb95a45558a697088fc9efc",
+    "crates/rrrah-dedup/tests/anchor_fallback_collection_preflight.rs": "6875dc7812f657daae9cbde6bffdb70e2e7f7a41b452910d6b85cd014dbfdfa8",
+    "crates/rrrah-dedup/tests/anchor_file_search_preflight.rs": "bd843b3788d334b000268168d0b9f123d8e806531a49e7e0ec2cf93acceac8ee"
+  },
+  "scope": "Same policy validator now shared by native rank, supplied/automatic file APIs and ordinary/geometry-only/fallback indexed collections. Dedicated admission tests reject malformed/work policies before iteration, cancellation priority, zero peak memory. No changed acceptance thresholds or new real precision proof; Linux snapshot predates refactor."
+}

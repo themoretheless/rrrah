@@ -1,0 +1,32 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+error[E0425]: cannot find value `region_grid` in this scope
+   --> crates/rrrah-dedup/examples/photo_probe.rs:678:8
+    |
+678 |     if region_grid {
+    |        ^^^^^^^^^^^ not found in this scope
+
+error[E0061]: this function takes 5 arguments but 6 arguments were supplied
+   --> crates/rrrah-dedup/examples/photo_probe.rs:72:9
+    |
+ 72 |         pyramid_file_pair(
+    |         ^^^^^^^^^^^^^^^^^
+...
+ 80 |             arguments[1] == "--pyramid-region-grid-pair",
+    |             -------------------------------------------- unexpected argument #6 of type `bool`
+    |
+note: function defined here
+   --> crates/rrrah-dedup/examples/photo_probe.rs:637:4
+    |
+637 | fn pyramid_file_pair(args: &[String], collection: bool, blur: bool, portfolio: bool, encoded: bool) {
+    |    ^^^^^^^^^^^^^^^^^
+help: remove the extra argument
+    |
+ 79 -             arguments[1] == "--pyramid-encoded-blur-pair",
+ 80 -             arguments[1] == "--pyramid-region-grid-pair",
+ 79 +             arguments[1] == "--pyramid-encoded-blur-pair",
+    |
+
+Some errors have detailed explanations: E0061, E0425.
+For more information about an error, try `rustc --explain E0061`.
+error: could not compile `rrrah-dedup` (example "photo_probe") due to 2 previous errors

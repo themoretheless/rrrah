@@ -1,0 +1,12 @@
+{
+  "status": "rejected_default_optimization_restored_original",
+  "passed_candidate_tests": 7,
+  "benchmark_scope": "Seeded 512 descriptor vectors, 32 queries, 8 repeats; four alternating-order rounds per radius in optimized isolated native kernels under concurrent load. Exact accepted counts/distance sums matched. Not an end-to-end production benchmark.",
+  "reason": "At radius 0.5 the candidate was slower in three of four paired rounds; radius4 also generally slower. Gains at tiny radii do not justify changing the default recipe.",
+  "input_hashes": {
+    "docs/research/dedup-gradient-index-cutoff-rejected-source.rs": "a085e05e0bccd7f2db8495c1ca8cb1705ad195443fbd2368212c1038cafcd59d",
+    "docs/research/dedup-gradient-index-cutoff-benchmark-source.rs": "962054251742aa6e8d726ee1953df9ae1261b600723019b39df382926b66408f",
+    "docs/research/dedup-gradient-index-cutoff-benchmark.jsonl": "4880d390d20aae407acbbf4d85c872308b63bdbbee5c9dac5a1928987d1dd50f",
+    "docs/research/dedup-gradient-index-cutoff-macos.log": "bfa89e36dcb5eaea5827633b007dac0b4db9503a5bc22265692835db178e9440"
+  }
+}

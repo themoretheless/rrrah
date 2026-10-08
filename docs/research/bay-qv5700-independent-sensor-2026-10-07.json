@@ -1,0 +1,35 @@
+{
+  "scope": "Authored full-size Casio QV5700 packed sensor versus independent dcraw document output",
+  "source_kind": "Synthetic deterministic bytes; not camera-produced",
+  "generator": "bytes((i*73+i//17)%256 for i in range(3232*1924))",
+  "storage_dimensions": [
+    2585,
+    1924
+  ],
+  "active_dimensions": [
+    2576,
+    1924
+  ],
+  "samples_checked": 4956224,
+  "passed": 1,
+  "failed": 0,
+  "source_sha256": "3ba304d65b44d81597ddb227b98e6ba75aa704ba5da55d463fa5b3c22b8781e5",
+  "oracle_sha256": "a1d0a68a502b9ab4b51e3c7ec65e03968e895075d3ad9fdf70766881bdb8ce39",
+  "oracle_command": [
+    "dcraw-reference",
+    "-D",
+    "-4",
+    "-j",
+    "-t",
+    "0",
+    "qv5700.bay"
+  ],
+  "converter_source_sha256": "d18d9e43a096eea04eee2148e53068f8fa45ce95395d97128b1aa37b477eab43",
+  "log": "/tmp/rrrah-bay-independent-final.log",
+  "managed_final_used": 0,
+  "limitations": [
+    "No camera-produced file, camera identity, white balance or color qualification.",
+    "Only active columns compared; remaining storage columns are not qualified photographic pixels.",
+    "BAY normal viewer remains Pending."
+  ]
+}

@@ -1,0 +1,1429 @@
+{
+  "scope": "Authored PDF mask prototype versus Poppler at72dpi, normal blend; no real AI qualification",
+  "root": "/tmp/rrrah-pdf-mask-oracle-20261008",
+  "poppler": "pdftoppm version 26.10.0\nCopyright 2005-2026 The Poppler Developers - http://poppler.freedesktop.org\nCopyright 1996-2011, 2022 Glyph & Cog, LLC",
+  "fixtures": [
+    {
+      "fixture": "ko-false-color-false-nested-false-restore-false-Alpha-0.5-bc-false-invert-false.pdf",
+      "sha256": "d65c7ed59d05e09f9022fdeb5ba553faf3a6d18491f3b3d0898e2d96c34bb882",
+      "different_pixels": 16,
+      "max_error": 16,
+      "mae": 0.5,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 128,
+        "mae": 4.0
+      }
+    },
+    {
+      "fixture": "ko-false-color-false-nested-false-restore-false-Alpha-0.5-bc-false-invert-true.pdf",
+      "sha256": "d669649d2ba27225662c6ba1db404a20f764d9fbab7faa693d8914e01e910fba",
+      "different_pixels": 16,
+      "max_error": 16,
+      "mae": 0.5,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 128,
+        "mae": 4.0
+      }
+    },
+    {
+      "fixture": "ko-false-color-false-nested-false-restore-false-Alpha-0.5-bc-true-invert-false.pdf",
+      "sha256": "f05e7e09202bea4c85c61f27096520992cfb4979b1978a4caf9b57cf73c391f2",
+      "different_pixels": 16,
+      "max_error": 16,
+      "mae": 0.5,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 128,
+        "mae": 4.0
+      }
+    },
+    {
+      "fixture": "ko-false-color-false-nested-false-restore-false-Alpha-1-bc-false-invert-false.pdf",
+      "sha256": "9206550c97dc730a7c0283edae18c8e4f5ac6ddcf26a4e72f5995bab43a50077",
+      "different_pixels": 16,
+      "max_error": 32,
+      "mae": 1.0,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 255,
+        "mae": 7.96875
+      }
+    },
+    {
+      "fixture": "ko-false-color-false-nested-false-restore-false-Luminosity-0.5-bc-false-invert-false.pdf",
+      "sha256": "8c08a1373bad4822ff74a064060728e8c74184d5761b6f6ed257cf3b0739ab8f",
+      "different_pixels": 16,
+      "max_error": 8,
+      "mae": 0.25,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 64,
+        "mae": 2.0
+      }
+    },
+    {
+      "fixture": "ko-false-color-false-nested-false-restore-false-Luminosity-0.5-bc-false-invert-true.pdf",
+      "sha256": "e117c4d983a40b4ccc62f6192cb2f37a6ac3e157042ccbd2bb8a874927804025",
+      "different_pixels": 16,
+      "max_error": 8,
+      "mae": 0.25,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 64,
+        "mae": 2.0
+      }
+    },
+    {
+      "fixture": "ko-false-color-false-nested-false-restore-false-Luminosity-0.5-bc-true-invert-false.pdf",
+      "sha256": "d9d8ace85bf641d0745d3edf3806394a00466cfdce5e376d6309e955bdb53aae",
+      "different_pixels": 16,
+      "max_error": 8,
+      "mae": 0.25,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 64,
+        "mae": 2.0
+      }
+    },
+    {
+      "fixture": "ko-false-color-false-nested-false-restore-false-Luminosity-0.5-bc-true-invert-true.pdf",
+      "sha256": "b1c191b00d6d4a2f7919413ca76b02d132c2c91a95c2128b62263828b576d528",
+      "different_pixels": 16,
+      "max_error": 8,
+      "mae": 0.25,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 64,
+        "mae": 2.0
+      }
+    },
+    {
+      "fixture": "ko-false-color-false-nested-false-restore-false-Luminosity-1-bc-false-invert-false.pdf",
+      "sha256": "228b3ab99c1bfaf6065ccf1bbce49adbf7eeb16179631d3cf81f17684cd822c3",
+      "different_pixels": 16,
+      "max_error": 16,
+      "mae": 0.5,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 128,
+        "mae": 4.0
+      }
+    },
+    {
+      "fixture": "ko-false-color-false-nested-false-restore-true-Alpha-0.5-bc-false-invert-false.pdf",
+      "sha256": "85e8aacb7d89400806d49b1c760959ae2b9fbde0c467557f2b82e873eede857a",
+      "different_pixels": 16,
+      "max_error": 16,
+      "mae": 0.5,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 128,
+        "mae": 4.0
+      }
+    },
+    {
+      "fixture": "ko-false-color-false-nested-false-restore-true-Alpha-0.5-bc-false-invert-true.pdf",
+      "sha256": "9189c5b60b7fcea01cdb221150d86a4381555400841b8edde25d0db5d3a05080",
+      "different_pixels": 16,
+      "max_error": 16,
+      "mae": 0.5,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 128,
+        "mae": 4.0
+      }
+    },
+    {
+      "fixture": "ko-false-color-false-nested-false-restore-true-Alpha-0.5-bc-true-invert-false.pdf",
+      "sha256": "054d60ab9c8732c1ee6e1f1fd197a83723edd4c2d498fec2fbeb0b500a6a6e9e",
+      "different_pixels": 16,
+      "max_error": 16,
+      "mae": 0.5,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 128,
+        "mae": 4.0
+      }
+    },
+    {
+      "fixture": "ko-false-color-false-nested-false-restore-true-Alpha-1-bc-false-invert-false.pdf",
+      "sha256": "0246dbb2d22f8a8731869b139f09c4b5aaad6159f224d19aa2768908ff203a9e",
+      "different_pixels": 16,
+      "max_error": 32,
+      "mae": 1.0,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 255,
+        "mae": 7.96875
+      }
+    },
+    {
+      "fixture": "ko-false-color-false-nested-false-restore-true-Luminosity-0.5-bc-false-invert-false.pdf",
+      "sha256": "953e5f609cd831c80b207dff18ee9bf809807f4c41c7ea58450b8fd47121e18d",
+      "different_pixels": 16,
+      "max_error": 8,
+      "mae": 0.25,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 64,
+        "mae": 2.0
+      }
+    },
+    {
+      "fixture": "ko-false-color-false-nested-false-restore-true-Luminosity-0.5-bc-false-invert-true.pdf",
+      "sha256": "5051434c925de85f331aa97727b06bb618a572f1439bb4b0f1b2da9ef0947d9d",
+      "different_pixels": 16,
+      "max_error": 8,
+      "mae": 0.25,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 64,
+        "mae": 2.0
+      }
+    },
+    {
+      "fixture": "ko-false-color-false-nested-false-restore-true-Luminosity-0.5-bc-true-invert-false.pdf",
+      "sha256": "88c1ccebe32b0b047da00bc989aed5ebb7d152f764aeb994341207135ede5013",
+      "different_pixels": 16,
+      "max_error": 8,
+      "mae": 0.25,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 64,
+        "mae": 2.0
+      }
+    },
+    {
+      "fixture": "ko-false-color-false-nested-false-restore-true-Luminosity-0.5-bc-true-invert-true.pdf",
+      "sha256": "998a0f2ce015a45de967e6ddb4a6ae874372f83f4886df1b81efcd8fc63e402f",
+      "different_pixels": 16,
+      "max_error": 8,
+      "mae": 0.25,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 64,
+        "mae": 2.0
+      }
+    },
+    {
+      "fixture": "ko-false-color-false-nested-false-restore-true-Luminosity-1-bc-false-invert-false.pdf",
+      "sha256": "3535582fb240373674d4c8c5fc027c472b552afd9fce9f4c6aa6984f7cb79564",
+      "different_pixels": 16,
+      "max_error": 16,
+      "mae": 0.5,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 128,
+        "mae": 4.0
+      }
+    },
+    {
+      "fixture": "ko-false-color-false-nested-true-restore-false-Alpha-0.5-bc-false-invert-false.pdf",
+      "sha256": "cba755cad1dbf4fe3510dee617ff7a9853a845de59e6051c182db86257047c7e",
+      "different_pixels": 16,
+      "max_error": 8,
+      "mae": 0.25,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 64,
+        "mae": 2.0
+      }
+    },
+    {
+      "fixture": "ko-false-color-false-nested-true-restore-false-Alpha-0.5-bc-false-invert-true.pdf",
+      "sha256": "ef13a5fbd1db388f31d5c3436a844270e6828c06cdae7ce4209ef05cf8ad02ba",
+      "different_pixels": 16,
+      "max_error": 8,
+      "mae": 0.25,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 64,
+        "mae": 2.0
+      }
+    },
+    {
+      "fixture": "ko-false-color-false-nested-true-restore-false-Alpha-0.5-bc-true-invert-false.pdf",
+      "sha256": "c6b16ec45c8fcf45f9d0bdb3fc4e305da76deac2992650461ac9e16e5833e34a",
+      "different_pixels": 16,
+      "max_error": 8,
+      "mae": 0.25,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 64,
+        "mae": 2.0
+      }
+    },
+    {
+      "fixture": "ko-false-color-false-nested-true-restore-false-Alpha-1-bc-false-invert-false.pdf",
+      "sha256": "df0b460c6218cc81461f213988c0003a23af831afb84ed8ba4aeb35446ee8d11",
+      "different_pixels": 16,
+      "max_error": 16,
+      "mae": 0.5,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 128,
+        "mae": 4.0
+      }
+    },
+    {
+      "fixture": "ko-false-color-false-nested-true-restore-false-Luminosity-0.5-bc-false-invert-false.pdf",
+      "sha256": "5a28b3ff3e0cf3ce2c413a8bea80c94cc3fbfb3b353a7930ba73c2d117716124",
+      "different_pixels": 16,
+      "max_error": 4,
+      "mae": 0.125,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 32,
+        "mae": 1.0
+      }
+    },
+    {
+      "fixture": "ko-false-color-false-nested-true-restore-false-Luminosity-0.5-bc-false-invert-true.pdf",
+      "sha256": "3db40f074c9abc34fba64bed7425b1d7c52cffef52dcae355158a13b440a16e9",
+      "different_pixels": 16,
+      "max_error": 4,
+      "mae": 0.125,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 32,
+        "mae": 1.0
+      }
+    },
+    {
+      "fixture": "ko-false-color-false-nested-true-restore-false-Luminosity-0.5-bc-true-invert-false.pdf",
+      "sha256": "96d876f3618dff320f3863820f24fcab53a823bb499e5bbfcd3fd53d80d16e27",
+      "different_pixels": 16,
+      "max_error": 4,
+      "mae": 0.125,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 32,
+        "mae": 1.0
+      }
+    },
+    {
+      "fixture": "ko-false-color-false-nested-true-restore-false-Luminosity-0.5-bc-true-invert-true.pdf",
+      "sha256": "85f63ee6b40b435efc380da7005f8b99226d3256fdb297fc4595eaa1f8d971c7",
+      "different_pixels": 16,
+      "max_error": 4,
+      "mae": 0.125,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 32,
+        "mae": 1.0
+      }
+    },
+    {
+      "fixture": "ko-false-color-false-nested-true-restore-false-Luminosity-1-bc-false-invert-false.pdf",
+      "sha256": "ef82730473991420d307d8d077fb64348210b86b7c8a8f9138cc2447903b86d1",
+      "different_pixels": 16,
+      "max_error": 8,
+      "mae": 0.25,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 64,
+        "mae": 2.0
+      }
+    },
+    {
+      "fixture": "ko-false-color-false-nested-true-restore-true-Alpha-0.5-bc-false-invert-false.pdf",
+      "sha256": "6d00b185781efd411963da1713c657e872b353e544fba94bb71677c85ecc3174",
+      "different_pixels": 16,
+      "max_error": 8,
+      "mae": 0.25,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 64,
+        "mae": 2.0
+      }
+    },
+    {
+      "fixture": "ko-false-color-false-nested-true-restore-true-Alpha-0.5-bc-false-invert-true.pdf",
+      "sha256": "cd54a4ac3c93ae441d378177f86562e7daa7a5df8f6d967b0bb7b72db97b5974",
+      "different_pixels": 16,
+      "max_error": 8,
+      "mae": 0.25,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 64,
+        "mae": 2.0
+      }
+    },
+    {
+      "fixture": "ko-false-color-false-nested-true-restore-true-Alpha-0.5-bc-true-invert-false.pdf",
+      "sha256": "e266b5718e66a6be410ff1763de3e265eaa611b799dc10cd36d6f0af082c40f6",
+      "different_pixels": 16,
+      "max_error": 8,
+      "mae": 0.25,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 64,
+        "mae": 2.0
+      }
+    },
+    {
+      "fixture": "ko-false-color-false-nested-true-restore-true-Alpha-1-bc-false-invert-false.pdf",
+      "sha256": "6e9b98c530b8aecd5ea3c0e5dff858ee1ebce2c4a8d84b80bc0afaecac738264",
+      "different_pixels": 16,
+      "max_error": 16,
+      "mae": 0.5,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 128,
+        "mae": 4.0
+      }
+    },
+    {
+      "fixture": "ko-false-color-false-nested-true-restore-true-Luminosity-0.5-bc-false-invert-false.pdf",
+      "sha256": "e520cbc3a8dbbe12c6e84f83435662dbed60536da292e4cb478cd802371d2018",
+      "different_pixels": 16,
+      "max_error": 4,
+      "mae": 0.125,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 32,
+        "mae": 1.0
+      }
+    },
+    {
+      "fixture": "ko-false-color-false-nested-true-restore-true-Luminosity-0.5-bc-false-invert-true.pdf",
+      "sha256": "08ec63ff002bcaf22be3032c219493d657afae6b2dd1931521c1c655f6c29462",
+      "different_pixels": 16,
+      "max_error": 4,
+      "mae": 0.125,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 32,
+        "mae": 1.0
+      }
+    },
+    {
+      "fixture": "ko-false-color-false-nested-true-restore-true-Luminosity-0.5-bc-true-invert-false.pdf",
+      "sha256": "75ff6ca68d6acb48dfb03061f5bf552777acb9442b6f21079a555f7f31354555",
+      "different_pixels": 16,
+      "max_error": 4,
+      "mae": 0.125,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 32,
+        "mae": 1.0
+      }
+    },
+    {
+      "fixture": "ko-false-color-false-nested-true-restore-true-Luminosity-0.5-bc-true-invert-true.pdf",
+      "sha256": "6a791e544c742c74f177d7b87800e3d6c978a458973651f6f8e4877309874631",
+      "different_pixels": 16,
+      "max_error": 4,
+      "mae": 0.125,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 32,
+        "mae": 1.0
+      }
+    },
+    {
+      "fixture": "ko-false-color-false-nested-true-restore-true-Luminosity-1-bc-false-invert-false.pdf",
+      "sha256": "22616ef0514012b03f160eff92db6f7fc57b97a73fed8f055d1e14b2347f8d39",
+      "different_pixels": 16,
+      "max_error": 8,
+      "mae": 0.25,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 64,
+        "mae": 2.0
+      }
+    },
+    {
+      "fixture": "ko-false-color-true-nested-false-restore-true-Alpha-0.5-bc-false-invert-false.pdf",
+      "sha256": "5203f184f3b3d90201016347cc2d342367c6482db3f6b086def150bdd1f0fa78",
+      "different_pixels": 16,
+      "max_error": 12,
+      "mae": 0.125,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 96,
+        "mae": 1.0
+      }
+    },
+    {
+      "fixture": "ko-false-color-true-nested-false-restore-true-Alpha-0.5-bc-false-invert-true.pdf",
+      "sha256": "8b96c632c8df643fb7ac497509603c76ecd26fcde9f051c39ff943f6cd6d3bf7",
+      "different_pixels": 16,
+      "max_error": 12,
+      "mae": 0.125,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 96,
+        "mae": 1.0
+      }
+    },
+    {
+      "fixture": "ko-false-color-true-nested-false-restore-true-Alpha-0.5-bc-true-invert-false.pdf",
+      "sha256": "2c0a2d807bedb984803cf67164d63c40beecb9864d9071196ccc27c24c7ff9aa",
+      "different_pixels": 16,
+      "max_error": 12,
+      "mae": 0.125,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 96,
+        "mae": 1.0
+      }
+    },
+    {
+      "fixture": "ko-false-color-true-nested-false-restore-true-Alpha-1-bc-false-invert-false.pdf",
+      "sha256": "e7e40d2ea3bded3ebb6534d0be49d5a73f17a2c5b859168649bed200661a0e0c",
+      "different_pixels": 16,
+      "max_error": 24,
+      "mae": 0.25,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 192,
+        "mae": 2.0
+      }
+    },
+    {
+      "fixture": "ko-false-color-true-nested-false-restore-true-Luminosity-0.5-bc-false-invert-false.pdf",
+      "sha256": "78b7546fc8c640612c9f613e7ae3556280c6cbd15f960658b13e3d77d7d62e51",
+      "different_pixels": 16,
+      "max_error": 6,
+      "mae": 0.0625,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 48,
+        "mae": 0.5
+      }
+    },
+    {
+      "fixture": "ko-false-color-true-nested-false-restore-true-Luminosity-0.5-bc-false-invert-true.pdf",
+      "sha256": "db481f9a644d39a7204076476171b27503b9f58e139c6d417497aa2fad0b2db2",
+      "different_pixels": 16,
+      "max_error": 6,
+      "mae": 0.0625,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 48,
+        "mae": 0.5
+      }
+    },
+    {
+      "fixture": "ko-false-color-true-nested-false-restore-true-Luminosity-0.5-bc-true-invert-false.pdf",
+      "sha256": "28629c1160b8f5b7cfb7d0f46238ce31545c55f73f648bf344c001b07d622f3c",
+      "different_pixels": 16,
+      "max_error": 6,
+      "mae": 0.0625,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 48,
+        "mae": 0.5
+      }
+    },
+    {
+      "fixture": "ko-false-color-true-nested-false-restore-true-Luminosity-0.5-bc-true-invert-true.pdf",
+      "sha256": "cec9e58c401d7f27cfb4cc76f5c1cee7e2346a53ff9666b5fde885010385f5f5",
+      "different_pixels": 16,
+      "max_error": 6,
+      "mae": 0.0625,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 48,
+        "mae": 0.5
+      }
+    },
+    {
+      "fixture": "ko-false-color-true-nested-false-restore-true-Luminosity-1-bc-false-invert-false.pdf",
+      "sha256": "56ce8d81ea66a20c79cf377133b9a72f5a3973bde8a51027c92db54fec5ea174",
+      "different_pixels": 16,
+      "max_error": 12,
+      "mae": 0.125,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 96,
+        "mae": 1.0
+      }
+    },
+    {
+      "fixture": "ko-false-color-true-nested-true-restore-true-Alpha-0.5-bc-false-invert-false.pdf",
+      "sha256": "e25d41d0ba2d474f5c34008f5f20565f43ef179ede5bfde77372d0a5be6e7c4d",
+      "different_pixels": 16,
+      "max_error": 6,
+      "mae": 0.0625,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 48,
+        "mae": 0.5
+      }
+    },
+    {
+      "fixture": "ko-false-color-true-nested-true-restore-true-Alpha-0.5-bc-false-invert-true.pdf",
+      "sha256": "0274909c37e3d8446b1e92e7ef69f8e832d22ca97882113365fdfc66911097ab",
+      "different_pixels": 16,
+      "max_error": 6,
+      "mae": 0.0625,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 48,
+        "mae": 0.5
+      }
+    },
+    {
+      "fixture": "ko-false-color-true-nested-true-restore-true-Alpha-0.5-bc-true-invert-false.pdf",
+      "sha256": "9e85010b0ffa595ed29bb647f3e1d91776b542c189bb2e338bded925982c3769",
+      "different_pixels": 16,
+      "max_error": 6,
+      "mae": 0.0625,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 48,
+        "mae": 0.5
+      }
+    },
+    {
+      "fixture": "ko-false-color-true-nested-true-restore-true-Alpha-1-bc-false-invert-false.pdf",
+      "sha256": "a33d193a19e89b8e93faba39bbb6d1429240efcfbb3126fa53e90881dccb093e",
+      "different_pixels": 16,
+      "max_error": 12,
+      "mae": 0.125,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 96,
+        "mae": 1.0
+      }
+    },
+    {
+      "fixture": "ko-false-color-true-nested-true-restore-true-Luminosity-0.5-bc-false-invert-false.pdf",
+      "sha256": "32b91479883efaf16b78161b64e1a14bb4f8147305da7bb6531184f7223cc31e",
+      "different_pixels": 16,
+      "max_error": 3,
+      "mae": 0.03125,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 24,
+        "mae": 0.25
+      }
+    },
+    {
+      "fixture": "ko-false-color-true-nested-true-restore-true-Luminosity-0.5-bc-false-invert-true.pdf",
+      "sha256": "1b8b562c25f0e0969dd2f71d1d6ad5a0db48e99485fbe6de03fe19a59d3a7797",
+      "different_pixels": 16,
+      "max_error": 3,
+      "mae": 0.03125,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 24,
+        "mae": 0.25
+      }
+    },
+    {
+      "fixture": "ko-false-color-true-nested-true-restore-true-Luminosity-0.5-bc-true-invert-false.pdf",
+      "sha256": "5e07edcd9a6fa60adc886f286f148950ce9d3bf39f462819cb176d131159307c",
+      "different_pixels": 16,
+      "max_error": 3,
+      "mae": 0.03125,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 24,
+        "mae": 0.25
+      }
+    },
+    {
+      "fixture": "ko-false-color-true-nested-true-restore-true-Luminosity-0.5-bc-true-invert-true.pdf",
+      "sha256": "bc4da2631e3de7c85df5f450d3158394039f1225723c1ccf3f4feb1b4886a5e2",
+      "different_pixels": 16,
+      "max_error": 3,
+      "mae": 0.03125,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 24,
+        "mae": 0.25
+      }
+    },
+    {
+      "fixture": "ko-false-color-true-nested-true-restore-true-Luminosity-1-bc-false-invert-false.pdf",
+      "sha256": "4cf00c90be1465ef1e7adf546761996ea084a2b8376bd8695e0e6ec02ee94680",
+      "different_pixels": 16,
+      "max_error": 6,
+      "mae": 0.0625,
+      "noaa": {
+        "different_pixels": 16,
+        "max_error": 48,
+        "mae": 0.5
+      }
+    },
+    {
+      "fixture": "ko-true-color-true-nested-false-restore-true-Alpha-0.5-bc-false-invert-false.pdf",
+      "sha256": "7bc8fdc786a8fbaf5d9cd2d33dcb2b4ec20bf755ba3b0c20313897245a6d699a",
+      "different_pixels": 384,
+      "max_error": 75,
+      "mae": 31.875,
+      "noaa": {
+        "different_pixels": 384,
+        "max_error": 159,
+        "mae": 34.5
+      }
+    },
+    {
+      "fixture": "ko-true-color-true-nested-false-restore-true-Alpha-0.5-bc-false-invert-true.pdf",
+      "sha256": "f1c9aedb957283f454e5b3668f735a68f89c0f54a9f2ca03acab36642b939d81",
+      "different_pixels": 384,
+      "max_error": 63,
+      "mae": 31.375,
+      "noaa": {
+        "different_pixels": 384,
+        "max_error": 96,
+        "mae": 31.875
+      }
+    },
+    {
+      "fixture": "ko-true-color-true-nested-false-restore-true-Alpha-0.5-bc-true-invert-false.pdf",
+      "sha256": "d23c619b324effd14a1b2095826291eedd5f0cf2c63e732c24ee9dbe2afc9b41",
+      "different_pixels": 384,
+      "max_error": 75,
+      "mae": 31.875,
+      "noaa": {
+        "different_pixels": 384,
+        "max_error": 159,
+        "mae": 34.5
+      }
+    },
+    {
+      "fixture": "ko-true-color-true-nested-false-restore-true-Alpha-1-bc-false-invert-false.pdf",
+      "sha256": "6e483166e4c80fa41eeabf6a054326c9b30246ccadd214de01b57a9d19cd1602",
+      "different_pixels": 384,
+      "max_error": 87,
+      "mae": 32.25,
+      "noaa": {
+        "different_pixels": 384,
+        "max_error": 255,
+        "mae": 37.5
+      }
+    },
+    {
+      "fixture": "ko-true-color-true-nested-false-restore-true-Luminosity-0.5-bc-false-invert-false.pdf",
+      "sha256": "a61e89c480ea16ad74fe54de77b595657860c9e1e81923e458c5c085987787b0",
+      "different_pixels": 384,
+      "max_error": 69,
+      "mae": 31.6875,
+      "noaa": {
+        "different_pixels": 384,
+        "max_error": 111,
+        "mae": 33.0
+      }
+    },
+    {
+      "fixture": "ko-true-color-true-nested-false-restore-true-Luminosity-0.5-bc-false-invert-true.pdf",
+      "sha256": "ec7ed3347ad3b509c9cbf8be304148091206063e59af9c020806a5d8b9d056a3",
+      "different_pixels": 384,
+      "max_error": 63,
+      "mae": 31.4375,
+      "noaa": {
+        "different_pixels": 384,
+        "max_error": 63,
+        "mae": 31.0
+      }
+    },
+    {
+      "fixture": "ko-true-color-true-nested-false-restore-true-Luminosity-0.5-bc-true-invert-false.pdf",
+      "sha256": "5670fee827353c7f5cbd21cdf87f98814a0f3796152d1b8cf6f4f2085dd3ca47",
+      "different_pixels": 384,
+      "max_error": 63,
+      "mae": 31.4375,
+      "noaa": {
+        "different_pixels": 384,
+        "max_error": 63,
+        "mae": 31.0
+      }
+    },
+    {
+      "fixture": "ko-true-color-true-nested-false-restore-true-Luminosity-0.5-bc-true-invert-true.pdf",
+      "sha256": "849d5c4a6edaadb6484c4c5b3ffd30b849f9fec5613fa5c09ea7c1e0b61d6179",
+      "different_pixels": 384,
+      "max_error": 69,
+      "mae": 31.6875,
+      "noaa": {
+        "different_pixels": 384,
+        "max_error": 111,
+        "mae": 33.0
+      }
+    },
+    {
+      "fixture": "ko-true-color-true-nested-false-restore-true-Luminosity-1-bc-false-invert-false.pdf",
+      "sha256": "ce72ae8b0d35ac11a2738a061ee19213739c7facdaab06bdbf556beeb8124b56",
+      "different_pixels": 384,
+      "max_error": 75,
+      "mae": 31.875,
+      "noaa": {
+        "different_pixels": 384,
+        "max_error": 159,
+        "mae": 34.5
+      }
+    },
+    {
+      "fixture": "ko-true-color-true-nested-true-restore-true-Alpha-0.5-bc-false-invert-false.pdf",
+      "sha256": "c69056ed50380608ba1d553f9c3f9d064cf2b9bb941e9d2630db8d799c3a3349",
+      "different_pixels": 384,
+      "max_error": 69,
+      "mae": 31.6875,
+      "noaa": {
+        "different_pixels": 384,
+        "max_error": 111,
+        "mae": 33.0
+      }
+    },
+    {
+      "fixture": "ko-true-color-true-nested-true-restore-true-Alpha-0.5-bc-false-invert-true.pdf",
+      "sha256": "cbc7d410ba1ff7a0948e64feb240d83ca7dcc001efdd3104227d81ab3db5bee1",
+      "different_pixels": 384,
+      "max_error": 63,
+      "mae": 31.4375,
+      "noaa": {
+        "different_pixels": 384,
+        "max_error": 63,
+        "mae": 31.0
+      }
+    },
+    {
+      "fixture": "ko-true-color-true-nested-true-restore-true-Alpha-0.5-bc-true-invert-false.pdf",
+      "sha256": "ba6df4bc8b7afc03ce745d031d136d61fc578593225bd37d515494bf789f6c8d",
+      "different_pixels": 384,
+      "max_error": 69,
+      "mae": 31.6875,
+      "noaa": {
+        "different_pixels": 384,
+        "max_error": 111,
+        "mae": 33.0
+      }
+    },
+    {
+      "fixture": "ko-true-color-true-nested-true-restore-true-Alpha-1-bc-false-invert-false.pdf",
+      "sha256": "6dbcdfc14469264adc08d9a6694d54495ed4a43d036708b1b08c8ffed45ec3d9",
+      "different_pixels": 384,
+      "max_error": 75,
+      "mae": 31.875,
+      "noaa": {
+        "different_pixels": 384,
+        "max_error": 159,
+        "mae": 34.5
+      }
+    },
+    {
+      "fixture": "ko-true-color-true-nested-true-restore-true-Luminosity-0.5-bc-false-invert-false.pdf",
+      "sha256": "462a446c1f10c5e41f0c6e5b5d0ea3a86a0be2419a64a0499ab0a0aa18832551",
+      "different_pixels": 384,
+      "max_error": 66,
+      "mae": 31.59375,
+      "noaa": {
+        "different_pixels": 384,
+        "max_error": 87,
+        "mae": 32.25
+      }
+    },
+    {
+      "fixture": "ko-true-color-true-nested-true-restore-true-Luminosity-0.5-bc-false-invert-true.pdf",
+      "sha256": "1999e39427b017da39967c72fbe6d48238e009c49660e49bbfe3beb1e5cd65b5",
+      "different_pixels": 384,
+      "max_error": 63,
+      "mae": 31.46875,
+      "noaa": {
+        "different_pixels": 384,
+        "max_error": 63,
+        "mae": 31.25
+      }
+    },
+    {
+      "fixture": "ko-true-color-true-nested-true-restore-true-Luminosity-0.5-bc-true-invert-false.pdf",
+      "sha256": "be98e1b27bf743e2ed6b66fc1375d5f10bbb2c6425eca78fee129d67f95468ed",
+      "different_pixels": 384,
+      "max_error": 63,
+      "mae": 31.46875,
+      "noaa": {
+        "different_pixels": 384,
+        "max_error": 63,
+        "mae": 31.25
+      }
+    },
+    {
+      "fixture": "ko-true-color-true-nested-true-restore-true-Luminosity-0.5-bc-true-invert-true.pdf",
+      "sha256": "1a3ff4d68d70e0fd38fe46b7fcae92485ff505108c803e68b72b34b867b378bd",
+      "different_pixels": 384,
+      "max_error": 66,
+      "mae": 31.59375,
+      "noaa": {
+        "different_pixels": 384,
+        "max_error": 87,
+        "mae": 32.25
+      }
+    },
+    {
+      "fixture": "ko-true-color-true-nested-true-restore-true-Luminosity-1-bc-false-invert-false.pdf",
+      "sha256": "c8917a80f39061d9fa98ecc0f1bb6e38d38a4dba00b83e75b5c4a10d5654ba3e",
+      "different_pixels": 384,
+      "max_error": 69,
+      "mae": 31.6875,
+      "noaa": {
+        "different_pixels": 384,
+        "max_error": 111,
+        "mae": 33.0
+      }
+    }
+  ],
+  "count": 72,
+  "exact": 0,
+  "max_error": 87,
+  "noaa_exact": 0,
+  "noaa_max_error": 255,
+  "limitations": [
+    "Strict external pixel equality fails. KO discrepancies include interior colors, not only AA; analytical model is insufficient qualification.",
+    "No production renderer integration or real AI correction."
+  ],
+  "alpha_as_shape_diagnostic": {
+    "interpretation": "Inference: replacing independent group shape255 by group alpha192 leaves63 of prior red. This explains selected interior pixels; it is not a renderer fix or normative proof.",
+    "checks": [
+      {
+        "fixture": "ko-true-color-true-nested-false-restore-true-Alpha-0.5-bc-false-invert-false.pdf",
+        "x": 4,
+        "predicted_alpha_as_shape": [
+          159,
+          96,
+          96
+        ],
+        "poppler": [
+          159,
+          96,
+          96
+        ],
+        "max_error": 0
+      },
+      {
+        "fixture": "ko-true-color-true-nested-false-restore-true-Alpha-0.5-bc-false-invert-false.pdf",
+        "x": 20,
+        "predicted_alpha_as_shape": [
+          255,
+          192,
+          192
+        ],
+        "poppler": [
+          255,
+          192,
+          192
+        ],
+        "max_error": 0
+      },
+      {
+        "fixture": "ko-true-color-true-nested-false-restore-true-Alpha-0.5-bc-false-invert-true.pdf",
+        "x": 4,
+        "predicted_alpha_as_shape": [
+          159,
+          96,
+          96
+        ],
+        "poppler": [
+          159,
+          96,
+          96
+        ],
+        "max_error": 0
+      },
+      {
+        "fixture": "ko-true-color-true-nested-false-restore-true-Alpha-0.5-bc-false-invert-true.pdf",
+        "x": 20,
+        "predicted_alpha_as_shape": [
+          63,
+          0,
+          0
+        ],
+        "poppler": [
+          63,
+          0,
+          0
+        ],
+        "max_error": 0
+      },
+      {
+        "fixture": "ko-true-color-true-nested-false-restore-true-Alpha-0.5-bc-true-invert-false.pdf",
+        "x": 4,
+        "predicted_alpha_as_shape": [
+          159,
+          96,
+          96
+        ],
+        "poppler": [
+          159,
+          96,
+          96
+        ],
+        "max_error": 0
+      },
+      {
+        "fixture": "ko-true-color-true-nested-false-restore-true-Alpha-0.5-bc-true-invert-false.pdf",
+        "x": 20,
+        "predicted_alpha_as_shape": [
+          255,
+          192,
+          192
+        ],
+        "poppler": [
+          255,
+          192,
+          192
+        ],
+        "max_error": 0
+      },
+      {
+        "fixture": "ko-true-color-true-nested-false-restore-true-Alpha-1-bc-false-invert-false.pdf",
+        "x": 4,
+        "predicted_alpha_as_shape": [
+          63,
+          0,
+          0
+        ],
+        "poppler": [
+          63,
+          0,
+          0
+        ],
+        "max_error": 0
+      },
+      {
+        "fixture": "ko-true-color-true-nested-false-restore-true-Alpha-1-bc-false-invert-false.pdf",
+        "x": 20,
+        "predicted_alpha_as_shape": [
+          255,
+          192,
+          192
+        ],
+        "poppler": [
+          255,
+          192,
+          192
+        ],
+        "max_error": 0
+      },
+      {
+        "fixture": "ko-true-color-true-nested-false-restore-true-Luminosity-0.5-bc-false-invert-false.pdf",
+        "x": 4,
+        "predicted_alpha_as_shape": [
+          207,
+          144,
+          144
+        ],
+        "poppler": [
+          207,
+          144,
+          144
+        ],
+        "max_error": 0
+      },
+      {
+        "fixture": "ko-true-color-true-nested-false-restore-true-Luminosity-0.5-bc-false-invert-false.pdf",
+        "x": 20,
+        "predicted_alpha_as_shape": [
+          255,
+          192,
+          192
+        ],
+        "poppler": [
+          255,
+          192,
+          192
+        ],
+        "max_error": 0
+      },
+      {
+        "fixture": "ko-true-color-true-nested-false-restore-true-Luminosity-0.5-bc-false-invert-true.pdf",
+        "x": 4,
+        "predicted_alpha_as_shape": [
+          111,
+          48,
+          48
+        ],
+        "poppler": [
+          111,
+          48,
+          48
+        ],
+        "max_error": 0
+      },
+      {
+        "fixture": "ko-true-color-true-nested-false-restore-true-Luminosity-0.5-bc-false-invert-true.pdf",
+        "x": 20,
+        "predicted_alpha_as_shape": [
+          63,
+          0,
+          0
+        ],
+        "poppler": [
+          63,
+          0,
+          0
+        ],
+        "max_error": 0
+      },
+      {
+        "fixture": "ko-true-color-true-nested-false-restore-true-Luminosity-0.5-bc-true-invert-false.pdf",
+        "x": 4,
+        "predicted_alpha_as_shape": [
+          111,
+          48,
+          48
+        ],
+        "poppler": [
+          111,
+          48,
+          48
+        ],
+        "max_error": 0
+      },
+      {
+        "fixture": "ko-true-color-true-nested-false-restore-true-Luminosity-0.5-bc-true-invert-false.pdf",
+        "x": 20,
+        "predicted_alpha_as_shape": [
+          63,
+          0,
+          0
+        ],
+        "poppler": [
+          63,
+          0,
+          0
+        ],
+        "max_error": 0
+      },
+      {
+        "fixture": "ko-true-color-true-nested-false-restore-true-Luminosity-0.5-bc-true-invert-true.pdf",
+        "x": 4,
+        "predicted_alpha_as_shape": [
+          207,
+          144,
+          144
+        ],
+        "poppler": [
+          207,
+          144,
+          144
+        ],
+        "max_error": 0
+      },
+      {
+        "fixture": "ko-true-color-true-nested-false-restore-true-Luminosity-0.5-bc-true-invert-true.pdf",
+        "x": 20,
+        "predicted_alpha_as_shape": [
+          255,
+          192,
+          192
+        ],
+        "poppler": [
+          255,
+          192,
+          192
+        ],
+        "max_error": 0
+      },
+      {
+        "fixture": "ko-true-color-true-nested-false-restore-true-Luminosity-1-bc-false-invert-false.pdf",
+        "x": 4,
+        "predicted_alpha_as_shape": [
+          159,
+          96,
+          96
+        ],
+        "poppler": [
+          159,
+          96,
+          96
+        ],
+        "max_error": 0
+      },
+      {
+        "fixture": "ko-true-color-true-nested-false-restore-true-Luminosity-1-bc-false-invert-false.pdf",
+        "x": 20,
+        "predicted_alpha_as_shape": [
+          255,
+          192,
+          192
+        ],
+        "poppler": [
+          255,
+          192,
+          192
+        ],
+        "max_error": 0
+      },
+      {
+        "fixture": "ko-true-color-true-nested-true-restore-true-Alpha-0.5-bc-false-invert-false.pdf",
+        "x": 4,
+        "predicted_alpha_as_shape": [
+          207,
+          144,
+          144
+        ],
+        "poppler": [
+          207,
+          144,
+          144
+        ],
+        "max_error": 0
+      },
+      {
+        "fixture": "ko-true-color-true-nested-true-restore-true-Alpha-0.5-bc-false-invert-false.pdf",
+        "x": 20,
+        "predicted_alpha_as_shape": [
+          255,
+          192,
+          192
+        ],
+        "poppler": [
+          255,
+          192,
+          192
+        ],
+        "max_error": 0
+      },
+      {
+        "fixture": "ko-true-color-true-nested-true-restore-true-Alpha-0.5-bc-false-invert-true.pdf",
+        "x": 4,
+        "predicted_alpha_as_shape": [
+          111,
+          48,
+          48
+        ],
+        "poppler": [
+          111,
+          48,
+          48
+        ],
+        "max_error": 0
+      },
+      {
+        "fixture": "ko-true-color-true-nested-true-restore-true-Alpha-0.5-bc-false-invert-true.pdf",
+        "x": 20,
+        "predicted_alpha_as_shape": [
+          63,
+          0,
+          0
+        ],
+        "poppler": [
+          63,
+          0,
+          0
+        ],
+        "max_error": 0
+      },
+      {
+        "fixture": "ko-true-color-true-nested-true-restore-true-Alpha-0.5-bc-true-invert-false.pdf",
+        "x": 4,
+        "predicted_alpha_as_shape": [
+          207,
+          144,
+          144
+        ],
+        "poppler": [
+          207,
+          144,
+          144
+        ],
+        "max_error": 0
+      },
+      {
+        "fixture": "ko-true-color-true-nested-true-restore-true-Alpha-0.5-bc-true-invert-false.pdf",
+        "x": 20,
+        "predicted_alpha_as_shape": [
+          255,
+          192,
+          192
+        ],
+        "poppler": [
+          255,
+          192,
+          192
+        ],
+        "max_error": 0
+      },
+      {
+        "fixture": "ko-true-color-true-nested-true-restore-true-Alpha-1-bc-false-invert-false.pdf",
+        "x": 4,
+        "predicted_alpha_as_shape": [
+          159,
+          96,
+          96
+        ],
+        "poppler": [
+          159,
+          96,
+          96
+        ],
+        "max_error": 0
+      },
+      {
+        "fixture": "ko-true-color-true-nested-true-restore-true-Alpha-1-bc-false-invert-false.pdf",
+        "x": 20,
+        "predicted_alpha_as_shape": [
+          255,
+          192,
+          192
+        ],
+        "poppler": [
+          255,
+          192,
+          192
+        ],
+        "max_error": 0
+      },
+      {
+        "fixture": "ko-true-color-true-nested-true-restore-true-Luminosity-0.5-bc-false-invert-false.pdf",
+        "x": 4,
+        "predicted_alpha_as_shape": [
+          231,
+          168,
+          168
+        ],
+        "poppler": [
+          231,
+          168,
+          168
+        ],
+        "max_error": 0
+      },
+      {
+        "fixture": "ko-true-color-true-nested-true-restore-true-Luminosity-0.5-bc-false-invert-false.pdf",
+        "x": 20,
+        "predicted_alpha_as_shape": [
+          255,
+          192,
+          192
+        ],
+        "poppler": [
+          255,
+          192,
+          192
+        ],
+        "max_error": 0
+      },
+      {
+        "fixture": "ko-true-color-true-nested-true-restore-true-Luminosity-0.5-bc-false-invert-true.pdf",
+        "x": 4,
+        "predicted_alpha_as_shape": [
+          87,
+          24,
+          24
+        ],
+        "poppler": [
+          87,
+          24,
+          24
+        ],
+        "max_error": 0
+      },
+      {
+        "fixture": "ko-true-color-true-nested-true-restore-true-Luminosity-0.5-bc-false-invert-true.pdf",
+        "x": 20,
+        "predicted_alpha_as_shape": [
+          63,
+          0,
+          0
+        ],
+        "poppler": [
+          63,
+          0,
+          0
+        ],
+        "max_error": 0
+      },
+      {
+        "fixture": "ko-true-color-true-nested-true-restore-true-Luminosity-0.5-bc-true-invert-false.pdf",
+        "x": 4,
+        "predicted_alpha_as_shape": [
+          87,
+          24,
+          24
+        ],
+        "poppler": [
+          87,
+          24,
+          24
+        ],
+        "max_error": 0
+      },
+      {
+        "fixture": "ko-true-color-true-nested-true-restore-true-Luminosity-0.5-bc-true-invert-false.pdf",
+        "x": 20,
+        "predicted_alpha_as_shape": [
+          63,
+          0,
+          0
+        ],
+        "poppler": [
+          63,
+          0,
+          0
+        ],
+        "max_error": 0
+      },
+      {
+        "fixture": "ko-true-color-true-nested-true-restore-true-Luminosity-0.5-bc-true-invert-true.pdf",
+        "x": 4,
+        "predicted_alpha_as_shape": [
+          231,
+          168,
+          168
+        ],
+        "poppler": [
+          231,
+          168,
+          168
+        ],
+        "max_error": 0
+      },
+      {
+        "fixture": "ko-true-color-true-nested-true-restore-true-Luminosity-0.5-bc-true-invert-true.pdf",
+        "x": 20,
+        "predicted_alpha_as_shape": [
+          255,
+          192,
+          192
+        ],
+        "poppler": [
+          255,
+          192,
+          192
+        ],
+        "max_error": 0
+      },
+      {
+        "fixture": "ko-true-color-true-nested-true-restore-true-Luminosity-1-bc-false-invert-false.pdf",
+        "x": 4,
+        "predicted_alpha_as_shape": [
+          207,
+          144,
+          144
+        ],
+        "poppler": [
+          207,
+          144,
+          144
+        ],
+        "max_error": 0
+      },
+      {
+        "fixture": "ko-true-color-true-nested-true-restore-true-Luminosity-1-bc-false-invert-false.pdf",
+        "x": 20,
+        "predicted_alpha_as_shape": [
+          255,
+          192,
+          192
+        ],
+        "poppler": [
+          255,
+          192,
+          192
+        ],
+        "max_error": 0
+      }
+    ],
+    "max_error": 0,
+    "source_snapshot": "https://skia.googlesource.com/third_party/poppler/+/f91b5a3bdc2286d669923da9c0b017cf2808fc0a/splash/Splash.cc",
+    "source_observation": "Splash::composite assigns src alpha to pipe.shape; snapshot is not an audit of installed26.10.0.",
+    "isolated_child_derivative": "Changing only child11 I=false to I=true (same-length bytes, valid xref) leaves sampled Poppler interior pixels unchanged."
+  }
+}

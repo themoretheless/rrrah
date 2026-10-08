@@ -1,0 +1,55 @@
+{
+  "scope": "Real native viewer Metal HDR surface and read-only built-in-display EDR headroom probe",
+  "timestamp_utc": "2026-10-07T20:12:45.752085+00:00",
+  "gpu": "Apple M4 Max",
+  "screen": {
+    "name": "Built-in Retina Display",
+    "color_space": "Color LCD",
+    "frame_points": [
+      2056,
+      1329
+    ],
+    "edr_potential_max": 16,
+    "edr_reference_max": 0
+  },
+  "headroom_sequence": {
+    "before_viewer": 1,
+    "while_hdr_viewer_running": 6.153846263885498,
+    "after_own_viewer_stopped": 1
+  },
+  "viewer": {
+    "backend": "Metal",
+    "hdr": true,
+    "surface_format": "Rgba16Float",
+    "color_space": "ExtendedSrgbLinear",
+    "ready_dimensions": [
+      8,
+      2
+    ],
+    "first_decode_ready_microseconds": 989.041,
+    "command": [
+      "/tmp/rrrah-required-corpus-target/debug/rrrah",
+      "tests/fixtures/raster/rle-hdr-rec709-declared.hdr",
+      "--no-cache",
+      "--gpu-backend",
+      "metal"
+    ],
+    "environment": {
+      "RRRAH_HDR_SURFACE": "1",
+      "RUST_LOG": "info"
+    },
+    "owned_process_exit_code": 0
+  },
+  "input": {
+    "file": "tests/fixtures/raster/rle-hdr-rec709-declared.hdr",
+    "linear_min": 0.5,
+    "linear_max": 6.625,
+    "sha256": "7054e40d167f8f6b66768df908b25997e6f3e02c60e1c2efe1e72d2a7ddaed96"
+  },
+  "probe": "scripts/probe-metal-edr.swift",
+  "limitations": [
+    "EDR activation and headroom are operating-system capability/readiness evidence, not measured luminance in nits or physical display calibration.",
+    "Float source preservation and numerical display comparisons are established by separate Metal readback tests.",
+    "This probe does not qualify all HDR formats, profiles, cameras or NVIDIA."
+  ]
+}

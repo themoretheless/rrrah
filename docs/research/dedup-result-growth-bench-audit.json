@@ -1,0 +1,50 @@
+{
+  "status": "verified_native_exact_paired_result_growth",
+  "rounds": [
+    {
+      "round": 0,
+      "old_seconds": 1.6736982089999999,
+      "new_seconds": 1.290159375,
+      "speedup": 1.2972801976499995
+    },
+    {
+      "round": 1,
+      "old_seconds": 1.007296334,
+      "new_seconds": 0.991395,
+      "speedup": 1.0160393526293758
+    },
+    {
+      "round": 2,
+      "old_seconds": 0.986609708,
+      "new_seconds": 0.868247958,
+      "speedup": 1.1363225204383378
+    },
+    {
+      "round": 3,
+      "old_seconds": 1.543218625,
+      "new_seconds": 1.318632792,
+      "speedup": 1.170317190928769
+    },
+    {
+      "round": 4,
+      "old_seconds": 1.427712834,
+      "new_seconds": 1.053383542,
+      "speedup": 1.3553589714239147
+    },
+    {
+      "round": 5,
+      "old_seconds": 1.040966125,
+      "new_seconds": 0.845077,
+      "speedup": 1.2318003270707876
+    }
+  ],
+  "old_median_seconds": 1.2343394795,
+  "new_median_seconds": 1.022389271,
+  "median_paired_speedup": 1.2010587589997783,
+  "pins": {
+    "docs/research/dedup-result-growth-bench.log": "7cb23bffed2eda14e29aa8e50e1b6c266eb4af7edfcf11dc272b81eb0d47b3f2",
+    "docs/research/dedup-result-growth-bench-source.json": "8e3e75da65c4a5ec3c0d42c50b5b8dc21d472cf324cd07b03366ba0c4dd60a5c",
+    "docs/research/dedup-result-growth-snapshot.json": "cb2e0eb9970d4b350ff0712138f09e718c331af3abd66b5faf8d30ee71e71590"
+  },
+  "scope": "Six alternating paired same-process runs, 4096 descriptors/256 mixed queries/radius0.5/545163 hits. Every retained ID and exact f64 distance compared natively; final zero managed credit. Concurrent workloads present; not full collection throughput, RSS or general scalability."
+}

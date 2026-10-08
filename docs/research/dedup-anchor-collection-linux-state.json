@@ -1,0 +1,35 @@
+{
+  "status": "verified_native_linux_indexed_anchor_collection_and_files",
+  "tests": 62,
+  "suites": {
+    "anchor_collection": 1,
+    "anchor_collection_preflight": 1,
+    "anchor_collection_scaled": 1,
+    "anchor_candidate_search": 1,
+    "anchor_rank_file": 2,
+    "anchor_rank": 4,
+    "local_rank": 5,
+    "local_rank_cached": 3,
+    "piecewise_local_rank": 2,
+    "piecewise_warp": 4,
+    "mesh_rank_regions": 3,
+    "projective_grid": 3,
+    "mesh_grid": 2,
+    "mesh_rank": 2,
+    "rank_region": 7,
+    "projective_exhaustive_domains": 3,
+    "projective_domains": 4,
+    "projective_geometry": 14
+  },
+  "snapshot_files": 2940,
+  "current_files_changed_after_snapshot": [
+    "crates/rrrah-dedup/src/anchor_rank_file.rs"
+  ],
+  "pins": {
+    "docs/research/dedup-anchor-collection-linux-snapshot.json": "3e4e35099fe389b56fabdc1f74c973412879dc8b0697c9db47f9e1159b772d8c",
+    "docs/research/dedup-anchor-collection-linux-native.log": "320f67b2719657206c7469c5178ec4f8999d842645d718256ca924577aa8c2c8",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-anchor-collection-linux.py": "8c2745e51e6ebe8b4d458002298efb80e114bdae60f6223681e3f7f8b470a035",
+    "scripts/run-dedup-linux-local-rank.sh": "58aefc31cb9d3a2ecd3cad408c60284026b81db9675f1eae5b1678eb8ce54b2f"
+  },
+  "scope": "Native Linux aarch64 automatic candidate/guarded file fixture tests including scale, full original points, exact direct parity, request-token cancellation, file mutation and managed release, plus geometry/rank regressions. Current indexed collection lifecycle,12preiteration cases and exact scaled indexed-versus-all-direct parity included. Exact frozen dedup source/test bytes; any newer fallback wrapper is excluded and the archived module matches snapshot bytes; other dependencies preserved from prior frozen file snapshot; no real corpus, Windows, unrelated precision, full package or collection admission proof."
+}

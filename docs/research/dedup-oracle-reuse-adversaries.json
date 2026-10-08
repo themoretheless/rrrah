@@ -1,0 +1,58 @@
+{
+  "status": "verified_reuse_auditor_rejections",
+  "cases": [
+    {
+      "case": "baseline",
+      "returncode": 0,
+      "audit_created": true
+    },
+    {
+      "case": "stale_seed_hash",
+      "returncode": 1,
+      "audit_created": false
+    },
+    {
+      "case": "changed_seed_paths",
+      "returncode": 1,
+      "audit_created": false
+    },
+    {
+      "case": "duplicate_seed_pair",
+      "returncode": 1,
+      "audit_created": false
+    },
+    {
+      "case": "different_probe",
+      "returncode": 1,
+      "audit_created": false
+    },
+    {
+      "case": "correlated_counter_forgery",
+      "returncode": 1,
+      "audit_created": false
+    },
+    {
+      "case": "wrong_reused_count",
+      "returncode": 1,
+      "audit_created": false
+    },
+    {
+      "case": "boolean_fresh_count",
+      "returncode": 1,
+      "audit_created": false
+    },
+    {
+      "case": "boolean_fresh_memory",
+      "returncode": 1,
+      "audit_created": false
+    }
+  ],
+  "input_hashes": {
+    "docs/research/dedup-six-twelve-file.json": "7e2a33cf8e0497f782d00c2b058bc736c27950ba8494a327432ffeadc5fa6a3d",
+    "/Users/themoretheless/.codex/tmp/dedup-twelve-reuse-oracle.json": "da66c0c25488aaddf7dad805a4f23e7cf8664819f75410f57242bbc2b0f0cf18",
+    "docs/research/dedup-six-twelve-file-pair-oracle.json": "8df3680194d839d4e36a49e30e2309e4179867d1be8fd495f4d952365dd8a10d",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-six-multifile-parity.py": "cec8817820aa440409be90590e8f588f923d936db771471382bd1f62e87385e5",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/check-dedup-oracle-reuse-adversaries.py": "25edff6bb3e7e7f5a0a6f4047ad2949463ce75d1682e018e3a551257222c4eb4"
+  },
+  "scope": "One valid replay plus8corruptions including correlated raw/parsed forgery; auditor behavior only, no new native pair confirmations."
+}

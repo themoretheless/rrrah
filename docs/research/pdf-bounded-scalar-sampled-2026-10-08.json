@@ -1,0 +1,40 @@
+{
+  "scope": "Bounded scalar linear Type0 sampled BG/UCR execution; native compositor remains test-only",
+  "source_sha256": {
+    "vendor/hayro-interpret/src/function/mod.rs": "4edb1332ce1518bc105a00378313483dd4d1dae202895ed3182780d016fe3169",
+    "vendor/hayro-interpret/src/function/type0.rs": "7908755ce4e7e68748ef3ae16850c3395ba83c6523dc2a4dd4ef2debd7a22113",
+    "vendor/hayro/src/knockout_interpreter.rs": "abf45a8b028e1ccf6ae8bf997e558476aed84d76736c0af41a41e9cb41aa8d29"
+  },
+  "interpreter_suite": {
+    "passed": 79,
+    "failed": 0,
+    "seconds": 0.15,
+    "log": "/tmp/rrrah-bounded-sampled-interpreter-final.log"
+  },
+  "renderer_suite": {
+    "passed": 102,
+    "failed": 0,
+    "ignored": 8,
+    "seconds": 2.94,
+    "log": "/tmp/rrrah-bounded-sampled-renderer-controls.log"
+  },
+  "verified": [
+    "Independent linear fractions for1/2/4/8/16/24/32bit samples",
+    "32bit normalization no longer overflows in existing generic eval",
+    "Reverse Encode0.25->0.75",
+    "Decode[-1,2] with Range[0,1] clamps0.25->0,0.5->0.5,0.75->1",
+    "Four cancellation checkpoints refuse output",
+    "Missing table entry, insufficient work budget, nonfinite input and Order3 refuse",
+    "Authored PDF ASCIIHexDecode Type0 BG plus Type2 UCR converts captured RGB0.2,0.4,0.6 to CMYK0.4,0.2,0,0.4 with alpha0.5",
+    "Type0 parser rejects zero/empty Size and uses checked expected-entry product"
+  ],
+  "allocation": "At most2 inline single-coordinate hash lookups and scalar f64 interpolation; no per-sample heap scratch. Existing table backing storage, parsing and decompression still need admission.",
+  "remaining": [
+    "Cubic sampled Order3",
+    "Bounded calculator Type4",
+    "Function parsing/table allocation admission",
+    "Concrete default BG/UCR output policy",
+    "Native scene integration and real AI oracle qualification"
+  ],
+  "production_native_compositor_enabled": false
+}

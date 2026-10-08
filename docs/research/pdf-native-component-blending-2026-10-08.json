@@ -1,0 +1,48 @@
+{
+  "scope": "Test-only native RGB/Gray/CMYK component pixel algebra; not yet scene/frame or production integration",
+  "source": "vendor/hayro/src/native_blend.rs",
+  "source_sha256": "6de05b553982aea4a297ccd992b1a6a517fbc833ce4013ceba49d05b024236f7",
+  "suite": {
+    "passed": 98,
+    "failed": 0,
+    "ignored": 8,
+    "filtered": 1,
+    "seconds": 2.49,
+    "log": "/tmp/rrrah-native-component-blend-final-controls.log"
+  },
+  "new_controls": {
+    "passed": 5,
+    "cases": [
+      "CMYK cyan/magenta alpha0.5 overlap gives alpha3/4, components1/3,2/3,0,0",
+      "Zero-alpha full-shape knockout restores initial backdrop; zero-shape preserves previous",
+      "Fractional CMYK knockout independent components1/4,1/2,0,0",
+      "Multiply/Screen/HardLight invert all four subtractive channels, expected0.84/0.16/0.68",
+      "Non-isolated CMYK group removes background and retains magenta contribution; opacity0.37 gives alpha0.185 without quantization",
+      "Gray0.2 plus white0.5 gives0.6",
+      "RGB exact parity with existing f64 algebra across4 modes and2 shapes",
+      "Invalid component counts, NaN/Inf, incompatible models, alpha exceeding shape and unsupported modes refuse",
+      "Negative contribution after group-backdrop removal refuses"
+    ]
+  },
+  "representation": "Four fixed f64 additive premultiplied component slots plus separate alpha/model. CMYK native values complemented before blending, complemented back on extraction. No dynamic pixel allocation.",
+  "normative_source": {
+    "path": "/tmp/rrrah-pdf32000-2008.txt",
+    "section": "11.3.4 / printed p.324",
+    "rule": "Subtractive components complemented before blend and complemented back afterward"
+  },
+  "precision": "No RGBA8 conversion. Existing1e-12 internal floating arithmetic bounds retained; constructor input channels and opacity finite in0..1.",
+  "limits": [
+    "Scene paints still use existing RGBA8 capture",
+    "Group frame buffers and native-space conversion at boundaries not connected",
+    "Model agreement alone does not establish ICC profile equivalence; caller must resolve/convert spaces",
+    "Only Normal/Multiply/Screen/HardLight supported here",
+    "External real-AI discrepancies unresolved"
+  ],
+  "remaining": [
+    "Retain original source components in admitted scene paint data",
+    "Implement admitted native frame storage and group-space inheritance",
+    "Qualify group boundary profile transforms and native mask luminosity",
+    "Independent authored oracle and real corpus rendering before production routing"
+  ],
+  "production_enabled": false
+}

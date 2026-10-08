@@ -1,0 +1,104 @@
+{
+  "scope": "Admitted original solid-paint scene capture, preserving compatibility display output; no native frame or production routing claim",
+  "source_sha256": {
+    "vendor/hayro/src/native_paint.rs": "5ab07fb2ff4c72511ad37e410481a853f6e291898cd18370f2056555d81e8f45",
+    "vendor/hayro/src/knockout_interpreter.rs": "3c95422f2b964e1da587764e637dbb7c2a38376190a83ae10f4c86eed95d1e52"
+  },
+  "suite": {
+    "passed": 99,
+    "failed": 0,
+    "ignored": 8,
+    "filtered": 1,
+    "seconds": 1.91,
+    "log": "/tmp/rrrah-native-paint-capture-controls.log"
+  },
+  "focused_cmyk_transport_test": {
+    "passed": 1,
+    "failed": 0,
+    "log": "/tmp/rrrah-native-cmyk-paint-capture-controls.log"
+  },
+  "controls": [
+    "Native RGB0.17,0.31,0.53 and opacity0.37 retained without quantization",
+    "Exact holder+component byte admission before vector/paint allocation",
+    "Every cancellation checkpoint releases native holder and vector credits",
+    "Admission refusal releases all storage",
+    "Actual PDF retains all four CMYK0.17,0.31,0.53,0.07 channels and original space",
+    "RGB source remains RGB3 inside Gray1 form group, preserving need for explicit destination conversion",
+    "Existing geometry, masks, blending and scene cancellation/admission controls pass"
+  ],
+  "real_ai_rows": [
+    {
+      "fixture": "VectorApple.ai",
+      "page": 0,
+      "width": 301,
+      "height": 246,
+      "peak_admitted_bytes": 55715210,
+      "final_admitted_bytes": 0,
+      "status": "replayed",
+      "events": 2755,
+      "knockout_groups": 7,
+      "capture_ms": 1494.925291,
+      "capture_deadline_expired": false,
+      "whole_replay_ms": 3526.4245,
+      "tile_edge": 64,
+      "tile_replay_ms": 7863.394249999999,
+      "tile_different_pixels": 0,
+      "tile_peak_admitted_bytes": 33438768,
+      "tile_retained_comparison_baseline_bytes": 31774160
+    },
+    {
+      "fixture": "one.ai",
+      "page": 0,
+      "width": 1366,
+      "height": 768,
+      "peak_admitted_bytes": 89640808,
+      "final_admitted_bytes": 0,
+      "status": "replayed",
+      "events": 8,
+      "knockout_groups": 0,
+      "capture_ms": 3.018042,
+      "capture_deadline_expired": false,
+      "whole_replay_ms": 592.729917,
+      "tile_edge": 64,
+      "tile_replay_ms": 4210.600542,
+      "tile_different_pixels": 0,
+      "tile_peak_admitted_bytes": 9209192,
+      "tile_retained_comparison_baseline_bytes": 4664536
+    },
+    {
+      "fixture": "one.ai",
+      "page": 1,
+      "width": 177,
+      "height": 175,
+      "peak_admitted_bytes": 2602964,
+      "final_admitted_bytes": 0,
+      "status": "replayed",
+      "events": 1,
+      "knockout_groups": 0,
+      "capture_ms": 0.041124999999999995,
+      "capture_deadline_expired": false,
+      "whole_replay_ms": 0.255584,
+      "tile_edge": 64,
+      "tile_replay_ms": 0.322625,
+      "tile_different_pixels": 0,
+      "tile_peak_admitted_bytes": 592928,
+      "tile_retained_comparison_baseline_bytes": 124964
+    }
+  ],
+  "all_six_payloads_identical": true,
+  "all_final_admitted_bytes_zero": true,
+  "limits": {
+    "native_components": 255,
+    "opacity": "Finite0..1",
+    "component_values": "Finite native PDF coordinates; Lab/spot ranges not incorrectly forced to0..1"
+  },
+  "ownership": "Original components copied into exactly reserved admitted vector; shared color-space/profile reference retained, no profile duplication. Credit field drops after owned payload. Existing display sample reused by compatibility replay.",
+  "remaining": [
+    "Connect native component frame storage and group-space boundary transforms",
+    "Native gradient/image sample conversion; current encoded shades/display samples remain RGB",
+    "Apply page/group native spaces to complete scene replay",
+    "Independent authored and real-AI oracle conformance",
+    "Production integration"
+  ],
+  "production_enabled": false
+}

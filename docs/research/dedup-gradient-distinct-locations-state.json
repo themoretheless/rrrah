@@ -1,0 +1,73 @@
+{
+  "status": "verified_primitive_tests",
+  "returncode": 0,
+  "passed": 15,
+  "input_hashes": {
+    "docs/research/dedup-gradient-distinct-locations-tests.log": "be43be6aaa5b835f4cd462659044156329bd025421eeec49c2d8c92a752b14ed",
+    "crates/rrrah-dedup/src/gradient.rs": "81a9bc75026697c17012a21ce4a07558862f20eea8c30c1a8665b1f620e34f30",
+    "crates/rrrah-dedup/tests/gradient_distinct_locations.rs": "d34e03aab9018922871f66a4bcad2f03ed09dc085989b3a915e70bcdd4c50bd7"
+  },
+  "scope": "Explicit distinct-location ratio, mutual nearest exact indices, finite competitor required on both sides, checked two-pass admission, exhaustive cancellation checkpoints on tiny authored fixture; no file or real-corpus promotion.",
+  "independent_sorted_oracle_gate": {
+    "returncode": 0,
+    "passed": 3,
+    "log": "docs/research/dedup-gradient-distinct-locations-oracle-tests.log",
+    "sha256": "53c3f45d98b7513a41f75b16a455c0d6a680276fc981926fc57205d0bf7d9613",
+    "test_source_sha256": "8ebdcbdebd37f2fb7f374daec53b2c7b514b6937fd9f18ef4a6e985ad15f94d6",
+    "radii": [
+      0,
+      2,
+      12,
+      1000
+    ]
+  },
+  "real_three_crop_diagnostic": {
+    "status": "verified_complete_diagnostic",
+    "report_sha256": "44ab51f52767853039e5728a7af5e4f5bb47ffec938cbc442b6790c0c220e8a4",
+    "summary": [
+      {
+        "query": "200101.jpg",
+        "levels": 4,
+        "matches": 24,
+        "inliers": 18,
+        "region_supports": 0
+      },
+      {
+        "query": "200101.jpg",
+        "levels": 7,
+        "matches": 29,
+        "inliers": 25,
+        "region_supports": 0
+      },
+      {
+        "query": "200201.jpg",
+        "levels": 4,
+        "matches": 12,
+        "inliers": 0,
+        "region_supports": 0
+      },
+      {
+        "query": "200201.jpg",
+        "levels": 7,
+        "matches": 11,
+        "inliers": 0,
+        "region_supports": 0
+      },
+      {
+        "query": "200301.jpg",
+        "levels": 4,
+        "matches": 9,
+        "inliers": 0,
+        "region_supports": 0
+      },
+      {
+        "query": "200301.jpg",
+        "levels": 7,
+        "matches": 12,
+        "inliers": 0,
+        "region_supports": 0
+      }
+    ],
+    "scope": "Pinned positive-only diagnostic, independent reported inlier residuals; no true geometry or negative precision qualification."
+  }
+}

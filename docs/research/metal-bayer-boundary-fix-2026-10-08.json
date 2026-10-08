@@ -1,0 +1,68 @@
+{
+  "scope": "Fix RAW GPU Bayer green-site horizontal neighbor classification at sensor boundary",
+  "backend": "Metal Apple M4 Max",
+  "before": {
+    "side": 63,
+    "cfa": "BGGR",
+    "pixel": [
+      62,
+      1
+    ],
+    "gpu": [
+      170,
+      162,
+      185,
+      255
+    ],
+    "cpu": [
+      186,
+      164,
+      171,
+      255
+    ]
+  },
+  "fix": "Use repeating Bayer lattice parity for interpolation direction; retain clamped sensor reads",
+  "coverage": {
+    "sides": [
+      63,
+      64
+    ],
+    "cfa": [
+      "RGGB",
+      "BGGR",
+      "GRBG",
+      "GBRG"
+    ],
+    "pixels": 32260,
+    "tile_size": 32,
+    "tile_halo": 1,
+    "tiled_vs_default": "exact",
+    "cpu_preview_tolerance_rgb8": 2
+  },
+  "suites": [
+    {
+      "passed": 10,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "passed": 11,
+      "failed": 0,
+      "ignored": 0
+    }
+  ],
+  "logs": [
+    {
+      "path": "/tmp/rrrah-metal-bayer-boundaries-fixed-20261008.log",
+      "sha256": "97d3df97b8cdd616b276f6008552ffc79d2c4132cb73dd9049e1d5e218106fbc"
+    },
+    {
+      "path": "/tmp/rrrah-metal-raw-boundary-regression-20261008.log",
+      "sha256": "cdf15d17ce1e7e69d23bdce78ab1f13269a58773f2138ca2e68324f1636b73cf"
+    }
+  ],
+  "limitations": [
+    "CPU preview agreement is an implementation consistency check, not independent real-camera demosaic quality qualification",
+    "NVIDIA and calibrated HDR display remain unverified"
+  ]
+}

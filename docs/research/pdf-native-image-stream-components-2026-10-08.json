@@ -1,0 +1,99 @@
+{
+  "scope": "Native original-component API connected to decoded image streams and optional test-recorder capture",
+  "controls": {
+    "passed": 115,
+    "failed": 0,
+    "ignored": 10,
+    "seconds": 2.59,
+    "log": "/tmp/rrrah-native-image-stream-final.log"
+  },
+  "checks": [
+    "Actual 16-bit inline PDF streams preserve Gray RGB CMYK components exactly",
+    "Reversed Decode on Gray preserves full 16-bit coordinate precision",
+    "Native buffers stay associated with exact raster event indices",
+    "Metadata and float output buffers admitted before retained allocation",
+    "All real diagnostic tracked capture/replay credit released"
+  ],
+  "real_ai_pages": [
+    {
+      "fixture": "VectorApple.ai",
+      "page": 0,
+      "width": 301,
+      "height": 246,
+      "peak_admitted_bytes": 48095496,
+      "final_admitted_bytes": 0,
+      "status": "native_diagnostic",
+      "native_completed": false,
+      "capture_failed": false,
+      "capture_ms": 1567.5452910000001,
+      "native_replay_ms": 12.616916,
+      "deadline_expired": false,
+      "events": 2755,
+      "native_paints": 463,
+      "raster_events": 3,
+      "raster_source_models": [
+        "event=3,model=None",
+        "event=1218,model=Some(Cmyk)",
+        "event=2298,model=Some(Cmyk)"
+      ],
+      "native_raster_components": [
+        "event=3,sample_count=None",
+        "event=1218,sample_count=None",
+        "event=2298,sample_count=None"
+      ],
+      "shading_events": 13,
+      "page_model": "Cmyk"
+    },
+    {
+      "fixture": "one.ai",
+      "page": 0,
+      "width": 1366,
+      "height": 768,
+      "peak_admitted_bytes": 168322584,
+      "final_admitted_bytes": 0,
+      "status": "native_diagnostic",
+      "native_completed": true,
+      "capture_failed": false,
+      "capture_ms": 1.482042,
+      "native_replay_ms": 2590.757166,
+      "deadline_expired": false,
+      "events": 8,
+      "native_paints": 2,
+      "raster_events": 0,
+      "raster_source_models": [],
+      "native_raster_components": [],
+      "shading_events": 0,
+      "page_model": "Rgb"
+    },
+    {
+      "fixture": "one.ai",
+      "page": 1,
+      "width": 177,
+      "height": 175,
+      "peak_admitted_bytes": 4957320,
+      "final_admitted_bytes": 0,
+      "status": "native_diagnostic",
+      "native_completed": true,
+      "capture_failed": false,
+      "capture_ms": 0.048124999999999994,
+      "native_replay_ms": 51.132291,
+      "deadline_expired": false,
+      "events": 1,
+      "native_paints": 0,
+      "raster_events": 0,
+      "raster_source_models": [],
+      "native_raster_components": [],
+      "shading_events": 0,
+      "page_model": "Rgb"
+    }
+  ],
+  "source_manifest_hashes_verified": true,
+  "limitations": [
+    "Real VectorApple native component attempts all refused; first exact native decode refusal reason not traced yet",
+    "Masks and transfer functions explicitly refuse native component stage",
+    "Strict dimensions and byte lengths required; no truncated-image padding",
+    "Filter/stream decompression allocation remains outside component admission",
+    "Optional capture currently decodes alongside compatibility pixels; redundant work not production optimized",
+    "Native raster sampling/compositing still not implemented; production AI not qualified"
+  ]
+}

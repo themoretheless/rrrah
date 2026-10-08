@@ -1,0 +1,18 @@
+{
+  "scope": "Independent sustained byte-cap eviction with actual file assertions",
+  "duration_seconds": 30.320023167,
+  "cycles": 114,
+  "pressure_refusals": 114,
+  "disk_peak_bytes": 786624,
+  "disk_peak_objects": 3,
+  "disk_byte_limit": 786624,
+  "count_limit": 100,
+  "ttl_seconds": 3600,
+  "byte_limit_reached": true,
+  "final_managed_bytes": 0,
+  "log": "/tmp/rrrah-sustained-byte-cap.log",
+  "limitations": [
+    "30-second run with synthetic raster payloads and injected codec I/O delays",
+    "No count or TTL pressure in this case; other scenarios cover those separately"
+  ]
+}

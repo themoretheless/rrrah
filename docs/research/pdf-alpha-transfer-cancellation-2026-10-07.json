@@ -1,0 +1,37 @@
+{
+  "scope": "PDF transfer-function and matte-unpremultiplication cooperative cancellation",
+  "implementation": {
+    "transfer": "Poll every 1024 scalar entries for single functions and every 1024 RGB pixels for four functions; abort decode without publishing partial data.",
+    "matte": "Poll before work, every 1024 RGB or luma pixels and before returning; preserve original arithmetic."
+  },
+  "validation": {
+    "decoder_library": {
+      "passed": 973,
+      "ignored": 66,
+      "failed": 0
+    },
+    "vendor_image_color": {
+      "passed": 3,
+      "failed": 0,
+      "matte": "6147 pixels each in RGB and luma, alpha including 0 and 255, byte-exact independent original formula, cancellation at every observed checkpoint"
+    },
+    "pdf_ram_swap_metal": {
+      "passed": 6,
+      "ignored": 0,
+      "failed": 0,
+      "ai_corpus": "/tmp/rrrah-integrated-ai-corpus"
+    }
+  },
+  "logs": [
+    "/tmp/rrrah-pdf-transfer-cancel.log",
+    "/tmp/rrrah-pdf-matte-cancel.log",
+    "/tmp/rrrah-pdf-matte-unit.log",
+    "/tmp/rrrah-pdf-alpha-transfer-metal.log"
+  ],
+  "limitations": [
+    "Transfer-function cancellation does not yet have a dedicated every-checkpoint unit fixture.",
+    "Encoded filters, mask decoding, component unpacking and final renderer flush remain incompletely interruptible.",
+    "No new latency ceiling or complete process-memory cap is established.",
+    "AI fidelity qualification remains incomplete."
+  ]
+}

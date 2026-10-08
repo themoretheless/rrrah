@@ -1,0 +1,29 @@
+{
+  "scope": "Test-only architecture diagnostic. Not production qualification or accepted defect tolerance.",
+  "source": "vendor/hayro/src/knockout_interpreter.rs::correlated_fractional_edges_require_compositing_before_area_reduction",
+  "authored_geometry": "32x16 page, red and blue both [8.5,24.5] x [0,16], isolated children under non-isolated knockout parent, red opaque, blue 0.5",
+  "pixel": [
+    8,
+    8
+  ],
+  "pixel_average_first_rgba": [
+    191,
+    127,
+    191,
+    255
+  ],
+  "composite_at_2x_then_reduce_rgba": [
+    191,
+    191,
+    255,
+    255
+  ],
+  "exact_area_rgba": [
+    191,
+    191,
+    255,
+    255
+  ],
+  "conclusion": "Scalar shape/alpha buffers lose correlated subpixel overlap. Preserve spatial shape until group composition, then reduce area; generic pixel-average prototype cannot be promoted as correct.",
+  "verification": "Dedicated diagnostic passed, comparing real PDF native interpreter at 32x16 and64x32; passing diagnostic asserts discrepancy remains visible, not that production rendering is correct."
+}

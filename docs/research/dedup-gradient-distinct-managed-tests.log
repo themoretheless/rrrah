@@ -1,0 +1,51 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 8.79s
+     Running tests/gradient.rs (target/debug/deps/gradient-b6db68f2539cce08)
+
+running 9 tests
+test gradient_matching_mutual_ties_admission_and_cancel ... ok
+test independently_rotated_texture_and_alpha_refusal ... ok
+test gradient_affine_light_flat_refusals_and_cancel ... ok
+test dominant_gradient_orientation_analytic_angles_flat_and_limits ... ok
+test rotated_uniform_patches_never_create_descriptors ... ok
+test spatial_gradient_selection_preserves_recipe_and_cell_limits ... ok
+test managed_spatial_pyramid_matches_unmanaged_and_releases_last_owner ... ok
+test extracted_gradients_identity_unrelated_work_and_cancel ... ok
+test gradient_pyramid_independent_double_size_coordinates_and_work ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+
+     Running tests/gradient_distinct_locations.rs (target/debug/deps/gradient_distinct_locations-99c8bd51d2edd0c6)
+
+running 4 tests
+test nearby_scale_duplicates_preserve_distinct_landmarks_and_reject_ambiguity ... ok
+test distinct_location_work_validation_and_atomic_cancellation ... ok
+test managed_distinct_match_admission_last_owner_and_cancellation ... ok
+test distinct_location_results_equal_independent_sorted_distance_oracle ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/gradient_interpolated.rs (target/debug/deps/gradient_interpolated-a561bd88a8307aed)
+
+running 4 tests
+test interpolated_recipe_preserves_independent_quarter_turn_and_affine_light ... ok
+test interpolated_cells_reduce_one_pixel_edge_localization_error ... ok
+test interpolated_recipe_flat_alpha_work_and_cancellation_refusals ... ok
+test explicit_recipe_pyramid_preserves_positions_limits_cancel_and_managed_ownership ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+

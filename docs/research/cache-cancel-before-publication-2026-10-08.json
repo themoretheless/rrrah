@@ -1,0 +1,64 @@
+{
+  "problem": "Raster and RAW cache getters did not recheck request cancellation after resident lookup or completed swap read before RAM publication and visible-pin transfer. The app checked cancellation after return, after cache membership/pin could already change.",
+  "fix": "Check cancellation after resident clone and before publishing swap restore. Drop rejected restore without changing visible pin or RAM membership. Recheck cancellation before pressure eviction.",
+  "before": {
+    "raster_regressions_failed": 2,
+    "raw_regressions_failed": 2
+  },
+  "after": {
+    "cache_unit_passed": 128,
+    "cache_unit_failed": 0,
+    "raster_swap_metal_passed": 1,
+    "real_cr3_ttl_swap_metal_passed": 1
+  },
+  "regressions": "Deterministic cancellation at resident-return and post-stream/pre-publication boundaries. Swap callback count measured independently so cancellation hits final cache publication boundary. Assert old visible pin remains, restored output credit drops, and retry preserves raster float bits / RAW metadata and samples.",
+  "real_cr3_metal": {
+    "adapter": "Metal Apple M4 Max",
+    "sensor_samples_compared": 25494560,
+    "readback_size": [
+      128,
+      96
+    ],
+    "native_samples_and_metal_frame_exact": true,
+    "pressure_refusal_retry": true,
+    "final_budget_used": 0
+  },
+  "sources": [
+    {
+      "path": "crates/rrrah-cache/src/raster_ram.rs",
+      "sha256": "771dc3eb15036ec9286cdb016146e78f5af6d906137039c9e32daeb32367d5e8"
+    },
+    {
+      "path": "crates/rrrah-cache/src/ram.rs",
+      "sha256": "b7d018bb6174420d25134561c5c49214e16506129e3ffa7fc218159f36755318"
+    }
+  ],
+  "logs": [
+    {
+      "path": "/tmp/rrrah-raster-publication-before-20261008.log",
+      "sha256": "093604a7ca51a380e12cde948aca76dabfc868732fe1788c418537f3263cd918"
+    },
+    {
+      "path": "/tmp/rrrah-raw-publication-before-20261008.log",
+      "sha256": "cdaabb5cb73ece7767c11395e20b8511e1dc567dacb349fbae684fcb078b08a2"
+    },
+    {
+      "path": "/tmp/rrrah-cache-publication-both-fixed-20261008.log",
+      "sha256": "69d876af54b6f3a6ffc6c5a4795d6a3e2ef487918e6e9c363b910a43827948ef"
+    },
+    {
+      "path": "/tmp/rrrah-raster-publication-metal-20261008.log",
+      "sha256": "86eadf404d2c7daa6071bc03169c1f68038acc91249d033d6e28cc123d0f7900"
+    },
+    {
+      "path": "/tmp/rrrah-raw-publication-metal-20261008.log",
+      "sha256": "c5092e3b00a4c6a261aedb3c8a0cab00fdfea035b1c1c08b2bafa346779f5cb2"
+    }
+  ],
+  "limitations": [
+    "Cancellation checks narrow publication races; they are not an atomic transaction with external generation changes.",
+    "Deterministic tests cover cache API publication boundaries, not physical UI scheduling latency.",
+    "Real CR3 readback is one fixture and a 128x96 offscreen frame, not universal RAW or physical HDR qualification.",
+    "3D model cache publication requires separate audit."
+  ]
+}

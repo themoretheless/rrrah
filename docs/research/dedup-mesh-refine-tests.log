@@ -1,0 +1,36 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: unused variable: `cancel`
+   --> crates/rrrah-dedup/src/local_index.rs:715:5
+    |
+715 |     cancel: impl Fn() -> bool,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_cancel`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-dedup` (lib) generated 1 warning (run `cargo fix --lib -p rrrah-dedup` to apply 1 suggestion)
+    Finished `test` profile [optimized + debuginfo] target(s) in 4.60s
+     Running tests/mesh_grid.rs (target/debug/deps/mesh_grid-77a556d97db04cee)
+
+running 2 tests
+test both_directions_match_point_queries_and_preserve_holes_and_credit ... ok
+test every_cancel_and_one_short_memory_work_refuse_without_partial_grid ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/mesh_rank.rs (target/debug/deps/mesh_rank-a63dbeea30c790dd)
+
+running 2 tests
+test summed_mesh_windows_match_direct_projective_windows_and_reject_inversion ... ok
+test cancellation_memory_reads_and_overflow_refuse_without_retaining_scratch ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/mesh_refine.rs (target/debug/deps/mesh_refine-7638ac24b83b6184)
+
+running 3 tests
+test flat_support_and_invalid_visible_samples_are_explicit ... ok
+test known_translation_is_recovered_without_using_validation_for_selection ... ok
+test cancellation_and_prepaid_read_limits_leave_no_partial_proposals ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+

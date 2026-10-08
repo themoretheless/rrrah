@@ -1,0 +1,71 @@
+{
+  "status": "five_regional_gains_verified_on_32_prior_model_pairs_collection_integration_running",
+  "unit_exit_code": 0,
+  "unit_passed_tests": 4,
+  "source_hashes": {
+    "crates/rrrah-dedup/src/region_grid.rs": "4f67306b28206df499a613f25156c24f2ed5863c42cb325158c63b8f919aa892",
+    "crates/rrrah-dedup/tests/region_grid.rs": "a0a7c3db143158c24383e7629db9c4061559a388b565492478fe41d28556d9e7"
+  },
+  "native_order_diagnostic_session_id": 46336,
+  "scope": "Finite primitive/file gates on macOS and native Linux; one real prior-model pair gains regional support in both gradient lanes, with first-grid parity. No whole-image promotion, broad precision, all-corpus or full-library qualification.",
+  "native_order_diagnostic_exit_code": 0,
+  "native_order_audit_sha256": "754b7f869c7713d3c7b0bbecd059d866ceea6b0d667c812f350e8d2b28a754bf",
+  "native_order_finding": "Forward zero supported regions, reverse fixed-gradient one supported region; thresholds unchanged. Different extraction/model estimates prevent attribution solely to domain partition.",
+  "pixel_view_exit_code": 0,
+  "pixel_view_compound_tests": 1,
+  "file_gate_session_id": 66355,
+  "file_stage_source_hashes": {
+    "crates/rrrah-dedup/src/region_grid.rs": "4f67306b28206df499a613f25156c24f2ed5863c42cb325158c63b8f919aa892",
+    "crates/rrrah-dedup/src/region_transform.rs": "25f24255ffb7b72e63fb702e1270383c4fc4ee3633df6b6018db11bff0505684",
+    "crates/rrrah-dedup/src/local_scan.rs": "e408c35ef4125f6ac9712e100512221a1ffa0fd93e0f36716c24ef45091c9cb7",
+    "crates/rrrah-dedup/tests/region_transform.rs": "8be8913eec9f3fd6113a9e5c3d4f6906d076f5176b5afdd1e6dc80ee77040a22"
+  },
+  "file_gate_exit_code": 0,
+  "file_gate_compound_tests": 1,
+  "source_after_file_gate": {
+    "crates/rrrah-dedup/src/region_grid.rs": "4f67306b28206df499a613f25156c24f2ed5863c42cb325158c63b8f919aa892",
+    "crates/rrrah-dedup/src/region_transform.rs": "25f24255ffb7b72e63fb702e1270383c4fc4ee3633df6b6018db11bff0505684",
+    "crates/rrrah-dedup/src/local_scan.rs": "e408c35ef4125f6ac9712e100512221a1ffa0fd93e0f36716c24ef45091c9cb7",
+    "crates/rrrah-dedup/tests/region_transform.rs": "8be8913eec9f3fd6113a9e5c3d4f6906d076f5176b5afdd1e6dc80ee77040a22"
+  },
+  "linux_initial_exit_code": 126,
+  "linux_initial_failure": "Script lacks executable permission; retried through shell without source changes.",
+  "linux_session_id": 19551,
+  "linux_source_before": {
+    "crates/rrrah-dedup/src/region_grid.rs": "4f67306b28206df499a613f25156c24f2ed5863c42cb325158c63b8f919aa892",
+    "crates/rrrah-dedup/src/region_transform.rs": "25f24255ffb7b72e63fb702e1270383c4fc4ee3633df6b6018db11bff0505684",
+    "crates/rrrah-dedup/src/local_scan.rs": "e408c35ef4125f6ac9712e100512221a1ffa0fd93e0f36716c24ef45091c9cb7",
+    "crates/rrrah-dedup/tests/region_transform.rs": "8be8913eec9f3fd6113a9e5c3d4f6906d076f5176b5afdd1e6dc80ee77040a22"
+  },
+  "probe_build_exit_code": 0,
+  "frozen_probe": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/photo-probe-bidirectional-regions",
+  "probe_sha256": "5c1149638768619cdd308630a101867508b9dc62c50056f80aaafe24703e678c",
+  "real_initial_exit_code": 1,
+  "real_initial_failure": "Measurement helper used radius 1/minimum fit samples 16 instead of reference gradient radius 3/minimum fit samples 1000. First-grid parity assertion rejected result; no gain claim.",
+  "real_initial_session_id": 62045,
+  "gradient_probe_build_exit_code": 0,
+  "frozen_gradient_probe": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/photo-probe-bidirectional-gradient-regions",
+  "gradient_probe_sha256": "5ef966cbc9a046d100ad09cbed887f4f6e0b3842316dcbf4bc6242214b023f1a",
+  "linux_exit_code": 0,
+  "linux_passed_tests": 6,
+  "linux_source_after": {
+    "crates/rrrah-dedup/src/region_grid.rs": "4f67306b28206df499a613f25156c24f2ed5863c42cb325158c63b8f919aa892",
+    "crates/rrrah-dedup/src/region_transform.rs": "25f24255ffb7b72e63fb702e1270383c4fc4ee3633df6b6018db11bff0505684",
+    "crates/rrrah-dedup/src/local_scan.rs": "e408c35ef4125f6ac9712e100512221a1ffa0fd93e0f36716c24ef45091c9cb7",
+    "crates/rrrah-dedup/tests/region_transform.rs": "8be8913eec9f3fd6113a9e5c3d4f6906d076f5176b5afdd1e6dc80ee77040a22"
+  },
+  "real_207401_exit_code": 0,
+  "real_207401_audit_sha256": "87a9a4258d5b69fa9176d1a3745be9219dbd4adc471381188eff705bdc350ece",
+  "real_32_session_id": 93385,
+  "real_32_exit_code": 0,
+  "real_32_audit_sha256": "86c710d182d0a131903d5580806fe6de1bc113c16b680c6e7f33546c5cfc4f82",
+  "real_32_verified_queries": 32,
+  "real_32_verified_models": 58,
+  "real_32_regional_gain_query_ids": [
+    "202501.jpg",
+    "204401.jpg",
+    "207401.jpg",
+    "208301.jpg",
+    "208601.jpg"
+  ]
+}

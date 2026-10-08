@@ -1,5 +1,5 @@
 use crate::StrokeProps;
-use crate::color::{AlphaColor, ColorComponents, ColorSpace};
+use crate::color::{AlphaColor, ColorComponents, ColorSpace, DeviceConversionFunction, DeviceConversionFunctions};
 use crate::context::Context;
 use crate::convert::{convert_line_cap, convert_line_join};
 use crate::font::{Font, UNITS_PER_EM};
@@ -97,6 +97,7 @@ impl<'a> State<'a> {
             color_space: self.graphics_state.stroke_cs.clone(),
             pattern: self.graphics_state.stroke_pattern.clone(),
             transfer_function: self.graphics_state.transfer_function.clone(),
+            conversion_functions: self.graphics_state.conversion_functions.clone(),
         }
     }
 
@@ -107,6 +108,7 @@ impl<'a> State<'a> {
             color_space: self.graphics_state.none_stroke_cs.clone(),
             pattern: self.graphics_state.non_stroke_pattern.clone(),
             transfer_function: self.graphics_state.transfer_function.clone(),
+            conversion_functions: self.graphics_state.conversion_functions.clone(),
         }
     }
 }
@@ -266,8 +268,10 @@ pub(crate) struct GraphicsState<'a> {
     pub(crate) none_stroke_cs: ColorSpace,
     pub(crate) non_stroke_alpha: f32,
 
+    pub(crate) alpha_is_shape: bool,
     pub(crate) soft_mask: Option<SoftMask<'a>>,
     pub(crate) transfer_function: Option<ActiveTransferFunction>,
+    pub(crate) conversion_functions: DeviceConversionFunctions,
     pub(crate) blend_mode: BlendMode,
 }
 
@@ -283,8 +287,10 @@ impl Default for GraphicsState<'_> {
             stroke_alpha: 1.0,
             stroke_pattern: None,
             non_stroke_pattern: None,
+            alpha_is_shape: false,
             soft_mask: None,
             transfer_function: None,
+            conversion_functions: DeviceConversionFunctions::default(),
             blend_mode: BlendMode::default(),
         }
     }
@@ -296,6 +302,7 @@ pub(crate) struct PaintData<'a> {
     pub(crate) color_space: ColorSpace,
     pub(crate) pattern: Option<Pattern<'a>>,
     pub(crate) transfer_function: Option<ActiveTransferFunction>,
+    pub(crate) conversion_functions: DeviceConversionFunctions,
 }
 
 pub(crate) fn handle_gs<'a>(
@@ -329,8 +336,25 @@ pub(crate) fn handle_gs_single<'a>(
                 convert_line_join(LineJoin(dict.get::<Number>(key)?));
         }
         "ML" => context.get_mut().graphics_state.stroke_props.miter_limit = dict.get::<f32>(key)?,
+        "AIS" => context.get_mut().graphics_state.alpha_is_shape = dict.get::<bool>(key)?,
         "CA" => context.get_mut().graphics_state.stroke_alpha = dict.get::<f32>(key)?,
         "ca" => context.get_mut().graphics_state.non_stroke_alpha = dict.get::<f32>(key)?,
+        "BG" | "BG2" | "UCR" | "UCR2" => {
+            let black = key.as_str().starts_with("BG");
+            let preferred = if black { b"BG2".as_slice() } else { b"UCR2".as_slice() };
+            let legacy = if black { b"BG".as_slice() } else { b"UCR".as_slice() };
+            let preferred_object = dict.get::<Object<'_>>(preferred);
+            let is_preferred = preferred_object.is_some();
+            let object = preferred_object.or_else(|| dict.get::<Object<'_>>(legacy))?;
+            let function = match object {
+                Object::Name(name) if is_preferred && name.as_str() == "Default" => DeviceConversionFunction::Default,
+                object => Function::new(&object).map(DeviceConversionFunction::Function)
+                    .unwrap_or(DeviceConversionFunction::Unresolved),
+            };
+            let functions = &mut context.get_mut().graphics_state.conversion_functions;
+            if black { functions.black_generation = function; }
+            else { functions.undercolor_removal = function; }
+        }
         "TR" | "TR2" => {
             let function = match dict
                 .get::<Object<'_>>(TR2)

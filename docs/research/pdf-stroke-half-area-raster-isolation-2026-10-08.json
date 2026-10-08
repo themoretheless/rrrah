@@ -1,0 +1,1195 @@
+{
+  "scope": "test-only raster precision isolation; production remains unchanged",
+  "half_area_control": {
+    "path": "line(0,8) to (32,8), width3, round caps, dash[4,3], offset1",
+    "interior_dash_interval": [
+      6,
+      10
+    ],
+    "pixel": [
+      7,
+      9
+    ],
+    "intersection_rectangle": [
+      7,
+      9,
+      8,
+      9.5
+    ],
+    "exact_area": "1/2",
+    "expected_alpha": 128,
+    "derivation": "floor(255 * 1/2 + 1/2) = 128; selected pixel does not intersect either round cap",
+    "rows": [
+      {
+        "kind": "rectangle",
+        "viewport": "whole",
+        "expected": 128,
+        "actual": 128
+      },
+      {
+        "kind": "rectangle",
+        "viewport": "translated_tile_with_gutter",
+        "expected": 128,
+        "actual": 128
+      },
+      {
+        "kind": "dash_outline",
+        "viewport": "whole",
+        "expected": 128,
+        "actual": 128
+      },
+      {
+        "kind": "dash_outline",
+        "viewport": "translated_tile_with_gutter",
+        "expected": 128,
+        "actual": 127
+      }
+    ]
+  },
+  "traces": [
+    {
+      "log": "/tmp/rrrah-prepared-leaf-trace.log",
+      "pixels": [
+        {
+          "fixture": 2,
+          "transform": 0,
+          "edge": 7,
+          "x": 18,
+          "y": 8,
+          "tile": [
+            194,
+            62,
+            123,
+            255
+          ],
+          "whole": [
+            194,
+            61,
+            122,
+            255
+          ]
+        }
+      ],
+      "shapes": [
+        {
+          "event": 2,
+          "x": 18,
+          "y": 8,
+          "clipped": false,
+          "whole": 255,
+          "tile": 255
+        },
+        {
+          "event": 2,
+          "x": 18,
+          "y": 8,
+          "clipped": true,
+          "whole": 255,
+          "tile": 255
+        },
+        {
+          "event": 5,
+          "x": 18,
+          "y": 8,
+          "clipped": false,
+          "whole": 122,
+          "tile": 123
+        },
+        {
+          "event": 5,
+          "x": 18,
+          "y": 8,
+          "clipped": true,
+          "whole": 122,
+          "tile": 123
+        }
+      ]
+    },
+    {
+      "log": "/tmp/rrrah-global-stroke-outline-leaf-20261008.log",
+      "pixels": [
+        {
+          "fixture": 1,
+          "transform": 0,
+          "edge": 7,
+          "x": 7,
+          "y": 9,
+          "tile": [
+            192,
+            64,
+            127,
+            255
+          ],
+          "whole": [
+            191,
+            64,
+            128,
+            255
+          ]
+        },
+        {
+          "fixture": 1,
+          "transform": 0,
+          "edge": 7,
+          "x": 8,
+          "y": 9,
+          "tile": [
+            192,
+            64,
+            127,
+            255
+          ],
+          "whole": [
+            191,
+            64,
+            128,
+            255
+          ]
+        },
+        {
+          "fixture": 1,
+          "transform": 0,
+          "edge": 7,
+          "x": 9,
+          "y": 9,
+          "tile": [
+            192,
+            64,
+            127,
+            255
+          ],
+          "whole": [
+            191,
+            64,
+            128,
+            255
+          ]
+        },
+        {
+          "fixture": 1,
+          "transform": 0,
+          "edge": 7,
+          "x": 13,
+          "y": 9,
+          "tile": [
+            192,
+            64,
+            127,
+            255
+          ],
+          "whole": [
+            191,
+            64,
+            128,
+            255
+          ]
+        },
+        {
+          "fixture": 1,
+          "transform": 0,
+          "edge": 7,
+          "x": 14,
+          "y": 9,
+          "tile": [
+            192,
+            64,
+            127,
+            255
+          ],
+          "whole": [
+            191,
+            64,
+            128,
+            255
+          ]
+        },
+        {
+          "fixture": 1,
+          "transform": 0,
+          "edge": 7,
+          "x": 15,
+          "y": 9,
+          "tile": [
+            192,
+            64,
+            127,
+            255
+          ],
+          "whole": [
+            191,
+            64,
+            128,
+            255
+          ]
+        },
+        {
+          "fixture": 1,
+          "transform": 0,
+          "edge": 7,
+          "x": 16,
+          "y": 9,
+          "tile": [
+            192,
+            64,
+            127,
+            255
+          ],
+          "whole": [
+            191,
+            64,
+            128,
+            255
+          ]
+        },
+        {
+          "fixture": 1,
+          "transform": 0,
+          "edge": 7,
+          "x": 20,
+          "y": 9,
+          "tile": [
+            192,
+            64,
+            127,
+            255
+          ],
+          "whole": [
+            191,
+            64,
+            128,
+            255
+          ]
+        },
+        {
+          "fixture": 1,
+          "transform": 0,
+          "edge": 7,
+          "x": 21,
+          "y": 9,
+          "tile": [
+            192,
+            64,
+            127,
+            255
+          ],
+          "whole": [
+            191,
+            64,
+            128,
+            255
+          ]
+        },
+        {
+          "fixture": 1,
+          "transform": 0,
+          "edge": 7,
+          "x": 22,
+          "y": 9,
+          "tile": [
+            192,
+            64,
+            127,
+            255
+          ],
+          "whole": [
+            191,
+            64,
+            128,
+            255
+          ]
+        },
+        {
+          "fixture": 1,
+          "transform": 0,
+          "edge": 7,
+          "x": 23,
+          "y": 9,
+          "tile": [
+            192,
+            64,
+            127,
+            255
+          ],
+          "whole": [
+            191,
+            64,
+            128,
+            255
+          ]
+        },
+        {
+          "fixture": 1,
+          "transform": 0,
+          "edge": 7,
+          "x": 27,
+          "y": 9,
+          "tile": [
+            192,
+            192,
+            255,
+            255
+          ],
+          "whole": [
+            191,
+            191,
+            255,
+            255
+          ]
+        },
+        {
+          "fixture": 1,
+          "transform": 0,
+          "edge": 7,
+          "x": 28,
+          "y": 9,
+          "tile": [
+            192,
+            192,
+            255,
+            255
+          ],
+          "whole": [
+            191,
+            191,
+            255,
+            255
+          ]
+        },
+        {
+          "fixture": 1,
+          "transform": 4,
+          "edge": 7,
+          "x": 24,
+          "y": 9,
+          "tile": [
+            192,
+            64,
+            127,
+            255
+          ],
+          "whole": [
+            191,
+            64,
+            128,
+            255
+          ]
+        },
+        {
+          "fixture": 1,
+          "transform": 4,
+          "edge": 7,
+          "x": 25,
+          "y": 9,
+          "tile": [
+            192,
+            64,
+            127,
+            255
+          ],
+          "whole": [
+            191,
+            64,
+            128,
+            255
+          ]
+        },
+        {
+          "fixture": 1,
+          "transform": 4,
+          "edge": 7,
+          "x": 26,
+          "y": 9,
+          "tile": [
+            192,
+            64,
+            127,
+            255
+          ],
+          "whole": [
+            191,
+            64,
+            128,
+            255
+          ]
+        },
+        {
+          "fixture": 1,
+          "transform": 4,
+          "edge": 7,
+          "x": 27,
+          "y": 9,
+          "tile": [
+            192,
+            64,
+            127,
+            255
+          ],
+          "whole": [
+            191,
+            64,
+            128,
+            255
+          ]
+        },
+        {
+          "fixture": 1,
+          "transform": 4,
+          "edge": 7,
+          "x": 31,
+          "y": 9,
+          "tile": [
+            192,
+            64,
+            127,
+            255
+          ],
+          "whole": [
+            191,
+            64,
+            128,
+            255
+          ]
+        },
+        {
+          "fixture": 1,
+          "transform": 4,
+          "edge": 7,
+          "x": 32,
+          "y": 9,
+          "tile": [
+            192,
+            64,
+            127,
+            255
+          ],
+          "whole": [
+            191,
+            64,
+            128,
+            255
+          ]
+        },
+        {
+          "fixture": 1,
+          "transform": 4,
+          "edge": 7,
+          "x": 33,
+          "y": 9,
+          "tile": [
+            192,
+            64,
+            127,
+            255
+          ],
+          "whole": [
+            191,
+            64,
+            128,
+            255
+          ]
+        },
+        {
+          "fixture": 1,
+          "transform": 4,
+          "edge": 7,
+          "x": 34,
+          "y": 9,
+          "tile": [
+            192,
+            64,
+            127,
+            255
+          ],
+          "whole": [
+            191,
+            64,
+            128,
+            255
+          ]
+        }
+      ],
+      "shapes": [
+        {
+          "event": 2,
+          "x": 7,
+          "y": 9,
+          "clipped": false,
+          "whole": 255,
+          "tile": 255
+        },
+        {
+          "event": 2,
+          "x": 7,
+          "y": 9,
+          "clipped": true,
+          "whole": 255,
+          "tile": 255
+        },
+        {
+          "event": 5,
+          "x": 7,
+          "y": 9,
+          "clipped": false,
+          "whole": 128,
+          "tile": 127
+        },
+        {
+          "event": 5,
+          "x": 7,
+          "y": 9,
+          "clipped": true,
+          "whole": 128,
+          "tile": 127
+        },
+        {
+          "event": 2,
+          "x": 8,
+          "y": 9,
+          "clipped": false,
+          "whole": 255,
+          "tile": 255
+        },
+        {
+          "event": 2,
+          "x": 8,
+          "y": 9,
+          "clipped": true,
+          "whole": 255,
+          "tile": 255
+        },
+        {
+          "event": 5,
+          "x": 8,
+          "y": 9,
+          "clipped": false,
+          "whole": 128,
+          "tile": 127
+        },
+        {
+          "event": 5,
+          "x": 8,
+          "y": 9,
+          "clipped": true,
+          "whole": 128,
+          "tile": 127
+        },
+        {
+          "event": 2,
+          "x": 9,
+          "y": 9,
+          "clipped": false,
+          "whole": 255,
+          "tile": 255
+        },
+        {
+          "event": 2,
+          "x": 9,
+          "y": 9,
+          "clipped": true,
+          "whole": 255,
+          "tile": 255
+        },
+        {
+          "event": 5,
+          "x": 9,
+          "y": 9,
+          "clipped": false,
+          "whole": 128,
+          "tile": 127
+        },
+        {
+          "event": 5,
+          "x": 9,
+          "y": 9,
+          "clipped": true,
+          "whole": 128,
+          "tile": 127
+        },
+        {
+          "event": 2,
+          "x": 13,
+          "y": 9,
+          "clipped": false,
+          "whole": 255,
+          "tile": 255
+        },
+        {
+          "event": 2,
+          "x": 13,
+          "y": 9,
+          "clipped": true,
+          "whole": 255,
+          "tile": 255
+        },
+        {
+          "event": 5,
+          "x": 13,
+          "y": 9,
+          "clipped": false,
+          "whole": 128,
+          "tile": 127
+        },
+        {
+          "event": 5,
+          "x": 13,
+          "y": 9,
+          "clipped": true,
+          "whole": 128,
+          "tile": 127
+        },
+        {
+          "event": 2,
+          "x": 14,
+          "y": 9,
+          "clipped": false,
+          "whole": 255,
+          "tile": 255
+        },
+        {
+          "event": 2,
+          "x": 14,
+          "y": 9,
+          "clipped": true,
+          "whole": 255,
+          "tile": 255
+        },
+        {
+          "event": 5,
+          "x": 14,
+          "y": 9,
+          "clipped": false,
+          "whole": 128,
+          "tile": 127
+        },
+        {
+          "event": 5,
+          "x": 14,
+          "y": 9,
+          "clipped": true,
+          "whole": 128,
+          "tile": 127
+        },
+        {
+          "event": 2,
+          "x": 15,
+          "y": 9,
+          "clipped": false,
+          "whole": 255,
+          "tile": 255
+        },
+        {
+          "event": 2,
+          "x": 15,
+          "y": 9,
+          "clipped": true,
+          "whole": 255,
+          "tile": 255
+        },
+        {
+          "event": 5,
+          "x": 15,
+          "y": 9,
+          "clipped": false,
+          "whole": 128,
+          "tile": 127
+        },
+        {
+          "event": 5,
+          "x": 15,
+          "y": 9,
+          "clipped": true,
+          "whole": 128,
+          "tile": 127
+        },
+        {
+          "event": 2,
+          "x": 16,
+          "y": 9,
+          "clipped": false,
+          "whole": 255,
+          "tile": 255
+        },
+        {
+          "event": 2,
+          "x": 16,
+          "y": 9,
+          "clipped": true,
+          "whole": 255,
+          "tile": 255
+        },
+        {
+          "event": 5,
+          "x": 16,
+          "y": 9,
+          "clipped": false,
+          "whole": 128,
+          "tile": 127
+        },
+        {
+          "event": 5,
+          "x": 16,
+          "y": 9,
+          "clipped": true,
+          "whole": 128,
+          "tile": 127
+        },
+        {
+          "event": 2,
+          "x": 20,
+          "y": 9,
+          "clipped": false,
+          "whole": 255,
+          "tile": 255
+        },
+        {
+          "event": 2,
+          "x": 20,
+          "y": 9,
+          "clipped": true,
+          "whole": 255,
+          "tile": 255
+        },
+        {
+          "event": 5,
+          "x": 20,
+          "y": 9,
+          "clipped": false,
+          "whole": 128,
+          "tile": 127
+        },
+        {
+          "event": 5,
+          "x": 20,
+          "y": 9,
+          "clipped": true,
+          "whole": 128,
+          "tile": 127
+        },
+        {
+          "event": 2,
+          "x": 21,
+          "y": 9,
+          "clipped": false,
+          "whole": 255,
+          "tile": 255
+        },
+        {
+          "event": 2,
+          "x": 21,
+          "y": 9,
+          "clipped": true,
+          "whole": 255,
+          "tile": 255
+        },
+        {
+          "event": 5,
+          "x": 21,
+          "y": 9,
+          "clipped": false,
+          "whole": 128,
+          "tile": 127
+        },
+        {
+          "event": 5,
+          "x": 21,
+          "y": 9,
+          "clipped": true,
+          "whole": 128,
+          "tile": 127
+        },
+        {
+          "event": 2,
+          "x": 22,
+          "y": 9,
+          "clipped": false,
+          "whole": 255,
+          "tile": 255
+        },
+        {
+          "event": 2,
+          "x": 22,
+          "y": 9,
+          "clipped": true,
+          "whole": 255,
+          "tile": 255
+        },
+        {
+          "event": 5,
+          "x": 22,
+          "y": 9,
+          "clipped": false,
+          "whole": 128,
+          "tile": 127
+        },
+        {
+          "event": 5,
+          "x": 22,
+          "y": 9,
+          "clipped": true,
+          "whole": 128,
+          "tile": 127
+        },
+        {
+          "event": 2,
+          "x": 23,
+          "y": 9,
+          "clipped": false,
+          "whole": 255,
+          "tile": 255
+        },
+        {
+          "event": 2,
+          "x": 23,
+          "y": 9,
+          "clipped": true,
+          "whole": 255,
+          "tile": 255
+        },
+        {
+          "event": 5,
+          "x": 23,
+          "y": 9,
+          "clipped": false,
+          "whole": 128,
+          "tile": 127
+        },
+        {
+          "event": 5,
+          "x": 23,
+          "y": 9,
+          "clipped": true,
+          "whole": 128,
+          "tile": 127
+        },
+        {
+          "event": 2,
+          "x": 27,
+          "y": 9,
+          "clipped": false,
+          "whole": 0,
+          "tile": 0
+        },
+        {
+          "event": 2,
+          "x": 27,
+          "y": 9,
+          "clipped": true,
+          "whole": 0,
+          "tile": 0
+        },
+        {
+          "event": 5,
+          "x": 27,
+          "y": 9,
+          "clipped": false,
+          "whole": 128,
+          "tile": 127
+        },
+        {
+          "event": 5,
+          "x": 27,
+          "y": 9,
+          "clipped": true,
+          "whole": 128,
+          "tile": 127
+        },
+        {
+          "event": 2,
+          "x": 28,
+          "y": 9,
+          "clipped": false,
+          "whole": 0,
+          "tile": 0
+        },
+        {
+          "event": 2,
+          "x": 28,
+          "y": 9,
+          "clipped": true,
+          "whole": 0,
+          "tile": 0
+        },
+        {
+          "event": 5,
+          "x": 28,
+          "y": 9,
+          "clipped": false,
+          "whole": 128,
+          "tile": 127
+        },
+        {
+          "event": 5,
+          "x": 28,
+          "y": 9,
+          "clipped": true,
+          "whole": 128,
+          "tile": 127
+        },
+        {
+          "event": 2,
+          "x": 24,
+          "y": 9,
+          "clipped": false,
+          "whole": 255,
+          "tile": 255
+        },
+        {
+          "event": 2,
+          "x": 24,
+          "y": 9,
+          "clipped": true,
+          "whole": 255,
+          "tile": 255
+        },
+        {
+          "event": 5,
+          "x": 24,
+          "y": 9,
+          "clipped": false,
+          "whole": 128,
+          "tile": 127
+        },
+        {
+          "event": 5,
+          "x": 24,
+          "y": 9,
+          "clipped": true,
+          "whole": 128,
+          "tile": 127
+        },
+        {
+          "event": 2,
+          "x": 25,
+          "y": 9,
+          "clipped": false,
+          "whole": 255,
+          "tile": 255
+        },
+        {
+          "event": 2,
+          "x": 25,
+          "y": 9,
+          "clipped": true,
+          "whole": 255,
+          "tile": 255
+        },
+        {
+          "event": 5,
+          "x": 25,
+          "y": 9,
+          "clipped": false,
+          "whole": 128,
+          "tile": 127
+        },
+        {
+          "event": 5,
+          "x": 25,
+          "y": 9,
+          "clipped": true,
+          "whole": 128,
+          "tile": 127
+        },
+        {
+          "event": 2,
+          "x": 26,
+          "y": 9,
+          "clipped": false,
+          "whole": 255,
+          "tile": 255
+        },
+        {
+          "event": 2,
+          "x": 26,
+          "y": 9,
+          "clipped": true,
+          "whole": 255,
+          "tile": 255
+        },
+        {
+          "event": 5,
+          "x": 26,
+          "y": 9,
+          "clipped": false,
+          "whole": 128,
+          "tile": 127
+        },
+        {
+          "event": 5,
+          "x": 26,
+          "y": 9,
+          "clipped": true,
+          "whole": 128,
+          "tile": 127
+        },
+        {
+          "event": 2,
+          "x": 27,
+          "y": 9,
+          "clipped": false,
+          "whole": 255,
+          "tile": 255
+        },
+        {
+          "event": 2,
+          "x": 27,
+          "y": 9,
+          "clipped": true,
+          "whole": 255,
+          "tile": 255
+        },
+        {
+          "event": 5,
+          "x": 27,
+          "y": 9,
+          "clipped": false,
+          "whole": 128,
+          "tile": 127
+        },
+        {
+          "event": 5,
+          "x": 27,
+          "y": 9,
+          "clipped": true,
+          "whole": 128,
+          "tile": 127
+        },
+        {
+          "event": 2,
+          "x": 31,
+          "y": 9,
+          "clipped": false,
+          "whole": 255,
+          "tile": 255
+        },
+        {
+          "event": 2,
+          "x": 31,
+          "y": 9,
+          "clipped": true,
+          "whole": 255,
+          "tile": 255
+        },
+        {
+          "event": 5,
+          "x": 31,
+          "y": 9,
+          "clipped": false,
+          "whole": 128,
+          "tile": 127
+        },
+        {
+          "event": 5,
+          "x": 31,
+          "y": 9,
+          "clipped": true,
+          "whole": 128,
+          "tile": 127
+        },
+        {
+          "event": 2,
+          "x": 32,
+          "y": 9,
+          "clipped": false,
+          "whole": 255,
+          "tile": 255
+        },
+        {
+          "event": 2,
+          "x": 32,
+          "y": 9,
+          "clipped": true,
+          "whole": 255,
+          "tile": 255
+        },
+        {
+          "event": 5,
+          "x": 32,
+          "y": 9,
+          "clipped": false,
+          "whole": 128,
+          "tile": 127
+        },
+        {
+          "event": 5,
+          "x": 32,
+          "y": 9,
+          "clipped": true,
+          "whole": 128,
+          "tile": 127
+        },
+        {
+          "event": 2,
+          "x": 33,
+          "y": 9,
+          "clipped": false,
+          "whole": 255,
+          "tile": 255
+        },
+        {
+          "event": 2,
+          "x": 33,
+          "y": 9,
+          "clipped": true,
+          "whole": 255,
+          "tile": 255
+        },
+        {
+          "event": 5,
+          "x": 33,
+          "y": 9,
+          "clipped": false,
+          "whole": 128,
+          "tile": 127
+        },
+        {
+          "event": 5,
+          "x": 33,
+          "y": 9,
+          "clipped": true,
+          "whole": 128,
+          "tile": 127
+        },
+        {
+          "event": 2,
+          "x": 34,
+          "y": 9,
+          "clipped": false,
+          "whole": 255,
+          "tile": 255
+        },
+        {
+          "event": 2,
+          "x": 34,
+          "y": 9,
+          "clipped": true,
+          "whole": 255,
+          "tile": 255
+        },
+        {
+          "event": 5,
+          "x": 34,
+          "y": 9,
+          "clipped": false,
+          "whole": 128,
+          "tile": 127
+        },
+        {
+          "event": 5,
+          "x": 34,
+          "y": 9,
+          "clipped": true,
+          "whole": 128,
+          "tile": 127
+        }
+      ]
+    }
+  ],
+  "finding": "Both clipped and unclipped leaf shapes reproduce the same discrepancy. A rectangle control yields alpha128 in both viewports, while a globally flattened and canonical-f32 dashed outline yields128 whole and127 translated. Therefore clipping and compositor mixing are not necessary to reproduce this half-area failure. This does not by itself locate the internal floating-point operation responsible.",
+  "qualification": {
+    "prepared_transform_gate_passed": false,
+    "diagnostic_execution_passed": true,
+    "production_enabled": false
+  },
+  "next_work": "Introduce globally anchored, bounded polygon coverage arithmetic with independent area controls before replacing the backend raster path.",
+  "diagnostic_source_sha256": "71168efda1fdef5c78af649ffac97ccc4444cfc60a271b72fe72bdc60dc273b0"
+}

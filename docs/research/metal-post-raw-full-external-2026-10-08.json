@@ -1,0 +1,21 @@
+{
+  "scope": "Post RAW shader fixes rerun six full-sensor/full-frame Metal controls",
+  "backend": "Metal Apple M4 Max",
+  "passed": 6,
+  "failed": 0,
+  "ignored": 0,
+  "full_camera_inputs_hash_verified_against": "docs/research/metal-full-camera-final-refresh-2026-10-08.json",
+  "full_camera_pixels": 45305939,
+  "full_camera_max_rgb8_difference": 1,
+  "log": "/tmp/rrrah-metal-post-raw-full-external-20261008.log",
+  "log_sha256": "647e898dc7b2711b1da43379ad18de2333a595e00eb48254d68ecdab7dd8181e",
+  "remaining_ignored_case": {
+    "name": "full_f828_managed_rgbe_matches_cpu_reference",
+    "reason": "Previously used /tmp/rrrah-srf-four-channel-reference.u16le no longer exists; no current qualifying dump supplied"
+  },
+  "limitations": [
+    "Prepared linear camera raster transport, not fresh end-to-end decoding",
+    "Compute controls exercise exposure rather than all RAW demosaic",
+    "NVIDIA and physical calibrated HDR luminance unverified"
+  ]
+}

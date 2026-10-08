@@ -1,0 +1,22 @@
+{
+  "scope": "Current GPU shader, RAW upload and full-resolution compute validation",
+  "date": "2026-10-07",
+  "validation": {
+    "library_passed": 49,
+    "compute_passed": 6,
+    "raster_readback_passed": 10,
+    "raw_readback_passed": 11,
+    "failed": 0,
+    "remaining_ignored": 1
+  },
+  "logs": [
+    "/tmp/rrrah-gpu-current-validation.log",
+    "/tmp/rrrah-gpu-full-compute-validation.log"
+  ],
+  "full_compute": "Included both previously ignored full-sensor exposure tests, single-threaded, including managed memory budgets and every-pixel checks.",
+  "limitations": [
+    "Qualified SD10 X3F raster display test remains ignored; required qualified linear PPM was not supplied in this run.",
+    "Metal validation does not qualify NVIDIA/CUDA or physical HDR display output.",
+    "No new performance improvement or general throughput claim."
+  ]
+}

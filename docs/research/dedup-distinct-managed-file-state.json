@@ -1,0 +1,20 @@
+{
+  "status": "verified_native_file_lifecycle",
+  "returncode": 0,
+  "passed": 11,
+  "input_hashes": {
+    "docs/research/dedup-distinct-managed-file-lifecycle-tests.log": "955bd3b5f1fd448568f7c0cfb717556be4f146ef8de0044d26068bbac949f68a",
+    "crates/rrrah-dedup/src/local_scan.rs": "00e97641ae0f7b32bd0e68dd7588b5833c750cc1b46654ca4f6b2b687aa8c53b",
+    "crates/rrrah-dedup/tests/gradient_scale_files.rs": "bafbbbe4aef5e884f71a077fff8b2e0f7588a1efd191b12b62b62fb01a20b5dc",
+    "crates/rrrah-dedup/src/managed_evidence.rs": "f48b7443734ccc4cab82a63dbd0ff2e06278ffbde775097220c602476e968500"
+  },
+  "evidence": [
+    "identity and authored reduced copy confirm; unrelated fixture rejects",
+    "retained output credit persists until last clone drops",
+    "first/middle/final cancellation releases all credit",
+    "mid/late appended source mutation returns Source and releases all credit",
+    "restored source reversed pair confirms",
+    "legacy nine scale file/collection tests remain passing"
+  ],
+  "scope": "Explicit file API only; matcher tables/output scratch admitted, correspondence/inlier result payloads managed. Geometry/decoder allocations and process RSS not fully bounded; no native Linux/Windows or real negative qualification of this API yet."
+}

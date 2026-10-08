@@ -1,0 +1,23 @@
+{
+  "scope": "Folder scan worker failure/shutdown handling",
+  "changes": [
+    "Named fallible worker-thread creation logs spawn failure",
+    "Disconnected ready channel reported instead of indistinguishable empty polling",
+    "App clears pending scan and reports worker failure",
+    "Drop invalidates generation and drains pending/ready owned path lists"
+  ],
+  "gallery_tests_passed": 34,
+  "failed": 0,
+  "ignored_external": 9,
+  "new_controls": [
+    "Disconnected worker channel returns terminal error",
+    "Dropping idle scanner increments generation and disconnects worker output within bounded deadline"
+  ],
+  "log": "/tmp/rrrah-folder-worker-lifecycle-20261008.log",
+  "log_sha256": "7cfec6a1381ddbd52cf2517ed18b419cc0f8dba46b9893368a3951c93ea02cc5",
+  "limitations": [
+    "No injected OS thread-spawn failure; disconnected-channel behavior tested",
+    "Active filesystem syscall cannot be interrupted until it returns",
+    "Physical UI shutdown timing not measured"
+  ]
+}

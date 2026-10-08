@@ -1,0 +1,28 @@
+{
+  "status": "verified",
+  "verified_pairs": 3,
+  "all_native_fields_equal_except_peak": true,
+  "report_hashes": {
+    "docs/research/dedup-managed-pair-growth-controls.json": "8afc84bff0fd283036be094e850fa91316b1839819faf7c7fefb044ddf37f104",
+    "docs/research/dedup-extra-gradient-regions-controls.json": "f9798503784ba2afcd04b56b4cd29368fdb03d867d1da29d2bc0b6dc3009fe67",
+    "docs/research/dedup-extra-gradient-regions-58.json": "1994b54cf5dfe04d47ca44ff12692bb25e5770135826e01a061d9c5b3e57e998"
+  },
+  "managed_peaks": [
+    {
+      "query_id": "200001.jpg",
+      "old_managed_peak": 26042592,
+      "new_managed_peak": 26042576
+    },
+    {
+      "query_id": "200102.jpg",
+      "old_managed_peak": 25092832,
+      "new_managed_peak": 25092816
+    },
+    {
+      "query_id": "200901.jpg",
+      "old_managed_peak": 24747232,
+      "new_managed_peak": 24747216
+    }
+  ],
+  "scope": "Three two-source native controls across frozen versions. No full-corpus performance/RSS, all-query recall/precision, full collection scale or full-library qualification."
+}

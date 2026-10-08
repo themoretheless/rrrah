@@ -1,0 +1,841 @@
+{
+  "manifest_sha256": "6ba843f8f09419efb8ccec9b5d84cc8f086d1dc74ec222f5aa2acae29f9fff01",
+  "probe_sha256": "7d96eacca97b822920e9d741b9c90894f233183db773fa10dfb2959e07cc7705",
+  "required_runs": 8,
+  "completed_runs": 8,
+  "results": [
+    {
+      "query_id": "200001.jpg",
+      "variant": "default",
+      "returncode": 0,
+      "evidence": {
+        "status": "ok",
+        "minimum_corner_score": 0.0001,
+        "spatial_requested": false,
+        "registration_requested": false,
+        "diagnostics": [
+          {
+            "levels": 1,
+            "left_features": 393,
+            "right_features": 395,
+            "correspondences": 3,
+            "match_admission": {
+              "within_distance": 373,
+              "forward_ratio": 16,
+              "mutual": 12,
+              "both_ratios": 3
+            },
+            "inliers": 0,
+            "geometry": null,
+            "pixel_verification": null,
+            "registration_verification": null,
+            "photometric_verification": null
+          },
+          {
+            "levels": 2,
+            "left_features": 542,
+            "right_features": 537,
+            "correspondences": 18,
+            "match_admission": {
+              "within_distance": 524,
+              "forward_ratio": 36,
+              "mutual": 25,
+              "both_ratios": 18
+            },
+            "inliers": 15,
+            "geometry": [
+              [
+                1.9248889985477584,
+                -0.5302815396148883,
+                54.98940663825202
+              ],
+              [
+                0.4692371689482216,
+                1.688969153044343,
+                -237.78257859753148
+              ],
+              [
+                -2.569742006811611e-05,
+                -0.0007503526226948444,
+                1.1672056772471813
+              ]
+            ],
+            "pixel_verification": {
+              "status": "ok",
+              "strict_counts": [
+                [
+                  15847,
+                  26362,
+                  66560
+                ],
+                [
+                  55304,
+                  93440,
+                  93440
+                ]
+              ],
+              "filtered_counts": [
+                [
+                  16494,
+                  25586,
+                  66560
+                ],
+                [
+                  57161,
+                  92220,
+                  93440
+                ]
+              ],
+              "candidate": false
+            },
+            "registration_verification": null,
+            "photometric_verification": [
+              {
+                "mode": "RejectOutsidePolicy",
+                "status": "ok",
+                "fitted_counts": [
+                  [
+                    23827,
+                    25586,
+                    66560
+                  ],
+                  [
+                    83960,
+                    92220,
+                    93440
+                  ]
+                ],
+                "candidate": true
+              },
+              {
+                "mode": "ConstrainedLeastSquares",
+                "status": "ok",
+                "fitted_counts": [
+                  [
+                    23827,
+                    25586,
+                    66560
+                  ],
+                  [
+                    83960,
+                    92220,
+                    93440
+                  ]
+                ],
+                "candidate": true
+              }
+            ]
+          },
+          {
+            "levels": 3,
+            "left_features": 560,
+            "right_features": 554,
+            "correspondences": 18,
+            "match_admission": {
+              "within_distance": 542,
+              "forward_ratio": 41,
+              "mutual": 29,
+              "both_ratios": 18
+            },
+            "inliers": 15,
+            "geometry": [
+              [
+                1.9211652728948152,
+                -0.47545526753606127,
+                42.99365528017577
+              ],
+              [
+                0.47050780683002175,
+                1.7027450022287294,
+                -240.47042192757146
+              ],
+              [
+                -6.151624001664623e-05,
+                -0.0005635586804446796,
+                1.130533660387641
+              ]
+            ],
+            "pixel_verification": {
+              "status": "ok",
+              "strict_counts": [
+                [
+                  16133,
+                  26320,
+                  66560
+                ],
+                [
+                  56382,
+                  93440,
+                  93440
+                ]
+              ],
+              "filtered_counts": [
+                [
+                  16666,
+                  25546,
+                  66560
+                ],
+                [
+                  58476,
+                  92220,
+                  93440
+                ]
+              ],
+              "candidate": false
+            },
+            "registration_verification": null,
+            "photometric_verification": [
+              {
+                "mode": "RejectOutsidePolicy",
+                "status": "ok",
+                "fitted_counts": [
+                  [
+                    24037,
+                    25546,
+                    66560
+                  ],
+                  [
+                    84801,
+                    92220,
+                    93440
+                  ]
+                ],
+                "candidate": true
+              },
+              {
+                "mode": "ConstrainedLeastSquares",
+                "status": "ok",
+                "fitted_counts": [
+                  [
+                    24037,
+                    25546,
+                    66560
+                  ],
+                  [
+                    84801,
+                    92220,
+                    93440
+                  ]
+                ],
+                "candidate": true
+              }
+            ]
+          }
+        ],
+        "scope": "Scale-pyramid verification with fixed pixel criteria and optional explicit registration; no known geometry or semantic accuracy qualification. Public feature allocations outside managed decode accounting."
+      }
+    },
+    {
+      "query_id": "200001.jpg",
+      "variant": "spatial",
+      "returncode": 0,
+      "evidence": {
+        "status": "ok",
+        "minimum_corner_score": 0.0001,
+        "spatial_requested": true,
+        "registration_requested": false,
+        "diagnostics": [
+          {
+            "levels": 1,
+            "left_features": 286,
+            "right_features": 391,
+            "correspondences": 1,
+            "match_admission": {
+              "within_distance": 276,
+              "forward_ratio": 16,
+              "mutual": 6,
+              "both_ratios": 1
+            },
+            "inliers": 0,
+            "geometry": null,
+            "pixel_verification": null,
+            "registration_verification": null,
+            "photometric_verification": null
+          },
+          {
+            "levels": 2,
+            "left_features": 435,
+            "right_features": 533,
+            "correspondences": 21,
+            "match_admission": {
+              "within_distance": 426,
+              "forward_ratio": 48,
+              "mutual": 29,
+              "both_ratios": 21
+            },
+            "inliers": 17,
+            "geometry": [
+              [
+                1.9533793085856461,
+                -0.4440113636752356,
+                32.75730521395735
+              ],
+              [
+                0.4942040305941713,
+                1.750566400272487,
+                -253.19931287869832
+              ],
+              [
+                8.026127069420933e-05,
+                -0.0002880841223364455,
+                1.054436533409973
+              ]
+            ],
+            "pixel_verification": {
+              "status": "ok",
+              "strict_counts": [
+                [
+                  16330,
+                  25648,
+                  66560
+                ],
+                [
+                  58493,
+                  93440,
+                  93440
+                ]
+              ],
+              "filtered_counts": [
+                [
+                  16806,
+                  24882,
+                  66560
+                ],
+                [
+                  60666,
+                  92220,
+                  93440
+                ]
+              ],
+              "candidate": false
+            },
+            "registration_verification": null,
+            "photometric_verification": [
+              {
+                "mode": "RejectOutsidePolicy",
+                "status": "ok",
+                "fitted_counts": [
+                  [
+                    23438,
+                    24882,
+                    66560
+                  ],
+                  [
+                    86093,
+                    92220,
+                    93440
+                  ]
+                ],
+                "candidate": true
+              },
+              {
+                "mode": "ConstrainedLeastSquares",
+                "status": "ok",
+                "fitted_counts": [
+                  [
+                    23438,
+                    24882,
+                    66560
+                  ],
+                  [
+                    86093,
+                    92220,
+                    93440
+                  ]
+                ],
+                "candidate": true
+              }
+            ]
+          },
+          {
+            "levels": 3,
+            "left_features": 453,
+            "right_features": 550,
+            "correspondences": 21,
+            "match_admission": {
+              "within_distance": 443,
+              "forward_ratio": 53,
+              "mutual": 33,
+              "both_ratios": 21
+            },
+            "inliers": 17,
+            "geometry": [
+              [
+                1.9585545644651114,
+                -0.4452731359295878,
+                32.66484698963265
+              ],
+              [
+                0.4963370802401481,
+                1.7481028546556445,
+                -252.62079962489003
+              ],
+              [
+                9.455566329897249e-05,
+                -0.00026455963315521276,
+                1.048489737104062
+              ]
+            ],
+            "pixel_verification": {
+              "status": "ok",
+              "strict_counts": [
+                [
+                  16251,
+                  25686,
+                  66560
+                ],
+                [
+                  58260,
+                  93440,
+                  93440
+                ]
+              ],
+              "filtered_counts": [
+                [
+                  16746,
+                  24920,
+                  66560
+                ],
+                [
+                  60321,
+                  92220,
+                  93440
+                ]
+              ],
+              "candidate": false
+            },
+            "registration_verification": null,
+            "photometric_verification": [
+              {
+                "mode": "RejectOutsidePolicy",
+                "status": "ok",
+                "fitted_counts": [
+                  [
+                    23515,
+                    24920,
+                    66560
+                  ],
+                  [
+                    86093,
+                    92220,
+                    93440
+                  ]
+                ],
+                "candidate": true
+              },
+              {
+                "mode": "ConstrainedLeastSquares",
+                "status": "ok",
+                "fitted_counts": [
+                  [
+                    23515,
+                    24920,
+                    66560
+                  ],
+                  [
+                    86093,
+                    92220,
+                    93440
+                  ]
+                ],
+                "candidate": true
+              }
+            ]
+          }
+        ],
+        "scope": "Scale-pyramid verification with fixed pixel criteria and optional explicit registration; no known geometry or semantic accuracy qualification. Public feature allocations outside managed decode accounting."
+      }
+    },
+    {
+      "query_id": "200101.jpg",
+      "variant": "default",
+      "returncode": 0,
+      "evidence": {
+        "status": "ok",
+        "minimum_corner_score": 0.0001,
+        "spatial_requested": false,
+        "registration_requested": false,
+        "diagnostics": [
+          {
+            "levels": 1,
+            "left_features": 405,
+            "right_features": 438,
+            "correspondences": 1,
+            "match_admission": {
+              "within_distance": 335,
+              "forward_ratio": 2,
+              "mutual": 2,
+              "both_ratios": 1
+            },
+            "inliers": 0,
+            "geometry": null,
+            "pixel_verification": null,
+            "registration_verification": null,
+            "photometric_verification": null
+          },
+          {
+            "levels": 2,
+            "left_features": 740,
+            "right_features": 771,
+            "correspondences": 1,
+            "match_admission": {
+              "within_distance": 633,
+              "forward_ratio": 6,
+              "mutual": 4,
+              "both_ratios": 1
+            },
+            "inliers": 0,
+            "geometry": null,
+            "pixel_verification": null,
+            "registration_verification": null,
+            "photometric_verification": null
+          },
+          {
+            "levels": 3,
+            "left_features": 775,
+            "right_features": 804,
+            "correspondences": 1,
+            "match_admission": {
+              "within_distance": 664,
+              "forward_ratio": 7,
+              "mutual": 5,
+              "both_ratios": 1
+            },
+            "inliers": 0,
+            "geometry": null,
+            "pixel_verification": null,
+            "registration_verification": null,
+            "photometric_verification": null
+          }
+        ],
+        "scope": "Scale-pyramid verification with fixed pixel criteria and optional explicit registration; no known geometry or semantic accuracy qualification. Public feature allocations outside managed decode accounting."
+      }
+    },
+    {
+      "query_id": "200101.jpg",
+      "variant": "spatial",
+      "returncode": 0,
+      "evidence": {
+        "status": "ok",
+        "minimum_corner_score": 0.0001,
+        "spatial_requested": true,
+        "registration_requested": false,
+        "diagnostics": [
+          {
+            "levels": 1,
+            "left_features": 427,
+            "right_features": 425,
+            "correspondences": 2,
+            "match_admission": {
+              "within_distance": 372,
+              "forward_ratio": 3,
+              "mutual": 3,
+              "both_ratios": 2
+            },
+            "inliers": 0,
+            "geometry": null,
+            "pixel_verification": null,
+            "registration_verification": null,
+            "photometric_verification": null
+          },
+          {
+            "levels": 2,
+            "left_features": 741,
+            "right_features": 702,
+            "correspondences": 2,
+            "match_admission": {
+              "within_distance": 658,
+              "forward_ratio": 7,
+              "mutual": 5,
+              "both_ratios": 2
+            },
+            "inliers": 0,
+            "geometry": null,
+            "pixel_verification": null,
+            "registration_verification": null,
+            "photometric_verification": null
+          },
+          {
+            "levels": 3,
+            "left_features": 776,
+            "right_features": 735,
+            "correspondences": 2,
+            "match_admission": {
+              "within_distance": 689,
+              "forward_ratio": 8,
+              "mutual": 6,
+              "both_ratios": 2
+            },
+            "inliers": 0,
+            "geometry": null,
+            "pixel_verification": null,
+            "registration_verification": null,
+            "photometric_verification": null
+          }
+        ],
+        "scope": "Scale-pyramid verification with fixed pixel criteria and optional explicit registration; no known geometry or semantic accuracy qualification. Public feature allocations outside managed decode accounting."
+      }
+    },
+    {
+      "query_id": "200201.jpg",
+      "variant": "default",
+      "returncode": 0,
+      "evidence": {
+        "status": "ok",
+        "minimum_corner_score": 0.0001,
+        "spatial_requested": false,
+        "registration_requested": false,
+        "diagnostics": [
+          {
+            "levels": 1,
+            "left_features": 434,
+            "right_features": 475,
+            "correspondences": 2,
+            "match_admission": {
+              "within_distance": 400,
+              "forward_ratio": 2,
+              "mutual": 2,
+              "both_ratios": 2
+            },
+            "inliers": 0,
+            "geometry": null,
+            "pixel_verification": null,
+            "registration_verification": null,
+            "photometric_verification": null
+          },
+          {
+            "levels": 2,
+            "left_features": 775,
+            "right_features": 844,
+            "correspondences": 4,
+            "match_admission": {
+              "within_distance": 739,
+              "forward_ratio": 7,
+              "mutual": 7,
+              "both_ratios": 4
+            },
+            "inliers": 0,
+            "geometry": null,
+            "pixel_verification": null,
+            "registration_verification": null,
+            "photometric_verification": null
+          },
+          {
+            "levels": 3,
+            "left_features": 810,
+            "right_features": 882,
+            "correspondences": 6,
+            "match_admission": {
+              "within_distance": 772,
+              "forward_ratio": 9,
+              "mutual": 8,
+              "both_ratios": 6
+            },
+            "inliers": 0,
+            "geometry": null,
+            "pixel_verification": null,
+            "registration_verification": null,
+            "photometric_verification": null
+          }
+        ],
+        "scope": "Scale-pyramid verification with fixed pixel criteria and optional explicit registration; no known geometry or semantic accuracy qualification. Public feature allocations outside managed decode accounting."
+      }
+    },
+    {
+      "query_id": "200201.jpg",
+      "variant": "spatial",
+      "returncode": 0,
+      "evidence": {
+        "status": "ok",
+        "minimum_corner_score": 0.0001,
+        "spatial_requested": true,
+        "registration_requested": false,
+        "diagnostics": [
+          {
+            "levels": 1,
+            "left_features": 441,
+            "right_features": 431,
+            "correspondences": 2,
+            "match_admission": {
+              "within_distance": 412,
+              "forward_ratio": 5,
+              "mutual": 5,
+              "both_ratios": 2
+            },
+            "inliers": 0,
+            "geometry": null,
+            "pixel_verification": null,
+            "registration_verification": null,
+            "photometric_verification": null
+          },
+          {
+            "levels": 2,
+            "left_features": 758,
+            "right_features": 737,
+            "correspondences": 6,
+            "match_admission": {
+              "within_distance": 727,
+              "forward_ratio": 12,
+              "mutual": 10,
+              "both_ratios": 6
+            },
+            "inliers": 0,
+            "geometry": null,
+            "pixel_verification": null,
+            "registration_verification": null,
+            "photometric_verification": null
+          },
+          {
+            "levels": 3,
+            "left_features": 793,
+            "right_features": 775,
+            "correspondences": 9,
+            "match_admission": {
+              "within_distance": 759,
+              "forward_ratio": 15,
+              "mutual": 12,
+              "both_ratios": 9
+            },
+            "inliers": 0,
+            "geometry": null,
+            "pixel_verification": null,
+            "registration_verification": null,
+            "photometric_verification": null
+          }
+        ],
+        "scope": "Scale-pyramid verification with fixed pixel criteria and optional explicit registration; no known geometry or semantic accuracy qualification. Public feature allocations outside managed decode accounting."
+      }
+    },
+    {
+      "query_id": "200301.jpg",
+      "variant": "default",
+      "returncode": 0,
+      "evidence": {
+        "status": "ok",
+        "minimum_corner_score": 0.0001,
+        "spatial_requested": false,
+        "registration_requested": false,
+        "diagnostics": [
+          {
+            "levels": 1,
+            "left_features": 90,
+            "right_features": 428,
+            "correspondences": 1,
+            "match_admission": {
+              "within_distance": 90,
+              "forward_ratio": 1,
+              "mutual": 1,
+              "both_ratios": 1
+            },
+            "inliers": 0,
+            "geometry": null,
+            "pixel_verification": null,
+            "registration_verification": null,
+            "photometric_verification": null
+          },
+          {
+            "levels": 2,
+            "left_features": 130,
+            "right_features": 614,
+            "correspondences": 2,
+            "match_admission": {
+              "within_distance": 130,
+              "forward_ratio": 5,
+              "mutual": 4,
+              "both_ratios": 2
+            },
+            "inliers": 0,
+            "geometry": null,
+            "pixel_verification": null,
+            "registration_verification": null,
+            "photometric_verification": null
+          },
+          {
+            "levels": 3,
+            "left_features": 146,
+            "right_features": 616,
+            "correspondences": 1,
+            "match_admission": {
+              "within_distance": 146,
+              "forward_ratio": 6,
+              "mutual": 4,
+              "both_ratios": 1
+            },
+            "inliers": 0,
+            "geometry": null,
+            "pixel_verification": null,
+            "registration_verification": null,
+            "photometric_verification": null
+          }
+        ],
+        "scope": "Scale-pyramid verification with fixed pixel criteria and optional explicit registration; no known geometry or semantic accuracy qualification. Public feature allocations outside managed decode accounting."
+      }
+    },
+    {
+      "query_id": "200301.jpg",
+      "variant": "spatial",
+      "returncode": 0,
+      "evidence": {
+        "status": "ok",
+        "minimum_corner_score": 0.0001,
+        "spatial_requested": true,
+        "registration_requested": false,
+        "diagnostics": [
+          {
+            "levels": 1,
+            "left_features": 89,
+            "right_features": 416,
+            "correspondences": 1,
+            "match_admission": {
+              "within_distance": 89,
+              "forward_ratio": 1,
+              "mutual": 1,
+              "both_ratios": 1
+            },
+            "inliers": 0,
+            "geometry": null,
+            "pixel_verification": null,
+            "registration_verification": null,
+            "photometric_verification": null
+          },
+          {
+            "levels": 2,
+            "left_features": 129,
+            "right_features": 601,
+            "correspondences": 2,
+            "match_admission": {
+              "within_distance": 129,
+              "forward_ratio": 5,
+              "mutual": 4,
+              "both_ratios": 2
+            },
+            "inliers": 0,
+            "geometry": null,
+            "pixel_verification": null,
+            "registration_verification": null,
+            "photometric_verification": null
+          },
+          {
+            "levels": 3,
+            "left_features": 145,
+            "right_features": 603,
+            "correspondences": 1,
+            "match_admission": {
+              "within_distance": 145,
+              "forward_ratio": 6,
+              "mutual": 4,
+              "both_ratios": 1
+            },
+            "inliers": 0,
+            "geometry": null,
+            "pixel_verification": null,
+            "registration_verification": null,
+            "photometric_verification": null
+          }
+        ],
+        "scope": "Scale-pyramid verification with fixed pixel criteria and optional explicit registration; no known geometry or semantic accuracy qualification. Public feature allocations outside managed decode accounting."
+      }
+    }
+  ],
+  "scope": "Fixed4x4 spatial quotas32 percell versus default, unchanged descriptor/geometry/pixel criteria. Diagnostic allocations unmanaged; no production promotion."
+}

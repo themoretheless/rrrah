@@ -53,6 +53,23 @@ pub enum EpsRasterError {
     #[error(transparent)]
     Fill(#[from] EpsFillError),
 }
+impl EpsRasterError {
+    fn capacity_refused(&self) -> bool {
+        use crate::{EpsStrokeError as S, EpsStrokePrepareError as P};
+        matches!(
+            self,
+            Self::Memory(BufferError::Capacity { .. })
+                | Self::Graphics(EpsGraphicsError::Memory(BufferError::Capacity { .. }))
+                | Self::Flatten(EpsFlattenError::Memory(BufferError::Capacity { .. }))
+                | Self::StrokeOutline(S::Memory(BufferError::Capacity { .. }))
+                | Self::StrokePreparation(P::Graphics(EpsGraphicsError::Memory(
+                    BufferError::Capacity { .. }
+                )))
+                | Self::StrokePreparation(P::Flatten(EpsFlattenError::Memory(BufferError::Capacity { .. })))
+                | Self::StrokePreparation(P::Stroke(S::Memory(BufferError::Capacity { .. })))
+        )
+    }
+}
 /// Renders supported fills in source order into straight-alpha sRGB RGBA bytes.
 /// `viewport` maps EPS world coordinates into top-to-bottom pixel coordinates.
 /// Unsupported operations are rejected before output admission. Private
@@ -105,10 +122,27 @@ fn rasterize<F: FnMut() -> bool>(
     let pixels = u64::from(width)
         .checked_mul(u64::from(height))
         .ok_or(EpsRasterError::Limit)?;
+    let mut clip_visits = 0u64;
+    for (index, paint) in scene.paints().iter().enumerate() {
+        let mut clip = paint.clip;
+        let mut before = index;
+        while let Some(at) = clip {
+            if cancelled() {
+                return Err(EpsRasterError::Cancelled);
+            }
+            if at >= before {
+                return Err(EpsRasterError::Limit);
+            }
+            clip_visits = clip_visits.checked_add(1).ok_or(EpsRasterError::Limit)?;
+            before = at;
+            clip = scene.paints()[at].clip;
+        }
+    }
     let work = pixels
         .checked_mul(
             (scene.paints().len() as u64)
-                .checked_add(1)
+                .checked_add(clip_visits)
+                .and_then(|n| n.checked_add(1))
                 .ok_or(EpsRasterError::Limit)?,
         )
         .ok_or(EpsRasterError::Limit)?;
@@ -128,7 +162,9 @@ fn rasterize<F: FnMut() -> bool>(
         if paint.kind == EpsPaintKind::Stroke && !strokes {
             return Err(EpsRasterError::Stroke);
         }
-        if matches!(paint.style.color, EpsDeviceColor::Cmyk(_)) {
+        if !matches!(paint.kind, EpsPaintKind::ClipNonZero | EpsPaintKind::ClipEvenOdd)
+            && matches!(paint.style.color, EpsDeviceColor::Cmyk(_))
+        {
             return Err(EpsRasterError::Cmyk);
         }
     }
@@ -137,29 +173,123 @@ fn rasterize<F: FnMut() -> bool>(
         .and_then(|n| usize::try_from(n).ok())
         .ok_or(EpsRasterError::Limit)?;
     let mut rgba = budget.try_buffer(bytes, 0u8)?;
+    let mut cached_clip: Option<(usize, SharedBuffer<u64>)> = None;
     for (index, paint) in scene.paints().iter().enumerate() {
-        let flat = if paint.kind == EpsPaintKind::Stroke {
-            let prepared =
-                crate::prepare_eps_stroke(scene, index, viewport, limits.flatten, budget, &mut cancelled)?;
-            crate::outline_eps_prepared_stroke(&prepared, limits.stroke, budget, &mut cancelled)?
-        } else {
-            let path = scene.prepare_path(index, viewport, budget, &mut cancelled)?;
-            flatten_eps_path(&path, limits.flatten, budget, &mut cancelled)?
+        if matches!(paint.kind, EpsPaintKind::ClipNonZero | EpsPaintKind::ClipEvenOdd) {
+            continue;
+        }
+        if paint.clip.is_none() {
+            cached_clip = None;
+        }
+        let mut prepare = || -> Result<SharedBuffer<crate::EpsPathSegment>, EpsRasterError> {
+            if paint.kind == EpsPaintKind::Stroke {
+                let prepared = crate::prepare_eps_stroke(
+                    scene,
+                    index,
+                    viewport,
+                    limits.flatten,
+                    budget,
+                    &mut cancelled,
+                )?;
+                Ok(crate::outline_eps_prepared_stroke(
+                    &prepared,
+                    limits.stroke,
+                    budget,
+                    &mut cancelled,
+                )?)
+            } else {
+                let path = scene.prepare_path(index, viewport, budget, &mut cancelled)?;
+                Ok(flatten_eps_path(&path, limits.flatten, budget, &mut cancelled)?)
+            }
+        };
+        let flat = match prepare() {
+            Err(error) if error.capacity_refused() && cached_clip.is_some() => {
+                drop(cached_clip.take());
+                prepare()?
+            }
+            result => result?,
         };
         if flat.is_empty() {
             // Path preparation already validated geometry and cancellation.
             // No segments can contribute pixels; avoid allocating a full mask.
             continue;
         }
-        let coverage = fill_eps_path(
-            &flat,
-            width,
-            height,
-            paint.kind == EpsPaintKind::FillEvenOdd,
-            limits.fill,
-            budget,
-            &mut cancelled,
-        )?;
+        let coverage = if paint.clip.is_some() {
+            let mut build_mask = || {
+                crate::eps_fill::fill_eps_path_sample_mask(
+                    &flat,
+                    width,
+                    height,
+                    paint.kind == EpsPaintKind::FillEvenOdd,
+                    limits.fill,
+                    budget,
+                    &mut cancelled,
+                )
+            };
+            let initial = build_mask();
+            let mut combined = match initial {
+                Err(EpsFillError::Memory(BufferError::Capacity { .. })) if cached_clip.is_some() => {
+                    // Cached pixels are disposable; retry only a refused admission,
+                    // never cancellation, invalid geometry or a work limit.
+                    drop(cached_clip.take());
+                    build_mask()?
+                }
+                result => result?,
+            };
+            let mut clip = paint.clip;
+            while let Some(at) = clip {
+                let record = &scene.paints()[at];
+                let reuse = if let Some((previous, _)) = cached_clip.as_ref() {
+                    scene.same_clip_path(*previous, at, &mut cancelled)?
+                } else {
+                    false
+                };
+                if !reuse {
+                    // Release the old entry before admitting replacement storage.
+                    drop(cached_clip.take());
+                    let path = scene.prepare_path(at, viewport, budget, &mut cancelled)?;
+                    let flat_clip = flatten_eps_path(&path, limits.flatten, budget, &mut cancelled)?;
+                    drop(path);
+                    let mask = crate::eps_fill::fill_eps_path_sample_mask(
+                        &flat_clip,
+                        width,
+                        height,
+                        record.kind == EpsPaintKind::ClipEvenOdd,
+                        limits.fill,
+                        budget,
+                        &mut cancelled,
+                    )?;
+                    cached_clip = Some((at, mask.freeze()));
+                }
+                let mask = &cached_clip.as_ref().ok_or(EpsRasterError::Limit)?.1;
+                for (index, (bits, &clip_bits)) in combined.iter_mut().zip(mask.iter()).enumerate() {
+                    if index % 4096 == 0 && cancelled() {
+                        return Err(EpsRasterError::Cancelled);
+                    }
+                    *bits &= clip_bits;
+                }
+                clip = record.clip;
+            }
+            let mut alpha = budget.try_buffer(pixels as usize, 0u8)?;
+            let total = u32::from(limits.fill.samples).pow(2);
+            for (index, (alpha, bits)) in alpha.iter_mut().zip(combined.iter()).enumerate() {
+                if index % 4096 == 0 && cancelled() {
+                    return Err(EpsRasterError::Cancelled);
+                }
+                *alpha = ((bits.count_ones() * 255 + total / 2) / total) as u8;
+            }
+            alpha.freeze()
+        } else {
+            fill_eps_path(
+                &flat,
+                width,
+                height,
+                paint.kind == EpsPaintKind::FillEvenOdd,
+                limits.fill,
+                budget,
+                &mut cancelled,
+            )?
+        };
         drop(flat);
         let color = match paint.style.color {
             EpsDeviceColor::Gray(g) => [g; 3],
@@ -377,7 +507,195 @@ mod tests {
         .unwrap();
         compare_reference_cases(reference["cases"].as_array().unwrap());
     }
+    #[test]
+    fn independent_zero_adjust_arc_pixels_match_ghostscript() {
+        let reference: serde_json::Value = serde_json::from_str(include_str!(
+            "../../../tests/fixtures/eps/arc-pixel-zero-adjust-ghostscript-reference.json"
+        ))
+        .unwrap();
+        assert_eq!(reference["cases"].as_array().unwrap().len(), 6);
+        let mut limits = EpsRasterLimits::default();
+        limits.fill.samples = 1;
+        let cases: Vec<_> = reference["cases"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .filter(|case| case["name"] != "ellipse")
+            .cloned()
+            .collect();
+        assert_eq!(cases.len(), 5);
+        compare_reference_cases_with_limits(&cases, limits);
+    }
+    #[test]
+    #[ignore = "default Ghostscript fill adjustment differs from native center coverage"]
+    fn independent_default_adjust_arc_pixel_qualification() {
+        let reference: serde_json::Value = serde_json::from_str(include_str!(
+            "../../../tests/fixtures/eps/arc-pixel-ghostscript-reference.json"
+        ))
+        .unwrap();
+        compare_reference_cases(reference["cases"].as_array().unwrap());
+    }
+    #[test]
+    #[ignore = "zero-adjust ellipse boundary differs at pixel 19; keep full qualification open"]
+    fn independent_all_zero_adjust_arc_pixel_qualification() {
+        let reference: serde_json::Value = serde_json::from_str(include_str!(
+            "../../../tests/fixtures/eps/arc-pixel-zero-adjust-ghostscript-reference.json"
+        ))
+        .unwrap();
+        let mut limits = EpsRasterLimits::default();
+        limits.fill.samples = 1;
+        compare_reference_cases_with_limits(reference["cases"].as_array().unwrap(), limits);
+    }
+    #[test]
+    fn independent_clip_pixels_match_ghostscript() {
+        let reference: serde_json::Value = serde_json::from_str(include_str!(
+            "../../../tests/fixtures/eps/clip-pixel-ghostscript-reference.json"
+        ))
+        .unwrap();
+        assert_eq!(reference["cases"].as_array().unwrap().len(), 10);
+        compare_reference_cases(reference["cases"].as_array().unwrap());
+    }
+    #[test]
+    fn subpixel_clip_intersects_samples_without_multiplying_alpha() {
+        let root = MemoryBudget::new(100_000);
+        for disjoint in [false, true] {
+            let mut g = EpsGraphics::new(
+                EpsGraphicsLimits {
+                    max_nodes: 32,
+                    max_paints: 4,
+                    max_saved_states: 1,
+                },
+                &root,
+                || false,
+            )
+            .unwrap();
+            for offset in [0., if disjoint { 0.5 } else { 0. }] {
+                g.new_path();
+                g.move_to(offset, 0.).unwrap();
+                g.line_to(offset + 0.5, 0.).unwrap();
+                g.line_to(offset + 0.5, 1.).unwrap();
+                g.line_to(offset, 1.).unwrap();
+                g.clip(false).unwrap();
+            }
+            g.paint_rectangle(0., 0., 1., 1., EpsPaintKind::FillNonZero)
+                .unwrap();
+            let scene = g.finish();
+            let target = MemoryBudget::new(100_000);
+            for samples in 1..=8 {
+                let mut limits = EpsRasterLimits::default();
+                limits.fill.samples = samples;
+                let rgba = rasterize_eps_scene(
+                    &scene,
+                    1,
+                    1,
+                    [1., 0., 0., 1., 0., 0.],
+                    EpsRasterColorPolicy::DeviceGrayRgbAsSrgb,
+                    limits,
+                    &target,
+                    || false,
+                )
+                .unwrap();
+                let alpha = if disjoint {
+                    0
+                } else {
+                    (u32::from(samples / 2) * 255 + u32::from(samples) / 2) / u32::from(samples)
+                } as u8;
+                assert_eq!(&rgba[..], &[0, 0, 0, alpha]);
+                drop(rgba);
+                assert_eq!(target.used(), 0);
+            }
+            let refused = MemoryBudget::new(3);
+            assert!(
+                rasterize_eps_scene(
+                    &scene,
+                    1,
+                    1,
+                    [1., 0., 0., 1., 0., 0.],
+                    EpsRasterColorPolicy::DeviceGrayRgbAsSrgb,
+                    EpsRasterLimits::default(),
+                    &refused,
+                    || false
+                )
+                .is_err()
+            );
+            assert_eq!((refused.used(), refused.peak()), (0, 0));
+            let mut ticks = 0;
+            assert!(
+                rasterize_eps_scene(
+                    &scene,
+                    1,
+                    1,
+                    [1., 0., 0., 1., 0., 0.],
+                    EpsRasterColorPolicy::DeviceGrayRgbAsSrgb,
+                    EpsRasterLimits::default(),
+                    &target,
+                    || {
+                        ticks += 1;
+                        ticks == 40
+                    }
+                )
+                .is_err()
+            );
+            assert_eq!(target.used(), 0);
+            drop(scene);
+            assert_eq!(root.used(), 0);
+        }
+    }
+    #[test]
+    fn cached_clip_yields_to_complex_paint_mask_admission() {
+        let scene_root = MemoryBudget::new(1_000_000);
+        let mut g = EpsGraphics::new(
+            EpsGraphicsLimits {
+                max_nodes: 1024,
+                max_paints: 4,
+                max_saved_states: 0,
+            },
+            &scene_root,
+            || false,
+        )
+        .unwrap();
+        g.clip_rectangle(0., 0., 128., 128.).unwrap();
+        g.paint_rectangle(0., 0., 128., 128., EpsPaintKind::FillNonZero)
+            .unwrap();
+        g.move_to(0., 0.).unwrap();
+        for y in 1..512 {
+            g.line_to(if y % 2 == 0 { 0. } else { 127. }, y as f64 / 4.)
+                .unwrap();
+        }
+        g.close_path().unwrap();
+        g.paint(EpsPaintKind::FillNonZero).unwrap();
+        let scene = g.finish();
+        for size in [1, 128] {
+            let generous = MemoryBudget::new(2_000_000);
+            let render = |root: &MemoryBudget| {
+                rasterize_eps_scene(
+                    &scene,
+                    size,
+                    size,
+                    [1., 0., 0., 1., 0., 0.],
+                    EpsRasterColorPolicy::DeviceGrayRgbAsSrgb,
+                    EpsRasterLimits::default(),
+                    root,
+                    || false,
+                )
+            };
+            let expected = render(&generous).unwrap();
+            let peak = generous.peak();
+            let tight = MemoryBudget::new(peak - 1);
+            let actual = render(&tight).expect("discard clip cache and retry mask admission");
+            assert_eq!(&actual[..], &expected[..]);
+            assert!(tight.peak() < peak);
+            drop(actual);
+            drop(expected);
+            assert_eq!((tight.used(), generous.used()), (0, 0));
+        }
+        drop(scene);
+        assert_eq!(scene_root.used(), 0);
+    }
     fn compare_reference_cases(cases: &[serde_json::Value]) {
+        compare_reference_cases_with_limits(cases, EpsRasterLimits::default());
+    }
+    fn compare_reference_cases_with_limits(cases: &[serde_json::Value], limits: EpsRasterLimits) {
         for case in cases {
             let root = MemoryBudget::new(1_000_000);
             let code = case["source"].as_str().unwrap();
@@ -412,7 +730,7 @@ mod tests {
                 8,
                 [1., 0., 0., -1., 0., 8.],
                 EpsRasterColorPolicy::DeviceGrayRgbAsSrgb,
-                EpsRasterLimits::default(),
+                limits,
                 &root,
                 || false,
             )

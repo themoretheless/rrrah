@@ -1,0 +1,36 @@
+{
+  "scope": "External prefetch regression after Metal HDR model fix",
+  "passed": 30,
+  "failed": 0,
+  "ignored": 0,
+  "log": "/tmp/rrrah-metal-prefetch-final.log",
+  "inputs": [
+    {
+      "path": "tests/IMG_9043.CR3",
+      "sha256": "d06cbb10e84882cf130430bdc88ed2652c2622b96dea8d6a854c09e3bee37e59"
+    },
+    {
+      "path": "/tmp/rrrah-sony-f828.srf",
+      "sha256": "07739f94bcab0c7e198d418ac65172d0dce04bb84a7683ecffd0bfe4b32f6d79"
+    },
+    {
+      "path": "/tmp/rrrah-app-first.eip",
+      "sha256": "c78041f5bcb2cd0935cad10da6b311ce5f239c62407060046037ad2bb28c3c06"
+    },
+    {
+      "path": "/tmp/rrrah-app-second.eip",
+      "sha256": "23e5e130e0a14c78bc661166a2c785ec4ea7df1782b9ac9bb32b89759a659cda"
+    },
+    {
+      "path": "/tmp/rrrah-integrated-ai-corpus/VectorApple.ai",
+      "sha256": "c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06"
+    },
+    {
+      "path": "/tmp/rrrah-integrated-ai-corpus/one.ai",
+      "sha256": "97786949c268233a446e1738fb9c2f941e4d109811bd2f972948cdb7a45d64b4"
+    }
+  ],
+  "limitations": [
+    "Prefetch tests qualify selected sources, cache behavior and payload preservation; not physical GPU display or universal format support."
+  ]
+}

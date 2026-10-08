@@ -1,0 +1,33 @@
+{
+  "status": "verified_updated_additional_failure_evidence",
+  "verified_rows": 2,
+  "required_pairs": 2,
+  "counts": {
+    "local_supported": 1,
+    "miss": 1,
+    "native_error": 0
+  },
+  "summary": [
+    {
+      "query": "201303.jpg",
+      "outcome": "miss",
+      "matches": 42,
+      "inliers": 0,
+      "support_count": 0
+    },
+    {
+      "query": "201401.jpg",
+      "outcome": "local_supported",
+      "matches": 6275,
+      "inliers": 6007,
+      "support_count": 62
+    }
+  ],
+  "input_hashes": {
+    "docs/research/dedup-updated-additional-failures.json": "09ea6b2517321e45ebdebc04c9d728c5686af8a9b79a6ab628afcec8551afba6",
+    "scripts/verify-dedup-scale-similarity-diagnostic.py": "41a4c0583f4a99677e716bae43ed976cfda409703fe2ec6236da3de5d4f897e4",
+    "scripts/dedup_jpeg_domain.py": "a9986aabe3428100e1b061a70f6fb7f1f87e1b6c8552484b550e764a04746921",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-updated-additional-failures.py": "c16d467f498c61e019d3229e00a1b80af0cfea5518ed67ea415f5707868fbc7f"
+  },
+  "scope": "Source/archive hashes, ordered origin pairs, same-recipe positive parity, typed stdout, distinct locations, geometry residuals and regional arithmetic/domain bounds. Errors remain unresolved denominator rows. No whole identity, semantic precision, full-pixel resampling oracle or indexed full-collection proof."
+}

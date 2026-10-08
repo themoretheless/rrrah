@@ -1,0 +1,68 @@
+{
+  "status": "verified_terminal_color_counterexamples_and_targeted_rejections",
+  "negative_cases": 156,
+  "color_region_supports": 6,
+  "source_cases": 5,
+  "summary": [
+    {
+      "source": "201900.jpg",
+      "color_region_supports": 1,
+      "native_points": 11,
+      "native_model": null,
+      "native_supports": 0,
+      "report": "docs/research/dedup-affine-grid-201900-native-search.json",
+      "audit": "docs/research/dedup-affine-grid-201900-native-search-audit.json"
+    },
+    {
+      "source": "203100.jpg",
+      "color_region_supports": 2,
+      "native_points": 21,
+      "native_model": null,
+      "native_supports": 0,
+      "report": "docs/research/dedup-affine-grid-203100-native-search.json",
+      "audit": "docs/research/dedup-affine-grid-203100-native-search-audit.json"
+    },
+    {
+      "source": "207300.jpg",
+      "color_region_supports": 1,
+      "native_points": 15,
+      "native_model": null,
+      "native_supports": 0,
+      "report": "docs/research/dedup-affine-grid-207300-native-search.json",
+      "audit": "docs/research/dedup-affine-grid-207300-native-search-audit.json"
+    },
+    {
+      "source": "210600.jpg",
+      "color_region_supports": 1,
+      "native_points": 22,
+      "native_model": null,
+      "native_supports": 0,
+      "report": "docs/research/dedup-affine-grid-210600-native-search.json",
+      "audit": "docs/research/dedup-affine-grid-210600-native-search-audit.json"
+    },
+    {
+      "source": "213500.jpg",
+      "color_region_supports": 1,
+      "native_points": 23,
+      "native_model": null,
+      "native_supports": 0,
+      "report": "docs/research/dedup-affine-grid-213500-native-search.json",
+      "audit": "docs/research/dedup-affine-grid-213500-native-search-audit.json"
+    }
+  ],
+  "input_hashes": {
+    "docs/research/dedup-native-screen-affine-color-grid-negatives-meanfix.json": "03c99391581180b782ebede58d50cf6df6b6db4c6be035d518557afd495bb9af",
+    "docs/research/dedup-affine-grid-meanfix-terminal-audit.json": "deed8c626e7e61dc58ab9505798f307feeb5dcb7b2dee55ee12cba9ea2e114f7",
+    "docs/research/dedup-affine-grid-201900-native-search.json": "a1f2dc62190cea3bf7865885e9a27ef6eac23c61db92c4c87b49bd773ea0f906",
+    "docs/research/dedup-affine-grid-201900-native-search-audit.json": "50ec0a89ea46dc193dbb06f6b0226ecdfa2db63cc3cdd13e3ea118232441d4bb",
+    "docs/research/dedup-affine-grid-203100-native-search.json": "db7889f07beb91a023a1596c0c33e07fe255c23477cfc864304075e4978b2b13",
+    "docs/research/dedup-affine-grid-203100-native-search-audit.json": "a6c7166703e18bb1a023b6e3ae9e982801e1a07e491ba968a1ced3a8f7db9efe",
+    "docs/research/dedup-affine-grid-207300-native-search.json": "389c2ca0418e9c75a2483423b12f7efb6e7ecd9d9822471f58bee864e5009fb6",
+    "docs/research/dedup-affine-grid-207300-native-search-audit.json": "c9ebb35c561c8c269e958d085c1e4155491ab77a79a7ed0fa53333e5165f4edf",
+    "docs/research/dedup-affine-grid-210600-native-search.json": "b3668521d2e4cd5bcfadfe545a297843502d4f8285657ea534b98cf984aad103",
+    "docs/research/dedup-affine-grid-210600-native-search-audit.json": "0ae239aa78307c2ea825b94d605fe7f66d3b43eb42a7bca5c35a950e357f8dac",
+    "docs/research/dedup-affine-grid-213500-native-search.json": "17bdf5e63d9dc07e28a8493085f9713fd5a3a8625fd9e2df397d96ddd3c604aa",
+    "docs/research/dedup-affine-grid-213500-native-search-audit.json": "c466463c1f3a2c9a36352a8be8faec6153ed0896f2f45e435a771f31654bb140"
+  },
+  "scope": "Full supplied-model negative color grid at meanfix revision plus five separately qualified targeted native no-model rejections at preserved search revisions. Not an integrated all156 retrieval gate, all-query/current rank precision or broad copy recall."
+}

@@ -1,0 +1,88 @@
+    Blocking waiting for file lock on build directory
+   Compiling moxcms v0.8.1 (/workspace/vendor/moxcms)
+   Compiling image v0.25.10
+   Compiling hayro-interpret v0.7.0 (/workspace/vendor/hayro-interpret)
+   Compiling rrrah-memory v0.1.0 (/workspace/crates/rrrah-memory)
+   Compiling rrrah-core v0.1.0 (/workspace/crates/rrrah-core)
+   Compiling hayro v0.7.1 (/workspace/vendor/hayro)
+   Compiling jxl-oxide v0.12.6
+   Compiling rrrah-dedup v0.1.0 (/workspace/crates/rrrah-dedup)
+   Compiling rrrah-decode v0.1.0 (/workspace/crates/rrrah-decode)
+warning: taking a mutable reference to a `const` item
+   --> crates/rrrah-dedup/src/managed_metric.rs:218:59
+    |
+218 |                     .search(query, radius, entries.len(), &mut usize::MAX, &budget, || false)
+    |                                                           ^^^^^^^^^^^^^^^
+    |
+    = note: each usage of a `const` item creates a new temporary
+    = note: the mutable reference will refer to this temporary, not the original `const` item
+note: `const` item defined here
+   --> /rustc/88d9e12ae178fab0fb5cc050a94da85685d449ea/library/core/src/num/uint_macros.rs:51:8
+   --> /rustc/88d9e12ae178fab0fb5cc050a94da85685d449ea/library/core/src/num/mod.rs:1449:4
+   ::: /rustc/88d9e12ae178fab0fb5cc050a94da85685d449ea/library/core/src/num/mod.rs:1473:5
+    |
+    = note: in this macro invocation
+    = note: `#[warn(const_item_mutation)]` on by default
+    = note: this warning originates in the macro `uint_impl` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+warning: taking a mutable reference to a `const` item
+   --> crates/rrrah-dedup/src/managed_metric.rs:237:36
+    |
+237 |             index.search(0, 64, 0, &mut usize::MAX, &budget, || false),
+    |                                    ^^^^^^^^^^^^^^^
+    |
+    = note: each usage of a `const` item creates a new temporary
+    = note: the mutable reference will refer to this temporary, not the original `const` item
+note: `const` item defined here
+   --> /rustc/88d9e12ae178fab0fb5cc050a94da85685d449ea/library/core/src/num/uint_macros.rs:51:8
+   --> /rustc/88d9e12ae178fab0fb5cc050a94da85685d449ea/library/core/src/num/mod.rs:1449:4
+   ::: /rustc/88d9e12ae178fab0fb5cc050a94da85685d449ea/library/core/src/num/mod.rs:1473:5
+    |
+    = note: in this macro invocation
+    = note: this warning originates in the macro `uint_impl` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+warning: taking a mutable reference to a `const` item
+   --> crates/rrrah-dedup/src/managed_metric.rs:242:37
+    |
+242 |             index.search(0, 64, 96, &mut usize::MAX, &budget, || true),
+    |                                     ^^^^^^^^^^^^^^^
+    |
+    = note: each usage of a `const` item creates a new temporary
+    = note: the mutable reference will refer to this temporary, not the original `const` item
+note: `const` item defined here
+   --> /rustc/88d9e12ae178fab0fb5cc050a94da85685d449ea/library/core/src/num/uint_macros.rs:51:8
+   --> /rustc/88d9e12ae178fab0fb5cc050a94da85685d449ea/library/core/src/num/mod.rs:1449:4
+   ::: /rustc/88d9e12ae178fab0fb5cc050a94da85685d449ea/library/core/src/num/mod.rs:1473:5
+    |
+    = note: in this macro invocation
+    = note: this warning originates in the macro `uint_impl` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: linker stderr: /validation/sysroot/usr/bin/ld: /validation/target/debug/deps/libjpegxr-8d01a0594e000fc4.rlib(2e643c6506a180d9-strenc.o): in function `StrIOEncInit':
+         /validation/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/jpegxr-0.3.1/jxrlib/image/encode/strenc.c:485:(.text.StrIOEncInit+0xf0): the use of `tmpnam' is dangerous, better use `mkstemp'
+  |
+  = note: `#[warn(linker_messages)]` on by default
+
+warning: linker stdout: /validation/sysroot/usr/bin/ld: /validation/target/debug/deps/libjpegxr-8d01a0594e000fc4.rlib(2e643c6506a180d9-strenc.o): note: the message above does not take linker garbage collection into account
+
+warning: `rrrah-dedup` (lib test) generated 6 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 14m 08s
+     Running unittests src/lib.rs (/validation/target/debug/deps/rrrah_dedup-c3b17b6d2f269f12)
+
+running 1 test
+test local_collection::gradient_metadata_tests::gradient_id_scratch_exact_limit_cancellation_and_ownership ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 48 filtered out; finished in 0.00s
+

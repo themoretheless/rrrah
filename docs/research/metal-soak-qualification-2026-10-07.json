@@ -1,0 +1,41 @@
+{
+  "scope": "Metal viewer and bounded delayed-I/O swap qualification",
+  "date": "2026-10-07",
+  "status": "selected_scenarios_passed",
+  "metal_policy": {
+    "cycles": 200,
+    "duration_seconds": 52.69,
+    "adapter": "Metal Apple M4 Max",
+    "exact_frames": true,
+    "exact_float_bits": true,
+    "final_managed_bytes": 0,
+    "log": "/tmp/rrrah-metal-200-policy-cycles.log"
+  },
+  "slow_swap": {
+    "duration_seconds": 600.04134475,
+    "unique_objects": 3274,
+    "pressure_refusals": 3274,
+    "exact_restores": 3274,
+    "payload_bytes": 262144,
+    "root_limit_bytes": 2097152,
+    "root_peak_bytes": 2097152,
+    "queue_peak_bytes": 262144,
+    "final_managed_bytes": 0,
+    "log": "/tmp/rrrah-sustained-swap-600s.log"
+  },
+  "delayed_cancel": {
+    "cancelled_after_allocation": 16,
+    "exact_retries": 16,
+    "final_managed_bytes": 0,
+    "log": "/tmp/rrrah-slow-swap-cancellation.log"
+  },
+  "live_hdr_report": "docs/research/metal-live-hdr-2026-10-07.json",
+  "limitations": [
+    "Injected 2ms codec I/O delays exercise actual files but are not a physical slow-disk benchmark.",
+    "3274 objects exercised in a bounded 16-entry swap; not a full 100000-file gallery qualification.",
+    "One 600-second run does not establish indefinite stability.",
+    "Live EDR surface and image were observed; absolute display luminance and color calibration were not measured.",
+    "A later UI observation reported a color-transform refusal with unknown selected source; it is not attributed to the qualified EXR or Metal surface.",
+    "NVIDIA/CUDA deferred by user; full 100-format objective remains incomplete."
+  ]
+}

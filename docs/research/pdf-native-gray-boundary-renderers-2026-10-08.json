@@ -1,0 +1,152 @@
+{
+  "scope": "Authored isolated Gray group boundary diagnostic across Poppler Splash and Cairo",
+  "comparisons": [
+    {
+      "scale": 1,
+      "renderer": "splash",
+      "width": 32,
+      "height": 16,
+      "different_pixels": 16,
+      "max_error": 16,
+      "different_x_coordinates": [
+        24
+      ],
+      "exact": false,
+      "command": [
+        "pdftoppm",
+        "-r",
+        "72",
+        "-singlefile",
+        "/tmp/rrrah-native-gray-independent-20261008/gray-group.pdf",
+        "/tmp/rrrah-native-gray-independent-20261008/splash-scale-1"
+      ],
+      "reference_sha256": "97b48f209138e8dd0c8077cf2ab208dfcb0d4ce3f83c5a823cb72b4e2240e59a",
+      "oracle_sha256": "7e7a4735365c677970555e285cc85935d88c612b3b367da3d2cfa9ab9953f54f"
+    },
+    {
+      "scale": 1,
+      "renderer": "cairo",
+      "width": 32,
+      "height": 16,
+      "different_pixels": 0,
+      "max_error": 0,
+      "different_x_coordinates": [],
+      "exact": true,
+      "command": [
+        "pdftocairo",
+        "-png",
+        "-r",
+        "72",
+        "-singlefile",
+        "/tmp/rrrah-native-gray-independent-20261008/gray-group.pdf",
+        "/tmp/rrrah-native-gray-independent-20261008/cairo-scale-1"
+      ],
+      "reference_sha256": "97b48f209138e8dd0c8077cf2ab208dfcb0d4ce3f83c5a823cb72b4e2240e59a",
+      "oracle_sha256": "97b48f209138e8dd0c8077cf2ab208dfcb0d4ce3f83c5a823cb72b4e2240e59a"
+    },
+    {
+      "scale": 2,
+      "renderer": "splash",
+      "width": 64,
+      "height": 32,
+      "different_pixels": 32,
+      "max_error": 16,
+      "different_x_coordinates": [
+        48
+      ],
+      "exact": false,
+      "command": [
+        "pdftoppm",
+        "-r",
+        "144",
+        "-singlefile",
+        "/tmp/rrrah-native-gray-independent-20261008/gray-group.pdf",
+        "/tmp/rrrah-native-gray-independent-20261008/splash-scale-2"
+      ],
+      "reference_sha256": "540137a593e44497deb443971e9b138818362cd210e92cb849094accb2344b00",
+      "oracle_sha256": "a93e365498ffc21cb58ff0bc1d79907e5dd18fd8f8e10a1cdb1d4da439e2ecda"
+    },
+    {
+      "scale": 2,
+      "renderer": "cairo",
+      "width": 64,
+      "height": 32,
+      "different_pixels": 0,
+      "max_error": 0,
+      "different_x_coordinates": [],
+      "exact": true,
+      "command": [
+        "pdftocairo",
+        "-png",
+        "-r",
+        "144",
+        "-singlefile",
+        "/tmp/rrrah-native-gray-independent-20261008/gray-group.pdf",
+        "/tmp/rrrah-native-gray-independent-20261008/cairo-scale-2"
+      ],
+      "reference_sha256": "540137a593e44497deb443971e9b138818362cd210e92cb849094accb2344b00",
+      "oracle_sha256": "540137a593e44497deb443971e9b138818362cd210e92cb849094accb2344b00"
+    },
+    {
+      "scale": 4,
+      "renderer": "splash",
+      "width": 128,
+      "height": 64,
+      "different_pixels": 64,
+      "max_error": 16,
+      "different_x_coordinates": [
+        96
+      ],
+      "exact": false,
+      "command": [
+        "pdftoppm",
+        "-r",
+        "288",
+        "-singlefile",
+        "/tmp/rrrah-native-gray-independent-20261008/gray-group.pdf",
+        "/tmp/rrrah-native-gray-independent-20261008/splash-scale-4"
+      ],
+      "reference_sha256": "756406d32ff4fcefc698506a60ebdc91685d95b82a5f280194bbdc0fd82c48c6",
+      "oracle_sha256": "b048bba84dfd0db223c0aa585cea4ca5854f38ad3144425dd81aad51ab627b5b"
+    },
+    {
+      "scale": 4,
+      "renderer": "cairo",
+      "width": 128,
+      "height": 64,
+      "different_pixels": 0,
+      "max_error": 0,
+      "different_x_coordinates": [],
+      "exact": true,
+      "command": [
+        "pdftocairo",
+        "-png",
+        "-r",
+        "288",
+        "-singlefile",
+        "/tmp/rrrah-native-gray-independent-20261008/gray-group.pdf",
+        "/tmp/rrrah-native-gray-independent-20261008/cairo-scale-4"
+      ],
+      "reference_sha256": "756406d32ff4fcefc698506a60ebdc91685d95b82a5f280194bbdc0fd82c48c6",
+      "oracle_sha256": "756406d32ff4fcefc698506a60ebdc91685d95b82a5f280194bbdc0fd82c48c6"
+    }
+  ],
+  "native_72dpi_matches_cairo_exactly": true,
+  "scaled_reference": "Nearest repetition of the analytically piecewise-constant native 72dpi output; not fresh scaled native replay",
+  "source_sha256": "9e7bb0af51886bfeacfe3c983714d1fc7f82e685c97ab0691fd738a11a566569",
+  "limitations": [
+    "Splash and Cairo share Poppler PDF parsing; independent rasterizers, not independent parser implementations",
+    "Ghostscript absent; not tested",
+    "Default Splash strict oracle still differs; no pixel gate relaxed",
+    "Authored simple geometry does not qualify real AI corpus or production integration"
+  ],
+  "native_boundary_regression": {
+    "passed": 1,
+    "failed": 0,
+    "log": "/tmp/rrrah-native-gray-boundary-control.log",
+    "checks": [
+      "x23 remains red/Gray overlap, alpha 1",
+      "x24 has no red coverage, Gray only alpha 0.5"
+    ]
+  }
+}

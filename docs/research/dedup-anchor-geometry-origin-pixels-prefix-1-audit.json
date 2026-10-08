@@ -1,0 +1,38 @@
+{
+  "status": "verified_fresh_geometry_origin_positive_independent_pixels",
+  "pairs": 1,
+  "directions": 2,
+  "rows": [
+    {
+      "query": "214402.jpg",
+      "direction": "forward",
+      "anchors": 139,
+      "counts": {
+        "sites": 3475,
+        "valid_sites": 3465,
+        "informative_pairs": 24548,
+        "agreeing_pairs": 23218
+      }
+    },
+    {
+      "query": "214402.jpg",
+      "direction": "reverse",
+      "anchors": 147,
+      "counts": {
+        "sites": 3675,
+        "valid_sites": 3675,
+        "informative_pairs": 27033,
+        "agreeing_pairs": 24954
+      }
+    }
+  ],
+  "pins": {
+    "docs/research/dedup-anchor-geometry-origin-pixels-prefix-1.json": "f71bb6980ae9090778460ad6b196914d6ded1a2942a55f278a57d68e22800925",
+    "scripts/verify-dedup-rank-pixel-oracle.py": "60e6ff6a4ec5623fae3b0a8678a663c950fec6e92392a641fcaaae279e5ca4f3",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-anchor-geometry-origin-positive-pixels.py": "45bd6be318f002bb2610380dfe19153b44169603a25bde805f7a21cf20760cc5",
+    "docs/research/dedup-local-rank-eyeglasses-controls-snapshot-79.json": "3f23fc6d1c15082b9c933bf4e535a139e9c66e0c71b7df1d827f6e508fe53593",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/local-rank-eyeglasses-controls/214400.rgba32": "f12b00731c10d0acdd1982aa295ea91d01f063852883a4784012abb96083b5e0",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/rank-normalized-pixel-oracle/occlusion-214402.rgba32": "0b9ba76265db2cc5709f23b26301cbe850e418aa4a880f48dee493e62cc3a86e"
+  },
+  "scope": "Fresh native origin positive: all original automatic union points, independent aliases/bounds/bidirectional residuals/disjoint selection, exact NumPy original-normalized pixel count parity and support predicate. Native JPEG normalization shared via pinned prior dumps; normalization decoder is shared; no independent decoder or full corpus/precision proof."
+}

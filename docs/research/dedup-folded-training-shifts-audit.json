@@ -1,0 +1,62 @@
+{
+  "status": "verified_training_only_shift_diagnostic",
+  "cases": 54,
+  "selected_models": 4,
+  "supports": 0,
+  "summary": [
+    {
+      "model_index": 0,
+      "shift": [
+        1,
+        1
+      ],
+      "heldout_fractions": [
+        0.8022540983606558,
+        0.5777371707019948
+      ],
+      "supported": false
+    },
+    {
+      "model_index": 1,
+      "shift": [
+        -1,
+        0
+      ],
+      "heldout_fractions": [
+        0.7236628849270664,
+        0.938785362556725
+      ],
+      "supported": false
+    },
+    {
+      "model_index": 2,
+      "shift": [
+        1,
+        1
+      ],
+      "heldout_fractions": [
+        0.6549733570159858,
+        0.8159208851463821
+      ],
+      "supported": false
+    },
+    {
+      "model_index": 5,
+      "shift": [
+        -1,
+        0
+      ],
+      "heldout_fractions": [
+        0.7781620553359684,
+        0.5949875645685861
+      ],
+      "supported": false
+    }
+  ],
+  "input_hashes": {
+    "docs/research/dedup-folded-training-shifts.json": "fc9a9081faed0adf684272b8eaf2db41127c07fdadbdf45ff0198cf078b20002",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-folded-training-shifts.py": "64d6e0c1fc928056c64b1216b51138c60bcfc1f3d68b4bf9054fea6dd133bb69",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/dedup_jpeg_domain.py": "a9986aabe3428100e1b061a70f6fb7f1f87e1b6c8552484b550e764a04746921"
+  },
+  "scope": "All nine shifts per native model, fixed rectangles, exact native-point residual membership, finite bounded diagnostics and independent training-only selection arithmetic. Equal forward sample counts do not independently prove identical per-pixel membership; no pixel resampling/fit oracle or automatic fold recovery."
+}

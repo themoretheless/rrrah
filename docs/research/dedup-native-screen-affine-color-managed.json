@@ -1,0 +1,43 @@
+{
+  "input_hashes": {
+    "docs/research/dedup-native-screen-affine-color-footprint.json": "0a569cfcc1a1b0a4cbc8bd76dfc8ba01126546c065f379a460d8b14e2ac3837a",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200500.jpg": "55d5ff8935ee354fd0d34e3db8346db2b79047db56d7543ce50617c95e0ba91f",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200501.jpg": "c9f9a86fe25fd5bba47af5130e2fcf441633355cc1d806039c86cc0d5bbde9a3",
+    "docs/research/dedup-screen-global-translation-anchor.txt": "1b8e317bbe3718c339b81a58e6400bc60e9f3ef0fa661273ca3dae5c62ef115d",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/affine-color-managed-image-probe-screen": "37b657d5088b9921e660307a1da52f0957d6484679ddbc54328147fca12711b5",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-native-screen-affine-color-managed.py": "a8091edf00a4564730a50551044f81eeadc421dff4de34ca0d1acaae9ef1bdcb",
+    "crates/rrrah-dedup/src/affine_region.rs": "776c71abfb8e1c8ef30236541bc4f1882b2ce28aa60a7aeb4105c63c2b5809c1",
+    "crates/rrrah-dedup/src/affine_color.rs": "2c6106f7e91c3b2a246f8a36a23e6adae57ed7bfdc7d65363c8e82efdc5de2aa",
+    "crates/rrrah-dedup/src/region_footprint.rs": "3d93a2aecdbc0d5f03f69a5fa2df344fc9a2284265f9fcecfc99b3b00b29787d",
+    "crates/rrrah-dedup/src/lib.rs": "b42a3485e3bf7a327a0cae47e3fa5259948e35ff9e9b1b68bd64117f16f56faf",
+    "crates/rrrah-dedup/examples/affine_color_managed_image_probe.rs": "0974ea77863de9c7bf40e2479a322feeb839411d54e7b35571c15a8b556c49f9"
+  },
+  "returncode": 0,
+  "stdout": "{\"status\":\"ok\",\"directions\":[{\"direction\":\"forward\",\"radius\":8,\"training_samples\":2400,\"heldout_samples\":2400,\"matched\":2383,\"pixel_reads\":6936000},{\"direction\":\"reverse\",\"radius\":14,\"training_samples\":6523,\"heldout_samples\":6524,\"matched\":6191,\"pixel_reads\":54862635}],\"managed_used\":0,\"managed_peak\":118947840,\"scope\":\"One fixed ROI pair, native opaque display-range decoder and mapped box forward radius8, reverse geometry-derived radius; separate checker training/heldout, coefficients5/offset0.1, tolerance0.03. Sample vector payloads use the shared memory budget; allocator overhead excluded. Centers restricted to opposite ROI; filter taps retain whole-image support. Diagnostic only, no copy decision.\"}\n",
+  "stderr": "",
+  "status": "verified_native_managed_sample_parity",
+  "evidence": {
+    "status": "ok",
+    "directions": [
+      {
+        "direction": "forward",
+        "radius": 8,
+        "training_samples": 2400,
+        "heldout_samples": 2400,
+        "matched": 2383,
+        "pixel_reads": 6936000
+      },
+      {
+        "direction": "reverse",
+        "radius": 14,
+        "training_samples": 6523,
+        "heldout_samples": 6524,
+        "matched": 6191,
+        "pixel_reads": 54862635
+      }
+    ],
+    "managed_used": 0,
+    "managed_peak": 118947840,
+    "scope": "One fixed ROI pair, native opaque display-range decoder and mapped box forward radius8, reverse geometry-derived radius; separate checker training/heldout, coefficients5/offset0.1, tolerance0.03. Sample vector payloads use the shared memory budget; allocator overhead excluded. Centers restricted to opposite ROI; filter taps retain whole-image support. Diagnostic only, no copy decision."
+  }
+}

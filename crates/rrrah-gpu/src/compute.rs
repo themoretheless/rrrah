@@ -11,12 +11,113 @@ pub enum ExposureError {
     #[error("GPU exposure readback failed: {0}")]
     Readback(String),
 }
+/// Queue-ordered linear RGBA32F result; storage remains admitted while any
+/// owner or in-flight submission retains it. No CPU readback is performed.
+#[derive(Debug, Clone)]
+pub struct ResidentExposure {
+    buffer: wgpu::Buffer,
+    pixels: u32,
+    pub(crate) raster_alpha_valid: bool,
+    _reservation: std::sync::Arc<rrrah_core::Reservation>,
+}
+impl ResidentExposure {
+    /// Retain this owner or resource_lease through completion of downstream work.
+    pub fn buffer(&self) -> &wgpu::Buffer {
+        &self.buffer
+    }
+    pub fn resource_lease(&self) -> crate::GpuResourceLease {
+        crate::GpuResourceLease::new(std::iter::once(self._reservation.clone()))
+    }
+    pub fn pixels(&self) -> u32 {
+        self.pixels
+    }
+}
 #[derive(Debug)]
 pub struct LinearExposureCompute {
     device: wgpu::Device,
     pipeline: wgpu::ComputePipeline,
 }
 impl LinearExposureCompute {
+    /// Submit exposure and retain its output on GPU. Input is CPU-owned;
+    /// GPU admission covers source, output and per-dispatch uniforms. Subsequent
+    /// commands on the same queue can consume the result without a CPU wait.
+    pub fn execute_resident<F: FnMut() -> bool>(
+        &self,
+        queue: &wgpu::Queue,
+        samples: &[[f32; 4]],
+        stops: f32,
+        budget: &rrrah_core::MemoryBudget,
+        mut cancelled: F,
+    ) -> Result<ResidentExposure, ExposureError> {
+        if cancelled() {
+            return Err(ExposureError::Cancelled);
+        }
+        if !stops.is_finite() || !(-32.0..=32.0).contains(&stops) {
+            return Err(ExposureError::Invalid("exposure outside finite -32..32 range"));
+        }
+        let count = u32::try_from(samples.len()).map_err(|_| ExposureError::Invalid("too many pixels"))?;
+        if count == 0 {
+            return Err(ExposureError::Invalid("resident exposure requires pixels"));
+        }
+        let gain = stops.exp2();
+        let mut raster_alpha_valid = true;
+        for (index, pixel) in samples.iter().enumerate() {
+            raster_alpha_valid &= (0.0..=1.0).contains(&pixel[3]);
+            if index % 4096 == 0 && cancelled() {
+                return Err(ExposureError::Cancelled);
+            }
+            if pixel.iter().any(|v| !v.is_finite()) || pixel[..3].iter().any(|v| !(v * gain).is_finite()) {
+                return Err(ExposureError::Invalid(
+                    "exposure requires finite input and output",
+                ));
+            }
+        }
+        let bytes = u64::from(count) * 16;
+        let limits = self.device.limits();
+        if bytes > limits.max_buffer_size {
+            return Err(ExposureError::Invalid("buffer exceeds device limit"));
+        }
+        let alignment = u64::from(limits.min_storage_buffer_offset_alignment).max(16) / 16;
+        let maximum = (u64::from(limits.max_storage_buffer_binding_size) / 16)
+            .min(u64::from(limits.max_compute_workgroups_per_dimension) * 64);
+        let chunk = maximum / alignment * alignment;
+        if chunk == 0 {
+            return Err(ExposureError::Invalid("device cannot bind aligned chunk"));
+        }
+        let transient =
+            std::sync::Arc::new(budget.try_reserve(bytes + u64::from(count).div_ceil(chunk) * 16)?);
+        let resident = std::sync::Arc::new(budget.try_reserve(bytes)?);
+        if cancelled() {
+            return Err(ExposureError::Cancelled);
+        }
+        let source = self.device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
+            label: Some("resident exposure source"),
+            contents: bytemuck::cast_slice(samples),
+            usage: wgpu::BufferUsages::STORAGE,
+        });
+        let output = self.device.create_buffer(&wgpu::BufferDescriptor {
+            label: Some("resident exposure output"),
+            size: bytes,
+            usage: wgpu::BufferUsages::STORAGE | wgpu::BufferUsages::COPY_SRC,
+            mapped_at_creation: false,
+        });
+        let mut encoder = self.device.create_command_encoder(&Default::default());
+        self.encode(&mut encoder, &source, &output, count, stops)
+            .map_err(ExposureError::Invalid)?;
+        if cancelled() {
+            return Err(ExposureError::Cancelled);
+        }
+        queue.submit([encoder.finish()]);
+        let pending = resident.clone();
+        queue.on_submitted_work_done(move || drop((transient, pending)));
+        Ok(ResidentExposure {
+            buffer: output,
+            pixels: count,
+            raster_alpha_valid,
+            _reservation: resident,
+        })
+    }
+
     /// Blocking, explicitly budgeted exposure/readback. The caller owns the
     /// input's CPU accounting. GPU accounting covers buffer sizes (including
     /// readback and dispatch uniforms), excluding driver/pipeline overhead.

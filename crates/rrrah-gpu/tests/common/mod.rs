@@ -71,8 +71,8 @@ impl RgbaFrame {
 /// Headless wgpu device/queue pair plus the adapter description for logs.
 #[derive(Debug)]
 pub struct GpuReadback {
-    device: wgpu::Device,
-    queue: wgpu::Queue,
+    pub(crate) device: wgpu::Device,
+    pub(crate) queue: wgpu::Queue,
     adapter_name: String,
 }
 
@@ -165,6 +165,10 @@ impl GpuReadback {
             cpu,
             || false,
         )
+    }
+
+    pub fn render_existing_raw(&self, renderer: &RawRenderer, size: [u32; 2]) -> RgbaFrame {
+        self.read_frame(size, |encoder, target| renderer.encode(encoder, target))
     }
 
     pub fn render_with_tiling(
@@ -295,6 +299,177 @@ impl GpuReadback {
         renderer.update_view(&self.queue, view);
         let after = self.read_frame(size, |encoder, target| renderer.encode(encoder, target));
         (before, after)
+    }
+
+    pub fn verify_cancelled_raster_upload_keeps_previous_frame(
+        &self,
+        first: &rrrah_core::DecodedRaster,
+        replacement: &rrrah_core::DecodedRaster,
+        view: ViewParameters,
+        size: [u32; 2],
+    ) {
+        let first_bytes = u64::from(first.width()) * u64::from(first.height()) * 16;
+        let replacement_bytes = u64::from(replacement.width()) * u64::from(replacement.height()) * 16;
+        let gpu = rrrah_core::MemoryBudget::new(first_bytes + replacement_bytes);
+        let uploads = rrrah_core::MemoryBudget::new(1024 * 1024);
+        let mut renderer =
+            rrrah_gpu::RasterRenderer::new_with_budget(&self.device, READBACK_FORMAT, gpu.clone())
+                .with_upload_queue_budget(uploads.clone());
+        renderer.upload(&self.device, &self.queue, first).unwrap();
+        renderer.update_view(&self.queue, view);
+        let before = self.read_frame(size, |encoder, target| renderer.encode(encoder, target));
+        assert_eq!((gpu.used(), uploads.used()), (first_bytes, 0));
+        // Initial check, three validation blocks, before admission and after admission.
+        for checkpoint in 1..=6 {
+            let mut polls = 0;
+            assert!(matches!(
+                renderer.upload_with_cancel(&self.device, &self.queue, replacement, || {
+                    polls += 1;
+                    polls == checkpoint
+                }),
+                Err(rrrah_gpu::RasterUploadError::Cancelled)
+            ));
+            assert_eq!((gpu.used(), uploads.used()), (first_bytes, 0));
+            let after = self.read_frame(size, |encoder, target| renderer.encode(encoder, target));
+            assert_eq!(before.pixels, after.pixels);
+        }
+        renderer
+            .upload_with_cancel(&self.device, &self.queue, replacement, || false)
+            .unwrap();
+        renderer.update_view(&self.queue, view);
+        let after = self.read_frame(size, |encoder, target| renderer.encode(encoder, target));
+        assert_ne!(before.pixels, after.pixels);
+        assert_eq!(after.center(), [0, 0, 255, 255]);
+        assert_eq!((gpu.used(), uploads.used()), (replacement_bytes, 0));
+        drop(renderer);
+        assert_eq!((gpu.used(), uploads.used()), (0, 0));
+    }
+
+    pub fn render_resident_exposure(
+        &self,
+        pixels: &[[f32; 4]],
+        dimensions: [u32; 2],
+        stops: f32,
+        view: ViewParameters,
+        size: [u32; 2],
+    ) -> RgbaFrame {
+        self.render_resident_exposure_with_aspect(pixels, dimensions, stops, view, size, None)
+    }
+
+    pub fn render_resident_exposure_with_aspect(
+        &self,
+        pixels: &[[f32; 4]],
+        dimensions: [u32; 2],
+        stops: f32,
+        view: ViewParameters,
+        size: [u32; 2],
+        aspect: Option<f32>,
+    ) -> RgbaFrame {
+        let bytes = pixels.len() as u64 * 16;
+        let compute_root = rrrah_core::MemoryBudget::new(bytes * 2 + 16);
+        let texture_root = rrrah_core::MemoryBudget::new(bytes + 16);
+        let queue_root = rrrah_core::MemoryBudget::new(bytes.max(256));
+        let compute = rrrah_gpu::LinearExposureCompute::new(&self.device);
+        let result = compute
+            .execute_resident(&self.queue, pixels, stops, &compute_root, || false)
+            .unwrap();
+        let oracle = self.device.create_buffer(&wgpu::BufferDescriptor {
+            label: Some("test resident buffer values"),
+            size: bytes,
+            usage: wgpu::BufferUsages::COPY_DST | wgpu::BufferUsages::MAP_READ,
+            mapped_at_creation: false,
+        });
+        let mut encoder = self.device.create_command_encoder(&Default::default());
+        encoder.copy_buffer_to_buffer(result.buffer(), 0, &oracle, 0, bytes);
+        self.queue.submit([encoder.finish()]);
+        let (tx, rx) = std::sync::mpsc::channel();
+        oracle
+            .slice(..)
+            .map_async(wgpu::MapMode::Read, move |r| tx.send(r).unwrap());
+        self.device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
+        rx.recv().unwrap().unwrap();
+        let mapped = oracle.slice(..).get_mapped_range().unwrap();
+        let values: &[[f32; 4]] = bytemuck::cast_slice(&mapped);
+        for (actual, p) in values.iter().zip(pixels) {
+            assert_eq!(
+                *actual,
+                [
+                    p[0] * stops.exp2(),
+                    p[1] * stops.exp2(),
+                    p[2] * stops.exp2(),
+                    p[3]
+                ]
+            );
+        }
+        drop(mapped);
+        oracle.unmap();
+        let mut renderer =
+            rrrah_gpu::RasterRenderer::new_with_budget(&self.device, READBACK_FORMAT, texture_root.clone())
+                .with_upload_queue_budget(queue_root.clone());
+        let first = rrrah_core::DecodedRaster::new(
+            1,
+            1,
+            rrrah_core::RasterPixels::Rgba32Float(std::sync::Arc::new(vec![1., 0., 0., 1.]).into()),
+            rrrah_core::RasterColorSpace::LinearSrgb,
+        )
+        .unwrap();
+        renderer.upload(&self.device, &self.queue, &first).unwrap();
+        renderer.update_view(&self.queue, view);
+        let before = self.read_frame(size, |e, t| renderer.encode(e, t));
+        for invalid in [0.0, -1.0, f32::NAN, f32::INFINITY, f32::MAX] {
+            assert!(matches!(
+                renderer.upload_resident_with_aspect(
+                    &self.device,
+                    &self.queue,
+                    &result,
+                    dimensions,
+                    Some(invalid),
+                    || false
+                ),
+                Err(rrrah_gpu::RasterUploadError::InvalidPixelAspect)
+            ));
+            assert_eq!((texture_root.used(), queue_root.used()), (16, 0));
+            let after = self.read_frame(size, |e, t| renderer.encode(e, t));
+            assert_eq!(before.pixels, after.pixels);
+        }
+        let row_polls = if (dimensions[0] * 16).is_multiple_of(wgpu::COPY_BYTES_PER_ROW_ALIGNMENT) {
+            1
+        } else {
+            dimensions[1].div_ceil(256)
+        };
+        for checkpoint in 1..=3 + row_polls {
+            let mut polls = 0;
+            assert!(matches!(
+                renderer.upload_resident_with_aspect(
+                    &self.device,
+                    &self.queue,
+                    &result,
+                    dimensions,
+                    aspect,
+                    || {
+                        polls += 1;
+                        polls == checkpoint
+                    }
+                ),
+                Err(rrrah_gpu::RasterUploadError::Cancelled)
+            ));
+            assert_eq!((texture_root.used(), queue_root.used()), (16, 0));
+            let after = self.read_frame(size, |e, t| renderer.encode(e, t));
+            assert_eq!(before.pixels, after.pixels);
+        }
+        renderer
+            .upload_resident_with_aspect(&self.device, &self.queue, &result, dimensions, aspect, || false)
+            .unwrap();
+        drop(result);
+        renderer.update_view(&self.queue, view);
+        let frame = self.read_frame(size, |e, t| renderer.encode(e, t));
+        assert_eq!(
+            (compute_root.used(), texture_root.used(), queue_root.used()),
+            (0, bytes, 0)
+        );
+        drop(renderer);
+        assert_eq!(texture_root.used(), 0);
+        frame
     }
 
     pub fn render_developed_raw(

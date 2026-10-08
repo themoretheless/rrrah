@@ -1,5 +1,5 @@
 {
-  "status": "targeted_five_passed_full_evaluation_running",
+  "status": "terminal_all580_audited_one_explicit_refusal",
   "probe_sha256": "1a61a0e42e35d0c7840ab31a72dca11fd64b72cf81d9e4de4d66763d63f618fd",
   "pixel_budget": 409600,
   "original_pixel_budget": 400000,
@@ -8,7 +8,7 @@
   "verified_pairs": 5,
   "required_targeted_pairs": 5,
   "integrity_checkpoint": "docs/research/dedup-hpatches-portfolio-budget-targeted-integrity.json",
-  "scope": "All five original resource refusals now execute successfully with fixed matching thresholds; full all-580 qualification remains pending. Two are candidates and three fail the fixed pixel criterion. Publisher correspondences are not duplicate truth.",
+  "scope": "All580 measured;696 prepared images verified. Twelve candidates; one native whole-source horizon refusal retained explicitly. Fixed spatial4x4 selection removes this refusal on one case and retains two existing candidates, not a full spatial run/default promotion or duplicate-truth qualification.",
   "targeted_exit_code": 0,
   "targeted_status_counts": {
     "ok": 5
@@ -16,5 +16,21 @@
   "targeted_candidates": 2,
   "full_report": "docs/research/dedup-hpatches-portfolio-budget-macos.json",
   "targeted_session": 49664,
-  "full_session": 31676
+  "full_session": 31676,
+  "resume_session": 21552,
+  "resume_log": "docs/research/dedup-hpatches-portfolio-budget-resume-macos.log",
+  "resume_integrity": "docs/research/dedup-hpatches-portfolio-budget-macos-resume-integrity.json",
+  "resume_adversaries": "docs/research/dedup-hpatches-resume-adversaries.json",
+  "full_exit_code": 1,
+  "completed_pairs": 580,
+  "status_counts": {
+    "ok": 579,
+    "error": 1
+  },
+  "candidates": 12,
+  "integrity": "docs/research/dedup-hpatches-portfolio-budget-full-integrity.json",
+  "analysis": "docs/research/dedup-hpatches-portfolio-budget-full-analysis.json",
+  "retained_refusal": "i_tools/3 Pixels(Invalid)",
+  "refusal_horizon_audit": "docs/research/dedup-hpatches-tools3-horizon-audit.json",
+  "spatial_three_case_diagnostic": "docs/research/dedup-hpatches-spatial-portfolio-three-cases.json"
 }

@@ -1,0 +1,144 @@
+{
+  "upstream": "https://github.com/phoboslab/qoi",
+  "commit": "ffb2d2cb74a1de60819b21b939f7209aa53e91c1",
+  "header_sha256": "7de6fca1a285b1c20d38f2723dec8b774eb9f144edb9710800a95feeea09375a",
+  "driver_sha256": "09b81cd9e1be24f5c4e5fd8492ccf71bf1252e8a511e74b778b50853ad9e0965",
+  "fixtures": [
+    {
+      "source": "opaque-rgb-0.qoi",
+      "oracle": "opaque-rgb-0.rgba",
+      "width": 257,
+      "height": 3,
+      "channels": 3,
+      "flag": 0,
+      "producer": "upstream-reference-encoder",
+      "source_sha256": "01ec2fc26586fbafc8f6fe2ac96871c4374bdf16732867d4bd8e9e47d99ed330",
+      "oracle_sha256": "e331ff36593efc28fef4c1766ad9d3e70c9721a9f507b6882ce493b9a66c8320",
+      "opcodes": {
+        "RUN": 61,
+        "RGB": 238,
+        "DIFF": 218,
+        "INDEX": 69
+      }
+    },
+    {
+      "source": "opaque-rgb-1.qoi",
+      "oracle": "opaque-rgb-1.rgba",
+      "width": 257,
+      "height": 3,
+      "channels": 3,
+      "flag": 1,
+      "producer": "upstream-reference-encoder",
+      "source_sha256": "76753b2e68fdf803adb9a204be5b09e5bf7062da13f0a89e518387a7fc71f7ee",
+      "oracle_sha256": "e331ff36593efc28fef4c1766ad9d3e70c9721a9f507b6882ce493b9a66c8320",
+      "opcodes": {
+        "RUN": 61,
+        "RGB": 238,
+        "DIFF": 218,
+        "INDEX": 69
+      }
+    },
+    {
+      "source": "opaque-rgba-0.qoi",
+      "oracle": "opaque-rgba-0.rgba",
+      "width": 257,
+      "height": 3,
+      "channels": 4,
+      "flag": 0,
+      "producer": "upstream-reference-encoder",
+      "source_sha256": "67003d8ec305a80c75081fd530eb55402f9bb19be5ce4573be16ce92f52e3b80",
+      "oracle_sha256": "e331ff36593efc28fef4c1766ad9d3e70c9721a9f507b6882ce493b9a66c8320",
+      "opcodes": {
+        "RUN": 61,
+        "RGB": 238,
+        "DIFF": 218,
+        "INDEX": 69
+      }
+    },
+    {
+      "source": "opaque-rgba-1.qoi",
+      "oracle": "opaque-rgba-1.rgba",
+      "width": 257,
+      "height": 3,
+      "channels": 4,
+      "flag": 1,
+      "producer": "upstream-reference-encoder",
+      "source_sha256": "ba5372443a7a7ac3b82c6666ae3d24dd3bf56e19ca99dbd2b08a220148295c62",
+      "oracle_sha256": "e331ff36593efc28fef4c1766ad9d3e70c9721a9f507b6882ce493b9a66c8320",
+      "opcodes": {
+        "RUN": 61,
+        "RGB": 238,
+        "DIFF": 218,
+        "INDEX": 69
+      }
+    },
+    {
+      "source": "alpha-rgba-0.qoi",
+      "oracle": "alpha-rgba-0.rgba",
+      "width": 257,
+      "height": 3,
+      "channels": 4,
+      "flag": 0,
+      "producer": "upstream-reference-encoder",
+      "source_sha256": "c43ee5cd4d72c40b1f64397d163a5585a64cb4a868f21e463eb25deabe993c0c",
+      "oracle_sha256": "acdbcc5bdb35cc8733a218c36c270420bea791f1f5a1f7917b28842da5a85107",
+      "opcodes": {
+        "INDEX": 154,
+        "RGBA": 617
+      }
+    },
+    {
+      "source": "alpha-rgba-1.qoi",
+      "oracle": "alpha-rgba-1.rgba",
+      "width": 257,
+      "height": 3,
+      "channels": 4,
+      "flag": 1,
+      "producer": "upstream-reference-encoder",
+      "source_sha256": "588081fb4bf3cacc75bd8a556f998ad9b21463aa1d8a2c81d1c7da9d3341ce5a",
+      "oracle_sha256": "acdbcc5bdb35cc8733a218c36c270420bea791f1f5a1f7917b28842da5a85107",
+      "opcodes": {
+        "INDEX": 154,
+        "RGBA": 617
+      }
+    },
+    {
+      "source": "all-opcodes-0.qoi",
+      "oracle": "all-opcodes-0.rgba",
+      "width": 17,
+      "height": 4,
+      "channels": 4,
+      "flag": 0,
+      "producer": "authored-reference-decoder-verified",
+      "source_sha256": "c2514ac01e616aaf6b4cb1d7940b2209590b8632ec52f243dcbf3470e591e20c",
+      "oracle_sha256": "964c2e9596e0a6bcd603b97b24bd76b26b309dd5d2b328f3f4cd1d169f3e9647",
+      "opcodes": {
+        "RUN": 2,
+        "RGBA": 1,
+        "DIFF": 1,
+        "LUMA": 1,
+        "RGB": 1,
+        "INDEX": 1
+      }
+    },
+    {
+      "source": "all-opcodes-1.qoi",
+      "oracle": "all-opcodes-1.rgba",
+      "width": 17,
+      "height": 4,
+      "channels": 4,
+      "flag": 1,
+      "producer": "authored-reference-decoder-verified",
+      "source_sha256": "2a1a1d7f58b08d4db033c693c88f27acba4815251b1f64b07cb59e2a9ebc4094",
+      "oracle_sha256": "964c2e9596e0a6bcd603b97b24bd76b26b309dd5d2b328f3f4cd1d169f3e9647",
+      "opcodes": {
+        "RUN": 2,
+        "RGBA": 1,
+        "DIFF": 1,
+        "LUMA": 1,
+        "RGB": 1,
+        "INDEX": 1
+      }
+    }
+  ]
+}

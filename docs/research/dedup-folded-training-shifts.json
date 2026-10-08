@@ -1,0 +1,4172 @@
+{
+  "status": "complete_training_shift_diagnostic",
+  "input_hashes": {
+    "docs/research/dedup-folded-201702-witness-geometry.json": "d9167f4a3d8ea35d3e30d8161f0b680c9c82b4bbdbd7bb1feef08f51aa18ae1f",
+    "docs/research/dedup-folded-201702-witness-geometry-audit.json": "e6f6e201e2d66489d56730bccf16465915d0fcb2b8cff0d8aff7a610c0b30fb4",
+    "docs/research/dedup-folded-training-diagnostic.json": "04eac9c31b095859e356904e93b0dc55b1be50c4dfc1f35d35b0fb594494bbb2",
+    "docs/research/dedup-folded-training-diagnostic-audit.json": "195674e8fb005f3d105983ff7159bba3abab50feca8f6b569f7f2316b3ef2da7",
+    "docs/research/dedup-folded-201702-regional-points.txt": "75eb5777493ac88ebc50538e820c9b4ccbe9d5035f04fc27bf74e5a0ee9cec4f",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/affine-color-training-diagnostic": "09bc094aad100bc5682d6bca2f175ae4dadb0c4510cf43a6aefbc6fe8ef3d362",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201700.jpg": "72a07e098b9628cf665612b9a9450da78cff914a06b08c403e56c7dc74d4b5ca",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/201702.jpg": "a2e4eaa90d3aba8cca4dc3382d710cc8564f07bea69eedf35ac550ecc0900a51",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/prepared.json": "6ba843f8f09419efb8ccec9b5d84cc8f086d1dc74ec222f5aa2acae29f9fff01",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-folded-training-shifts.py": "335dad299365e4ca952f9eeaf3e1f41e78116b74413c4cfc6d72c9a3751b3e86",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/dedup_jpeg_domain.py": "a9986aabe3428100e1b061a70f6fb7f1f87e1b6c8552484b550e764a04746921"
+  },
+  "required_models": 6,
+  "rows": [
+    {
+      "model_index": 0,
+      "shift": [
+        0,
+        0
+      ],
+      "matrix": [
+        [
+          0.4185336656235676,
+          0.19846255337442598,
+          -203.71018899991643
+        ],
+        [
+          -0.05327827859488764,
+          0.5835200872062716,
+          -84.68744430343341
+        ],
+        [
+          -0.00022344441600046018,
+          0.0006183023850363254,
+          0.8382813553456121
+        ]
+      ],
+      "source_domain": [
+        681,
+        450,
+        271,
+        202
+      ],
+      "target_domain": [
+        205,
+        162,
+        93,
+        63
+      ],
+      "inliers": [
+        52,
+        64,
+        70,
+        71,
+        72,
+        82,
+        83,
+        84,
+        87,
+        89,
+        92,
+        93,
+        94,
+        96,
+        97
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/fold-training-shift-0-0-0.txt",
+      "input_sha256": "2fd699bc0582aed243c4c0bb8f94960c0a548600ddadc68f81ea1e6361300124",
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"directions\":[{\"radius\":8,\"training_samples\":2931,\"samples\":2928,\"matched\":2375,\"pixel_reads\":8466255,\"training_matched\":2387,\"training_squared_error\":5.053237278589199,\"heldout_squared_error\":5.012097644276247},{\"radius\":8,\"training_samples\":13195,\"samples\":13180,\"matched\":9251,\"pixel_reads\":60979000,\"training_matched\":9226,\"training_squared_error\":42.29219538493391,\"heldout_squared_error\":42.76035758590929}],\"managed_used\":0,\"managed_peak\":63266880,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "status": "ok",
+      "evidence": {
+        "status": "ok",
+        "directions": [
+          {
+            "radius": 8,
+            "training_samples": 2931,
+            "samples": 2928,
+            "matched": 2375,
+            "pixel_reads": 8466255,
+            "training_matched": 2387,
+            "training_squared_error": 5.053237278589199,
+            "heldout_squared_error": 5.012097644276247
+          },
+          {
+            "radius": 8,
+            "training_samples": 13195,
+            "samples": 13180,
+            "matched": 9251,
+            "pixel_reads": 60979000,
+            "training_matched": 9226,
+            "training_squared_error": 42.29219538493391,
+            "heldout_squared_error": 42.76035758590929
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 63266880,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      },
+      "same_forward_counts": true,
+      "training_loss": 0.001724065942882702
+    },
+    {
+      "model_index": 0,
+      "shift": [
+        -1,
+        -1
+      ],
+      "matrix": [
+        [
+          0.41875711003956806,
+          0.19784425098938965,
+          -204.54847035526203
+        ],
+        [
+          -0.05305483417888718,
+          0.5829017848212352,
+          -85.52572565877902
+        ],
+        [
+          -0.00022344441600046018,
+          0.0006183023850363254,
+          0.8382813553456121
+        ]
+      ],
+      "source_domain": [
+        681,
+        450,
+        271,
+        202
+      ],
+      "target_domain": [
+        205,
+        162,
+        93,
+        63
+      ],
+      "inliers": [
+        52,
+        64,
+        70,
+        72,
+        83,
+        92,
+        96,
+        97
+      ],
+      "status": "insufficient_geometric_inliers"
+    },
+    {
+      "model_index": 0,
+      "shift": [
+        0,
+        -1
+      ],
+      "matrix": [
+        [
+          0.4185336656235676,
+          0.19846255337442598,
+          -203.71018899991643
+        ],
+        [
+          -0.05305483417888718,
+          0.5829017848212352,
+          -85.52572565877902
+        ],
+        [
+          -0.00022344441600046018,
+          0.0006183023850363254,
+          0.8382813553456121
+        ]
+      ],
+      "source_domain": [
+        681,
+        450,
+        271,
+        202
+      ],
+      "target_domain": [
+        205,
+        162,
+        93,
+        63
+      ],
+      "inliers": [
+        52,
+        64,
+        70,
+        71,
+        72,
+        92,
+        94,
+        96,
+        97
+      ],
+      "status": "insufficient_geometric_inliers"
+    },
+    {
+      "model_index": 0,
+      "shift": [
+        1,
+        -1
+      ],
+      "matrix": [
+        [
+          0.4183102212075671,
+          0.1990808557594623,
+          -202.87190764457083
+        ],
+        [
+          -0.05305483417888718,
+          0.5829017848212352,
+          -85.52572565877902
+        ],
+        [
+          -0.00022344441600046018,
+          0.0006183023850363254,
+          0.8382813553456121
+        ]
+      ],
+      "source_domain": [
+        681,
+        450,
+        271,
+        202
+      ],
+      "target_domain": [
+        205,
+        162,
+        93,
+        63
+      ],
+      "inliers": [
+        52,
+        64,
+        70,
+        71,
+        72,
+        82,
+        87,
+        92,
+        94,
+        96,
+        97
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/fold-training-shift-0-1--1.txt",
+      "input_sha256": "4c6945c71b1b2ec53ca495a436c1ef76b3d4a2ceacd9246ab63188a25e608a6f",
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"directions\":[{\"radius\":8,\"training_samples\":2931,\"samples\":2928,\"matched\":2416,\"pixel_reads\":8466255,\"training_matched\":2412,\"training_squared_error\":5.538445172402781,\"heldout_squared_error\":5.49585490394151},{\"radius\":8,\"training_samples\":13265,\"samples\":13261,\"matched\":9918,\"pixel_reads\":61328112,\"training_matched\":9808,\"training_squared_error\":37.73543353880939,\"heldout_squared_error\":37.8916284205703}],\"managed_used\":0,\"managed_peak\":63266880,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "status": "ok",
+      "evidence": {
+        "status": "ok",
+        "directions": [
+          {
+            "radius": 8,
+            "training_samples": 2931,
+            "samples": 2928,
+            "matched": 2416,
+            "pixel_reads": 8466255,
+            "training_matched": 2412,
+            "training_squared_error": 5.538445172402781,
+            "heldout_squared_error": 5.49585490394151
+          },
+          {
+            "radius": 8,
+            "training_samples": 13265,
+            "samples": 13261,
+            "matched": 9918,
+            "pixel_reads": 61328112,
+            "training_matched": 9808,
+            "training_squared_error": 37.73543353880939,
+            "heldout_squared_error": 37.8916284205703
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 63266880,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      },
+      "same_forward_counts": true,
+      "training_loss": 0.001889609407165739
+    },
+    {
+      "model_index": 0,
+      "shift": [
+        -1,
+        0
+      ],
+      "matrix": [
+        [
+          0.41875711003956806,
+          0.19784425098938965,
+          -204.54847035526203
+        ],
+        [
+          -0.05327827859488764,
+          0.5835200872062716,
+          -84.68744430343341
+        ],
+        [
+          -0.00022344441600046018,
+          0.0006183023850363254,
+          0.8382813553456121
+        ]
+      ],
+      "source_domain": [
+        681,
+        450,
+        271,
+        202
+      ],
+      "target_domain": [
+        205,
+        162,
+        93,
+        63
+      ],
+      "inliers": [
+        52,
+        64,
+        70,
+        72,
+        83,
+        84,
+        92,
+        93,
+        94,
+        96,
+        97
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/fold-training-shift-0--1-0.txt",
+      "input_sha256": "935c2b2ac406767bfce516aeabb16fc8ed4cf9659ecd8d2436271e895ecf0ae1",
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"directions\":[{\"radius\":8,\"training_samples\":2931,\"samples\":2928,\"matched\":2375,\"pixel_reads\":8466255,\"training_matched\":2385,\"training_squared_error\":5.137785515532501,\"heldout_squared_error\":5.076280102022599},{\"radius\":8,\"training_samples\":13174,\"samples\":13169,\"matched\":9224,\"pixel_reads\":60905016,\"training_matched\":9188,\"training_squared_error\":42.36228223828449,\"heldout_squared_error\":43.05319658651919}],\"managed_used\":0,\"managed_peak\":63266880,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "status": "ok",
+      "evidence": {
+        "status": "ok",
+        "directions": [
+          {
+            "radius": 8,
+            "training_samples": 2931,
+            "samples": 2928,
+            "matched": 2375,
+            "pixel_reads": 8466255,
+            "training_matched": 2385,
+            "training_squared_error": 5.137785515532501,
+            "heldout_squared_error": 5.076280102022599
+          },
+          {
+            "radius": 8,
+            "training_samples": 13174,
+            "samples": 13169,
+            "matched": 9224,
+            "pixel_reads": 60905016,
+            "training_matched": 9188,
+            "training_squared_error": 42.36228223828449,
+            "heldout_squared_error": 43.05319658651919
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 63266880,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      },
+      "same_forward_counts": true,
+      "training_loss": 0.0017529121513246337
+    },
+    {
+      "model_index": 0,
+      "shift": [
+        1,
+        0
+      ],
+      "matrix": [
+        [
+          0.4183102212075671,
+          0.1990808557594623,
+          -202.87190764457083
+        ],
+        [
+          -0.05327827859488764,
+          0.5835200872062716,
+          -84.68744430343341
+        ],
+        [
+          -0.00022344441600046018,
+          0.0006183023850363254,
+          0.8382813553456121
+        ]
+      ],
+      "source_domain": [
+        681,
+        450,
+        271,
+        202
+      ],
+      "target_domain": [
+        205,
+        162,
+        93,
+        63
+      ],
+      "inliers": [
+        52,
+        64,
+        70,
+        71,
+        72,
+        82,
+        84,
+        85,
+        87,
+        92,
+        94,
+        96,
+        97
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/fold-training-shift-0-1-0.txt",
+      "input_sha256": "cbff33fc268c1e503f7aba3c9c91ce2d10791d90386c0c5014656a574448ef32",
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"directions\":[{\"radius\":8,\"training_samples\":2931,\"samples\":2928,\"matched\":2377,\"pixel_reads\":8466255,\"training_matched\":2385,\"training_squared_error\":4.969238586954484,\"heldout_squared_error\":4.958360274996632},{\"radius\":8,\"training_samples\":13208,\"samples\":13198,\"matched\":9248,\"pixel_reads\":61050672,\"training_matched\":9247,\"training_squared_error\":42.32854614321362,\"heldout_squared_error\":42.53831730427539}],\"managed_used\":0,\"managed_peak\":63266880,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "status": "ok",
+      "evidence": {
+        "status": "ok",
+        "directions": [
+          {
+            "radius": 8,
+            "training_samples": 2931,
+            "samples": 2928,
+            "matched": 2377,
+            "pixel_reads": 8466255,
+            "training_matched": 2385,
+            "training_squared_error": 4.969238586954484,
+            "heldout_squared_error": 4.958360274996632
+          },
+          {
+            "radius": 8,
+            "training_samples": 13208,
+            "samples": 13198,
+            "matched": 9248,
+            "pixel_reads": 61050672,
+            "training_matched": 9247,
+            "training_squared_error": 42.32854614321362,
+            "heldout_squared_error": 42.53831730427539
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 63266880,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      },
+      "same_forward_counts": true,
+      "training_loss": 0.0016954072285753955
+    },
+    {
+      "model_index": 0,
+      "shift": [
+        -1,
+        1
+      ],
+      "matrix": [
+        [
+          0.41875711003956806,
+          0.19784425098938965,
+          -204.54847035526203
+        ],
+        [
+          -0.0535017230108881,
+          0.5841383895913079,
+          -83.8491629480878
+        ],
+        [
+          -0.00022344441600046018,
+          0.0006183023850363254,
+          0.8382813553456121
+        ]
+      ],
+      "source_domain": [
+        681,
+        450,
+        271,
+        202
+      ],
+      "target_domain": [
+        205,
+        162,
+        93,
+        63
+      ],
+      "inliers": [
+        52,
+        64,
+        70,
+        72,
+        83,
+        84,
+        89,
+        92,
+        93,
+        94,
+        96,
+        97
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/fold-training-shift-0--1-1.txt",
+      "input_sha256": "e85fec40f197cd767b96b07bcb5ae14b78221ae9452356837648d1c2bf4ced16",
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"directions\":[{\"radius\":8,\"training_samples\":2931,\"samples\":2928,\"matched\":2369,\"pixel_reads\":8466255,\"training_matched\":2350,\"training_squared_error\":4.823977866491146,\"heldout_squared_error\":4.807599705962066},{\"radius\":8,\"training_samples\":13115,\"samples\":13111,\"matched\":7810,\"pixel_reads\":60634512,\"training_matched\":7712,\"training_squared_error\":49.514529692387015,\"heldout_squared_error\":49.88005047526454}],\"managed_used\":0,\"managed_peak\":63266880,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "status": "ok",
+      "evidence": {
+        "status": "ok",
+        "directions": [
+          {
+            "radius": 8,
+            "training_samples": 2931,
+            "samples": 2928,
+            "matched": 2369,
+            "pixel_reads": 8466255,
+            "training_matched": 2350,
+            "training_squared_error": 4.823977866491146,
+            "heldout_squared_error": 4.807599705962066
+          },
+          {
+            "radius": 8,
+            "training_samples": 13115,
+            "samples": 13111,
+            "matched": 7810,
+            "pixel_reads": 60634512,
+            "training_matched": 7712,
+            "training_squared_error": 49.514529692387015,
+            "heldout_squared_error": 49.88005047526454
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 63266880,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      },
+      "same_forward_counts": true,
+      "training_loss": 0.001645847105592339
+    },
+    {
+      "model_index": 0,
+      "shift": [
+        0,
+        1
+      ],
+      "matrix": [
+        [
+          0.4185336656235676,
+          0.19846255337442598,
+          -203.71018899991643
+        ],
+        [
+          -0.0535017230108881,
+          0.5841383895913079,
+          -83.8491629480878
+        ],
+        [
+          -0.00022344441600046018,
+          0.0006183023850363254,
+          0.8382813553456121
+        ]
+      ],
+      "source_domain": [
+        681,
+        450,
+        271,
+        202
+      ],
+      "target_domain": [
+        205,
+        162,
+        93,
+        63
+      ],
+      "inliers": [
+        52,
+        64,
+        70,
+        72,
+        82,
+        83,
+        84,
+        87,
+        89,
+        92,
+        93,
+        94,
+        96,
+        97
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/fold-training-shift-0-0-1.txt",
+      "input_sha256": "53d7340854bbb329cf1dec22a0480938ac0ecd55befa1203c146d0e862839722",
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"directions\":[{\"radius\":8,\"training_samples\":2931,\"samples\":2928,\"matched\":2358,\"pixel_reads\":8466255,\"training_matched\":2339,\"training_squared_error\":4.763240563393692,\"heldout_squared_error\":4.761784831162729},{\"radius\":8,\"training_samples\":13140,\"samples\":13120,\"matched\":7680,\"pixel_reads\":60713120,\"training_matched\":7705,\"training_squared_error\":49.661824104202836,\"heldout_squared_error\":49.84814734666687}],\"managed_used\":0,\"managed_peak\":63266880,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "status": "ok",
+      "evidence": {
+        "status": "ok",
+        "directions": [
+          {
+            "radius": 8,
+            "training_samples": 2931,
+            "samples": 2928,
+            "matched": 2358,
+            "pixel_reads": 8466255,
+            "training_matched": 2339,
+            "training_squared_error": 4.763240563393692,
+            "heldout_squared_error": 4.761784831162729
+          },
+          {
+            "radius": 8,
+            "training_samples": 13140,
+            "samples": 13120,
+            "matched": 7680,
+            "pixel_reads": 60713120,
+            "training_matched": 7705,
+            "training_squared_error": 49.661824104202836,
+            "heldout_squared_error": 49.84814734666687
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 63266880,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      },
+      "same_forward_counts": true,
+      "training_loss": 0.0016251247230957668
+    },
+    {
+      "model_index": 0,
+      "shift": [
+        1,
+        1
+      ],
+      "matrix": [
+        [
+          0.4183102212075671,
+          0.1990808557594623,
+          -202.87190764457083
+        ],
+        [
+          -0.0535017230108881,
+          0.5841383895913079,
+          -83.8491629480878
+        ],
+        [
+          -0.00022344441600046018,
+          0.0006183023850363254,
+          0.8382813553456121
+        ]
+      ],
+      "source_domain": [
+        681,
+        450,
+        271,
+        202
+      ],
+      "target_domain": [
+        205,
+        162,
+        93,
+        63
+      ],
+      "inliers": [
+        52,
+        64,
+        70,
+        71,
+        72,
+        82,
+        84,
+        87,
+        89,
+        92,
+        94,
+        96,
+        97
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/fold-training-shift-0-1-1.txt",
+      "input_sha256": "cc10f3156e5d4da13c3f8377e35d4c66cbb160ba99ab7e7892e8febcbda25530",
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"directions\":[{\"radius\":8,\"training_samples\":2931,\"samples\":2928,\"matched\":2349,\"pixel_reads\":8466255,\"training_matched\":2336,\"training_squared_error\":4.70356820049335,\"heldout_squared_error\":4.725108982694148},{\"radius\":8,\"training_samples\":13158,\"samples\":13134,\"matched\":7588,\"pixel_reads\":60787104,\"training_matched\":7649,\"training_squared_error\":49.924113892367586,\"heldout_squared_error\":49.8915138095988}],\"managed_used\":0,\"managed_peak\":63266880,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "status": "ok",
+      "evidence": {
+        "status": "ok",
+        "directions": [
+          {
+            "radius": 8,
+            "training_samples": 2931,
+            "samples": 2928,
+            "matched": 2349,
+            "pixel_reads": 8466255,
+            "training_matched": 2336,
+            "training_squared_error": 4.70356820049335,
+            "heldout_squared_error": 4.725108982694148
+          },
+          {
+            "radius": 8,
+            "training_samples": 13158,
+            "samples": 13134,
+            "matched": 7588,
+            "pixel_reads": 60787104,
+            "training_matched": 7649,
+            "training_squared_error": 49.924113892367586,
+            "heldout_squared_error": 49.8915138095988
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 63266880,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      },
+      "same_forward_counts": true,
+      "training_loss": 0.001604765677411583
+    },
+    {
+      "model_index": 1,
+      "shift": [
+        0,
+        0
+      ],
+      "matrix": [
+        [
+          0.5841396054403898,
+          0.06449934069649939,
+          -280.9766937275939
+        ],
+        [
+          0.028074743749347954,
+          0.5231811541882987,
+          -125.22253061336158
+        ],
+        [
+          0.00030600642272842035,
+          0.00010197867584308398,
+          0.6397310430246039
+        ]
+      ],
+      "source_domain": [
+        886,
+        462,
+        247,
+        192
+      ],
+      "target_domain": [
+        300,
+        164,
+        84,
+        59
+      ],
+      "inliers": [
+        100,
+        102,
+        105,
+        106,
+        107,
+        110,
+        111,
+        112,
+        116,
+        121,
+        124,
+        127,
+        136,
+        139,
+        140,
+        147,
+        150,
+        156,
+        161
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/fold-training-shift-1-0-0.txt",
+      "input_sha256": "44b0d3522786e00e4e9f1151e545ddea2012cd3ac788285964b3edcf6547e658",
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"directions\":[{\"radius\":8,\"training_samples\":2488,\"samples\":2468,\"matched\":1777,\"pixel_reads\":7161420,\"training_matched\":1821,\"training_squared_error\":3.15283796565306,\"heldout_squared_error\":3.023551080508284},{\"radius\":8,\"training_samples\":10345,\"samples\":10341,\"matched\":9638,\"pixel_reads\":47826032,\"training_matched\":9661,\"training_squared_error\":6.671073951005962,\"heldout_squared_error\":6.660461889211028}],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "status": "ok",
+      "evidence": {
+        "status": "ok",
+        "directions": [
+          {
+            "radius": 8,
+            "training_samples": 2488,
+            "samples": 2468,
+            "matched": 1777,
+            "pixel_reads": 7161420,
+            "training_matched": 1821,
+            "training_squared_error": 3.15283796565306,
+            "heldout_squared_error": 3.023551080508284
+          },
+          {
+            "radius": 8,
+            "training_samples": 10345,
+            "samples": 10341,
+            "matched": 9638,
+            "pixel_reads": 47826032,
+            "training_matched": 9661,
+            "training_squared_error": 6.671073951005962,
+            "heldout_squared_error": 6.660461889211028
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      },
+      "same_forward_counts": true,
+      "training_loss": 0.0012672178318541237
+    },
+    {
+      "model_index": 1,
+      "shift": [
+        -1,
+        -1
+      ],
+      "matrix": [
+        [
+          0.5838335990176614,
+          0.06439736202065631,
+          -281.6164247706185
+        ],
+        [
+          0.027768737326619535,
+          0.5230791755124556,
+          -125.8622616563862
+        ],
+        [
+          0.00030600642272842035,
+          0.00010197867584308398,
+          0.6397310430246039
+        ]
+      ],
+      "source_domain": [
+        886,
+        462,
+        247,
+        192
+      ],
+      "target_domain": [
+        300,
+        164,
+        84,
+        59
+      ],
+      "inliers": [
+        100,
+        102,
+        104,
+        106,
+        107,
+        110,
+        111,
+        112,
+        116,
+        121,
+        124,
+        127,
+        136,
+        139,
+        140,
+        147,
+        161
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/fold-training-shift-1--1--1.txt",
+      "input_sha256": "c38a4523579e19f0d9f978d7262eae63f32abe1e6bd17acbc61b078a552d3993",
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"directions\":[{\"radius\":8,\"training_samples\":2488,\"samples\":2468,\"matched\":1730,\"pixel_reads\":7161420,\"training_matched\":1819,\"training_squared_error\":3.3195721428473,\"heldout_squared_error\":3.193775264217937},{\"radius\":8,\"training_samples\":10378,\"samples\":10362,\"matched\":9694,\"pixel_reads\":47950880,\"training_matched\":9723,\"training_squared_error\":6.567650506496267,\"heldout_squared_error\":6.577083779720156}],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "status": "ok",
+      "evidence": {
+        "status": "ok",
+        "directions": [
+          {
+            "radius": 8,
+            "training_samples": 2488,
+            "samples": 2468,
+            "matched": 1730,
+            "pixel_reads": 7161420,
+            "training_matched": 1819,
+            "training_squared_error": 3.3195721428473,
+            "heldout_squared_error": 3.193775264217937
+          },
+          {
+            "radius": 8,
+            "training_samples": 10378,
+            "samples": 10362,
+            "matched": 9694,
+            "pixel_reads": 47950880,
+            "training_matched": 9723,
+            "training_squared_error": 6.567650506496267,
+            "heldout_squared_error": 6.577083779720156
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      },
+      "same_forward_counts": true,
+      "training_loss": 0.0013342331763855709
+    },
+    {
+      "model_index": 1,
+      "shift": [
+        0,
+        -1
+      ],
+      "matrix": [
+        [
+          0.5841396054403898,
+          0.06449934069649939,
+          -280.9766937275939
+        ],
+        [
+          0.027768737326619535,
+          0.5230791755124556,
+          -125.8622616563862
+        ],
+        [
+          0.00030600642272842035,
+          0.00010197867584308398,
+          0.6397310430246039
+        ]
+      ],
+      "source_domain": [
+        886,
+        462,
+        247,
+        192
+      ],
+      "target_domain": [
+        300,
+        164,
+        84,
+        59
+      ],
+      "inliers": [
+        100,
+        102,
+        104,
+        105,
+        106,
+        107,
+        110,
+        111,
+        112,
+        116,
+        121,
+        124,
+        127,
+        136,
+        139,
+        140,
+        147,
+        150,
+        161
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/fold-training-shift-1-0--1.txt",
+      "input_sha256": "dee48181ff29c5054b5a9f30304862b5d35c10b0433ea27e670fe4426a7f4075",
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"directions\":[{\"radius\":8,\"training_samples\":2488,\"samples\":2468,\"matched\":1741,\"pixel_reads\":7161420,\"training_matched\":1825,\"training_squared_error\":3.3548529024037643,\"heldout_squared_error\":3.2296784273211063},{\"radius\":8,\"training_samples\":10355,\"samples\":10342,\"matched\":9613,\"pixel_reads\":47851464,\"training_matched\":9661,\"training_squared_error\":6.554811958089298,\"heldout_squared_error\":6.504152504399472}],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "status": "ok",
+      "evidence": {
+        "status": "ok",
+        "directions": [
+          {
+            "radius": 8,
+            "training_samples": 2488,
+            "samples": 2468,
+            "matched": 1741,
+            "pixel_reads": 7161420,
+            "training_matched": 1825,
+            "training_squared_error": 3.3548529024037643,
+            "heldout_squared_error": 3.2296784273211063
+          },
+          {
+            "radius": 8,
+            "training_samples": 10355,
+            "samples": 10342,
+            "matched": 9613,
+            "pixel_reads": 47851464,
+            "training_matched": 9661,
+            "training_squared_error": 6.554811958089298,
+            "heldout_squared_error": 6.504152504399472
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      },
+      "same_forward_counts": true,
+      "training_loss": 0.0013484135459822203
+    },
+    {
+      "model_index": 1,
+      "shift": [
+        1,
+        -1
+      ],
+      "matrix": [
+        [
+          0.5844456118631182,
+          0.06460131937234247,
+          -280.3369626845693
+        ],
+        [
+          0.027768737326619535,
+          0.5230791755124556,
+          -125.8622616563862
+        ],
+        [
+          0.00030600642272842035,
+          0.00010197867584308398,
+          0.6397310430246039
+        ]
+      ],
+      "source_domain": [
+        886,
+        462,
+        247,
+        192
+      ],
+      "target_domain": [
+        300,
+        164,
+        84,
+        59
+      ],
+      "inliers": [
+        100,
+        102,
+        104,
+        105,
+        106,
+        110,
+        111,
+        112,
+        121,
+        127,
+        136,
+        139,
+        140,
+        150,
+        161
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/fold-training-shift-1-1--1.txt",
+      "input_sha256": "5ca4a71d1113fe097c3a209725deff622039840e79660104421a05baf6bf1546",
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"directions\":[{\"radius\":8,\"training_samples\":2488,\"samples\":2468,\"matched\":1768,\"pixel_reads\":7161420,\"training_matched\":1820,\"training_squared_error\":3.4735974094799853,\"heldout_squared_error\":3.3402870681432137},{\"radius\":8,\"training_samples\":10327,\"samples\":10329,\"matched\":9531,\"pixel_reads\":47756672,\"training_matched\":9559,\"training_squared_error\":6.6605385000111905,\"heldout_squared_error\":6.668363997935991}],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "status": "ok",
+      "evidence": {
+        "status": "ok",
+        "directions": [
+          {
+            "radius": 8,
+            "training_samples": 2488,
+            "samples": 2468,
+            "matched": 1768,
+            "pixel_reads": 7161420,
+            "training_matched": 1820,
+            "training_squared_error": 3.4735974094799853,
+            "heldout_squared_error": 3.3402870681432137
+          },
+          {
+            "radius": 8,
+            "training_samples": 10327,
+            "samples": 10329,
+            "matched": 9531,
+            "pixel_reads": 47756672,
+            "training_matched": 9559,
+            "training_squared_error": 6.6605385000111905,
+            "heldout_squared_error": 6.668363997935991
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      },
+      "same_forward_counts": true,
+      "training_loss": 0.0013961404378938847
+    },
+    {
+      "model_index": 1,
+      "shift": [
+        -1,
+        0
+      ],
+      "matrix": [
+        [
+          0.5838335990176614,
+          0.06439736202065631,
+          -281.6164247706185
+        ],
+        [
+          0.028074743749347954,
+          0.5231811541882987,
+          -125.22253061336158
+        ],
+        [
+          0.00030600642272842035,
+          0.00010197867584308398,
+          0.6397310430246039
+        ]
+      ],
+      "source_domain": [
+        886,
+        462,
+        247,
+        192
+      ],
+      "target_domain": [
+        300,
+        164,
+        84,
+        59
+      ],
+      "inliers": [
+        100,
+        102,
+        106,
+        107,
+        110,
+        112,
+        116,
+        121,
+        124,
+        127,
+        136,
+        139,
+        140,
+        147,
+        150,
+        156,
+        161
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/fold-training-shift-1--1-0.txt",
+      "input_sha256": "87ef7d501900c8688c399ea23cf355e5c323e3b5c6617f98b0edeeb0d9682c6d",
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"directions\":[{\"radius\":8,\"training_samples\":2488,\"samples\":2468,\"matched\":1786,\"pixel_reads\":7161420,\"training_matched\":1817,\"training_squared_error\":3.0969466701688457,\"heldout_squared_error\":2.992678923172261},{\"radius\":8,\"training_samples\":10372,\"samples\":10357,\"matched\":9723,\"pixel_reads\":47925448,\"training_matched\":9768,\"training_squared_error\":6.63942938049128,\"heldout_squared_error\":6.650986853703757}],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "status": "ok",
+      "evidence": {
+        "status": "ok",
+        "directions": [
+          {
+            "radius": 8,
+            "training_samples": 2488,
+            "samples": 2468,
+            "matched": 1786,
+            "pixel_reads": 7161420,
+            "training_matched": 1817,
+            "training_squared_error": 3.0969466701688457,
+            "heldout_squared_error": 2.992678923172261
+          },
+          {
+            "radius": 8,
+            "training_samples": 10372,
+            "samples": 10357,
+            "matched": 9723,
+            "pixel_reads": 47925448,
+            "training_matched": 9768,
+            "training_squared_error": 6.63942938049128,
+            "heldout_squared_error": 6.650986853703757
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      },
+      "same_forward_counts": true,
+      "training_loss": 0.001244753484794552
+    },
+    {
+      "model_index": 1,
+      "shift": [
+        1,
+        0
+      ],
+      "matrix": [
+        [
+          0.5844456118631182,
+          0.06460131937234247,
+          -280.3369626845693
+        ],
+        [
+          0.028074743749347954,
+          0.5231811541882987,
+          -125.22253061336158
+        ],
+        [
+          0.00030600642272842035,
+          0.00010197867584308398,
+          0.6397310430246039
+        ]
+      ],
+      "source_domain": [
+        886,
+        462,
+        247,
+        192
+      ],
+      "target_domain": [
+        300,
+        164,
+        84,
+        59
+      ],
+      "inliers": [
+        100,
+        102,
+        105,
+        106,
+        107,
+        110,
+        111,
+        112,
+        121,
+        124,
+        127,
+        136,
+        139,
+        140,
+        150,
+        156,
+        161
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/fold-training-shift-1-1-0.txt",
+      "input_sha256": "52e7231a1282a4719e44a44e6accf16c30f852fa938e1dbd639129788d564bc5",
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"directions\":[{\"radius\":8,\"training_samples\":2488,\"samples\":2468,\"matched\":1789,\"pixel_reads\":7161420,\"training_matched\":1836,\"training_squared_error\":3.292465679044648,\"heldout_squared_error\":3.1338551146047546},{\"radius\":8,\"training_samples\":10319,\"samples\":10326,\"matched\":9481,\"pixel_reads\":47731240,\"training_matched\":9553,\"training_squared_error\":6.866585844897308,\"heldout_squared_error\":6.881749001900928}],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "status": "ok",
+      "evidence": {
+        "status": "ok",
+        "directions": [
+          {
+            "radius": 8,
+            "training_samples": 2488,
+            "samples": 2468,
+            "matched": 1789,
+            "pixel_reads": 7161420,
+            "training_matched": 1836,
+            "training_squared_error": 3.292465679044648,
+            "heldout_squared_error": 3.1338551146047546
+          },
+          {
+            "radius": 8,
+            "training_samples": 10319,
+            "samples": 10326,
+            "matched": 9481,
+            "pixel_reads": 47731240,
+            "training_matched": 9553,
+            "training_squared_error": 6.866585844897308,
+            "heldout_squared_error": 6.881749001900928
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      },
+      "same_forward_counts": true,
+      "training_loss": 0.0013233382954359518
+    },
+    {
+      "model_index": 1,
+      "shift": [
+        -1,
+        1
+      ],
+      "matrix": [
+        [
+          0.5838335990176614,
+          0.06439736202065631,
+          -281.6164247706185
+        ],
+        [
+          0.028380750172076374,
+          0.5232831328641417,
+          -124.58279957033697
+        ],
+        [
+          0.00030600642272842035,
+          0.00010197867584308398,
+          0.6397310430246039
+        ]
+      ],
+      "source_domain": [
+        886,
+        462,
+        247,
+        192
+      ],
+      "target_domain": [
+        300,
+        164,
+        84,
+        59
+      ],
+      "inliers": [
+        100,
+        102,
+        106,
+        107,
+        110,
+        112,
+        116,
+        121,
+        124,
+        136,
+        139,
+        140,
+        147,
+        156,
+        161
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/fold-training-shift-1--1-1.txt",
+      "input_sha256": "28683337940bdc8a5dbf01921875bfd128079ce47a0446abc123109c1bf689cf",
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"directions\":[{\"radius\":8,\"training_samples\":2488,\"samples\":2468,\"matched\":1782,\"pixel_reads\":7161420,\"training_matched\":1826,\"training_squared_error\":3.1126835827739545,\"heldout_squared_error\":2.9947110014053138},{\"radius\":8,\"training_samples\":10361,\"samples\":10355,\"matched\":9408,\"pixel_reads\":47895392,\"training_matched\":9551,\"training_squared_error\":7.825018087663638,\"heldout_squared_error\":7.8613630495608495}],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "status": "ok",
+      "evidence": {
+        "status": "ok",
+        "directions": [
+          {
+            "radius": 8,
+            "training_samples": 2488,
+            "samples": 2468,
+            "matched": 1782,
+            "pixel_reads": 7161420,
+            "training_matched": 1826,
+            "training_squared_error": 3.1126835827739545,
+            "heldout_squared_error": 2.9947110014053138
+          },
+          {
+            "radius": 8,
+            "training_samples": 10361,
+            "samples": 10355,
+            "matched": 9408,
+            "pixel_reads": 47895392,
+            "training_matched": 9551,
+            "training_squared_error": 7.825018087663638,
+            "heldout_squared_error": 7.8613630495608495
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      },
+      "same_forward_counts": true,
+      "training_loss": 0.0012510786104396924
+    },
+    {
+      "model_index": 1,
+      "shift": [
+        0,
+        1
+      ],
+      "matrix": [
+        [
+          0.5841396054403898,
+          0.06449934069649939,
+          -280.9766937275939
+        ],
+        [
+          0.028380750172076374,
+          0.5232831328641417,
+          -124.58279957033697
+        ],
+        [
+          0.00030600642272842035,
+          0.00010197867584308398,
+          0.6397310430246039
+        ]
+      ],
+      "source_domain": [
+        886,
+        462,
+        247,
+        192
+      ],
+      "target_domain": [
+        300,
+        164,
+        84,
+        59
+      ],
+      "inliers": [
+        100,
+        102,
+        105,
+        106,
+        107,
+        110,
+        112,
+        121,
+        124,
+        127,
+        136,
+        139,
+        140,
+        147,
+        150,
+        156,
+        161
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/fold-training-shift-1-0-1.txt",
+      "input_sha256": "8e81cf7c6273ae1bf8507174b23656696d85e798fac7b9bd61cac9580af37c2c",
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"directions\":[{\"radius\":8,\"training_samples\":2488,\"samples\":2468,\"matched\":1778,\"pixel_reads\":7161420,\"training_matched\":1813,\"training_squared_error\":3.190213935131295,\"heldout_squared_error\":3.016908100611186},{\"radius\":8,\"training_samples\":10335,\"samples\":10339,\"matched\":9334,\"pixel_reads\":47798288,\"training_matched\":9400,\"training_squared_error\":7.9407273991098934,\"heldout_squared_error\":7.949793878480792}],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "status": "ok",
+      "evidence": {
+        "status": "ok",
+        "directions": [
+          {
+            "radius": 8,
+            "training_samples": 2488,
+            "samples": 2468,
+            "matched": 1778,
+            "pixel_reads": 7161420,
+            "training_matched": 1813,
+            "training_squared_error": 3.190213935131295,
+            "heldout_squared_error": 3.016908100611186
+          },
+          {
+            "radius": 8,
+            "training_samples": 10335,
+            "samples": 10339,
+            "matched": 9334,
+            "pixel_reads": 47798288,
+            "training_matched": 9400,
+            "training_squared_error": 7.9407273991098934,
+            "heldout_squared_error": 7.949793878480792
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      },
+      "same_forward_counts": true,
+      "training_loss": 0.0012822403276251187
+    },
+    {
+      "model_index": 1,
+      "shift": [
+        1,
+        1
+      ],
+      "matrix": [
+        [
+          0.5844456118631182,
+          0.06460131937234247,
+          -280.3369626845693
+        ],
+        [
+          0.028380750172076374,
+          0.5232831328641417,
+          -124.58279957033697
+        ],
+        [
+          0.00030600642272842035,
+          0.00010197867584308398,
+          0.6397310430246039
+        ]
+      ],
+      "source_domain": [
+        886,
+        462,
+        247,
+        192
+      ],
+      "target_domain": [
+        300,
+        164,
+        84,
+        59
+      ],
+      "inliers": [
+        100,
+        102,
+        105,
+        106,
+        107,
+        110,
+        112,
+        121,
+        124,
+        127,
+        139,
+        140,
+        150,
+        156,
+        161
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/fold-training-shift-1-1-1.txt",
+      "input_sha256": "02926486a7c0e45875ad06326407ec565de496ef74e814fc6f378da2ed237151",
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"directions\":[{\"radius\":8,\"training_samples\":2488,\"samples\":2468,\"matched\":1772,\"pixel_reads\":7161420,\"training_matched\":1795,\"training_squared_error\":3.3500006650831193,\"heldout_squared_error\":3.1199110427759487},{\"radius\":8,\"training_samples\":10311,\"samples\":10324,\"matched\":9223,\"pixel_reads\":47708120,\"training_matched\":9259,\"training_squared_error\":8.242896916153072,\"heldout_squared_error\":8.239111429632429}],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "status": "ok",
+      "evidence": {
+        "status": "ok",
+        "directions": [
+          {
+            "radius": 8,
+            "training_samples": 2488,
+            "samples": 2468,
+            "matched": 1772,
+            "pixel_reads": 7161420,
+            "training_matched": 1795,
+            "training_squared_error": 3.3500006650831193,
+            "heldout_squared_error": 3.1199110427759487
+          },
+          {
+            "radius": 8,
+            "training_samples": 10311,
+            "samples": 10324,
+            "matched": 9223,
+            "pixel_reads": 47708120,
+            "training_matched": 9259,
+            "training_squared_error": 8.242896916153072,
+            "heldout_squared_error": 8.239111429632429
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      },
+      "same_forward_counts": true,
+      "training_loss": 0.001346463289824405
+    },
+    {
+      "model_index": 2,
+      "shift": [
+        0,
+        0
+      ],
+      "matrix": [
+        [
+          0.5062617385302625,
+          0.27772602508438665,
+          -357.04420718479287
+        ],
+        [
+          0.021408645253887637,
+          0.6772017774217518,
+          -229.74249486157413
+        ],
+        [
+          0.00016096869798490644,
+          0.0007406422371262621,
+          0.328921383682814
+        ]
+      ],
+      "source_domain": [
+        877,
+        602,
+        288,
+        167
+      ],
+      "target_domain": [
+        301,
+        232,
+        98,
+        46
+      ],
+      "inliers": [
+        98,
+        101,
+        103,
+        108,
+        113,
+        114,
+        115,
+        118,
+        119,
+        120,
+        122,
+        125,
+        129,
+        130,
+        132,
+        135,
+        137,
+        146,
+        152,
+        153,
+        158,
+        162,
+        163,
+        164,
+        165,
+        169,
+        173,
+        180
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/fold-training-shift-2-0-0.txt",
+      "input_sha256": "6984c7ac4ba4048bc30be2d7ff835c36f4372141a1c832f4798d92b83de2fde1",
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"directions\":[{\"radius\":8,\"training_samples\":2256,\"samples\":2252,\"matched\":1348,\"pixel_reads\":6514060,\"training_matched\":1362,\"training_squared_error\":5.961725535635464,\"heldout_squared_error\":6.130775982316919},{\"radius\":8,\"training_samples\":10270,\"samples\":10256,\"matched\":8219,\"pixel_reads\":47456112,\"training_matched\":8279,\"training_squared_error\":11.660753629769527,\"heldout_squared_error\":11.62233779798331}],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "status": "ok",
+      "evidence": {
+        "status": "ok",
+        "directions": [
+          {
+            "radius": 8,
+            "training_samples": 2256,
+            "samples": 2252,
+            "matched": 1348,
+            "pixel_reads": 6514060,
+            "training_matched": 1362,
+            "training_squared_error": 5.961725535635464,
+            "heldout_squared_error": 6.130775982316919
+          },
+          {
+            "radius": 8,
+            "training_samples": 10270,
+            "samples": 10256,
+            "matched": 8219,
+            "pixel_reads": 47456112,
+            "training_matched": 8279,
+            "training_squared_error": 11.660753629769527,
+            "heldout_squared_error": 11.62233779798331
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      },
+      "same_forward_counts": true,
+      "training_loss": 0.0026426088367178476
+    },
+    {
+      "model_index": 2,
+      "shift": [
+        -1,
+        -1
+      ],
+      "matrix": [
+        [
+          0.5061007698322776,
+          0.2769853828472604,
+          -357.3731285684757
+        ],
+        [
+          0.02124767655590273,
+          0.6764611351846256,
+          -230.07141624525696
+        ],
+        [
+          0.00016096869798490644,
+          0.0007406422371262621,
+          0.328921383682814
+        ]
+      ],
+      "source_domain": [
+        877,
+        602,
+        288,
+        167
+      ],
+      "target_domain": [
+        301,
+        232,
+        98,
+        46
+      ],
+      "inliers": [
+        101,
+        113,
+        114,
+        115,
+        118,
+        119,
+        120,
+        122,
+        125,
+        129,
+        130,
+        132,
+        137,
+        152,
+        153,
+        158,
+        162,
+        163,
+        165,
+        169,
+        180
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/fold-training-shift-2--1--1.txt",
+      "input_sha256": "cb64116b489d67ab31ed8c8d937ff1b571418b877119c7d4defca2620237c6e4",
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"directions\":[{\"radius\":8,\"training_samples\":2256,\"samples\":2252,\"matched\":1197,\"pixel_reads\":6514060,\"training_matched\":1262,\"training_squared_error\":6.696584169934338,\"heldout_squared_error\":6.819593310829036},{\"radius\":8,\"training_samples\":10321,\"samples\":10319,\"matched\":7971,\"pixel_reads\":47719680,\"training_matched\":8000,\"training_squared_error\":15.516251676523328,\"heldout_squared_error\":15.430392983596985}],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "status": "ok",
+      "evidence": {
+        "status": "ok",
+        "directions": [
+          {
+            "radius": 8,
+            "training_samples": 2256,
+            "samples": 2252,
+            "matched": 1197,
+            "pixel_reads": 6514060,
+            "training_matched": 1262,
+            "training_squared_error": 6.696584169934338,
+            "heldout_squared_error": 6.819593310829036
+          },
+          {
+            "radius": 8,
+            "training_samples": 10321,
+            "samples": 10319,
+            "matched": 7971,
+            "pixel_reads": 47719680,
+            "training_matched": 8000,
+            "training_squared_error": 15.516251676523328,
+            "heldout_squared_error": 15.430392983596985
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      },
+      "same_forward_counts": true,
+      "training_loss": 0.00296834404695671
+    },
+    {
+      "model_index": 2,
+      "shift": [
+        0,
+        -1
+      ],
+      "matrix": [
+        [
+          0.5062617385302625,
+          0.27772602508438665,
+          -357.04420718479287
+        ],
+        [
+          0.02124767655590273,
+          0.6764611351846256,
+          -230.07141624525696
+        ],
+        [
+          0.00016096869798490644,
+          0.0007406422371262621,
+          0.328921383682814
+        ]
+      ],
+      "source_domain": [
+        877,
+        602,
+        288,
+        167
+      ],
+      "target_domain": [
+        301,
+        232,
+        98,
+        46
+      ],
+      "inliers": [
+        101,
+        103,
+        108,
+        113,
+        114,
+        115,
+        118,
+        119,
+        120,
+        122,
+        125,
+        129,
+        130,
+        132,
+        135,
+        137,
+        152,
+        153,
+        158,
+        162,
+        163,
+        164,
+        165,
+        169,
+        173,
+        180
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/fold-training-shift-2-0--1.txt",
+      "input_sha256": "26749f8c24e736e22145e36cc621c7ff46b8c989cdfb62c6bc9bbcc0c9da7abc",
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"directions\":[{\"radius\":8,\"training_samples\":2256,\"samples\":2252,\"matched\":1240,\"pixel_reads\":6514060,\"training_matched\":1278,\"training_squared_error\":6.324825028819274,\"heldout_squared_error\":6.48301023164496},{\"radius\":8,\"training_samples\":10302,\"samples\":10312,\"matched\":8223,\"pixel_reads\":47659568,\"training_matched\":8155,\"training_squared_error\":12.231160101489007,\"heldout_squared_error\":12.237013733170716}],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "status": "ok",
+      "evidence": {
+        "status": "ok",
+        "directions": [
+          {
+            "radius": 8,
+            "training_samples": 2256,
+            "samples": 2252,
+            "matched": 1240,
+            "pixel_reads": 6514060,
+            "training_matched": 1278,
+            "training_squared_error": 6.324825028819274,
+            "heldout_squared_error": 6.48301023164496
+          },
+          {
+            "radius": 8,
+            "training_samples": 10302,
+            "samples": 10312,
+            "matched": 8223,
+            "pixel_reads": 47659568,
+            "training_matched": 8155,
+            "training_squared_error": 12.231160101489007,
+            "heldout_squared_error": 12.237013733170716
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      },
+      "same_forward_counts": true,
+      "training_loss": 0.0028035571936255647
+    },
+    {
+      "model_index": 2,
+      "shift": [
+        1,
+        -1
+      ],
+      "matrix": [
+        [
+          0.5064227072282473,
+          0.27846666732151293,
+          -356.71528580111004
+        ],
+        [
+          0.02124767655590273,
+          0.6764611351846256,
+          -230.07141624525696
+        ],
+        [
+          0.00016096869798490644,
+          0.0007406422371262621,
+          0.328921383682814
+        ]
+      ],
+      "source_domain": [
+        877,
+        602,
+        288,
+        167
+      ],
+      "target_domain": [
+        301,
+        232,
+        98,
+        46
+      ],
+      "inliers": [
+        101,
+        103,
+        108,
+        114,
+        115,
+        118,
+        119,
+        120,
+        122,
+        125,
+        129,
+        130,
+        132,
+        135,
+        137,
+        152,
+        153,
+        158,
+        162,
+        163,
+        164,
+        165,
+        169,
+        173
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/fold-training-shift-2-1--1.txt",
+      "input_sha256": "c71ec19e3a215f8122c81efe1e2d30f30663e9ef1fe84e5f977fb33d8b0f9903",
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"directions\":[{\"radius\":8,\"training_samples\":2256,\"samples\":2252,\"matched\":1291,\"pixel_reads\":6514060,\"training_matched\":1311,\"training_squared_error\":5.993402846222398,\"heldout_squared_error\":6.1974345573798795},{\"radius\":8,\"training_samples\":10287,\"samples\":10302,\"matched\":8631,\"pixel_reads\":47601768,\"training_matched\":8557,\"training_squared_error\":9.976439265465617,\"heldout_squared_error\":9.952129156086713}],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "status": "ok",
+      "evidence": {
+        "status": "ok",
+        "directions": [
+          {
+            "radius": 8,
+            "training_samples": 2256,
+            "samples": 2252,
+            "matched": 1291,
+            "pixel_reads": 6514060,
+            "training_matched": 1311,
+            "training_squared_error": 5.993402846222398,
+            "heldout_squared_error": 6.1974345573798795
+          },
+          {
+            "radius": 8,
+            "training_samples": 10287,
+            "samples": 10302,
+            "matched": 8631,
+            "pixel_reads": 47601768,
+            "training_matched": 8557,
+            "training_squared_error": 9.976439265465617,
+            "heldout_squared_error": 9.952129156086713
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      },
+      "same_forward_counts": true,
+      "training_loss": 0.002656650197793616
+    },
+    {
+      "model_index": 2,
+      "shift": [
+        -1,
+        0
+      ],
+      "matrix": [
+        [
+          0.5061007698322776,
+          0.2769853828472604,
+          -357.3731285684757
+        ],
+        [
+          0.021408645253887637,
+          0.6772017774217518,
+          -229.74249486157413
+        ],
+        [
+          0.00016096869798490644,
+          0.0007406422371262621,
+          0.328921383682814
+        ]
+      ],
+      "source_domain": [
+        877,
+        602,
+        288,
+        167
+      ],
+      "target_domain": [
+        301,
+        232,
+        98,
+        46
+      ],
+      "inliers": [
+        98,
+        101,
+        103,
+        108,
+        113,
+        114,
+        115,
+        118,
+        119,
+        120,
+        122,
+        125,
+        129,
+        130,
+        132,
+        152,
+        153,
+        158,
+        162,
+        163,
+        164,
+        165,
+        169,
+        173,
+        180
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/fold-training-shift-2--1-0.txt",
+      "input_sha256": "b00f260e79344c4ea45bde7cf836aaff14ea7c8f6312b1b5e1c677623303574a",
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"directions\":[{\"radius\":8,\"training_samples\":2256,\"samples\":2252,\"matched\":1298,\"pixel_reads\":6514060,\"training_matched\":1341,\"training_squared_error\":6.35123894940484,\"heldout_squared_error\":6.488171808206217},{\"radius\":8,\"training_samples\":10293,\"samples\":10259,\"matched\":7998,\"pixel_reads\":47516224,\"training_matched\":8163,\"training_squared_error\":14.742479702068685,\"heldout_squared_error\":14.62183923461704}],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "status": "ok",
+      "evidence": {
+        "status": "ok",
+        "directions": [
+          {
+            "radius": 8,
+            "training_samples": 2256,
+            "samples": 2252,
+            "matched": 1298,
+            "pixel_reads": 6514060,
+            "training_matched": 1341,
+            "training_squared_error": 6.35123894940484,
+            "heldout_squared_error": 6.488171808206217
+          },
+          {
+            "radius": 8,
+            "training_samples": 10293,
+            "samples": 10259,
+            "matched": 7998,
+            "pixel_reads": 47516224,
+            "training_matched": 8163,
+            "training_squared_error": 14.742479702068685,
+            "heldout_squared_error": 14.62183923461704
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      },
+      "same_forward_counts": true,
+      "training_loss": 0.0028152654917574646
+    },
+    {
+      "model_index": 2,
+      "shift": [
+        1,
+        0
+      ],
+      "matrix": [
+        [
+          0.5064227072282473,
+          0.27846666732151293,
+          -356.71528580111004
+        ],
+        [
+          0.021408645253887637,
+          0.6772017774217518,
+          -229.74249486157413
+        ],
+        [
+          0.00016096869798490644,
+          0.0007406422371262621,
+          0.328921383682814
+        ]
+      ],
+      "source_domain": [
+        877,
+        602,
+        288,
+        167
+      ],
+      "target_domain": [
+        301,
+        232,
+        98,
+        46
+      ],
+      "inliers": [
+        101,
+        103,
+        108,
+        114,
+        115,
+        118,
+        119,
+        120,
+        122,
+        125,
+        129,
+        130,
+        135,
+        137,
+        146,
+        152,
+        153,
+        158,
+        162,
+        163,
+        164,
+        165,
+        169,
+        173,
+        174
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/fold-training-shift-2-1-0.txt",
+      "input_sha256": "65ca2b4223788d8468d3e81b9140ee884635d0bd7082bc5b5555ed3b6440de3e",
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"directions\":[{\"radius\":8,\"training_samples\":2256,\"samples\":2252,\"matched\":1390,\"pixel_reads\":6514060,\"training_matched\":1379,\"training_squared_error\":5.6165910567899235,\"heldout_squared_error\":5.83100024995319},{\"radius\":8,\"training_samples\":10249,\"samples\":10253,\"matched\":8650,\"pixel_reads\":47400624,\"training_matched\":8564,\"training_squared_error\":9.592311726909827,\"heldout_squared_error\":9.534639795487776}],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "status": "ok",
+      "evidence": {
+        "status": "ok",
+        "directions": [
+          {
+            "radius": 8,
+            "training_samples": 2256,
+            "samples": 2252,
+            "matched": 1390,
+            "pixel_reads": 6514060,
+            "training_matched": 1379,
+            "training_squared_error": 5.6165910567899235,
+            "heldout_squared_error": 5.83100024995319
+          },
+          {
+            "radius": 8,
+            "training_samples": 10249,
+            "samples": 10253,
+            "matched": 8650,
+            "pixel_reads": 47400624,
+            "training_matched": 8564,
+            "training_squared_error": 9.592311726909827,
+            "heldout_squared_error": 9.534639795487776
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      },
+      "same_forward_counts": true,
+      "training_loss": 0.0024896236953856044
+    },
+    {
+      "model_index": 2,
+      "shift": [
+        -1,
+        1
+      ],
+      "matrix": [
+        [
+          0.5061007698322776,
+          0.2769853828472604,
+          -357.3731285684757
+        ],
+        [
+          0.021569613951872544,
+          0.677942419658878,
+          -229.4135734778913
+        ],
+        [
+          0.00016096869798490644,
+          0.0007406422371262621,
+          0.328921383682814
+        ]
+      ],
+      "source_domain": [
+        877,
+        602,
+        288,
+        167
+      ],
+      "target_domain": [
+        301,
+        232,
+        98,
+        46
+      ],
+      "inliers": [
+        98,
+        103,
+        108,
+        113,
+        114,
+        115,
+        118,
+        119,
+        120,
+        125,
+        129,
+        130,
+        132,
+        146,
+        152,
+        153,
+        158,
+        162,
+        163,
+        164,
+        165,
+        169,
+        173,
+        180
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/fold-training-shift-2--1-1.txt",
+      "input_sha256": "2704ffa88807915cbd6a8e1c67942478ea134e4582d33494f4df547646575566",
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"directions\":[{\"radius\":8,\"training_samples\":2256,\"samples\":2252,\"matched\":1355,\"pixel_reads\":6514060,\"training_matched\":1382,\"training_squared_error\":6.123818555051796,\"heldout_squared_error\":6.254849413311264},{\"radius\":8,\"training_samples\":10229,\"samples\":10227,\"matched\":7828,\"pixel_reads\":47294272,\"training_matched\":7883,\"training_squared_error\":15.647958843871498,\"heldout_squared_error\":15.379736518707121}],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "status": "ok",
+      "evidence": {
+        "status": "ok",
+        "directions": [
+          {
+            "radius": 8,
+            "training_samples": 2256,
+            "samples": 2252,
+            "matched": 1355,
+            "pixel_reads": 6514060,
+            "training_matched": 1382,
+            "training_squared_error": 6.123818555051796,
+            "heldout_squared_error": 6.254849413311264
+          },
+          {
+            "radius": 8,
+            "training_samples": 10229,
+            "samples": 10227,
+            "matched": 7828,
+            "pixel_reads": 47294272,
+            "training_matched": 7883,
+            "training_squared_error": 15.647958843871498,
+            "heldout_squared_error": 15.379736518707121
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      },
+      "same_forward_counts": true,
+      "training_loss": 0.0027144585793669306
+    },
+    {
+      "model_index": 2,
+      "shift": [
+        0,
+        1
+      ],
+      "matrix": [
+        [
+          0.5062617385302625,
+          0.27772602508438665,
+          -357.04420718479287
+        ],
+        [
+          0.021569613951872544,
+          0.677942419658878,
+          -229.4135734778913
+        ],
+        [
+          0.00016096869798490644,
+          0.0007406422371262621,
+          0.328921383682814
+        ]
+      ],
+      "source_domain": [
+        877,
+        602,
+        288,
+        167
+      ],
+      "target_domain": [
+        301,
+        232,
+        98,
+        46
+      ],
+      "inliers": [
+        98,
+        101,
+        103,
+        108,
+        114,
+        115,
+        118,
+        119,
+        120,
+        122,
+        125,
+        129,
+        130,
+        132,
+        135,
+        137,
+        146,
+        152,
+        153,
+        158,
+        162,
+        163,
+        164,
+        165,
+        169,
+        173,
+        180
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/fold-training-shift-2-0-1.txt",
+      "input_sha256": "58e7d873f33ccd53bc04bdc6177912c0bd0ffae27fb055de1a8db5d2084d6e43",
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"directions\":[{\"radius\":8,\"training_samples\":2256,\"samples\":2252,\"matched\":1400,\"pixel_reads\":6514060,\"training_matched\":1392,\"training_squared_error\":5.7316291417694885,\"heldout_squared_error\":5.893949780055836},{\"radius\":8,\"training_samples\":10212,\"samples\":10218,\"matched\":8063,\"pixel_reads\":47234160,\"training_matched\":8024,\"training_squared_error\":12.885061740304478,\"heldout_squared_error\":12.67580970576796}],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "status": "ok",
+      "evidence": {
+        "status": "ok",
+        "directions": [
+          {
+            "radius": 8,
+            "training_samples": 2256,
+            "samples": 2252,
+            "matched": 1400,
+            "pixel_reads": 6514060,
+            "training_matched": 1392,
+            "training_squared_error": 5.7316291417694885,
+            "heldout_squared_error": 5.893949780055836
+          },
+          {
+            "radius": 8,
+            "training_samples": 10212,
+            "samples": 10218,
+            "matched": 8063,
+            "pixel_reads": 47234160,
+            "training_matched": 8024,
+            "training_squared_error": 12.885061740304478,
+            "heldout_squared_error": 12.67580970576796
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      },
+      "same_forward_counts": true,
+      "training_loss": 0.002540615754330447
+    },
+    {
+      "model_index": 2,
+      "shift": [
+        1,
+        1
+      ],
+      "matrix": [
+        [
+          0.5064227072282473,
+          0.27846666732151293,
+          -356.71528580111004
+        ],
+        [
+          0.021569613951872544,
+          0.677942419658878,
+          -229.4135734778913
+        ],
+        [
+          0.00016096869798490644,
+          0.0007406422371262621,
+          0.328921383682814
+        ]
+      ],
+      "source_domain": [
+        877,
+        602,
+        288,
+        167
+      ],
+      "target_domain": [
+        301,
+        232,
+        98,
+        46
+      ],
+      "inliers": [
+        98,
+        101,
+        103,
+        108,
+        114,
+        119,
+        120,
+        122,
+        125,
+        129,
+        130,
+        135,
+        137,
+        146,
+        158,
+        162,
+        163,
+        164,
+        165,
+        169,
+        173,
+        174
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/fold-training-shift-2-1-1.txt",
+      "input_sha256": "234717a79f3d52581f44d15b158ca5143d19a7df2cc0e3c81cc8c2d9980d410e",
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"directions\":[{\"radius\":8,\"training_samples\":2256,\"samples\":2252,\"matched\":1475,\"pixel_reads\":6514060,\"training_matched\":1413,\"training_squared_error\":5.387204405282941,\"heldout_squared_error\":5.593327490929376},{\"radius\":8,\"training_samples\":10195,\"samples\":10213,\"matched\":8333,\"pixel_reads\":47183296,\"training_matched\":8311,\"training_squared_error\":11.064393071558637,\"heldout_squared_error\":10.863061411494227}],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "status": "ok",
+      "evidence": {
+        "status": "ok",
+        "directions": [
+          {
+            "radius": 8,
+            "training_samples": 2256,
+            "samples": 2252,
+            "matched": 1475,
+            "pixel_reads": 6514060,
+            "training_matched": 1413,
+            "training_squared_error": 5.387204405282941,
+            "heldout_squared_error": 5.593327490929376
+          },
+          {
+            "radius": 8,
+            "training_samples": 10195,
+            "samples": 10213,
+            "matched": 8333,
+            "pixel_reads": 47183296,
+            "training_matched": 8311,
+            "training_squared_error": 11.064393071558637,
+            "heldout_squared_error": 10.863061411494227
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      },
+      "same_forward_counts": true,
+      "training_loss": 0.0023879452151076867
+    },
+    {
+      "model_index": 3,
+      "shift": [
+        0,
+        0
+      ],
+      "matrix": [
+        [
+          0.2620747617172537,
+          -0.008466367402710728,
+          88.71579990098758
+        ],
+        [
+          -0.14305297283484375,
+          0.5163661150411557,
+          43.849341709565294
+        ],
+        [
+          -0.0006484883608691561,
+          0.00015022396560042368,
+          1.5563358993887488
+        ]
+      ],
+      "source_domain": [
+        913,
+        753,
+        260,
+        242
+      ],
+      "target_domain": [
+        310,
+        305,
+        88,
+        70
+      ],
+      "inliers": [
+        109,
+        126,
+        131,
+        138,
+        143,
+        145,
+        151,
+        166,
+        171,
+        172,
+        178
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/fold-training-shift-3-0-0.txt",
+      "input_sha256": "c79560d6d803e9b49f7881e7fe9dcab38b5baa5abff86ec4351cd1e72fd91fb8",
+      "returncode": 0,
+      "stdout": "{\"status\":\"refusal:Region(Color(Bounds))\",\"directions\":[],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "status": "refusal:Region(Color(Bounds))",
+      "evidence": {
+        "status": "refusal:Region(Color(Bounds))",
+        "directions": [],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      }
+    },
+    {
+      "model_index": 3,
+      "shift": [
+        -1,
+        -1
+      ],
+      "matrix": [
+        [
+          0.26272325007812286,
+          -0.008616591368311152,
+          87.15946400159883
+        ],
+        [
+          -0.1424044844739746,
+          0.5162158910755553,
+          42.293005810176545
+        ],
+        [
+          -0.0006484883608691561,
+          0.00015022396560042368,
+          1.5563358993887488
+        ]
+      ],
+      "source_domain": [
+        913,
+        753,
+        260,
+        242
+      ],
+      "target_domain": [
+        310,
+        305,
+        88,
+        70
+      ],
+      "inliers": [
+        109,
+        126,
+        131,
+        138,
+        143,
+        151,
+        171,
+        172,
+        178
+      ],
+      "status": "insufficient_geometric_inliers"
+    },
+    {
+      "model_index": 3,
+      "shift": [
+        0,
+        -1
+      ],
+      "matrix": [
+        [
+          0.2620747617172537,
+          -0.008466367402710728,
+          88.71579990098758
+        ],
+        [
+          -0.1424044844739746,
+          0.5162158910755553,
+          42.293005810176545
+        ],
+        [
+          -0.0006484883608691561,
+          0.00015022396560042368,
+          1.5563358993887488
+        ]
+      ],
+      "source_domain": [
+        913,
+        753,
+        260,
+        242
+      ],
+      "target_domain": [
+        310,
+        305,
+        88,
+        70
+      ],
+      "inliers": [
+        109,
+        126,
+        131,
+        138,
+        143,
+        151,
+        171,
+        172,
+        178
+      ],
+      "status": "insufficient_geometric_inliers"
+    },
+    {
+      "model_index": 3,
+      "shift": [
+        1,
+        -1
+      ],
+      "matrix": [
+        [
+          0.2614262733563845,
+          -0.008316143437110304,
+          90.27213580037632
+        ],
+        [
+          -0.1424044844739746,
+          0.5162158910755553,
+          42.293005810176545
+        ],
+        [
+          -0.0006484883608691561,
+          0.00015022396560042368,
+          1.5563358993887488
+        ]
+      ],
+      "source_domain": [
+        913,
+        753,
+        260,
+        242
+      ],
+      "target_domain": [
+        310,
+        305,
+        88,
+        70
+      ],
+      "inliers": [
+        109,
+        126,
+        131,
+        138,
+        171,
+        172,
+        178
+      ],
+      "status": "insufficient_geometric_inliers"
+    },
+    {
+      "model_index": 3,
+      "shift": [
+        -1,
+        0
+      ],
+      "matrix": [
+        [
+          0.26272325007812286,
+          -0.008616591368311152,
+          87.15946400159883
+        ],
+        [
+          -0.14305297283484375,
+          0.5163661150411557,
+          43.849341709565294
+        ],
+        [
+          -0.0006484883608691561,
+          0.00015022396560042368,
+          1.5563358993887488
+        ]
+      ],
+      "source_domain": [
+        913,
+        753,
+        260,
+        242
+      ],
+      "target_domain": [
+        310,
+        305,
+        88,
+        70
+      ],
+      "inliers": [
+        109,
+        126,
+        131,
+        138,
+        143,
+        145,
+        151,
+        166,
+        171,
+        178
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/fold-training-shift-3--1-0.txt",
+      "input_sha256": "5bc27d77d4b0101f7c471f815867452dcb759552a59fe043ab3de7177757f1d7",
+      "returncode": 0,
+      "stdout": "{\"status\":\"refusal:Region(Color(Bounds))\",\"directions\":[],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "status": "refusal:Region(Color(Bounds))",
+      "evidence": {
+        "status": "refusal:Region(Color(Bounds))",
+        "directions": [],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      }
+    },
+    {
+      "model_index": 3,
+      "shift": [
+        1,
+        0
+      ],
+      "matrix": [
+        [
+          0.2614262733563845,
+          -0.008316143437110304,
+          90.27213580037632
+        ],
+        [
+          -0.14305297283484375,
+          0.5163661150411557,
+          43.849341709565294
+        ],
+        [
+          -0.0006484883608691561,
+          0.00015022396560042368,
+          1.5563358993887488
+        ]
+      ],
+      "source_domain": [
+        913,
+        753,
+        260,
+        242
+      ],
+      "target_domain": [
+        310,
+        305,
+        88,
+        70
+      ],
+      "inliers": [
+        109,
+        126,
+        131,
+        138,
+        145,
+        166,
+        171,
+        172,
+        178
+      ],
+      "status": "insufficient_geometric_inliers"
+    },
+    {
+      "model_index": 3,
+      "shift": [
+        -1,
+        1
+      ],
+      "matrix": [
+        [
+          0.26272325007812286,
+          -0.008616591368311152,
+          87.15946400159883
+        ],
+        [
+          -0.1437014611957129,
+          0.5165163390067561,
+          45.40567760895404
+        ],
+        [
+          -0.0006484883608691561,
+          0.00015022396560042368,
+          1.5563358993887488
+        ]
+      ],
+      "source_domain": [
+        913,
+        753,
+        260,
+        242
+      ],
+      "target_domain": [
+        310,
+        305,
+        88,
+        70
+      ],
+      "inliers": [
+        109,
+        126,
+        131,
+        143,
+        145,
+        151,
+        166,
+        171,
+        178
+      ],
+      "status": "insufficient_geometric_inliers"
+    },
+    {
+      "model_index": 3,
+      "shift": [
+        0,
+        1
+      ],
+      "matrix": [
+        [
+          0.2620747617172537,
+          -0.008466367402710728,
+          88.71579990098758
+        ],
+        [
+          -0.1437014611957129,
+          0.5165163390067561,
+          45.40567760895404
+        ],
+        [
+          -0.0006484883608691561,
+          0.00015022396560042368,
+          1.5563358993887488
+        ]
+      ],
+      "source_domain": [
+        913,
+        753,
+        260,
+        242
+      ],
+      "target_domain": [
+        310,
+        305,
+        88,
+        70
+      ],
+      "inliers": [
+        109,
+        126,
+        131,
+        138,
+        143,
+        145,
+        151,
+        166,
+        171,
+        172,
+        178
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/fold-training-shift-3-0-1.txt",
+      "input_sha256": "a317a55783c34700e90b9e9986eb13a30a9c2c3c84f8660db789fa98e4584f71",
+      "returncode": 0,
+      "stdout": "{\"status\":\"refusal:Region(Color(Bounds))\",\"directions\":[],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "status": "refusal:Region(Color(Bounds))",
+      "evidence": {
+        "status": "refusal:Region(Color(Bounds))",
+        "directions": [],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      }
+    },
+    {
+      "model_index": 3,
+      "shift": [
+        1,
+        1
+      ],
+      "matrix": [
+        [
+          0.2614262733563845,
+          -0.008316143437110304,
+          90.27213580037632
+        ],
+        [
+          -0.1437014611957129,
+          0.5165163390067561,
+          45.40567760895404
+        ],
+        [
+          -0.0006484883608691561,
+          0.00015022396560042368,
+          1.5563358993887488
+        ]
+      ],
+      "source_domain": [
+        913,
+        753,
+        260,
+        242
+      ],
+      "target_domain": [
+        310,
+        305,
+        88,
+        70
+      ],
+      "inliers": [
+        109,
+        126,
+        131,
+        138,
+        145,
+        166,
+        171,
+        172,
+        178
+      ],
+      "status": "insufficient_geometric_inliers"
+    },
+    {
+      "model_index": 4,
+      "shift": [
+        0,
+        0
+      ],
+      "matrix": [
+        [
+          0.39212658878321727,
+          -0.3843393493436241,
+          315.2008130550762
+        ],
+        [
+          -0.055304485542662055,
+          0.12547122475862998,
+          331.58498360651697
+        ],
+        [
+          -0.0003169569337642831,
+          -0.0007749150589410392,
+          2.10725536133726
+        ]
+      ],
+      "source_domain": [
+        919,
+        898,
+        276,
+        248
+      ],
+      "target_domain": [
+        301,
+        376,
+        94,
+        73
+      ],
+      "inliers": [
+        123,
+        134,
+        142,
+        149,
+        157,
+        168,
+        176,
+        177,
+        179,
+        184
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/fold-training-shift-4-0-0.txt",
+      "input_sha256": "48970cf42c4dce69398ad74665be7ca7e6cf6edab25426ce029b371f82ad0dc0",
+      "returncode": 0,
+      "stdout": "{\"status\":\"refusal:Region(Color(Bounds))\",\"directions\":[],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "status": "refusal:Region(Color(Bounds))",
+      "evidence": {
+        "status": "refusal:Region(Color(Bounds))",
+        "directions": [],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      }
+    },
+    {
+      "model_index": 4,
+      "shift": [
+        -1,
+        -1
+      ],
+      "matrix": [
+        [
+          0.39244354571698153,
+          -0.38356443428468306,
+          313.09355769373894
+        ],
+        [
+          -0.05498752860889777,
+          0.12624613981757102,
+          329.4777282451797
+        ],
+        [
+          -0.0003169569337642831,
+          -0.0007749150589410392,
+          2.10725536133726
+        ]
+      ],
+      "source_domain": [
+        919,
+        898,
+        276,
+        248
+      ],
+      "target_domain": [
+        301,
+        376,
+        94,
+        73
+      ],
+      "inliers": [
+        123,
+        134,
+        142,
+        157,
+        176,
+        177,
+        184
+      ],
+      "status": "insufficient_geometric_inliers"
+    },
+    {
+      "model_index": 4,
+      "shift": [
+        0,
+        -1
+      ],
+      "matrix": [
+        [
+          0.39212658878321727,
+          -0.3843393493436241,
+          315.2008130550762
+        ],
+        [
+          -0.05498752860889777,
+          0.12624613981757102,
+          329.4777282451797
+        ],
+        [
+          -0.0003169569337642831,
+          -0.0007749150589410392,
+          2.10725536133726
+        ]
+      ],
+      "source_domain": [
+        919,
+        898,
+        276,
+        248
+      ],
+      "target_domain": [
+        301,
+        376,
+        94,
+        73
+      ],
+      "inliers": [
+        123,
+        134,
+        142,
+        149,
+        157,
+        168,
+        176,
+        177,
+        184
+      ],
+      "status": "insufficient_geometric_inliers"
+    },
+    {
+      "model_index": 4,
+      "shift": [
+        1,
+        -1
+      ],
+      "matrix": [
+        [
+          0.391809631849453,
+          -0.3851142644025652,
+          317.30806841641345
+        ],
+        [
+          -0.05498752860889777,
+          0.12624613981757102,
+          329.4777282451797
+        ],
+        [
+          -0.0003169569337642831,
+          -0.0007749150589410392,
+          2.10725536133726
+        ]
+      ],
+      "source_domain": [
+        919,
+        898,
+        276,
+        248
+      ],
+      "target_domain": [
+        301,
+        376,
+        94,
+        73
+      ],
+      "inliers": [
+        123,
+        134,
+        142,
+        149,
+        157,
+        168,
+        177,
+        184
+      ],
+      "status": "insufficient_geometric_inliers"
+    },
+    {
+      "model_index": 4,
+      "shift": [
+        -1,
+        0
+      ],
+      "matrix": [
+        [
+          0.39244354571698153,
+          -0.38356443428468306,
+          313.09355769373894
+        ],
+        [
+          -0.055304485542662055,
+          0.12547122475862998,
+          331.58498360651697
+        ],
+        [
+          -0.0003169569337642831,
+          -0.0007749150589410392,
+          2.10725536133726
+        ]
+      ],
+      "source_domain": [
+        919,
+        898,
+        276,
+        248
+      ],
+      "target_domain": [
+        301,
+        376,
+        94,
+        73
+      ],
+      "inliers": [
+        123,
+        134,
+        142,
+        149,
+        157,
+        168,
+        176,
+        177,
+        179,
+        184
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/fold-training-shift-4--1-0.txt",
+      "input_sha256": "8b4e964bfce7f5f9623ad6dba62419156f74fc7bae630e599719acb0ccb8791d",
+      "returncode": 0,
+      "stdout": "{\"status\":\"refusal:Region(Color(Bounds))\",\"directions\":[],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "status": "refusal:Region(Color(Bounds))",
+      "evidence": {
+        "status": "refusal:Region(Color(Bounds))",
+        "directions": [],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      }
+    },
+    {
+      "model_index": 4,
+      "shift": [
+        1,
+        0
+      ],
+      "matrix": [
+        [
+          0.391809631849453,
+          -0.3851142644025652,
+          317.30806841641345
+        ],
+        [
+          -0.055304485542662055,
+          0.12547122475862998,
+          331.58498360651697
+        ],
+        [
+          -0.0003169569337642831,
+          -0.0007749150589410392,
+          2.10725536133726
+        ]
+      ],
+      "source_domain": [
+        919,
+        898,
+        276,
+        248
+      ],
+      "target_domain": [
+        301,
+        376,
+        94,
+        73
+      ],
+      "inliers": [
+        123,
+        134,
+        142,
+        149,
+        157,
+        168,
+        176,
+        177,
+        179,
+        184
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/fold-training-shift-4-1-0.txt",
+      "input_sha256": "0f4a72347b6c6fdd593a77585e17e42da4486a5c187815b062c677cd99397917",
+      "returncode": 0,
+      "stdout": "{\"status\":\"refusal:Region(Color(Bounds))\",\"directions\":[],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "status": "refusal:Region(Color(Bounds))",
+      "evidence": {
+        "status": "refusal:Region(Color(Bounds))",
+        "directions": [],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      }
+    },
+    {
+      "model_index": 4,
+      "shift": [
+        -1,
+        1
+      ],
+      "matrix": [
+        [
+          0.39244354571698153,
+          -0.38356443428468306,
+          313.09355769373894
+        ],
+        [
+          -0.055621442476426336,
+          0.12469630969968895,
+          333.6922389678542
+        ],
+        [
+          -0.0003169569337642831,
+          -0.0007749150589410392,
+          2.10725536133726
+        ]
+      ],
+      "source_domain": [
+        919,
+        898,
+        276,
+        248
+      ],
+      "target_domain": [
+        301,
+        376,
+        94,
+        73
+      ],
+      "inliers": [
+        123,
+        134,
+        142,
+        149,
+        154,
+        157,
+        168,
+        176,
+        177,
+        179
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/fold-training-shift-4--1-1.txt",
+      "input_sha256": "683bfc747059f1700fd9d6361c498a3c7100954192d5a8d8a2908b1537dd1156",
+      "returncode": 0,
+      "stdout": "{\"status\":\"refusal:Region(Color(Bounds))\",\"directions\":[],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "status": "refusal:Region(Color(Bounds))",
+      "evidence": {
+        "status": "refusal:Region(Color(Bounds))",
+        "directions": [],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      }
+    },
+    {
+      "model_index": 4,
+      "shift": [
+        0,
+        1
+      ],
+      "matrix": [
+        [
+          0.39212658878321727,
+          -0.3843393493436241,
+          315.2008130550762
+        ],
+        [
+          -0.055621442476426336,
+          0.12469630969968895,
+          333.6922389678542
+        ],
+        [
+          -0.0003169569337642831,
+          -0.0007749150589410392,
+          2.10725536133726
+        ]
+      ],
+      "source_domain": [
+        919,
+        898,
+        276,
+        248
+      ],
+      "target_domain": [
+        301,
+        376,
+        94,
+        73
+      ],
+      "inliers": [
+        123,
+        134,
+        142,
+        149,
+        154,
+        157,
+        168,
+        176,
+        177,
+        179
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/fold-training-shift-4-0-1.txt",
+      "input_sha256": "900e082fac2ffc9ccc53340780476724f5106c1d584625619474c98b0dd42b3a",
+      "returncode": 0,
+      "stdout": "{\"status\":\"refusal:Region(Color(Bounds))\",\"directions\":[],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "status": "refusal:Region(Color(Bounds))",
+      "evidence": {
+        "status": "refusal:Region(Color(Bounds))",
+        "directions": [],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      }
+    },
+    {
+      "model_index": 4,
+      "shift": [
+        1,
+        1
+      ],
+      "matrix": [
+        [
+          0.391809631849453,
+          -0.3851142644025652,
+          317.30806841641345
+        ],
+        [
+          -0.055621442476426336,
+          0.12469630969968895,
+          333.6922389678542
+        ],
+        [
+          -0.0003169569337642831,
+          -0.0007749150589410392,
+          2.10725536133726
+        ]
+      ],
+      "source_domain": [
+        919,
+        898,
+        276,
+        248
+      ],
+      "target_domain": [
+        301,
+        376,
+        94,
+        73
+      ],
+      "inliers": [
+        123,
+        149,
+        154,
+        157,
+        168,
+        176,
+        177,
+        179
+      ],
+      "status": "insufficient_geometric_inliers"
+    },
+    {
+      "model_index": 5,
+      "shift": [
+        0,
+        0
+      ],
+      "matrix": [
+        [
+          0.5263407363635306,
+          -0.009458240418660044,
+          -187.21362387608607
+        ],
+        [
+          0.2008862480054409,
+          0.14165709504154317,
+          215.99279813634473
+        ],
+        [
+          0.00038649523544282923,
+          -0.00048028106311298916,
+          1.3946921373083754
+        ]
+      ],
+      "source_domain": [
+        545,
+        1284,
+        251,
+        190
+      ],
+      "target_domain": [
+        111,
+        526,
+        81,
+        50
+      ],
+      "inliers": [
+        27,
+        35,
+        45,
+        46,
+        48,
+        49,
+        50,
+        51,
+        55,
+        58,
+        61
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/fold-training-shift-5-0-0.txt",
+      "input_sha256": "3a7c70d9854d68d408d71ea6bc9c366adca2c4befd38bcbac1fd016d889897ef",
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"directions\":[{\"radius\":8,\"training_samples\":2026,\"samples\":2024,\"matched\":1561,\"pixel_reads\":5852250,\"training_matched\":1584,\"training_squared_error\":2.4465338282257103,\"heldout_squared_error\":2.4041280145698214},{\"radius\":8,\"training_samples\":10433,\"samples\":10420,\"matched\":6237,\"pixel_reads\":48212136,\"training_matched\":6218,\"training_squared_error\":29.07033294031429,\"heldout_squared_error\":28.851180341718784}],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "status": "ok",
+      "evidence": {
+        "status": "ok",
+        "directions": [
+          {
+            "radius": 8,
+            "training_samples": 2026,
+            "samples": 2024,
+            "matched": 1561,
+            "pixel_reads": 5852250,
+            "training_matched": 1584,
+            "training_squared_error": 2.4465338282257103,
+            "heldout_squared_error": 2.4041280145698214
+          },
+          {
+            "radius": 8,
+            "training_samples": 10433,
+            "samples": 10420,
+            "matched": 6237,
+            "pixel_reads": 48212136,
+            "training_matched": 6218,
+            "training_squared_error": 29.07033294031429,
+            "heldout_squared_error": 28.851180341718784
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      },
+      "same_forward_counts": true,
+      "training_loss": 0.0012075685233098273
+    },
+    {
+      "model_index": 5,
+      "shift": [
+        -1,
+        -1
+      ],
+      "matrix": [
+        [
+          0.5259542411280878,
+          -0.008977959355547054,
+          -188.60831601339444
+        ],
+        [
+          0.20049975276999807,
+          0.14213737610465615,
+          214.59810599903636
+        ],
+        [
+          0.00038649523544282923,
+          -0.00048028106311298916,
+          1.3946921373083754
+        ]
+      ],
+      "source_domain": [
+        545,
+        1284,
+        251,
+        190
+      ],
+      "target_domain": [
+        111,
+        526,
+        81,
+        50
+      ],
+      "inliers": [
+        24,
+        27,
+        35,
+        45,
+        47,
+        48,
+        49,
+        50,
+        51,
+        58,
+        61
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/fold-training-shift-5--1--1.txt",
+      "input_sha256": "515f2eb08969b2519eb6728fbe21ffef7a58093626d47d2c32a26cc06dd7d595",
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"directions\":[{\"radius\":8,\"training_samples\":2026,\"samples\":2024,\"matched\":1566,\"pixel_reads\":5852250,\"training_matched\":1619,\"training_squared_error\":2.808121486024183,\"heldout_squared_error\":2.9726323724454256},{\"radius\":8,\"training_samples\":10411,\"samples\":10407,\"matched\":6203,\"pixel_reads\":48131216,\"training_matched\":6132,\"training_squared_error\":33.66119715580734,\"heldout_squared_error\":33.749705483389526}],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "status": "ok",
+      "evidence": {
+        "status": "ok",
+        "directions": [
+          {
+            "radius": 8,
+            "training_samples": 2026,
+            "samples": 2024,
+            "matched": 1566,
+            "pixel_reads": 5852250,
+            "training_matched": 1619,
+            "training_squared_error": 2.808121486024183,
+            "heldout_squared_error": 2.9726323724454256
+          },
+          {
+            "radius": 8,
+            "training_samples": 10411,
+            "samples": 10407,
+            "matched": 6203,
+            "pixel_reads": 48131216,
+            "training_matched": 6132,
+            "training_squared_error": 33.66119715580734,
+            "heldout_squared_error": 33.749705483389526
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      },
+      "same_forward_counts": true,
+      "training_loss": 0.001386042194483802
+    },
+    {
+      "model_index": 5,
+      "shift": [
+        0,
+        -1
+      ],
+      "matrix": [
+        [
+          0.5263407363635306,
+          -0.009458240418660044,
+          -187.21362387608607
+        ],
+        [
+          0.20049975276999807,
+          0.14213737610465615,
+          214.59810599903636
+        ],
+        [
+          0.00038649523544282923,
+          -0.00048028106311298916,
+          1.3946921373083754
+        ]
+      ],
+      "source_domain": [
+        545,
+        1284,
+        251,
+        190
+      ],
+      "target_domain": [
+        111,
+        526,
+        81,
+        50
+      ],
+      "inliers": [
+        24,
+        27,
+        35,
+        45,
+        48,
+        49,
+        50,
+        51,
+        55,
+        58,
+        61
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/fold-training-shift-5-0--1.txt",
+      "input_sha256": "b55c7829cd1ff7c0bfa25e26cc219a2744149dfe0297c9118faf940164c94cfd",
+      "returncode": 0,
+      "stdout": "{\"status\":\"refusal:Region(Color(Bounds))\",\"directions\":[],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "status": "refusal:Region(Color(Bounds))",
+      "evidence": {
+        "status": "refusal:Region(Color(Bounds))",
+        "directions": [],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      }
+    },
+    {
+      "model_index": 5,
+      "shift": [
+        1,
+        -1
+      ],
+      "matrix": [
+        [
+          0.5267272315989735,
+          -0.009938521481773033,
+          -185.8189317387777
+        ],
+        [
+          0.20049975276999807,
+          0.14213737610465615,
+          214.59810599903636
+        ],
+        [
+          0.00038649523544282923,
+          -0.00048028106311298916,
+          1.3946921373083754
+        ]
+      ],
+      "source_domain": [
+        545,
+        1284,
+        251,
+        190
+      ],
+      "target_domain": [
+        111,
+        526,
+        81,
+        50
+      ],
+      "inliers": [
+        27,
+        35,
+        45,
+        46,
+        49,
+        51,
+        55,
+        61
+      ],
+      "status": "insufficient_geometric_inliers"
+    },
+    {
+      "model_index": 5,
+      "shift": [
+        -1,
+        0
+      ],
+      "matrix": [
+        [
+          0.5259542411280878,
+          -0.008977959355547054,
+          -188.60831601339444
+        ],
+        [
+          0.2008862480054409,
+          0.14165709504154317,
+          215.99279813634473
+        ],
+        [
+          0.00038649523544282923,
+          -0.00048028106311298916,
+          1.3946921373083754
+        ]
+      ],
+      "source_domain": [
+        545,
+        1284,
+        251,
+        190
+      ],
+      "target_domain": [
+        111,
+        526,
+        81,
+        50
+      ],
+      "inliers": [
+        27,
+        35,
+        41,
+        45,
+        48,
+        49,
+        50,
+        51,
+        58,
+        61
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/fold-training-shift-5--1-0.txt",
+      "input_sha256": "5b9d48d30b43c775edf0281defb22e8b9409349fd28c10f190c81b8361a8151c",
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"directions\":[{\"radius\":8,\"training_samples\":2026,\"samples\":2024,\"matched\":1575,\"pixel_reads\":5852250,\"training_matched\":1601,\"training_squared_error\":2.4241642466543607,\"heldout_squared_error\":2.4382343495534484},{\"radius\":8,\"training_samples\":10452,\"samples\":10454,\"matched\":6220,\"pixel_reads\":48334672,\"training_matched\":6171,\"training_squared_error\":29.92882147960718,\"heldout_squared_error\":30.151493146769972}],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "status": "ok",
+      "evidence": {
+        "status": "ok",
+        "directions": [
+          {
+            "radius": 8,
+            "training_samples": 2026,
+            "samples": 2024,
+            "matched": 1575,
+            "pixel_reads": 5852250,
+            "training_matched": 1601,
+            "training_squared_error": 2.4241642466543607,
+            "heldout_squared_error": 2.4382343495534484
+          },
+          {
+            "radius": 8,
+            "training_samples": 10452,
+            "samples": 10454,
+            "matched": 6220,
+            "pixel_reads": 48334672,
+            "training_matched": 6171,
+            "training_squared_error": 29.92882147960718,
+            "heldout_squared_error": 30.151493146769972
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      },
+      "same_forward_counts": true,
+      "training_loss": 0.0011965272688323598
+    },
+    {
+      "model_index": 5,
+      "shift": [
+        1,
+        0
+      ],
+      "matrix": [
+        [
+          0.5267272315989735,
+          -0.009938521481773033,
+          -185.8189317387777
+        ],
+        [
+          0.2008862480054409,
+          0.14165709504154317,
+          215.99279813634473
+        ],
+        [
+          0.00038649523544282923,
+          -0.00048028106311298916,
+          1.3946921373083754
+        ]
+      ],
+      "source_domain": [
+        545,
+        1284,
+        251,
+        190
+      ],
+      "target_domain": [
+        111,
+        526,
+        81,
+        50
+      ],
+      "inliers": [
+        27,
+        35,
+        46,
+        48,
+        49,
+        50,
+        51,
+        55,
+        58,
+        61
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/fold-training-shift-5-1-0.txt",
+      "input_sha256": "fe3c13aaaf7b42a621487780f0946d884b980d03ce1731844b61244a8006e2d3",
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"directions\":[{\"radius\":8,\"training_samples\":2026,\"samples\":2024,\"matched\":1500,\"pixel_reads\":5852250,\"training_matched\":1498,\"training_squared_error\":2.715497935806017,\"heldout_squared_error\":2.6593235721090607},{\"radius\":8,\"training_samples\":10410,\"samples\":10401,\"matched\":6034,\"pixel_reads\":48115032,\"training_matched\":5983,\"training_squared_error\":30.94682920370138,\"heldout_squared_error\":30.7579093750148}],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "status": "ok",
+      "evidence": {
+        "status": "ok",
+        "directions": [
+          {
+            "radius": 8,
+            "training_samples": 2026,
+            "samples": 2024,
+            "matched": 1500,
+            "pixel_reads": 5852250,
+            "training_matched": 1498,
+            "training_squared_error": 2.715497935806017,
+            "heldout_squared_error": 2.6593235721090607
+          },
+          {
+            "radius": 8,
+            "training_samples": 10410,
+            "samples": 10401,
+            "matched": 6034,
+            "pixel_reads": 48115032,
+            "training_matched": 5983,
+            "training_squared_error": 30.94682920370138,
+            "heldout_squared_error": 30.7579093750148
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      },
+      "same_forward_counts": true,
+      "training_loss": 0.0013403247462023776
+    },
+    {
+      "model_index": 5,
+      "shift": [
+        -1,
+        1
+      ],
+      "matrix": [
+        [
+          0.5259542411280878,
+          -0.008977959355547054,
+          -188.60831601339444
+        ],
+        [
+          0.2012727432408837,
+          0.14117681397843018,
+          217.3874902736531
+        ],
+        [
+          0.00038649523544282923,
+          -0.00048028106311298916,
+          1.3946921373083754
+        ]
+      ],
+      "source_domain": [
+        545,
+        1284,
+        251,
+        190
+      ],
+      "target_domain": [
+        111,
+        526,
+        81,
+        50
+      ],
+      "inliers": [
+        27,
+        35,
+        45,
+        48,
+        49,
+        50,
+        51,
+        58,
+        61
+      ],
+      "status": "insufficient_geometric_inliers"
+    },
+    {
+      "model_index": 5,
+      "shift": [
+        0,
+        1
+      ],
+      "matrix": [
+        [
+          0.5263407363635306,
+          -0.009458240418660044,
+          -187.21362387608607
+        ],
+        [
+          0.2012727432408837,
+          0.14117681397843018,
+          217.3874902736531
+        ],
+        [
+          0.00038649523544282923,
+          -0.00048028106311298916,
+          1.3946921373083754
+        ]
+      ],
+      "source_domain": [
+        545,
+        1284,
+        251,
+        190
+      ],
+      "target_domain": [
+        111,
+        526,
+        81,
+        50
+      ],
+      "inliers": [
+        27,
+        35,
+        45,
+        46,
+        48,
+        49,
+        50,
+        51,
+        58,
+        61
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/fold-training-shift-5-0-1.txt",
+      "input_sha256": "9bf4e5c2df9a0ef83f47377e42f0134b31befcbc892f214e5a7858872a5ec178",
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"directions\":[{\"radius\":8,\"training_samples\":2026,\"samples\":2024,\"matched\":1521,\"pixel_reads\":5852250,\"training_matched\":1504,\"training_squared_error\":2.6340019848243785,\"heldout_squared_error\":2.4975731273507003},{\"radius\":8,\"training_samples\":10463,\"samples\":10467,\"matched\":6017,\"pixel_reads\":48390160,\"training_matched\":6019,\"training_squared_error\":31.456950244941723,\"heldout_squared_error\":31.405487329707704}],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "status": "ok",
+      "evidence": {
+        "status": "ok",
+        "directions": [
+          {
+            "radius": 8,
+            "training_samples": 2026,
+            "samples": 2024,
+            "matched": 1521,
+            "pixel_reads": 5852250,
+            "training_matched": 1504,
+            "training_squared_error": 2.6340019848243785,
+            "heldout_squared_error": 2.4975731273507003
+          },
+          {
+            "radius": 8,
+            "training_samples": 10463,
+            "samples": 10467,
+            "matched": 6017,
+            "pixel_reads": 48390160,
+            "training_matched": 6019,
+            "training_squared_error": 31.456950244941723,
+            "heldout_squared_error": 31.405487329707704
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      },
+      "same_forward_counts": true,
+      "training_loss": 0.0013000996963595155
+    },
+    {
+      "model_index": 5,
+      "shift": [
+        1,
+        1
+      ],
+      "matrix": [
+        [
+          0.5267272315989735,
+          -0.009938521481773033,
+          -185.8189317387777
+        ],
+        [
+          0.2012727432408837,
+          0.14117681397843018,
+          217.3874902736531
+        ],
+        [
+          0.00038649523544282923,
+          -0.00048028106311298916,
+          1.3946921373083754
+        ]
+      ],
+      "source_domain": [
+        545,
+        1284,
+        251,
+        190
+      ],
+      "target_domain": [
+        111,
+        526,
+        81,
+        50
+      ],
+      "inliers": [
+        27,
+        35,
+        46,
+        48,
+        49,
+        51,
+        58,
+        61
+      ],
+      "status": "insufficient_geometric_inliers"
+    }
+  ],
+  "selections": [
+    {
+      "model_index": 0,
+      "row_index": 8,
+      "training_loss": 0.001604765677411583,
+      "shift": [
+        1,
+        1
+      ]
+    },
+    {
+      "model_index": 1,
+      "row_index": 13,
+      "training_loss": 0.001244753484794552,
+      "shift": [
+        -1,
+        0
+      ]
+    },
+    {
+      "model_index": 2,
+      "row_index": 26,
+      "training_loss": 0.0023879452151076867,
+      "shift": [
+        1,
+        1
+      ]
+    },
+    {
+      "model_index": 5,
+      "row_index": 49,
+      "training_loss": 0.0011965272688323598,
+      "shift": [
+        -1,
+        0
+      ]
+    }
+  ],
+  "scope": "Supplied native models translated by at most one query pixel. Fixed target witness and fixed expanded source rectangle per model. Selection uses forward training RMS only among equal-forward-sample-count candidates with at least ten original native correspondences within two pixels. Heldout color scores never choose the shift. Diagnostic only; no automatic search, default changes or broad precision."
+}

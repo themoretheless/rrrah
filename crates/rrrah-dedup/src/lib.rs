@@ -1,6 +1,13 @@
 //! Duplicate search primitives. Perceptual matches are candidates, not proof
 //! of content identity. See `docs/DUPLICATE_LIBRARY_CONTRACT.md` for coverage.
 
+pub mod affine_color;
+#[cfg(feature = "decode")]
+pub mod affine_region;
+#[cfg(feature = "decode")]
+pub mod affine_region_file;
+#[cfg(feature = "decode")]
+pub mod affine_region_grid;
 #[cfg(feature = "decode")]
 pub mod animated;
 pub mod cache;
@@ -11,6 +18,10 @@ pub mod crop;
 pub mod decode;
 pub mod exact;
 pub mod geometry;
+pub mod gradient;
+#[cfg(feature = "decode")]
+pub mod gradient_index;
+pub mod gradient_scale;
 pub mod groups;
 pub mod linear;
 pub mod local;
@@ -19,20 +30,42 @@ pub mod local_collection;
 pub mod local_index;
 #[cfg(feature = "decode")]
 pub mod local_scan;
+#[cfg(feature = "decode")]
+mod managed_descriptor_union;
+#[cfg(feature = "decode")]
+pub mod managed_evidence;
+#[cfg(feature = "decode")]
+mod managed_metric;
+#[cfg(feature = "decode")]
+mod managed_pair_counts;
+#[cfg(feature = "decode")]
+mod managed_targets;
+#[cfg(feature = "decode")]
+mod managed_visual;
 pub mod ordinal;
 #[cfg(feature = "decode")]
 pub mod pages;
+#[cfg(feature = "raster")]
+pub mod piecewise_warp;
 #[cfg(feature = "decode")]
 pub mod pixel_index;
 pub mod pixels;
 #[cfg(feature = "decode")]
 pub mod presentation_kind;
 pub mod pyramid;
+pub mod rank_region;
 #[cfg(feature = "raster")]
 pub mod raster;
+pub mod region_footprint;
+#[cfg(feature = "raster")]
+pub mod region_grid;
+#[cfg(feature = "decode")]
+pub mod region_transform;
 #[cfg(feature = "decode")]
 pub mod scan;
 pub mod sequence;
+#[cfg(feature = "raster")]
+pub mod triangulation;
 pub mod visual;
 pub mod warp;
 
@@ -428,3 +461,27 @@ mod tests {
         }
     }
 }
+
+#[cfg(feature = "raster")]
+pub mod correspondence_union;
+
+#[cfg(feature = "raster")]
+pub mod mesh_grid;
+
+#[cfg(feature = "raster")]
+pub mod mesh_rank;
+
+#[cfg(feature = "raster")]
+pub mod mesh_refine;
+
+#[cfg(feature = "raster")]
+pub mod local_rank;
+
+#[cfg(feature = "raster")]
+pub mod piecewise_local_rank;
+
+#[cfg(feature = "raster")]
+pub mod anchor_rank;
+
+#[cfg(feature = "decode")]
+pub mod anchor_rank_file;

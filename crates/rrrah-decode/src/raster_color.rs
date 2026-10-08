@@ -195,6 +195,7 @@ pub fn prepare_raster_for_display_with_budget_and_cancel(
         }),
         RasterColorSpace::LinearSrgb,
     )?
+    .with_pixel_aspect(frame.pixel_aspect())?
     .with_sample_scale(frame.sample_scale())?
     .with_hotspot(frame.hotspot())?
     .with_image_selection(frame.image_index(), frame.image_count())?)

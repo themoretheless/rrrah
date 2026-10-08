@@ -1,0 +1,28 @@
+{
+  "scope": "Original RAW from authored EIP through MosaicRamCache TTL, file swap, restore, actual Metal renderer",
+  "adapter": "Metal Apple M4 Max",
+  "sensor_samples": 25494560,
+  "frame": [
+    128,
+    96
+  ],
+  "verification": [
+    "EIP native sensor metadata and all samples equal original CR3",
+    "EIP Metal frame equals original CR3 before expiry",
+    "Visible lease survives TTL without spilling or changing frame",
+    "After final visible lease drops: one spill, one file write, root occupancy zero",
+    "Fully occupied managed root refuses restore without swap error; retry succeeds after release",
+    "Restored sensor metadata, all samples and Metal frame equal original",
+    "One successful swap read, final root occupancy zero"
+  ],
+  "suite": "4 passed, zero failures, zero ignored (manual cases explicitly included)",
+  "logs": [
+    "/tmp/rrrah-eip-ttl-metal.log",
+    "/tmp/rrrah-eip-ttl-metal-all.log"
+  ],
+  "limitations": [
+    "Authored ZIP wrapping a real camera CR3; no Capture One-produced EIP",
+    "Capture One adjustments/profile/LCC not applied",
+    "Offscreen GPU render; physical HDR display and CUDA/NVIDIA unqualified"
+  ]
+}

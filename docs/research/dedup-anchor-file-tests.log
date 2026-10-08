@@ -1,0 +1,48 @@
+   Compiling hayro-interpret v0.7.0 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret)
+   Compiling rrrah-core v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-core)
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+   Compiling hayro v0.7.1 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+warning: unused imports: `compare_anchor_rank` and `linear::LinearRgbaView`
+ --> crates/rrrah-dedup/tests/anchor_rank_file.rs:4:37
+  |
+4 |     anchor_rank::{AnchorRankPolicy, compare_anchor_rank},
+  |                                     ^^^^^^^^^^^^^^^^^^^
+5 |     geometry::{Correspondence, ProjectiveTransform},
+6 |     linear::LinearRgbaView,
+  |     ^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `image` is never used
+  --> crates/rrrah-dedup/tests/anchor_rank_file.rs:50:4
+   |
+50 | fn image(invert: bool) -> Vec<f32> {
+   |    ^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-dedup` (test "anchor_rank_file") generated 2 warnings (run `cargo fix --test "anchor_rank_file" -p rrrah-dedup` to apply 1 suggestion)
+    Finished `test` profile [optimized + debuginfo] target(s) in 16.78s
+     Running tests/anchor_rank_file.rs (target/debug/deps/anchor_rank_file-2195681449128eea)
+
+running 2 tests
+test aggregate_work_refuses_before_missing_source_io ... ok
+test files_match_views_and_cancel_or_mutation_discard_evidence ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+

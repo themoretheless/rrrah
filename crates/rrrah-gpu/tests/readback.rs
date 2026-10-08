@@ -587,3 +587,51 @@ fn raw_atlas_budget_accounts_halos_and_preserves_image_on_refusal() {
     device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
     assert_eq!(budget.used(), 0);
 }
+
+#[test]
+fn cancelled_raw_tile_upload_preserves_previous_frame_and_budget() {
+    let gpu = common::qualification_gpu().expect("actual GPU required");
+    let root = rrrah_core::MemoryBudget::new(1024 * 1024);
+    let cpu = rrrah_core::MemoryBudget::new(1024 * 1024);
+    let queued = rrrah_core::MemoryBudget::new(1024 * 1024);
+    let tiling = rrrah_gpu::TilingOverrides { tile_size: Some(32), tile_halo: Some(1) };
+    let original = uniform_mosaic(65, 65, 1000, WHITE);
+    let replacement = uniform_mosaic(65, 65, 50000, WHITE);
+    let mut renderer = rrrah_gpu::RawRenderer::new_with_budget(&gpu.device, common::READBACK_FORMAT, root.clone()).with_upload_memory_budget(cpu.clone()).with_upload_queue_budget(queued.clone());
+    renderer.upload_mosaic_with_tiling(&gpu.device, &gpu.queue, &original, tiling).unwrap();
+    renderer.update_view(&gpu.queue, rrrah_gpu::ViewParameters { viewport: [64., 64.], ..Default::default() });
+    let expected = gpu.render_existing_raw(&renderer, [64, 64]).pixels;
+    let resident = renderer.resident_bytes();
+    let polls = std::cell::Cell::new(0usize);
+    renderer.upload_mosaic_with_tiling_and_cancel(&gpu.device, &gpu.queue, &replacement, tiling, || { polls.set(polls.get() + 1); false }).unwrap();
+    renderer.upload_mosaic_with_tiling(&gpu.device, &gpu.queue, &original, tiling).unwrap();
+    assert_eq!(gpu.render_existing_raw(&renderer, [64, 64]).pixels, expected);
+    assert!(polls.get() > 22, "halo packing must provide interior checkpoints");
+    for stop in 1..=polls.get() {
+        let calls = std::cell::Cell::new(0usize);
+        assert!(matches!(renderer.upload_mosaic_with_tiling_and_cancel(&gpu.device, &gpu.queue, &replacement, tiling, || {
+            calls.set(calls.get() + 1); calls.get() == stop
+        }), Err(rrrah_gpu::GpuError::Cancelled)), "checkpoint {stop}");
+        assert_eq!(renderer.resident_bytes(), resident);
+        assert_eq!(gpu.render_existing_raw(&renderer, [64, 64]).pixels, expected, "checkpoint {stop}");
+        assert_eq!(root.used(), resident);
+        assert_eq!(cpu.used(), 0);
+        assert_eq!(queued.used(), 0);
+    }
+    for budget in [&root, &cpu, &queued] {
+        let held = budget.try_reserve(budget.available_bytes()).unwrap();
+        assert!(matches!(renderer.upload_mosaic_with_tiling_and_cancel(&gpu.device, &gpu.queue, &replacement, tiling, || false), Err(rrrah_gpu::GpuError::Memory(_))));
+        assert_eq!(renderer.resident_bytes(), resident);
+        assert_eq!(gpu.render_existing_raw(&renderer, [64, 64]).pixels, expected);
+        drop(held);
+        assert_eq!(root.used(), resident);
+        assert_eq!(cpu.used(), 0);
+        assert_eq!(queued.used(), 0);
+    }
+    renderer.upload_mosaic_with_tiling(&gpu.device, &gpu.queue, &replacement, tiling).unwrap();
+    assert_ne!(gpu.render_existing_raw(&renderer, [64, 64]).pixels, expected);
+    drop(renderer);
+    assert_eq!(root.used(), 0);
+    assert_eq!(cpu.used(), 0);
+    assert_eq!(queued.used(), 0);
+}

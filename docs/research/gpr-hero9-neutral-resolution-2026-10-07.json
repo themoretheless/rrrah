@@ -1,0 +1,87 @@
+{
+  "scope": "HERO9 full native development; sampled 32px grid against independent Adobe identity-tone sRGB render; demosaic differences remain",
+  "dimensions": [
+    5568,
+    4176
+  ],
+  "sampled_pixels": 22620,
+  "results": {
+    "previous": {
+      "mean_abs_rgb": [
+        0.005135016854358699,
+        0.006823524839830681,
+        0.013787364466043318
+      ],
+      "p95_abs": 0.03171024877154033,
+      "max_abs": 0.33874908550490945,
+      "sha256": "e656b4fb340880072038c654ce61730eb8cda428f0c858b009ae29e2275abc2b"
+    },
+    "neutral_resolved": {
+      "mean_abs_rgb": [
+        0.004042578399249309,
+        0.0066624016754544095,
+        0.013776254687479375
+      ],
+      "p95_abs": 0.03078467489702164,
+      "max_abs": 0.33108042056549086,
+      "sha256": "5a13211dbf9c33a67125777d87bc85a950ac054ab051bfcfdf0175ec2475bb58"
+    }
+  },
+  "matrix_oracle": {
+    "same_adobe_output_space_max_abs": 5.0343337276714806e-09,
+    "precise_native_srgb_max_abs": 0.00035683037236988735,
+    "production_solver": "native Rust; dual ColorMatrix, AsShotNeutral, reciprocal temperature interpolation, Bradford adaptation",
+    "eligibility": "3 channels, identity or absent CameraCalibration and AnalogBalance, absent ForwardMatrix",
+    "other_metadata": "existing profile path retained; full nonidentity calibration/forward-matrix support not qualified"
+  },
+  "production_decode": {
+    "dimensions": [
+      5568,
+      4176
+    ],
+    "color": "LinearSrgb",
+    "managed_peak_bytes": 868711424,
+    "managed_final_bytes": 0
+  },
+  "metal": {
+    "adapter": "Metal Apple M4 Max",
+    "independent_color_field_tests": {
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "fields": 4
+    },
+    "camera_color_suite": {
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0
+    },
+    "full_frame_transport": {
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "pixels_checked": 23251968,
+      "maximum_rgb8_error": 1,
+      "scope": "production linear dump -> texture/shader/readback vs CPU display reference; not independent demosaic qualification",
+      "view": "1:1; zoom compensates viewer 32px fit margin"
+    },
+    "raster_suite": {
+      "passed": 10,
+      "failed": 0,
+      "ignored": 2,
+      "ignored_details": "HERO9 full-frame separately passed in this run; X3F external case not rerun here"
+    }
+  },
+  "dng_tests": {
+    "passed": 76,
+    "failed": 0,
+    "ignored": 8
+  },
+  "limitations": [
+    "Only HERO9 color matrix independently qualified here; other GPR cameras still require their own qualification.",
+    "Full developed image retains demosaic differences against Adobe; format-wide color equivalence is not claimed.",
+    "No physical HDR luminance measurement or NVIDIA validation."
+  ],
+  "source_sha256": "9249208a3482d6d71d39575210fe19ab3dd737e5e446a4d0718d4bd9d3c4358b",
+  "independent_render_sha256": "4be7a847dc517d4fde4021c4d3dd200166caab710fcfdc773853e9e3edcbf575"
+}

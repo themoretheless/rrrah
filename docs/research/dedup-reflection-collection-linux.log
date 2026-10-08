@@ -1,0 +1,73 @@
+   Compiling rrrah-dedup v0.1.0 (/workspace/crates/rrrah-dedup)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+warning: linker stderr: /validation/sysroot/usr/bin/ld: /validation/target/debug/deps/libjpegxr-8d01a0594e000fc4.rlib(2e643c6506a180d9-strenc.o): in function `StrIOEncInit':
+         /validation/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/jpegxr-0.3.1/jxrlib/image/encode/strenc.c:485:(.text.StrIOEncInit+0xf0): the use of `tmpnam' is dangerous, better use `mkstemp'
+  |
+  = note: `#[warn(linker_messages)]` on by default
+
+warning: linker stdout: /validation/sysroot/usr/bin/ld: /validation/target/debug/deps/libjpegxr-8d01a0594e000fc4.rlib(2e643c6506a180d9-strenc.o): note: the message above does not take linker garbage collection into account
+
+warning: `rrrah-dedup` (test "gradient_index") generated 2 warnings
+warning: `rrrah-dedup` (test "anchor_reflection_collection_cancel") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "anchor_rank_driven_collection") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "anchor_reflection_collection") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "gradient_index_reflection") generated 2 warnings (2 duplicates)
+    Finished `test` profile [optimized + debuginfo] target(s) in 6m 18s
+     Running tests/anchor_rank_driven_collection.rs (/validation/target/debug/deps/anchor_rank_driven_collection-4d6a4c0aa15eeaca)
+
+running 1 test
+test rank_driven_indexed_collection_matches_all_direct_pairs ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 22.45s
+
+     Running tests/anchor_reflection_collection.rs (/validation/target/debug/deps/anchor_reflection_collection-b5746c80434666fe)
+
+running 3 tests
+test six_phase_collection_caps_refuse_before_iteration_and_cancel_wins ... ok
+test indexed_mirror_equals_direct_original_pixel_confirmation ... ok
+test foreign_pairs_are_rejected_by_indexed_and_all_direct_reflected_searches has been running for over 60 seconds
+test foreign_pairs_are_rejected_by_indexed_and_all_direct_reflected_searches ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 83.06s
+
+     Running tests/anchor_reflection_collection_cancel.rs (/validation/target/debug/deps/anchor_reflection_collection_cancel-bf7892cfd3c5f6a0)
+
+running 1 test
+test reflected_collection_early_and_extraction_cancellation_releases_all_memory ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+     Running tests/gradient_index.rs (/validation/target/debug/deps/gradient_index-b62d7c3208c52a4a)
+
+running 7 tests
+test admission_cancel_recipe_and_owned_reservation ... ok
+test invalid_vectors_exact_memory_and_build_cancellation ... ok
+test proposal_scratch_and_retained_report_admit_exact_peak ... ok
+test file_proposal_cancellation_never_returns_partial_pairs ... ok
+test file_proposals_equal_exhaustive_without_ambiguity_loss ... ok
+test repeated_descriptor_hits_retain_one_pair_with_bounded_memory ... ok
+test retrieval_equals_exhaustive_including_boundaries_and_collisions ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+
+     Running tests/gradient_index_reflection.rs (/validation/target/debug/deps/gradient_index_reflection-46b6fa741f3b8a94)
+
+running 2 tests
+test reflected_pair_union_prepays_both_domains_and_keeps_all_hits ... ok
+test reflected_query_matches_independent_permutation_and_releases_index ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

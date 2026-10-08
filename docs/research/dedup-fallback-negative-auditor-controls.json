@@ -1,0 +1,26 @@
+{
+  "status": "verified_fallback_negative_auditor_rejections",
+  "cases": [
+    {
+      "case": "incomplete_terminal",
+      "rejected": true
+    },
+    {
+      "case": "boolean_attempts",
+      "rejected": true
+    },
+    {
+      "case": "wrong_final_radii",
+      "rejected": true
+    },
+    {
+      "case": "stdout_mismatch",
+      "rejected": true
+    }
+  ],
+  "input_hashes": {
+    "docs/research/dedup-fallback-original-negatives-201303-checkpoint-1-screen-retry.json": "b8cd19c61b707036bbf35c2f52ece4e590b24eba84dc6d7074279dca93df5ef4",
+    "scripts/verify-dedup-fallback-original-negatives.py": "a4de3e9ceb32ca296c21aa358d393a1ce18102a7b7b26056e83dd76880e9b3cc"
+  },
+  "scope": "Four corrupted-report rejection controls. Does not establish native negative precision."
+}

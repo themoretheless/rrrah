@@ -1,0 +1,45 @@
+{
+  "date": "2026-10-07",
+  "feature": "Budgeted per-conversion exact sRGB16 lookup table for images at least 65536 pixels",
+  "contract": [
+    "Uses original f32 normalization and transfer expression for each of 65536 channel values",
+    "Applies only sRGB/assumed-sRGB RGBA16, not BT.709 or floating HDR",
+    "Optional scratch reserve 262144 bytes; refused reservation or allocation falls back to scalar conversion",
+    "Cancellation checked during table construction and image iteration",
+    "No retained global LUT allocation"
+  ],
+  "evidence": {
+    "core_log": "/tmp/rrrah-srgb16-core.log",
+    "core_passed": 98,
+    "core_ignored": 1,
+    "checks": [
+      "exhaustive channel bit equivalence including alpha",
+      "exact output-only budget succeeds via scalar fallback",
+      "scratch budget peak and output ownership asserted",
+      "cancel releases all admitted memory"
+    ],
+    "decode_log": "/tmp/rrrah-srgb16-decode-regression.log",
+    "benchmark_before": "/tmp/rrrah-resident-large-stages.log",
+    "benchmark_after": "/tmp/rrrah-srgb16-large-after.log"
+  },
+  "benchmark": {
+    "adapter": "Apple M4 Max Metal",
+    "source": "1920x1080 Farbfeld fixture described in resident-large-view-stages-2026-10-07.json",
+    "iterations": 15,
+    "warmup": 3,
+    "before_prepare_p50_ms": 70.519,
+    "after_prepare_p50_ms": 18.184,
+    "before_total_p50_ms": 166.759,
+    "after_total_p50_ms": 107.873,
+    "before_cpu_peak_bytes": 49766400,
+    "after_cpu_peak_bytes": 50028544,
+    "released_cpu": 0,
+    "released_gpu": 0
+  },
+  "limits": [
+    "Sequential dev-profile before/after on generated warm-cache source; not randomized controlled benchmark",
+    "Does not accelerate ICC transforms, BT709 or floating source transfer",
+    "No broad format or cold-storage speed claim"
+  ],
+  "status": "local, not pushed"
+}

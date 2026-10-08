@@ -1,0 +1,45 @@
+{
+  "problems": [
+    "Model RAM hit returned and changed visible pin without checking cancellation after lookup.",
+    "A cancelled swap lookup became a cache miss and invoked native decode before final cancellation check."
+  ],
+  "fix": "Production load delegates to a checked helper with the real generation-token predicate. Recheck resident result before pin change, swap result before decode fallback, retry before native decode, and memory refusal before evicting another model. Final pre-publication cancellation check retained.",
+  "before": {
+    "failed_regressions": 2,
+    "decode_on_cancelled_swap_lookup_reproduced": true,
+    "stale_resident_publication_reproduced": true
+  },
+  "after": {
+    "model_loader_cache_tests_passed": 22,
+    "integration_tests_passed": 6,
+    "gpu_integration_tests": 5,
+    "cpu_malformed_payload_test": 1,
+    "failed": 0,
+    "ignored": 0
+  },
+  "metal": "Actual Metal Apple M4 Max required via RRRAH_GPU_BACKEND=metal and RRRAH_GPU_OPTIONAL=0; STL, OBJ, PLY and OFF native managed geometry/readback and exact swap frame checks pass.",
+  "source": {
+    "path": "crates/rrrah-app/src/main.rs",
+    "model_display_cache_sha256": "ddeb3de11431c5b36a4e943670bf65b49d80540b95a84ffd11a961a42d1c19aa"
+  },
+  "logs": [
+    {
+      "path": "/tmp/rrrah-model-cancel-before-20261008.log",
+      "sha256": "1d6d46d80faf9fb0fddbf47f31f5e8599610ba0f4065abe4f951e48b48ade4e4"
+    },
+    {
+      "path": "/tmp/rrrah-model-cancel-fixed-20261008.log",
+      "sha256": "fb40268261beb7ab419298f6dea067ce944398d8c1ee743164c33de0ef3c56a3"
+    },
+    {
+      "path": "/tmp/rrrah-model-cancel-metal-20261008.log",
+      "sha256": "f14f1d6377aa8881052b6beabba030e140d39f69a422792dc098f4927e2863ed"
+    }
+  ],
+  "limitations": [
+    "Deterministic generation-predicate controls cover cancellation boundaries, not physical-window navigation latency.",
+    "Metal integrations cover authored fixtures and existing common geometry/transport assertions, not every 3D producer/material/texture variant.",
+    "Publication remains a checked boundary, not an atomic transaction with external generation mutation.",
+    "No NVIDIA or physical HDR qualification in these tests."
+  ]
+}

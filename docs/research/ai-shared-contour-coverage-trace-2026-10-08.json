@@ -1,0 +1,98 @@
+{
+  "scope": "test-only prepared and shared global contour diagnostic; selected top-level fill coverage before color compositing",
+  "checks_passed": 70,
+  "traces": {
+    "VectorApple.ai": [
+      {
+        "event": 361,
+        "x": 153,
+        "y": 165,
+        "whole_shape": 61,
+        "tile_shape": 60,
+        "paint": "color"
+      }
+    ],
+    "one.ai": [
+      {
+        "event": 1,
+        "x": 453,
+        "y": 391,
+        "whole_shape": 242,
+        "tile_shape": 241,
+        "paint": "color"
+      },
+      {
+        "event": 1,
+        "x": 453,
+        "y": 403,
+        "whole_shape": 242,
+        "tile_shape": 241,
+        "paint": "color"
+      },
+      {
+        "event": 4,
+        "x": 1150,
+        "y": 249,
+        "whole_shape": 207,
+        "tile_shape": 206,
+        "paint": "color"
+      }
+    ]
+  },
+  "pages": [
+    {
+      "fixture": "VectorApple.ai",
+      "page": 0,
+      "width": 301,
+      "height": 246,
+      "peak_admitted_bytes": 73184992,
+      "final_admitted_bytes": 0,
+      "status": "replayed",
+      "events": 2755,
+      "knockout_groups": 7,
+      "whole_replay_ms": 2557.0604169999997,
+      "tile_edge": 64,
+      "tile_replay_ms": 3178.862167,
+      "tile_different_pixels": 1,
+      "tile_peak_admitted_bytes": 33905860,
+      "tile_retained_comparison_baseline_bytes": 31250188
+    },
+    {
+      "fixture": "one.ai",
+      "page": 0,
+      "width": 1366,
+      "height": 768,
+      "peak_admitted_bytes": 93836912,
+      "final_admitted_bytes": 0,
+      "status": "replayed",
+      "events": 8,
+      "knockout_groups": 0,
+      "whole_replay_ms": 90.032166,
+      "tile_edge": 64,
+      "tile_replay_ms": 116.391042,
+      "tile_different_pixels": 3,
+      "tile_peak_admitted_bytes": 9225328,
+      "tile_retained_comparison_baseline_bytes": 4664288
+    },
+    {
+      "fixture": "one.ai",
+      "page": 1,
+      "width": 177,
+      "height": 175,
+      "peak_admitted_bytes": 2602956,
+      "final_admitted_bytes": 0,
+      "status": "replayed",
+      "events": 1,
+      "knockout_groups": 0,
+      "whole_replay_ms": 0.36575,
+      "tile_edge": 64,
+      "tile_replay_ms": 0.413875,
+      "tile_different_pixels": 0,
+      "tile_peak_admitted_bytes": 592920,
+      "tile_retained_comparison_baseline_bytes": 124956
+    }
+  ],
+  "finding": "Every remaining whole/tile differing output pixel coincides with a one-code path shape coverage difference before blending. This does not yet distinguish coordinate conversion from viewport clipping or accumulation rounding.",
+  "next_check": "Compare canonical global f32 vertices against per-viewport conversion with independent area controls; no tolerance widening or compositor correction.",
+  "payloads_identical_to_previous_run": true
+}

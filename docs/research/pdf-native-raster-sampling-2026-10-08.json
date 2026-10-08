@@ -1,0 +1,29 @@
+{
+  "scope": "Test-only native float raster sampling and Indexed palette expansion",
+  "controls": {
+    "passed": 119,
+    "failed": 0,
+    "ignored": 10,
+    "seconds": 2.89,
+    "log": "/tmp/rrrah-native-raster-sampling-final.log"
+  },
+  "checks": [
+    "Palette indices resolve to original base color coordinates before interpolation",
+    "Direct and Indexed RGB transparent-red/opaque-blue midpoint returns blue with alpha 0.5",
+    "Premultiplied bilinear filtering prevents transparent color halo in authored control",
+    "Nearest sampling preserves original 16-bit source and alpha values",
+    "Nonfinite coordinates and every sampling cancellation checkpoint refuse output"
+  ],
+  "implementation": [
+    "Fixed stack component arrays; no new sample-loop heap allocation",
+    "Soft-mask dimensions and interpolation used independently",
+    "Native source color-space identity retained in borrowed sample"
+  ],
+  "limitations": [
+    "Sampler not connected to native event replay or group compositing yet",
+    "Independent source/mask dimensions supported algorithmically but not independently qualified by these authored cases",
+    "Lab spot palettes and unsupported non-unit blending coordinates refuse",
+    "No full real-image or external pixel oracle comparison of sampler yet",
+    "No production AI or Metal integration qualification"
+  ]
+}

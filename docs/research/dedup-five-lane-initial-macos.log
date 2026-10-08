@@ -1,0 +1,20 @@
+   Compiling rrrah-core v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-core)
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+error[E0369]: binary operation `==` cannot be applied to type `Vec<Correspondence>`
+    --> crates/rrrah-dedup/tests/projective_files.rs:4439:17
+     |
+4439 |                 assert_eq!(joined.primary.gradient.correspondences, all.gradient.correspondences);
+     |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |                 |
+     |                 Vec<Correspondence>
+     |                 Vec<Correspondence>
+     |
+note: `Correspondence` does not implement `PartialEq`
+    --> crates/rrrah-dedup/src/geometry.rs:6:1
+     |
+   6 | pub struct Correspondence {
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^ `Correspondence` is defined in another crate
+
+For more information about this error, try `rustc --explain E0369`.
+error: could not compile `rrrah-dedup` (test "projective_files") due to 1 previous error

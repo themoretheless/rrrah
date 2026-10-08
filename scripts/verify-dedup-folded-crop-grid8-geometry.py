@@ -1,0 +1,17 @@
+"""Independent source/partition/residual audit for folded-print local models."""
+import argparse,ast,hashlib,json,math
+from pathlib import Path
+p=argparse.ArgumentParser();p.add_argument('report',type=Path);p.add_argument('output',type=Path);a=p.parse_args();assert not a.output.exists();h=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest();r=json.loads(a.report.read_text());pins={str(a.report):h(a.report),str(Path(__file__)):h(__file__)};assert r['status']=='complete_native_local_geometry' and r['query']=='201702.jpg' and r['target_dimensions']==[800,600] and all(h(k)==v for k,v in r['input_hashes'].items())
+def pinned(name):return next(Path(k) for k in r['input_hashes'] if Path(k).name==name)
+b=pinned('dedup-fallback-release-original-full-checkpoint-37-refinement-pixel-running.json');ba=pinned('dedup-fallback-release-original-full-checkpoint-37-refinement-pixel-running-audit.json');prior=json.loads(b.read_text());audit=json.loads(ba.read_text());assert audit['status']=='verified_fallback_release_union_prefix' and audit['input_hashes'][str(b)]==h(b) and all(h(k)==v for obj in [prior,audit] for k,v in obj['input_hashes'].items());row=next(v for v in prior['results'] if v['query']==r['query']);assert r['original']==row['original'];points=row['evidence']['correspondences'];assert len(points)==289 and row['returncode']==0 and row['evidence']['region_support_count']==0
+assert [[float(v) for v in line.split()] for line in pinned('dedup-folded-201702-regional-points.txt').read_text().splitlines()]==[s+t for s,t in points]
+helper=Path('scripts/verify-dedup-scale-similarity-diagnostic.py');pins[str(helper)]=h(helper);node=next(v for v in ast.parse(helper.read_text()).body if isinstance(v,ast.FunctionDef) and v.name=='verify_model');ns={'math':math};exec(compile(ast.Module(body=[node],type_ignores=[]),str(helper),'exec'),ns);assert len(r['results'])==1;summary=[]
+for experiment,divisions in zip(r['results'],[8]):
+ assert type(experiment['divisions']) is int and experiment['divisions']==divisions and type(experiment['returncode']) is int and experiment['returncode']==0;e=experiment['evidence'];assert json.loads(experiment['stdout'])==e and e['status']=='ok' and len(e['regions'])==divisions**2
+ for idx,region in enumerate(e['regions']):
+  y,x=divmod(idx,divisions);domain=[x*800/divisions,y*600/divisions,800/divisions,600/divisions];ids=[i for i,(_,t) in enumerate(points) if domain[0]<=t[0]<domain[0]+domain[2] and domain[1]<=t[1]<domain[1]+domain[3]];assert region['target_domain']==domain and region['point_indices']==ids
+  if region['matrix'] is None:assert region['inliers']==[]
+  else:assert len(region['inliers'])>=10 and all(type(i) is int and i in ids for i in region['inliers']);ns['verify_model'](region['matrix'],region['inliers'],points)
+  if len(ids)<10:assert region['matrix'] is None
+ summary.append({'divisions':divisions,'models':sum(v['matrix'] is not None for v in e['regions']),'inliers':[len(v['inliers']) for v in e['regions']]})
+assert all(h(k)==v for k,v in pins.items()) and all(h(k)==v for k,v in r['input_hashes'].items());a.output.write_text(json.dumps({'status':'verified_folded_crop_local_geometry','input_hashes':pins,'verified_partitions':1,'summary':summary,'scope':'Exact verified289proposal source, deterministic local memberships and native geometry residuals. No original-pixel recovery or true fold geometry claim.'},indent=2)+'\n')

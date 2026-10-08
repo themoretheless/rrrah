@@ -1,0 +1,17 @@
+{
+  "status": "verified_native_bounded_diagonal_proposals",
+  "tests_passed": 9,
+  "real_landmarks": 156,
+  "real_triangles": 296,
+  "real_whole_geometry": "accepted",
+  "matches_manual_topology_ignoring_face_orientation_and_order": true,
+  "pins": {
+    "crates/rrrah-dedup/src/triangulation.rs": "40e6769e5168d121092d3ff5b3e4071f35de56b5331e9296342047b2174d13a3",
+    "crates/rrrah-dedup/tests/diagonal_proposals.rs": "9903d2c2b8c25ce4b5b78e0bf356f570470dbe404c41c507def573d787b848ce",
+    "crates/rrrah-dedup/examples/diagonal_triangulation_probe.rs": "52c3a2763737a11d94d16621af65559f82829b35c346100d93982fb4e04eb54f",
+    "docs/research/dedup-diagonal-proposals-tests.log": "8be0b46fb426221562371127b2c97499679a704fd38bfde477c8b4a65f44a36f",
+    "docs/research/dedup-folded-auto-diagonal-triangulation.json": "20e6431b3b7b632783e2e96cfcc441d5679a6aea8fdade3fee0e58e1f0acedb3",
+    "docs/research/dedup-folded-qualified-landmarks.txt": "87ed80401c81cf2ad9c04e50363884c8fa870e370361eb83cb4321b16b7e3dd9"
+  },
+  "scope": "Geometry proposal API plus mandatory external PiecewiseWarp conformity check; deterministic bounded first viable neighbor, not complete topology search. No new pixel/copy-admission evidence."
+}

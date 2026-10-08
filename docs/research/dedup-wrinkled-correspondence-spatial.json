@@ -1,0 +1,105 @@
+{
+  "status": "verified_spatial_diagnostic",
+  "query": "200302.jpg",
+  "correspondence_count": 11,
+  "source_target_spans": [
+    {
+      "x_range": [
+        272.0,
+        1685.5
+      ],
+      "y_range": [
+        493.5,
+        723.5
+      ],
+      "normalized_x_span": 0.690185546875,
+      "normalized_y_span": 0.14973958333333334
+    },
+    {
+      "x_range": [
+        276.0,
+        725.6986642785844
+      ],
+      "y_range": [
+        59.60407640085654,
+        563.0641046056784
+      ],
+      "normalized_x_span": 0.5621233303482305,
+      "normalized_y_span": 0.8391000470080363
+    }
+  ],
+  "nearest_source_neighbors": [
+    {
+      "source_index": 0,
+      "nearest_source_index": 1,
+      "source_distance_pixels": 176.20503258450094,
+      "target_distance_pixels": 438.6000865506048
+    },
+    {
+      "source_index": 1,
+      "nearest_source_index": 2,
+      "source_distance_pixels": 37.71574566119781,
+      "target_distance_pixels": 26.076149238935198
+    },
+    {
+      "source_index": 2,
+      "nearest_source_index": 1,
+      "source_distance_pixels": 37.71574566119781,
+      "target_distance_pixels": 26.076149238935198
+    },
+    {
+      "source_index": 3,
+      "nearest_source_index": 5,
+      "source_distance_pixels": 176.95857685679914,
+      "target_distance_pixels": 397.0618139626262
+    },
+    {
+      "source_index": 4,
+      "nearest_source_index": 5,
+      "source_distance_pixels": 4.99999999999996,
+      "target_distance_pixels": 130.5009578508909
+    },
+    {
+      "source_index": 5,
+      "nearest_source_index": 4,
+      "source_distance_pixels": 4.99999999999996,
+      "target_distance_pixels": 130.5009578508909
+    },
+    {
+      "source_index": 6,
+      "nearest_source_index": 4,
+      "source_distance_pixels": 14.130113815882648,
+      "target_distance_pixels": 472.00771133403566
+    },
+    {
+      "source_index": 7,
+      "nearest_source_index": 8,
+      "source_distance_pixels": 37.6521221562037,
+      "target_distance_pixels": 401.92661021634285
+    },
+    {
+      "source_index": 8,
+      "nearest_source_index": 9,
+      "source_distance_pixels": 22.80350850198276,
+      "target_distance_pixels": 284.3114489428802
+    },
+    {
+      "source_index": 9,
+      "nearest_source_index": 8,
+      "source_distance_pixels": 22.80350850198276,
+      "target_distance_pixels": 284.3114489428802
+    },
+    {
+      "source_index": 10,
+      "nearest_source_index": 9,
+      "source_distance_pixels": 428.92423573400464,
+      "target_distance_pixels": 209.67832506007863
+    }
+  ],
+  "input_hashes": {
+    "docs/research/dedup-fresh-union-original-full-strict-checkpoint-7.json": "d780bdfa039e47efcda7d4fb6433b08301b7c051181e09e6cfdfca35d4cc1d67",
+    "docs/research/dedup-fresh-union-original-full-strict-checkpoint-7-audit.json": "39e179ada510b249ca012e80f3a02e66c98a70bacbb59e7958421c835f973f3b",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/analyze-dedup-wrinkled-correspondences.py": "0a926910f3b7e868cc763a2a2657e56689eab826bfc05b65b88c8c7a2f3c4dfa"
+  },
+  "interpretation": "Source matches occupy a narrow vertical band and several nearby source points map far apart in the target. Descriptor correspondence quality must be investigated before attributing failure solely to the global projective model. No true match labels, fold model, acceptance relaxation or recovery claim."
+}

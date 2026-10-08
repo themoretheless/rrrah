@@ -1,0 +1,261 @@
+{
+  "status": "complete_native_diagnostic",
+  "required_cases": 7,
+  "input_hashes": {
+    "docs/research/dedup-folded-witness-common-footprint-regions.json": "435f2e627d862171a18b74d97c3a6f8d755e33eaaff54ff45488a9452f9cf3da",
+    "docs/research/dedup-folded-witness-common-footprint-regions-audit.json": "22b2d1fe7039466ef43e7a1ffe40e897c15c79ba3593cd8ab239261febe2161e",
+    "docs/research/dedup-common-footprint-screen-control.json": "4fbe761b03ca32768926612a811c440c03f8472b5e004c0cef1be0da950c457a",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/affine-color-training-diagnostic": "09bc094aad100bc5682d6bca2f175ae4dadb0c4510cf43a6aefbc6fe8ef3d362",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-folded-training-diagnostic.py": "738383871c8c5b7cd75eb56edbe5e42f7adeabcca8af989d48a13c5fb789e56b",
+    "crates/rrrah-dedup/examples/affine_color_training_diagnostic.rs": "ea65833103524d7d38bb3bc813f94e07d37ed8e47bd195113e5a6585ac4f7c6d",
+    "crates/rrrah-dedup/src/affine_region.rs": "77d3167e0b2fd56f4b7a5f603a4eb292922a1334f9e2369dc325be783a253ad5",
+    "crates/rrrah-dedup/src/affine_region_file.rs": "d5e22d164564cb87ba874f9c536690bd8b5cba891ce8691c5927b0e00a55eef2",
+    "crates/rrrah-dedup/src/affine_color.rs": "2c6106f7e91c3b2a246f8a36a23e6adae57ed7bfdc7d65363c8e82efdc5de2aa",
+    "crates/rrrah-dedup/src/lib.rs": "1fcdade41d89ae7ab8989e59ff83cabb6fa32aa5f7dd30361a6d2d556d78783b",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200500.jpg": "55d5ff8935ee354fd0d34e3db8346db2b79047db56d7543ce50617c95e0ba91f",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200501.jpg": "c9f9a86fe25fd5bba47af5130e2fcf441633355cc1d806039c86cc0d5bbde9a3",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/guarded-roi-screen-control.txt": "76eb968ed5c93e038f2727b519d67320d11044ee1c5d2896cf4116850f2ec4bf",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201700.jpg": "72a07e098b9628cf665612b9a9450da78cff914a06b08c403e56c7dc74d4b5ca",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/201702.jpg": "a2e4eaa90d3aba8cca4dc3382d710cc8564f07bea69eedf35ac550ecc0900a51",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-witness-common-footprint-region-0-0-0.txt": "5d43433b005d424b0a100e6b5e9cec6476b08a45ddd131d95bbdfc35ea992880",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-witness-common-footprint-region-1-0-0.txt": "d0303b3a5d29d10b170973f263fdba77b45767c42f62f3df4ed3a3389c36fd8a",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-witness-common-footprint-region-2-0-0.txt": "639cef08d5637c24fa894df67a68b73f1f1975d82982400b73a6aa36487c9c3e",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-witness-common-footprint-region-3-0-0.txt": "115b13a361dde557bc8c1473c982a2a66ac0383f0ae23cf466ae45fe38e13dfe",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-witness-common-footprint-region-4-0-0.txt": "47050da7f82afb01659474e42eeba9f0bb3ca968ac152116651cd8057964ea92",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-witness-common-footprint-region-5-0-0.txt": "ccdd9d849500244aa2c11c677169ffe5a5ce094478557ed024000a2464875433"
+  },
+  "rows": [
+    {
+      "case": "screen_control",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/guarded-roi-screen-control.txt",
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"directions\":[{\"radius\":8,\"training_samples\":2400,\"samples\":2400,\"matched\":2383,\"pixel_reads\":6936000,\"training_matched\":2382,\"training_squared_error\":0.7677941319146372,\"heldout_squared_error\":0.7623946566728664},{\"radius\":8,\"training_samples\":6523,\"samples\":6524,\"matched\":6171,\"pixel_reads\":30164664,\"training_matched\":6198,\"training_squared_error\":4.412161879727814,\"heldout_squared_error\":4.487127250369565}],\"managed_used\":0,\"managed_peak\":118947840,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "evidence": {
+        "status": "ok",
+        "directions": [
+          {
+            "radius": 8,
+            "training_samples": 2400,
+            "samples": 2400,
+            "matched": 2383,
+            "pixel_reads": 6936000,
+            "training_matched": 2382,
+            "training_squared_error": 0.7677941319146372,
+            "heldout_squared_error": 0.7623946566728664
+          },
+          {
+            "radius": 8,
+            "training_samples": 6523,
+            "samples": 6524,
+            "matched": 6171,
+            "pixel_reads": 30164664,
+            "training_matched": 6198,
+            "training_squared_error": 4.412161879727814,
+            "heldout_squared_error": 4.487127250369565
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 118947840,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      },
+      "original_evidence_parity": true
+    },
+    {
+      "case": "folded_0",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-witness-common-footprint-region-0-0-0.txt",
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"directions\":[{\"radius\":8,\"training_samples\":2931,\"samples\":2928,\"matched\":2375,\"pixel_reads\":8466255,\"training_matched\":2387,\"training_squared_error\":5.053237278589199,\"heldout_squared_error\":5.012097644276247},{\"radius\":8,\"training_samples\":13087,\"samples\":13069,\"matched\":9154,\"pixel_reads\":60472672,\"training_matched\":9134,\"training_squared_error\":42.18723852251118,\"heldout_squared_error\":42.6585352927887}],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "evidence": {
+        "status": "ok",
+        "directions": [
+          {
+            "radius": 8,
+            "training_samples": 2931,
+            "samples": 2928,
+            "matched": 2375,
+            "pixel_reads": 8466255,
+            "training_matched": 2387,
+            "training_squared_error": 5.053237278589199,
+            "heldout_squared_error": 5.012097644276247
+          },
+          {
+            "radius": 8,
+            "training_samples": 13087,
+            "samples": 13069,
+            "matched": 9154,
+            "pixel_reads": 60472672,
+            "training_matched": 9134,
+            "training_squared_error": 42.18723852251118,
+            "heldout_squared_error": 42.6585352927887
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      },
+      "original_evidence_parity": true
+    },
+    {
+      "case": "folded_1",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-witness-common-footprint-region-1-0-0.txt",
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"directions\":[{\"radius\":8,\"training_samples\":2488,\"samples\":2468,\"matched\":1777,\"pixel_reads\":7161420,\"training_matched\":1821,\"training_squared_error\":3.15283796565306,\"heldout_squared_error\":3.023551080508284},{\"radius\":8,\"training_samples\":10338,\"samples\":10327,\"matched\":9628,\"pixel_reads\":47777480,\"training_matched\":9652,\"training_squared_error\":6.667335361211625,\"heldout_squared_error\":6.644492243263572}],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "evidence": {
+        "status": "ok",
+        "directions": [
+          {
+            "radius": 8,
+            "training_samples": 2488,
+            "samples": 2468,
+            "matched": 1777,
+            "pixel_reads": 7161420,
+            "training_matched": 1821,
+            "training_squared_error": 3.15283796565306,
+            "heldout_squared_error": 3.023551080508284
+          },
+          {
+            "radius": 8,
+            "training_samples": 10338,
+            "samples": 10327,
+            "matched": 9628,
+            "pixel_reads": 47777480,
+            "training_matched": 9652,
+            "training_squared_error": 6.667335361211625,
+            "heldout_squared_error": 6.644492243263572
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      },
+      "original_evidence_parity": true
+    },
+    {
+      "case": "folded_2",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-witness-common-footprint-region-2-0-0.txt",
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"directions\":[{\"radius\":8,\"training_samples\":2256,\"samples\":2252,\"matched\":1348,\"pixel_reads\":6514060,\"training_matched\":1362,\"training_squared_error\":5.961725535635464,\"heldout_squared_error\":6.130775982316919},{\"radius\":8,\"training_samples\":10242,\"samples\":10232,\"matched\":8196,\"pixel_reads\":47335888,\"training_matched\":8251,\"training_squared_error\":11.658343120057795,\"heldout_squared_error\":11.6189873274713}],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "evidence": {
+        "status": "ok",
+        "directions": [
+          {
+            "radius": 8,
+            "training_samples": 2256,
+            "samples": 2252,
+            "matched": 1348,
+            "pixel_reads": 6514060,
+            "training_matched": 1362,
+            "training_squared_error": 5.961725535635464,
+            "heldout_squared_error": 6.130775982316919
+          },
+          {
+            "radius": 8,
+            "training_samples": 10242,
+            "samples": 10232,
+            "matched": 8196,
+            "pixel_reads": 47335888,
+            "training_matched": 8251,
+            "training_squared_error": 11.658343120057795,
+            "heldout_squared_error": 11.6189873274713
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      },
+      "original_evidence_parity": true
+    },
+    {
+      "case": "folded_3",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-witness-common-footprint-region-3-0-0.txt",
+      "returncode": 0,
+      "stdout": "{\"status\":\"refusal:Region(Color(Bounds))\",\"directions\":[],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "evidence": {
+        "status": "refusal:Region(Color(Bounds))",
+        "directions": [],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      },
+      "original_evidence_parity": true
+    },
+    {
+      "case": "folded_4",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-witness-common-footprint-region-4-0-0.txt",
+      "returncode": 0,
+      "stdout": "{\"status\":\"refusal:Region(Color(Bounds))\",\"directions\":[],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "evidence": {
+        "status": "refusal:Region(Color(Bounds))",
+        "directions": [],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      },
+      "original_evidence_parity": true
+    },
+    {
+      "case": "folded_5",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-witness-common-footprint-region-5-0-0.txt",
+      "returncode": 0,
+      "stdout": "{\"status\":\"ok\",\"directions\":[{\"radius\":8,\"training_samples\":2026,\"samples\":2024,\"matched\":1561,\"pixel_reads\":5852250,\"training_matched\":1584,\"training_squared_error\":2.4465338282257103,\"heldout_squared_error\":2.4041280145698214},{\"radius\":8,\"training_samples\":10425,\"samples\":10407,\"matched\":6236,\"pixel_reads\":48163584,\"training_matched\":6220,\"training_squared_error\":29.038481663527666,\"heldout_squared_error\":28.74073215676621}],\"managed_used\":0,\"managed_peak\":62914560,\"footprints\":[\"target\",\"source\"]}\n",
+      "stderr": "",
+      "evidence": {
+        "status": "ok",
+        "directions": [
+          {
+            "radius": 8,
+            "training_samples": 2026,
+            "samples": 2024,
+            "matched": 1561,
+            "pixel_reads": 5852250,
+            "training_matched": 1584,
+            "training_squared_error": 2.4465338282257103,
+            "heldout_squared_error": 2.4041280145698214
+          },
+          {
+            "radius": 8,
+            "training_samples": 10425,
+            "samples": 10407,
+            "matched": 6236,
+            "pixel_reads": 48163584,
+            "training_matched": 6220,
+            "training_squared_error": 29.038481663527666,
+            "heldout_squared_error": 28.74073215676621
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560,
+        "footprints": [
+          "target",
+          "source"
+        ]
+      },
+      "original_evidence_parity": true
+    }
+  ],
+  "scope": "One screen control and six unchanged supplied witness geometries. Training scores are diagnostic only; heldout thresholds and all original policies remain unchanged. Not automatic fold recovery or broad precision."
+}

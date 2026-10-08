@@ -1,0 +1,137 @@
+{
+  "scope": "Independent GoPro GPR-to-DNG and Adobe DNG SDK full color rendering; native comparison pending",
+  "camera": "HERO9",
+  "source_sha256": "9249208a3482d6d71d39575210fe19ab3dd737e5e446a4d0718d4bd9d3c4358b",
+  "sdk_version_evidence": "Existing local SDK source snapshot; no .git metadata; previous pinned report identifies commit but it is not reverified here",
+  "renderer_source_sha256": "abf0b55377ba41354b5d463d2c64cbbdaa58d6abaa107991ffe182687e6165ac",
+  "converter_command": [
+    "gpr_tools",
+    "-i",
+    "HERO9.GPR",
+    "-o",
+    "hero9.dng"
+  ],
+  "renderer_command": [
+    "dng_validate",
+    "-16",
+    "-2",
+    "stage2",
+    "-3",
+    "stage3",
+    "-tif",
+    "rendered",
+    "hero9.dng"
+  ],
+  "artifacts": [
+    {
+      "path": "/tmp/rrrah-gpr-hero9-color-oracle.dng",
+      "bytes": 46518546,
+      "sha256": "9b60386e4c03b21aeeca2de71c8b4bc6e60a9f6f1396435621220e435d044507",
+      "tiff_numeric_tags": {
+        "256": [
+          5568
+        ],
+        "257": [
+          4176
+        ],
+        "258": [
+          16
+        ],
+        "273": [
+          14610
+        ],
+        "277": [
+          1
+        ],
+        "279": [
+          46503936
+        ]
+      }
+    },
+    {
+      "path": "/tmp/rrrah-gpr-hero9-stage2.tif",
+      "bytes": 46504082,
+      "sha256": "7b70443e8914d9bddd59e6a27b99c475cf1bf6a19c71b5b594a1af67f88c1992",
+      "tiff_numeric_tags": {
+        "256": [
+          5568
+        ],
+        "257": [
+          4176
+        ],
+        "258": [
+          16
+        ],
+        "273": [
+          146
+        ],
+        "277": [
+          1
+        ],
+        "279": [
+          46503936
+        ]
+      }
+    },
+    {
+      "path": "/tmp/rrrah-gpr-hero9-stage3.tif",
+      "bytes": 139511960,
+      "sha256": "848d3f1ccc26dd632e1d76c846cc4da57e2dd8516888a0a8312c4fccf6d0b9d4",
+      "tiff_numeric_tags": {
+        "256": [
+          5568
+        ],
+        "257": [
+          4176
+        ],
+        "258": [
+          16,
+          16,
+          16
+        ],
+        "273": [
+          152
+        ],
+        "277": [
+          3
+        ],
+        "279": [
+          139511808
+        ]
+      }
+    },
+    {
+      "path": "/tmp/rrrah-gpr-hero9-rendered.tif",
+      "bytes": 139520914,
+      "sha256": "91813951ca67c3b8b535292f5b507b2e04734d8b8cdb19f15d2f8e733694bd8a",
+      "tiff_numeric_tags": {
+        "256": [
+          5568
+        ],
+        "257": [
+          4176
+        ],
+        "258": [
+          16,
+          16,
+          16
+        ],
+        "273": [
+          9106
+        ],
+        "277": [
+          3
+        ],
+        "279": [
+          139511808
+        ]
+      }
+    }
+  ],
+  "log": "/tmp/rrrah-gpr-hero9-rendered-oracle.log",
+  "limitations": [
+    "No native color agreement claimed yet.",
+    "Differences require normalization, interpolation and tone-curve analysis.",
+    "External SDK used only as independent test oracle."
+  ]
+}

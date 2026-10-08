@@ -1,0 +1,386 @@
+{
+  "status": "complete_native_proposals",
+  "input_hashes": {
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/dense-patch-bounded-probe-wrinkled": "1a0865567a4ddcd70f3cbc3a65a21a55a6bca1e4f4443bd80f3e07a24f3e0b69",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200300.jpg": "0573729209c9ce6c109ea1175079960165b915dd5579121f0e15653d56f755d0",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200302.jpg": "bc4de3728d82839559134cc8155f87bdf7f8aeaca32b66bdea11f5a618420242",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/prepared.json": "6ba843f8f09419efb8ccec9b5d84cc8f086d1dc74ec222f5aa2acae29f9fff01",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-wrinkled-dense-patches-bounded.py": "8caf033908f3ccbd4bd43a06f3947f2acfb6c136da8e9d0550cfc313a5030935",
+    "crates/rrrah-dedup/examples/dense_patch_bounded_probe.rs": "400b09c4b69b0a8b371eb4a4c0429a4ecfe9ef8a40c0ae376bc7dc0b71577fc1"
+  },
+  "scope": "One known wrinkled-print positive, dense gradient proposals only. No geometry/pixel acceptance, negatives, production integration or full RSS qualification.",
+  "returncode": 0,
+  "stdout": "{\"status\":\"ok\",\"feature_counts\":[8344,4319],\"radius_pass\":8337,\"matches\":[{\"source\":[1936.0, 496.0],\"target\":[704.0, 496.0],\"squared_distance\":0.11170433979372738,\"second_distinct_squared_distance\":0.24567658902338002},{\"source\":[336.0, 528.0],\"target\":[64.0, 368.0],\"squared_distance\":0.12342165002069062,\"second_distinct_squared_distance\":0.26235300079407614},{\"source\":[400.0, 528.0],\"target\":[240.0, 192.0],\"squared_distance\":0.25470419025251556,\"second_distinct_squared_distance\":0.4027308351363084},{\"source\":[432.0, 528.0],\"target\":[64.0, 368.0],\"squared_distance\":0.17753184635124125,\"second_distinct_squared_distance\":0.36014741887495627},{\"source\":[464.0, 528.0],\"target\":[720.0, 64.0],\"squared_distance\":0.25491385238118275,\"second_distinct_squared_distance\":0.40949189811640324},{\"source\":[560.0, 528.0],\"target\":[208.0, 128.0],\"squared_distance\":0.15726277880683986,\"second_distinct_squared_distance\":0.43237368654312913},{\"source\":[688.0, 528.0],\"target\":[208.0, 128.0],\"squared_distance\":0.22304372365007852,\"second_distinct_squared_distance\":0.41195067284743403},{\"source\":[752.0, 528.0],\"target\":[64.0, 368.0],\"squared_distance\":0.268972605248193,\"second_distinct_squared_distance\":0.4543932971291577},{\"source\":[944.0, 528.0],\"target\":[32.0, 32.0],\"squared_distance\":0.14000441389549567,\"second_distinct_squared_distance\":0.27365075507347525},{\"source\":[1584.0, 528.0],\"target\":[208.0, 128.0],\"squared_distance\":0.20246162236657206,\"second_distinct_squared_distance\":0.4103250210763757},{\"source\":[336.0, 560.0],\"target\":[624.0, 224.0],\"squared_distance\":0.12705246937395004,\"second_distinct_squared_distance\":0.2707294700902417},{\"source\":[368.0, 560.0],\"target\":[560.0, 96.0],\"squared_distance\":0.18745292150968526,\"second_distinct_squared_distance\":0.34870064467769585},{\"source\":[592.0, 560.0],\"target\":[432.0, 192.0],\"squared_distance\":0.19082688802579562,\"second_distinct_squared_distance\":0.32480065058708557},{\"source\":[1296.0, 560.0],\"target\":[752.0, 528.0],\"squared_distance\":0.17770176260240209,\"second_distinct_squared_distance\":0.2822835295940405},{\"source\":[1328.0, 560.0],\"target\":[624.0, 224.0],\"squared_distance\":0.13511798627140237,\"second_distinct_squared_distance\":0.22605846664520277},{\"source\":[1520.0, 560.0],\"target\":[768.0, 128.0],\"squared_distance\":0.13243333229273868,\"second_distinct_squared_distance\":0.24497424446622856},{\"source\":[1616.0, 560.0],\"target\":[704.0, 496.0],\"squared_distance\":0.1588325928278455,\"second_distinct_squared_distance\":0.2917064124905433},{\"source\":[1008.0, 592.0],\"target\":[368.0, 256.0],\"squared_distance\":0.09127997531744282,\"second_distinct_squared_distance\":0.16594195040242035},{\"source\":[1264.0, 592.0],\"target\":[608.0, 192.0],\"squared_distance\":0.2025177001588069,\"second_distinct_squared_distance\":0.3418293433910263},{\"source\":[1328.0, 592.0],\"target\":[704.0, 64.0],\"squared_distance\":0.1544483697330832,\"second_distinct_squared_distance\":0.25179373360322244},{\"source\":[1488.0, 592.0],\"target\":[64.0, 560.0],\"squared_distance\":0.2972851364580878,\"second_distinct_squared_distance\":0.4828041896990249},{\"source\":[1552.0, 592.0],\"target\":[208.0, 256.0],\"squared_distance\":0.22593913888003328,\"second_distinct_squared_distance\":0.4629111854773385},{\"source\":[144.0, 624.0],\"target\":[192.0, 352.0],\"squared_distance\":0.18176702271241765,\"second_distinct_squared_distance\":0.2851265008597106},{\"source\":[816.0, 656.0],\"target\":[160.0, 272.0],\"squared_distance\":0.0939182320795075,\"second_distinct_squared_distance\":0.1795735982855689},{\"source\":[1040.0, 656.0],\"target\":[432.0, 192.0],\"squared_distance\":0.06687757789116422,\"second_distinct_squared_distance\":0.16099512586588577},{\"source\":[1232.0, 656.0],\"target\":[624.0, 224.0],\"squared_distance\":0.12283451686774238,\"second_distinct_squared_distance\":0.24950633263592617},{\"source\":[784.0, 688.0],\"target\":[624.0, 224.0],\"squared_distance\":0.06315766065215968,\"second_distinct_squared_distance\":0.13890671542981958},{\"source\":[976.0, 1136.0],\"target\":[336.0, 64.0],\"squared_distance\":0.18136973631363842,\"second_distinct_squared_distance\":0.29714770180728584},{\"source\":[80.0, 1168.0],\"target\":[256.0, 272.0],\"squared_distance\":0.07548846819150495,\"second_distinct_squared_distance\":0.12507238438812568},{\"source\":[1616.0, 1424.0],\"target\":[304.0, 160.0],\"squared_distance\":0.18500704022685593,\"second_distinct_squared_distance\":0.29771215435968346}],\"scope\":\"Dense stride32/16, explicit scales1/2/4, original linear patches; candidates only, no geometric or pixel acceptance. Feature/output allocations outside managed decode accounting.\"}\n",
+  "stderr": "",
+  "evidence": {
+    "status": "ok",
+    "feature_counts": [
+      8344,
+      4319
+    ],
+    "radius_pass": 8337,
+    "matches": [
+      {
+        "source": [
+          1936.0,
+          496.0
+        ],
+        "target": [
+          704.0,
+          496.0
+        ],
+        "squared_distance": 0.11170433979372738,
+        "second_distinct_squared_distance": 0.24567658902338002
+      },
+      {
+        "source": [
+          336.0,
+          528.0
+        ],
+        "target": [
+          64.0,
+          368.0
+        ],
+        "squared_distance": 0.12342165002069062,
+        "second_distinct_squared_distance": 0.26235300079407614
+      },
+      {
+        "source": [
+          400.0,
+          528.0
+        ],
+        "target": [
+          240.0,
+          192.0
+        ],
+        "squared_distance": 0.25470419025251556,
+        "second_distinct_squared_distance": 0.4027308351363084
+      },
+      {
+        "source": [
+          432.0,
+          528.0
+        ],
+        "target": [
+          64.0,
+          368.0
+        ],
+        "squared_distance": 0.17753184635124125,
+        "second_distinct_squared_distance": 0.36014741887495627
+      },
+      {
+        "source": [
+          464.0,
+          528.0
+        ],
+        "target": [
+          720.0,
+          64.0
+        ],
+        "squared_distance": 0.25491385238118275,
+        "second_distinct_squared_distance": 0.40949189811640324
+      },
+      {
+        "source": [
+          560.0,
+          528.0
+        ],
+        "target": [
+          208.0,
+          128.0
+        ],
+        "squared_distance": 0.15726277880683986,
+        "second_distinct_squared_distance": 0.43237368654312913
+      },
+      {
+        "source": [
+          688.0,
+          528.0
+        ],
+        "target": [
+          208.0,
+          128.0
+        ],
+        "squared_distance": 0.22304372365007852,
+        "second_distinct_squared_distance": 0.41195067284743403
+      },
+      {
+        "source": [
+          752.0,
+          528.0
+        ],
+        "target": [
+          64.0,
+          368.0
+        ],
+        "squared_distance": 0.268972605248193,
+        "second_distinct_squared_distance": 0.4543932971291577
+      },
+      {
+        "source": [
+          944.0,
+          528.0
+        ],
+        "target": [
+          32.0,
+          32.0
+        ],
+        "squared_distance": 0.14000441389549567,
+        "second_distinct_squared_distance": 0.27365075507347525
+      },
+      {
+        "source": [
+          1584.0,
+          528.0
+        ],
+        "target": [
+          208.0,
+          128.0
+        ],
+        "squared_distance": 0.20246162236657206,
+        "second_distinct_squared_distance": 0.4103250210763757
+      },
+      {
+        "source": [
+          336.0,
+          560.0
+        ],
+        "target": [
+          624.0,
+          224.0
+        ],
+        "squared_distance": 0.12705246937395004,
+        "second_distinct_squared_distance": 0.2707294700902417
+      },
+      {
+        "source": [
+          368.0,
+          560.0
+        ],
+        "target": [
+          560.0,
+          96.0
+        ],
+        "squared_distance": 0.18745292150968526,
+        "second_distinct_squared_distance": 0.34870064467769585
+      },
+      {
+        "source": [
+          592.0,
+          560.0
+        ],
+        "target": [
+          432.0,
+          192.0
+        ],
+        "squared_distance": 0.19082688802579562,
+        "second_distinct_squared_distance": 0.32480065058708557
+      },
+      {
+        "source": [
+          1296.0,
+          560.0
+        ],
+        "target": [
+          752.0,
+          528.0
+        ],
+        "squared_distance": 0.17770176260240209,
+        "second_distinct_squared_distance": 0.2822835295940405
+      },
+      {
+        "source": [
+          1328.0,
+          560.0
+        ],
+        "target": [
+          624.0,
+          224.0
+        ],
+        "squared_distance": 0.13511798627140237,
+        "second_distinct_squared_distance": 0.22605846664520277
+      },
+      {
+        "source": [
+          1520.0,
+          560.0
+        ],
+        "target": [
+          768.0,
+          128.0
+        ],
+        "squared_distance": 0.13243333229273868,
+        "second_distinct_squared_distance": 0.24497424446622856
+      },
+      {
+        "source": [
+          1616.0,
+          560.0
+        ],
+        "target": [
+          704.0,
+          496.0
+        ],
+        "squared_distance": 0.1588325928278455,
+        "second_distinct_squared_distance": 0.2917064124905433
+      },
+      {
+        "source": [
+          1008.0,
+          592.0
+        ],
+        "target": [
+          368.0,
+          256.0
+        ],
+        "squared_distance": 0.09127997531744282,
+        "second_distinct_squared_distance": 0.16594195040242035
+      },
+      {
+        "source": [
+          1264.0,
+          592.0
+        ],
+        "target": [
+          608.0,
+          192.0
+        ],
+        "squared_distance": 0.2025177001588069,
+        "second_distinct_squared_distance": 0.3418293433910263
+      },
+      {
+        "source": [
+          1328.0,
+          592.0
+        ],
+        "target": [
+          704.0,
+          64.0
+        ],
+        "squared_distance": 0.1544483697330832,
+        "second_distinct_squared_distance": 0.25179373360322244
+      },
+      {
+        "source": [
+          1488.0,
+          592.0
+        ],
+        "target": [
+          64.0,
+          560.0
+        ],
+        "squared_distance": 0.2972851364580878,
+        "second_distinct_squared_distance": 0.4828041896990249
+      },
+      {
+        "source": [
+          1552.0,
+          592.0
+        ],
+        "target": [
+          208.0,
+          256.0
+        ],
+        "squared_distance": 0.22593913888003328,
+        "second_distinct_squared_distance": 0.4629111854773385
+      },
+      {
+        "source": [
+          144.0,
+          624.0
+        ],
+        "target": [
+          192.0,
+          352.0
+        ],
+        "squared_distance": 0.18176702271241765,
+        "second_distinct_squared_distance": 0.2851265008597106
+      },
+      {
+        "source": [
+          816.0,
+          656.0
+        ],
+        "target": [
+          160.0,
+          272.0
+        ],
+        "squared_distance": 0.0939182320795075,
+        "second_distinct_squared_distance": 0.1795735982855689
+      },
+      {
+        "source": [
+          1040.0,
+          656.0
+        ],
+        "target": [
+          432.0,
+          192.0
+        ],
+        "squared_distance": 0.06687757789116422,
+        "second_distinct_squared_distance": 0.16099512586588577
+      },
+      {
+        "source": [
+          1232.0,
+          656.0
+        ],
+        "target": [
+          624.0,
+          224.0
+        ],
+        "squared_distance": 0.12283451686774238,
+        "second_distinct_squared_distance": 0.24950633263592617
+      },
+      {
+        "source": [
+          784.0,
+          688.0
+        ],
+        "target": [
+          624.0,
+          224.0
+        ],
+        "squared_distance": 0.06315766065215968,
+        "second_distinct_squared_distance": 0.13890671542981958
+      },
+      {
+        "source": [
+          976.0,
+          1136.0
+        ],
+        "target": [
+          336.0,
+          64.0
+        ],
+        "squared_distance": 0.18136973631363842,
+        "second_distinct_squared_distance": 0.29714770180728584
+      },
+      {
+        "source": [
+          80.0,
+          1168.0
+        ],
+        "target": [
+          256.0,
+          272.0
+        ],
+        "squared_distance": 0.07548846819150495,
+        "second_distinct_squared_distance": 0.12507238438812568
+      },
+      {
+        "source": [
+          1616.0,
+          1424.0
+        ],
+        "target": [
+          304.0,
+          160.0
+        ],
+        "squared_distance": 0.18500704022685593,
+        "second_distinct_squared_distance": 0.29771215435968346
+      }
+    ],
+    "scope": "Dense stride32/16, explicit scales1/2/4, original linear patches; candidates only, no geometric or pixel acceptance. Feature/output allocations outside managed decode accounting."
+  }
+}

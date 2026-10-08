@@ -4,6 +4,7 @@ set -eu
 validation_dir=${1:-/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native}
 sysroot_dir=${2:-/opt/rrrah-dedup-validation/sysroot}
 mode=${3:-targeted}
+source_dir_override=${4:-}
 test_tmpdir=/tmp
 feature_flag=--all-features
 cargo_command=test
@@ -19,10 +20,36 @@ case "$mode" in
   raw-camera) set -- --lib camtiff -- --nocapture; package=rrrah-decode ;;
   raw-core) set -- --all-targets; package=rrrah-core ;;
   projective) set -- --test projective_geometry --test warp; feature_flag=--no-default-features ;;
+  periodic-capture) set -- --test periodic_capture; feature_flag=--no-default-features ;;
   projective-regions) set -- --test projective_geometry --test warp --test photometric --test filtered; feature_flag=--no-default-features ;;
+  regional-reuse) set -- --lib --test projective_files --test projective_geometry --test warp --test photometric --test filtered ;;
   minimal-full) set -- --all-targets; feature_flag=--no-default-features ;;
   projective-files) set -- --test projective_files --test local_scan ;;
   pyramid-files) set -- --test pyramid --test projective_files pyramid ;;
+  spatial-pyramid) set -- --test pyramid ;;
+  five-collection) set -- --test five_collection --test gradient_collection --test gradient_index --test five_lifecycle ;;
+  spatial-gradient) set -- --test gradient --test gradient_interpolated --test gradient_empty --test gradient_collection ;;
+  spatial-gradient-files) set -- --test projective_files pyramid_photometric_files_preserve_identity_refusals_and_cancel_retry ;;
+  gradient-collection) set -- --test gradient_collection ;;
+  gradient-metadata) set -- --lib gradient_id_scratch_exact_limit_cancellation_and_ownership ;;
+  six-regions) set -- --lib --test five_collection --test five_region_admission ;;
+  six-unique-proposals) set -- --lib --test five_collection --test five_region_admission --test gradient_index ;;
+  candidate-union-files) set -- --test candidate_union_files --test correspondence_union --test gradient_candidate_smoothing --test gradient_scale_files ;;
+  distinct-managed-files) set -- --test managed_evidence --test gradient_scale_files --test gradient_distinct_locations ;;
+  gradient-scales-distinct) set -- --test gradient_scale --test gradient_scale_files --test gradient_distinct_locations --test projective_domains --test projective_geometry --test gradient --test gradient_interpolated ;;
+  gradient-index) set -- --test gradient_index ;;
+  region-grid) set -- --test region_grid --test region_grid_files ;;
+  region-transform) set -- --test region_transform --test region_grid --test region_grid_files ;;
+  five-gradient-regions) set -- --test five_collection --test five_region_admission --test five_gradient_region_lifecycle ;;
+  five-union-memory) set -- --test five_collection --test five_region_admission ;;
+  distinct-variants) set -- --lib --test visual --test local_index ;;
+  binary-owner-slots) set -- --lib --test visual --test local_index --test five_collection --test five_region_admission ;;
+  five-bidirectional-regions) set -- --lib --test five_collection --test five_region_admission --test local_index --test visual ;;
+  five-regions) set -- --test five_collection --test five_region_lifecycle --test region_grid --test region_grid_files ;;
+  proposal-lifetime) set -- --test five_collection --test five_region_lifecycle --test five_region_admission --test gradient_collection --test region_grid --test region_grid_files ;;
+  gradient-core) set -- --test gradient --test gradient_empty --test gradient_interpolated; feature_flag=--no-default-features ;;
+  gradient-pyramid) set -- --test gradient --test gradient_empty --test gradient_interpolated --test pyramid ;;
+  five-lifecycle) set -- --test five_lifecycle ;;
   complementary-files) set -- --test projective_files complementary ;;
   projective-collection) set -- --test projective_files indexed_projective_collection ;;
   projective-phase) set -- --test projective_files registration_phase_cancel ;;
@@ -59,6 +86,7 @@ case "$mode" in
   raw-build) set -- --example raw_probe; cargo_command=build ;;
   targeted) set -- --test decode --test container --test presentation_digest ;;
   raster-equality) set -- --test raster_equality ;;
+  jpeg-orientation) set -- --test jpeg_orientation ;;
   animation) set -- --test animated ;;
   exact-policy) set -- --lib --test exact_files; feature_flag=--no-default-features; target_dir=/validation/exact-policy-target ;;
   exact) set -- --lib --test exact_files; feature_flag=--no-default-features ;;
@@ -73,7 +101,12 @@ case "$mode" in
   cache-disk) set -- --test cache; test_tmpdir=/persist ;;
   *) echo "Expected targeted, raster-equality, animation, exact, exact-policy, exact-scale, exact-cancel-scale, raster-memory, raster-png, alpha-memory, full, cache or cache-disk validation mode" >&2; exit 2 ;;
 esac
-project_dir=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+if [ -n "$source_dir_override" ]; then
+  project_dir=$(CDPATH= cd -- "$source_dir_override" && pwd)
+else
+  project_dir=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+fi
+test -f "$project_dir/Cargo.toml"
 exec docker run --rm --user 65534:65534 \
   --tmpfs /tmp:rw,exec,size=2147483648,mode=1777 \
   -v "$project_dir:/workspace:ro" -v "$validation_dir:/validation" \

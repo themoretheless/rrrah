@@ -1,0 +1,77 @@
+{
+  "status": "verified_same_models_region_comparison",
+  "cases": 6,
+  "rows": [
+    {
+      "model_index": 0,
+      "before_status": "ok",
+      "after_status": "ok",
+      "before_supported": false,
+      "after_supported": false,
+      "before_fractions": [
+        0.6572192513368984,
+        0.5237776289350301
+      ],
+      "after_fractions": [
+        0.6572192513368984,
+        0.5249345430189368
+      ]
+    },
+    {
+      "model_index": 1,
+      "before_status": "ok",
+      "after_status": "ok",
+      "before_supported": false,
+      "after_supported": false,
+      "before_fractions": [
+        0.5836898395721926,
+        0.6510938780656957
+      ],
+      "after_fractions": [
+        0.5836898395721926,
+        0.6521656894268961
+      ]
+    },
+    {
+      "model_index": 2,
+      "before_status": "refusal:Region(Color(Bounds))",
+      "after_status": "refusal:Region(Color(Bounds))",
+      "before_supported": false,
+      "after_supported": false
+    },
+    {
+      "model_index": 3,
+      "before_status": "refusal:Region(Color(Bounds))",
+      "after_status": "refusal:Region(Color(Bounds))",
+      "before_supported": false,
+      "after_supported": false
+    },
+    {
+      "model_index": 4,
+      "before_status": "refusal:Region(Color(Bounds))",
+      "after_status": "refusal:Region(Color(Bounds))",
+      "before_supported": false,
+      "after_supported": false
+    },
+    {
+      "model_index": 5,
+      "before_status": "ok",
+      "after_status": "ok",
+      "before_supported": false,
+      "after_supported": false,
+      "before_fractions": [
+        0.8041267942583732,
+        0.6068281938325991
+      ],
+      "after_fractions": [
+        0.8041267942583732,
+        0.6012106537530266
+      ]
+    }
+  ],
+  "input_hashes": {
+    "docs/research/dedup-folded-grid8-common-footprint-regions.json": "1d03e8e1f1ad99e62c80abeef6c1c8f0b960c931552a16b2472702dedb567069",
+    "docs/research/dedup-folded-grid8-guarded-regions.json": "bbae5ab43eb3330eaea4a25265580ac14d70b091bee92a8249ec56f08315aa8c"
+  },
+  "scope": "Same six models/ROIs and thresholds, only reverse footprint coordinate axes/radius change. Zero supports in both. Does not establish general sampling equivalence or cause of fold misses."
+}

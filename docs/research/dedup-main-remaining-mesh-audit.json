@@ -1,0 +1,60 @@
+{
+  "status": "verified_complete_input_remaining_mesh_diagnostic",
+  "attempts": 6,
+  "mesh_refusals": 5,
+  "summary": [
+    {
+      "query": "202502.jpg",
+      "point_set": "all",
+      "original_points_retained": 219,
+      "outcome": "explicit_geometry_refusal"
+    },
+    {
+      "query": "202502.jpg",
+      "point_set": "global_inliers",
+      "original_points_retained": 80,
+      "outcome": "explicit_geometry_refusal"
+    },
+    {
+      "query": "204702.jpg",
+      "point_set": "all",
+      "original_points_retained": 183,
+      "outcome": "explicit_geometry_refusal"
+    },
+    {
+      "query": "204702.jpg",
+      "point_set": "global_inliers",
+      "original_points_retained": 52,
+      "outcome": "rank_measured",
+      "filter8_directions": [
+        {
+          "direction": "forward",
+          "agreement": 0.9307196158029052,
+          "coverage": 0.06093958333333333
+        },
+        {
+          "direction": "reverse",
+          "agreement": 0.888550921801745,
+          "coverage": 0.05134748225176418
+        }
+      ]
+    },
+    {
+      "query": "212602.jpg",
+      "point_set": "all",
+      "original_points_retained": 177,
+      "outcome": "explicit_geometry_refusal"
+    },
+    {
+      "query": "212602.jpg",
+      "point_set": "global_inliers",
+      "original_points_retained": 81,
+      "outcome": "explicit_geometry_refusal"
+    }
+  ],
+  "pins": {
+    "docs/research/dedup-main-remaining-mesh.json": "b08d53a2f4d363a4b85fb59990f503f96a04f411215f355e9eaca74dc9dac85a",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-main-remaining-mesh.py": "fab31a0093140bf3791cecda0417a21a72bbc95f82c0fffaecc9b2302de78f3e"
+  },
+  "scope": "Whole original point list or whole baseline inlier list retained; source/executable/pixel pins, native admission refusal and rank bounds/counts. No independent real geometry/mesh pixel oracle, local-region validation or copy admission/broad precision."
+}

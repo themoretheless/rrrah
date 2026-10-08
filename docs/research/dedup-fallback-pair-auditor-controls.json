@@ -1,0 +1,26 @@
+{
+  "status": "verified_fallback_auditor_rejects_corrupt_reports",
+  "cases": [
+    {
+      "case": "incomplete_terminal",
+      "rejected": true
+    },
+    {
+      "case": "boolean_returncode",
+      "rejected": true
+    },
+    {
+      "case": "boolean_attempts",
+      "rejected": true
+    },
+    {
+      "case": "wrong_selected_radii",
+      "rejected": true
+    }
+  ],
+  "input_hashes": {
+    "docs/research/dedup-fallback-known-pairs-retry.json": "ebc7ed11c6064da4934564d5b466baa0076c5d73c430b99ede9d8748d6cebdfe",
+    "scripts/verify-dedup-fallback-known-pairs.py": "24972bc7ac25c0b00230cca156c25f878be1cc71b5cf13270f042467a6fe7f91"
+  },
+  "scope": "Parser/evidence corruption controls, not native negative precision."
+}

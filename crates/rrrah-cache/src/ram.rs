@@ -139,11 +139,16 @@ impl MosaicRamCache {
         }
         self.spill_expired();
         if let Some(mosaic) = self.inner.get_cloned(key) {
-            return Some(mosaic);
+            return (!cancelled()).then_some(mosaic);
         }
         loop {
             match self.swap.as_ref()?.try_get(key, &mut cancelled) {
                 Ok(Some(mosaic)) => {
+                    // Do not publish a restore or transfer the visible pin
+                    // after its request generation has been cancelled.
+                    if cancelled() {
+                        return None;
+                    }
                     if visible {
                         self.insert_visible(*key, mosaic.clone());
                     } else {
@@ -154,7 +159,7 @@ impl MosaicRamCache {
                 Err(rrrah_memory::BufferError::Capacity { requested, limit, .. })
                     if visible && requested <= limit =>
                 {
-                    if !self.release_lru_unpinned() {
+                    if cancelled() || !self.release_lru_unpinned() {
                         return None;
                     }
                 }
@@ -281,6 +286,68 @@ mod tests {
             Arc::new(vec![42_u16; pixels]),
         )
         .unwrap()
+    }
+
+    #[test]
+    fn cancellation_after_raw_ram_hit_does_not_return_a_stale_owner() {
+        let mut cache = MosaicRamCache::with_limits(crate::CacheLimits::bytes(8));
+        assert!(cache.insert_visible(key(2), mosaic(2)));
+        let mut polls = 0;
+        assert!(
+            cache
+                .get_with_cancel(&key(2), || {
+                    polls += 1;
+                    polls == 2
+                })
+                .is_none()
+        );
+        assert_eq!(polls, 2);
+        assert_eq!(cache.visible(), Some(key(2)));
+    }
+
+    #[test]
+    fn cancellation_after_raw_swap_read_preserves_visible_pin_and_retry() {
+        let (_parent, mut cache) = swap_cache(64, 2);
+        let root = rrrah_memory::MemoryBudget::new(64);
+        cache.swap.as_mut().unwrap().set_restore_budget(root.clone());
+        assert!(cache.insert_visible(key(2), mosaic(2).try_manage_pixels(&root).unwrap()));
+        cache.swap().unwrap().enqueue(key(1), mosaic(2));
+        cache.swap().unwrap().wait_idle().unwrap();
+        let mut stream_polls = 0;
+        drop(
+            cache
+                .swap()
+                .unwrap()
+                .try_get(&key(1), || {
+                    stream_polls += 1;
+                    false
+                })
+                .unwrap()
+                .unwrap(),
+        );
+        assert_eq!(root.used(), 4);
+        let target = stream_polls + 2;
+        let mut polls = 0;
+        assert!(
+            cache
+                .get_with_cancel(&key(1), || {
+                    polls += 1;
+                    polls == target
+                })
+                .is_none()
+        );
+        assert_eq!(polls, target);
+        assert_eq!(cache.visible(), Some(key(2)));
+        assert_eq!(cache.len(), 1);
+        assert_eq!(root.used(), 4);
+        let restored = cache.get(&key(1)).unwrap();
+        assert_eq!(cache.visible(), Some(key(1)));
+        assert_eq!(&restored.pixels[..], &[42, 42]);
+        assert_eq!(restored.metadata, mosaic(2).metadata);
+        drop(restored);
+        cache.swap().unwrap().wait_idle().unwrap();
+        drop(cache);
+        assert_eq!(root.used(), 0);
     }
 
     #[test]

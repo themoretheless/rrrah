@@ -1,0 +1,42 @@
+{
+  "status": "verified_known_roi_parity",
+  "input_hashes": {
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/affine-color-guarded-roi-radius24-probe": "0a1797bc32ef4b00232d558a8896ee619caf56a5c7f00c3de0043bc12e7c9ddf",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/guarded-roi-screen-control.txt": "76eb968ed5c93e038f2727b519d67320d11044ee1c5d2896cf4116850f2ec4bf",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200500.jpg": "55d5ff8935ee354fd0d34e3db8346db2b79047db56d7543ce50617c95e0ba91f",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200501.jpg": "c9f9a86fe25fd5bba47af5130e2fcf441633355cc1d806039c86cc0d5bbde9a3",
+    "docs/research/dedup-native-screen-affine-color-managed.json": "961ac2d40f39d81a8d250726c696b0bf2d81e6e9ccbf75039928ba81ba53eb6b",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-guarded-roi-radius24-control.py": "fb096aed559789bd18b3ba343e49c52dcc6ce63965748925c5513a8bd5268862",
+    "crates/rrrah-dedup/examples/affine_color_guarded_roi_radius24_probe.rs": "5a4e798768ce772818690f51128c24e716412d230229a38fa6c8d12a41ce8e91",
+    "crates/rrrah-dedup/src/affine_region.rs": "5334e39fab623782432388ae3270bc79e1872e67b1a4cb92c14678acca140977",
+    "crates/rrrah-dedup/src/affine_region_file.rs": "f7e31493a793bfcbcbc4ec770ea3ee95e745a036d5da099f4b2322aa896bca17",
+    "crates/rrrah-dedup/src/region_footprint.rs": "3d93a2aecdbc0d5f03f69a5fa2df344fc9a2284265f9fcecfc99b3b00b29787d",
+    "crates/rrrah-dedup/src/affine_color.rs": "2c6106f7e91c3b2a246f8a36a23e6adae57ed7bfdc7d65363c8e82efdc5de2aa",
+    "crates/rrrah-dedup/src/lib.rs": "1fcdade41d89ae7ab8989e59ff83cabb6fa32aa5f7dd30361a6d2d556d78783b"
+  },
+  "scope": "One known ROI pair, exact count parity through guarded file API; not fresh geometry or broad coverage.",
+  "returncode": 0,
+  "stdout": "{\"status\":\"ok\",\"directions\":[{\"radius\":8,\"training_samples\":2400,\"samples\":2400,\"matched\":2383,\"pixel_reads\":6936000},{\"radius\":14,\"training_samples\":6523,\"samples\":6524,\"matched\":6191,\"pixel_reads\":54862635}],\"managed_used\":0,\"managed_peak\":118947840}\n",
+  "stderr": "",
+  "evidence": {
+    "status": "ok",
+    "directions": [
+      {
+        "radius": 8,
+        "training_samples": 2400,
+        "samples": 2400,
+        "matched": 2383,
+        "pixel_reads": 6936000
+      },
+      {
+        "radius": 14,
+        "training_samples": 6523,
+        "samples": 6524,
+        "matched": 6191,
+        "pixel_reads": 54862635
+      }
+    ],
+    "managed_used": 0,
+    "managed_peak": 118947840
+  }
+}

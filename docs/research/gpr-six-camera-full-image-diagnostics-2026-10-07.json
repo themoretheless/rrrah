@@ -1,0 +1,357 @@
+{
+  "scope": "Full native scene-linear AHD vs independent SDK bilinear Stage3 transformed by independent camera matrices",
+  "limitations": [
+    "Block means characterize interpolation differences; no perceptual quality or universal format pass is inferred.",
+    "The reference uses RGB16 quantization. Boundary blocks are excluded from mean comparisons."
+  ],
+  "rows": [
+    {
+      "camera": "HERO5",
+      "dimensions": [
+        4000,
+        3000
+      ],
+      "all_pixels_finite_opaque": true,
+      "pixels_checked": 12000000,
+      "source_orientation": 2,
+      "native_sha256": "6de839f6256744ebcb0b260761b2665aee56c948b0d7c7bf5a3059bc225fd37c",
+      "independent_stage3_sha256": "d2da7d7fa82d5e27dbe6183b483f2f3377f0658d548433d645c1b4f8e5f62474",
+      "linear_block_means": {
+        "8": {
+          "blocks": 185754,
+          "signed_mean_rgb": [
+            0.000522622511703671,
+            -0.0007226906151666525,
+            0.00071671769590203
+          ],
+          "mean_abs_rgb": [
+            0.0020631944330283163,
+            0.0011774656449564944,
+            0.0022840486663479064
+          ]
+        },
+        "32": {
+          "blocks": 11316,
+          "signed_mean_rgb": [
+            0.0005194612791834769,
+            -0.0007158773829576046,
+            0.0007071243045057269
+          ],
+          "mean_abs_rgb": [
+            0.000849973717940585,
+            0.0007844862120521856,
+            0.0009502883740071944
+          ]
+        },
+        "64": {
+          "blocks": 2700,
+          "signed_mean_rgb": [
+            0.0005172160629650865,
+            -0.0007065500854085094,
+            0.0006966780068758279
+          ],
+          "mean_abs_rgb": [
+            0.0006798500476469612,
+            0.000729966932999029,
+            0.0007748272641270218
+          ]
+        }
+      },
+      "source_sha256": "cf4bf90f2cff3ed36e2e51a632078537d1eddc1149279de4ecce1cb2c1879d5b",
+      "independent_dng_sha256": "8881e249c3c2ce98dce18d8f7787974b04f8d269e741088037883e94b4230ac1",
+      "native_log": "camera=GoPro HERO5 Black white_balance=[1.7238764, 1.0, 1.8574207, 1.0] xyz_to_camera=[[1.1683671, -0.41189578, -0.11441798], [-0.16229028, 1.0198735, 0.113641106], [0.016869493, 0.10879307, 0.37446898], [0.0, 0.0, 0.0]]\ndimensions=4000x3000 color=LinearSrgb peak=452388608\n"
+    },
+    {
+      "camera": "HERO6",
+      "dimensions": [
+        4000,
+        3000
+      ],
+      "all_pixels_finite_opaque": true,
+      "pixels_checked": 12000000,
+      "source_orientation": 2,
+      "native_sha256": "9fcfea1863baa75b1409b797e59829a88858524577f62968335b034e5808aad3",
+      "independent_stage3_sha256": "d1781d12fab2059d7a84b9d448eeaf5d25bc60b3c9f28d5c1dd66f194a8502e0",
+      "linear_block_means": {
+        "8": {
+          "blocks": 185754,
+          "signed_mean_rgb": [
+            2.0253716395723425e-05,
+            -4.535322621015586e-05,
+            4.614048963338502e-05
+          ],
+          "mean_abs_rgb": [
+            0.0008268390756796541,
+            0.0002236716563946093,
+            0.0007246058443945626
+          ]
+        },
+        "32": {
+          "blocks": 11316,
+          "signed_mean_rgb": [
+            2.0906423228450122e-05,
+            -4.577571094807703e-05,
+            4.6296146505403246e-05
+          ],
+          "mean_abs_rgb": [
+            0.0002785858920223755,
+            8.082267612200648e-05,
+            0.00021552540098303743
+          ]
+        },
+        "64": {
+          "blocks": 2700,
+          "signed_mean_rgb": [
+            2.276687304968646e-05,
+            -4.662525740163761e-05,
+            4.6625352091531544e-05
+          ],
+          "mean_abs_rgb": [
+            0.00018682302614809307,
+            6.093270077592177e-05,
+            0.00013487494457566524
+          ]
+        }
+      },
+      "source_sha256": "82e8abdbe66db44e08f01078fe3174cd77d8a9414844f0526cd2d8177cec9778",
+      "independent_dng_sha256": "f73f770ce91d390d2515f62077a7586e7b4591bca93580abd849e58d61ea5232",
+      "native_log": "camera=GoPro HERO6 Black white_balance=[1.9140624, 1.0, 1.7499987, 1.0] xyz_to_camera=[[1.0707875, -0.39587465, -0.09107315], [-0.21422526, 1.0516746, 0.14000961], [0.007540799, 0.11355993, 0.414198], [0.0, 0.0, 0.0]]\ndimensions=4000x3000 color=LinearSrgb peak=452388608\n"
+    },
+    {
+      "camera": "HERO7",
+      "dimensions": [
+        4000,
+        3000
+      ],
+      "all_pixels_finite_opaque": true,
+      "pixels_checked": 12000000,
+      "source_orientation": 2,
+      "native_sha256": "163bfd1ca9622e659efddca7ae77fff991f85728643157945dcd04d7a15c535f",
+      "independent_stage3_sha256": "bf0a62357609d2561271ceb385e4a98cadb41196685af6eb27be47493573dbfc",
+      "linear_block_means": {
+        "8": {
+          "blocks": 185754,
+          "signed_mean_rgb": [
+            -7.06761998644299e-05,
+            -4.5949281659570806e-05,
+            8.18932570302488e-05
+          ],
+          "mean_abs_rgb": [
+            0.0009478542390302856,
+            0.0002846490573829363,
+            0.0009240453583562596
+          ]
+        },
+        "32": {
+          "blocks": 11316,
+          "signed_mean_rgb": [
+            -7.029497789292664e-05,
+            -4.608197414228168e-05,
+            8.19695630393615e-05
+          ],
+          "mean_abs_rgb": [
+            0.00028348938108353365,
+            8.80561467609962e-05,
+            0.00027207775619361024
+          ]
+        },
+        "64": {
+          "blocks": 2700,
+          "signed_mean_rgb": [
+            -7.063845025559166e-05,
+            -4.6050254279815236e-05,
+            8.286397642747926e-05
+          ],
+          "mean_abs_rgb": [
+            0.00018160703715058523,
+            6.009748681967242e-05,
+            0.0001726550593799198
+          ]
+        }
+      },
+      "source_sha256": "0c2003137feb0ca7c9a8adf6cd832bc8fba7ff1b89cf5d77822b22558b9a20fe",
+      "independent_dng_sha256": "d97c8abefea87ed522f9d5d723632685daf1708e5722ae92facbeab4f2032a51",
+      "native_log": "camera=GoPro HERO7 Black white_balance=[1.7695326, 1.0, 1.8945315, 1.0] xyz_to_camera=[[1.1561807, -0.41703063, -0.11355737], [-0.17210394, 1.030116, 0.11133852], [0.0147306975, 0.1109988, 0.36401278], [0.0, 0.0, 0.0]]\ndimensions=4000x3000 color=LinearSrgb peak=452388608\n"
+    },
+    {
+      "camera": "HERO9",
+      "dimensions": [
+        5568,
+        4176
+      ],
+      "all_pixels_finite_opaque": true,
+      "pixels_checked": 23251968,
+      "source_orientation": 1,
+      "native_sha256": "5a13211dbf9c33a67125777d87bc85a950ac054ab051bfcfdf0175ec2475bb58",
+      "independent_stage3_sha256": "848d3f1ccc26dd632e1d76c846cc4da57e2dd8516888a0a8312c4fccf6d0b9d4",
+      "linear_block_means": {
+        "8": {
+          "blocks": 360880,
+          "signed_mean_rgb": [
+            -8.422674870672009e-05,
+            -6.218576309417245e-05,
+            0.00010985634652036342
+          ],
+          "mean_abs_rgb": [
+            0.001099013100134167,
+            0.00031885261315425074,
+            0.0010502483848050508
+          ]
+        },
+        "32": {
+          "blocks": 22188,
+          "signed_mean_rgb": [
+            -8.501792754559091e-05,
+            -6.271706576130581e-05,
+            0.00011112824710709145
+          ],
+          "mean_abs_rgb": [
+            0.0003120134494363317,
+            0.00010205510102501061,
+            0.0003039398764153086
+          ]
+        },
+        "64": {
+          "blocks": 5440,
+          "signed_mean_rgb": [
+            -8.596669086133691e-05,
+            -6.338014693318244e-05,
+            0.00011228569318910985
+          ],
+          "mean_abs_rgb": [
+            0.00019615890576562146,
+            7.757956565190927e-05,
+            0.00019934186812248743
+          ]
+        }
+      },
+      "source_sha256": "9249208a3482d6d71d39575210fe19ab3dd737e5e446a4d0718d4bd9d3c4358b",
+      "independent_dng_sha256": "9b60386e4c03b21aeeca2de71c8b4bc6e60a9f6f1396435621220e435d044507",
+      "native_log": "camera=GoPro HERO9 Black white_balance=[2.1562505, 1.0, 1.7695326, 1.0] xyz_to_camera=[[1.0443232, -0.43043888, -0.084942974], [-0.24070327, 1.0862143, 0.14262491], [0.0032425344, 0.117696844, 0.41469717], [0.0, 0.0, 0.0]]\ndimensions=5568x4176 color=LinearSrgb peak=868711424\n"
+    },
+    {
+      "camera": "Fusion-back",
+      "dimensions": [
+        3104,
+        3000
+      ],
+      "all_pixels_finite_opaque": true,
+      "pixels_checked": 9312000,
+      "source_orientation": 2,
+      "native_sha256": "f44ee16a4ac2960e2b53868017fc17f2d325ececf662de97b85e01d2b891b73f",
+      "independent_stage3_sha256": "2cd1f5f38bd236c7672b725155787b81a9cdaeb868e89781be28642674c074f8",
+      "linear_block_means": {
+        "8": {
+          "blocks": 143978,
+          "signed_mean_rgb": [
+            -3.776664765227481e-05,
+            -4.337203602742315e-05,
+            7.972646104160127e-05
+          ],
+          "mean_abs_rgb": [
+            0.000796767272326751,
+            0.0002729069389002078,
+            0.0007192340145702608
+          ]
+        },
+        "32": {
+          "blocks": 8740,
+          "signed_mean_rgb": [
+            -3.839805227149336e-05,
+            -4.438456777108443e-05,
+            8.146776241205346e-05
+          ],
+          "mean_abs_rgb": [
+            0.00025758083118064567,
+            9.239219905289905e-05,
+            0.00022380615657271075
+          ]
+        },
+        "64": {
+          "blocks": 2070,
+          "signed_mean_rgb": [
+            -3.851645653505825e-05,
+            -4.672174787614743e-05,
+            8.44188431591255e-05
+          ],
+          "mean_abs_rgb": [
+            0.00016399572253326727,
+            6.674340762301273e-05,
+            0.00014891692513091978
+          ]
+        }
+      },
+      "source_sha256": "c03eccdc334dc5b35cf6385799b219f4c9a0bc18ccbe70fe433237d98f352247",
+      "independent_dng_sha256": "37eb725e06eae255bc88d5d0922b3bf59652021f55fff26bd615b994781da069",
+      "native_log": "camera=GoPro FUSION white_balance=[2.0263672, 1.0, 1.6479487, 1.0] xyz_to_camera=[[1.0539697, -0.41059214, -0.08049763], [-0.22486137, 1.0617604, 0.15823649], [0.007290797, 0.111837536, 0.45956096], [0.0, 0.0, 0.0]]\ndimensions=3104x3000 color=LinearSrgb peak=352932608\n"
+    },
+    {
+      "camera": "Fusion-front",
+      "dimensions": [
+        3104,
+        3000
+      ],
+      "all_pixels_finite_opaque": true,
+      "pixels_checked": 9312000,
+      "source_orientation": 2,
+      "native_sha256": "b8f6f544f647fa5740c1a4a19936640b9d76e0a382469e7b4ce3402e0e7ff4e3",
+      "independent_stage3_sha256": "c997db249d941349cf0c920849a08496a2821908317e9132effa28fe4cabb40c",
+      "linear_block_means": {
+        "8": {
+          "blocks": 143978,
+          "signed_mean_rgb": [
+            -6.462298515334592e-05,
+            -4.552581427977485e-05,
+            0.00010059030900696136
+          ],
+          "mean_abs_rgb": [
+            0.0010344780170645467,
+            0.0003239180439092295,
+            0.0009372251659962969
+          ]
+        },
+        "32": {
+          "blocks": 8740,
+          "signed_mean_rgb": [
+            -6.631606197369729e-05,
+            -4.669781850665393e-05,
+            0.00010261899289021479
+          ],
+          "mean_abs_rgb": [
+            0.00034190928060970517,
+            0.00010934529488891909,
+            0.0002844643734653845
+          ]
+        },
+        "64": {
+          "blocks": 2070,
+          "signed_mean_rgb": [
+            -6.952752284310735e-05,
+            -4.891324571095353e-05,
+            0.00010760239512658853
+          ],
+          "mean_abs_rgb": [
+            0.0002231086804856158,
+            7.936387082648998e-05,
+            0.00018310206741377523
+          ]
+        }
+      },
+      "source_sha256": "096f8eba6a39739bb6cea4b835464c9b35d8ef2c6e6a622e3c3d1760221f32b2",
+      "independent_dng_sha256": "b2ecb1be49dee8a4cf6c81d6adba608c649c2ad791b5f313bb3c6248fec6917a",
+      "native_log": "camera=GoPro FUSION white_balance=[2.0263672, 1.0, 1.6479487, 1.0] xyz_to_camera=[[1.0539697, -0.41059214, -0.08049763], [-0.22486137, 1.0617604, 0.15823649], [0.007290797, 0.111837536, 0.45956096], [0.0, 0.0, 0.0]]\ndimensions=3104x3000 color=LinearSrgb peak=352932608\n"
+    }
+  ],
+  "pixels_checked_total": 77875968,
+  "visual_review": {
+    "artifact": "/tmp/rrrah-gpr-six-camera-quality.png",
+    "sha256": "77db3ac1a10024235d77f55c7a18e34159dc542d159a1952b7bff5d7bf0f7a7d",
+    "scope": "six whole-frame 8x8 linear-average overviews: native, independent sensor Stage3 mapped to sRGB, difference heatmap",
+    "observations": "Framing and reflection agree after EXIF orientation alignment. Largest differences are fine edges and clipped highlights. This does not certify all pixels or final display highlight/color quality."
+  },
+  "generation": {
+    "native": "raw_developed_dump INPUT.GPR OUTPUT.rgba32fle",
+    "independent": "external test-only Adobe DNG SDK validator -16 -3 OUTPUT-stage3 INPUT.dng",
+    "analysis": "scripts/analyze-gpr-linear-quality.py --input-dir /tmp/rrrah-gpr-full-quality-20261007 --dng-dir /tmp/rrrah-gpr-matrix-corpus-20261007 --output-report REPORT.json"
+  }
+}

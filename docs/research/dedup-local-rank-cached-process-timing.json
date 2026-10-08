@@ -1,0 +1,100 @@
+{
+  "status": "measured_alternating_exact_output_process_timings",
+  "rows": [
+    {
+      "iteration": 0,
+      "backend": "direct",
+      "elapsed_seconds": 2.3136055000068154,
+      "returncode": 0
+    },
+    {
+      "iteration": 0,
+      "backend": "cached",
+      "elapsed_seconds": 0.2089182080089813,
+      "returncode": 0
+    },
+    {
+      "iteration": 1,
+      "backend": "cached",
+      "elapsed_seconds": 0.20451975001196843,
+      "returncode": 0
+    },
+    {
+      "iteration": 1,
+      "backend": "direct",
+      "elapsed_seconds": 3.0580200840049656,
+      "returncode": 0
+    },
+    {
+      "iteration": 2,
+      "backend": "direct",
+      "elapsed_seconds": 2.739856583008077,
+      "returncode": 0
+    },
+    {
+      "iteration": 2,
+      "backend": "cached",
+      "elapsed_seconds": 0.34183079200738575,
+      "returncode": 0
+    },
+    {
+      "iteration": 3,
+      "backend": "cached",
+      "elapsed_seconds": 0.4684927080088528,
+      "returncode": 0
+    },
+    {
+      "iteration": 3,
+      "backend": "direct",
+      "elapsed_seconds": 3.1329784999979893,
+      "returncode": 0
+    },
+    {
+      "iteration": 4,
+      "backend": "direct",
+      "elapsed_seconds": 3.2086068330099806,
+      "returncode": 0
+    },
+    {
+      "iteration": 4,
+      "backend": "cached",
+      "elapsed_seconds": 0.2341116250026971,
+      "returncode": 0
+    },
+    {
+      "iteration": 5,
+      "backend": "cached",
+      "elapsed_seconds": 0.22325383400311694,
+      "returncode": 0
+    },
+    {
+      "iteration": 5,
+      "backend": "direct",
+      "elapsed_seconds": 2.4852136250119656,
+      "returncode": 0
+    }
+  ],
+  "summary": {
+    "direct": {
+      "median_seconds": 2.8989383335065213,
+      "min_seconds": 2.3136055000068154,
+      "max_seconds": 3.2086068330099806
+    },
+    "cached": {
+      "median_seconds": 0.22868272950290702,
+      "min_seconds": 0.20451975001196843,
+      "max_seconds": 0.4684927080088528
+    }
+  },
+  "input_hashes": {
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/local-rank-resolution-probe-qualified": "9113b29490cc7f3b886214685af76f53df1da93e550a94a4160bf6671d7c7233",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/local-rank-cached-pixels-probe-qualified": "0dbc33cb7264eb093bd2608a52375803889762ab682a144e08c5feed894435dc",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/rank-normalized-pixel-oracle/200500.rgba32": "cf0ab6883e57688692a0a67d531a4ee22ff93cb32eb45535d536efefb59d2daf",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/rank-normalized-pixel-oracle/200501.rgba32": "8559c6abb440543a69f31cde2204044e14443648e77e7988c2e55c302ef4b8de",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/all-screen-local-rank-58.txt": "f0deb5404d57ed113021eb4196b941813dd2ddef46b833a7f4687bea9604c089",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/screen-local-rank-api-points.txt": "cdc707c882b17d2cd82d33ac22d659af37bcf78389f951b5776938c9fbf89eaf",
+    "docs/research/dedup-main-screen-local-rank-api.jsonl": "4111e9d629aed70d410c5051b274ed90b2938be7b60382c9a2c3725256fac028",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-local-rank-cached-timing.py": "50bb731cb534b9763a5bc34aac7078fbff6fe9edc20db3b85e179ebfa6a37af8"
+  },
+  "scope": "Single selected real screen ROI, frozen release binaries, three filter levels/two directions plus normalized-pixel loading and snapshot hashing in each process. Six alternating measurements per backend under live concurrent workloads. No isolated kernel/decoder/retrieval/whole-collection performance claim; bytes and decisions exactly equal."
+}

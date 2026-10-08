@@ -1,0 +1,44 @@
+{
+  "scope": "Bounded scalar Type3 stitching evaluation for native BG/UCR conversions; production scene replay unchanged",
+  "source_sha256": {
+    "vendor/hayro-interpret/src/function/mod.rs": "7228875daf6ac502fc7b324c4504ef1667df96c5a108ec614a0bd42341ca9a37",
+    "vendor/hayro-interpret/src/function/type3.rs": "81434edd334f86721decfc0df434c4a51d8bdd6b5929d4840f3cfad02cc65fd8",
+    "vendor/hayro/src/knockout_interpreter.rs": "78826c07fafbfc6ccf89ba8b1b59d3001c5f080ea1bfea98c34e653bcf17f7f0"
+  },
+  "interpreter_suite": {
+    "passed": 77,
+    "failed": 0,
+    "seconds": 0.12,
+    "log": "/tmp/rrrah-bounded-stitching-final.log"
+  },
+  "renderer_suite": {
+    "passed": 102,
+    "failed": 0,
+    "ignored": 8,
+    "seconds": 2.71,
+    "log": "/tmp/rrrah-bounded-stitching-renderer-controls.log"
+  },
+  "verified": [
+    "Independent exact endpoint and interior references0->0,0.25->0.5,0.5->0.2,0.75->0.3,1->0.4",
+    "Boundary chooses right interval",
+    "Out-of-domain input clamps to true endpoints",
+    "Every5 cancellation checkpoint refuses output",
+    "Exhausted work budget refuses output",
+    "32 nested stitching wrappers refuse before depth overflow",
+    "Invalid bound outside domain and NaN input refuse",
+    "Actual PDF Type3 BG plus Type2 UCR yields native CMYK0.4,0.2,0,0.18 with separate shape/alpha"
+  ],
+  "limits": {
+    "shared_evaluation_steps": 4096,
+    "depth_levels": 32,
+    "heap_scratch": 0
+  },
+  "difference_from_legacy": "Bounded scalar evaluator uses exact original domain endpoints. Legacy display evaluator dummy delta behavior remains unchanged.",
+  "remaining": [
+    "Bounded sampled Type0 and calculator Type4",
+    "Function parsing/allocation admission",
+    "Output-device default BG/UCR policy",
+    "Native scene frame integration, shading/image state, real AI qualification"
+  ],
+  "production_enabled": false
+}

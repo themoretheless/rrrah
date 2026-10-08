@@ -1,0 +1,21 @@
+{
+  "status": "targeted_macos_pass_real_diagnostic_pending",
+  "tests": 6,
+  "test_exit_code": 0,
+  "change": "Per-level scratch maximum: borrowed factor1grayscale8bytes/pixel, reduced level24bytes/pixel; other scratch caps unchanged. Extractor body/thresholds unchanged.",
+  "diagnostic_build": {
+    "session": 16562,
+    "snapshot": "/Users/themoretheless/.codex/tmp/rrrah-dedup-pixel-admission-macos-snapshot-20261008",
+    "log": "docs/research/dedup-extraction-level-admission-frozen-build.log",
+    "status": "running"
+  },
+  "first_build_failure": {
+    "exit_code": 101,
+    "log": "docs/research/dedup-extraction-level-admission-build.log",
+    "cause": "Concurrent vendor/hayro-interpret native_source missing documentation lints; unrelated work preserved."
+  },
+  "sha256": {
+    "crates/rrrah-dedup/src/gradient_scale.rs": "e7350a691d8c7da5c73b376882956cf1df468620804d5f77c2a01b0750538a7c",
+    "docs/research/dedup-gradient-scale-per-level-admission-tests.log": "355f993e952b5fe2d3e0d69a62abfa309caeb40d5a15d15172c01ed44f468d52"
+  }
+}

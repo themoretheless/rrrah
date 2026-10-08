@@ -1,0 +1,29 @@
+{
+  "behavior": "Common sensor router opens original RAW in EIP; Capture One edits are not applied",
+  "routing": [
+    "EIP gallery image/raw candidate",
+    "Sensor classifier for EIP suffix",
+    "NativeRawDecoder recipe and decode route",
+    "RAW prefetch recipe uses shared managed root"
+  ],
+  "budget": "Caller root preserved; absent request root uses bounded 512 MiB fallback",
+  "cache_identity": "Existing source fingerprint covers whole EIP, inner decoder recipe identifies original sensor contract",
+  "verification": {
+    "real_cr3": "Stored/deflated authored ZIP with EOS R8 CR3: decode_image returns sensor, metadata/all 25,494,560 values match original",
+    "decoder_library": "964 passed, zero failures, 65 ignored",
+    "app_units": "164 passed, zero failures, 24 ignored",
+    "managed_peak_bytes": 73371346,
+    "final_occupancy": 0
+  },
+  "limitations": [
+    "No Capture One-produced EIP fixture",
+    "Settings/ICC/LCC not interpreted",
+    "Actual EIP app cache, swap, prefetch and GPU integration not qualified yet",
+    "No physical HDR or NVIDIA proof"
+  ],
+  "logs": [
+    "/tmp/rrrah-eip-common.log",
+    "/tmp/rrrah-eip-common-real.log",
+    "/tmp/rrrah-eip-common-app.log"
+  ]
+}

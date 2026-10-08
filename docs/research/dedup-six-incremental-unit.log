@@ -1,0 +1,105 @@
+    Blocking waiting for file lock on build directory
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+warning: taking a mutable reference to a `const` item
+    --> crates/rrrah-dedup/src/managed_metric.rs:218:59
+     |
+ 218 |                     .search(query, radius, entries.len(), &mut usize::MAX, &budget, || false)
+     |                                                           ^^^^^^^^^^^^^^^
+     |
+     = note: each usage of a `const` item creates a new temporary
+     = note: the mutable reference will refer to this temporary, not the original `const` item
+note: `const` item defined here
+    --> /Users/themoretheless/.rustup/toolchains/stable-aarch64-apple-darwin/lib/rustlib/src/rust/library/core/src/num/uint_macros.rs:51:9
+     |
+  51 |           pub const MAX: Self = !0;
+     |           ^^^^^^^^^^^^^^^^^^^
+     |
+    ::: /Users/themoretheless/.rustup/toolchains/stable-aarch64-apple-darwin/lib/rustlib/src/rust/library/core/src/num/mod.rs:1449:5
+     |
+1449 | /     uint_impl! {
+1450 | |         Self = usize,
+1451 | |         ActualT = u64,
+1452 | |         SignedT = isize,
+...    |
+1472 | |         bound_condition = " on 64-bit targets",
+1473 | |     }
+     | |_____- in this macro invocation
+     = note: `#[warn(const_item_mutation)]` on by default
+     = note: this warning originates in the macro `uint_impl` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+warning: taking a mutable reference to a `const` item
+    --> crates/rrrah-dedup/src/managed_metric.rs:237:36
+     |
+ 237 |             index.search(0, 64, 0, &mut usize::MAX, &budget, || false),
+     |                                    ^^^^^^^^^^^^^^^
+     |
+     = note: each usage of a `const` item creates a new temporary
+     = note: the mutable reference will refer to this temporary, not the original `const` item
+note: `const` item defined here
+    --> /Users/themoretheless/.rustup/toolchains/stable-aarch64-apple-darwin/lib/rustlib/src/rust/library/core/src/num/uint_macros.rs:51:9
+     |
+  51 |           pub const MAX: Self = !0;
+     |           ^^^^^^^^^^^^^^^^^^^
+     |
+    ::: /Users/themoretheless/.rustup/toolchains/stable-aarch64-apple-darwin/lib/rustlib/src/rust/library/core/src/num/mod.rs:1449:5
+     |
+1449 | /     uint_impl! {
+1450 | |         Self = usize,
+1451 | |         ActualT = u64,
+1452 | |         SignedT = isize,
+...    |
+1472 | |         bound_condition = " on 64-bit targets",
+1473 | |     }
+     | |_____- in this macro invocation
+     = note: this warning originates in the macro `uint_impl` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+warning: taking a mutable reference to a `const` item
+    --> crates/rrrah-dedup/src/managed_metric.rs:242:37
+     |
+ 242 |             index.search(0, 64, 96, &mut usize::MAX, &budget, || true),
+     |                                     ^^^^^^^^^^^^^^^
+     |
+     = note: each usage of a `const` item creates a new temporary
+     = note: the mutable reference will refer to this temporary, not the original `const` item
+note: `const` item defined here
+    --> /Users/themoretheless/.rustup/toolchains/stable-aarch64-apple-darwin/lib/rustlib/src/rust/library/core/src/num/uint_macros.rs:51:9
+     |
+  51 |           pub const MAX: Self = !0;
+     |           ^^^^^^^^^^^^^^^^^^^
+     |
+    ::: /Users/themoretheless/.rustup/toolchains/stable-aarch64-apple-darwin/lib/rustlib/src/rust/library/core/src/num/mod.rs:1449:5
+     |
+1449 | /     uint_impl! {
+1450 | |         Self = usize,
+1451 | |         ActualT = u64,
+1452 | |         SignedT = isize,
+...    |
+1472 | |         bound_condition = " on 64-bit targets",
+1473 | |     }
+     | |_____- in this macro invocation
+     = note: this warning originates in the macro `uint_impl` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib test) generated 4 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 1m 08s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_dedup-dbe305bf06b05e73)
+
+running 2 tests
+test local_collection::compact_portfolio_tests::incremental_batches_admit_overlap_and_preserve_previous_batch_on_failure ... ok
+test local_collection::compact_portfolio_tests::compaction_admits_overlap_preserves_order_and_rolls_back ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 49 filtered out; finished in 0.00s
+

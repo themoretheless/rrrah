@@ -1,0 +1,73 @@
+{
+  "status": "verified_real_projective_atlas_rank_pixel_counts",
+  "comparisons": 6,
+  "summary": [
+    {
+      "direction": "forward",
+      "radius": 0,
+      "valid_sites": 289536,
+      "informative_pairs": 1482870,
+      "agreeing_pairs": 898699,
+      "agreement_fraction": 0.6060538010749426
+    },
+    {
+      "direction": "forward",
+      "radius": 3,
+      "valid_sites": 283044,
+      "informative_pairs": 951646,
+      "agreeing_pairs": 739759,
+      "agreement_fraction": 0.7773468285475902
+    },
+    {
+      "direction": "forward",
+      "radius": 8,
+      "valid_sites": 272384,
+      "informative_pairs": 779316,
+      "agreeing_pairs": 685965,
+      "agreement_fraction": 0.8802141878262476
+    },
+    {
+      "direction": "reverse",
+      "radius": 0,
+      "valid_sites": 754511,
+      "informative_pairs": 3751920,
+      "agreeing_pairs": 2163575,
+      "agreement_fraction": 0.5766580843941236
+    },
+    {
+      "direction": "reverse",
+      "radius": 3,
+      "valid_sites": 743653,
+      "informative_pairs": 2092847,
+      "agreeing_pairs": 1550499,
+      "agreement_fraction": 0.7408563550034952
+    },
+    {
+      "direction": "reverse",
+      "radius": 8,
+      "valid_sites": 725734,
+      "informative_pairs": 1583787,
+      "agreeing_pairs": 1385755,
+      "agreement_fraction": 0.8749629842901855
+    }
+  ],
+  "pins": {
+    "crates/rrrah-dedup/src/geometry.rs": "34319a268ce2ba42382c588bcd1c98bd6f146bc1a861305dbe7dbd4b2fe4acc5",
+    "crates/rrrah-dedup/src/mesh_grid.rs": "6623a06e650853c72e1278a3ac44868b6be26eda8159cfa53dcea775ce8d4a7e",
+    "crates/rrrah-dedup/src/mesh_rank.rs": "7dc7aabc21e25fdb934e6dc6b7984671eba18bc3062c7470e87d61d3a5b55adf",
+    "crates/rrrah-dedup/src/linear.rs": "9ba055f4a73063eed2d757e47cbd6d0b1b53b9f1fed6c1cbd777d3106141e059",
+    "crates/rrrah-dedup/src/rank_region.rs": "781bde7379e709db64b3b2b3f6e18036eb79cca2d06d5294bc8d7828c6df081a",
+    "crates/rrrah-dedup/examples/projective_rank_pixels_probe.rs": "9cd2f452604a3281047f8670fa14947052af2dbfb198226dc004e82886aa1eff",
+    "crates/rrrah-dedup/Cargo.toml": "10befa462f314ffa61a339d90ab0f36f1a6893bccc9f8a74bd0abcb7ffb1e787",
+    "docs/research/dedup-projective-rank-screen-model.txt": "1b8e317bbe3718c339b81a58e6400bc60e9f3ef0fa661273ca3dae5c62ef115d",
+    "docs/research/dedup-screen-filter8.json": "24f2548d742443f4b6dfd8ae2a165174da65fefe84a5785d67fd927a27de7c18",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/projective-rank-pixels-probe-qualified": "99dbbd21f2b7683e027d5b347ec8b395d8be4d50872d29824e33b5a489aeb650",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/rank-normalized-pixel-oracle/200500.rgba32": "cf0ab6883e57688692a0a67d531a4ee22ff93cb32eb45535d536efefb59d2daf",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/rank-normalized-pixel-oracle/200501.rgba32": "8559c6abb440543a69f31cde2204044e14443648e77e7988c2e55c302ef4b8de",
+    "docs/research/dedup-projective-rank-screen-pins.json": "7f4893a46cad16451316e95bce148f0e71456bce768e1052f2ac9f2c6a68ba6e",
+    "docs/research/dedup-projective-rank-screen.jsonl": "e3a1b7eb506477af3836a55f5ba2849ccdc364ed064732880593c9102420588a",
+    "scripts/measure-dedup-piecewise-pixels.py": "d595de3f9cc859cd5375f6eb9974da1db33367a7f8f7b53170e50c9a2466f80c",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-projective-rank-screen-pixels.py": "6e7810bb241a168c6bcd012faab95047ecd9a08fe703b5a42d5c847ec82b2f31"
+  },
+  "scope": "Independent linear-system mapping, geometric coverage, bilinear luminance, complete box/ordinal windows for all forward/reverse sites; six exact count checks. Shared native normalized decoder dumps, not independent decoding or copy admission/broad negatives/performance qualification."
+}

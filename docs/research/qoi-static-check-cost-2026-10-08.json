@@ -1,0 +1,51 @@
+{
+  "change": "Replace dynamic cancellation callback with generic callback; retain every command cancellation checkpoint and all strict framing checks",
+  "timing": [
+    {
+      "dense": false,
+      "pixels": 12000000,
+      "bytes": 193571,
+      "samples": 15,
+      "framing_p50_ms": 0.406166,
+      "framing_p95_ms": 0.658417,
+      "codec_p50_ms": 5.615833,
+      "codec_p95_ms": 15.233333
+    },
+    {
+      "dense": true,
+      "pixels": 12000000,
+      "bytes": 60000022,
+      "samples": 15,
+      "framing_p50_ms": 47.715834,
+      "framing_p95_ms": 97.449583,
+      "codec_p50_ms": 167.264792,
+      "codec_p95_ms": 243.008208
+    }
+  ],
+  "previous_report": "qoi-framing-cost-2026-10-08.json",
+  "conclusion": "No demonstrated dense-stream speedup; timing variability does not justify claiming performance improvement. Separate strict framing scan remains costly.",
+  "tests": {
+    "framing_and_timing": 2,
+    "reference_and_malformed": 2,
+    "reference_images": 8,
+    "malformed_cases": 45,
+    "cancellation_checkpoints": 9
+  },
+  "source_sha256": "cd764a588d735e86996c07806f2e635411b560f9e097465f35eb1c6193e1f1c5",
+  "logs": [
+    {
+      "path": "/tmp/rrrah-qoi-inline-cost-20261008.log",
+      "sha256": "4a7353375c1b85239ac0ccb3a220ba8f5349d8fab43372365e8cdd47eb8d7190"
+    },
+    {
+      "path": "/tmp/rrrah-qoi-inline-corpus-20261008.log",
+      "sha256": "1bbbcd6161e5e5ec593b1e89f4394b8b33442ccbb92f05e06ba48596a51267ec"
+    }
+  ],
+  "limitations": [
+    "Warm CPU memory timing only; no Metal presentation or disk timing.",
+    "15 samples after 3 warmups per synthetic 12 MP control; cancellation token absent from timing request.",
+    "Process load and codec timing varied materially between runs.",
+    "No universal QOI or RAW speedup claim."
+  ]
+}

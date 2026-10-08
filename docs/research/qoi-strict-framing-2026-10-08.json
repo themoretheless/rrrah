@@ -1,0 +1,51 @@
+{
+  "scope": "Strict allocation-free cancellable QOI framing before pixel decoding",
+  "reproduced_before": "62-pixel run accepted for declared one-pixel image",
+  "checks": [
+    "Declared pixel count exactly consumed",
+    "Commands cannot overlap end marker",
+    "Exact eight-byte final marker and no trailing bytes",
+    "Valid nonzero dimensions, RGB/RGBA channels, supported colorspace flags",
+    "Declared output bounded by existing raster byte limit",
+    "Cancellation at each command and before/after validation"
+  ],
+  "malformed_cases": 45,
+  "cancel_checkpoints": 9,
+  "correct_reference_fixtures": 8,
+  "final_credit_after_each_refusal": 0,
+  "suites": [
+    {
+      "log": "/tmp/rrrah-qoi-cancellation-20261008.log",
+      "sha256": "96c9b04150787acee33d7f82df5223fa5e8dccb3c5c1fdbf3cb76d4d9873e34d",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "log": "/tmp/rrrah-qoi-malformed-final-20261008.log",
+      "sha256": "94a4ad6045f623f78a11ff971e6de876f16a886656a445487d66198354e9f76c",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "log": "/tmp/rrrah-qoi-strict-swap-metal-20261008.log",
+      "sha256": "e20616302afabefae3af8364d85d7733990bb50e3c3bd3282bd086bef4317fe0",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "log": "/tmp/rrrah-qoi-strict-raster-regression-20261008.log",
+      "sha256": "fae687c8b0806a4456e337f2a150f21b3fa207d10be23e13e07db67efc4f1898",
+      "passed": 30,
+      "failed": 0,
+      "ignored": 4
+    }
+  ],
+  "limitations": [
+    "Separate validation pass adds work before codec decoding; no throughput benchmark yet",
+    "Not exhaustive fuzzing or all malformed producer variants",
+    "Does not qualify other 99 formats or physical window presentation"
+  ]
+}

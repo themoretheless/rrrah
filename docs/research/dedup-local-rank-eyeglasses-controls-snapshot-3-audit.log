@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-local-rank-eyeglasses-controls.py", line 4, in <module>
+    p=argparse.ArgumentParser();p.add_argument('report',type=Path);p.add_argument('output',type=Path);p.add_argument('--checkpoint',action='store_true');a=p.parse_args();assert not a.output.exists();h=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest();digest=h(a.report);r=json.loads(a.report.read_text());assert r['status']=='complete' or a.checkpoint and r['status']=='running';assert r['required_pairs']==157 and r['required_negatives']==156
+                                                                                                                                                                                                                                                                          ~^^^^^^^^^^
+  File "/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-local-rank-eyeglasses-controls.py", line 4, in <lambda>
+    p=argparse.ArgumentParser();p.add_argument('report',type=Path);p.add_argument('output',type=Path);p.add_argument('--checkpoint',action='store_true');a=p.parse_args();assert not a.output.exists();h=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest();digest=h(a.report);r=json.loads(a.report.read_text());assert r['status']=='complete' or a.checkpoint and r['status']=='running';assert r['required_pairs']==157 and r['required_negatives']==156
+                                                                                                                                                                                                                                 ~~~~~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/lib/python3.14/pathlib/__init__.py", line 777, in read_bytes
+    with self.open(mode='rb', buffering=0) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/lib/python3.14/pathlib/__init__.py", line 771, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'docs/research/dedup-local-rank-eyeglasses-controls-snapshot-3.json'

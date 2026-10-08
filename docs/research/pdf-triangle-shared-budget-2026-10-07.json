@@ -1,0 +1,19 @@
+{
+  "scope": "Managed storage admission for generated PDF patch triangle arrays",
+  "implementation": "After coincident-patch visibility selection, count 722 triangles per visible fixed-grid patch. Reserve count*sizeof(Triangle) through the PDF shared budget before allocating the array with exact requested capacity. Keep the reservation until sampling completes and the triangle array drops. Coons and tensor-product patch paths use this admission.",
+  "active_test": "pdf::precise_fill_tests::tensor_triangle_storage_is_admitted_before_materialization",
+  "fixture": "tests/fixtures/pdf/tensor-solid-rgb.pdf",
+  "verified": [
+    "Managed peak includes the complete generated Triangle array for the authored single RGB tensor patch.",
+    "Exact observed peak budget succeeds with identical pixels.",
+    "One byte below peak returns a structured memory error before array materialization.",
+    "Success retains only output credit; failure and output drop release all managed credit."
+  ],
+  "validation": {"decoder_library_passed": 973, "ignored": 66, "vendor_focused_passed": 2, "failed": 0},
+  "logs": ["/tmp/rrrah-pdf-triangle-budget-final.log", "/tmp/rrrah-pdf-triangle-budget-unit.log"],
+  "limitations": [
+    "Color components beyond four may spill into separate SmallVec heap storage; those allocations are not included yet.",
+    "Source-owned triangle meshes, sampled mesh maps and visibility inventory remain outside this admission.",
+    "Parser and other renderer allocations still prevent claiming a complete RSS or allocator cap."
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "status": "verified_managed_primitive_tests",
+  "returncode": 0,
+  "passed": 17,
+  "input_hashes": {
+    "docs/research/dedup-gradient-distinct-managed-tests.log": "236f0a3a3656e3acd5a9eca37e0d59f3bc15bff63f5779132fc188d649361d1c",
+    "crates/rrrah-dedup/src/gradient.rs": "dfe680d754a3032c77c5a5661678d56d83739f00dcb66e330411757d03afce0e",
+    "crates/rrrah-dedup/tests/gradient_distinct_locations.rs": "f5cd422ae309a2c6dd76ae5059c4975e14b61a469765b0985c792a98f1ad869d"
+  },
+  "evidence": [
+    "managed output equals unmanaged and independent sorted-distance oracle",
+    "measured exact managed limit succeeds and one byte short refuses",
+    "last shared owner releases retained result credit",
+    "every authored successful-run cancellation checkpoint releases all credit",
+    "work limit one comparison short refuses before managed admission"
+  ],
+  "scope": "Native authored primitive fixtures and original gradient regressions; caller input excluded, no decoder/RSS/file/real-corpus completeness claim."
+}

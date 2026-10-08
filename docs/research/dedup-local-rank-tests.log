@@ -1,0 +1,33 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: unused variable: `cancel`
+   --> crates/rrrah-dedup/src/local_index.rs:715:5
+    |
+715 |     cancel: impl Fn() -> bool,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_cancel`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-dedup` (lib) generated 1 warning (run `cargo fix --lib -p rrrah-dedup` to apply 1 suggestion)
+    Finished `test` profile [optimized + debuginfo] target(s) in 3.40s
+     Running tests/local_rank.rs (target/debug/deps/local_rank-942b56a1df6add9c)
+
+running 3 tests
+test inverse_residual_is_required_even_when_forward_error_is_small ... ok
+test bidirectional_support_requires_geometry_and_pixel_order ... ok
+test aggregate_work_and_each_cancellation_refuse ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.53s
+
+     Running tests/rank_region.rs (target/debug/deps/rank_region-8337a4b13ae293fa)
+
+running 7 tests
+test filtered_overflow_and_mid_window_cancel_return_no_partial_evidence ... ok
+test invalid_domains_policy_alpha_and_scene_range_are_explicit ... ok
+test flat_pixels_budget_and_cancellation_do_not_produce_evidence ... ok
+test independent_textures_are_not_high_agreement_evidence ... ok
+test filter_zero_preserves_evidence_and_callback_work ... ok
+test nonlinear_monotone_transfer_preserves_local_order_but_inversion_does_not ... ok
+test filtered_identity_matches_independent_box_counts_and_read_budget ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

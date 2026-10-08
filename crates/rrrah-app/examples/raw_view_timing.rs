@@ -587,6 +587,7 @@ fn raster_view_timing(
     let compute = compute_stops.map(|stops| (rrrah_gpu::LinearExposureCompute::new(device), stops));
     for path in paths {
         let mut times = Vec::new();
+        let mut stage_times = [Vec::new(), Vec::new(), Vec::new(), Vec::new()];
         for iteration in 0..18 {
             let started = Instant::now();
             let mut request = rrrah_decode::DecodeRequest::new(path);
@@ -595,11 +596,15 @@ fn raster_view_timing(
                 return Err("raster mode requires a raster source".into());
             }
             let source = rrrah_decode::decode_raster(&request)?;
+            let decode_ms = ms(started);
+            let prepare_started = Instant::now();
             let raster =
                 rrrah_decode::prepare_raster_for_display_with_budget_and_cancel(&source, Some(&cpu), || {
                     false
                 })?;
             drop(source);
+            let prepare_ms = ms(prepare_started);
+            let transfer_started = Instant::now();
             let raster = if let Some((compute, stops, cuda_gpu)) = &cuda {
                 let rrrah_core::RasterPixels::Rgba32Float(pixels) = raster.pixels() else {
                     return Err("CUDA exposure requires prepared RGBA32F".into());
@@ -611,23 +616,7 @@ fn raster_view_timing(
                     rrrah_core::RasterPixels::Rgba32Float(output.into()),
                     rrrah_core::RasterColorSpace::LinearSrgb,
                 )?
-                .with_sample_scale(raster.sample_scale())?
-                .with_image_selection(raster.image_index(), raster.image_count())?
-                .with_hotspot(raster.hotspot())?;
-                drop(raster);
-                result
-            } else if let Some((compute, stops)) = &compute {
-                let rrrah_core::RasterPixels::Rgba32Float(pixels) = raster.pixels() else {
-                    return Err("compute exposure requires prepared RGBA32F".into());
-                };
-                let output =
-                    compute.execute_interleaved_with_cancel(queue, pixels, *stops, &gpu, &cpu, || false)?;
-                let result = rrrah_core::DecodedRaster::new(
-                    raster.width(),
-                    raster.height(),
-                    rrrah_core::RasterPixels::Rgba32Float(output),
-                    rrrah_core::RasterColorSpace::LinearSrgb,
-                )?
+                .with_pixel_aspect(raster.pixel_aspect())?
                 .with_sample_scale(raster.sample_scale())?
                 .with_image_selection(raster.image_index(), raster.image_count())?
                 .with_hotspot(raster.hotspot())?;
@@ -636,7 +625,28 @@ fn raster_view_timing(
             } else {
                 raster
             };
-            renderer.upload(device, queue, &raster)?;
+            if let Some((compute, stops)) = &compute {
+                let rrrah_core::RasterPixels::Rgba32Float(pixels) = raster.pixels() else {
+                    return Err("compute exposure requires prepared RGBA32F".into());
+                };
+                let (pixels, remainder) = pixels.as_chunks::<4>();
+                if !remainder.is_empty() {
+                    return Err("incomplete prepared RGBA32F".into());
+                }
+                let output = compute.execute_resident(queue, pixels, *stops, &gpu, || false)?;
+                renderer.upload_resident_with_aspect(
+                    device,
+                    queue,
+                    &output,
+                    [raster.width(), raster.height()],
+                    raster.pixel_aspect(),
+                    || false,
+                )?;
+            } else {
+                renderer.upload(device, queue, &raster)?;
+            }
+            let transfer_ms = ms(transfer_started);
+            let frame_started = Instant::now();
             renderer.update_view(
                 queue,
                 ViewParameters {
@@ -654,6 +664,13 @@ fn raster_view_timing(
             let elapsed = ms(started);
             if iteration >= 3 {
                 times.push(elapsed);
+                for (samples, value) in
+                    stage_times
+                        .iter_mut()
+                        .zip([decode_ms, prepare_ms, transfer_ms, ms(frame_started)])
+                {
+                    samples.push(value);
+                }
             }
             drop(raster);
             assert_eq!(cpu.used(), 0);
@@ -664,7 +681,7 @@ fn raster_view_timing(
             if cuda.is_some() {
                 "+CUDA-exposure-transfers"
             } else if compute.is_some() {
-                "+WGSL-compute-exposure-transfers"
+                "+WGSL-resident-exposure-GPU-copy"
             } else {
                 ""
             },
@@ -672,6 +689,17 @@ fn raster_view_timing(
             percentile(&times, 0.95),
             times.len()
         );
+        for (name, samples) in ["decode", "prepare", "exposure+transfer-submit", "completed-frame"]
+            .into_iter()
+            .zip(&stage_times)
+        {
+            println!(
+                "stage,{name},p50={:.3},p95={:.3},ms,n={}",
+                percentile(samples, 0.5),
+                percentile(samples, 0.95),
+                samples.len()
+            );
+        }
     }
     drop(renderer);
     assert_eq!(gpu.used(), 0);

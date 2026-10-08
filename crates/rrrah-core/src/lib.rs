@@ -25,7 +25,7 @@ pub use color::{
     camera_to_linear_srgb, camera_to_linear_srgb_precise, camera4_to_linear_srgb_precise,
     diagnose_green_planes, display_wb_gains, dng_illuminant_white, green_relative_wb_gains, invert_3x3,
     invert_3x3_f64, luminance_normalize_wb_gains, multiply_3x3, multiply_3x3_f64,
-    reconstruct_clipped_camera_highlight, select_dng_xyz_to_camera, xy_chromaticity_to_xyz,
+    reconstruct_clipped_camera_highlight, resolve_dng_neutral_matrix, select_dng_xyz_to_camera, xy_chromaticity_to_xyz,
 };
 pub use frame::{
     CfaColor, CfaPattern, DecodedMosaic, FrameError, LevelGrid, Orientation, Photometric, RawMetadata,

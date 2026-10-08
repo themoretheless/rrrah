@@ -1,0 +1,150 @@
+{
+  "session": 52978,
+  "exit_code": 0,
+  "passed_tests": 1,
+  "scope": "Explicit fixed-cell gradient histogram primitive; supplied location/scale/orientation, opaque linear luminance only,256grid sites. Authored affine light/flat/boundary/work/cancel/retry gate passes. No SIFT equivalence, detector, matcher, file/index integration or real-copy recovery claim.",
+  "reference": "https://www.cs.ubc.ca/~lowe/papers/ijcv04.pdf",
+  "adversarial_gate": {
+    "initial_session": 20955,
+    "initial_exit_code": 101,
+    "failure": "Rotated uniform patch produced descriptor from weighted-sum roundoff.",
+    "fixed_session": 4248,
+    "fixed_exit_code": 0,
+    "rotation_alpha_session": 6499,
+    "rotation_alpha_exit_code": 0,
+    "passed_tests": 3,
+    "fix": "Difference-form bilinear interpolation exactly preserves constant samples; no energy threshold relaxation."
+  },
+  "matching_gate": {
+    "session": 77328,
+    "exit_code": 0,
+    "passed_tests": 4,
+    "scope": "Mutual squared-distance ratio matching; authored permutation, forward/reverse ties, unrelated descriptors, invalid/nonunit inputs, work admission and cancel/retry. Extraction/orientation detection, managed memory, native Linux and real-file/index integration pending."
+  },
+  "orientation_gate": {
+    "session": 13935,
+    "exit_code": 0,
+    "passed_tests": 5,
+    "scope": "One dominant orientation on integer-centered opaque16x16 patch,36 bins,six smoothing passes; analytical0/45/90degree gradients, flat/no-angle, work/boundary/cancel gates. Scale detection/multiple peaks/full extraction/nativeLinux/real-copy qualification pending."
+  },
+  "extraction_gate": {
+    "session": 97306,
+    "exit_code": 0,
+    "passed_tests": 6,
+    "scope": "Strongest native corners plus unit-scale dominant-gradient orientation/descriptors;512grid sites permaximumfeature admitted upfront. Authored deterministic identity/unrelated/coordinate/work/cancel/retry gates pass. Managed memory,pyramid,real-copy,file/index integration pending."
+  },
+  "real_four_case_gate": {
+    "probe_build_session": 98051,
+    "probe_build_exit_code": 0,
+    "measurement_exit_code": 0,
+    "completed_pairs": 4,
+    "geometry_models": 0,
+    "whole_candidates": 0,
+    "scope": "Unit-scale gradient misses all three omissions and recovered pyramid control200001; matching counts5/0/3/0. No production promotion; multiscale detection/description and descriptor refinement remain unresolved."
+  },
+  "linux_gate": {
+    "session": 60337,
+    "status": "terminal",
+    "exit_code": 0,
+    "passed_tests": 6,
+    "selected_files_unchanged": true
+  },
+  "pyramid_gate": {
+    "session": 3748,
+    "exit_code": 0,
+    "passed_tests": 11,
+    "scope": "Shared generic native area-reduction/coordinate mapping; one-level gradient equality and independently doubled96x96texture >=10 exact scale2 correspondences. Work/cancel admission and existing pyramid regression pass. Managed variant regression, nativeLinux and real copies pending.",
+    "allfeatures_session": 55386,
+    "allfeatures_status": "terminal",
+    "allfeatures_exit_code": 0,
+    "allfeatures_passed_tests": 12,
+    "linux_session": 56652,
+    "linux_status": "terminal",
+    "linux_exit_code": 0,
+    "linux_passed_tests": 12,
+    "selected_files_unchanged": true
+  },
+  "real_pyramid_four_case_gate": {
+    "build_session": 74313,
+    "build_exit_code": 0,
+    "measurement_session": 58673,
+    "exit_code": 0,
+    "completed_pairs": 4,
+    "whole_candidates": 1,
+    "control_recovered": true,
+    "omissions_recovered": 0,
+    "inputs_verified_before_after": true,
+    "scope": "Three levels restore200001 at59matches/39inliers and original pixel thresholds. Three omissions remain; negative precision gate and production integration pending."
+  },
+  "full_copydays": {
+    "positive_session": 73757,
+    "negative_session": 51326,
+    "status": "terminal_positive_and_two_query_negatives",
+    "required_positive_pairs": 229,
+    "required_control_negatives": 156,
+    "control_negative_exit_code": 0,
+    "control_negative_passed_pairs": 156,
+    "new_gain_query": "201501.jpg",
+    "gain_negative_session": 27653,
+    "gain_negative_status": "terminal",
+    "required_gain_negative_pairs": 156,
+    "gain_negative_exit_code": 0,
+    "gain_negative_passed_pairs": 156,
+    "positive_exit_code": 0,
+    "positive_candidates": 27,
+    "new_to_prior_portfolio": [
+      "201501.jpg",
+      "202701.jpg",
+      "206801.jpg",
+      "207201.jpg",
+      "209901.jpg"
+    ],
+    "diagnostic_union_candidates": 35,
+    "remaining_gain_negative_session": 18987,
+    "remaining_gain_negative_status": "terminal",
+    "remaining_gain_negative_exit_code": 0,
+    "six_query_negative_pairs": 936,
+    "six_query_negative_candidates": 0
+  },
+  "managed_pyramid_gate": {
+    "session": 43715,
+    "exit_code": 0,
+    "passed_tests": 12,
+    "scope": "Managed/unmanaged equality, last-owner release, exactpeak/one-byte-short admission, work refusal preallocation, first/middle/final cancellation and retry. Not RSS/allocation completeness; nativeLinux and file/index lifecycle pending."
+  },
+  "file_api_gate": {
+    "shared_lifecycle_session": 35796,
+    "shared_lifecycle_exit_code": 0,
+    "status": "full229_parity_and56_regression_passed",
+    "scope": "Generic shared source/dependency/cancellation lifecycle now accepts typed descriptor extractors/matchers; new gradient API uses managed extraction and original pyramid geometry/pixels. New gate includes identity/unrelated/cancel/retry/work admission. NativeLinux and real-file parity pending.",
+    "admission_session": 56711,
+    "admission_exit_code": 0,
+    "passed_compound_tests": 1,
+    "probe_build_session": 60346,
+    "probe_build_exit_code": 0,
+    "parity_session": 87980,
+    "parity_exit_code": 0,
+    "parity_pairs": 2,
+    "regression_session": 92332,
+    "regression_status": "terminal",
+    "full_public_positive_session": 59459,
+    "full_public_positive_status": "terminal_audited",
+    "parity_verifier": "scripts/verify-dedup-gradient-file-parity.py",
+    "forged_parity_fields_rejected": 6,
+    "public_negative_parity_session": 20752,
+    "public_negative_parity_status": "running",
+    "regression_exit_code": 0,
+    "regression_passed_tests": 56,
+    "selected_files_unchanged": true,
+    "full_public_positive_exit_code": 0,
+    "full_public_positive_pairs": 229,
+    "full_public_positive_candidates": 27,
+    "all_native_fields_equal": true,
+    "verified_inputs": 386
+  },
+  "four_lane_gate": {
+    "session": 8076,
+    "status": "initial_compatibility_test_running",
+    "scope": "New shared-view registration+two binary filters+gradient confirmation; checked cumulative comparisons/hypotheses/pixel-work/two gradient extraction caps. New compound identity/cancel/one-short/final-phase refusal gate written; needs explicit rerun after initial gate terminal. No realfour-lane or collection result claimed."
+  }
+}

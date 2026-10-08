@@ -1,0 +1,31 @@
+{
+  "scope": "Test-only native device-space luminosity masks and original native background capture; calibrated/ICC luminosity remains unsupported",
+  "source_sha256": "6528d1fde02b9adb992b9b75afba84c53bbe2012109778676bb5e57a46b92af1",
+  "suite": {
+    "passed": 109,
+    "failed": 0,
+    "ignored": 9,
+    "seconds": 2.51,
+    "log": "/tmp/rrrah-native-device-luminosity-verified-controls.log"
+  },
+  "verified": [
+    "Original mask background components/color space retained in admitted NativePaint payload",
+    "DeviceGray/RGB/CMYK native luminosity evaluated without RGBA8 intermediate",
+    "Authored Gray background0.371234 retained outside mask drawing; inside half-transparent black yields exactly half its original f32 value in f64 math",
+    "Authored RGB background0.173123,0.319876,0.537654 uses existing renderer device weights and preserves original fractional components",
+    "Authored CMYK background0.173123,0.319876,0.537654,0.071234 uses subtractive device gray approximation, including K",
+    "Opaque red/blue composition follows independently computed mask/background arithmetic within1e-14 floating error",
+    "Masked/unmasked alpha and all three device luminosity2x1 fixtures cover every replay admission refusal/cancellation checkpoint; no partial output and final replay credits0"
+  ],
+  "policy": "Existing device-space approximation: Gray component; RGB0.3R+0.59G+0.11B; CMYK1-min(1,0.3C+0.59M+0.11Y+K). Multiply by resulting mask alpha before original transfer. This is not calibrated/ICC PCS luminosity qualification.",
+  "allocation": "Mask native input metadata and background paint payload separately credited during capture; f64 mask vector credited during replay. Existing shared-profile/parse allocations still require bounded construction integration.",
+  "remaining": [
+    "Calibrated/ICC luminosity and background conversion",
+    "Different group-space boundaries",
+    "Malformed transfer declaration handling",
+    "Native raster/shading events",
+    "Admitted ICC/default output policy",
+    "Real AI oracle qualification and production/Metal integration"
+  ],
+  "production_enabled": false
+}

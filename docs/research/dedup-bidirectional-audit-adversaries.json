@@ -1,0 +1,42 @@
+{
+  "status": "verified_audit_adversaries",
+  "report_sha256": "cc450702de9bc86cccd379ae8d1bf88e5ef13d5339a8cf3b1ba5512182958112",
+  "results": [
+    {
+      "case": "baseline",
+      "accepted": true,
+      "exit_code": 0
+    },
+    {
+      "case": "integer_accepted_flag",
+      "accepted": false,
+      "exit_code": 1
+    },
+    {
+      "case": "matched_count_exceeds_source",
+      "accepted": false,
+      "exit_code": 1
+    },
+    {
+      "case": "shifted_native_domain",
+      "accepted": false,
+      "exit_code": 1
+    },
+    {
+      "case": "missing_result",
+      "accepted": false,
+      "exit_code": 1
+    },
+    {
+      "case": "duplicated_query",
+      "accepted": false,
+      "exit_code": 1
+    },
+    {
+      "case": "changed_whole_decision",
+      "accepted": false,
+      "exit_code": 1
+    }
+  ],
+  "scope": "Report-integrity checks; no new native accuracy or performance measurement."
+}

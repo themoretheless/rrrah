@@ -1,0 +1,92 @@
+{
+  "input_hashes": {
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/prepared.json": "6ba843f8f09419efb8ccec9b5d84cc8f086d1dc74ec222f5aa2acae29f9fff01",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200500.jpg": "55d5ff8935ee354fd0d34e3db8346db2b79047db56d7543ce50617c95e0ba91f",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200000.jpg": "688a1b76f0d16d8a139a387e990ee0aeedbff1444eb9132d128eec9bf9249db9",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200501.jpg": "c9f9a86fe25fd5bba47af5130e2fcf441633355cc1d806039c86cc0d5bbde9a3",
+    "docs/research/dedup-screen-global-translation-anchor.txt": "1b8e317bbe3718c339b81a58e6400bc60e9f3ef0fa661273ca3dae5c62ef115d",
+    "docs/research/dedup-native-screen-affine-color-negative-input.txt": "6f13d7d3db5b357ca1db770a7de8e75e783c0754b01c315acde4cc419efd2aa0",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/affine-color-roi-image-probe-screen-negative": "210b00bd78c930a0b770a567de56d08c3181ff4785f9c92f132c38a851b764dd",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-native-screen-affine-color-negative.py": "dd41e5edd083adaf84486f599915c7e33390b2b0c728799afab899140164dd5d",
+    "crates/rrrah-dedup/examples/affine_color_roi_image_probe.rs": "1fcc621158553ad0e1d8a6c81874cd106768c096ea05f7994b88690de071fb57",
+    "crates/rrrah-dedup/src/affine_color.rs": "2c6106f7e91c3b2a246f8a36a23e6adae57ed7bfdc7d65363c8e82efdc5de2aa"
+  },
+  "returncode": 0,
+  "stdout": "{\"status\":\"ok\",\"directions\":[{\"direction\":\"forward\",\"domain\":[240, 60, 80, 60],\"training_samples\":2360,\"heldout_samples\":2360,\"filter_radius\":8,\"pixel_reads\":6820400,\"evidence\":{\"fit_error\":\"Bounds\"}},{\"direction\":\"reverse\",\"domain\":[1405, 1257, 68, 181],\"training_samples\":5877,\"heldout_samples\":5877,\"filter_radius\":13,\"pixel_reads\":42843330,\"evidence\":{\"matrix\":[[0.05097876793531597, -0.5067593042582517, 0.5919339569649962], [0.06249008208829565, -0.5661872076423187, 0.6519465264052572], [-0.029060676621957438, -0.206009324205376, 0.2983991741600635]],\"offset\":[0.06980640457329966, 0.06927641908620968, 0.07495649014685425],\"samples\":5877,\"matched\":5585,\"squared_error\":3.9395138002345167}}],\"managed_used\":0,\"managed_peak\":107674600,\"scope\":\"One fixed ROI pair, native opaque display-range decoder and mapped box forward radius8, reverse geometry-derived radius; separate checker training/heldout, coefficients5/offset0.1, tolerance0.03. Pair vectors bounded separately, outside decode credit. Centers restricted to opposite ROI; filter taps retain whole-image support. Diagnostic only, no copy decision.\"}\n",
+  "stderr": "",
+  "source_roi": [
+    1405,
+    1257,
+    68,
+    181
+  ],
+  "source_dimension_scale": [
+    1.5058823529411764,
+    0.7335880514067384
+  ],
+  "scope": "One unrelated publisher original mapped to fixed screen ROI by normalized original dimensions; no discovered geometry, no all-query precision claim.",
+  "evidence": {
+    "status": "ok",
+    "directions": [
+      {
+        "direction": "forward",
+        "domain": [
+          240,
+          60,
+          80,
+          60
+        ],
+        "training_samples": 2360,
+        "heldout_samples": 2360,
+        "filter_radius": 8,
+        "pixel_reads": 6820400,
+        "evidence": {
+          "fit_error": "Bounds"
+        }
+      },
+      {
+        "direction": "reverse",
+        "domain": [
+          1405,
+          1257,
+          68,
+          181
+        ],
+        "training_samples": 5877,
+        "heldout_samples": 5877,
+        "filter_radius": 13,
+        "pixel_reads": 42843330,
+        "evidence": {
+          "matrix": [
+            [
+              0.05097876793531597,
+              -0.5067593042582517,
+              0.5919339569649962
+            ],
+            [
+              0.06249008208829565,
+              -0.5661872076423187,
+              0.6519465264052572
+            ],
+            [
+              -0.029060676621957438,
+              -0.206009324205376,
+              0.2983991741600635
+            ]
+          ],
+          "offset": [
+            0.06980640457329966,
+            0.06927641908620968,
+            0.07495649014685425
+          ],
+          "samples": 5877,
+          "matched": 5585,
+          "squared_error": 3.9395138002345167
+        }
+      }
+    ],
+    "managed_used": 0,
+    "managed_peak": 107674600,
+    "scope": "One fixed ROI pair, native opaque display-range decoder and mapped box forward radius8, reverse geometry-derived radius; separate checker training/heldout, coefficients5/offset0.1, tolerance0.03. Pair vectors bounded separately, outside decode credit. Centers restricted to opposite ROI; filter taps retain whole-image support. Diagnostic only, no copy decision."
+  }
+}

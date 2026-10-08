@@ -1,0 +1,78 @@
+   Compiling hayro-interpret v0.7.0 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret)
+error: missing documentation for an enum
+  --> vendor/hayro-interpret/src/encode/native_source.rs:10:1
+   |
+10 | pub enum NativeShadingError {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+note: the lint level is defined here
+  --> vendor/hayro-interpret/src/lib.rs:29:9
+   |
+29 | #![deny(missing_docs)]
+   |         ^^^^^^^^^^^^
+
+error: missing documentation for a variant
+  --> vendor/hayro-interpret/src/encode/native_source.rs:11:5
+   |
+11 |     Cancelled,
+   |     ^^^^^^^^^
+
+error: missing documentation for a variant
+  --> vendor/hayro-interpret/src/encode/native_source.rs:12:5
+   |
+12 |     Unsupported,
+   |     ^^^^^^^^^^^
+
+error: missing documentation for a variant
+  --> vendor/hayro-interpret/src/encode/native_source.rs:13:5
+   |
+13 |     Invalid,
+   |     ^^^^^^^
+
+error: missing documentation for a variant
+  --> vendor/hayro-interpret/src/encode/native_source.rs:14:5
+   |
+14 |     Admission,
+   |     ^^^^^^^^^
+
+error: missing documentation for a struct
+  --> vendor/hayro-interpret/src/encode/native_source.rs:17:1
+   |
+17 | pub struct NativeShadingSample {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: missing documentation for a struct field
+  --> vendor/hayro-interpret/src/encode/native_source.rs:18:5
+   |
+18 |     pub components: [f32; 4],
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: missing documentation for a struct field
+  --> vendor/hayro-interpret/src/encode/native_source.rs:19:5
+   |
+19 |     pub count: usize,
+   |     ^^^^^^^^^^^^^^^^
+
+error: missing documentation for a struct field
+  --> vendor/hayro-interpret/src/encode/native_source.rs:20:5
+   |
+20 |     pub opacity: f32,
+   |     ^^^^^^^^^^^^^^^^
+
+error: missing documentation for a struct field
+  --> vendor/hayro-interpret/src/encode/native_source.rs:27:5
+   |
+27 |     pub color_space: ColorSpace,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: missing documentation for an associated function
+  --> vendor/hayro-interpret/src/encode/native_source.rs:41:5
+   |
+41 | /     pub fn capture(
+42 | |         pattern: &ShadingPattern,
+43 | |         cancelled: &dyn Fn() -> bool,
+44 | |         admit: &dyn Fn(usize) -> Option<Box<dyn std::any::Any + Send + Sync>>,
+45 | |     ) -> Result<Self, NativeShadingError> {
+   | |_________________________________________^
+
+error: could not compile `hayro-interpret` (lib) due to 11 previous errors

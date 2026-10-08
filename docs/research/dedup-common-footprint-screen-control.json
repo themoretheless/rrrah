@@ -1,0 +1,46 @@
+{
+  "status": "verified_common_footprint_control",
+  "input_hashes": {
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/affine-color-common-footprint-roi-probe": "2ee28b687adeb28c99687cccf6d23ff382404464e1db6fe120dbb88a79978e5e",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/guarded-roi-screen-control.txt": "76eb968ed5c93e038f2727b519d67320d11044ee1c5d2896cf4116850f2ec4bf",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200500.jpg": "55d5ff8935ee354fd0d34e3db8346db2b79047db56d7543ce50617c95e0ba91f",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200501.jpg": "c9f9a86fe25fd5bba47af5130e2fcf441633355cc1d806039c86cc0d5bbde9a3",
+    "docs/research/dedup-native-screen-affine-color-managed.json": "961ac2d40f39d81a8d250726c696b0bf2d81e6e9ccbf75039928ba81ba53eb6b",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-common-footprint-screen-control.py": "69517d6890b54f0abd6e75026cdad89d7ff61ccc17d708b0b6319a4a75dbb0dc",
+    "crates/rrrah-dedup/examples/affine_color_common_footprint_roi_probe.rs": "7f41a5719afdcb784aba4a6d988904012f57cf531cff098d22f568e41beec652",
+    "crates/rrrah-dedup/src/affine_region.rs": "f78364c0f7e23e2124dbfcfbaefff26a22ddc90213a7d110010379c939899ac3",
+    "crates/rrrah-dedup/src/affine_region_file.rs": "b1b7490ac3405427a7cef17980973fd2ee3431b0a6147b19eb201f1a13c8bb19",
+    "crates/rrrah-dedup/src/affine_color.rs": "2c6106f7e91c3b2a246f8a36a23e6adae57ed7bfdc7d65363c8e82efdc5de2aa",
+    "crates/rrrah-dedup/src/lib.rs": "1fcdade41d89ae7ab8989e59ff83cabb6fa32aa5f7dd30361a6d2d556d78783b"
+  },
+  "scope": "One supplied-model real ROI control. Exact prior forward count parity, common-frame reverse measured separately; no broad precision or fold coverage.",
+  "returncode": 0,
+  "stdout": "{\"status\":\"ok\",\"directions\":[{\"radius\":8,\"training_samples\":2400,\"samples\":2400,\"matched\":2383,\"pixel_reads\":6936000},{\"radius\":8,\"training_samples\":6523,\"samples\":6524,\"matched\":6171,\"pixel_reads\":30164664}],\"managed_used\":0,\"managed_peak\":118947840,\"footprints\":[\"target\",\"source\"]}\n",
+  "stderr": "",
+  "evidence": {
+    "status": "ok",
+    "directions": [
+      {
+        "radius": 8,
+        "training_samples": 2400,
+        "samples": 2400,
+        "matched": 2383,
+        "pixel_reads": 6936000
+      },
+      {
+        "radius": 8,
+        "training_samples": 6523,
+        "samples": 6524,
+        "matched": 6171,
+        "pixel_reads": 30164664
+      }
+    ],
+    "managed_used": 0,
+    "managed_peak": 118947840,
+    "footprints": [
+      "target",
+      "source"
+    ]
+  },
+  "bidirectional_supported": true
+}

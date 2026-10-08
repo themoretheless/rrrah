@@ -1,0 +1,43 @@
+{
+  "backend": "CPU on Apple M4 Max",
+  "scope": "Actual production QOI framing validator versus image QOI codec; warm in-memory authored 4000x3000 controls",
+  "test": "qoi_bounds::tests::large_qoi_framing_cost",
+  "warmups": 3,
+  "passed": 1,
+  "failed": 0,
+  "rows": [
+    {
+      "dense": false,
+      "pixels": 12000000,
+      "bytes": 193571,
+      "samples": 15,
+      "framing_p50_ms": 0.556208,
+      "framing_p95_ms": 4.15625,
+      "codec_p50_ms": 12.038667,
+      "codec_p95_ms": 25.569166,
+      "framing_to_codec_p50_ratio": 0.04620179293936779
+    },
+    {
+      "dense": true,
+      "pixels": 12000000,
+      "bytes": 60000022,
+      "samples": 15,
+      "framing_p50_ms": 46.89075,
+      "framing_p95_ms": 79.850792,
+      "codec_p50_ms": 102.698708,
+      "codec_p95_ms": 162.670375,
+      "framing_to_codec_p50_ratio": 0.4565855882042839
+    }
+  ],
+  "log": "/tmp/rrrah-qoi-cost-20261008.log",
+  "log_sha256": "5ea751d6271d5c3d73cf37bf5809d739aee92ed23162a2da18fe14838c334503",
+  "source_sha256": "124c0464e50c0553e8adb6ac76467d446546e98749615651de23750f09304709",
+  "limitations": [
+    "No filesystem loading, GPU upload, Metal frame or display timing.",
+    "No cancellation token attached in this timing control; separate cancellation tests cover command checkpoints.",
+    "Two synthetic opcode distributions, not photographic producer corpus.",
+    "Sample checks at five pixel positions per decode, not every pixel.",
+    "Separate stage percentiles cannot be summed into end-to-end percentiles.",
+    "Strict validation remains enabled; dense command overhead warrants optimization."
+  ]
+}

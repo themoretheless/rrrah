@@ -1,0 +1,45 @@
+{
+  "change": "Bounded original-component Function API now supports Type3 stitching into Type2 Gray/RGB/CMYK outputs, with one shared 4096-step work counter and maximum 32 function levels; no heap evaluation scratch or RGB conversion.",
+  "tests": {
+    "function_tests_passed": 60,
+    "failed": 0,
+    "new_tests": 3,
+    "exact_four_channel_reference_inputs": 7,
+    "cancellation_checkpoints": 9,
+    "minimum_valid_work_budget": 7,
+    "insufficient_work_budget": 6,
+    "accepted_stitch_wrappers": 31,
+    "rejected_stitch_wrappers": 32
+  },
+  "reference": "Exact binary-fraction CMYK endpoint/midpoint values across a discontinuous two-interval function; domain clamping and right-interval selection at Bounds=0.5, using real domain endpoints instead of compatibility epsilon sentinels.",
+  "failure": "Malformed output widths, out-of-domain bounds and reversed parent output range are refused. Public output stays unchanged on every tested refusal/cancellation.",
+  "sources": [
+    {
+      "path": "vendor/hayro-interpret/src/function/mod.rs",
+      "sha256": "b4e3749d65130e3fc1f9f712c4e50043001c4f69fa651364492b986963d3fa28"
+    },
+    {
+      "path": "vendor/hayro-interpret/src/function/type3.rs",
+      "sha256": "2e2c6f7534cab9eb84a76551949f7264b25cefd1264cad624310f54014602812"
+    }
+  ],
+  "log": {
+    "path": "/tmp/rrrah-pdf-native-stitch-components-20261008.log",
+    "sha256": "1d613b47fd0a0afe73afa99844c049699f3185b175035f67eeef57377d71bb86"
+  },
+  "command": [
+    "python3",
+    "scripts/test-pdf-mesh-bounds.py",
+    "--filter",
+    "function::",
+    "--target-dir",
+    "/tmp/rrrah-required-corpus-target"
+  ],
+  "limitations": [
+    "Native AI shading event capture/replay is not yet connected to this function API; AI remains unqualified.",
+    "Multi-output sampled/calculator functions remain unsupported; scalar fallback retains previously bounded evaluator.",
+    "Retained function metadata parsing/allocation is separate from bounded evaluation scratch.",
+    "Original components retain existing f32 function precision, not exact original PDF decimal precision.",
+    "No Poppler image match, physical Metal/HDR or general format qualification claimed."
+  ]
+}

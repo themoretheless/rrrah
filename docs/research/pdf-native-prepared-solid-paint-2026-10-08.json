@@ -1,0 +1,59 @@
+{
+  "scope": "Prepare native solid paint once per path in test-only native event replay; no production/GPU or overall AI speed claim",
+  "source_sha256": {
+    "vendor/hayro/src/native_frame.rs": "2ded56393f7cef8f9020f6bcfe639fb0319d58ca1b7034187058a53e064b5f43",
+    "vendor/hayro/src/knockout_interpreter.rs": "58380d08f93ddfb3c820a6557f241f1fde8700ba0a8265fca68db0050a0652fe"
+  },
+  "suite": {
+    "passed": 107,
+    "failed": 0,
+    "ignored": 9,
+    "seconds": 2.19,
+    "log": "/tmp/rrrah-native-prepared-paint-final-controls.log"
+  },
+  "benchmark": {
+    "samples_per_run": 100000,
+    "runs": [
+      {
+        "run": 0,
+        "samples": 100000,
+        "repeated_ms": 19.508541,
+        "prepared_ms": 2.8817090000000003
+      },
+      {
+        "run": 1,
+        "samples": 100000,
+        "repeated_ms": 19.243083000000002,
+        "prepared_ms": 2.883
+      },
+      {
+        "run": 2,
+        "samples": 100000,
+        "repeated_ms": 19.302291999999998,
+        "prepared_ms": 2.820792
+      }
+    ],
+    "median_repeated_ms": 19.302291999999998,
+    "median_prepared_ms": 2.8817090000000003,
+    "ratio": 6.698209985810502,
+    "final_pixels_exact": true,
+    "log": "/tmp/rrrah-native-prepared-paint-benchmark.log",
+    "limits": "Warmed CMYK-to-RGB conversion plus repeated blending into one RGB pixel. Shared CPU load; not complete page rendering or Metal."
+  },
+  "verified": [
+    "Solid native scene converts each paint once after admitted shape rasterization",
+    "Prepared paint retains verified target coordinates; reuse requires same coordinates",
+    "Pixel loop scales premultiplied native sample by coverage without repeated color conversion",
+    "Leaf AISfalse blueopacity0.5 shape0.5 after red yields alpha0.75 and nativeRGB2/3,0,1/3",
+    "Leaf AIStrue same source yields opaqueRGB0.75,0,0.25; opacity applied to shape once",
+    "All existing native replay admission/cancellation controls still pass"
+  ],
+  "allocation": "Prepared sample is fixed stack storage plus shared ColorSpace reference; no new per-path heap buffer or persistent cache.",
+  "remaining": [
+    "Native rasters/shading/active masks",
+    "Group cross-space conversion and default BG/UCR",
+    "Admitted ICC/function construction",
+    "Real AI oracle qualification and production/Metal integration"
+  ],
+  "production_enabled": false
+}

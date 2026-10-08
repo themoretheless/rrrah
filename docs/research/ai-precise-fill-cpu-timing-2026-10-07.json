@@ -1,0 +1,52 @@
+{
+  "scope": "Current precise-fill warm in-process CPU decode and display preparation; no GPU presentation latency or before/after speed claim",
+  "iterations_per_page": 60,
+  "warmup_per_page": 3,
+  "platform": "macOS-26.7.1-arm64-arm-64bit-Mach-O",
+  "profile": "dev optimized + debuginfo",
+  "rows": [
+    {
+      "path": "/tmp/rrrah-integrated-ai-corpus/VectorApple.ai",
+      "index": 0,
+      "iterations": 60,
+      "load_p50_ms": 597.866084,
+      "load_p95_ms": 754.8802919999999,
+      "prepare_p50_ms": 0.294833,
+      "prepare_p95_ms": 0.6614169999999999,
+      "cpu_ready_p50_ms": 598.161167,
+      "cpu_ready_p95_ms": 755.175125,
+      "display_blake3": "0f119be8564cabb014eb0690f232dec061fe62637ab1df4c563d05273b030267",
+      "cache": "warm filesystem; process warm; no decoded image cache"
+    },
+    {
+      "path": "/tmp/rrrah-integrated-ai-corpus/one.ai",
+      "index": 0,
+      "iterations": 60,
+      "load_p50_ms": 3.2221670000000002,
+      "load_p95_ms": 6.269167,
+      "prepare_p50_ms": 4.164707999999999,
+      "prepare_p95_ms": 8.855,
+      "cpu_ready_p50_ms": 8.437541,
+      "cpu_ready_p95_ms": 13.408959,
+      "display_blake3": "ede400cafc8c564915295c4867720eee8251e4e4e2d588a7abe271c1e48d5b43",
+      "cache": "warm filesystem; process warm; no decoded image cache"
+    },
+    {
+      "path": "/tmp/rrrah-integrated-ai-corpus/one.ai",
+      "index": 1,
+      "iterations": 60,
+      "load_p50_ms": 0.155417,
+      "load_p95_ms": 0.528958,
+      "prepare_p50_ms": 0.122875,
+      "prepare_p95_ms": 0.23441700000000001,
+      "cpu_ready_p50_ms": 0.278833,
+      "cpu_ready_p95_ms": 0.7813749999999999,
+      "display_blake3": "16708155f4f8922e0d727803857b075f79197a7dc899a6a13b6169691ee4ad74",
+      "cache": "warm filesystem; process warm; no decoded image cache"
+    }
+  ],
+  "benchmark": "crates/rrrah-decode/examples/raster_load_bench.rs",
+  "binary_sha256": "6b64b557858615799e62dd54caa50b38b41cd1bd35397fc5c25d80a54733b92f",
+  "source_manifest": "docs/research/ai-upstream-poppler-2026-10-06.json",
+  "interpretation": "VectorApple remains expensive at about 598 ms median CPU ready. Timing is current-state evidence only, under uncontrolled concurrent machine load; no pre-change baseline."
+}

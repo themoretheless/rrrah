@@ -130,22 +130,19 @@ pub fn read_eip_raw_with_budget(
 /// File-based sensor import charging package, inflated RAW and decoded sensor
 /// to the request's required shared root. Does not apply Capture One edits.
 pub fn decode_eip_file_sensor(request: &crate::DecodeRequest) -> Result<EipSensor, EipError> {
+    let started = std::time::Instant::now();
     request.check_cancelled()?;
     let budget = request
         .memory_budget
         .as_ref()
         .ok_or(EipError::Invalid("sensor import requires a memory budget"))?;
     let source = read_package_with_budget(request, budget)?;
-    decode_eip_sensor(&source, request)
+    let raw = extract_eip_sensor_raw(&source, request)?;
+    drop(source);
+    decode_eip_raw_sensor(raw, request, started)
 }
 
-/// Explicit sensor-only import. Capture One settings, masks and ICC/LCC assets
-/// are inventoried but not interpreted; this is not authored appearance reproduction.
-/// Source package bytes are borrowed. RAW inflation and sensor output share the
-/// request's required memory budget, and the inflated source is released before return.
-pub fn decode_eip_sensor(bytes: &[u8], request: &crate::DecodeRequest) -> Result<EipSensor, EipError> {
-    use crate::camtiff::{CameraFormat, NativeCameraDecoder};
-    let total_started = std::time::Instant::now();
+fn extract_eip_sensor_raw(bytes: &[u8], request: &crate::DecodeRequest) -> Result<EipRaw, EipError> {
     request.check_cancelled()?;
     if request.image_index != 0 {
         return Err(crate::DecodeError::UnsupportedImageIndex {
@@ -173,7 +170,9 @@ pub fn decode_eip_sensor(bytes: &[u8], request: &crate::DecodeRequest) -> Result
         extension.as_str(),
         "mrw"
             | "cr3"
+            | "crw"
             | "dng"
+            | "gpr"
             | "iiq"
             | "mos"
             | "cr2"
@@ -199,7 +198,23 @@ pub fn decode_eip_sensor(bytes: &[u8], request: &crate::DecodeRequest) -> Result
     ) {
         return Err(EipError::UnsupportedRaw(candidate.clone()));
     }
-    let raw = read_eip_raw(bytes, budget, &cancelled)?;
+    read_eip_raw(bytes, budget, &cancelled)
+}
+
+/// Explicit sensor-only import. Capture One settings, masks and ICC/LCC assets
+/// are inventoried but not interpreted; this is not authored appearance reproduction.
+/// Source package bytes are borrowed. RAW inflation and sensor output share the
+/// request's required memory budget, and the inflated source is released before return.
+pub fn decode_eip_sensor(bytes: &[u8], request: &crate::DecodeRequest) -> Result<EipSensor, EipError> {
+    let started = std::time::Instant::now();
+    let raw = extract_eip_sensor_raw(bytes, request)?;
+    decode_eip_raw_sensor(raw, request, started)
+}
+
+fn decode_eip_raw_sensor(raw: EipRaw, request: &crate::DecodeRequest,
+    total_started: std::time::Instant) -> Result<EipSensor, EipError> {
+    use crate::camtiff::NativeCameraDecoder;
+    request.check_cancelled()?;
     let name = &raw.manifest.entries[raw.manifest.raw_index].name;
     let extension = name
         .rsplit_once('.')
@@ -216,6 +231,12 @@ pub fn decode_eip_sensor(bytes: &[u8], request: &crate::DecodeRequest) -> Result
             raw_recipe,
         });
     }
+    if extension == "crw" {
+        let source_open = total_started.elapsed();
+        let raw_recipe = crate::RawDecoder::mosaic_recipe(&crate::NativeCrwDecoder, request)?;
+        let decoded = crate::NativeCrwDecoder.decode_source(request, raw.bytes, source_open, total_started)?;
+        return Ok(EipSensor { manifest: raw.manifest, decoded, raw_recipe });
+    }
     if extension == "cr3" {
         let source_open = total_started.elapsed();
         let decoded =
@@ -226,7 +247,7 @@ pub fn decode_eip_sensor(bytes: &[u8], request: &crate::DecodeRequest) -> Result
             raw_recipe: crate::NATIVE_EOS_R8_MOSAIC_CONTRACT_1,
         });
     }
-    if extension == "dng" {
+    if matches!(extension.as_str(), "dng" | "gpr") {
         let source_open = total_started.elapsed();
         let decoded =
             crate::NativeDngDecoder.decode_source(request, raw.bytes, source_open, total_started)?;
@@ -236,7 +257,21 @@ pub fn decode_eip_sensor(bytes: &[u8], request: &crate::DecodeRequest) -> Result
             raw_recipe: crate::NATIVE_DNG_MOSAIC_CONTRACT_1,
         });
     }
-    let format = match extension.as_str() {
+    let format = eip_camera_format(name, &raw.bytes)?;
+    let source_open = total_started.elapsed();
+    let decoded =
+        NativeCameraDecoder::new(format).decode_source(request, raw.bytes, source_open, total_started)?;
+    Ok(EipSensor {
+        manifest: raw.manifest,
+        decoded,
+        raw_recipe: format.recipe(),
+    })
+}
+
+fn eip_camera_format(name: &str, bytes: &[u8]) -> Result<crate::camtiff::CameraFormat, EipError> {
+    use crate::camtiff::CameraFormat;
+    let extension = name.rsplit_once('.').map(|(_, e)| e.to_ascii_lowercase()).unwrap_or_default();
+    Ok(match extension.as_str() {
         "iiq" => CameraFormat::Iiq,
         "mos" => CameraFormat::Mos,
         "cr2" => CameraFormat::Cr2,
@@ -255,17 +290,33 @@ pub fn decode_eip_sensor(bytes: &[u8], request: &crate::DecodeRequest) -> Result
         "fff" => CameraFormat::Fff,
         "dcr" => CameraFormat::Dcr,
         "dcs" => CameraFormat::Dcs,
-        "raw" if crate::sniff::sniff(&raw.bytes) == crate::sniff::SniffedFormat::Rw2 => CameraFormat::Rw2,
-        _ => return Err(EipError::UnsupportedRaw(name.clone())),
-    };
-    let source_open = total_started.elapsed();
-    let decoded =
-        NativeCameraDecoder::new(format).decode_source(request, raw.bytes, source_open, total_started)?;
-    Ok(EipSensor {
-        manifest: raw.manifest,
-        decoded,
-        raw_recipe: format.recipe(),
+        "raw" if crate::sniff::sniff(bytes) == crate::sniff::SniffedFormat::Rw2 => CameraFormat::Rw2,
+        _ => return Err(EipError::UnsupportedRaw(name.to_owned())),
     })
+}
+
+/// Resolve the native sensor recipe without decoding pixels. Cache keys must
+/// fingerprint the complete package, not only its RAW entry. Capture One assets
+/// are not applied. Only ambiguous `.raw` members require managed inflation to
+/// identify their backend; named backends need only the bounded ZIP inventory.
+pub fn eip_file_sensor_recipe(request: &crate::DecodeRequest) -> Result<rrrah_core::MosaicRecipeManifest, EipError> {
+    let budget = request.memory_budget.as_ref().ok_or(EipError::Invalid("sensor import requires a memory budget"))?;
+    let source = read_package_with_budget(request, budget)?;
+    let manifest = inspect_eip(&source)?;
+    let name = &manifest.entries[manifest.raw_index].name;
+    let extension = name.rsplit_once('.').map(|(_, e)| e.to_ascii_lowercase()).unwrap_or_default();
+    request.check_cancelled()?;
+    match extension.as_str() {
+        "cr3" => Ok(crate::NATIVE_EOS_R8_MOSAIC_CONTRACT_1),
+        "dng" | "gpr" => Ok(crate::NATIVE_DNG_MOSAIC_CONTRACT_1),
+        "mrw" => Ok(crate::RawDecoder::mosaic_recipe(&crate::NativeMrwDecoder, request)?),
+        "crw" => Ok(crate::RawDecoder::mosaic_recipe(&crate::NativeCrwDecoder, request)?),
+        "raw" => {
+            let raw = extract_eip_sensor_raw(&source, request)?;
+            Ok(eip_camera_format(name, &raw.bytes)?.recipe())
+        }
+        _ => Ok(eip_camera_format(name, &[])?.recipe()),
+    }
 }
 
 /// Lists a classic single-disk ZIP package with exactly one RAW candidate.
@@ -451,13 +502,35 @@ mod tests {
             let root = rrrah_core::MemoryBudget::new(256 * 1024 * 1024);
             let mut request = crate::DecodeRequest::new(&path);
             request.memory_budget = Some(root.clone());
+            assert!(crate::is_supported_image_path(&path));
+            assert!(crate::is_supported_raw_path(&path));
+            assert_eq!(crate::image_source_kind(&request).unwrap(), crate::ImageSourceKind::Sensor);
+            assert_eq!(crate::NativeRawDecoder.mosaic_recipe(&request).unwrap(), crate::NATIVE_EOS_R8_MOSAIC_CONTRACT_1);
+            let common = crate::decode_image(&request).unwrap();
+            let crate::DecodedImage::Sensor(common) = common else { panic!("EIP routed to a raster preview"); };
+            assert_eq!(common.mosaic.metadata, reference.metadata);
+            assert_eq!(common.mosaic.pixels, reference.pixels);
+            drop(common);
+            assert_eq!(root.used(), 0);
             let imported = decode_eip_file_sensor(&request).unwrap();
             assert_eq!(imported.decoded.mosaic.metadata, reference.metadata);
             assert_eq!(imported.decoded.mosaic.pixels, reference.pixels);
             let sensor_bytes = imported.decoded.mosaic.pixels.capacity_bytes();
             assert_eq!(root.used(), sensor_bytes);
             let peak = root.peak();
-            assert!(peak >= package_bytes + raw_bytes + sensor_bytes);
+            assert!(peak >= (package_bytes + raw_bytes).max(raw_bytes + sensor_bytes));
+            // Model the former file lifecycle: retain the managed ZIP through decoding.
+            let retained_root = rrrah_core::MemoryBudget::new(256 * 1024 * 1024);
+            let mut retained_request = request.clone();
+            retained_request.memory_budget = Some(retained_root.clone());
+            let retained_source = read_package_with_budget(&retained_request, &retained_root).unwrap();
+            let retained = decode_eip_sensor(&retained_source, &retained_request).unwrap();
+            assert_eq!(retained.decoded.mosaic.pixels, reference.pixels);
+            assert_eq!(retained.decoded.mosaic.metadata, reference.metadata);
+            assert_eq!(retained_root.peak(), peak + package_bytes);
+            drop(retained);
+            drop(retained_source);
+            assert_eq!(retained_root.used(), 0);
             let clone = imported.decoded.mosaic.pixels.clone();
             drop(imported);
             assert_eq!(root.used(), sensor_bytes);
@@ -481,6 +554,113 @@ mod tests {
         drop(reference);
         assert_eq!(reference_root.used(), 0);
     }
+    #[test]
+    #[ignore = "requires pinned official HERO9 GPR source"]
+    fn common_eip_gpr_preserves_original_sensor_and_development_metadata() {
+        let source_path = std::path::PathBuf::from(std::env::var("RRRAH_GPR_CORPUS").unwrap()).join("HERO9.GPR");
+        common_eip_sensor_matches_original(source_path, "source.GPR");
+    }
+
+    #[test]
+    #[ignore = "requires pinned EOS 10D CRW source"]
+    fn common_eip_crw_preserves_original_sensor_and_metadata() {
+        common_eip_sensor_matches_original(std::path::PathBuf::from(std::env::var("RRRAH_CRW_SOURCE").unwrap()), "source.CRW");
+    }
+
+    fn common_eip_sensor_matches_original(source_path: std::path::PathBuf, member: &str) {
+        use crate::RawDecoder;
+        let source = std::fs::read(&source_path).unwrap();
+        let reference_root = rrrah_core::MemoryBudget::new(512 * 1024 * 1024);
+        let mut reference_request = crate::DecodeRequest::new(&source_path);
+        reference_request.memory_budget = Some(reference_root.clone());
+        let reference = crate::NativeRawDecoder.decode(&reference_request).unwrap().mosaic;
+        let path = std::env::temp_dir().join(format!("rrrah-eip-gpr-{}-{}.eip", std::process::id(), std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_nanos()));
+        struct Cleanup(std::path::PathBuf);
+        impl Drop for Cleanup { fn drop(&mut self) { let _ = std::fs::remove_file(&self.0); } }
+        let _cleanup = Cleanup(path.clone());
+        for compression in [zip::CompressionMethod::Stored, zip::CompressionMethod::Deflated] {
+            let mut writer = zip::ZipWriter::new(std::fs::File::create(&path).unwrap());
+            writer.start_file(member, zip::write::SimpleFileOptions::default().compression_method(compression)).unwrap();
+            writer.write_all(&source).unwrap();
+            writer.finish().unwrap();
+            let root = rrrah_core::MemoryBudget::new(512 * 1024 * 1024);
+            let mut request = crate::DecodeRequest::new(&path);
+            request.memory_budget = Some(root.clone());
+            assert_eq!(crate::NativeRawDecoder.mosaic_recipe(&request).unwrap(), crate::NativeRawDecoder.mosaic_recipe(&reference_request).unwrap());
+            let crate::DecodedImage::Sensor(imported) = crate::decode_image(&request).unwrap() else { panic!("GPR package became preview"); };
+            assert_eq!(imported.mosaic.metadata, reference.metadata);
+            assert_eq!(imported.mosaic.pixels, reference.pixels);
+            let weight = imported.mosaic.pixels.capacity_bytes();
+            assert_eq!(root.used(), weight);
+            drop(imported);
+            assert_eq!(root.used(), 0);
+            eprintln!("EIP {member} {compression:?}: {} samples and complete development metadata exact; peak={}; final=0", reference.pixels.len(), root.peak());
+        }
+        drop(reference);
+        assert_eq!(reference_root.used(), 0);
+    }
+
+    #[test]
+    fn file_recipe_uses_inventory_without_inflating_named_raw() {
+        let path = std::env::temp_dir().join(format!("rrrah-eip-recipe-{}-{}.eip", std::process::id(), std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_nanos()));
+        struct Cleanup(std::path::PathBuf);
+        impl Drop for Cleanup { fn drop(&mut self) { let _ = std::fs::remove_file(&self.0); } }
+        let _cleanup = Cleanup(path.clone());
+        for ext in ["crw", "cr3", "dng", "gpr", "mrw", "iiq", "mos", "pef", "ptx", "nef", "rw2", "sr2"] {
+            for compression in [zip::CompressionMethod::Stored, zip::CompressionMethod::Deflated] {
+                let bytes = package(&[&format!("source.{ext}"), "CaptureOne/settings.cos"], compression);
+                std::fs::write(&path, &bytes).unwrap();
+                let root = rrrah_core::MemoryBudget::new(bytes.len() as u64);
+                let mut request = crate::DecodeRequest::new(&path);
+                request.memory_budget = Some(root.clone());
+                let actual = eip_file_sensor_recipe(&request).unwrap();
+                let inner = crate::DecodeRequest::new(format!("/nonexistent/source.{ext}"));
+                let expected = crate::RawDecoder::mosaic_recipe(&crate::NativeRawDecoder, &inner).unwrap();
+                assert_eq!(actual, expected, "{ext} {compression:?}");
+                assert_eq!(root.peak(), bytes.len() as u64);
+                assert_eq!(root.used(), 0);
+                request.image_index = 1;
+                let empty = rrrah_core::MemoryBudget::new(0);
+                request.memory_budget = Some(empty.clone());
+                assert!(matches!(eip_file_sensor_recipe(&request), Err(EipError::Decode(crate::DecodeError::UnsupportedImageIndex { index: 1 }))));
+                assert_eq!(empty.peak(), 0);
+            }
+        }
+    }
+
+    #[test]
+    fn common_eip_route_refuses_corruption_and_releases_managed_credit() {
+        let path = std::env::temp_dir().join(format!("rrrah-eip-refusal-{}-{}.EIP", std::process::id(), std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_nanos()));
+        struct Cleanup(std::path::PathBuf);
+        impl Drop for Cleanup { fn drop(&mut self) { let _ = std::fs::remove_file(&self.0); } }
+        let _cleanup = Cleanup(path.clone());
+        let mut corrupt_crc = package(&["source.pef"], zip::CompressionMethod::Stored);
+        let payload = corrupt_crc.windows(7).position(|bytes| bytes == b"payload").unwrap();
+        corrupt_crc[payload] ^= 1;
+        let cases = [
+            b"not a ZIP".to_vec(),
+            package(&["preview.png", "settings.cos"], zip::CompressionMethod::Stored),
+            package(&["source.cap"], zip::CompressionMethod::Stored),
+            package(&["first.pef", "second.dng"], zip::CompressionMethod::Stored),
+            package(&["source.pef", "preview.png"], zip::CompressionMethod::Deflated),
+            corrupt_crc,
+        ];
+        for bytes in cases {
+            std::fs::write(&path, &bytes).unwrap();
+            let root = rrrah_core::MemoryBudget::new(4096);
+            let mut request = crate::DecodeRequest::new(&path);
+            request.memory_budget = Some(root.clone());
+            assert_eq!(crate::image_source_kind(&request).unwrap(), crate::ImageSourceKind::Sensor);
+            assert!(matches!(crate::decode_image(&request), Err(crate::RasterDecodeError::Source(crate::DecodeError::NativeCamera { .. }))));
+            assert_eq!(root.used(), 0);
+            let empty = rrrah_core::MemoryBudget::new(0);
+            request.memory_budget = Some(empty.clone());
+            assert!(matches!(crate::decode_image(&request), Err(crate::RasterDecodeError::Source(crate::DecodeError::Memory(_)))));
+            assert_eq!(empty.used(), 0);
+            assert_eq!(empty.peak(), 0);
+        }
+    }
+
     #[test]
     fn disk_package_and_inflated_raw_share_root_and_failures_release_source() {
         let path = std::env::temp_dir().join(format!(

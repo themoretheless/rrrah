@@ -1,0 +1,23 @@
+{
+  "status": "verified_alternating_selected_roi_process_timing",
+  "measurements": 12,
+  "summary": {
+    "direct": {
+      "median_seconds": 2.8989383335065213,
+      "min_seconds": 2.3136055000068154,
+      "max_seconds": 3.2086068330099806
+    },
+    "cached": {
+      "median_seconds": 0.22868272950290702,
+      "min_seconds": 0.20451975001196843,
+      "max_seconds": 0.4684927080088528
+    }
+  },
+  "observed_median_ratio": 12.676682405392008,
+  "pins": {
+    "docs/research/dedup-local-rank-cached-process-timing.json": "9b40a023f86ee337e1d6e639eb8cc703e39b27ecfbc91bcb4db8f45b4cb815b5",
+    "docs/research/dedup-local-rank-cached-process-timing.log": "a92ad263491315dddc0963a4e93153da07393da69e72b8eee46737c58070c93d",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-local-rank-cached-timing.py": "730be1de558513e26aa4f418405783bee5c501b56f3d523b3477eef2c7836178"
+  },
+  "scope": "Single selected real screen ROI, frozen release binaries, three filter levels/two directions plus normalized-pixel loading and snapshot hashing in each process. Six alternating measurements per backend under live concurrent workloads. No isolated kernel/decoder/retrieval/whole-collection performance claim; bytes and decisions exactly equal."
+}

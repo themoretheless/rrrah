@@ -1059,7 +1059,7 @@ mod reuse_tests {
         let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/timeline");
         let folder = tempfile::tempdir().unwrap();
         let path = folder.path().join("left.gif");
-        std::fs::copy(root.join("base.gif"), &path).unwrap();
+        std::fs::write(&path, std::fs::read(root.join("base.gif")).unwrap()).unwrap();
         let left = (
             DecodeRequest::new(&path),
             Presentation::Animation(AnimationKind::Gif),
@@ -1243,7 +1243,7 @@ mod reuse_tests {
         let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/timeline");
         let folder = tempfile::tempdir().unwrap();
         let path = folder.path().join("left.gif");
-        std::fs::copy(root.join("base.gif"), &path).unwrap();
+        std::fs::write(&path, std::fs::read(root.join("base.gif")).unwrap()).unwrap();
         let budget = MemoryBudget::new(4 * 1024 * 1024);
         let limits = AnimationBudget {
             max_frames: 10,
@@ -1530,7 +1530,7 @@ mod reuse_tests {
         let (mut files, policy) = indexed_fixture();
         let folder = tempfile::tempdir().unwrap();
         let path = folder.path().join("left.gif");
-        std::fs::copy(&files[0].1.path, &path).unwrap();
+        std::fs::write(&path, std::fs::read(&files[0].1.path).unwrap()).unwrap();
         files[0].1 = DecodeRequest::new(&path);
         let budget = MemoryBudget::new(4 * 1024 * 1024);
         PREPARE_CALLS.with(|count| count.set(0));

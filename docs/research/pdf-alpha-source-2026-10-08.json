@@ -1,0 +1,19 @@
+{
+  "scope": {
+    "scope": "Production interpreter parses and restores AIS, with default-compatible Device callback; only test compositor implements AIS compositing. Production Renderer still ignores callback.",
+    "implementation": "AIS defaults false. Synchronize before paths, text, forms, images, shadings, and q/Q restoration; Type3 forwards callback. Replay snapshots AIS on group entry, scales group shape for constant alpha, scales mask shape only for AIS true, retains independent premultiplied alpha.",
+    "verification": "59 passed, 0 failed, 4 diagnostic tests ignored. Added zero/half/full group opacity, normal and knockout groups, q/Q restoration, full versus 3/7 tiles, separate path/group constants (half times half), authored group alpha mask, and every shape-mask cancellation checkpoint. rrrah-decode cargo check locked/offline passed.",
+    "limits": "Test-only compositing. Broader raster/SMask alpha-source cases, fractional mask coverage, complex paints, adversarial resource bounds and production integration remain pending."
+  },
+  "tests": {
+    "passed": 59,
+    "failed": 0,
+    "ignored": 4
+  },
+  "commands": [
+    "python3 scripts/test-pdf-mesh-bounds.py --renderer --filter knockout_compositor --target-dir /tmp/rrrah-required-corpus-target",
+    "cargo check -p rrrah-decode --locked --offline --target-dir /tmp/rrrah-required-corpus-target",
+    "git diff --check"
+  ],
+  "production_knockout_integrated": false
+}

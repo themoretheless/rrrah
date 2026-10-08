@@ -1,0 +1,32 @@
+{
+  "scope": "100000 distinct raster-key real-file swap churn with exact identity restore and bounded eviction",
+  "passed": 1,
+  "failed": 0,
+  "ignored": 0,
+  "seconds": 58.884065334,
+  "distinct_keys": 100000,
+  "writes": 100000,
+  "reads": 100000,
+  "pressure_refusals_and_successful_retries": 1000,
+  "root_limit_and_peak": 131072,
+  "queue_peak": 4,
+  "disk_limits": {
+    "bytes": 4096,
+    "objects": 17
+  },
+  "final_tracked_bytes": 0,
+  "checks": [
+    "Per-key exact original four-byte raster identity",
+    "Evicted keys absent on every cycle after capacity",
+    "Logical disk limits every cycle",
+    "Physical file limits every 1000 cycles",
+    "All reads and writes counted without errors"
+  ],
+  "log": "/tmp/rrrah-cache-100k-distinct-20261008.log",
+  "log_sha256": "e6e80220aa2275b7c49e7221261118bf383584b5e24d40a8c89c42df26ce2f8b",
+  "limitations": [
+    "One-pixel synthetic rasters stress distinct-key lifecycle, not large-photo byte throughput",
+    "Local SSD without injected I/O delay; not a physical slow disk",
+    "Does not qualify 100000 source-file decoding, production collection navigation, TTL or hours-long operation"
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "scope": "Group color-space declaration resolution and callback/capture transport; RGB compositor retained pending native space math",
+  "source_sha256": {
+    "vendor/hayro-interpret/src/device.rs": "d2bc8c5cc786ea90476e22487a230b88980ec6c830971f7724dada8886883fc2",
+    "vendor/hayro-interpret/src/color.rs": "cd3f4e04978504e27b7e8ab61bf912962e1aa9eb22cd76f1a7b0700e860d96d3",
+    "vendor/hayro-interpret/src/x_object.rs": "2dab728e233475687629e900591c6a00c0f20bfc212424f3fa534e906eec7001",
+    "vendor/hayro-interpret/src/interpret/mod.rs": "a0590011ece9c61e6917ad7372d62ee6d022d9b85c75eeb6da7544f8d35cf905",
+    "vendor/hayro/src/knockout_interpreter.rs": "2551bb4e968da47c5bde0bff02122553224aa739ec5d224f9555847b1d0d0dbf"
+  },
+  "suite": {
+    "passed": 93,
+    "failed": 0,
+    "ignored": 8,
+    "filtered": 1,
+    "seconds": 1.85,
+    "log": "/tmp/rrrah-group-space-transport-final-controls.log"
+  },
+  "implementation": [
+    "Public TransparencyGroupColorSpace states Inherited/Explicit(ColorSpace)/Unresolved",
+    "Page color-space hook invoked before page painting with cancellation guards",
+    "Form group hook receives declared color space plus independent isolation/knockout flags",
+    "Named spaces resolved in form local resources with parent fallback; device defaults applied",
+    "Reject Lab/Pattern/Indexed/Separation/DeviceN and unsupported ICC component models as unresolved group declarations",
+    "Legacy device hook forwards unchanged old group callback",
+    "Test scene retains resolved space references and vector metadata under admission before allocation"
+  ],
+  "controls": [
+    "CMYK page4 channels with inherited child",
+    "Absent page CS remains inherited, explicit Gray form1 channel",
+    "Form local Alias Gray overrides parent Alias CMYK",
+    "Missing named resource unresolved",
+    "Explicit null unresolved",
+    "Indexed group space unresolved",
+    "Existing92 composition/tile/refusal/cancellation controls pass"
+  ],
+  "compatibility_change": "Early page color-space cancellation can return before final page guard. Operator-only cancellation regression now checks exact requested poll count and bounded guard count, retaining zero scene capture invariant.",
+  "normative_source": {
+    "file": "/tmp/rrrah-pdf32000-2008.txt",
+    "sections": [
+      "11.6.3",
+      "11.6.6 Table145"
+    ],
+    "rule": "Page group has blending color space; declared group space may be device/calibrated additive/subtractive, excluding Lab and special spaces; non-isolated nesting inheritance is compositor-context dependent"
+  },
+  "limits": [
+    "Declarations transported, not yet applied to pixel blending",
+    "Group metadata collected separately from existing RGB events; admitted native frame integration still required",
+    "Compositor must apply inheritance according to isolated/page/luminosity-mask context",
+    "Causal relationship to real-AI oracle differences remains unproven"
+  ],
+  "remaining": [
+    "Native component preserving scene paints",
+    "RGB/Gray/CMYK frame math and group-boundary conversions",
+    "Independent authored/group/profile oracle qualification",
+    "Production renderer integration"
+  ],
+  "production_enabled": false
+}

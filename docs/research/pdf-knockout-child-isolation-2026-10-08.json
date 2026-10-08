@@ -1,0 +1,162 @@
+{
+  "scope": "Diagnostic toggle of child isolation only. Compare native independent-child knockout experiment against Poppler leaf with all child I=true. Minimal nonisolated-child case also sampled. Does not qualify original file.",
+  "leaf_isolated_children": {
+    "different_pixels": 187,
+    "max_channel_error": 93,
+    "mean_absolute_channel_error": 0.01368068497960727
+  },
+  "minimal_nonisolated_children": {
+    "x4_rgb": [
+      255,
+      0,
+      0
+    ],
+    "x16_rgb": [
+      127,
+      127,
+      255
+    ],
+    "x28_rgb": [
+      127,
+      127,
+      255
+    ]
+  },
+  "half_opacity_prior_child": [
+    {
+      "child_isolated": false,
+      "samples": {
+        "4": [
+          255,
+          127,
+          127
+        ],
+        "16": [
+          127,
+          127,
+          255
+        ],
+        "28": [
+          127,
+          127,
+          255
+        ]
+      }
+    },
+    {
+      "child_isolated": true,
+      "samples": {
+        "4": [
+          255,
+          127,
+          127
+        ],
+        "16": [
+          127,
+          127,
+          255
+        ],
+        "28": [
+          127,
+          127,
+          255
+        ]
+      }
+    }
+  ],
+  "conclusion": "Child isolation changes real leaf rendering and authored fractional-boundary rectangle rendering. Integer-aligned rectangles did not expose it; retain fractional geometric coverage in nested group implementation tests.",
+  "fractional_boundary_reproduction": {
+    "scope": "Authored RGB rectangles. First child opacity 0.0625, second 0.125; blue rectangle begins at x=8.5/y=0.5. Parent nonisolated knockout; compare child I false vs true.",
+    "different_pixels_between_oracles": 48,
+    "max_channel_error_between_oracles": 14,
+    "cases": [
+      {
+        "child_isolated": false,
+        "fixture": "tests/fixtures/raster/pdf-knockout-fractional-nonisolated.pdf",
+        "sha256": "ba63c593d3cf8fdf38e7d6e15b8b0158c0691086ccb222fb8f2bd94b3477c7ac",
+        "samples": {
+          "4,8": [
+            255,
+            239,
+            239
+          ],
+          "8,8": [
+            244,
+            244,
+            255
+          ],
+          "9,8": [
+            223,
+            223,
+            255
+          ],
+          "16,8": [
+            223,
+            223,
+            255
+          ],
+          "24,8": [
+            223,
+            223,
+            255
+          ],
+          "31,8": [
+            234,
+            234,
+            255
+          ]
+        }
+      },
+      {
+        "child_isolated": true,
+        "fixture": "tests/fixtures/raster/pdf-knockout-fractional-isolated.pdf",
+        "sha256": "7e9d415e96c7b9a08559166b79f575dd07f1f7bf965c2f808e0951b0c75a2c85",
+        "samples": {
+          "4,8": [
+            255,
+            239,
+            239
+          ],
+          "8,8": [
+            244,
+            234,
+            245
+          ],
+          "9,8": [
+            223,
+            223,
+            255
+          ],
+          "16,8": [
+            223,
+            223,
+            255
+          ],
+          "24,8": [
+            223,
+            223,
+            255
+          ],
+          "31,8": [
+            234,
+            234,
+            255
+          ]
+        }
+      }
+    ]
+  },
+  "fractional_regression": {
+    "test": "child_isolation_changes_fractional_knockout_edge",
+    "explicit_run_result": "1 failed; current renderer does not distinguish child isolation at edge",
+    "status": "Ignored in ordinary suite pending implementation; oracle edge behavior still needs normative group-shape analysis before production algorithm decisions."
+  },
+  "normative_review": {
+    "reference": "PDF 32000-1:2008, 11.4.6, note 6",
+    "official_indexed_reference": "https://opensource.adobe.com/dc-acrobat-sdk-docs/standards/pdfstandards/pdf/PDF32000_2008.pdf?from=20423&from_column=20423",
+    "access_limit": "Official indexed excerpts retrieved; direct PDF URL returns 404. Do not claim full document downloaded or audited.",
+    "rule": "For non-isolated child nested inside knockout parent, select parent initial backdrop instead of immediate accumulated backdrop. Isolated child starts transparent.",
+    "fractional_coverage": "Use source shape separately from opacity and weight previous result by uncovered shape. Poppler-specific difference between edge samples is diagnostic, not yet a normative pass criterion.",
+    "source_change": "Fractional edge test ignore reason/comment now explicitly mark oracle-only status; normal knockout interior tests remain normative targets."
+  }
+}

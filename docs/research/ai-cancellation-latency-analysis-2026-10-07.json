@@ -1,0 +1,1294 @@
+{
+  "scope": "Real pinned AI CPU decode generation-cancellation latency and bottleneck localization",
+  "benchmark": "crates/rrrah-decode/examples/raster_load_bench.rs --cancel-after-ms",
+  "measurement_report": "docs/research/ai-decode-cancellation-latency-2026-10-07.json",
+  "unprofiled_samples": 180,
+  "all_samples_release_managed_credit": true,
+  "VectorApple": {
+    "cancelled": 90,
+    "completed": 0,
+    "observed_worst_signal_to_exit_ms": 39.32299999999999
+  },
+  "profile": "docs/research/ai-cancel-sampling-2026-10-07.txt",
+  "profiler": "macOS sample, 5 seconds at 1 ms, separate 180-sample cancellation run at 20 ms signal delay",
+  "profiled_benchmark": {
+    "cancelled": 180,
+    "completed": 0,
+    "index": "0",
+    "path": "/tmp/rrrah-integrated-ai-corpus/VectorApple.ai",
+    "requested_signal_ms": 20,
+    "rows": [
+      {
+        "actual_signal_ms": 21.728291,
+        "decode_ms": 43.965790999999996,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 25.530375,
+        "decode_ms": 46.048625,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 25.3215,
+        "decode_ms": 57.44825,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 23.232959,
+        "decode_ms": 46.290917,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 27.712583,
+        "decode_ms": 48.307625,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.87825,
+        "decode_ms": 56.057916999999996,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3365962,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 94.014583,
+        "decode_ms": 153.349833,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 25.715124999999997,
+        "decode_ms": 53.250875,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.088292,
+        "decode_ms": 51.815625,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3365962,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 25.0305,
+        "decode_ms": 52.741584,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 21.055750000000003,
+        "decode_ms": 50.530917,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3140170,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 25.141459,
+        "decode_ms": 59.878542,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.697833,
+        "decode_ms": 53.26675,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.438167,
+        "decode_ms": 51.741667,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 23.500459000000003,
+        "decode_ms": 54.927459,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.730583,
+        "decode_ms": 60.235417,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 25.60475,
+        "decode_ms": 61.744292,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 25.140875,
+        "decode_ms": 52.784625,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 21.908834,
+        "decode_ms": 70.12170900000001,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.46875,
+        "decode_ms": 56.436791,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.304083000000002,
+        "decode_ms": 53.749582999999994,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 25.355,
+        "decode_ms": 58.434374999999996,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 25.394083000000002,
+        "decode_ms": 54.720833000000006,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 20.394792,
+        "decode_ms": 53.907333,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 25.385875,
+        "decode_ms": 57.388625,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 25.44225,
+        "decode_ms": 55.713709,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 21.304917,
+        "decode_ms": 47.79474999999999,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 25.054541,
+        "decode_ms": 54.097083,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 20.473625,
+        "decode_ms": 49.820499999999996,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 27.915042,
+        "decode_ms": 73.505167,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3140170,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.743125000000003,
+        "decode_ms": 47.353834,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3365962,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.54075,
+        "decode_ms": 48.402042,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3365962,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 26.654541000000002,
+        "decode_ms": 64.355125,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 27.373749999999998,
+        "decode_ms": 78.10262499999999,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.29325,
+        "decode_ms": 51.548666,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3365962,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 25.031167,
+        "decode_ms": 47.830708,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3365962,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.739667,
+        "decode_ms": 57.496208,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 23.396583,
+        "decode_ms": 46.507208,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 25.063416,
+        "decode_ms": 68.539916,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3365962,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 23.66075,
+        "decode_ms": 46.755458,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 21.979542000000002,
+        "decode_ms": 45.117917,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 25.063458999999998,
+        "decode_ms": 48.199167,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.788083999999998,
+        "decode_ms": 48.439792000000004,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3365962,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 23.830083,
+        "decode_ms": 69.270791,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3365962,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 23.872125,
+        "decode_ms": 48.663792,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3365962,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.676291,
+        "decode_ms": 80.18420800000001,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3365962,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 20.34625,
+        "decode_ms": 43.494709,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 21.221958,
+        "decode_ms": 43.432417,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 25.036666999999998,
+        "decode_ms": 47.681458000000006,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.365916000000002,
+        "decode_ms": 48.966207999999995,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3365962,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 21.139792,
+        "decode_ms": 85.175917,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.627416999999998,
+        "decode_ms": 48.234417,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 22.913,
+        "decode_ms": 66.260709,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.272125,
+        "decode_ms": 47.158333,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3365962,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 23.555375,
+        "decode_ms": 54.761375,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3365962,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 23.710209,
+        "decode_ms": 48.557375,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.059207999999998,
+        "decode_ms": 47.391875,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 21.102459,
+        "decode_ms": 79.248,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3066082,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 25.184749999999998,
+        "decode_ms": 49.827791000000005,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3365962,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 23.3785,
+        "decode_ms": 62.492708,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 2718090,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 21.181417,
+        "decode_ms": 43.422250000000005,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 25.0535,
+        "decode_ms": 75.938,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.872041,
+        "decode_ms": 47.206625,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3365962,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 20.877,
+        "decode_ms": 88.837,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 23.987166000000002,
+        "decode_ms": 56.048874999999995,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 23.928749999999997,
+        "decode_ms": 29.47725,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 2125722,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 21.088167000000002,
+        "decode_ms": 21.092167,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 1062861,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.442167,
+        "decode_ms": 51.897417000000004,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 23.225291,
+        "decode_ms": 86.539291,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.220833,
+        "decode_ms": 48.090333,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 22.757541,
+        "decode_ms": 73.56391599999999,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 23.263167000000003,
+        "decode_ms": 50.281833,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 22.634458,
+        "decode_ms": 91.165542,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 22.679833,
+        "decode_ms": 85.943417,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 21.232582999999998,
+        "decode_ms": 53.397332999999996,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3140170,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 20.853375,
+        "decode_ms": 89.28554199999999,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 20.848417,
+        "decode_ms": 45.584832999999996,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 23.368208000000003,
+        "decode_ms": 119.911042,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.364917,
+        "decode_ms": 63.598792,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 25.782,
+        "decode_ms": 52.232,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.197958,
+        "decode_ms": 130.215333,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.783625,
+        "decode_ms": 73.641833,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 21.58,
+        "decode_ms": 45.94045800000001,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 23.03725,
+        "decode_ms": 111.223583,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 21.192208,
+        "decode_ms": 47.86975,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 25.052125,
+        "decode_ms": 88.387,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3067258,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 25.053208,
+        "decode_ms": 88.95804100000001,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 23.269125000000003,
+        "decode_ms": 50.506750000000004,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 21.905167,
+        "decode_ms": 133.912917,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3140170,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 25.004458,
+        "decode_ms": 44.000040999999996,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3365962,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.545541,
+        "decode_ms": 68.172291,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 2718090,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 25.03125,
+        "decode_ms": 102.40525000000001,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 22.344625,
+        "decode_ms": 85.35229199999999,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.998292,
+        "decode_ms": 78.244417,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3102538,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 23.00275,
+        "decode_ms": 61.173125,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.097792,
+        "decode_ms": 92.26558299999999,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3074314,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 22.670458,
+        "decode_ms": 53.162,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3102538,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 23.080209,
+        "decode_ms": 60.453374999999994,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 22.768625,
+        "decode_ms": 62.113792000000004,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 22.54625,
+        "decode_ms": 41.811665999999995,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 21.221291,
+        "decode_ms": 57.883833,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.704625,
+        "decode_ms": 54.87875,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3365962,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 23.456333,
+        "decode_ms": 63.309083,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 25.035083,
+        "decode_ms": 55.852166000000004,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 23.429042,
+        "decode_ms": 59.936417,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3365962,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 30.040625000000002,
+        "decode_ms": 55.576458,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3365962,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 25.048125000000002,
+        "decode_ms": 49.400082999999995,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3365962,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 21.595,
+        "decode_ms": 51.64475,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.436459,
+        "decode_ms": 44.35791699999999,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3365962,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 27.689917,
+        "decode_ms": 182.03025,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 2718090,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 25.596083,
+        "decode_ms": 65.134625,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.385459,
+        "decode_ms": 64.168542,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 25.047791,
+        "decode_ms": 135.386583,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3069610,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 25.0535,
+        "decode_ms": 74.720417,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 23.890375,
+        "decode_ms": 100.426708,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 23.436708,
+        "decode_ms": 94.2275,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3074314,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 25.029625,
+        "decode_ms": 74.24370900000001,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3140170,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 22.209708000000003,
+        "decode_ms": 89.01266600000001,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3140170,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 23.81525,
+        "decode_ms": 73.07245900000001,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3074314,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 23.272292,
+        "decode_ms": 101.16229200000001,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3102538,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 23.329165999999997,
+        "decode_ms": 65.679416,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3102538,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.813542,
+        "decode_ms": 26.031542,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 2125722,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.650583,
+        "decode_ms": 55.512458,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3140170,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 23.217708000000002,
+        "decode_ms": 25.609375,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 2125722,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.904958,
+        "decode_ms": 56.58775,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3102538,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 25.046791,
+        "decode_ms": 117.095666,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3140170,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.687541,
+        "decode_ms": 74.973208,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 23.060875000000003,
+        "decode_ms": 44.113958000000004,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 25.049959,
+        "decode_ms": 91.900584,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 25.03425,
+        "decode_ms": 90.968458,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3140170,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 25.043333,
+        "decode_ms": 95.588167,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3140170,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.997041,
+        "decode_ms": 91.348791,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.768874999999998,
+        "decode_ms": 66.007875,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3140170,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 23.211958000000003,
+        "decode_ms": 124.27754200000001,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3140170,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.774833,
+        "decode_ms": 83.133125,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3140170,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 22.864625,
+        "decode_ms": 95.398209,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3140170,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 22.580042000000002,
+        "decode_ms": 93.17675,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3083722,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 23.489791999999998,
+        "decode_ms": 43.247,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 25.301542,
+        "decode_ms": 47.660875,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 0,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.864541,
+        "decode_ms": 48.558583000000006,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3067258,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 22.837,
+        "decode_ms": 105.336083,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 2718090,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 22.64925,
+        "decode_ms": 71.33258400000001,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.293292,
+        "decode_ms": 25.742417,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 1062861,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 23.053458,
+        "decode_ms": 49.109125000000006,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3074314,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 25.029833,
+        "decode_ms": 67.040125,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 22.860125,
+        "decode_ms": 66.043166,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 22.545333,
+        "decode_ms": 69.85900000000001,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 22.775834,
+        "decode_ms": 42.340666999999996,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3365962,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 21.404291999999998,
+        "decode_ms": 74.337292,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3140170,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 23.667167,
+        "decode_ms": 68.551667,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 22.964333,
+        "decode_ms": 42.909083,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 21.937834,
+        "decode_ms": 44.90675,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3074314,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.547875,
+        "decode_ms": 66.656458,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3140170,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.926750000000002,
+        "decode_ms": 49.151666,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3140170,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.459875,
+        "decode_ms": 49.207833,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.162792,
+        "decode_ms": 64.019958,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3102538,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 22.17025,
+        "decode_ms": 41.816416000000004,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.566834,
+        "decode_ms": 71.044709,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3083722,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 23.270875,
+        "decode_ms": 48.21025,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3365962,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.249125,
+        "decode_ms": 48.418792,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.466833,
+        "decode_ms": 64.97295799999999,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.374667,
+        "decode_ms": 59.643792,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.663375000000002,
+        "decode_ms": 55.045375,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3140170,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.986125,
+        "decode_ms": 61.536375,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3140170,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 25.3505,
+        "decode_ms": 46.770083,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3140170,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.552500000000002,
+        "decode_ms": 57.325709,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 22.375541,
+        "decode_ms": 63.695416,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3140170,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.350208000000002,
+        "decode_ms": 55.4995,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3365962,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 23.303875,
+        "decode_ms": 43.534458,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 21.3585,
+        "decode_ms": 68.667,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3102538,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 25.061209,
+        "decode_ms": 54.967792,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 23.016292,
+        "decode_ms": 51.536875,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 25.045916000000002,
+        "decode_ms": 59.023332999999994,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3140170,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.245040999999997,
+        "decode_ms": 61.585833,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3365962,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 21.11625,
+        "decode_ms": 41.376542,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 22.851333,
+        "decode_ms": 42.768415999999995,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3140170,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 20.509625,
+        "decode_ms": 54.333833999999996,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3140170,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.486625,
+        "decode_ms": 51.46575,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3215434,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.484083000000002,
+        "decode_ms": 62.436749999999996,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3140170,
+        "status": "cancelled"
+      },
+      {
+        "actual_signal_ms": 24.679834,
+        "decode_ms": 60.28625,
+        "managed_final_bytes": 0,
+        "managed_peak_bytes": 3365962,
+        "status": "cancelled"
+      }
+    ],
+    "samples": 180,
+    "scope": "Warm OS filesystem, CPU decode, separate timer thread; includes scheduling and cleanup; no GPU presentation or universal latency bound",
+    "signal_to_decoder_exit_max_ms": 154.340333,
+    "signal_to_decoder_exit_p50_ms": 32.061709,
+    "signal_to_decoder_exit_p95_ms": 77.89
+  },
+  "finding": "Dominant visible sampled stacks include nested form/soft-mask interpretation, ImageXObject::decoded_raster, ColorSpace::convert_f32 and Separation::convert_f32. Patch checkpoints do not interrupt image color conversion; this is the next concrete cancellation path to address. Inclusive sampling counts must not be summed as wall-clock percentages.",
+  "limits": [
+    "Includes OS scheduling and synchronous cleanup; no universal latency ceiling.",
+    "Fast one.ai decodes can complete before the timer signals. Completed runs are recorded separately, not counted as cancellation samples.",
+    "This measures CPU decoder exit, not complete user navigation or GPU presentation."
+  ]
+}

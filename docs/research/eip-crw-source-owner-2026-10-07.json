@@ -1,0 +1,33 @@
+{
+  "fix": "CRW was inventoried but excluded from EIP sensor extraction and dispatch. Add source-owner CRW decoder and reuse bundled qualified table-zero decoder without temporary RAW files",
+  "source": "https://raw.pixls.us/getfile.php/2027/nice/Canon - EOS 10D - RAW (3:2).CRW",
+  "source_sha256": "b0730eb3a67cc2281a32e0b2ee104199246928d954a68b7e5b72366514c73d02",
+  "sensor_samples": 6518336,
+  "cases": [
+    "stored",
+    "deflated"
+  ],
+  "managed_peak_bytes": 20824002,
+  "verification": [
+    "Common EIP sensor route equals native original CRW in every sample and metadata field",
+    "Inner decoder recipe matches original CRW",
+    "Managed credit retains only sensor after return and reaches zero on final drop",
+    "Original CRW public/explicit route comparison and timing relationship remain valid",
+    "External unqualified table identity still refuses before source I/O"
+  ],
+  "tests": {
+    "EIP_real_CRW": "1 passed",
+    "original_CRW_regression": "1 passed",
+    "decoder_library": "966 passed, zero failures, 67 ignored"
+  },
+  "logs": [
+    "/tmp/rrrah-eip-crw-qualified.log",
+    "/tmp/rrrah-crw-source-owner-regression.log",
+    "/tmp/rrrah-eip-crw-final.log"
+  ],
+  "limits": [
+    "Authored ZIP packaging, not Capture One-created EIP",
+    "No new independent CRW sensor oracle run; two oracle-file tests lacked environment paths in broad manual run",
+    "Only existing qualified EOS 10D subset; Capture One edits not applied"
+  ]
+}

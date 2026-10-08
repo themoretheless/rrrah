@@ -1,0 +1,95 @@
+{
+  "scope": "Correct sensor-clipping provenance alignment under channel-specific rectilinear geometry; authored regressions plus two official Fusion full developments",
+  "regressions": {
+    "passed": 4,
+    "failed": 0,
+    "ignored": 0,
+    "description": [
+      "integer warp relocates source clipping evidence",
+      "channel-specific warp transforms each mask channel separately",
+      "identity and cancellation preserve provenance",
+      "saturated green is restored to the authored neutral 1.4 at the warped location"
+    ]
+  },
+  "rows": [
+    {
+      "camera": "Fusion-back",
+      "pixels_checked": 9312000,
+      "changed_pixels": 889,
+      "maximum_linear_difference": 0.8033194541931152,
+      "first_changed": {
+        "x": 2594,
+        "y": 798,
+        "before": [
+          0.4173697233200073,
+          0.30557411909103394,
+          0.3404613733291626,
+          1.0
+        ],
+        "after": [
+          0.45201706886291504,
+          0.29901593923568726,
+          0.3397098779678345,
+          1.0
+        ]
+      },
+      "managed_peak_bytes": 352932608,
+      "managed_final_bytes": 0,
+      "before_sha256": "f44ee16a4ac2960e2b53868017fc17f2d325ececf662de97b85e01d2b891b73f",
+      "after_sha256": "00d54286d47dab1e1a0e2d761e8f407e2dcdcdb0823e7ab91fd50f71e2a84df3"
+    },
+    {
+      "camera": "Fusion-front",
+      "pixels_checked": 9312000,
+      "changed_pixels": 173,
+      "maximum_linear_difference": 0.6287571787834167,
+      "first_changed": {
+        "x": 393,
+        "y": 529,
+        "before": [
+          1.9253640174865723,
+          0.5844155550003052,
+          1.6245765686035156,
+          1.0
+        ],
+        "after": [
+          1.9309253692626953,
+          0.5909824371337891,
+          1.5959374904632568,
+          1.0
+        ]
+      },
+      "managed_peak_bytes": 352932608,
+      "managed_final_bytes": 0,
+      "before_sha256": "b8f6f544f647fa5740c1a4a19936640b9d76e0a382469e7b4ce3402e0e7ff4e3",
+      "after_sha256": "37871b3f2f5f9de0933a8e3b05edf4e00a1ca9503fd3fe581a94ee5a51f20fa5"
+    }
+  ],
+  "limitations": [
+    "Real inputs may not contain sensor clipping; authored saturated-green geometry case proves the correction behavior.",
+    "No physical HDR/NVIDIA qualification is inferred."
+  ],
+  "core_suite": {
+    "passed": 104,
+    "failed": 0,
+    "ignored": 2
+  },
+  "dng_backend_suite": {
+    "passed": 13,
+    "failed": 0,
+    "ignored": 2
+  },
+  "metal_transport": {
+    "adapter": "Metal Apple M4 Max",
+    "passed": 2,
+    "failed": 0,
+    "ignored": 0,
+    "pixels_checked": 18624000,
+    "maximum_rgb8_difference": 1
+  },
+  "cache_invalidation": {
+    "dng_adapter_revision": 2,
+    "reason": "new AsShotNeutral-dependent color metadata must not reuse old cached matrices"
+  },
+  "memory_contract": "RGB source copy and clipping-mask copy peak at 30 bytes per full-resolution pixel, within the existing 35-byte scratch admission; no mask copy when highlight recovery is disabled"
+}

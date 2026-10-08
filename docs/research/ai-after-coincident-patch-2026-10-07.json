@@ -1,0 +1,92 @@
+{
+  "revision": "225c40c9f5d0ea3ff0e793ee1dacc386c198c3d4",
+  "sources": [
+    {
+      "name": "VectorApple.ai",
+      "source": "https://media.githubusercontent.com/media/opendesigndev/illustrator-parser-pdfcpu/225c40c9f5d0ea3ff0e793ee1dacc386c198c3d4/__tests__/fixtures/VectorApple.ai",
+      "sha256": "c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06",
+      "bytes": 1062861
+    },
+    {
+      "name": "one.ai",
+      "source": "https://media.githubusercontent.com/media/opendesigndev/illustrator-parser-pdfcpu/225c40c9f5d0ea3ff0e793ee1dacc386c198c3d4/__tests__/fixtures/one.ai",
+      "sha256": "97786949c268233a446e1738fb9c2f941e4d109811bd2f972948cdb7a45d64b4",
+      "bytes": 204049
+    }
+  ],
+  "decoder_sha256": "a22e47782b6cd431fe0d076d540bda8700b32a69d974f6a3e3bfaae3956290a7",
+  "poppler_version": "pdftoppm version 26.10.0\nCopyright 2005-2026 The Poppler Developers - http://poppler.freedesktop.org\nCopyright 1996-2011, 2022 Glyph & Cog, LLC",
+  "scope": "Strict 72 dpi white-composite RGB comparison; no tolerance. No GPU, private AI data or full format qualification.",
+  "pages": [
+    {
+      "file": "VectorApple.ai",
+      "index": 0,
+      "exact": false,
+      "native": {
+        "width": 301,
+        "height": 246,
+        "image_index": 0,
+        "image_count": 1
+      },
+      "poppler_header": "P6\n301 246",
+      "different_pixels": 33167,
+      "max_channel_error": 214,
+      "mean_absolute_channel_error": 4.004645760743322,
+      "rms_channel_error": 10.375666631093976,
+      "pixels_above_channel_error": {
+        "1": 32819,
+        "8": 21938,
+        "32": 1942,
+        "128": 108
+      },
+      "rgba_sha256": "540230435a16b6d1dfba154e0d7610b37fbf2fb22d59d8790c5b0537daed20ae"
+    },
+    {
+      "file": "one.ai",
+      "index": 0,
+      "exact": false,
+      "native": {
+        "width": 1366,
+        "height": 768,
+        "image_index": 0,
+        "image_count": 2
+      },
+      "poppler_header": "P6\n1366 768",
+      "different_pixels": 2790,
+      "max_channel_error": 115,
+      "mean_absolute_channel_error": 0.09860088000244022,
+      "rms_channel_error": 2.324669670181904,
+      "pixels_above_channel_error": {
+        "1": 2747,
+        "8": 2379,
+        "32": 1400,
+        "128": 0
+      },
+      "rgba_sha256": "027fc9ed92a3b78452a61c4fafcaec04944eeaad3b1e753b809f7edc0cf4b417"
+    },
+    {
+      "file": "one.ai",
+      "index": 1,
+      "exact": true,
+      "native": {
+        "width": 177,
+        "height": 175,
+        "image_index": 1,
+        "image_count": 2
+      },
+      "poppler_header": "P6\n177 175",
+      "different_pixels": 0,
+      "max_channel_error": 0,
+      "mean_absolute_channel_error": 0.0,
+      "rms_channel_error": 0.0,
+      "pixels_above_channel_error": {
+        "1": 0,
+        "8": 0,
+        "32": 0,
+        "128": 0
+      },
+      "rgba_sha256": "155a1e78cb7d2dd3d3aaf2832e7591b61f9ec0cbf5b97bef36a7787a5907f38f"
+    }
+  ],
+  "interpretation": "Coincident-patch controlled case is fixed, but strict original AI qualification still fails. VectorApple differing-pixel count increases from 33054 to 33167; prior severity metrics unavailable, so no severity improvement/regression conclusion. one.ai page0 unchanged; page1 remains exact."
+}

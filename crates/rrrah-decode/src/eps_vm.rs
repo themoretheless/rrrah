@@ -60,12 +60,18 @@ pub enum EpsOperator {
     RelativeLineTo,
     CurveTo,
     RelativeCurveTo,
+    Arc,
+    ArcNegative,
     ClosePath,
+    Clip,
+    EvenOddClip,
+    InitClip,
     Stroke,
     Fill,
     EvenOddFill,
     RectFill,
     RectStroke,
+    RectClip,
     SetGray,
     SetRgbColor,
     SetCmykColor,
@@ -334,12 +340,18 @@ impl<'a> Machine<'a, '_> {
             | O::RelativeLineTo
             | O::CurveTo
             | O::RelativeCurveTo
+            | O::Arc
+            | O::ArcNegative
             | O::ClosePath
+            | O::Clip
+            | O::EvenOddClip
+            | O::InitClip
             | O::Stroke
             | O::Fill
             | O::EvenOddFill
             | O::RectFill
             | O::RectStroke
+            | O::RectClip
             | O::SetGray
             | O::SetRgbColor
             | O::SetCmykColor
@@ -637,8 +649,9 @@ impl<'a> Machine<'a, '_> {
         let count = match op {
             O::MoveTo | O::RelativeMoveTo | O::LineTo | O::RelativeLineTo | O::Translate | O::Scale => 2,
             O::CurveTo | O::RelativeCurveTo => 6,
+            O::Arc | O::ArcNegative => 5,
             O::SetRgbColor => 3,
-            O::SetCmykColor | O::RectFill | O::RectStroke => 4,
+            O::SetCmykColor | O::RectFill | O::RectStroke | O::RectClip => 4,
             O::Rotate | O::SetGray | O::SetLineWidth | O::SetLineCap | O::SetLineJoin | O::SetMiterLimit => 1,
             _ => 0,
         };
@@ -661,10 +674,29 @@ impl<'a> Machine<'a, '_> {
             O::RelativeLineTo => graphics.relative_line_to(args[0], args[1])?,
             O::CurveTo => graphics.curve_to(args)?,
             O::RelativeCurveTo => graphics.relative_curve_to(args)?,
+            O::Arc | O::ArcNegative => {
+                let mut failure = None;
+                let result = graphics.arc(args[..5].try_into().unwrap(), op == O::ArcNegative, || match work
+                    .tick()
+                {
+                    Ok(()) => false,
+                    Err(error) => {
+                        failure = Some(error);
+                        true
+                    }
+                });
+                if let Some(error) = failure {
+                    return Err(error);
+                }
+                result?;
+            }
+            O::Clip | O::EvenOddClip => graphics.clip(op == O::EvenOddClip)?,
+            O::InitClip => graphics.init_clip(),
             O::ClosePath => graphics.close_path()?,
             O::Stroke => graphics.paint(EpsPaintKind::Stroke)?,
             O::Fill => graphics.paint(EpsPaintKind::FillNonZero)?,
             O::EvenOddFill => graphics.paint(EpsPaintKind::FillEvenOdd)?,
+            O::RectClip => graphics.clip_rectangle(args[0], args[1], args[2], args[3])?,
             O::RectFill | O::RectStroke => graphics.paint_rectangle(
                 args[0],
                 args[1],
@@ -903,12 +935,18 @@ fn operator(word: &[u8]) -> Option<EpsOperator> {
         b"rlineto" => O::RelativeLineTo,
         b"curveto" => O::CurveTo,
         b"rcurveto" => O::RelativeCurveTo,
+        b"arc" => O::Arc,
+        b"arcn" => O::ArcNegative,
+        b"clip" => O::Clip,
+        b"eoclip" => O::EvenOddClip,
+        b"initclip" => O::InitClip,
         b"closepath" => O::ClosePath,
         b"stroke" => O::Stroke,
         b"fill" => O::Fill,
         b"eofill" => O::EvenOddFill,
         b"rectfill" => O::RectFill,
         b"rectstroke" => O::RectStroke,
+        b"rectclip" => O::RectClip,
         b"setgray" => O::SetGray,
         b"setrgbcolor" => O::SetRgbColor,
         b"setcmykcolor" => O::SetCmykColor,
@@ -1682,6 +1720,38 @@ mod vector_tests {
             max_saved_states: 16,
         }
     }
+    #[test]
+    fn arc_operators_execute_and_account_each_generated_piece() {
+        let root = MemoryBudget::new(100_000);
+        for code in [
+            b"0 0 2 0 360 arc currentpoint stroke".as_slice(),
+            b"0 0 2 360 0 arcn currentpoint stroke".as_slice(),
+        ] {
+            let program = compile(code, &root);
+            let result = evaluate_eps_vectors(&program, vm(), graphics(), &root, || false).unwrap();
+            assert_eq!(result.scene.paints()[0].node_count, 5);
+            assert_eq!(
+                result.evaluation.values(),
+                &[
+                    EpsValue::Number(EpsNumber::Real(2.)),
+                    EpsValue::Number(EpsNumber::Real(0.))
+                ]
+            );
+            drop(result);
+            drop(program);
+            assert_eq!(root.used(), 0);
+        }
+        let program = compile(b"0 0 2 0 7200 arc stroke", &root);
+        let before = root.used();
+        let limited = EpsVmLimits { max_work: 20, ..vm() };
+        assert!(matches!(
+            evaluate_eps_vectors(&program, limited, graphics(), &root, || false),
+            Err(EpsVmError::Limit(EpsVmLimit::Work))
+        ));
+        assert_eq!(root.used(), before);
+        drop(program);
+        assert_eq!(root.used(), 0);
+    }
     fn compile<'a>(code: &'a [u8], root: &MemoryBudget) -> EpsProgram<'a> {
         compile_eps_program(
             &EpsSource {
@@ -1828,7 +1898,7 @@ mod vector_tests {
             b"0 0 moveto 1 1 lineto stroke unknown".as_slice(),
             b"1 2 lineto",
             b"0 0 moveto 1 1 lineto stroke 1.0 setlinecap",
-            b"0 0 moveto 1 1 lineto stroke clip",
+            b"0 0 moveto 1 1 lineto stroke clippath",
             b"0 0 0 0 setcmykcolor currentrgbcolor",
         ] {
             let program = compile(code, &root);

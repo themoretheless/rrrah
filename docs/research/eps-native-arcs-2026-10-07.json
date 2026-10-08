@@ -1,0 +1,61 @@
+{
+  "date": "2026-10-07",
+  "implementation": "native Rust EPS arc/arcn, signed radius, cubic pieces <=90 degrees, user CTM, preserved multi-turn sweep",
+  "reference_spec": "https://www.adobe.com/jp/print/postscript/pdfs/PLRM.pdf",
+  "oracle": {
+    "ghostscript_version": "10.05.1",
+    "binary_sha256": "e522a84dc98345933621efba59577afe76d8f2d241ae103a92e6ccd37812b290",
+    "source_sha256": "a541ae15e7327dd67d1e87d1e0457449928019118668cde92d5ee2beb8896d50",
+    "fill_adjust": [
+      0,
+      0
+    ]
+  },
+  "qualified_cases": [
+    "circle",
+    "clockwise_circle",
+    "pie",
+    "twice_evenodd",
+    "negative_radius"
+  ],
+  "qualification_scope": "explicit EPS file API, one sample per pixel, zero Ghostscript fill adjustment; normal viewer four-sample defaults remain unchanged",
+  "exact_native_pixels": 320,
+  "exact_metal_pixels": 5120,
+  "decoder_tests": {
+    "passed": 953,
+    "failed": 0,
+    "ignored": 65,
+    "log": "/tmp/rrrah-native-arcs-final-full.log"
+  },
+  "metal_tests": {
+    "passed": 8,
+    "failed": 0,
+    "log": "/tmp/rrrah-native-arcs-final-metal.log",
+    "adapter": "Apple M4 Max"
+  },
+  "invariants": [
+    "all path nodes in shared admitted arena",
+    "node preflight before mutation",
+    "per-piece VM work/cancellation checks",
+    "full active-path rollback on range/cancel failure",
+    "budget root releases on execution failure and last-owner drop"
+  ],
+  "open_gates": [
+    {
+      "fixture": "arc-pixel-ghostscript-reference.json",
+      "first_difference": "circle pixel 9 channel 0: native 255, Ghostscript 0",
+      "settings": "native default 4x4 samples versus GS one sample and default fill adjustment"
+    },
+    {
+      "fixture": "arc-pixel-zero-adjust-ghostscript-reference.json",
+      "first_difference": "ellipse pixel 19 channel 0: native 255, Ghostscript 0",
+      "settings": "one sample, zero oracle fill adjustment; strict six-case ignored gate retained"
+    }
+  ],
+  "limitations": [
+    "selected authored 8x8 fixtures only",
+    "full EPS clipping/fonts/images/arrays/dictionaries still unsupported",
+    "no physical HDR or NVIDIA proof",
+    "changes local, not pushed"
+  ]
+}

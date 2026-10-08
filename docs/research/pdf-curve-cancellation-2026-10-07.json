@@ -1,0 +1,13 @@
+{
+  "scope": "Cancellation during precise PDF fill subdivision",
+  "implementation": "Optional interpreter cancellation predicate is wired to the decoder GenerationToken. Both planning and materialization poll at each path element and recursive subdivision node, with additional checks before and after storage admission.",
+  "active_test": "pdf::precise_fill_tests::curve_cancellation_at_every_checkpoint_releases_shared_credit",
+  "verified": "Cancel sequentially at every checkpoint observed in a successful two-pass curved path, including after admission. Each run refuses without retaining shared managed credit.",
+  "decoder_library": {"passed": 971, "failed": 0, "ignored": 66},
+  "log": "/tmp/rrrah-pdf-curve-cancel-full.log",
+  "limitations": [
+    "This does not interrupt every parser or renderer operation.",
+    "No wall-clock cancellation latency bound is measured.",
+    "Real AI/PDF performance qualification remains incomplete."
+  ]
+}

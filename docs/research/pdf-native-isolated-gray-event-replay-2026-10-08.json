@@ -1,0 +1,21 @@
+{
+  "scope": "Actual authored PDF isolated Gray group over RGB page; native test-only replay",
+  "passed": 112,
+  "failed": 0,
+  "ignored": 9,
+  "filtered": 1,
+  "seconds": 2.47,
+  "log": "/tmp/rrrah-native-gray-pdf-verified.log",
+  "checks": [
+    "PDF declared DeviceGray group is captured as explicit Gray",
+    "Overlap RGB 0.625 0.125 0.125 alpha 1 exactly",
+    "Gray-only region RGB 0.25 0.25 0.25 alpha 0.5 exactly",
+    "Every replay allocation refusal releases all tracked bytes",
+    "Every replay cancellation checkpoint refuses partial output and releases all tracked bytes"
+  ],
+  "limitations": [
+    "Authored fixture and analytic expectations; no independent external pixel oracle in this turn",
+    "Test-only compositor, not production AI or Metal integration",
+    "Nonisolated cross-space backdrops and ICC transforms remain unsupported"
+  ]
+}

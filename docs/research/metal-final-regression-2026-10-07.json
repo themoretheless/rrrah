@@ -1,0 +1,245 @@
+{
+  "gpu_backend": "metal",
+  "gpu_optional": false,
+  "storage_soak_seconds_per_mode": 10,
+  "gpu_policy_cycles": 3,
+  "suites": [
+    {
+      "suite": "cache",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-cache",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target"
+      ],
+      "exit_code": 0,
+      "passed": 132,
+      "failed": 0,
+      "ignored": 2,
+      "ignored_tests": [
+        "test sustained_byte_cap_evicts_without_count_or_ttl_pressure ... ignored, manual sustained independent byte-cap qualification",
+        "test sustained_large_keyspace_delayed_swap_pressure_and_retry ... ignored, manual sustained delayed-I/O pressure qualification; default 60 seconds"
+      ],
+      "log": "/private/tmp/rrrah-metal-final-regression-20261007/cache.log"
+    },
+    {
+      "suite": "cuda-host",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-cuda",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target"
+      ],
+      "exit_code": 0,
+      "passed": 5,
+      "failed": 0,
+      "ignored": 1,
+      "ignored_tests": [
+        "test tests::nvidia_full_output_boundaries_hdr_alpha_and_managed_limits ... ignored, requires CUDA-capable NVIDIA driver on 64-bit Linux/Windows; never a CPU fallback"
+      ],
+      "log": "/private/tmp/rrrah-metal-final-regression-20261007/cuda-host.log"
+    },
+    {
+      "suite": "prefetch",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--bin",
+        "rrrah",
+        "prefetch",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target"
+      ],
+      "exit_code": 0,
+      "passed": 24,
+      "failed": 0,
+      "ignored": 6,
+      "ignored_tests": [
+        "test foreground_loader_tests::real_ai_pages_use_shared_ram_hits_and_independent_prefetch_keys ... ignored, requires pinned AI source corpus; set RRRAH_AI_CORPUS",
+        "test gallery::tests::eip_prefetch_restores_exact_sensor_and_fingerprints_complete_package ... ignored, requires authored EIP pair and local EOS R8 CR3",
+        "test gallery::tests::raw_prefetch_byte_limit_preserves_present_priority_neighbour ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture",
+        "test gallery::tests::raw_prefetch_count_limit_counts_retained_neighbours_after_missing_file ... ignored, requires external Sony DSC-F828 SRF fixture",
+        "test gallery::tests::raw_prefetch_count_limit_preserves_highest_priority_neighbour ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture",
+        "test gallery::tests::raw_prefetch_respects_shared_budget_and_recovers_after_release ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture"
+      ],
+      "log": "/private/tmp/rrrah-metal-final-regression-20261007/prefetch.log"
+    },
+    {
+      "suite": "model-swap",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--bin",
+        "rrrah",
+        "model_swap",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target"
+      ],
+      "exit_code": 0,
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/private/tmp/rrrah-metal-final-regression-20261007/model-swap.log"
+    },
+    {
+      "suite": "model-gpu",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--test",
+        "model_readback",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target"
+      ],
+      "exit_code": 0,
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/private/tmp/rrrah-metal-final-regression-20261007/model-gpu.log"
+    },
+    {
+      "suite": "hdr-ttl-gpu",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--test",
+        "hdr_raster_swap",
+        "--test",
+        "ttl_swap_metal",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target"
+      ],
+      "exit_code": 0,
+      "passed": 14,
+      "failed": 0,
+      "ignored": 3,
+      "ignored_tests": [
+        "test pict_external_directbits_oracle_swap_pressure_and_metal ... ignored, requires actual GPU and external PICT/TwelveMonkeys corpus",
+        "test expired_eip_lease_and_swap_restore_match_original_cr3_metal_frame ... ignored, requires authored EIP and actual Metal GPU",
+        "test live_count_size_and_ttl_changes_preserve_hdr_frames_through_swap ... ignored, manual hardware qualification"
+      ],
+      "log": "/private/tmp/rrrah-metal-final-regression-20261007/hdr-ttl-gpu.log"
+    },
+    {
+      "suite": "gpu",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-gpu",
+        "--lib",
+        "--test",
+        "compute_readback",
+        "--test",
+        "readback",
+        "--test",
+        "raster_readback",
+        "--test",
+        "model_readback",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target"
+      ],
+      "exit_code": 0,
+      "passed": 80,
+      "failed": 0,
+      "ignored": 3,
+      "ignored_tests": [
+        "test full_sensor_linear_exposure_chunked_readback ... ignored, allocates about 0.8 GB of GPU buffers; full-resolution local qualification",
+        "test full_sensor_managed_exposure_budgets_and_checks_every_pixel ... ignored, full-resolution managed compute uses about 2 GB of tracked buffers",
+        "test qualified_sd10_linear_raster_full_frame_display_readback ... ignored, requires qualified X3F linear sRGB PPM and a physical GPU"
+      ],
+      "log": "/private/tmp/rrrah-metal-final-regression-20261007/gpu.log"
+    },
+    {
+      "suite": "storage-soak",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-cache",
+        "--test",
+        "sustained_swap",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target",
+        "--",
+        "--include-ignored",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/private/tmp/rrrah-metal-final-regression-20261007/storage-soak.log"
+    },
+    {
+      "suite": "gpu-policy-cycles",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--test",
+        "ttl_swap_metal",
+        "live_count_size_and_ttl_changes_preserve_hdr_frames_through_swap",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target",
+        "--",
+        "--include-ignored",
+        "--nocapture"
+      ],
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/private/tmp/rrrah-metal-final-regression-20261007/gpu-policy-cycles.log"
+    }
+  ],
+  "complete_suite_execution": true,
+  "limitations": [
+    "Passing host CUDA tests does not qualify NVIDIA hardware.",
+    "Metal readback does not qualify physical HDR display.",
+    "Ignored tests are unverified, not passing.",
+    "These regression suites do not prove all 100 formats or sustained slow-disk workloads."
+  ],
+  "summary": {
+    "passed_test_executions": 273,
+    "failed_test_executions": 0,
+    "ignored_test_instances": 15,
+    "note": "Repeated suites count repeated executions; selected manual ignored tests execute separately. Other ignored tests remain unverified."
+  }
+}

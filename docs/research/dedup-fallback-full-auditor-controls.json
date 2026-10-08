@@ -1,0 +1,30 @@
+{
+  "status": "verified_fallback_full_auditor_corruption_rejections",
+  "cases": [
+    {
+      "case": "incomplete_terminal",
+      "rejected": true
+    },
+    {
+      "case": "shrunk_denominator",
+      "rejected": true
+    },
+    {
+      "case": "boolean_returncode",
+      "rejected": true
+    },
+    {
+      "case": "boolean_attempts",
+      "rejected": true
+    },
+    {
+      "case": "miss_stopped_early",
+      "rejected": true
+    }
+  ],
+  "input_hashes": {
+    "docs/research/dedup-fallback-release-original-full-checkpoint-5-initial.json": "50bbbb0770d0ca03782399de54e6b1b2769f0d057a47a445d32a2bba13e6f6ad",
+    "scripts/verify-dedup-fallback-release-original-full.py": "4ded3e80993a37f73d536062647ec42a8783353cf755b0ce6205b83f19584ee2"
+  },
+  "scope": "Five corrupted-report checks; no full-corpus correctness or precision claim."
+}

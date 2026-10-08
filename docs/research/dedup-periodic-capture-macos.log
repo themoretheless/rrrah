@@ -1,0 +1,31 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: unused variable: `cancel`
+   --> crates/rrrah-dedup/src/local_index.rs:715:5
+    |
+715 |     cancel: impl Fn() -> bool,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_cancel`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-dedup` (lib) generated 1 warning (run `cargo fix --lib -p rrrah-dedup` to apply 1 suggestion)
+    Finished `test` profile [optimized + debuginfo] target(s) in 3.10s
+     Running tests/periodic_capture.rs (target/debug/deps/periodic_capture-14e1b3348e543327)
+
+running 1 test
+test periodic_capture_bands_keep_strict_evidence_and_reject_broad_content_changes ... FAILED
+
+failures:
+
+---- periodic_capture_bands_keep_strict_evidence_and_reject_broad_content_changes stdout ----
+
+thread 'periodic_capture_bands_keep_strict_evidence_and_reject_broad_content_changes' (6539992) panicked at crates/rrrah-dedup/tests/periodic_capture.rs:37:109:
+called `Result::unwrap()` on an `Err` value: Fit(OutsidePolicy { channel: 0 })
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    periodic_capture_bands_keep_strict_evidence_and_reject_broad_content_changes
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p rrrah-dedup --test periodic_capture`

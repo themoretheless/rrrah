@@ -97,7 +97,10 @@ fn bilinear_demosaic(position: vec2<i32>) -> vec3<f32> {
     let color = cfa_color(position);
     if color == 0u { return vec3<f32>(center, axial, diagonal); }
     if color == 2u { return vec3<f32>(diagonal, axial, center); }
-    let horizontal_color = cfa_color(position + vec2<i32>(1, 0));
+    // CFA direction follows the repeating lattice even when the adjacent
+    // sample lies outside the sensor. Clamp sample reads, not lattice phase.
+    let horizontal_phase = u32(position.y & 1) * 2u + u32((position.x + 1) & 1);
+    let horizontal_color = parameters.cfa[horizontal_phase];
     if horizontal_color == 0u {
         return vec3<f32>(0.5 * (west + east), center, 0.5 * (north + south));
     }
@@ -295,8 +298,10 @@ fn fs_main(@builtin(position) fragment: vec4<f32>) -> @location(0) vec4<f32> {
         return vec4<f32>(0.012, 0.014, 0.018, 1.0);
     }
     let raw_uv = inverse_orientation(display_uv);
-    let crop_extent = max(vec2<f32>(parameters.crop_size) - vec2<f32>(1.0), vec2<f32>(0.0));
-    let raw_position = vec2<f32>(parameters.crop_origin) + raw_uv * crop_extent;
+    // Pixel centers span the full crop extent. Area filters add 0.5 to
+    // recover sensor-cell boundaries; shrinking by one distorts footprints.
+    let raw_position = vec2<f32>(parameters.crop_origin)
+        + raw_uv * vec2<f32>(parameters.crop_size) - vec2<f32>(0.5);
     let linear_rgb = developed_rgb_at(raw_position, 1.0 / scale);
     if parameters._padding.y == 1u { return vec4<f32>(linear_rgb, 1.0); }
     return vec4<f32>(aces_tone_map(linear_rgb), 1.0);

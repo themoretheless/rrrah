@@ -1,0 +1,55 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+warning: unused import: `LocalFileError`
+  --> crates/rrrah-dedup/tests/five_collection.rs:49:13
+   |
+49 |             LocalFileError, ProjectiveComplementaryFilePolicy, ProjectivePortfolioFilePolicy,
+   |             ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `compare_local_files_projective`
+ --> crates/rrrah-dedup/tests/region_grid_files.rs:8:35
+  |
+8 |     local_scan::{LocalFilePolicy, compare_local_files_projective},
+  |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `compare_local_files_projective_pyramid_photometric`
+  --> crates/rrrah-dedup/tests/region_grid_files.rs:50:13
+   |
+50 |             compare_local_files_projective_pyramid_photometric,
+   |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `rrrah-dedup` (test "region_grid_files") generated 2 warnings (run `cargo fix --test "region_grid_files" -p rrrah-dedup` to apply 2 suggestions)
+warning: `rrrah-dedup` (test "five_collection") generated 1 warning (run `cargo fix --test "five_collection" -p rrrah-dedup` to apply 1 suggestion)
+    Finished `test` profile [optimized + debuginfo] target(s) in 5.19s
+     Running tests/five_collection.rs (/Users/themoretheless/.codex/tmp/rrrah-dedup-atomic-20261006/target/debug/deps/five_collection-a1d99f20d0fbcfbe)
+
+running 1 test
+test five_search_collection_matches_direct_and_source_lifecycle has been running for over 60 seconds
+test five_search_collection_matches_direct_and_source_lifecycle ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 118.82s
+
+     Running tests/region_grid_files.rs (/Users/themoretheless/.codex/tmp/rrrah-dedup-atomic-20261006/target/debug/deps/region_grid_files-8ae9aeab2d72b46b)
+
+running 1 test
+test automatic_region_grid_matches_declared_regions_and_lifecycle ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.94s
+

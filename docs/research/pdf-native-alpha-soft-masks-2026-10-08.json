@@ -1,0 +1,39 @@
+{
+  "scope": "Test-only recursive native alpha soft-mask replay with original bounded transfer and masked leaf/group composition; luminosity masks remain unsupported",
+  "source_sha256": {
+    "vendor/hayro-interpret/src/soft_mask.rs": "bf68a7c37e66dae26f282e3e94449f14918826b03ecd2e698570638de5c38788",
+    "vendor/hayro/src/native_frame.rs": "1d2390c623fd73550e61ca1854da77348b7663973fef3e491de441f7e52cee76",
+    "vendor/hayro/src/knockout_interpreter.rs": "73e5967f859a1dad5185d237331476b6ee26731bd3d84ad318e01cae685aed63"
+  },
+  "suite": {
+    "passed": 108,
+    "failed": 0,
+    "ignored": 9,
+    "seconds": 2.47,
+    "log": "/tmp/rrrah-native-alpha-mask-verified-controls.log"
+  },
+  "verified": [
+    "Mask alpha comes from recursive native scene result, not RGBA8 or cached8bit mask",
+    "Original transfer function metadata associated with Mask event, separately admitted",
+    "Authored PDF alpha0.5 transferred byxSquared yields exactly0.25; red/blue overlap opaqueRGB0.75,0,0.25",
+    "Authored AIS mask scene yields nativeRGB0.625,0.125,0.125 vs AISfalseRGB0.625,0.625,0.625 over white",
+    "Zero mask with AIStrue retains prior knockout content; AISfalse may replace it inside full geometric shape",
+    "Masked leaf and group opacity changes source alpha and AIS shape independently",
+    "All representative masked and unmasked2x1 replay admissions/cancellations refuse partial output and release replay credit"
+  ],
+  "allocation": "Native mask f64 vector credited before reservation. Frame stack includes mask metadata; transfer metadata vector capacity separately admitted. Mask retained until consumed by group or cleared.",
+  "limits": {
+    "recursive_mask_depth": 32,
+    "mask_pixels": 16777216,
+    "function_work_steps": 4096
+  },
+  "remaining": [
+    "Luminosity masks with native color and background",
+    "Mixed-space mask/group boundaries",
+    "Invalid transfer declaration handling and parsing/admission",
+    "Native images/shading",
+    "Admitted ICC/default output policies",
+    "Real AI oracle qualification and production/Metal integration"
+  ],
+  "production_enabled": false
+}

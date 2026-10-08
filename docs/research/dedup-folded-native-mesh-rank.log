@@ -1,0 +1,49 @@
+   Compiling rrrah-core v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-core)
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+warning: calls to `std::mem::drop` with a value that implements `Copy` does nothing
+   --> crates/rrrah-dedup/examples/mesh_rank_probe.rs:130:5
+    |
+130 |     drop(av);
+    |     ^^^^^--^
+    |          |
+    |          argument has type `LinearRgbaView<'_>`
+    |
+    = note: `#[warn(dropping_copy_types)]` on by default
+help: use `let _ = ...` to ignore the expression or result
+    |
+130 -     drop(av);
+130 +     let _ = av;
+    |
+
+warning: calls to `std::mem::drop` with a value that implements `Copy` does nothing
+   --> crates/rrrah-dedup/examples/mesh_rank_probe.rs:131:5
+    |
+131 |     drop(bv);
+    |     ^^^^^--^
+    |          |
+    |          argument has type `LinearRgbaView<'_>`
+    |
+help: use `let _ = ...` to ignore the expression or result
+    |
+131 -     drop(bv);
+131 +     let _ = bv;
+    |
+
+warning: `rrrah-dedup` (example "mesh_rank_probe") generated 2 warnings
+    Finished `dev` profile [optimized + debuginfo] target(s) in 13.04s
+     Running `target/debug/examples/mesh_rank_probe docs/research/dedup-folded-qualified-landmarks.txt /Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201700.jpg /Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/201702.jpg`

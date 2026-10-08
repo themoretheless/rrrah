@@ -1,0 +1,23 @@
+{
+  "change": "Reject MEF sensor strips intersecting parsed out-of-line TIFF metadata fields before sensor allocation",
+  "existing_protection": "TIFF directory tables remain protected; inline values are covered by those tables",
+  "verification": [
+    "Exact field boundaries accepted, partial/full/enclosing intersections refused",
+    "Pinned real Mamiya ZD full sensor hash remains equal independent oracle",
+    "Relocated sensor still exact",
+    "Real file admission, shared ownership and cancellation tests pass"
+  ],
+  "tests": {
+    "real_camera": "3 passed, zero failures; separate file-oracle test excluded because RRRAH_MEF_ORACLE unset",
+    "decoder_library": "966 passed, zero failures, 65 ignored"
+  },
+  "logs": [
+    "/tmp/rrrah-mef-metadata-overlap-qualified.log",
+    "/tmp/rrrah-mef-metadata-overlap-all.log"
+  ],
+  "limitations": [
+    "Native camera white balance unresolved",
+    "No MEF color viewer support added",
+    "Protects parsed directories/fields, not unparsed proprietary metadata"
+  ]
+}

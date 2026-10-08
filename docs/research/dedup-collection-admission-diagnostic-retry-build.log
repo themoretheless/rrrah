@@ -1,0 +1,25 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/.codex/tmp/rrrah-dedup-collection-admission-diagnostic-snapshot-20261008-retry/crates/rrrah-dedup)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+warning: unused import: `search_anchor_rank_geometry_fallback_files`
+   --> crates/rrrah-dedup/examples/candidate_collection_admission_probe.rs:118:72
+    |
+118 |     use rrrah_dedup::{anchor_rank::AnchorRankPolicy,anchor_rank_file::{search_anchor_rank_geometry_fallback_files,AnchorGeometryFal...
+    |                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-dedup` (example "candidate_collection_admission_probe") generated 1 warning (run `cargo fix --example "candidate_collection_admission_probe" -p rrrah-dedup` to apply 1 suggestion)
+    Finished `dev` profile [optimized + debuginfo] target(s) in 16.91s

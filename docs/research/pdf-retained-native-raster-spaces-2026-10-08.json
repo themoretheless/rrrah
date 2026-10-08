@@ -1,0 +1,86 @@
+{
+  "scope": "Retain resolved original raster color-space identity alongside compatibility pixels",
+  "controls": {
+    "passed": 114,
+    "failed": 0,
+    "ignored": 10,
+    "log": "/tmp/rrrah-native-raster-spaces-controls.log"
+  },
+  "checks": [
+    "Authored inline Gray RGB CMYK images retain original coordinate model with exact associated event index",
+    "Color-space metadata admitted before retained vector entry",
+    "Real AI capture and replay release all tracked credits"
+  ],
+  "real_ai_pages": [
+    {
+      "fixture": "VectorApple.ai",
+      "page": 0,
+      "width": 301,
+      "height": 246,
+      "peak_admitted_bytes": 48094872,
+      "final_admitted_bytes": 0,
+      "status": "native_diagnostic",
+      "native_completed": false,
+      "capture_failed": false,
+      "capture_ms": 1649.8870829999998,
+      "native_replay_ms": 12.41725,
+      "deadline_expired": false,
+      "events": 2755,
+      "native_paints": 463,
+      "raster_events": 3,
+      "raster_source_models": [
+        "event=3,model=None",
+        "event=1218,model=Some(Cmyk)",
+        "event=2298,model=Some(Cmyk)"
+      ],
+      "shading_events": 13,
+      "page_model": "Cmyk"
+    },
+    {
+      "fixture": "one.ai",
+      "page": 0,
+      "width": 1366,
+      "height": 768,
+      "peak_admitted_bytes": 168322584,
+      "final_admitted_bytes": 0,
+      "status": "native_diagnostic",
+      "native_completed": true,
+      "capture_failed": false,
+      "capture_ms": 1.9566660000000002,
+      "native_replay_ms": 3442.928541,
+      "deadline_expired": false,
+      "events": 8,
+      "native_paints": 2,
+      "raster_events": 0,
+      "raster_source_models": [],
+      "shading_events": 0,
+      "page_model": "Rgb"
+    },
+    {
+      "fixture": "one.ai",
+      "page": 1,
+      "width": 177,
+      "height": 175,
+      "peak_admitted_bytes": 4957320,
+      "final_admitted_bytes": 0,
+      "status": "native_diagnostic",
+      "native_completed": true,
+      "capture_failed": false,
+      "capture_ms": 0.04625,
+      "native_replay_ms": 56.868458,
+      "deadline_expired": false,
+      "events": 1,
+      "native_paints": 0,
+      "raster_events": 0,
+      "raster_source_models": [],
+      "shading_events": 0,
+      "page_model": "Rgb"
+    }
+  ],
+  "limitations": [
+    "Original component sample arrays are not retained yet; compatibility raster samples already converted",
+    "blending_model None indicates a source without direct Gray/RGB/CMYK blending coordinates; does not establish missing metadata",
+    "First VectorApple raster remains unsupported; following two raster sources are CMYK",
+    "No production AI or Metal integration qualification"
+  ]
+}

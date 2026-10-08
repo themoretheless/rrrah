@@ -1,0 +1,15 @@
+{
+  "scope": "Active regression for viewport-bounded PDF mesh sampling",
+  "test": "encode::sample_bounds_tests::fractional_texture_bounds_preserve_every_consumed_sample",
+  "runner": "python3 scripts/test-pdf-mesh-bounds.py",
+  "verified": [
+    "25 fractional origin/extent combinations under identity and skewed affine transforms",
+    "Zero extent, subpixel extent and partially covered final texture pixels",
+    "Bit-identical coverage and every color component for all samples consumed by the texture",
+    "Fewer retained sample entries with a triangle outside the texture region"
+  ],
+  "result": {"passed": 1, "failed": 0},
+  "log": "/tmp/rrrah-mesh-bounds-runner.log",
+  "method": "Isolated vendor test workspace uses current hayro-interpret and patched moxcms source without modifying the product workspace or lockfile.",
+  "remaining": "Comprehensive renderer allocation admission, full AI fidelity, physical HDR/NVIDIA and remaining formats are incomplete."
+}

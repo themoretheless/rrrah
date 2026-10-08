@@ -1,0 +1,17 @@
+{
+  "status": "verified_native_linux_candidate_union_fallback_controls",
+  "returncode": 0,
+  "tests": 30,
+  "suite_counts": [
+    7,
+    2,
+    2,
+    19
+  ],
+  "verified_snapshot_files": 2828,
+  "input_hashes": {
+    "docs/research/dedup-candidate-union-fallback-linux-snapshot.json": "1a10f75b5e10d19962c0fdaf866e5501392f43809c7998cc789463df53068c09",
+    "docs/research/dedup-candidate-union-fallback-linux-native.log": "e9685af50626784e321adbe2f2da4bd9802f1c2fa334339dd2bca81ce186fa24"
+  },
+  "scope": "Seven compound tests include direct fallback symmetric preservation, all-three misses, cumulative pre-I/O admission, deferred cancellation and source append/refusal/restored retry. Snapshot predates fallback collection integration; not current collection Linux proof."
+}

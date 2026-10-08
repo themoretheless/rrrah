@@ -1,0 +1,197 @@
+{
+  "status": "finished",
+  "paths": [
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/original/200000.png",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/strong/200001.png",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/original/207300.png",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/strong/207302.png",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/original/208100.png",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/strong/208102.png"
+  ],
+  "input_hashes": {
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/photo-probe-distance-kernel": "489d3a7706c44161719e0e78428bd263e02e909a680d5cd36c4400d49741e05b",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/original/200000.png": "04b702e544dbcf4f34b5258d546ad24ef872fbb70ff648106a1dfc366862d0dd",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/strong/200001.png": "d79c537b125d6160fbd3657d519cf8f650c7f4941b0452de9271190ba5ea2dfc",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/original/207300.png": "98a844920106eb9f41ad57d9cfd548fd4e91af171186969cbc45cf3aeaa3a388",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/strong/207302.png": "9edaa0baea5ba1c4c01356579823236a6d5ef698a02671d80f7a15ef9a244b70",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/original/208100.png": "9da059a8cfd5c51674df8f9efea5f92d7ddf7ca924bae1741dfbce00ffba4785",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/strong/208102.png": "cec437081da60a76b924fc4b1b285af398b7adaacf7bc1ea4e3abbcf9ce509c9"
+  },
+  "returncode": 0,
+  "stdout": "{\"status\":\"verified_kernel_experiment\",\"records\":[{\"recipe\":\"Fixed\",\"radius\":0,\"descriptors\":5108,\"queries\":128,\"accepted\":128,\"full_ns\":[44746417, 66020916, 58623625, 44349708, 56035875],\"bounded_ns\":[8053959, 7645542, 10102292, 13032125, 12151333]},{\"recipe\":\"Fixed\",\"radius\":0.1,\"descriptors\":5108,\"queries\":128,\"accepted\":133,\"full_ns\":[51021917, 46626417, 62077750, 79588584, 49484791],\"bounded_ns\":[16005459, 16478500, 14541708, 25187000, 16513208]},{\"recipe\":\"Fixed\",\"radius\":0.5,\"descriptors\":5108,\"queries\":128,\"accepted\":2387,\"full_ns\":[45594125, 44567291, 44327792, 49232916, 44903542],\"bounded_ns\":[49537417, 41643833, 39907542, 50027084, 44638708]},{\"recipe\":\"Fixed\",\"radius\":4,\"descriptors\":5108,\"queries\":128,\"accepted\":653824,\"full_ns\":[67501375, 45501375, 45503542, 44984875, 49164250],\"bounded_ns\":[61864708, 62728166, 62804041, 61824958, 68288792]},{\"recipe\":\"Interpolated\",\"radius\":0,\"descriptors\":5108,\"queries\":128,\"accepted\":128,\"full_ns\":[49823792, 48922125, 56534333, 58829167, 58382584],\"bounded_ns\":[12041875, 9596417, 8058334, 8537875, 9613125]},{\"recipe\":\"Interpolated\",\"radius\":0.1,\"descriptors\":5108,\"queries\":128,\"accepted\":150,\"full_ns\":[51690209, 68439833, 72888667, 50365542, 63768333],\"bounded_ns\":[17441834, 31872959, 20100458, 18889833, 19740083]},{\"recipe\":\"Interpolated\",\"radius\":0.5,\"descriptors\":5108,\"queries\":128,\"accepted\":19445,\"full_ns\":[54973542, 54898000, 44875416, 49391791, 47406416],\"bounded_ns\":[65344958, 76242666, 63143333, 61210167, 55693042]},{\"recipe\":\"Interpolated\",\"radius\":4,\"descriptors\":5108,\"queries\":128,\"accepted\":653824,\"full_ns\":[44570750, 47456750, 48768125, 45657584, 45762208],\"bounded_ns\":[61418417, 68756042, 65614000, 64707875, 65940834]}],\"scope\":\"Real native descriptor arrays, five alternating timing samples; exact accepted distances and decisions. Isolated kernel experiment under current host load; no production change or end-to-end speed claim.\"}\n",
+  "stderr": "",
+  "native": {
+    "status": "verified_kernel_experiment",
+    "records": [
+      {
+        "recipe": "Fixed",
+        "radius": 0,
+        "descriptors": 5108,
+        "queries": 128,
+        "accepted": 128,
+        "full_ns": [
+          44746417,
+          66020916,
+          58623625,
+          44349708,
+          56035875
+        ],
+        "bounded_ns": [
+          8053959,
+          7645542,
+          10102292,
+          13032125,
+          12151333
+        ]
+      },
+      {
+        "recipe": "Fixed",
+        "radius": 0.1,
+        "descriptors": 5108,
+        "queries": 128,
+        "accepted": 133,
+        "full_ns": [
+          51021917,
+          46626417,
+          62077750,
+          79588584,
+          49484791
+        ],
+        "bounded_ns": [
+          16005459,
+          16478500,
+          14541708,
+          25187000,
+          16513208
+        ]
+      },
+      {
+        "recipe": "Fixed",
+        "radius": 0.5,
+        "descriptors": 5108,
+        "queries": 128,
+        "accepted": 2387,
+        "full_ns": [
+          45594125,
+          44567291,
+          44327792,
+          49232916,
+          44903542
+        ],
+        "bounded_ns": [
+          49537417,
+          41643833,
+          39907542,
+          50027084,
+          44638708
+        ]
+      },
+      {
+        "recipe": "Fixed",
+        "radius": 4,
+        "descriptors": 5108,
+        "queries": 128,
+        "accepted": 653824,
+        "full_ns": [
+          67501375,
+          45501375,
+          45503542,
+          44984875,
+          49164250
+        ],
+        "bounded_ns": [
+          61864708,
+          62728166,
+          62804041,
+          61824958,
+          68288792
+        ]
+      },
+      {
+        "recipe": "Interpolated",
+        "radius": 0,
+        "descriptors": 5108,
+        "queries": 128,
+        "accepted": 128,
+        "full_ns": [
+          49823792,
+          48922125,
+          56534333,
+          58829167,
+          58382584
+        ],
+        "bounded_ns": [
+          12041875,
+          9596417,
+          8058334,
+          8537875,
+          9613125
+        ]
+      },
+      {
+        "recipe": "Interpolated",
+        "radius": 0.1,
+        "descriptors": 5108,
+        "queries": 128,
+        "accepted": 150,
+        "full_ns": [
+          51690209,
+          68439833,
+          72888667,
+          50365542,
+          63768333
+        ],
+        "bounded_ns": [
+          17441834,
+          31872959,
+          20100458,
+          18889833,
+          19740083
+        ]
+      },
+      {
+        "recipe": "Interpolated",
+        "radius": 0.5,
+        "descriptors": 5108,
+        "queries": 128,
+        "accepted": 19445,
+        "full_ns": [
+          54973542,
+          54898000,
+          44875416,
+          49391791,
+          47406416
+        ],
+        "bounded_ns": [
+          65344958,
+          76242666,
+          63143333,
+          61210167,
+          55693042
+        ]
+      },
+      {
+        "recipe": "Interpolated",
+        "radius": 4,
+        "descriptors": 5108,
+        "queries": 128,
+        "accepted": 653824,
+        "full_ns": [
+          44570750,
+          47456750,
+          48768125,
+          45657584,
+          45762208
+        ],
+        "bounded_ns": [
+          61418417,
+          68756042,
+          65614000,
+          64707875,
+          65940834
+        ]
+      }
+    ],
+    "scope": "Real native descriptor arrays, five alternating timing samples; exact accepted distances and decisions. Isolated kernel experiment under current host load; no production change or end-to-end speed claim."
+  }
+}

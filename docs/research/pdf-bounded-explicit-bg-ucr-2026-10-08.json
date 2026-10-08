@@ -1,0 +1,41 @@
+{
+  "scope": "Bounded explicit exponential BG/UCR execution for bare RGB-to-CMYK in test-only native paint bridge; production scene replay unchanged",
+  "source_sha256": {
+    "vendor/hayro-interpret/src/color.rs": "a83099787b09d8fe4451a5edb7e5e9ebdde37304305dbc0f10b2df980b3766ea",
+    "vendor/hayro-interpret/src/function/mod.rs": "767fc1aadcde2a9c2257784817dc056c556dccdb48c57dd5c5a0f4d177ef5c2a",
+    "vendor/hayro-interpret/src/function/type2.rs": "29eff136f93057e32788e5e0a7391763048a00fc4cf8a60a4ecce15ae76324f4",
+    "vendor/hayro/src/native_paint.rs": "abf6565248efba54ecb6ea840438e196dd776f9c5aa962296169b777093079bd",
+    "vendor/hayro/src/knockout_interpreter.rs": "1d1e28e8c0395d5060673bdbc6f3f086e7b48d6f5d7440397bcf2f5ff849a8ae"
+  },
+  "interpreter_suite": {
+    "passed": 75,
+    "failed": 0,
+    "seconds": 0.11,
+    "log": "/tmp/rrrah-bounded-bg-ucr-interpreter-final.log"
+  },
+  "renderer_suite": {
+    "passed": 102,
+    "failed": 0,
+    "ignored": 8,
+    "seconds": 2.43,
+    "log": "/tmp/rrrah-bounded-bg-ucr-renderer-controls.log"
+  },
+  "verified": [
+    "Direct RGB0.2,0.4,0.6 with exponential BG0.1+0.2k and identity UCR yields CMYK0.4,0.2,0,0.18",
+    "Parsed authored PDF same conversion passes through captured NativePaint with independent shape0.5 and alpha0.5",
+    "Every6 RGB-to-CMYK cancellation checkpoint refuses output",
+    "Scalar domain and range clamps match independent0.1/0.25/0.5 references",
+    "Reversed domain, nonfinite input, fractional power of negative input and nonscalar outputs refuse",
+    "Defaults remain unresolved instead of silently choosing identity BG/UCR"
+  ],
+  "allocation": "Scalar Type2 evaluation uses fixed scalar/stack storage, no eval SmallVec or per-pixel heap allocation. At most2 powf operations per RGB conversion. Parsing/shared Function allocation admission remains incomplete.",
+  "remaining": [
+    "Bounded scalar Function types0,3,4",
+    "Explicit output-device default BG/UCR policy",
+    "ICC profile boundary/cache admission",
+    "Shading and image conversion state",
+    "Native frame scene replay and production integration",
+    "Real AI pixel qualification"
+  ],
+  "production_enabled": false
+}

@@ -1,0 +1,32 @@
+{
+  "scope": "Production RAW prefetch scheduling under rapid jumps and reversals across 100000 supplied paths",
+  "large_scheduler_test_passed": 1,
+  "existing_prefetch_controls_passed": 25,
+  "ignored_external_prefetch_controls": 6,
+  "failed": 0,
+  "paths": 100000,
+  "navigation_commands": 20000,
+  "maximum_pending_commands": 1,
+  "maximum_neighbours": 7,
+  "checks": [
+    "Exact independent directional nearest-first index ordering",
+    "Stale commands replaced before worker consumption",
+    "Current generation equals published command",
+    "Visible file excluded from speculative neighbours"
+  ],
+  "logs": [
+    {
+      "path": "/tmp/rrrah-prefetch-large-jumps-20261008.log",
+      "sha256": "de504cb9a9c3c510b0e9f13eca64bdc237a1ce94af16f194eb8f6fce130aea31"
+    },
+    {
+      "path": "/tmp/rrrah-prefetch-post-large-jumps-20261008.log",
+      "sha256": "8a9c69bd7e2f59ea8e1febb514eac5afb9495ca766ea4e9a76d2de358fe32529"
+    }
+  ],
+  "limitations": [
+    "Synthetic path list tests scheduling without worker decoding or physical I/O",
+    "Actual gallery scan MAX_ITEMS remains 10000; this is not 100000-file end-to-end gallery qualification",
+    "Six external prefetch tests not run here"
+  ]
+}

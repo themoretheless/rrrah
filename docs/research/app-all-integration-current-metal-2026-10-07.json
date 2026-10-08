@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-07",
+  "scope": "All default rrrah app unit and integration test targets after RPF import/cache/aspect changes",
+  "command": "RRRAH_GPU_BACKEND=metal cargo test -p rrrah --tests --locked --offline",
+  "log": "/tmp/rrrah-app-all-integration-current-metal.log",
+  "suites": 43,
+  "passed": 210,
+  "failed": 0,
+  "ignored": 80,
+  "build_log": "/tmp/rrrah-app-all-integration-build.log",
+  "small_fix": "CUDA timing branch preserves prepared raster pixel aspect in result reconstruction",
+  "limits": [
+    "Ignored corpus and hardware gates were not automatically promoted to passed",
+    "CUDA/NVIDIA execution unavailable on this Metal host",
+    "Does not prove physical HDR output or complete format variants",
+    "No live-window visual qualification in this run"
+  ],
+  "status": "local, not pushed"
+}

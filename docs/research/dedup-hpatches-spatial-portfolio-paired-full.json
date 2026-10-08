@@ -1,0 +1,34 @@
+{
+  "verified_pairs": 580,
+  "required_pairs": 580,
+  "complete": true,
+  "counts": {
+    "both_reject": 567,
+    "candidate_retained": 12,
+    "execution_recovery": 1
+  },
+  "changes": [
+    {
+      "sequence": "i_tools",
+      "target_index": 3,
+      "category": "execution_recovery",
+      "baseline_status": "error",
+      "spatial_status": "ok",
+      "baseline_stderr": "projective-pair error: Pixels(Invalid)\n",
+      "spatial_stderr": ""
+    }
+  ],
+  "report_snapshot_sha256": [
+    "cd8cb99460db71fd332c07f9add4a4fbffe6ed96af81dbf1b3575bc143b3f627",
+    "07d6bdd54b20c7d2e5bc2f0558ab98f13387e6a71fa3151c10c28e5ff70f5285"
+  ],
+  "probe_sha256": [
+    "1a61a0e42e35d0c7840ab31a72dca11fd64b72cf81d9e4de4d66763d63f618fd",
+    "0c00cd4858f8c075392e9a4ea67f4788e2442710a067d083354c85810c1661c7"
+  ],
+  "managed_peak_max": [
+    4324000,
+    4324000
+  ],
+  "scope": "Paired fixed-policy candidate changes and explicit execution refusals. Published correspondence pairs are not duplicate truth. Managed peak excludes RSS/allocation completeness; no performance or default-promotion claim."
+}

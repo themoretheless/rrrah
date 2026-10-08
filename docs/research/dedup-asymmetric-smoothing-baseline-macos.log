@@ -1,0 +1,30 @@
+   Compiling hayro-interpret v0.7.0 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret)
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+   Compiling hayro v0.7.1 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 18.80s
+     Running tests/candidate_union_files.rs (target/debug/deps/candidate_union_files-89e661208a46895f)
+
+running 4 tests
+test fresh_union_regions_match_supplied_model_and_refuse_unrelated ... ok
+test common_source_guard_cancellation_and_preio_aggregate_admission ... ok
+test union_collection_retains_every_fresh_positive_and_exact_pair_evidence ... ok
+test union_collection_removes_all_changed_source_edges_and_restores_reversed_retry has been running for over 60 seconds
+test union_collection_removes_all_changed_source_edges_and_restores_reversed_retry ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 69.33s
+

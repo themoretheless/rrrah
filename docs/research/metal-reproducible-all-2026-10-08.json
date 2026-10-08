@@ -1,0 +1,149 @@
+{
+  "gpu_backend": "metal",
+  "gpu_optional": false,
+  "storage_soak_seconds_per_mode": 0,
+  "gpu_policy_cycles": 0,
+  "full_sensor_compute": true,
+  "suites": [
+    {
+      "suite": "gpu-all",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-gpu",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target",
+        "--",
+        "--nocapture"
+      ],
+      "exit_code": 0,
+      "passed": 106,
+      "failed": 0,
+      "ignored": 7,
+      "ignored_tests": [
+        "test full_sensor_linear_exposure_chunked_readback ... ignored, allocates about 0.8 GB of GPU buffers; full-resolution local qualification",
+        "test full_sensor_managed_exposure_budgets_and_checks_every_pixel ... ignored, full-resolution managed compute uses about 2 GB of tracked buffers",
+        "test fusion_back_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires corrected production Fusion linear dumps; display transport qualification",
+        "test fusion_front_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires corrected production Fusion linear dumps; display transport qualification",
+        "test hero9_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires production HERO9 scene-linear dump; transport qualification, not demosaic/color oracle",
+        "test qualified_sd10_linear_raster_full_frame_display_readback ... ignored, requires qualified X3F linear sRGB PPM and a physical GPU",
+        "test full_f828_managed_rgbe_matches_cpu_reference ... ignored, requires independent DSC-F828 full-sensor dump; authored four-channel normalization, not as-shot color qualification"
+      ],
+      "log": "/private/tmp/rrrah-metal-reproducible-all-20261008/gpu-all.log",
+      "verified_execution": true
+    },
+    {
+      "suite": "full-camera-transport",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-gpu",
+        "--test",
+        "raster_readback",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target",
+        "--",
+        "--ignored",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/private/tmp/rrrah-metal-reproducible-all-20261008/full-camera-transport.log",
+      "verified_execution": true
+    },
+    {
+      "suite": "full-f828-compute",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-gpu",
+        "--test",
+        "rgbe_compute_readback",
+        "full_f828_managed_rgbe_matches_cpu_reference",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target",
+        "--",
+        "--ignored",
+        "--nocapture"
+      ],
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/private/tmp/rrrah-metal-reproducible-all-20261008/full-f828-compute.log",
+      "verified_execution": true
+    },
+    {
+      "suite": "full-sensor-compute",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-gpu",
+        "--test",
+        "compute_readback",
+        "full_sensor",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target",
+        "--",
+        "--include-ignored",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/private/tmp/rrrah-metal-reproducible-all-20261008/full-sensor-compute.log",
+      "verified_execution": true
+    }
+  ],
+  "complete_suite_execution": true,
+  "limitations": [
+    "Passing host CUDA tests does not qualify NVIDIA hardware.",
+    "Metal readback does not qualify physical HDR display.",
+    "Ignored tests are unverified, not passing.",
+    "These regression suites do not prove all 100 formats or sustained slow-disk workloads.",
+    "Full-sensor compute checks exposure/readback of authored float pixels; it does not qualify every RAW demosaic pipeline."
+  ],
+  "external_viewer_inputs": {
+    "Fusion-back.rgba32fle": {
+      "path": "/private/tmp/rrrah-gpr-clipping-warp-after-20261007/Fusion-back.rgba32fle",
+      "sha256": "00d54286d47dab1e1a0e2d761e8f407e2dcdcdb0823e7ab91fd50f71e2a84df3"
+    },
+    "Fusion-front.rgba32fle": {
+      "path": "/private/tmp/rrrah-gpr-clipping-warp-after-20261007/Fusion-front.rgba32fle",
+      "sha256": "37871b3f2f5f9de0933a8e3b05edf4e00a1ca9503fd3fe581a94ee5a51f20fa5"
+    },
+    "HERO9.rgba32fle": {
+      "path": "/private/tmp/rrrah-gpr-full-quality-20261007/HERO9.rgba32fle",
+      "sha256": "5a13211dbf9c33a67125777d87bc85a950ac054ab051bfcfdf0175ec2475bb58"
+    },
+    "linear-srgb.ppm": {
+      "path": "/private/tmp/rrrah-x3f-restored-20261007/linear-srgb.ppm",
+      "sha256": "00f64dc46ad86366f7da089c9ba37d4aec3462dd49595c2d2049ba0e0d0b68ff"
+    },
+    "F828-sensor-oracle": {
+      "path": "/private/tmp/rrrah-srf-refresh-20261008.u16le",
+      "sha256": "b3fc3d395950407a35d33392a97181fa51aac1afb0aa6b96d94a7eba00e95d42"
+    }
+  },
+  "all_executed_suites_verified": true
+}

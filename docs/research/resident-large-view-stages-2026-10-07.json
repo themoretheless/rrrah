@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-07",
+  "feature": "Existing raster view benchmark gains per-stage timing",
+  "adapter": "Metal Apple M4 Max",
+  "profile": "dev optimized with debuginfo",
+  "source": {
+    "path": "/tmp/rrrah-resident-1920x1080.ff",
+    "sha256": "b6c0559f86fd6d035ddb5e30f1768ef886fc071816d9e8a698112bc1e384d10f",
+    "format": "Farbfeld RGBA16 assumed-sRGB import",
+    "dimensions": [
+      1920,
+      1080
+    ],
+    "generation": "RGBA16 big-endian: R=floor(x*65535/1919), G=floor(y*65535/1079), B=floor((x+y)*65535/2998), A=65535; farbfeld header and big-endian dimensions"
+  },
+  "iterations": 15,
+  "warmup": 3,
+  "stops": 1,
+  "staged_run": {
+    "log": "/tmp/rrrah-resident-large-stages.log",
+    "total_p50_ms": 166.759,
+    "total_p95_ms": 184.34,
+    "stages_p50_ms": {
+      "decode": 75.534,
+      "prepare": 70.519,
+      "exposure_transfer_submit": 12.377,
+      "completed_frame": 4.692
+    },
+    "cpu_peak_bytes": 49766400,
+    "gpu_peak_bytes": 132710416,
+    "released_cpu": 0,
+    "released_gpu": 0
+  },
+  "earlier_runs": {
+    "compute_total_p50_ms": 163.927,
+    "plain_total_p50_ms": 157.006
+  },
+  "interpretation": "On this controlled workload CPU decode and color preparation dominate measured stages; exposure differs between plain and compute runs so they do not establish speedup. Stage medians need not sum to total median. Submit timing includes CPU validation and encoding; asynchronous GPU work completes in frame wait.",
+  "limits": [
+    "Generated source, warm OS cache, not cold disk",
+    "No before/after bulk copy comparison",
+    "No cache-hit navigation or real-camera throughput claim",
+    "No physical HDR or CUDA qualification"
+  ],
+  "status": "local, not pushed"
+}

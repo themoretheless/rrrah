@@ -1,0 +1,21 @@
+{
+  "date": "2026-10-07",
+  "scope": "Current explicit RPF decoder and actual Metal validation; normal viewer integration still pending",
+  "adapter": "Apple M4 Max Metal",
+  "command": "RRRAH_GPU_BACKEND=metal cargo test -p rrrah --test rpf_readback --locked --offline -- --include-ignored --nocapture",
+  "log": "/tmp/rrrah-rpf-current-metal.log",
+  "passed": 2,
+  "ignored": 0,
+  "tests": [
+    "hdr_rpf_alpha_ram_and_swap_match_explicit_reference_on_gpu",
+    "rpf_non_square_pixels_match_physical_rectangle_on_gpu"
+  ],
+  "limits": [
+    "Synthetic explicit interpretations; no producer-derived universal RGB/alpha assumption",
+    "No common gallery routing",
+    "No broad real-producer corpus or physical HDR output",
+    "No NVIDIA/CUDA hardware qualification"
+  ],
+  "next_requirement": "Add explicit channel/color/alpha interpretation to common import and preserve producer pixel aspect through display/cache keys without guessing missing values",
+  "status": "local evidence, not pushed"
+}

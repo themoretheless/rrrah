@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-07",
+  "feature": "native numeric rectclip",
+  "specification": "https://www.adobe.com/jp/print/postscript/pdfs/PLRM.pdf",
+  "semantics": "intersect with existing clipping region; clear active path on success; preserve graphics state, used nodes and current path on refused geometry or quota",
+  "admission": "five path nodes and one scene record checked before mutation; transformed-coordinate failure rolls back appended nodes",
+  "reference": {
+    "ghostscript_version": "10.05.1",
+    "binary_sha256": "e522a84dc98345933621efba59577afe76d8f2d241ae103a92e6ccd37812b290",
+    "source_sha256": "415ae7dc2d320ec7f9eee0ff6f339ce081027d7a282f3e62f20702bf7c0916ce"
+  },
+  "independent_cases": [
+    "retained_open_clip",
+    "empty_clip",
+    "clip_rectangle",
+    "even_odd_hole",
+    "nested_intersection",
+    "saved_clip_restore",
+    "numeric_rectclip",
+    "negative_rectclip",
+    "zero_rectclip",
+    "reset_clip"
+  ],
+  "exact_pixels": {
+    "native": 640,
+    "metal": 10240
+  },
+  "tests": {
+    "decoder": {
+      "passed": 957,
+      "failed": 0,
+      "ignored": 65,
+      "log": "/tmp/rrrah-eps-rectclip-full.log"
+    },
+    "metal": {
+      "passed": 9,
+      "failed": 0,
+      "log": "/tmp/rrrah-eps-rectclip-metal.log"
+    }
+  },
+  "limitations": [
+    "numeric rectangle form only; array and encoded number string remain unsupported",
+    "selected authored axis-aligned clipping only; full EPS variants and curved/diagonal producer qualification open",
+    "local changes not pushed"
+  ]
+}

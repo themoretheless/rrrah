@@ -1,0 +1,28 @@
+{
+  "status": "verified_native_linux_mesh_refinement_admission",
+  "returncode": 0,
+  "tests": 26,
+  "suites": {
+    "rank_region": 7,
+    "triangulation": 3,
+    "diagonal_proposals": 2,
+    "piecewise_warp": 4,
+    "mesh_grid": 2,
+    "mesh_rank": 2,
+    "mesh_refine": 3,
+    "mesh_landmark_admission": 3
+  },
+  "snapshot_files": 2901,
+  "current_snapshot_files_verified": 197,
+  "current_source_drift_after_snapshot": [
+    "crates/rrrah-core/src/develop/ahd.rs"
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-mesh-refine-linux-snapshot.json": "ef35d113a6cbab3c4b36415bbb8564db01a3c7da60dd97efdafe8560b4f38fb4",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-mesh-refine-linux-native.log": "5430b0f47f3e8de119625d49bfa2a99bcf29ac63ef9a5d1befa0d90808f69952",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-mesh-raster-dependency-tree.log": "1fb5a13db6bdb3e4b5b95ddf5b10baee6583fffe1b3649c8a036692f79dab446",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/run-dedup-linux-mesh-refine.sh": "c8f14ffce3645f3e08bba87db840f759b44f941e64a95031239d0d5199f26190",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-mesh-refine-linux.py": "9a8f87411e4ba0ae4b0bdbcc6fb749c43781c99a6f9e7a33081029c6deeb6b23"
+  },
+  "scope": "Native Linux aarch64 raster-only tests: rank, target triangulation, source diagonal proposals, piecewise conformity, atlas, mesh rank, translation refinement and original-preserving landmark admission. All snapshot files intact and current dedup files match. Any core source drift after snapshot is explicitly reported; modified live core bytes are not qualified by this frozen run. PDF/decode dependencies are outside the raster graph. No Linux decode/real corpus, Windows or full crate suite claim."
+}

@@ -1,0 +1,26 @@
+{
+  "scope": "HERO9 all-sample normalization/gain-map kernel versus Adobe DNG SDK stage2",
+  "passed": 1,
+  "failed": 0,
+  "samples_checked": 23251968,
+  "dimensions": [
+    5568,
+    4176
+  ],
+  "native_black": 0,
+  "native_white": 16383,
+  "gain_maps": 4,
+  "maximum_normalized_error": 2.0951033e-05,
+  "maximum_error_in_16bit_levels": 1.373025947655,
+  "allowed_16bit_levels": 2,
+  "inputs": {
+    "opcodes.bin": "8849d4a13dbb39f526a6a2f78b283428eb8f95d79b8e4bd115b0627515fb78b3",
+    "stage2.u16le": "83ace6e1e2c28065eb017c9b8c2c9ce58cd243a610578fde8ac62cb4fef0369d",
+    "sensor.u16le": "6592240ad9710edba5190fd1fd17c951cdb9f2359cedd3d2ab6728efaafcf882"
+  },
+  "log": "/tmp/rrrah-gpr-stage2-comparison-final.log",
+  "limitations": [
+    "Core gain-map kernel and normalized sensor input tested; complete decode-to-display pipeline not yet compared.",
+    "Demosaic, camera color, tone curve and physical HDR remain separate requirements."
+  ]
+}

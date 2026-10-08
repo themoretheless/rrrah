@@ -1,0 +1,40 @@
+{
+  "date": "2026-10-07",
+  "feature": "RasterRenderer::upload_resident consumes GPU-resident exposure output via GPU buffer-to-texture copies, no production CPU readback or reupload",
+  "contract": "caller explicitly interprets compute input as linear sRGB; dimensions and bounded texture size checked, finite input/output inherited from compute, alpha range metadata validated before admission",
+  "row_copy": "single-row copies with explicit 256-aligned bytes_per_row; source rows remain packed with width*16 offsets",
+  "ownership": "queue callback retains compute output and destination reservations through transfer completion; renderer owns destination texture; queue payload admission; cancellation before queue submission preserves previous image",
+  "actual_metal": {
+    "adapter": "Apple M4 Max",
+    "compute_passed": 4,
+    "raster_passed": 10,
+    "ignored": 3,
+    "log": "/tmp/rrrah-resident-raster-final-metal.log",
+    "cases": [
+      [
+        7,
+        3
+      ],
+      [
+        16,
+        3
+      ]
+    ],
+    "checks": [
+      "all computed float buffer values exact against CPU multiplication",
+      "both rendered 64x64 frames byte-exact against independently CPU-exposed raster",
+      "four transfer cancellation checkpoints preserve prior full-frame bytes",
+      "cancelled texture and queue reservations released",
+      "dropping compute output before transfer completion is safe through retained lease",
+      "all budgets release after last renderer owner"
+    ]
+  },
+  "investigation": "initial implicit bytes_per_row copies produced differing colored rows on Metal; explicit aligned pitch resolves both tested widths",
+  "limits": [
+    "library renderer integration only; no main-viewer compute routing yet",
+    "CPU readback appears in test oracle only",
+    "no physical HDR or NVIDIA/CUDA qualification",
+    "GPU-only path latency not measured"
+  ],
+  "status": "local, not pushed"
+}

@@ -1,0 +1,20 @@
+{
+  "status": "verified_strict_terminal_count_refusal",
+  "observed": {
+    "verify-dedup-fresh-union-original-negatives-oriented.py": {
+      "returncode": 0,
+      "audit_written": true
+    },
+    "verify-dedup-fresh-union-original-negatives-strict.py": {
+      "returncode": 1,
+      "audit_written": false
+    }
+  },
+  "fixture_rows": 16,
+  "required_rows": 156,
+  "scope": "Reconstructed complete-status report from actual prefix. Parser control only; not terminal negative qualification.",
+  "input_hashes": {
+    "scripts/verify-dedup-fresh-union-original-negatives-oriented.py": "ae30698eb02906296e191f8fb9a909957c2737a23a4b1b7b85dd5abaf36a77a9",
+    "scripts/verify-dedup-fresh-union-original-negatives-strict.py": "fabfeb1692fae538ebb0e27c5299ec66742d4ef2fb9fbb6d60cac93bb4567ff3"
+  }
+}

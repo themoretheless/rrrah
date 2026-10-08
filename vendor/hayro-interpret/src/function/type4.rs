@@ -16,6 +16,25 @@ pub(crate) struct Type4 {
 }
 
 impl Type4 {
+    pub(crate) fn eval_scalar(&self, input: f32, cancelled: &dyn Fn() -> bool,
+        remaining: &mut usize, depth: usize) -> Option<f32> {
+        if !input.is_finite() || self.clamper.domain.len() != 1 { return None; }
+        let (low, high) = self.clamper.domain[0];
+        if !low.is_finite() || !high.is_finite() || low > high { return None; }
+        let mut stack = InterpreterStack::new();
+        stack.push(Argument::Float(input.clamp(low,high)))?;
+        eval_inner(&self.program, &mut stack, remaining, depth, cancelled)?;
+        if stack.len() != 1 { return None; }
+        let Argument::Float(mut output) = stack.pop()? else { return None; };
+        if !output.is_finite() { return None; }
+        if let Some(range) = &self.clamper.range {
+            if range.len() != 1 { return None; }
+            let (low,high) = range[0];
+            if !low.is_finite() || !high.is_finite() || low > high { return None; }
+            output = output.clamp(low,high);
+        }
+        Some(output)
+    }
     /// Create a new type 4 function.
     pub(crate) fn new(stream: &Stream<'_>) -> Option<Self> {
         let dict = stream.dict().clone();
@@ -34,10 +53,11 @@ impl Type4 {
         let mut arg_stack = InterpreterStack::new();
 
         for input in input {
-            arg_stack.push(Argument::Float(input));
+            arg_stack.push(Argument::Float(input))?;
         }
 
-        eval_inner(&self.program, &mut arg_stack)?;
+        let mut remaining = usize::MAX;
+        eval_inner(&self.program, &mut arg_stack, &mut remaining, 0, &|| false)?;
 
         let mut out: SmallVec<_> = arg_stack.items().iter().map(|i| i.as_f32()).collect();
 
@@ -162,17 +182,19 @@ impl<T: Default, const C: usize> ArgumentsStack<T, C> {
 type InterpreterStack = ArgumentsStack<Argument, 64>;
 type ParseStack = ArgumentsStack<Vec<PostScriptOp>, 2>;
 
-fn eval_inner(procedure: &[PostScriptOp], arg_stack: &mut InterpreterStack) -> Option<()> {
+fn eval_inner(procedure: &[PostScriptOp], arg_stack: &mut InterpreterStack,
+    remaining: &mut usize, depth: usize, cancelled: &dyn Fn() -> bool) -> Option<()> {
+    if depth >= 32 || cancelled() { return None; }
     macro_rules! zero {
         ($eval:expr) => {
-            arg_stack.push($eval);
+            arg_stack.push($eval)?;
         };
     }
 
     macro_rules! one_f {
         ($eval:expr) => {
             let n1 = arg_stack.pop()?;
-            arg_stack.push(Argument::Float($eval(n1.as_f32())));
+            arg_stack.push(Argument::Float($eval(n1.as_f32())))?;
         };
     }
 
@@ -180,7 +202,7 @@ fn eval_inner(procedure: &[PostScriptOp], arg_stack: &mut InterpreterStack) -> O
         ($eval:expr) => {
             let n2 = arg_stack.pop()?;
             let n1 = arg_stack.pop()?;
-            arg_stack.push(Argument::Float($eval(n1.as_f32(), n2.as_f32())));
+            arg_stack.push(Argument::Float($eval(n1.as_f32(), n2.as_f32())))?;
         };
     }
 
@@ -200,7 +222,7 @@ fn eval_inner(procedure: &[PostScriptOp], arg_stack: &mut InterpreterStack) -> O
                 (Argument::Bool(f1), Argument::Bool(f2)) => Argument::Bool($eval_b(f1, f2)),
             };
 
-            arg_stack.push(res);
+            arg_stack.push(res)?;
         };
     }
 
@@ -209,6 +231,8 @@ fn eval_inner(procedure: &[PostScriptOp], arg_stack: &mut InterpreterStack) -> O
     }
 
     for op in procedure {
+        if cancelled() { return None; }
+        *remaining = remaining.checked_sub(1)?;
         match op {
             PostScriptOp::Number(n) => arg_stack.push(Argument::Float(n.as_f64() as f32))?,
             PostScriptOp::Abs => {
@@ -253,7 +277,7 @@ fn eval_inner(procedure: &[PostScriptOp], arg_stack: &mut InterpreterStack) -> O
                     let n1 = n1 as i32;
                     let n2 = n2 as i32;
 
-                    (n1 / n2) as f32
+                    n1.checked_div(n2).map(|v| v as f32).unwrap_or(f32::NAN)
                 });
             }
             PostScriptOp::Ln => {
@@ -295,9 +319,9 @@ fn eval_inner(procedure: &[PostScriptOp], arg_stack: &mut InterpreterStack) -> O
                     let shift = n2 as i32;
 
                     if shift >= 0 {
-                        (num << shift) as f32
+                        num.checked_shl(shift as u32).unwrap_or(0) as f32
                     } else {
-                        (num >> -shift) as f32
+                        num.checked_shr(shift.unsigned_abs()).unwrap_or(0) as f32
                     }
                 });
             }
@@ -330,7 +354,7 @@ fn eval_inner(procedure: &[PostScriptOp], arg_stack: &mut InterpreterStack) -> O
                     Argument::Bool(b) => Argument::Bool(!b),
                 };
 
-                arg_stack.push(res);
+                arg_stack.push(res)?;
             }
             PostScriptOp::Or => {
                 four!(
@@ -351,40 +375,42 @@ fn eval_inner(procedure: &[PostScriptOp], arg_stack: &mut InterpreterStack) -> O
                 let cond = arg_stack.pop()?.as_bool();
 
                 if cond {
-                    eval_inner(p, arg_stack)?;
+                    eval_inner(p, arg_stack, remaining, depth+1, cancelled)?;
                 }
             }
             PostScriptOp::IfElse(p1, p2) => {
                 let cond = arg_stack.pop()?.as_bool();
 
                 if cond {
-                    eval_inner(p1, arg_stack)?;
+                    eval_inner(p1, arg_stack, remaining, depth+1, cancelled)?;
                 } else {
-                    eval_inner(p2, arg_stack)?;
+                    eval_inner(p2, arg_stack, remaining, depth+1, cancelled)?;
                 }
             }
             PostScriptOp::Copy => {
                 let n = arg_stack.pop()?.as_f32() as u32 as usize;
                 let start = arg_stack.len().checked_sub(n)?;
                 for i in start..arg_stack.len() {
-                    arg_stack.push(*arg_stack.at(i)?);
+                    if cancelled() { return None; }
+                    *remaining = remaining.checked_sub(1)?;
+                    arg_stack.push(*arg_stack.at(i)?)?;
                 }
             }
             PostScriptOp::Dup => {
-                arg_stack.push(*arg_stack.last()?);
+                arg_stack.push(*arg_stack.last()?)?;
             }
             PostScriptOp::Exch => {
                 let n2 = arg_stack.pop()?;
                 let n1 = arg_stack.pop()?;
 
-                arg_stack.push(n2);
-                arg_stack.push(n1);
+                arg_stack.push(n2)?;
+                arg_stack.push(n1)?;
             }
             PostScriptOp::Index => {
                 let n = arg_stack.pop()?.as_f32() as u32 as usize;
                 let n = arg_stack.len().checked_sub(n + 1)?;
 
-                arg_stack.push(*arg_stack.at(n)?);
+                arg_stack.push(*arg_stack.at(n)?)?;
             }
             PostScriptOp::Pop => {
                 arg_stack.pop()?;
@@ -404,11 +430,12 @@ fn eval_inner(procedure: &[PostScriptOp], arg_stack: &mut InterpreterStack) -> O
                     let shift = j as usize % target.len();
                     target.rotate_right(shift);
                 } else {
-                    let shift = (-j) as usize % target.len();
+                    let shift = j.unsigned_abs() as usize % target.len();
                     target.rotate_left(shift);
                 }
             }
         }
+        if arg_stack.items().iter().any(|value| !value.as_f32().is_finite()) { return None; }
     }
 
     Some(())
@@ -559,6 +586,41 @@ impl PostScriptOp {
 
 #[cfg(test)]
 mod tests {
+
+    fn scalar(program: &[u8]) -> Function {
+        Function(Arc::new(FunctionType::Type4(Type4 {
+            program: parse_procedure(program).unwrap(),
+            clamper: Clamper { domain: smallvec::smallvec![(0.0,1.0)], range: Some(smallvec::smallvec![(0.0,1.0)]) },
+        })))
+    }
+
+    #[test]
+    fn bounded_calculator_scalar_has_numeric_and_conditional_references() {
+        assert_eq!(scalar(b"{ 0.2 mul 0.1 add }").eval_scalar_bounded(0.5,&|| false),Some(0.2));
+        let function = scalar(b"{ dup 0.5 lt { 2 mul } { 0.25 add } ifelse }");
+        assert_eq!(function.eval_scalar_bounded(0.2,&|| false),Some(0.4));
+        assert_eq!(function.eval_scalar_bounded(0.75,&|| false),Some(1.0));
+        assert_eq!(scalar(b"{ 1 32 bitshift exch pop }").eval_scalar_bounded(0.5,&|| false),Some(0.0));
+    }
+
+    #[test]
+    fn bounded_calculator_scalar_refuses_overflow_invalid_arithmetic_work_and_cancel() {
+        let function = scalar(b"{ dup mul }");
+        let polls = std::cell::Cell::new(0);
+        assert_eq!(function.eval_scalar_bounded(0.5,&|| { polls.set(polls.get()+1); false }),Some(0.25));
+        for stop in 1..=polls.get() {
+            let current = std::cell::Cell::new(0);
+            assert!(function.eval_scalar_bounded(0.5,&|| { current.set(current.get()+1); current.get()==stop }).is_none());
+        }
+        assert!(function.eval_scalar_with_budget(0.5,&|| false,&mut 2,0).is_none());
+        for program in [b"{ 0 div }".as_slice(), b"{ 0 idiv }", b"{ neg sqrt }", b"{ pop true }", b"{ pop pop }"] {
+            assert!(scalar(program).eval_scalar_bounded(0.5,&|| false).is_none());
+        }
+        let program = format!("{{ {} }}", "dup ".repeat(64));
+        assert!(scalar(program.as_bytes()).eval_scalar_bounded(0.5,&|| false).is_none());
+        let program = format!("{{ {} }}", "1 add ".repeat(3000));
+        assert!(scalar(program.as_bytes()).eval_scalar_bounded(0.5,&|| false).is_none());
+    }
     use crate::function::type4::{PostScriptOp, Type4, parse_procedure};
     use crate::function::{Clamper, Function, FunctionType, TupleVec, Values};
     use std::f32::consts::LN_10;

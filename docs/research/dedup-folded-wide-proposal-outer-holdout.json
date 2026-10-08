@@ -1,0 +1,56 @@
+{
+  "status": "complete_spatially_disjoint_outer_proposal_diagnostic",
+  "rows": [
+    {
+      "target": [
+        192,
+        384
+      ],
+      "offset": [
+        -24,
+        12
+      ],
+      "outer_centers": 77,
+      "informative_pairs": 264,
+      "baseline_fraction": 0.5681818181818182,
+      "shifted_fraction": 0.4810606060606061,
+      "local_heldout_fraction": 0.9166666666666666
+    },
+    {
+      "target": [
+        256,
+        416
+      ],
+      "offset": [
+        -2,
+        10
+      ],
+      "outer_centers": 120,
+      "informative_pairs": 436,
+      "baseline_fraction": 0.5986238532110092,
+      "shifted_fraction": 0.5206422018348624,
+      "local_heldout_fraction": 0.918918918918919
+    },
+    {
+      "target": [
+        352,
+        544
+      ],
+      "offset": [
+        16,
+        -8
+      ],
+      "outer_centers": 71,
+      "informative_pairs": 221,
+      "baseline_fraction": 0.43891402714932126,
+      "shifted_fraction": 0.6470588235294118,
+      "local_heldout_fraction": 0.9830508474576272
+    }
+  ],
+  "training_outer_target_taps_disjoint": true,
+  "outer_minimum_axis_distance": 33,
+  "training_maximum_axis_distance": 21,
+  "report_sha256": "fddc66917bb3da43373eb1f542650ed0f390d7708db3357d28711265df08c885",
+  "verifier_sha256": "8e9e6e86dfd57567441082ff4933dcbeab358dcd0c0a103ded0d9600701bfb3d",
+  "scope": "Selected shifts assessed on outer target samples with no shared target taps; same geometric support for baseline/shifted. Source taps may overlap due to geometry/interpolation. Geometry proposal extrapolation diagnostic only, no classifier."
+}

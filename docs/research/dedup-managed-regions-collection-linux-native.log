@@ -1,0 +1,17 @@
+   Compiling moxcms v0.8.1 (/workspace/vendor/moxcms)
+   Compiling image v0.25.10
+   Compiling hayro-interpret v0.7.0 (/workspace/vendor/hayro-interpret)
+   Compiling rrrah-memory v0.1.0 (/workspace/crates/rrrah-memory)
+   Compiling rrrah-core v0.1.0 (/workspace/crates/rrrah-core)
+   Compiling hayro v0.7.1 (/workspace/vendor/hayro)
+   Compiling jxl-oxide v0.12.6
+   Compiling rrrah-dedup v0.1.0 (/workspace/crates/rrrah-dedup)
+error: linking with `/validation/sysroot/usr/bin/gcc` failed: exit status: 1
+  |
+  = note:  "/validation/sysroot/usr/bin/gcc" "-Wl,--fix-cortex-a53-843419" "/validation/target/debug/build/rrrah-dedup-3a38a02528c2bbf0/rustc9Osv38/symbols.o" "<103 object files omitted>" "-Wl,--as-needed" "-Wl,-Bstatic" "/validation/target/debug/deps/{libblake3-e77978c56f2c723d,libconstant_time_eq-fabc9e6bb9f854e9,libcfg_if-a6d2444cd387f833,libarrayvec-fca443f319f99522,libarrayref-30a357ed0e983b64}.rlib" "<sysroot>/lib/rustlib/aarch64-unknown-linux-gnu/lib/{libstd-*,libpanic_unwind-*,libobject-*,libmemchr-*,libaddr2line-*,libgimli-*,libcfg_if-*,librustc_demangle-*,libstd_detect-*,libhashbrown-*,librustc_std_workspace_alloc-*,libminiz_oxide-*,libadler2-*,libunwind-*,liblibc-*,librustc_std_workspace_core-*,liballoc-*,libcore-*,libcompiler_builtins-*}.rlib" "-Wl,-Bdynamic" "-lgcc_s" "-lutil" "-lrt" "-lpthread" "-lm" "-ldl" "-lc" "-L" "/validation/target/debug/build/rrrah-dedup-3a38a02528c2bbf0/rustc9Osv38/raw-dylibs" "-Wl,--eh-frame-hdr" "-Wl,-z,noexecstack" "-L" "/validation/target/debug/build/blake3-c3c9ae2f28c25e08/out" "-L" "<sysroot>/lib/rustlib/aarch64-unknown-linux-gnu/lib" "-o" "/validation/target/debug/build/rrrah-dedup-3a38a02528c2bbf0/build_script_build-3a38a02528c2bbf0" "-Wl,--gc-sections" "-pie" "-Wl,-z,relro,-z,now" "-nodefaultlibs" "--sysroot=/validation/sysroot"
+  = note: some arguments are omitted. use `--verbose` to show all linker arguments
+  = note: /validation/sysroot/usr/bin/ld: cannot find libgcc_s.so.1: No such file or directory
+          collect2: error: ld returned 1 exit status
+          
+
+error: could not compile `rrrah-dedup` (build script) due to 1 previous error

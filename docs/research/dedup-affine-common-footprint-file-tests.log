@@ -1,0 +1,26 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 3m 39s
+     Running tests/affine_region_file.rs (target/debug/deps/affine_region_file-8bab19142faf8a42)
+
+running 4 tests
+test cancellation_and_cumulative_work_refuse_before_missing_source_io ... ok
+test common_footprint_files_preserve_mutation_replacement_and_sticky_cancel ... ok
+test stable_files_verify_and_mutation_or_replacement_discards_evidence ... ok
+test automatic_file_grid_guards_source_and_retains_managed_regions ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+

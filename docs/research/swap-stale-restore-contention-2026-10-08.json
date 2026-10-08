@@ -1,0 +1,59 @@
+{
+  "test": "stale_slow_restore_and_cancelled_lock_waiter_release_credit_for_latest_key",
+  "purpose": "Prove cancellation is observed while waiting for restore admission held by a stale delayed read; retain both immutable objects for later exact selected-key restore and stale-key retry.",
+  "passed": 1,
+  "failed": 0,
+  "cycles": 8,
+  "cancelled_waiters": 8,
+  "stale_active_reads_cancelled": 8,
+  "successful_exact_reads": 16,
+  "completed_writes": 2,
+  "read_or_write_errors": 0,
+  "root_peak_bytes": 262144,
+  "final_root_used": 0,
+  "final_queue_used": 0,
+  "controls": {
+    "source_dimensions": [
+      256,
+      256
+    ],
+    "source_bytes_each": 262144,
+    "root_limit_bytes": 1048576,
+    "restore_limit_bytes": 524288,
+    "disk_limit_bytes": 1048576,
+    "queue_limit_bytes": 1048576,
+    "queue_count": 2,
+    "delay_per_read_write_ms": 2,
+    "maximum_io_chunk_bytes": 65536,
+    "cancel_waiter_polls": 4
+  },
+  "synchronization": "Active reader callback pauses after pixel admission while holding restore mutex; waiter must cancel before pause is released. Atomic generation changes cancel active reader, then both keys restore and compare every byte. Timeouts guard test hangs, not latency assertions.",
+  "command": [
+    "cargo",
+    "test",
+    "-p",
+    "rrrah-cache",
+    "--test",
+    "sustained_swap",
+    "stale_slow_restore_and_cancelled_lock_waiter_release_credit_for_latest_key",
+    "--locked",
+    "--offline",
+    "--",
+    "--nocapture"
+  ],
+  "source": {
+    "path": "crates/rrrah-cache/tests/sustained_swap.rs",
+    "sha256": "90830d1a1073d360d9ff2725fcc9486f1bdd84378697a1b2235bf862046d1d55"
+  },
+  "log": {
+    "path": "/tmp/rrrah-slow-restore-contention-20261008.log",
+    "sha256": "b1eb6a02272922a8d3382f50538a40f6dd902cdc6c861cfbe36a29d305d6f392"
+  },
+  "limitations": [
+    "Synthetic delay wrapping actual local file I/O, not physical slow-disk qualification.",
+    "Cache API control; no app/UI foreground scheduling or Metal frame assertion.",
+    "Eight cycles and two keys, not long-duration or large-collection qualification.",
+    "No latency or throughput improvement claimed.",
+    "No production changes were required by this passing control."
+  ]
+}

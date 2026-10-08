@@ -1,0 +1,32 @@
+{
+  "case": "Coincident tensor geometry with different colors, later blue patch covers earlier red",
+  "independent_oracle": "Poppler 72dpi white-composite RGB",
+  "dimensions": [
+    32,
+    32
+  ],
+  "pixels": 1024,
+  "all_poppler_pixels": [
+    0,
+    0,
+    255
+  ],
+  "native_rgba_expected": [
+    0,
+    0,
+    255,
+    255
+  ],
+  "native_test": "pdf::overlap_patch_tests::later_coincident_tensor_patch_covers_earlier_color, now active and passed",
+  "implementation": "Skip geometrically identical earlier Coons/tensor patches using finite canonical coordinate keys; preserve order of all other patches",
+  "decoder_library": "967 passed, zero failures, 66 ignored",
+  "limits": [
+    "Arbitrary partial overlap remains unresolved",
+    "Whole AI external comparisons not rerun or qualified",
+    "No new source-color or PostScript AI support"
+  ],
+  "logs": [
+    "/tmp/rrrah-pdf-coincident-patch.log",
+    "/tmp/rrrah-tensor-overlap-poppler.log"
+  ]
+}

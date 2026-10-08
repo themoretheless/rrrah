@@ -1,0 +1,51 @@
+{
+  "status": "verified_parser_adversaries",
+  "rejected_cases": [
+    {
+      "case": "invalid_inlier",
+      "rejected": true
+    },
+    {
+      "case": "impossible_pixel_counts",
+      "rejected": true
+    },
+    {
+      "case": "unsupported_acceptance",
+      "rejected": true
+    },
+    {
+      "case": "model_outlier",
+      "rejected": true
+    },
+    {
+      "case": "boolean_managed_used",
+      "rejected": true
+    },
+    {
+      "case": "unreleased_payload",
+      "rejected": true
+    },
+    {
+      "case": "over_budget_peak",
+      "rejected": true
+    },
+    {
+      "case": "whole_identity_claim",
+      "rejected": true
+    },
+    {
+      "case": "false_source_pin",
+      "rejected": true
+    },
+    {
+      "case": "raw_output_disagreement",
+      "rejected": true
+    }
+  ],
+  "input_hashes": {
+    "docs/research/dedup-original-managed-region-200201.json": "ce4414e7dbb54a36f54df64307e15f2bf02e6028f6cb9703a147222852695095",
+    "scripts/verify-dedup-managed-real-parity.py": "614f5221759dc0302f3b630eb9c14e13495079d92680ddf22427688f614a427f",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/test-dedup-managed-real-verifier.py": "653f2e51d5cef50dc1f2e6747a8624412fe60089744fe50bf77e85edc7208cdd"
+  },
+  "scope": "Audit parser control derives from existing native file evidence, not a collection run. Ten corrupted records rejected without publishing audit output."
+}

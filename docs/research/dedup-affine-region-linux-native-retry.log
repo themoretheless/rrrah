@@ -1,0 +1,96 @@
+ Downloading crates ...
+  Downloaded allocator-api2 v0.2.21
+  Downloaded hashbrown v0.16.1
+   Compiling allocator-api2 v0.2.21
+   Compiling hashbrown v0.16.1
+   Compiling hayro-interpret v0.7.0 (/workspace/vendor/hayro-interpret)
+   Compiling rrrah-core v0.1.0 (/workspace/crates/rrrah-core)
+   Compiling hayro v0.7.1 (/workspace/vendor/hayro)
+   Compiling rrrah-decode v0.1.0 (/workspace/crates/rrrah-decode)
+   Compiling rrrah-dedup v0.1.0 (/workspace/crates/rrrah-dedup)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+warning: linker stderr: /validation/sysroot/usr/bin/ld: /validation/target/debug/deps/libjpegxr-8d01a0594e000fc4.rlib(2e643c6506a180d9-strenc.o): in function `StrIOEncInit':
+         /validation/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/jpegxr-0.3.1/jxrlib/image/encode/strenc.c:485:(.text.StrIOEncInit+0xf0): the use of `tmpnam' is dangerous, better use `mkstemp'
+  |
+  = note: `#[warn(linker_messages)]` on by default
+
+warning: linker stdout: /validation/sysroot/usr/bin/ld: /validation/target/debug/deps/libjpegxr-8d01a0594e000fc4.rlib(2e643c6506a180d9-strenc.o): note: the message above does not take linker garbage collection into account
+
+warning: `rrrah-dedup` (test "affine_region_file") generated 2 warnings
+warning: `rrrah-dedup` (test "affine_region") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "affine_color") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "affine_region_grid") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "region_footprint") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "affine_candidate_search") generated 2 warnings (2 duplicates)
+    Finished `test` profile [optimized + debuginfo] target(s) in 17m 40s
+     Running tests/affine_candidate_search.rs (/validation/target/debug/deps/affine_candidate_search-27180aec8334603b)
+
+running 1 test
+test native_geometry_drives_guarded_affine_grid_without_manual_model ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.68s
+
+     Running tests/affine_color.rs (/validation/target/debug/deps/affine_color-ad5a1947666bd5e5)
+
+running 4 tests
+test independent_mixed_channel_transform_and_disjoint_validation ... ok
+test uniform_rank_deficient_and_target_singular_inputs_refuse ... ok
+test coefficient_offset_range_and_preflight_work_bounds ... ok
+test every_fit_and_validation_checkpoint_cancels_without_partial_evidence ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/affine_color_heldout_negative.rs (/validation/target/debug/deps/affine_color_heldout_negative-6472f60e05778b0a)
+
+running 1 test
+test fitted_color_does_not_accept_unrelated_heldout_samples ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/affine_region.rs (/validation/target/debug/deps/affine_region-63e88698c5a77f38)
+
+running 3 tests
+test identity_is_heldout_verified_and_memory_released ... ok
+test preflight_and_mid_sampling_cancel_release_credit ... ok
+test saturated_uniform_filter_refuses_as_uninformative_not_invalid ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/affine_region_file.rs (/validation/target/debug/deps/affine_region_file-8989baf4c5253318)
+
+running 3 tests
+test cancellation_and_cumulative_work_refuse_before_missing_source_io ... ok
+test stable_files_verify_and_mutation_or_replacement_discards_evidence ... ok
+test automatic_file_grid_guards_source_and_retains_managed_regions ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+
+     Running tests/affine_region_grid.rs (/validation/target/debug/deps/affine_region_grid-43d64f99c8f0e6bd)
+
+running 2 tests
+test automatic_grid_retains_both_direction_results_and_managed_ownership ... ok
+test uniform_regions_are_retained_as_refusals_and_cancel_discards_partial_grid ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/region_footprint.rs (/validation/target/debug/deps/region_footprint-ab7ffce0dc8188a7)
+
+running 2 tests
+test scale_rotation_and_homography_magnitude_preserve_footprint ... ok
+test invalid_horizon_singular_and_cancelled_refuse ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

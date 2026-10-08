@@ -1,0 +1,104 @@
+{
+  "manifest_sha256": "6ba843f8f09419efb8ccec9b5d84cc8f086d1dc74ec222f5aa2acae29f9fff01",
+  "probe_sha256": "25d7f6ae49519b83767fc31fc646ce5ae54a7817d8212ce5bd25fea8a4ff9d4a",
+  "mode": "gradient_pyramid_three_levels",
+  "required_pairs": 4,
+  "completed_pairs": 4,
+  "results": [
+    {
+      "query_id": "200001.jpg",
+      "returncode": 0,
+      "evidence": {
+        "status": "ok",
+        "left_features": 690,
+        "right_features": 668,
+        "correspondences": 59,
+        "inliers": 39,
+        "geometry": [
+          [
+            1.935221984505686,
+            -0.4504908930123228,
+            35.42647477191065
+          ],
+          [
+            0.49226471644433206,
+            1.719446051737566,
+            -246.94265895026285
+          ],
+          [
+            5.626655955246253e-05,
+            -0.0003450074032320046,
+            1.0648714115560998
+          ]
+        ],
+        "pixels": {
+          "status": "ok",
+          "counts": [
+            [
+              22656,
+              23707,
+              66560
+            ],
+            [
+              84299,
+              89804,
+              93440
+            ]
+          ]
+        },
+        "candidate": true,
+        "managed_used_after_drop": 0,
+        "scope": "Gradient diagnostic with native geometry and fixed radius3 pixel confirmation; feature allocations unmanaged, no file lifecycle qualification."
+      }
+    },
+    {
+      "query_id": "200101.jpg",
+      "returncode": 0,
+      "evidence": {
+        "status": "ok",
+        "left_features": 962,
+        "right_features": 941,
+        "correspondences": 5,
+        "inliers": 0,
+        "geometry": null,
+        "pixels": null,
+        "candidate": false,
+        "managed_used_after_drop": 0,
+        "scope": "Gradient diagnostic with native geometry and fixed radius3 pixel confirmation; feature allocations unmanaged, no file lifecycle qualification."
+      }
+    },
+    {
+      "query_id": "200201.jpg",
+      "returncode": 0,
+      "evidence": {
+        "status": "ok",
+        "left_features": 970,
+        "right_features": 1005,
+        "correspondences": 13,
+        "inliers": 0,
+        "geometry": null,
+        "pixels": null,
+        "candidate": false,
+        "managed_used_after_drop": 0,
+        "scope": "Gradient diagnostic with native geometry and fixed radius3 pixel confirmation; feature allocations unmanaged, no file lifecycle qualification."
+      }
+    },
+    {
+      "query_id": "200301.jpg",
+      "returncode": 0,
+      "evidence": {
+        "status": "ok",
+        "left_features": 153,
+        "right_features": 755,
+        "correspondences": 3,
+        "inliers": 0,
+        "geometry": null,
+        "pixels": null,
+        "candidate": false,
+        "managed_used_after_drop": 0,
+        "scope": "Gradient diagnostic with native geometry and fixed radius3 pixel confirmation; feature allocations unmanaged, no file lifecycle qualification."
+      }
+    }
+  ],
+  "scope": "Three native area-reduced levels, unchanged gradient thresholds/projective geometry and radius3 pixel confirmation. Not file/index lifecycle or broad recall/precision qualification."
+}

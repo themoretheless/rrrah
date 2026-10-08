@@ -1,0 +1,21 @@
+{
+  "status": "native_failed",
+  "input_hashes": {
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/gradient-scales-probe-screen-translation": "1fdde9602b29210028ed4dd83b90f07335cecca82b6ac8883f5c3a3974b4f827",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200500.jpg": "55d5ff8935ee354fd0d34e3db8346db2b79047db56d7543ce50617c95e0ba91f",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200501.jpg": "c9f9a86fe25fd5bba47af5130e2fcf441633355cc1d806039c86cc0d5bbde9a3",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/prepared.json": "6ba843f8f09419efb8ccec9b5d84cc8f086d1dc74ec222f5aa2acae29f9fff01",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-screen-translation-grid.py": "784e6d00c27e12b701b168ebd4c5cbaf48440500b93aa8d4bf3009dd5a1d3293",
+    "docs/research/dedup-screen-translation-input.txt": "1b8e317bbe3718c339b81a58e6400bc60e9f3ef0fa661273ca3dae5c62ef115d",
+    "docs/research/dedup-screen-filter8.json": "24f2548d742443f4b6dfd8ae2a165174da65fefe84a5785d67fd927a27de7c18"
+  },
+  "original": "200500.jpg",
+  "query": "200501.jpg",
+  "candidate_smoothing_radius": 2,
+  "color_space": "Linear",
+  "confirmation_filter_radius": 8,
+  "scope": "Explicit linear-color radius8 regional comparison;12.8M combined domain admission, radius2 candidate-only smoothing; low-contrast lane, original-pixel region criteria and min10 geometry unchanged. Nine bounded target translations of the frozen supplied model, no refit or independent geometry admissibility claim; single known miss experiment, no default promotion, semantic precision or complete RSS bound.",
+  "returncode": 101,
+  "stdout": "",
+  "stderr": "\nthread 'main' (7188160) panicked at crates/rrrah-dedup/examples/gradient_scales_probe.rs:82:5:\nassertion failed: args.len() == 3\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+}

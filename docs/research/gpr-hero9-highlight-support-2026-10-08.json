@@ -1,0 +1,29 @@
+{
+  "scope": "HERO9 paired real full-image development with highlight recovery enabled/disabled; independent SDK sensor saturation constrains affected area",
+  "pixels_checked": 23251968,
+  "sensor_saturated_photosites": 110,
+  "independent_5x5_support_pixels": 2394,
+  "changed_pixels": 646,
+  "changed_outside_saturation_support": 0,
+  "maximum_linear_difference": 1.7175670862197876,
+  "hdr_pixels_enabled": 28498,
+  "hdr_pixels_disabled": 28499,
+  "managed_peak_bytes": 868711424,
+  "managed_final_bytes": 0,
+  "limitations": [
+    "HERO9 has normal orientation; this independent support check does not cover warped camera geometry.",
+    "Full saturation reconstruction cannot recover unknown physical scene color from clipped sensor values."
+  ],
+  "enabled_sha256": "5a13211dbf9c33a67125777d87bc85a950ac054ab051bfcfdf0175ec2475bb58",
+  "disabled_sha256": "afffae990efe088fe4d44f5af28fd44b012251570a02e661945ca855e1a4760f",
+  "independent_sensor_sha256": "6592240ad9710edba5190fd1fd17c951cdb9f2359cedd3d2ab6728efaafcf882",
+  "enabled_current_generation_verified": true,
+  "external_regression": {
+    "test": "crates/rrrah-decode/tests/gpr_highlight_support.rs",
+    "passed": 1,
+    "failed": 0,
+    "ignored": 0,
+    "scope": "fresh NativeRawDecoder and development enabled/disabled; all sensor codes exact against independent oracle, all output pixels inspected",
+    "elapsed_seconds": 14.48
+  }
+}

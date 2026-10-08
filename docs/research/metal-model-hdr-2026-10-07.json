@@ -1,0 +1,23 @@
+{
+  "scope": "Metal model rendering on linear HDR surfaces",
+  "adapter": "Apple M4 Max",
+  "backend": "Metal",
+  "surface": {"format": "Rgba16Float", "color_space": "ExtendedSrgbLinear"},
+  "fix": "Admit linear RGBA16Float model targets in both viewer and renderer constructor",
+  "gpu_tests": {"passed": 6, "failed": 0, "ignored": 0},
+  "verified": [
+    "Float16 model material matches analytic linear lighting within 0.001 per RGB channel",
+    "Background and alpha match expected values",
+    "Model GPU budget releases to zero",
+    "Existing geometry, depth and shared-budget tests pass",
+    "Native HDR viewer displays triangle.stl and reaches ready state"
+  ],
+  "live_source": "tests/fixtures/models/triangle.stl",
+  "live_ready": {"triangles": 1, "decode_ms": 16.41, "gpu_preparation_ms": 50.10},
+  "logs": ["/tmp/rrrah-metal-model-hdr.log", "/tmp/rrrah-metal-model-live.log"],
+  "limitations": [
+    "Selected neutral model material and STL fixture",
+    "Physical display luminance and calibration are not measured",
+    "NVIDIA qualification remains deferred"
+  ]
+}

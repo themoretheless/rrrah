@@ -1,0 +1,1197 @@
+{
+  "status": "complete_native_filtered_rank_diagnostic",
+  "required_cases": 36,
+  "input_hashes": {
+    "docs/research/dedup-rank-region-real.json": "0210d411304ebb100a7fb0800098f6ad914d4d85ff877e894f55e2e08f9e9de0",
+    "docs/research/dedup-rank-region-real-audit.json": "cbfe65db17b0a3bcaa36ad2313031c1274624b4a74b5354e5faa20867dc13a2f",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/filtered-rank-region-probe": "c5f233586c9ff89ac6f8860e529ea80752175520d02595573f4c72c14c342fcb",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-filtered-rank-real.py": "e3ac0f134c8ae4aba67c4e69a17c4b65d3bde2eefd789fce77d3372575d541ea",
+    "crates/rrrah-dedup/examples/filtered_rank_region_probe.rs": "4f3ecefd052f555508a85295e3ec177f746c3a58f31ee2dedeb8695ec1a7a9fc",
+    "crates/rrrah-dedup/src/rank_region.rs": "220bc0630249afac757858986a93c7dca535faaf80b168858a40e26d74f26212",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/rank-region-probe": "27b4016f3eb3378c750e47f1524911ee4c67d7e536152ad86f7883d7eb5bbc45",
+    "docs/research/dedup-folded-training-diagnostic.json": "04eac9c31b095859e356904e93b0dc55b1be50c4dfc1f35d35b0fb594494bbb2",
+    "docs/research/dedup-affine-grid-meanfix-checkpoint-111.json": "6c629d1762387130cdab5d0bf1b58c1510603d50aa1c41af320ac251fabe82b7",
+    "docs/research/dedup-affine-grid-meanfix-checkpoint-111-audit.json": "b0ff593e2f43bef1647051b048484365c4d4a617a258efe173c6de57e6c5b1ea",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-rank-region-real.py": "b73ab30392bcb95e4dd745e22394b78297bca772a452b30bd3d0fabef442ed51",
+    "crates/rrrah-dedup/examples/rank_region_probe.rs": "d25f9de8c62cf9450d4bf06ba44b579c713fbe19cab86f7432ae088b7395e8e9",
+    "docs/research/dedup-rank-region-before-filter.rs": "1cf3e008463c5391e9451fd1684e526a87a6c46e4a4e122402d7b5c9dd8f1bd1",
+    "crates/rrrah-dedup/src/lib.rs": "060f497e7dee3dcf4f4fcbbf3ff1104cc341e25129e33d0cfef5ae511a60efe8",
+    "crates/rrrah-dedup/src/linear.rs": "9ba055f4a73063eed2d757e47cbd6d0b1b53b9f1fed6c1cbd777d3106141e059",
+    "crates/rrrah-dedup/src/geometry.rs": "d5a4cae5e9aaa9c7b8ade16ae385392ff50c1409ac9850b7fb98e1e9c1eca4d9",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200500.jpg": "55d5ff8935ee354fd0d34e3db8346db2b79047db56d7543ce50617c95e0ba91f",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200501.jpg": "c9f9a86fe25fd5bba47af5130e2fcf441633355cc1d806039c86cc0d5bbde9a3",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/guarded-roi-screen-control.txt": "76eb968ed5c93e038f2727b519d67320d11044ee1c5d2896cf4116850f2ec4bf",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201700.jpg": "72a07e098b9628cf665612b9a9450da78cff914a06b08c403e56c7dc74d4b5ca",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/201702.jpg": "a2e4eaa90d3aba8cca4dc3382d710cc8564f07bea69eedf35ac550ecc0900a51",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-witness-common-footprint-region-0-0-0.txt": "5d43433b005d424b0a100e6b5e9cec6476b08a45ddd131d95bbdfc35ea992880",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-witness-common-footprint-region-1-0-0.txt": "d0303b3a5d29d10b170973f263fdba77b45767c42f62f3df4ed3a3389c36fd8a",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-witness-common-footprint-region-2-0-0.txt": "639cef08d5637c24fa894df67a68b73f1f1975d82982400b73a6aa36487c9c3e",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-witness-common-footprint-region-3-0-0.txt": "115b13a361dde557bc8c1473c982a2a66ac0383f0ae23cf466ae45fe38e13dfe",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-witness-common-footprint-region-4-0-0.txt": "47050da7f82afb01659474e42eeba9f0bb3ca968ac152116651cd8057964ea92",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-witness-common-footprint-region-5-0-0.txt": "ccdd9d849500244aa2c11c677169ffe5a5ce094478557ed024000a2464875433",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201900.jpg": "2e02bb367c6939f9184b470cd6e327551bc027db021a57b01023a524075c03d1",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/rank-negative-201900-16.txt": "15a5cc15dc403e9c2725ce475e61401baa06203b30e90992480c3828d7bfc1bb",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/203100.jpg": "d379b503e9dc445e7ff4890c2ea882d86f68304f6a23bc141e873a8786b6814a",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/rank-negative-203100-0.txt": "deb1625cd44a0267478d6867c9a531fb2c1b3ef2bf70b32a867ecd64f95707c1",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/rank-negative-203100-8.txt": "e43c9c0bdcdeb2536d8f9d2bcc9813a670bccaf63b72b39e7a2bc12f5da08643",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/207300.jpg": "a83152b75b07c37eebbee6df1fe5d3975993ac7b0852aabeb1726bce09c1af92",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/rank-negative-207300-63.txt": "5a8beded274d5b403cf6907cd6397602ab4f376f07408621b75ebffca7073e3b",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/210600.jpg": "0493d52989bd7e33a3e7b812f4af73af776900ebcd14b810985b05bff484d8ea",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/rank-negative-210600-63.txt": "6efde697d8d23ab6b0974ff236e8fb1c76a2a24c7715f80b473fda2c1a482814"
+  },
+  "rows": [
+    {
+      "case": "screen_control",
+      "filter_radius": 0,
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200500.jpg",
+      "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200501.jpg",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/guarded-roi-screen-control.txt",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":4800,\"valid_sites\":4800,\"informative_pairs\":30085,\"agreeing_pairs\":22827,\"pixel_reads\":216000},{\"status\":\"ok\",\"sites\":13699,\"valid_sites\":13047,\"informative_pairs\":77941,\"agreeing_pairs\":55146,\"pixel_reads\":587115}],\"managed_used\":0,\"managed_peak\":118947840}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 4800,
+            "valid_sites": 4800,
+            "informative_pairs": 30085,
+            "agreeing_pairs": 22827,
+            "pixel_reads": 216000
+          },
+          {
+            "status": "ok",
+            "sites": 13699,
+            "valid_sites": 13047,
+            "informative_pairs": 77941,
+            "agreeing_pairs": 55146,
+            "pixel_reads": 587115
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 118947840
+      }
+    },
+    {
+      "case": "folded_0",
+      "filter_radius": 0,
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201700.jpg",
+      "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/201702.jpg",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-witness-common-footprint-region-0-0-0.txt",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":5859,\"valid_sites\":5859,\"informative_pairs\":37460,\"agreeing_pairs\":29488,\"pixel_reads\":263655},{\"status\":\"ok\",\"sites\":28566,\"valid_sites\":26156,\"informative_pairs\":154067,\"agreeing_pairs\":115229,\"pixel_reads\":1177020}],\"managed_used\":0,\"managed_peak\":62914560}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 5859,
+            "valid_sites": 5859,
+            "informative_pairs": 37460,
+            "agreeing_pairs": 29488,
+            "pixel_reads": 263655
+          },
+          {
+            "status": "ok",
+            "sites": 28566,
+            "valid_sites": 26156,
+            "informative_pairs": 154067,
+            "agreeing_pairs": 115229,
+            "pixel_reads": 1177020
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560
+      }
+    },
+    {
+      "case": "folded_1",
+      "filter_radius": 0,
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201700.jpg",
+      "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/201702.jpg",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-witness-common-footprint-region-1-0-0.txt",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":4956,\"valid_sites\":4956,\"informative_pairs\":33946,\"agreeing_pairs\":28360,\"pixel_reads\":223020},{\"status\":\"ok\",\"sites\":23424,\"valid_sites\":20665,\"informative_pairs\":129397,\"agreeing_pairs\":102026,\"pixel_reads\":929925}],\"managed_used\":0,\"managed_peak\":62914560}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 4956,
+            "valid_sites": 4956,
+            "informative_pairs": 33946,
+            "agreeing_pairs": 28360,
+            "pixel_reads": 223020
+          },
+          {
+            "status": "ok",
+            "sites": 23424,
+            "valid_sites": 20665,
+            "informative_pairs": 129397,
+            "agreeing_pairs": 102026,
+            "pixel_reads": 929925
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560
+      }
+    },
+    {
+      "case": "folded_2",
+      "filter_radius": 0,
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201700.jpg",
+      "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/201702.jpg",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-witness-common-footprint-region-2-0-0.txt",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":4508,\"valid_sites\":4508,\"informative_pairs\":32074,\"agreeing_pairs\":26600,\"pixel_reads\":202860},{\"status\":\"ok\",\"sites\":23072,\"valid_sites\":20474,\"informative_pairs\":138783,\"agreeing_pairs\":111000,\"pixel_reads\":921330}],\"managed_used\":0,\"managed_peak\":62914560}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 4508,
+            "valid_sites": 4508,
+            "informative_pairs": 32074,
+            "agreeing_pairs": 26600,
+            "pixel_reads": 202860
+          },
+          {
+            "status": "ok",
+            "sites": 23072,
+            "valid_sites": 20474,
+            "informative_pairs": 138783,
+            "agreeing_pairs": 111000,
+            "pixel_reads": 921330
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560
+      }
+    },
+    {
+      "case": "folded_3",
+      "filter_radius": 0,
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201700.jpg",
+      "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/201702.jpg",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-witness-common-footprint-region-3-0-0.txt",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":6160,\"valid_sites\":6160,\"informative_pairs\":41638,\"agreeing_pairs\":28529,\"pixel_reads\":277200},{\"status\":\"ok\",\"sites\":34888,\"valid_sites\":26903,\"informative_pairs\":169587,\"agreeing_pairs\":109491,\"pixel_reads\":1210635}],\"managed_used\":0,\"managed_peak\":62914560}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 6160,
+            "valid_sites": 6160,
+            "informative_pairs": 41638,
+            "agreeing_pairs": 28529,
+            "pixel_reads": 277200
+          },
+          {
+            "status": "ok",
+            "sites": 34888,
+            "valid_sites": 26903,
+            "informative_pairs": 169587,
+            "agreeing_pairs": 109491,
+            "pixel_reads": 1210635
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560
+      }
+    },
+    {
+      "case": "folded_4",
+      "filter_radius": 0,
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201700.jpg",
+      "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/201702.jpg",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-witness-common-footprint-region-4-0-0.txt",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":6862,\"valid_sites\":6862,\"informative_pairs\":48448,\"agreeing_pairs\":37413,\"pixel_reads\":308790},{\"status\":\"ok\",\"sites\":39008,\"valid_sites\":28239,\"informative_pairs\":191961,\"agreeing_pairs\":142546,\"pixel_reads\":1270755}],\"managed_used\":0,\"managed_peak\":62914560}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 6862,
+            "valid_sites": 6862,
+            "informative_pairs": 48448,
+            "agreeing_pairs": 37413,
+            "pixel_reads": 308790
+          },
+          {
+            "status": "ok",
+            "sites": 39008,
+            "valid_sites": 28239,
+            "informative_pairs": 191961,
+            "agreeing_pairs": 142546,
+            "pixel_reads": 1270755
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560
+      }
+    },
+    {
+      "case": "folded_5",
+      "filter_radius": 0,
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201700.jpg",
+      "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/201702.jpg",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-witness-common-footprint-region-5-0-0.txt",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":4050,\"valid_sites\":4050,\"informative_pairs\":29171,\"agreeing_pairs\":23116,\"pixel_reads\":182250},{\"status\":\"ok\",\"sites\":23562,\"valid_sites\":20832,\"informative_pairs\":141985,\"agreeing_pairs\":106515,\"pixel_reads\":937440}],\"managed_used\":0,\"managed_peak\":62914560}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 4050,
+            "valid_sites": 4050,
+            "informative_pairs": 29171,
+            "agreeing_pairs": 23116,
+            "pixel_reads": 182250
+          },
+          {
+            "status": "ok",
+            "sites": 23562,
+            "valid_sites": 20832,
+            "informative_pairs": 141985,
+            "agreeing_pairs": 106515,
+            "pixel_reads": 937440
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560
+      }
+    },
+    {
+      "case": "negative_201900_16",
+      "filter_radius": 0,
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201900.jpg",
+      "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200501.jpg",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/rank-negative-201900-16.txt",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":4800,\"valid_sites\":4320,\"informative_pairs\":5397,\"agreeing_pairs\":3357,\"pixel_reads\":196800},{\"status\":\"ok\",\"sites\":5063,\"valid_sites\":4074,\"informative_pairs\":5439,\"agreeing_pairs\":3511,\"pixel_reads\":188480}],\"managed_used\":0,\"managed_peak\":38400000}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 4800,
+            "valid_sites": 4320,
+            "informative_pairs": 5397,
+            "agreeing_pairs": 3357,
+            "pixel_reads": 196800
+          },
+          {
+            "status": "ok",
+            "sites": 5063,
+            "valid_sites": 4074,
+            "informative_pairs": 5439,
+            "agreeing_pairs": 3511,
+            "pixel_reads": 188480
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 38400000
+      }
+    },
+    {
+      "case": "negative_203100_0",
+      "filter_radius": 0,
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/203100.jpg",
+      "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200501.jpg",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/rank-negative-203100-0.txt",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":4800,\"valid_sites\":3744,\"informative_pairs\":17276,\"agreeing_pairs\":12617,\"pixel_reads\":173760},{\"status\":\"ok\",\"sites\":5328,\"valid_sites\":3650,\"informative_pairs\":13362,\"agreeing_pairs\":8942,\"pixel_reads\":184320}],\"managed_used\":0,\"managed_peak\":38400000}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 4800,
+            "valid_sites": 3744,
+            "informative_pairs": 17276,
+            "agreeing_pairs": 12617,
+            "pixel_reads": 173760
+          },
+          {
+            "status": "ok",
+            "sites": 5328,
+            "valid_sites": 3650,
+            "informative_pairs": 13362,
+            "agreeing_pairs": 8942,
+            "pixel_reads": 184320
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 38400000
+      }
+    },
+    {
+      "case": "negative_203100_8",
+      "filter_radius": 0,
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/203100.jpg",
+      "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200501.jpg",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/rank-negative-203100-8.txt",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":4800,\"valid_sites\":4320,\"informative_pairs\":22335,\"agreeing_pairs\":14911,\"pixel_reads\":196800},{\"status\":\"ok\",\"sites\":5170,\"valid_sites\":4305,\"informative_pairs\":18479,\"agreeing_pairs\":11940,\"pixel_reads\":197885}],\"managed_used\":0,\"managed_peak\":38400000}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 4800,
+            "valid_sites": 4320,
+            "informative_pairs": 22335,
+            "agreeing_pairs": 14911,
+            "pixel_reads": 196800
+          },
+          {
+            "status": "ok",
+            "sites": 5170,
+            "valid_sites": 4305,
+            "informative_pairs": 18479,
+            "agreeing_pairs": 11940,
+            "pixel_reads": 197885
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 38400000
+      }
+    },
+    {
+      "case": "negative_207300_63",
+      "filter_radius": 0,
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/207300.jpg",
+      "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200501.jpg",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/rank-negative-207300-63.txt",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":4800,\"valid_sites\":3744,\"informative_pairs\":17300,\"agreeing_pairs\":10347,\"pixel_reads\":192960},{\"status\":\"ok\",\"sites\":10830,\"valid_sites\":8276,\"informative_pairs\":33493,\"agreeing_pairs\":19382,\"pixel_reads\":407030}],\"managed_used\":0,\"managed_peak\":118947840}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 4800,
+            "valid_sites": 3744,
+            "informative_pairs": 17300,
+            "agreeing_pairs": 10347,
+            "pixel_reads": 192960
+          },
+          {
+            "status": "ok",
+            "sites": 10830,
+            "valid_sites": 8276,
+            "informative_pairs": 33493,
+            "agreeing_pairs": 19382,
+            "pixel_reads": 407030
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 118947840
+      }
+    },
+    {
+      "case": "negative_210600_63",
+      "filter_radius": 0,
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/210600.jpg",
+      "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200501.jpg",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/rank-negative-210600-63.txt",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":4800,\"valid_sites\":3744,\"informative_pairs\":16695,\"agreeing_pairs\":8939,\"pixel_reads\":192960},{\"status\":\"ok\",\"sites\":5883,\"valid_sites\":3987,\"informative_pairs\":16751,\"agreeing_pairs\":8719,\"pixel_reads\":201275}],\"managed_used\":0,\"managed_peak\":62914560}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 4800,
+            "valid_sites": 3744,
+            "informative_pairs": 16695,
+            "agreeing_pairs": 8939,
+            "pixel_reads": 192960
+          },
+          {
+            "status": "ok",
+            "sites": 5883,
+            "valid_sites": 3987,
+            "informative_pairs": 16751,
+            "agreeing_pairs": 8719,
+            "pixel_reads": 201275
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560
+      }
+    },
+    {
+      "case": "screen_control",
+      "filter_radius": 3,
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200500.jpg",
+      "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200501.jpg",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/guarded-roi-screen-control.txt",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":4800,\"valid_sites\":4800,\"informative_pairs\":27631,\"agreeing_pairs\":25132,\"pixel_reads\":10584000},{\"status\":\"ok\",\"sites\":13699,\"valid_sites\":13047,\"informative_pairs\":66302,\"agreeing_pairs\":57150,\"pixel_reads\":28768635}],\"managed_used\":0,\"managed_peak\":118947840}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 4800,
+            "valid_sites": 4800,
+            "informative_pairs": 27631,
+            "agreeing_pairs": 25132,
+            "pixel_reads": 10584000
+          },
+          {
+            "status": "ok",
+            "sites": 13699,
+            "valid_sites": 13047,
+            "informative_pairs": 66302,
+            "agreeing_pairs": 57150,
+            "pixel_reads": 28768635
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 118947840
+      }
+    },
+    {
+      "case": "folded_0",
+      "filter_radius": 3,
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201700.jpg",
+      "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/201702.jpg",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-witness-common-footprint-region-0-0-0.txt",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":5859,\"valid_sites\":5859,\"informative_pairs\":35452,\"agreeing_pairs\":31725,\"pixel_reads\":12919095},{\"status\":\"ok\",\"sites\":28566,\"valid_sites\":26156,\"informative_pairs\":145216,\"agreeing_pairs\":123928,\"pixel_reads\":57673980}],\"managed_used\":0,\"managed_peak\":62914560}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 5859,
+            "valid_sites": 5859,
+            "informative_pairs": 35452,
+            "agreeing_pairs": 31725,
+            "pixel_reads": 12919095
+          },
+          {
+            "status": "ok",
+            "sites": 28566,
+            "valid_sites": 26156,
+            "informative_pairs": 145216,
+            "agreeing_pairs": 123928,
+            "pixel_reads": 57673980
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560
+      }
+    },
+    {
+      "case": "folded_1",
+      "filter_radius": 3,
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201700.jpg",
+      "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/201702.jpg",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-witness-common-footprint-region-1-0-0.txt",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":4956,\"valid_sites\":4956,\"informative_pairs\":32749,\"agreeing_pairs\":30543,\"pixel_reads\":10927980},{\"status\":\"ok\",\"sites\":23424,\"valid_sites\":20665,\"informative_pairs\":124585,\"agreeing_pairs\":112760,\"pixel_reads\":45566325}],\"managed_used\":0,\"managed_peak\":62914560}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 4956,
+            "valid_sites": 4956,
+            "informative_pairs": 32749,
+            "agreeing_pairs": 30543,
+            "pixel_reads": 10927980
+          },
+          {
+            "status": "ok",
+            "sites": 23424,
+            "valid_sites": 20665,
+            "informative_pairs": 124585,
+            "agreeing_pairs": 112760,
+            "pixel_reads": 45566325
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560
+      }
+    },
+    {
+      "case": "folded_2",
+      "filter_radius": 3,
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201700.jpg",
+      "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/201702.jpg",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-witness-common-footprint-region-2-0-0.txt",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":4508,\"valid_sites\":4508,\"informative_pairs\":30910,\"agreeing_pairs\":29036,\"pixel_reads\":9940140},{\"status\":\"ok\",\"sites\":23072,\"valid_sites\":20474,\"informative_pairs\":133865,\"agreeing_pairs\":122446,\"pixel_reads\":45145170}],\"managed_used\":0,\"managed_peak\":62914560}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 4508,
+            "valid_sites": 4508,
+            "informative_pairs": 30910,
+            "agreeing_pairs": 29036,
+            "pixel_reads": 9940140
+          },
+          {
+            "status": "ok",
+            "sites": 23072,
+            "valid_sites": 20474,
+            "informative_pairs": 133865,
+            "agreeing_pairs": 122446,
+            "pixel_reads": 45145170
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560
+      }
+    },
+    {
+      "case": "folded_3",
+      "filter_radius": 3,
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201700.jpg",
+      "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/201702.jpg",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-witness-common-footprint-region-3-0-0.txt",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":6160,\"valid_sites\":6160,\"informative_pairs\":39778,\"agreeing_pairs\":32784,\"pixel_reads\":13582800},{\"status\":\"ok\",\"sites\":34888,\"valid_sites\":26903,\"informative_pairs\":155359,\"agreeing_pairs\":116658,\"pixel_reads\":59321115}],\"managed_used\":0,\"managed_peak\":62914560}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 6160,
+            "valid_sites": 6160,
+            "informative_pairs": 39778,
+            "agreeing_pairs": 32784,
+            "pixel_reads": 13582800
+          },
+          {
+            "status": "ok",
+            "sites": 34888,
+            "valid_sites": 26903,
+            "informative_pairs": 155359,
+            "agreeing_pairs": 116658,
+            "pixel_reads": 59321115
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560
+      }
+    },
+    {
+      "case": "folded_4",
+      "filter_radius": 3,
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201700.jpg",
+      "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/201702.jpg",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-witness-common-footprint-region-4-0-0.txt",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":6862,\"valid_sites\":6862,\"informative_pairs\":45315,\"agreeing_pairs\":39278,\"pixel_reads\":15130710},{\"status\":\"ok\",\"sites\":39008,\"valid_sites\":28239,\"informative_pairs\":180694,\"agreeing_pairs\":152088,\"pixel_reads\":62266995}],\"managed_used\":0,\"managed_peak\":62914560}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 6862,
+            "valid_sites": 6862,
+            "informative_pairs": 45315,
+            "agreeing_pairs": 39278,
+            "pixel_reads": 15130710
+          },
+          {
+            "status": "ok",
+            "sites": 39008,
+            "valid_sites": 28239,
+            "informative_pairs": 180694,
+            "agreeing_pairs": 152088,
+            "pixel_reads": 62266995
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560
+      }
+    },
+    {
+      "case": "folded_5",
+      "filter_radius": 3,
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201700.jpg",
+      "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/201702.jpg",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-witness-common-footprint-region-5-0-0.txt",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":4050,\"valid_sites\":4050,\"informative_pairs\":28832,\"agreeing_pairs\":25974,\"pixel_reads\":8930250},{\"status\":\"ok\",\"sites\":23562,\"valid_sites\":20832,\"informative_pairs\":141651,\"agreeing_pairs\":119041,\"pixel_reads\":45934560}],\"managed_used\":0,\"managed_peak\":62914560}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 4050,
+            "valid_sites": 4050,
+            "informative_pairs": 28832,
+            "agreeing_pairs": 25974,
+            "pixel_reads": 8930250
+          },
+          {
+            "status": "ok",
+            "sites": 23562,
+            "valid_sites": 20832,
+            "informative_pairs": 141651,
+            "agreeing_pairs": 119041,
+            "pixel_reads": 45934560
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560
+      }
+    },
+    {
+      "case": "negative_201900_16",
+      "filter_radius": 3,
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201900.jpg",
+      "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200501.jpg",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/rank-negative-201900-16.txt",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":4800,\"valid_sites\":4140,\"informative_pairs\":3508,\"agreeing_pairs\":2923,\"pixel_reads\":9246300},{\"status\":\"ok\",\"sites\":5063,\"valid_sites\":3882,\"informative_pairs\":3409,\"agreeing_pairs\":2816,\"pixel_reads\":8688785}],\"managed_used\":0,\"managed_peak\":38400000}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 4800,
+            "valid_sites": 4140,
+            "informative_pairs": 3508,
+            "agreeing_pairs": 2923,
+            "pixel_reads": 9246300
+          },
+          {
+            "status": "ok",
+            "sites": 5063,
+            "valid_sites": 3882,
+            "informative_pairs": 3409,
+            "agreeing_pairs": 2816,
+            "pixel_reads": 8688785
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 38400000
+      }
+    },
+    {
+      "case": "negative_203100_0",
+      "filter_radius": 3,
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/203100.jpg",
+      "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200501.jpg",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/rank-negative-203100-0.txt",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":4800,\"valid_sites\":3381,\"informative_pairs\":15011,\"agreeing_pairs\":14184,\"pixel_reads\":7702065},{\"status\":\"ok\",\"sites\":5328,\"valid_sites\":3238,\"informative_pairs\":9945,\"agreeing_pairs\":8929,\"pixel_reads\":7828460}],\"managed_used\":0,\"managed_peak\":38400000}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 4800,
+            "valid_sites": 3381,
+            "informative_pairs": 15011,
+            "agreeing_pairs": 14184,
+            "pixel_reads": 7702065
+          },
+          {
+            "status": "ok",
+            "sites": 5328,
+            "valid_sites": 3238,
+            "informative_pairs": 9945,
+            "agreeing_pairs": 8929,
+            "pixel_reads": 7828460
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 38400000
+      }
+    },
+    {
+      "case": "negative_203100_8",
+      "filter_radius": 3,
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/203100.jpg",
+      "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200501.jpg",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/rank-negative-203100-8.txt",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":4800,\"valid_sites\":4140,\"informative_pairs\":18623,\"agreeing_pairs\":16625,\"pixel_reads\":9246300},{\"status\":\"ok\",\"sites\":5170,\"valid_sites\":4149,\"informative_pairs\":14229,\"agreeing_pairs\":12983,\"pixel_reads\":9253325}],\"managed_used\":0,\"managed_peak\":38400000}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 4800,
+            "valid_sites": 4140,
+            "informative_pairs": 18623,
+            "agreeing_pairs": 16625,
+            "pixel_reads": 9246300
+          },
+          {
+            "status": "ok",
+            "sites": 5170,
+            "valid_sites": 4149,
+            "informative_pairs": 14229,
+            "agreeing_pairs": 12983,
+            "pixel_reads": 9253325
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 38400000
+      }
+    },
+    {
+      "case": "negative_207300_63",
+      "filter_radius": 3,
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/207300.jpg",
+      "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200501.jpg",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/rank-negative-207300-63.txt",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":4800,\"valid_sites\":3381,\"informative_pairs\":13705,\"agreeing_pairs\":9230,\"pixel_reads\":8703330},{\"status\":\"ok\",\"sites\":10830,\"valid_sites\":7719,\"informative_pairs\":25596,\"agreeing_pairs\":16319,\"pixel_reads\":18362835}],\"managed_used\":0,\"managed_peak\":118947840}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 4800,
+            "valid_sites": 3381,
+            "informative_pairs": 13705,
+            "agreeing_pairs": 9230,
+            "pixel_reads": 8703330
+          },
+          {
+            "status": "ok",
+            "sites": 10830,
+            "valid_sites": 7719,
+            "informative_pairs": 25596,
+            "agreeing_pairs": 16319,
+            "pixel_reads": 18362835
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 118947840
+      }
+    },
+    {
+      "case": "negative_210600_63",
+      "filter_radius": 3,
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/210600.jpg",
+      "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200501.jpg",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/rank-negative-210600-63.txt",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":4800,\"valid_sites\":3381,\"informative_pairs\":13644,\"agreeing_pairs\":8068,\"pixel_reads\":8703330},{\"status\":\"ok\",\"sites\":5883,\"valid_sites\":3567,\"informative_pairs\":12593,\"agreeing_pairs\":6898,\"pixel_reads\":8631305}],\"managed_used\":0,\"managed_peak\":62914560}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 4800,
+            "valid_sites": 3381,
+            "informative_pairs": 13644,
+            "agreeing_pairs": 8068,
+            "pixel_reads": 8703330
+          },
+          {
+            "status": "ok",
+            "sites": 5883,
+            "valid_sites": 3567,
+            "informative_pairs": 12593,
+            "agreeing_pairs": 6898,
+            "pixel_reads": 8631305
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560
+      }
+    },
+    {
+      "case": "screen_control",
+      "filter_radius": 8,
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200500.jpg",
+      "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200501.jpg",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/guarded-roi-screen-control.txt",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":4800,\"valid_sites\":4800,\"informative_pairs\":28792,\"agreeing_pairs\":28639,\"pixel_reads\":62424000},{\"status\":\"ok\",\"sites\":13699,\"valid_sites\":13047,\"informative_pairs\":65784,\"agreeing_pairs\":63717,\"pixel_reads\":169676235}],\"managed_used\":0,\"managed_peak\":118947840}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 4800,
+            "valid_sites": 4800,
+            "informative_pairs": 28792,
+            "agreeing_pairs": 28639,
+            "pixel_reads": 62424000
+          },
+          {
+            "status": "ok",
+            "sites": 13699,
+            "valid_sites": 13047,
+            "informative_pairs": 65784,
+            "agreeing_pairs": 63717,
+            "pixel_reads": 169676235
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 118947840
+      }
+    },
+    {
+      "case": "folded_0",
+      "filter_radius": 8,
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201700.jpg",
+      "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/201702.jpg",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-witness-common-footprint-region-0-0-0.txt",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":5859,\"valid_sites\":5859,\"informative_pairs\":30605,\"agreeing_pairs\":29082,\"pixel_reads\":76196295},{\"status\":\"ok\",\"sites\":28566,\"valid_sites\":26156,\"informative_pairs\":128774,\"agreeing_pairs\":119532,\"pixel_reads\":340158780}],\"managed_used\":0,\"managed_peak\":62914560}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 5859,
+            "valid_sites": 5859,
+            "informative_pairs": 30605,
+            "agreeing_pairs": 29082,
+            "pixel_reads": 76196295
+          },
+          {
+            "status": "ok",
+            "sites": 28566,
+            "valid_sites": 26156,
+            "informative_pairs": 128774,
+            "agreeing_pairs": 119532,
+            "pixel_reads": 340158780
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560
+      }
+    },
+    {
+      "case": "folded_1",
+      "filter_radius": 8,
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201700.jpg",
+      "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/201702.jpg",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-witness-common-footprint-region-1-0-0.txt",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":4956,\"valid_sites\":4956,\"informative_pairs\":27501,\"agreeing_pairs\":25630,\"pixel_reads\":64452780},{\"status\":\"ok\",\"sites\":23424,\"valid_sites\":20665,\"informative_pairs\":117617,\"agreeing_pairs\":112830,\"pixel_reads\":268748325}],\"managed_used\":0,\"managed_peak\":62914560}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 4956,
+            "valid_sites": 4956,
+            "informative_pairs": 27501,
+            "agreeing_pairs": 25630,
+            "pixel_reads": 64452780
+          },
+          {
+            "status": "ok",
+            "sites": 23424,
+            "valid_sites": 20665,
+            "informative_pairs": 117617,
+            "agreeing_pairs": 112830,
+            "pixel_reads": 268748325
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560
+      }
+    },
+    {
+      "case": "folded_2",
+      "filter_radius": 8,
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201700.jpg",
+      "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/201702.jpg",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-witness-common-footprint-region-2-0-0.txt",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":4508,\"valid_sites\":4508,\"informative_pairs\":28075,\"agreeing_pairs\":26324,\"pixel_reads\":58626540},{\"status\":\"ok\",\"sites\":23072,\"valid_sites\":20474,\"informative_pairs\":126068,\"agreeing_pairs\":121373,\"pixel_reads\":266264370}],\"managed_used\":0,\"managed_peak\":62914560}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 4508,
+            "valid_sites": 4508,
+            "informative_pairs": 28075,
+            "agreeing_pairs": 26324,
+            "pixel_reads": 58626540
+          },
+          {
+            "status": "ok",
+            "sites": 23072,
+            "valid_sites": 20474,
+            "informative_pairs": 126068,
+            "agreeing_pairs": 121373,
+            "pixel_reads": 266264370
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560
+      }
+    },
+    {
+      "case": "folded_3",
+      "filter_radius": 8,
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201700.jpg",
+      "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/201702.jpg",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-witness-common-footprint-region-3-0-0.txt",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":6160,\"valid_sites\":6160,\"informative_pairs\":40785,\"agreeing_pairs\":35059,\"pixel_reads\":80110800},{\"status\":\"ok\",\"sites\":34888,\"valid_sites\":26903,\"informative_pairs\":151515,\"agreeing_pairs\":129495,\"pixel_reads\":349873515}],\"managed_used\":0,\"managed_peak\":62914560}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 6160,
+            "valid_sites": 6160,
+            "informative_pairs": 40785,
+            "agreeing_pairs": 35059,
+            "pixel_reads": 80110800
+          },
+          {
+            "status": "ok",
+            "sites": 34888,
+            "valid_sites": 26903,
+            "informative_pairs": 151515,
+            "agreeing_pairs": 129495,
+            "pixel_reads": 349873515
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560
+      }
+    },
+    {
+      "case": "folded_4",
+      "filter_radius": 8,
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201700.jpg",
+      "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/201702.jpg",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-witness-common-footprint-region-4-0-0.txt",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":6862,\"valid_sites\":6862,\"informative_pairs\":41132,\"agreeing_pairs\":38200,\"pixel_reads\":89240310},{\"status\":\"ok\",\"sites\":39008,\"valid_sites\":28239,\"informative_pairs\":159348,\"agreeing_pairs\":144254,\"pixel_reads\":367248195}],\"managed_used\":0,\"managed_peak\":62914560}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 6862,
+            "valid_sites": 6862,
+            "informative_pairs": 41132,
+            "agreeing_pairs": 38200,
+            "pixel_reads": 89240310
+          },
+          {
+            "status": "ok",
+            "sites": 39008,
+            "valid_sites": 28239,
+            "informative_pairs": 159348,
+            "agreeing_pairs": 144254,
+            "pixel_reads": 367248195
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560
+      }
+    },
+    {
+      "case": "folded_5",
+      "filter_radius": 8,
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201700.jpg",
+      "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/201702.jpg",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-witness-common-footprint-region-5-0-0.txt",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":4050,\"valid_sites\":4050,\"informative_pairs\":28250,\"agreeing_pairs\":26997,\"pixel_reads\":52670250},{\"status\":\"ok\",\"sites\":23562,\"valid_sites\":20832,\"informative_pairs\":137588,\"agreeing_pairs\":126044,\"pixel_reads\":270920160}],\"managed_used\":0,\"managed_peak\":62914560}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 4050,
+            "valid_sites": 4050,
+            "informative_pairs": 28250,
+            "agreeing_pairs": 26997,
+            "pixel_reads": 52670250
+          },
+          {
+            "status": "ok",
+            "sites": 23562,
+            "valid_sites": 20832,
+            "informative_pairs": 137588,
+            "agreeing_pairs": 126044,
+            "pixel_reads": 270920160
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560
+      }
+    },
+    {
+      "case": "negative_201900_16",
+      "filter_radius": 8,
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201900.jpg",
+      "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200501.jpg",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/rank-negative-201900-16.txt",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":4800,\"valid_sites\":3840,\"informative_pairs\":2722,\"agreeing_pairs\":2661,\"pixel_reads\":50632800},{\"status\":\"ok\",\"sites\":5063,\"valid_sites\":3558,\"informative_pairs\":2719,\"agreeing_pairs\":2619,\"pixel_reads\":47022565}],\"managed_used\":0,\"managed_peak\":38400000}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 4800,
+            "valid_sites": 3840,
+            "informative_pairs": 2722,
+            "agreeing_pairs": 2661,
+            "pixel_reads": 50632800
+          },
+          {
+            "status": "ok",
+            "sites": 5063,
+            "valid_sites": 3558,
+            "informative_pairs": 2719,
+            "agreeing_pairs": 2619,
+            "pixel_reads": 47022565
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 38400000
+      }
+    },
+    {
+      "case": "negative_203100_0",
+      "filter_radius": 8,
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/203100.jpg",
+      "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200501.jpg",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/rank-negative-203100-0.txt",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":4800,\"valid_sites\":2816,\"informative_pairs\":14049,\"agreeing_pairs\":13947,\"pixel_reads\":37963040},{\"status\":\"ok\",\"sites\":5328,\"valid_sites\":2606,\"informative_pairs\":8590,\"agreeing_pairs\":8276,\"pixel_reads\":37607525}],\"managed_used\":0,\"managed_peak\":38400000}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 4800,
+            "valid_sites": 2816,
+            "informative_pairs": 14049,
+            "agreeing_pairs": 13947,
+            "pixel_reads": 37963040
+          },
+          {
+            "status": "ok",
+            "sites": 5328,
+            "valid_sites": 2606,
+            "informative_pairs": 8590,
+            "agreeing_pairs": 8276,
+            "pixel_reads": 37607525
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 38400000
+      }
+    },
+    {
+      "case": "negative_203100_8",
+      "filter_radius": 8,
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/203100.jpg",
+      "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200501.jpg",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/rank-negative-203100-8.txt",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":4800,\"valid_sites\":3840,\"informative_pairs\":18857,\"agreeing_pairs\":18793,\"pixel_reads\":50632800},{\"status\":\"ok\",\"sites\":5170,\"valid_sites\":3890,\"informative_pairs\":14738,\"agreeing_pairs\":14183,\"pixel_reads\":51193280}],\"managed_used\":0,\"managed_peak\":38400000}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 4800,
+            "valid_sites": 3840,
+            "informative_pairs": 18857,
+            "agreeing_pairs": 18793,
+            "pixel_reads": 50632800
+          },
+          {
+            "status": "ok",
+            "sites": 5170,
+            "valid_sites": 3890,
+            "informative_pairs": 14738,
+            "agreeing_pairs": 14183,
+            "pixel_reads": 51193280
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 38400000
+      }
+    },
+    {
+      "case": "negative_207300_63",
+      "filter_radius": 8,
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/207300.jpg",
+      "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200501.jpg",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/rank-negative-207300-63.txt",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":4800,\"valid_sites\":2816,\"informative_pairs\":10739,\"agreeing_pairs\":9676,\"pixel_reads\":44076480},{\"status\":\"ok\",\"sites\":10830,\"valid_sites\":6838,\"informative_pairs\":15985,\"agreeing_pairs\":12775,\"pixel_reads\":97110120}],\"managed_used\":0,\"managed_peak\":118947840}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 4800,
+            "valid_sites": 2816,
+            "informative_pairs": 10739,
+            "agreeing_pairs": 9676,
+            "pixel_reads": 44076480
+          },
+          {
+            "status": "ok",
+            "sites": 10830,
+            "valid_sites": 6838,
+            "informative_pairs": 15985,
+            "agreeing_pairs": 12775,
+            "pixel_reads": 97110120
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 118947840
+      }
+    },
+    {
+      "case": "negative_210600_63",
+      "filter_radius": 8,
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/210600.jpg",
+      "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200501.jpg",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/rank-negative-210600-63.txt",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":4800,\"valid_sites\":2816,\"informative_pairs\":8316,\"agreeing_pairs\":4843,\"pixel_reads\":44076480},{\"status\":\"ok\",\"sites\":5883,\"valid_sites\":2907,\"informative_pairs\":7780,\"agreeing_pairs\":4518,\"pixel_reads\":42229710}],\"managed_used\":0,\"managed_peak\":62914560}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 4800,
+            "valid_sites": 2816,
+            "informative_pairs": 8316,
+            "agreeing_pairs": 4843,
+            "pixel_reads": 44076480
+          },
+          {
+            "status": "ok",
+            "sites": 5883,
+            "valid_sites": 2907,
+            "informative_pairs": 7780,
+            "agreeing_pairs": 4518,
+            "pixel_reads": 42229710
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560
+      }
+    }
+  ],
+  "scope": "Same twelve supplied-model/domain controls with explicit filter radii0,3,8. Radius0 must reproduce full original evidence exactly. Neighbor radius8/contrast.005/minpairs1000 unchanged; increased declared reads cover added box taps. No copy decision, broad precision or automatic fold recovery."
+}

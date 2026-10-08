@@ -1,0 +1,194 @@
+{
+  "change": "Retain original DeviceGray/RGB/CMYK axial/radial shading functions and color space after conservative metadata admission, then sample native components without RGB tables. Test-only compositor capture/replay connects source samples to native group blending and independent polygon/clip coverage.",
+  "scope": "Native AI/PDF compositor prototype; production PDF renderer is not replaced.",
+  "tests": {
+    "interpreter_tests_passed": 92,
+    "native_compositor_tests_passed": 121,
+    "native_compositor_ignored_unverified": 10,
+    "authored_axial_cmyk_full_frame_exact_pixels": 512,
+    "real_ai_diagnostic_passed": 1,
+    "real_ai_diagnostic_is_not_image_qualification": true
+  },
+  "sampling": [
+    "Axial projection in inverse pattern coordinates with domain/extension/background rules",
+    "General two-circle radial quadratic with stable roots, nonnegative-radius filtering, permitted-domain filtering and highest admissible root",
+    "Original Type2/Type3 single or multiple color functions share 4096 evaluation steps; native retained metadata traversal also shares 4096-node budget and 32-level cap"
+  ],
+  "admission": "Source Arc/color/function capacity reserved before retaining clone; unsupported profiles, transfers and non-Type2/Type3 metadata explicitly refused. Capacity is conservative and can double-count shared references. Parsed source allocations precede capture and are not measured by this admission.",
+  "controls": [
+    "Analytical CMYK axial samples through affine transform and extension",
+    "Concentric expansion/shrink, moving equal-radius circles and linear-cone radial samples",
+    "Every source-capture cancellation boundary releases credit; denied capacity retains no clone",
+    "Exact 512-pixel native CMYK replay of authored full-frame axial gradient"
+  ],
+  "real_pages": [
+    {
+      "fixture": "VectorApple.ai",
+      "page": 0,
+      "width": 301,
+      "height": 246,
+      "peak_admitted_bytes": 51243998,
+      "final_admitted_bytes": 0,
+      "status": "native_diagnostic",
+      "native_completed": false,
+      "capture_failed": false,
+      "capture_ms": 2091.646209,
+      "native_replay_ms": 39.526916,
+      "deadline_expired": false,
+      "events": 2755,
+      "native_paints": 463,
+      "raster_events": 3,
+      "raster_source_models": [
+        "event=3,model=None",
+        "event=1218,model=Some(Cmyk)",
+        "event=2298,model=Some(Cmyk)"
+      ],
+      "native_raster_components": [
+        "event=3,sample_count=Some(29488),refusal=None",
+        "event=1218,sample_count=Some(298224),refusal=None",
+        "event=2298,sample_count=Some(266084),refusal=None"
+      ],
+      "shading_events": 13,
+      "page_model": "Cmyk"
+    },
+    {
+      "fixture": "one.ai",
+      "page": 0,
+      "width": 1366,
+      "height": 768,
+      "peak_admitted_bytes": 168322584,
+      "final_admitted_bytes": 0,
+      "status": "native_diagnostic",
+      "native_completed": true,
+      "capture_failed": false,
+      "capture_ms": 2.989916,
+      "native_replay_ms": 3668.875167,
+      "deadline_expired": false,
+      "events": 8,
+      "native_paints": 2,
+      "raster_events": 0,
+      "raster_source_models": [],
+      "native_raster_components": [],
+      "shading_events": 0,
+      "page_model": "Rgb"
+    },
+    {
+      "fixture": "one.ai",
+      "page": 1,
+      "width": 177,
+      "height": 175,
+      "peak_admitted_bytes": 4957320,
+      "final_admitted_bytes": 0,
+      "status": "native_diagnostic",
+      "native_completed": true,
+      "capture_failed": false,
+      "capture_ms": 0.048374999999999994,
+      "native_replay_ms": 66.865167,
+      "deadline_expired": false,
+      "events": 1,
+      "native_paints": 0,
+      "raster_events": 0,
+      "raster_source_models": [],
+      "native_raster_components": [],
+      "shading_events": 0,
+      "page_model": "Rgb"
+    }
+  ],
+  "first_real_blocker": {
+    "fixture": "VectorApple.ai",
+    "event": 9,
+    "kind": "tensor-mesh",
+    "model": "CMYK",
+    "device": true,
+    "transfer": false,
+    "captured": false,
+    "refusal": "Unsupported"
+  },
+  "real_capture_trace": [
+    "NATIVE_SHADING_SOURCE kind=tensor-mesh model=Some(Cmyk) device=true transfer=false function_kind=None function_count=0",
+    "NATIVE_SHADING_SOURCE kind=tensor-mesh model=Some(Cmyk) device=true transfer=false function_kind=None function_count=0",
+    "NATIVE_SHADING_SOURCE kind=tensor-mesh model=Some(Cmyk) device=true transfer=false function_kind=None function_count=0",
+    "NATIVE_SHADING_SOURCE kind=axial model=None device=false transfer=false function_kind=Some(3) function_count=1",
+    "NATIVE_SHADING_SOURCE kind=axial model=Some(Cmyk) device=true transfer=false function_kind=Some(3) function_count=1",
+    "NATIVE_SHADING_SOURCE kind=axial model=Some(Cmyk) device=true transfer=false function_kind=Some(3) function_count=1",
+    "NATIVE_SHADING_SOURCE kind=axial model=None device=false transfer=false function_kind=Some(3) function_count=1",
+    "NATIVE_SHADING_SOURCE kind=axial model=None device=false transfer=false function_kind=Some(3) function_count=1",
+    "NATIVE_SHADING_SOURCE kind=axial model=Some(Cmyk) device=true transfer=false function_kind=Some(3) function_count=1",
+    "NATIVE_SHADING_SOURCE kind=axial model=Some(Cmyk) device=true transfer=false function_kind=Some(3) function_count=1",
+    "NATIVE_SHADING_SOURCE kind=axial model=Some(Cmyk) device=true transfer=false function_kind=Some(3) function_count=1",
+    "NATIVE_SHADING_SOURCE kind=axial model=Some(Cmyk) device=true transfer=false function_kind=Some(3) function_count=1",
+    "NATIVE_SHADING_SOURCE kind=tensor-mesh model=Some(Cmyk) device=true transfer=false function_kind=None function_count=0",
+    "NATIVE_SHADING_SOURCE kind=tensor-mesh model=Some(Cmyk) device=true transfer=false function_kind=None function_count=0",
+    "NATIVE_SHADING_SOURCE kind=axial model=None device=false transfer=false function_kind=Some(3) function_count=1",
+    "NATIVE_SHADING event=9 captured=false refusal=Some(Unsupported)"
+  ],
+  "fixtures": [
+    {
+      "path": "/tmp/rrrah-integrated-ai-corpus/VectorApple.ai",
+      "sha256": "c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06"
+    },
+    {
+      "path": "/tmp/rrrah-integrated-ai-corpus/one.ai",
+      "sha256": "97786949c268233a446e1738fb9c2f941e4d109811bd2f972948cdb7a45d64b4"
+    }
+  ],
+  "sources": [
+    {
+      "path": "vendor/hayro-interpret/src/function/mod.rs",
+      "sha256": "09f526a8d6b93f9d432d807d1594beabbda9003f6fcd039f66ec6d4672e0da59"
+    },
+    {
+      "path": "vendor/hayro-interpret/src/function/type2.rs",
+      "sha256": "4b1ea2e6a8d1670c34d6825e9fecb1266da7ac03007bcc8f82c31d733193620d"
+    },
+    {
+      "path": "vendor/hayro-interpret/src/function/type3.rs",
+      "sha256": "6b7f22c92020a87f99f54779b1070055a6210c218699c9d911207340dff80d7c"
+    },
+    {
+      "path": "vendor/hayro-interpret/src/color.rs",
+      "sha256": "7bf5c5536bd1f029dcf5897497ef40f9df823a0896cdebffc26164c7ffb227ca"
+    },
+    {
+      "path": "vendor/hayro-interpret/src/shading.rs",
+      "sha256": "fff04e775f7d31aa3708a898074a931fb26cbe251b921267bf5eef4e361a7f5c"
+    },
+    {
+      "path": "vendor/hayro-interpret/src/encode.rs",
+      "sha256": "e8cb6733df04c6a54cdce0c341a6813812ea2a00040074a6b048c5f418f891cc"
+    },
+    {
+      "path": "vendor/hayro-interpret/src/encode/native_source.rs",
+      "sha256": "cf315d2f1d4c13192dd043861188b30194791a2adbc31c292ac8c7783d61610d"
+    },
+    {
+      "path": "vendor/hayro/src/knockout_interpreter.rs",
+      "sha256": "f64a12bb3331a9a53a7e46881f65bcea7894ade28512bf600ba83ceca0779eca"
+    }
+  ],
+  "logs": [
+    {
+      "path": "/tmp/rrrah-pdf-native-shading-source-20261008.log",
+      "sha256": "5df3191c50173599dd128a13daf3c51d679138319a7a7078acd49bbbd94588ea"
+    },
+    {
+      "path": "/tmp/rrrah-native-shading-replay-20261008.log",
+      "sha256": "2dada553a186285a6bd30dfb9b250197633fa5aa8e5a74459b28b4cde3b13f2e"
+    },
+    {
+      "path": "/tmp/rrrah-native-shading-classification-20261008.log",
+      "sha256": "70bd67f6d0d789ca269d82d047af4ba43ff29b83f4bd6050ca0afb69048f4d15"
+    },
+    {
+      "path": "/tmp/rrrah-real-ai-native-shading-classification-20261008.log",
+      "sha256": "876e2eadffdba00d839265b61df02db66932414ea18da81079178c54048c3087"
+    }
+  ],
+  "limitations": [
+    "VectorApple tensor shading remains unsupported in native replay; native tensor components are the next requirement.",
+    "Spot/calibrated/ICC source spaces, transfer functions and sampled/calculator multi-output require separate retention/qualification.",
+    "Native shading scalar sampling at pixel centers is not full spatial gradient integration; geometry coverage remains existing u8 polygon coverage.",
+    "No refreshed strict Poppler image comparison, production AI integration, Metal or physical HDR qualification claimed.",
+    "Original PDF function/color components retain existing f32 source precision."
+  ]
+}

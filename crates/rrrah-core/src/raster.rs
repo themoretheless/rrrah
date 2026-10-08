@@ -43,7 +43,7 @@ impl RasterPixels {
 
 /// Interpretation of RGB samples. Embedded profiles need color management
 /// before display; their samples must not be silently treated as sRGB.
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum RasterColorSpace {
     Srgb,
     /// Untagged image imported with the conventional sRGB fallback.
@@ -73,6 +73,7 @@ pub struct DecodedRaster {
     color_space: Arc<RasterColorMetadata>,
     sample_scale: f32,
     hotspot: Option<(u32, u32)>,
+    pixel_aspect: Option<f32>,
     image_index: usize,
     image_count: usize,
 }
@@ -237,6 +238,7 @@ impl DecodedRaster {
             RasterPixels::Rgba32Float(pixels),
             RasterColorSpace::LinearSrgb,
         )?
+        .with_pixel_aspect(self.pixel_aspect)?
         .with_sample_scale(self.sample_scale)?
         .with_hotspot(self.hotspot)?
         .with_image_selection(self.image_index, self.image_count)
@@ -328,6 +330,7 @@ impl DecodedRaster {
             }),
             sample_scale: 1.0,
             hotspot: None,
+            pixel_aspect: None,
             image_index: 0,
             image_count: 1,
         })
@@ -382,6 +385,15 @@ impl DecodedRaster {
 
     pub fn sample_scale(&self) -> f32 {
         self.sample_scale
+    }
+    /// Explicit physical pixel width divided by height; absent means unknown.
+    pub fn pixel_aspect(&self) -> Option<f32> { self.pixel_aspect }
+    pub fn with_pixel_aspect(mut self, aspect: Option<f32>) -> Result<Self, RasterError> {
+        if aspect.is_some_and(|v| !v.is_finite() || v <= 0.0) {
+            return Err(RasterError::Dimensions);
+        }
+        self.pixel_aspect = aspect;
+        Ok(self)
     }
 
     pub fn with_sample_scale(mut self, scale: f32) -> Result<Self, RasterError> {
@@ -454,6 +466,32 @@ impl DecodedRaster {
         output
             .try_reserve_exact(count)
             .map_err(|_| RasterError::Allocation)?;
+        // Amortize transfer evaluation for large integer images. Scratch is
+        // optional: tight budgets retain the scalar path and its admission.
+        let table_reservation =
+            if encoded && !bt709 && count >= 4 * 65536 && matches!(&self.pixels, RasterPixels::Rgba16(_)) {
+                match budget {
+                    Some(b) => b.try_reserve(65536 * 4).ok(),
+                    None => None,
+                }
+            } else {
+                None
+            };
+        let mut table16 = Vec::new();
+        if encoded
+            && !bt709
+            && count >= 4 * 65536
+            && matches!(&self.pixels, RasterPixels::Rgba16(_))
+            && (budget.is_none() || table_reservation.is_some())
+            && table16.try_reserve_exact(65536).is_ok()
+        {
+            for sample in 0..=u16::MAX {
+                if sample.is_multiple_of(4096) && cancel() {
+                    return Err(RasterError::Cancelled);
+                }
+                table16.push(srgb_linear(f32::from(sample) / 65535.0));
+            }
+        }
         let mut convert = |rgba: [f32; 4]| -> Result<(), RasterError> {
             if rgba.iter().any(|value| !value.is_finite()) {
                 return Err(RasterError::NonFiniteSample);
@@ -509,6 +547,19 @@ impl DecodedRaster {
                     ])?;
                 }
             }
+            RasterPixels::Rgba16(pixels) if !table16.is_empty() => {
+                for (index, rgba) in pixels.as_chunks::<4>().0.iter().enumerate() {
+                    if index.is_multiple_of(4096) && cancel() {
+                        return Err(RasterError::Cancelled);
+                    }
+                    output.extend_from_slice(&[
+                        table16[rgba[0] as usize],
+                        table16[rgba[1] as usize],
+                        table16[rgba[2] as usize],
+                        f32::from(rgba[3]) / 65535.0,
+                    ]);
+                }
+            }
             RasterPixels::Rgba16(pixels) => {
                 for (index, rgba) in pixels.as_chunks::<4>().0.iter().enumerate() {
                     if index.is_multiple_of(4096) && cancel() {
@@ -543,6 +594,7 @@ impl DecodedRaster {
             }),
             RasterColorSpace::LinearSrgb,
         )?
+        .with_pixel_aspect(self.pixel_aspect)?
         .with_sample_scale(self.sample_scale)?
         .with_hotspot(self.hotspot)?
         .with_image_selection(self.image_index, self.image_count)
@@ -1145,5 +1197,69 @@ mod managed_ownership_tests {
         assert_eq!(budget.used(), 64);
         drop(retained);
         assert_eq!(budget.used(), 0);
+    }
+}
+
+#[cfg(test)]
+mod srgb16_table_tests {
+    use super::*;
+    #[test]
+    fn exhaustive_table_and_tight_budget_fallback_are_bit_exact() {
+        let pixels: Vec<u16> = (0..=u16::MAX).flat_map(|v| [v, u16::MAX - v, v, v]).collect();
+        let source = DecodedRaster::new(
+            256,
+            256,
+            RasterPixels::Rgba16(Arc::new(pixels).into()),
+            RasterColorSpace::Srgb,
+        )
+        .unwrap();
+        let bytes = 65536 * 16;
+        for extra in [0, 65536 * 4] {
+            let budget = rrrah_memory::MemoryBudget::new(bytes + extra);
+            let result = source.to_linear_srgb_with_budget(Some(&budget)).unwrap();
+            let RasterPixels::Rgba32Float(values) = result.pixels() else {
+                panic!()
+            };
+            for (v, rgba) in (0..=u16::MAX).zip(values.chunks_exact(4)) {
+                assert_eq!(rgba[0].to_bits(), srgb_linear(f32::from(v) / 65535.0).to_bits());
+                assert_eq!(
+                    rgba[1].to_bits(),
+                    srgb_linear(f32::from(u16::MAX - v) / 65535.0).to_bits()
+                );
+                assert_eq!(rgba[2].to_bits(), rgba[0].to_bits());
+                assert_eq!(rgba[3].to_bits(), (f32::from(v) / 65535.0).to_bits());
+            }
+            assert_eq!(budget.used(), bytes);
+            assert_eq!(budget.peak(), bytes + extra);
+            drop(result);
+            assert_eq!(budget.used(), 0);
+        }
+        let budget = rrrah_memory::MemoryBudget::new(bytes + 65536 * 4);
+        let calls = std::cell::Cell::new(0);
+        assert!(
+            source
+                .to_linear_srgb_with_budget_and_cancel(Some(&budget), || {
+                    calls.set(calls.get() + 1);
+                    calls.get() == 3
+                })
+                .is_err()
+        );
+        assert_eq!(budget.used(), 0);
+    }
+}
+
+#[cfg(test)]
+mod pixel_aspect_tests {
+    use super::*;
+    #[test]
+    fn explicit_aspect_survives_color_preparation_and_invalid_values_are_atomic() {
+        let image = DecodedRaster::new(1,1,RasterPixels::Rgba8(Arc::new(vec![255,0,0,255]).into()),RasterColorSpace::Srgb).unwrap();
+        assert_eq!(image.pixel_aspect(), None);
+        let image = image.with_pixel_aspect(Some(2.0)).unwrap();
+        assert_eq!(image.to_linear_srgb().unwrap().pixel_aspect(), Some(2.0));
+        for v in [0.0,-1.0,f32::NAN,f32::INFINITY] {
+            assert!(image.clone().with_pixel_aspect(Some(v)).is_err());
+            assert_eq!(image.pixel_aspect(), Some(2.0));
+        }
     }
 }

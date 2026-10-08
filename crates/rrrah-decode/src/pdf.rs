@@ -151,20 +151,36 @@ pub(crate) fn decode(bytes: &[u8], request: &DecodeRequest) -> Result<DecodedRas
     request.check_cancelled()?;
     let render_warnings = Arc::new(AtomicU8::new(0));
     let warnings = render_warnings.clone();
+    let curve_memory_error = Arc::new(std::sync::Mutex::new(None));
+    let curve_error = curve_memory_error.clone();
+    let curve_budget = budget.clone();
+    let curve_cancellation = request.cancellation.clone();
     let settings = hayro::hayro_interpret::InterpreterSettings {
+        fill_curve_tolerance: Some(1.0 / 256.0),
+        fill_curve_cancelled: Some(Arc::new(move || curve_cancellation.as_ref().is_some_and(crate::GenerationToken::is_cancelled))),
+        fill_curve_admission: Some(Arc::new(move |bytes| {
+            match curve_budget.try_reserve(bytes as u64) {
+                Ok(guard) => Some(Box::new(guard) as Box<dyn std::any::Any + Send + Sync>),
+                Err(error) => { *curve_error.lock().unwrap() = Some(error); None }
+            }
+        })),
         warning_sink: Arc::new(move |warning| {
             use hayro::hayro_interpret::InterpreterWarning;
             let flag = match warning {
                 InterpreterWarning::UnsupportedFont => 1,
                 InterpreterWarning::ImageDecodeFailure => 2,
+                InterpreterWarning::FillCurveLimit => 4,
             };
             warnings.fetch_or(flag, Ordering::Relaxed);
         }),
         ..Default::default()
     };
+    let mut render_cache = hayro::RenderCache::new();
+    render_cache.shading_cancelled = settings.fill_curve_cancelled.clone();
+    render_cache.shading_admission = settings.fill_curve_admission.clone();
     let pixmap = hayro::render(
         page,
-        &hayro::RenderCache::new(),
+        &render_cache,
         &settings,
         &hayro::RenderSettings {
             width: Some(width),
@@ -175,7 +191,9 @@ pub(crate) fn decode(bytes: &[u8], request: &DecodeRequest) -> Result<DecodedRas
         },
     );
     request.check_cancelled()?;
+    if let Some(error) = curve_memory_error.lock().unwrap().take() { return Err(DecodeError::from(error).into()); }
     let warnings = render_warnings.load(Ordering::Relaxed);
+    if warnings & 4 != 0 { return Err(bad("fill curve precision limit")); }
     if warnings & 2 != 0 {
         return Err(bad("embedded image decode failure"));
     }
@@ -343,6 +361,41 @@ mod tests {
                 index % 3
             );
         }
+    }
+
+    #[test]
+    fn independent_image_transfer_channels_match_public_decode() {
+        let root = MemoryBudget::new(1024 * 1024);
+        let mut request = DecodeRequest::new("transfer-channels.pdf");
+        request.memory_budget = Some(root.clone());
+        let image = decode(include_bytes!("../../../tests/fixtures/pdf/image-transfer-channels.pdf"), &request).unwrap();
+        assert_eq!((image.width(), image.height()), (256, 1));
+        let RasterPixels::Rgba8(values) = image.pixels() else { panic!() };
+        for (index, pixel) in values.chunks_exact(4).enumerate() {
+            let value = index as f32 / 255.0;
+            let red = (value * value * 255.0 + 0.5) as u8;
+            let blue = ((1.0 - value) * 255.0 + 0.5) as u8;
+            assert_eq!(pixel, &[red, index as u8, blue, 255], "input {index}");
+        }
+        drop(image);
+        assert_eq!(root.used(), 0);
+    }
+
+    #[test]
+    fn nonlinear_image_transfer_preserves_all_byte_values_through_public_decode() {
+        let root = MemoryBudget::new(1024 * 1024);
+        let mut request = DecodeRequest::new("transfer.pdf");
+        request.memory_budget = Some(root.clone());
+        let image = decode(include_bytes!("../../../tests/fixtures/pdf/image-transfer-square.pdf"), &request).unwrap();
+        assert_eq!((image.width(), image.height()), (256, 1));
+        let RasterPixels::Rgba8(values) = image.pixels() else { panic!() };
+        for (index, pixel) in values.chunks_exact(4).enumerate() {
+            let value = index as f32 / 255.0;
+            let expected = (value * value * 255.0 + 0.5) as u8;
+            assert_eq!(pixel, &[expected, expected, expected, 255], "input {index}");
+        }
+        drop(image);
+        assert_eq!(root.used(), 0);
     }
 
     #[test]
@@ -948,7 +1001,6 @@ mod tensor_background_coverage_tests {
 #[cfg(test)]
 mod overlap_patch_tests {
     #[test]
-    #[ignore = "known mesh overlap averaging defect; geometric fragment experiment too slow on real AI"]
     fn later_coincident_tensor_patch_covers_earlier_color() {
         let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
             .join("../../tests/fixtures/pdf/tensor-overlap-rgb.pdf");
@@ -1020,4 +1072,154 @@ mod shading_context_cache_tests {
         }
     }
     use rrrah_core::RasterPixels;
+}
+
+#[cfg(test)]
+mod precise_fill_tests {
+    #[test]
+    fn tensor_triangle_storage_is_admitted_before_materialization() {
+        let source = include_bytes!("../../../tests/fixtures/pdf/tensor-solid-rgb.pdf");
+        let load = |root: &rrrah_core::MemoryBudget| {
+            let mut request = crate::DecodeRequest::new("tensor.pdf");
+            request.memory_budget = Some(root.clone());
+            super::decode(source, &request)
+        };
+        let roomy = rrrah_core::MemoryBudget::new(1024 * 1024);
+        let reference = load(&roomy).unwrap();
+        let output = u64::from(reference.width()) * u64::from(reference.height()) * 4;
+        let baseline = source.len() as u64 + 2 * output;
+        let triangles = 722 * size_of::<hayro::hayro_interpret::shading::Triangle>() as u64;
+        let peak = roomy.peak();
+        assert!(peak > baseline + triangles);
+        let exact = rrrah_core::MemoryBudget::new(peak);
+        let image = load(&exact).unwrap();
+        let rrrah_core::RasterPixels::Rgba8(actual) = image.pixels() else { panic!() };
+        let rrrah_core::RasterPixels::Rgba8(expected) = reference.pixels() else { panic!() };
+        assert_eq!(actual.as_ref(), expected.as_ref());
+        assert_eq!(exact.used(), output);
+        drop(image);
+        drop(reference);
+        assert_eq!(exact.used(), 0);
+        assert_eq!(roomy.used(), 0);
+        let short = rrrah_core::MemoryBudget::new(baseline + triangles - 1);
+        assert!(matches!(load(&short), Err(crate::RasterDecodeError::Source(crate::DecodeError::Memory(_)))));
+        assert_eq!(short.peak(), baseline);
+        assert_eq!(short.used(), 0);
+        let map_short = rrrah_core::MemoryBudget::new(peak - 1);
+        assert!(matches!(load(&map_short), Err(crate::RasterDecodeError::Source(crate::DecodeError::Memory(_)))));
+        assert!(map_short.peak() >= baseline + triangles);
+        assert!(map_short.peak() < peak);
+        assert_eq!(map_short.used(), 0);
+    }
+    #[test]
+    fn shading_texture_obeys_exact_shared_budget_and_releases_credit() {
+        let source = include_bytes!("../../../tests/fixtures/pdf/gradient-rgb.pdf");
+        let load = |root: &rrrah_core::MemoryBudget| {
+            let mut request = crate::DecodeRequest::new("gradient.pdf");
+            request.memory_budget = Some(root.clone());
+            super::decode(source, &request)
+        };
+        let roomy = rrrah_core::MemoryBudget::new(1024 * 1024);
+        let reference = load(&roomy).unwrap();
+        let output = u64::from(reference.width()) * u64::from(reference.height()) * 4;
+        let baseline = source.len() as u64 + 2 * output;
+        let peak = roomy.peak();
+        assert_eq!(peak, baseline + output, "full-page texture must be admitted");
+        assert_eq!(roomy.used(), output);
+        let exact = rrrah_core::MemoryBudget::new(peak);
+        let image = load(&exact).unwrap();
+        let rrrah_core::RasterPixels::Rgba8(actual) = image.pixels() else { panic!() };
+        let rrrah_core::RasterPixels::Rgba8(expected) = reference.pixels() else { panic!() };
+        assert_eq!(actual.as_ref(), expected.as_ref());
+        assert_eq!(exact.peak(), peak);
+        assert_eq!(exact.used(), output);
+        drop(image);
+        drop(reference);
+        assert_eq!(exact.used(), 0);
+        assert_eq!(roomy.used(), 0);
+        let short = rrrah_core::MemoryBudget::new(peak - 1);
+        assert!(matches!(load(&short), Err(crate::RasterDecodeError::Source(crate::DecodeError::Memory(_)))));
+        assert_eq!(short.peak(), baseline);
+        assert_eq!(short.used(), 0);
+    }
+    #[test]
+    fn curve_cancellation_at_every_checkpoint_releases_shared_credit() {
+        use hayro::hayro_interpret::flatten_fill_bounded_with_admission_and_cancel;
+        use kurbo::{Affine, BezPath};
+        use std::cell::Cell;
+        let mut path = BezPath::new();
+        path.move_to((0., 0.));
+        path.curve_to((0., 32.), (32., 0.), (32., 32.));
+        path.close_path();
+        let checkpoints = Cell::new(0);
+        let root = rrrah_core::MemoryBudget::new(1024 * 1024);
+        let (reference, guard) = flatten_fill_bounded_with_admission_and_cancel(
+            &path, Affine::IDENTITY, 1. / 256., 65536,
+            |bytes| root.try_reserve(bytes as u64).map_err(|_| ()),
+            &|| { checkpoints.set(checkpoints.get() + 1); false },
+        ).unwrap();
+        assert!(reference.elements().len() > path.elements().len());
+        assert!(root.used() > 0);
+        drop(guard);
+        assert_eq!(root.used(), 0);
+        let total = checkpoints.get();
+        assert!(total > 100);
+        for stop in 1..=total {
+            let current = Cell::new(0);
+            assert!(flatten_fill_bounded_with_admission_and_cancel(
+                &path, Affine::IDENTITY, 1. / 256., 65536,
+                |bytes| root.try_reserve(bytes as u64).map_err(|_| ()),
+                &|| { current.set(current.get() + 1); current.get() == stop },
+            ).is_err(), "checkpoint {stop}/{total}");
+            assert_eq!(current.get(), stop);
+            assert_eq!(root.used(), 0, "checkpoint {stop}/{total}");
+        }
+    }
+    #[test]
+    fn precise_curve_storage_obeys_exact_shared_budget() {
+        let source = include_bytes!("../../../tests/fixtures/pdf/cubic-parabola-area.pdf");
+        let decode_at = |root: &rrrah_core::MemoryBudget| {
+            let mut request = crate::DecodeRequest::new("parabola.pdf");
+            request.memory_budget = Some(root.clone());
+            super::decode(source, &request)
+        };
+        let roomy = rrrah_core::MemoryBudget::new(1024 * 1024);
+        let reference = decode_at(&roomy).unwrap();
+        let peak = roomy.peak();
+        let baseline = source.len() as u64 + 2 * 32 * 32 * 4;
+        assert!(peak > baseline, "curve storage must contribute to the shared peak");
+        let exact = rrrah_core::MemoryBudget::new(peak);
+        let image = decode_at(&exact).unwrap();
+        let rrrah_core::RasterPixels::Rgba8(actual) = image.pixels() else { panic!() };
+        let rrrah_core::RasterPixels::Rgba8(expected) = reference.pixels() else { panic!() };
+        assert_eq!(actual.as_ref(), expected.as_ref());
+        assert_eq!(exact.peak(), peak);
+        assert_eq!(exact.used(), 32 * 32 * 4);
+        drop(image);
+        assert_eq!(exact.used(), 0);
+        drop(reference);
+        assert_eq!(roomy.used(), 0);
+        let short = rrrah_core::MemoryBudget::new(peak - 1);
+        assert!(matches!(decode_at(&short), Err(crate::RasterDecodeError::Source(crate::DecodeError::Memory(_)))));
+        assert_eq!(short.peak(), baseline, "reject curve storage before allocation");
+        assert_eq!(short.used(), 0);
+    }
+    #[test]
+    fn cubic_fill_matches_independent_parabola_pixel_integral() {
+        let image = super::decode(include_bytes!("../../../tests/fixtures/pdf/cubic-parabola-area.pdf"), &crate::DecodeRequest::new("parabola.pdf")).unwrap();
+        let oracle: serde_json::Value = serde_json::from_str(include_str!("../../../tests/fixtures/pdf/cubic-parabola-area.json")).unwrap();
+        let rrrah_core::RasterPixels::Rgba8(pixels) = image.pixels() else { panic!(); };
+        for (index, (pixel, expected)) in pixels.chunks_exact(4).zip(oracle["alpha8"].as_array().unwrap()).enumerate() {
+            assert!((i64::from(pixel[3])-expected.as_i64().unwrap()).abs() <= 1, "pixel {index}: {pixel:?} expected {expected}");
+            if pixel[3] != 0 { assert_eq!(&pixel[..3], &[0,0,0]); }
+        }
+    }
+    #[test]
+    fn excessive_fill_precision_refuses_without_retaining_managed_credit() {
+        let root = rrrah_core::MemoryBudget::new(1024 * 1024);
+        let mut request = crate::DecodeRequest::new("precision-limit.pdf");
+        request.memory_budget = Some(root.clone());
+        assert!(matches!(super::decode(include_bytes!("../../../tests/fixtures/pdf/cubic-precision-limit.pdf"), &request), Err(crate::RasterDecodeError::InvalidPdf("fill curve precision limit"))));
+        assert_eq!(root.used(), 0);
+    }
 }

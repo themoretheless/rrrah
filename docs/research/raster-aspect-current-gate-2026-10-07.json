@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-07",
+  "qualification": "Raster pixel-aspect failure is atomic and next raster upload resets geometry",
+  "adapter": "Metal Apple M4 Max",
+  "actual_reference": "square raster full-frame bytes versus doubled pixel aspect; invalid aspects 0,-1,NaN,infinity,f32MAX keep prior bytes exactly; new upload restores square bytes",
+  "change": "remove actual-GPU ignore from aspect gate; this suite already has mandatory actual-GPU tests",
+  "validation": {
+    "passed": 9,
+    "failed": 0,
+    "ignored": 1,
+    "log": "/tmp/rrrah-current-raster-gates-metal.log"
+  },
+  "remaining_ignored": "qualified_sd10_linear_raster_full_frame_display_readback requires qualified X3F linear sRGB PPM, not currently available",
+  "limits": "offscreen Metal proof only; full format/color/HDR/NVIDIA objective remains open",
+  "status": "local, not pushed"
+}

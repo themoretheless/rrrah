@@ -1,0 +1,117 @@
+{
+  "status": "verified_finite_bounds_flags",
+  "report_sha256": "6028edb0843d35971bfc096d2d621770419e8064d85bd15cfe7b0e846981eacb",
+  "cases": 6,
+  "supports_with_original_limits": 0,
+  "summary": [
+    {
+      "model_index": 0,
+      "original_status": "ok",
+      "directions": [
+        {
+          "maximum_coefficient": 0.8682497769844305,
+          "maximum_offset": 0.03650104607422926,
+          "fraction": 0.6572192513368984,
+          "bounds_admitted": true
+        },
+        {
+          "maximum_coefficient": 2.0044406709299434,
+          "maximum_offset": 0.05018662033078228,
+          "fraction": 0.5249345430189368,
+          "bounds_admitted": true
+        }
+      ]
+    },
+    {
+      "model_index": 1,
+      "original_status": "ok",
+      "directions": [
+        {
+          "maximum_coefficient": 1.9419037401737724,
+          "maximum_offset": 0.029635510250713065,
+          "fraction": 0.5836898395721926,
+          "bounds_admitted": true
+        },
+        {
+          "maximum_coefficient": 2.0414732290800575,
+          "maximum_offset": 0.07551254536390511,
+          "fraction": 0.6521656894268961,
+          "bounds_admitted": true
+        }
+      ]
+    },
+    {
+      "model_index": 2,
+      "original_status": "refusal:Region(Color(Bounds))",
+      "directions": [
+        {
+          "maximum_coefficient": 1.6921965093721478,
+          "maximum_offset": 0.06340630948806929,
+          "fraction": 0.5296791443850267,
+          "bounds_admitted": true
+        },
+        {
+          "maximum_coefficient": 2.489680818933205,
+          "maximum_offset": 0.10130463063482163,
+          "fraction": 0.5955683355886333,
+          "bounds_admitted": false
+        }
+      ]
+    },
+    {
+      "model_index": 3,
+      "original_status": "refusal:Region(Color(Bounds))",
+      "directions": [
+        {
+          "maximum_coefficient": 2.633202174839824,
+          "maximum_offset": 0.1878738478133372,
+          "fraction": 0.3553475935828877,
+          "bounds_admitted": false
+        },
+        {
+          "maximum_coefficient": 1.397451587798328,
+          "maximum_offset": 0.13428264176314497,
+          "fraction": 0.3452081084322898,
+          "bounds_admitted": false
+        }
+      ]
+    },
+    {
+      "model_index": 4,
+      "original_status": "refusal:Region(Color(Bounds))",
+      "directions": [
+        {
+          "maximum_coefficient": 3.2627562899951785,
+          "maximum_offset": 0.29234941494727973,
+          "fraction": 0.4687165775401069,
+          "bounds_admitted": false
+        },
+        {
+          "maximum_coefficient": 0.9236962468877102,
+          "maximum_offset": 0.191328348213808,
+          "fraction": 0.6577665172480998,
+          "bounds_admitted": false
+        }
+      ]
+    },
+    {
+      "model_index": 5,
+      "original_status": "ok",
+      "directions": [
+        {
+          "maximum_coefficient": 1.1596088104289044,
+          "maximum_offset": 0.008982510105122493,
+          "fraction": 0.8041267942583732,
+          "bounds_admitted": true
+        },
+        {
+          "maximum_coefficient": 2.7477043741765153,
+          "maximum_offset": 0.035824864967926306,
+          "fraction": 0.6012106537530266,
+          "bounds_admitted": true
+        }
+      ]
+    }
+  ],
+  "scope": "Independent finite parameter maxima and original-bound/acceptance arithmetic only; no color fit oracle or new sample-count audit."
+}

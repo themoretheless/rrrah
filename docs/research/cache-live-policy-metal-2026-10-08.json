@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-08",
+  "adapter": "Metal Apple M4 Max",
+  "test": "live_count_size_and_ttl_changes_preserve_hdr_frames_through_swap",
+  "cycles": 100,
+  "passed": 1,
+  "failed": 0,
+  "duration_seconds": 7.15,
+  "source_sha256": "e9ee78b44296e8f54103df3f8d2d7ffb4d5bf7db20d630c871351ec810c7f495",
+  "log": "/tmp/rrrah-metal-live-policy-20261008.log",
+  "log_sha256": "54b2f0cac899bc6cf18f9aaff76ec24438252e7b0624a948c9bb52beee5fefc1",
+  "command": "RRRAH_GPU_BACKEND=metal RRRAH_METAL_POLICY_CYCLES=100 cargo test -p rrrah --test ttl_swap_metal --locked --offline --target-dir /tmp/rrrah-required-corpus-target live_count_size_and_ttl_changes -- --ignored --nocapture",
+  "verified": [
+    "Rejected combined size/count/TTL reduction preserves lease and visible frame",
+    "Released lease allows asynchronous disk spill",
+    "Every original HDR float component survives background restore bit-exactly",
+    "Background restore preserves visible cache entry",
+    "Replacement zero-TTL payload survives spill with exact float bits",
+    "Metal offscreen frames match exactly throughout",
+    "Final managed root bytes zero in every cycle"
+  ],
+  "limitations": [
+    "Two-pixel authored linear HDR payload; 96x64 offscreen SDR output",
+    "Not physical HDR luminance qualification",
+    "Not a large-photo collection soak",
+    "No NVIDIA hardware qualification"
+  ]
+}

@@ -1,0 +1,29 @@
+    Blocking waiting for file lock on build directory
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+    Finished `test` profile [optimized + debuginfo] target(s) in 1m 14s
+     Running tests/local_index.rs (target/debug/deps/local_index-0344219280170c54)
+
+running 6 tests
+test collision_buckets_recipes_and_limits_never_return_partial_results ... ok
+test file_pair_storage_limits_preserve_sorted_complete_results ... ok
+test reverse_matching_preserves_asymmetric_variant_metric_and_hit_limits ... ok
+test descriptor_index_equals_independent_exhaustive_variant_search ... ok
+test file_pair_retrieval_equals_exhaustive_distinct_query_feature_counts ... ok
+test indexed_mutual_matching_equals_exhaustive_ratios_for_every_recipe ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/visual.rs (target/debug/deps/visual-201c6e6a2325e931)
+
+running 8 tests
+test cancellation_inside_large_collision_bucket_is_observed ... ok
+test cancelled_insertions_preserve_collision_buckets_and_deep_trees ... ok
+test duplicate_ids_budgets_and_cancel_do_not_return_partial_indexes ... ok
+test fallible_search_result_caps_are_inconclusive_and_leave_index_unchanged ... ok
+test full_radius_direct_search_cancellation_never_returns_partial_matches ... ok
+test fallible_insert_enforces_total_ids_without_partial_mutation ... ok
+test dense_adaptive_search_keeps_oracle_and_cancellation ... ok
+test complete_recipe_index_matches_exhaustive_oracle ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+

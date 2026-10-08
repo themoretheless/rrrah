@@ -1,0 +1,61 @@
+{
+  "status": "verified_native_file_gate",
+  "session_id": 54664,
+  "source_hashes_observed_during_build": {
+    "crates/rrrah-dedup/src/local_scan.rs": "3399d3651b79b19440f04746b5b3f5abe0f4d5e37db869e162bc961d06a777e4",
+    "crates/rrrah-dedup/src/gradient_scale.rs": "acf70f25058f870dbebef324dcc6c2a0b223fb7d622f322e5b1a8631648015ac",
+    "crates/rrrah-dedup/tests/gradient_scale_files.rs": "71f54f0ec38022a9f4e6f7e9f24da05803c445c292800b3713e3a524a8b9bb6c"
+  },
+  "initial_file_confirmation_exit_code": 0,
+  "scope": "One reduced-copy pixel confirmation and one unrelated rejection; invalid factors before IO, first/middle/final cancellation and released credit. Not collection/full-corpus/platform qualification.",
+  "repair": "Test matched Features error variant after initial compilation rejected nonexistent Local variant.",
+  "source_hashes_after": {
+    "crates/rrrah-dedup/src/local_scan.rs": "3399d3651b79b19440f04746b5b3f5abe0f4d5e37db869e162bc961d06a777e4",
+    "crates/rrrah-dedup/src/gradient_scale.rs": "acf70f25058f870dbebef324dcc6c2a0b223fb7d622f322e5b1a8631648015ac",
+    "crates/rrrah-dedup/tests/gradient_scale_files.rs": "71f54f0ec38022a9f4e6f7e9f24da05803c445c292800b3713e3a524a8b9bb6c"
+  },
+  "exit_code": 0,
+  "tests": 2,
+  "log": "docs/research/dedup-gradient-scale-files-lifecycle.log",
+  "log_sha256": "6554b5f710ed378b97c64810b1c3a50ede1c7b573a348083318905040f1e2b8d",
+  "source_mutation_gate": {
+    "exit_code": 0,
+    "tests": 3,
+    "log": "docs/research/dedup-gradient-scale-files-mutation.log",
+    "scope": "Mid/late append mutation refuses Source evidence; restore and reversed retry accepts known copy."
+  },
+  "collection_gate": {
+    "status": "verified_fixed_three_source_collection",
+    "session_id": 58929,
+    "source_hashes": {
+      "crates/rrrah-dedup/src/local_collection.rs": "98519d4056f965bcf9c1e9279519a978afea34ac2ab2457ec830af41af41107c",
+      "crates/rrrah-dedup/src/local_scan.rs": "3399d3651b79b19440f04746b5b3f5abe0f4d5e37db869e162bc961d06a777e4",
+      "crates/rrrah-dedup/src/gradient_scale.rs": "acf70f25058f870dbebef324dcc6c2a0b223fb7d622f322e5b1a8631648015ac",
+      "crates/rrrah-dedup/tests/gradient_scale_files.rs": "faafa424ecab68782533e220e0a539bd43cede16ee8ba650cd635a03b6cfa7be"
+    },
+    "exit_code": 0,
+    "tests": 4,
+    "log": "docs/research/dedup-gradient-scale-collection-native.log",
+    "scope": "Known reduction accepted, unrelated edges rejected; every proposed edge exactly equals fresh direct file evidence. No all-corpus or scale qualification.",
+    "log_sha256": "27a332c60f48bf3e6f1818ff8a69e733c0c4f2350f1872a0368ef36fddb2dd7b"
+  },
+  "collection_mutation_gate": {
+    "exit_code": 0,
+    "tests": 5,
+    "log": "docs/research/dedup-gradient-scale-collection-lifecycle.log",
+    "log_sha256": "04213ad0664ecafd054976cfa0e21915deaf2ae65b5e1bb3ba14ca427596f752",
+    "scope": "Mid/late mutation removes affected edges, restored reversed retry succeeds, first/middle/final cancellation releases memory; fixed fixture only."
+  },
+  "known_transform_sweep": {
+    "exit_code": 0,
+    "tests": 6,
+    "positive_cases": 7,
+    "negative_cases": 1,
+    "log": "docs/research/dedup-gradient-scale-known-rotation-files.log",
+    "input_hashes": {
+      "crates/rrrah-dedup/tests/gradient_scale_files.rs": "60cec9a0f795a733d466d433cc07eea322c909e2e017fe3bce7643cc94f0f9a5",
+      "docs/research/dedup-gradient-scale-known-rotation-files.log": "bd3c4145ae5a0ce1536a61e380522a7d6ef68660892096a7959ef7287c461356"
+    },
+    "scope": "Identity,17/-37/63-degree rotations,1.35x enlargement with/without17-degree rotation,0.73125x reduction and one unrelated image through domain-qualified file geometry/pixel confirmation; finite authored corpus only."
+  }
+}

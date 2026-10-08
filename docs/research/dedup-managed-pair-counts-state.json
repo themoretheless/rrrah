@@ -1,0 +1,91 @@
+{
+  "status": "preceding_fixed_capacity_stage_verified_on_finite_macos_gates",
+  "source_sha256": "3ec10d172a5e4762c6bb6aa7af14536badabcc062bc0c6cee3798de445eeaf7e",
+  "scope": "Integrated lazy flat pair counts. Six managed unit tests and fourteen minimal tests passed before collision-test addition. Collection qualification pending; no whole-library allocation claim.",
+  "unit_session_id": 33483,
+  "source_before": {
+    "crates/rrrah-dedup/src/local_index.rs": "ea7561cf4ef65ad8825c0d5ed2c6f47d90fef45bb1f9cd18fd1368a34e0d6c21",
+    "crates/rrrah-dedup/src/managed_pair_counts.rs": "3ec10d172a5e4762c6bb6aa7af14536badabcc062bc0c6cee3798de445eeaf7e",
+    "crates/rrrah-dedup/src/managed_targets.rs": "070b110df170ef9df9befe05da52da5533185a793e0f65bee4a501e9187753b9",
+    "crates/rrrah-dedup/src/managed_descriptor_union.rs": "9a8bb4e6fccc560c15797181ed381b996cb00a34a6d30b9ff16f5ac0fc4db251",
+    "crates/rrrah-dedup/src/managed_visual.rs": "2b43a22f5c21fb016aa48abb598561ee0390650d6d9e66a7d6a0dfe35bdf8d6f",
+    "crates/rrrah-dedup/src/managed_metric.rs": "392ae8f848fd7e835be49995108e2e478ee21508210d4b00a90450d43a534be4",
+    "crates/rrrah-dedup/src/lib.rs": "44a5fbf0da6ec2d72fe9e99e6ed89cfd465f200c96de9653ee4207482168abf8"
+  },
+  "remaining": "Documents/seen-ID metadata, returned caller-owned pair/insufficient-ID storage, decoder and other algorithms remain outside this managed storage path.",
+  "minimal_session_id": 34849,
+  "unit_exit_code": 0,
+  "unit_passed_tests": 6,
+  "source_after_unit": {
+    "crates/rrrah-dedup/src/local_index.rs": "ea7561cf4ef65ad8825c0d5ed2c6f47d90fef45bb1f9cd18fd1368a34e0d6c21",
+    "crates/rrrah-dedup/src/managed_pair_counts.rs": "3ec10d172a5e4762c6bb6aa7af14536badabcc062bc0c6cee3798de445eeaf7e",
+    "crates/rrrah-dedup/src/managed_targets.rs": "070b110df170ef9df9befe05da52da5533185a793e0f65bee4a501e9187753b9",
+    "crates/rrrah-dedup/src/managed_descriptor_union.rs": "9a8bb4e6fccc560c15797181ed381b996cb00a34a6d30b9ff16f5ac0fc4db251",
+    "crates/rrrah-dedup/src/managed_visual.rs": "2b43a22f5c21fb016aa48abb598561ee0390650d6d9e66a7d6a0dfe35bdf8d6f",
+    "crates/rrrah-dedup/src/managed_metric.rs": "392ae8f848fd7e835be49995108e2e478ee21508210d4b00a90450d43a534be4",
+    "crates/rrrah-dedup/src/lib.rs": "44a5fbf0da6ec2d72fe9e99e6ed89cfd465f200c96de9653ee4207482168abf8"
+  },
+  "minimal_exit_code": 0,
+  "minimal_passed_tests": 14,
+  "source_after_minimal": {
+    "crates/rrrah-dedup/src/local_index.rs": "ea7561cf4ef65ad8825c0d5ed2c6f47d90fef45bb1f9cd18fd1368a34e0d6c21",
+    "crates/rrrah-dedup/src/managed_pair_counts.rs": "4bc799df1a41bbba343349b20a41886335c6b988dac02c11d63e0e5df8ac2916",
+    "crates/rrrah-dedup/src/managed_targets.rs": "070b110df170ef9df9befe05da52da5533185a793e0f65bee4a501e9187753b9",
+    "crates/rrrah-dedup/src/managed_descriptor_union.rs": "9a8bb4e6fccc560c15797181ed381b996cb00a34a6d30b9ff16f5ac0fc4db251",
+    "crates/rrrah-dedup/src/managed_visual.rs": "2b43a22f5c21fb016aa48abb598561ee0390650d6d9e66a7d6a0dfe35bdf8d6f",
+    "crates/rrrah-dedup/src/managed_metric.rs": "392ae8f848fd7e835be49995108e2e478ee21508210d4b00a90450d43a534be4",
+    "crates/rrrah-dedup/src/lib.rs": "44a5fbf0da6ec2d72fe9e99e6ed89cfd465f200c96de9653ee4207482168abf8"
+  },
+  "collision_exit_code": 0,
+  "collision_passed_tests": 2,
+  "collision_source_sha256": "4bc799df1a41bbba343349b20a41886335c6b988dac02c11d63e0e5df8ac2916",
+  "collection_session_id": 97669,
+  "frozen_probe": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/photo-probe-managed-pair-counts",
+  "probe_sha256": "63458ae9f9d9a2d738b38ee0a6e2e5bcc0f51c71c2e53cbd218a550ca75ffcea",
+  "probe_build_exit_code": 0,
+  "controls_session_id": 85708,
+  "next_allocation_issue": {
+    "current": "First insertion allocates next_power_of_two(2 * min(theoretical_file_pairs, max_pair_counts)) entries, even for sparse actual pair sets.",
+    "required": "Admit geometric growth based on actual unique pairs; preserve cancellation atomicity and complete opaque IDs while rehashing.",
+    "scope": "Concrete source finding, not a runtime benchmark."
+  },
+  "source_at_frozen_probe": {
+    "crates/rrrah-dedup/src/local_index.rs": "ea7561cf4ef65ad8825c0d5ed2c6f47d90fef45bb1f9cd18fd1368a34e0d6c21",
+    "crates/rrrah-dedup/src/managed_pair_counts.rs": "4bc799df1a41bbba343349b20a41886335c6b988dac02c11d63e0e5df8ac2916",
+    "crates/rrrah-dedup/src/managed_targets.rs": "070b110df170ef9df9befe05da52da5533185a793e0f65bee4a501e9187753b9",
+    "crates/rrrah-dedup/src/managed_descriptor_union.rs": "9a8bb4e6fccc560c15797181ed381b996cb00a34a6d30b9ff16f5ac0fc4db251",
+    "crates/rrrah-dedup/src/managed_visual.rs": "2b43a22f5c21fb016aa48abb598561ee0390650d6d9e66a7d6a0dfe35bdf8d6f",
+    "crates/rrrah-dedup/src/managed_metric.rs": "392ae8f848fd7e835be49995108e2e478ee21508210d4b00a90450d43a534be4",
+    "crates/rrrah-dedup/src/lib.rs": "44a5fbf0da6ec2d72fe9e99e6ed89cfd465f200c96de9653ee4207482168abf8"
+  },
+  "collection_source_observation": {
+    "crates/rrrah-dedup/src/local_index.rs": "ea7561cf4ef65ad8825c0d5ed2c6f47d90fef45bb1f9cd18fd1368a34e0d6c21",
+    "crates/rrrah-dedup/src/managed_pair_counts.rs": "4bc799df1a41bbba343349b20a41886335c6b988dac02c11d63e0e5df8ac2916",
+    "crates/rrrah-dedup/src/managed_targets.rs": "070b110df170ef9df9befe05da52da5533185a793e0f65bee4a501e9187753b9",
+    "crates/rrrah-dedup/src/managed_descriptor_union.rs": "9a8bb4e6fccc560c15797181ed381b996cb00a34a6d30b9ff16f5ac0fc4db251",
+    "crates/rrrah-dedup/src/managed_visual.rs": "2b43a22f5c21fb016aa48abb598561ee0390650d6d9e66a7d6a0dfe35bdf8d6f",
+    "crates/rrrah-dedup/src/managed_metric.rs": "392ae8f848fd7e835be49995108e2e478ee21508210d4b00a90450d43a534be4",
+    "crates/rrrah-dedup/src/lib.rs": "44a5fbf0da6ec2d72fe9e99e6ed89cfd465f200c96de9653ee4207482168abf8"
+  },
+  "source_scope": "Selected library sources only; other workspace sources can change independently.",
+  "controls_exit_code": 0,
+  "controls_verified_pairs": 3,
+  "controls_audit_sha256": "068e31a8882f6b20aa17f151eaddf340942cfabb541ba351121df95d62d945e7",
+  "six_file_session_id": 24826,
+  "collection_exit_code": 0,
+  "collection_passed_tests": 2,
+  "collection_scope": "Test executables compiled before geometric-growth source edit; two tests terminal passing. Does not qualify subsequent growth implementation.",
+  "source_after_collection": {
+    "crates/rrrah-dedup/src/local_index.rs": "ea7561cf4ef65ad8825c0d5ed2c6f47d90fef45bb1f9cd18fd1368a34e0d6c21",
+    "crates/rrrah-dedup/src/managed_pair_counts.rs": "06f937219bb3421347eb51dbffdb0add475612ad655c82faaf859d0573085a62",
+    "crates/rrrah-dedup/src/managed_targets.rs": "070b110df170ef9df9befe05da52da5533185a793e0f65bee4a501e9187753b9",
+    "crates/rrrah-dedup/src/managed_descriptor_union.rs": "9a8bb4e6fccc560c15797181ed381b996cb00a34a6d30b9ff16f5ac0fc4db251",
+    "crates/rrrah-dedup/src/managed_visual.rs": "2b43a22f5c21fb016aa48abb598561ee0390650d6d9e66a7d6a0dfe35bdf8d6f",
+    "crates/rrrah-dedup/src/managed_metric.rs": "392ae8f848fd7e835be49995108e2e478ee21508210d4b00a90450d43a534be4",
+    "crates/rrrah-dedup/src/lib.rs": "44a5fbf0da6ec2d72fe9e99e6ed89cfd465f200c96de9653ee4207482168abf8"
+  },
+  "six_file_exit_code": 0,
+  "six_file_audit_sha256": "afeb4edd31728f5a43d21eb4cf523b9e2e7038147059c0e015b7b571fc3e9dcc",
+  "six_file_managed_peak": 47002800,
+  "six_file_rss": 61521920
+}

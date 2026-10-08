@@ -1,0 +1,125 @@
+{
+  "status": "complete",
+  "input_hashes": {
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/photo-probe-spatial-gradient-collection": "5422068ea1c6515e0d33d883cc0f143e3cc2fb636c15cfbbaef0bbcc3b85b03f",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/prepared.json": "6ba843f8f09419efb8ccec9b5d84cc8f086d1dc74ec222f5aa2acae29f9fff01",
+    "docs/research/dedup-spatial-gradients-insufficient-31.json": "28a78de47a15d923690fbc01662d60e78b9c86e29a0bbc73757a668f470faa57"
+  },
+  "image_hashes": {
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/original/201300.png": "ef6318721c14bd43dc815382b7de5a451ce2f68ae4668d243d796db135ce1bfd",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/strong/201301.png": "e029a30aef86e7ca70577d227f710ff659f5a96fdf4782b18fe8f3718d94adad",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/original/204600.png": "e54221e8ff92dc12f76f524dca49c5c0f7542b036b58bea8f6965d680eb49c88",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/strong/204601.png": "a3558385c7e014747106d40ff5baba5ade52a1f88bf48bcdd02118c3831658a8"
+  },
+  "required_queries": [
+    "201301.jpg",
+    "204601.jpg"
+  ],
+  "results": [
+    {
+      "query_id": "201301.jpg",
+      "evidence": {
+        "status": "ok",
+        "correspondences": 26,
+        "inliers": 11,
+        "geometry": [
+          [
+            3.7476933888286807,
+            0.12736825919731687,
+            -219.80133195191138
+          ],
+          [
+            0.05496636781084152,
+            3.6564219150726385,
+            -79.9637211938139
+          ],
+          [
+            0.0007966122447698032,
+            0.0008682323203178086,
+            0.8802844907400023
+          ]
+        ],
+        "pixels": {
+          "status": "ok",
+          "counts": [
+            [
+              5198,
+              5379,
+              76800
+            ],
+            [
+              68585,
+              76930,
+              80320
+            ]
+          ]
+        },
+        "candidate": false,
+        "managed_used_after_drop": 0,
+        "managed_peak": 19435392,
+        "retrieved": true,
+        "indexed_features": 1842,
+        "descriptor_hits": 228662,
+        "spatial_grid": [
+          4,
+          4,
+          32
+        ],
+        "scope": "Public managed gradient file API with source/dependency/cancellation guards; fixed three-level geometry and radius3 confirmation."
+      }
+    },
+    {
+      "query_id": "204601.jpg",
+      "evidence": {
+        "status": "ok",
+        "correspondences": 18,
+        "inliers": 13,
+        "geometry": [
+          [
+            2.4102101452421842,
+            0.06246732813206879,
+            -159.7371257504683
+          ],
+          [
+            0.0957076702201742,
+            2.3967281101833238,
+            -250.16198834758794
+          ],
+          [
+            0.0009549483755813451,
+            0.0003794543012638222,
+            0.8609476075683051
+          ]
+        ],
+        "pixels": {
+          "status": "ok",
+          "counts": [
+            [
+              5103,
+              7181,
+              76800
+            ],
+            [
+              27967,
+              42149,
+              45120
+            ]
+          ]
+        },
+        "candidate": false,
+        "managed_used_after_drop": 0,
+        "managed_peak": 16623488,
+        "retrieved": true,
+        "indexed_features": 1385,
+        "descriptor_hits": 53093,
+        "spatial_grid": [
+          4,
+          4,
+          32
+        ],
+        "scope": "Public managed gradient file API with source/dependency/cancellation guards; fixed three-level geometry and radius3 confirmation."
+      }
+    }
+  ],
+  "scope": "Native spatial collection retrieval and direct-file field parity on two recovered-model pairs. Whole-image decisions remain separate from supplied-model regional confirmation."
+}

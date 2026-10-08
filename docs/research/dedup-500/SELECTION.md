@@ -48,6 +48,15 @@ pixel counts and decisions match the fixed standalone measurements on all 229
 pairs; all 386 normalized input images were verified. Full measured evidence:
 `../dedup-complementary-filter-portfolio-full-state.json`.
 
+The subsequent shared-view four-search file API retains all30 and recovers five
+additional publisher-origin copies:35 of229, with194 still omitted. All reported
+constituent geometry, pixel counts and decisions equal the standalone references;
+all386 normalized inputs rehash. Its six-query negative gate finishes936
+different-origin comparisons without candidates, errors or timeouts. This is a
+measured improvement on this fixed corpus, not broad copy recall or semantic/burst
+precision. Evidence: `../dedup-four-lane-full-parity-audit.json` and
+`../dedup-four-lane-six-query-negative-terminal-audit.json`.
+
 A separate explicit radius-3 smoothing diagnostic recovers 27 of 229, with eight
 gains and one loss compared with radius 1. It preserves the initial native
 geometry on all pairs, but is not promoted as a replacement default because it

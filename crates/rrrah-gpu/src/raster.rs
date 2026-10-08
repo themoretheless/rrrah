@@ -6,6 +6,8 @@ use wgpu::util::DeviceExt;
 
 #[derive(Debug, Error)]
 pub enum RasterUploadError {
+    #[error("raster GPU upload cancelled")]
+    Cancelled,
     #[error(transparent)]
     Memory(#[from] rrrah_core::BufferError),
     #[error("raster GPU input must be linear sRGB RGBA32F")]
@@ -204,11 +206,31 @@ impl RasterRenderer {
         queue: &wgpu::Queue,
         raster: &DecodedRaster,
     ) -> Result<(), RasterUploadError> {
+        self.upload_with_cancel(device, queue, raster, || false)
+    }
+
+    /// Cancellation before submission preserves the previous texture and uniforms.
+    /// Driver allocation/write calls are not interruptible after the final check.
+    pub fn upload_with_cancel<F: FnMut() -> bool>(
+        &mut self,
+        device: &wgpu::Device,
+        queue: &wgpu::Queue,
+        raster: &DecodedRaster,
+        mut cancelled: F,
+    ) -> Result<(), RasterUploadError> {
+        if cancelled() {
+            return Err(RasterUploadError::Cancelled);
+        }
         let RasterPixels::Rgba32Float(pixels) = raster.pixels() else {
             return Err(RasterUploadError::ColorPreparationRequired);
         };
         if raster.color_space() != &RasterColorSpace::LinearSrgb {
             return Err(RasterUploadError::ColorPreparationRequired);
+        }
+        let aspect = raster.pixel_aspect().unwrap_or(1.0);
+        let physical_width = raster.width() as f32 * aspect;
+        if !physical_width.is_finite() || physical_width <= 0.0 {
+            return Err(RasterUploadError::InvalidPixelAspect);
         }
         if raster.width() > device.limits().max_texture_dimension_2d
             || raster.height() > device.limits().max_texture_dimension_2d
@@ -216,13 +238,16 @@ impl RasterRenderer {
         {
             return Err(RasterUploadError::TextureLimit);
         }
-        if pixels
-            .as_chunks::<4>()
-            .0
-            .iter()
-            .any(|p| p.iter().any(|v| !v.is_finite()) || !(0.0..=1.0).contains(&p[3]))
-        {
-            return Err(RasterUploadError::InvalidSamples);
+        for (index, pixel) in pixels.as_chunks::<4>().0.iter().enumerate() {
+            if index % 4096 == 0 && cancelled() {
+                return Err(RasterUploadError::Cancelled);
+            }
+            if pixel.iter().any(|v| !v.is_finite()) || !(0.0..=1.0).contains(&pixel[3]) {
+                return Err(RasterUploadError::InvalidSamples);
+            }
+        }
+        if cancelled() {
+            return Err(RasterUploadError::Cancelled);
         }
         let reservation = self
             .memory_budget
@@ -230,19 +255,23 @@ impl RasterRenderer {
             .map(|budget| budget.try_reserve(u64::from(raster.width()) * u64::from(raster.height()) * 16))
             .transpose()?
             .map(std::sync::Arc::new);
+        let queued_reservation = self
+            .upload_queue_budget
+            .as_ref()
+            .map(|budget| {
+                let row = (u64::from(raster.width()) * 16)
+                    .div_ceil(u64::from(wgpu::COPY_BYTES_PER_ROW_ALIGNMENT))
+                    * u64::from(wgpu::COPY_BYTES_PER_ROW_ALIGNMENT);
+                budget.try_reserve(row * u64::from(raster.height()))
+            })
+            .transpose()?;
+        if cancelled() {
+            return Err(RasterUploadError::Cancelled);
+        }
         let _queued_upload = crate::QueuedUploadReservation {
             queue: queue.clone(),
             resources: crate::GpuResourceLease::new(reservation.iter().cloned()),
-            reservation: self
-                .upload_queue_budget
-                .as_ref()
-                .map(|budget| {
-                    let row = (u64::from(raster.width()) * 16)
-                        .div_ceil(u64::from(wgpu::COPY_BYTES_PER_ROW_ALIGNMENT))
-                        * u64::from(wgpu::COPY_BYTES_PER_ROW_ALIGNMENT);
-                    budget.try_reserve(row * u64::from(raster.height()))
-                })
-                .transpose()?,
+            reservation: queued_reservation,
         };
         let size = wgpu::Extent3d {
             width: raster.width(),
@@ -274,6 +303,151 @@ impl RasterRenderer {
             },
             size,
         );
+        self.install_texture(
+            device,
+            queue,
+            texture,
+            reservation,
+            raster.width(),
+            raster.height(),
+        );
+        self.set_pixel_aspect(queue, aspect)?;
+        Ok(())
+    }
+
+    /// GPU-only transfer of queue-ordered compute output, explicitly interpreted
+    /// as linear sRGB. Single-row copies accept packed, unaligned row widths.
+    pub fn upload_resident<F: FnMut() -> bool>(
+        &mut self,
+        device: &wgpu::Device,
+        queue: &wgpu::Queue,
+        source: &crate::ResidentExposure,
+        dimensions: [u32; 2],
+        cancelled: F,
+    ) -> Result<(), RasterUploadError> {
+        self.upload_resident_with_aspect(device, queue, source, dimensions, None, cancelled)
+    }
+
+    /// Preserve explicitly supplied physical pixel geometry through GPU compute.
+    pub fn upload_resident_with_aspect<F: FnMut() -> bool>(
+        &mut self,
+        device: &wgpu::Device,
+        queue: &wgpu::Queue,
+        source: &crate::ResidentExposure,
+        dimensions: [u32; 2],
+        aspect: Option<f32>,
+        mut cancelled: F,
+    ) -> Result<(), RasterUploadError> {
+        if cancelled() {
+            return Err(RasterUploadError::Cancelled);
+        }
+        let [width, height] = dimensions;
+        let aspect = aspect.unwrap_or(1.0);
+        let physical_width = width as f32 * aspect;
+        if !aspect.is_finite() || aspect <= 0.0 || !physical_width.is_finite() || physical_width <= 0.0 {
+            return Err(RasterUploadError::InvalidPixelAspect);
+        }
+        if width == 0
+            || height == 0
+            || u64::from(width) * u64::from(height) != u64::from(source.pixels())
+            || width > device.limits().max_texture_dimension_2d
+            || height > device.limits().max_texture_dimension_2d
+            || u64::from(source.pixels()) * 16 > MAX_EAGER_ATLAS_BYTES
+        {
+            return Err(RasterUploadError::TextureLimit);
+        }
+        if !source.raster_alpha_valid {
+            return Err(RasterUploadError::InvalidSamples);
+        }
+        let bytes = u64::from(source.pixels()) * 16;
+        let reservation = self
+            .memory_budget
+            .as_ref()
+            .map(|b| b.try_reserve(bytes))
+            .transpose()?
+            .map(std::sync::Arc::new);
+        let occupancy = self
+            .upload_queue_budget
+            .as_ref()
+            .map(|b| b.try_reserve(bytes))
+            .transpose()?;
+        if cancelled() {
+            return Err(RasterUploadError::Cancelled);
+        }
+        let texture = device.create_texture(&wgpu::TextureDescriptor {
+            label: Some("resident compute raster"),
+            size: wgpu::Extent3d {
+                width,
+                height,
+                depth_or_array_layers: 1,
+            },
+            mip_level_count: 1,
+            sample_count: 1,
+            dimension: wgpu::TextureDimension::D2,
+            format: wgpu::TextureFormat::Rgba32Float,
+            usage: wgpu::TextureUsages::TEXTURE_BINDING | wgpu::TextureUsages::COPY_DST,
+            view_formats: &[],
+        });
+        let mut encoder = device.create_command_encoder(&Default::default());
+        let row_bytes = width * 16;
+        let aligned = row_bytes.is_multiple_of(wgpu::COPY_BYTES_PER_ROW_ALIGNMENT);
+        // Packed aligned rows can share a single transfer. Unaligned rows
+        // require separate copies to avoid allocating a padded staging buffer.
+        let copy_height = if aligned { height } else { 1 };
+        for row in (0..height).step_by(copy_height as usize) {
+            if row % 256 == 0 && cancelled() {
+                return Err(RasterUploadError::Cancelled);
+            }
+            encoder.copy_buffer_to_texture(
+                wgpu::TexelCopyBufferInfo {
+                    buffer: source.buffer(),
+                    layout: wgpu::TexelCopyBufferLayout {
+                        offset: u64::from(row) * u64::from(width) * 16,
+                        bytes_per_row: Some(
+                            row_bytes.div_ceil(wgpu::COPY_BYTES_PER_ROW_ALIGNMENT)
+                                * wgpu::COPY_BYTES_PER_ROW_ALIGNMENT,
+                        ),
+                        rows_per_image: None,
+                    },
+                },
+                wgpu::TexelCopyTextureInfo {
+                    texture: &texture,
+                    mip_level: 0,
+                    origin: wgpu::Origin3d { x: 0, y: row, z: 0 },
+                    aspect: wgpu::TextureAspect::All,
+                },
+                wgpu::Extent3d {
+                    width,
+                    height: copy_height,
+                    depth_or_array_layers: 1,
+                },
+            );
+        }
+        if cancelled() {
+            return Err(RasterUploadError::Cancelled);
+        }
+        let mut resources = source.resource_lease();
+        resources.extend(crate::GpuResourceLease::new(reservation.iter().cloned()));
+        let _in_flight = crate::QueuedUploadReservation {
+            queue: queue.clone(),
+            reservation: occupancy,
+            resources,
+        };
+        queue.submit([encoder.finish()]);
+        self.install_texture(device, queue, texture, reservation, width, height);
+        self.set_pixel_aspect(queue, aspect)?;
+        Ok(())
+    }
+
+    fn install_texture(
+        &mut self,
+        device: &wgpu::Device,
+        queue: &wgpu::Queue,
+        texture: wgpu::Texture,
+        reservation: Option<std::sync::Arc<rrrah_core::Reservation>>,
+        width: u32,
+        height: u32,
+    ) {
         let view = texture.create_view(&wgpu::TextureViewDescriptor::default());
         self.bind_group = Some(device.create_bind_group(&wgpu::BindGroupDescriptor {
             label: Some("Rrrah raster bind group"),
@@ -292,10 +466,9 @@ impl RasterRenderer {
         self.texture = Some(texture);
         self.texture_reservation = reservation;
         self.parameters.raw_development = [0; 4];
-        self.parameters.image_size = [raster.width() as f32, raster.height() as f32];
+        self.parameters.image_size = [width as f32, height as f32];
         self.parameters.pixel_aspect = 1.0;
         queue.write_buffer(&self.uniform, 0, bytemuck::bytes_of(&self.parameters));
-        Ok(())
     }
 
     /// Tone-map developed scene-linear RAW after exposure, then apply the

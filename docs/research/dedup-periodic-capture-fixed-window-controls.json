@@ -1,0 +1,30 @@
+{
+  "status": "verified_native_fixed_window_periodic_capture",
+  "positive_variants": 30,
+  "negative_variants": 30,
+  "periods": [
+    3,
+    5,
+    7
+  ],
+  "all_phases": true,
+  "axes": [
+    "horizontal",
+    "vertical"
+  ],
+  "fixed_radius": 7,
+  "positive_bidirectional_matched_pixels": 361,
+  "positive_bidirectional_compared_pixels": 361,
+  "source_pixels": 1089,
+  "minimum_fit_samples": 100,
+  "residual_tolerance": 0.03,
+  "max_offset": 0.1,
+  "negative_gate": "Both directions below90% or explicit bounded-fit refusal",
+  "limitations": "Supplied identity geometry and analytic opaque ramps.361 compared pixels are below production region minimum1000, so this test does not establish production admission. Unknown arbitrary periods, real perspective and screen color cast remain unqualified. No production policy change.",
+  "supersedes": "docs/research/dedup-periodic-capture-controls.json (test source subsequently extended; use current pinned report)",
+  "input_hashes": {
+    "crates/rrrah-dedup/tests/periodic_capture.rs": "836848dad8b2d29f2ac1c51c184b2ec30f68f340166c785da36910d4f2af6b0f",
+    "crates/rrrah-dedup/src/warp.rs": "1dee5d40b8fa2e4e4b9afb2f8899c64083f404686de6e08da476467c0ed57991",
+    "docs/research/dedup-periodic-capture-fixed-window-macos.log": "34806e7f6276ce950456f5bd5b3d676df412317b0733a1c940a5c0227422584a"
+  }
+}

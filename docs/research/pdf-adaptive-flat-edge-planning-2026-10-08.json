@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-08",
+  "scope": "Local adaptive tensor-patch cell edge planning",
+  "change": "Replace per-axis BTreeMap<u32,BTreeSet<u32>> with contiguous sorted/deduplicated (fixed coordinate,parameter) arrays; use binary searches for strictly interior edge points",
+  "source_sha256": "48278da296a087f31d938b30f193e9174ab1d5117c23ef20c8ba6be772642977",
+  "qualification_before_change": {
+    "passed": 3,
+    "failed": 0
+  },
+  "interpreter_suite_after_change": {
+    "passed": 98,
+    "failed": 0,
+    "ignored": 0
+  },
+  "verified": [
+    "9801 independent dense planar-patch samples remain within reported original bilinear-component bound",
+    "Unequally subdivided adjacent tensor patches have identical shared boundary coordinate bits",
+    "Each patch retains its own constant source color on shared vertices",
+    "Cancellation at every observed mesh checkpoint preserves pre-existing triangles and source ranges",
+    "Triangle-cap refusal preserves pre-existing triangles and source ranges",
+    "Existing interpreter and native source tests pass"
+  ],
+  "logs": [
+    {
+      "path": "/tmp/rrrah-adaptive-flat-edges-before-20261008.log",
+      "sha256": "6074e6300c167a2ac0518b5936bb4a2cb49b936fc69e8cf65f706da413672e34"
+    },
+    {
+      "path": "/tmp/rrrah-adaptive-flat-edges-after-20261008.log",
+      "sha256": "bb5c814cc0e5c2dd63063d6e625b664abfff70cb2a41cce6935b1ca2cced734b"
+    }
+  ],
+  "limitations": [
+    "Local arrays are not yet admitted through a shared byte budget",
+    "Mesh-wide shared-edge registries still use BTree containers",
+    "Leaf planning and emission scratch allocations still require complete admission design",
+    "No production tessellator selection changed",
+    "No wall-clock speedup claim",
+    "Native Tensor/Coons source capture and real AI event 9 remain unresolved"
+  ]
+}

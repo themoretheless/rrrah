@@ -48,6 +48,19 @@ fn packed_12(
     }
     Ok(output.freeze().into())
 }
+fn metadata_disjoint(source: &[u8], encoded: &[u8], begin: usize, end: usize) -> Result<(), DecodeError> {
+    // Classic TIFF keeps up to four bytes inline, already protected by the IFD table.
+    if encoded.len() <= 4 { return Ok(()); }
+    let field_begin = (encoded.as_ptr() as usize).checked_sub(source.as_ptr() as usize)
+        .ok_or_else(|| error("metadata field outside source"))?;
+    let field_end = field_begin.checked_add(encoded.len()).filter(|end| *end <= source.len())
+        .ok_or_else(|| error("metadata field outside source"))?;
+    if begin < field_end && field_begin < end {
+        return Err(error("sensor strip overlaps TIFF metadata field"));
+    }
+    Ok(())
+}
+
 /// Import the qualified Mamiya ZD packed sensor layout (4016 x 5344).
 /// Source memory is caller-owned; output is managed and cancellable. Returns
 /// sensor codes only: no white balance, color development or preview fallback.
@@ -125,6 +138,9 @@ pub fn decode_mef_zd_sensor(
             .ok_or(DecodeError::DimensionOverflow)?;
         if offset < table_end && begin < end {
             return Err(error("sensor strip overlaps TIFF directory"));
+        }
+        for entry in &directory.ifd.entries {
+            metadata_disjoint(bytes, entry.raw_bytes(), offset, end)?;
         }
     }
     let sensor = bytes
@@ -250,6 +266,20 @@ mod tests {
         drop(output);
         assert_eq!(budget.used(), 0);
     }
+    #[test]
+    fn sensor_strip_cannot_alias_out_of_line_metadata() {
+        let source = [0u8; 64];
+        let field = &source[8..20];
+        for (begin, end) in [(0, 9), (19, 30), (8, 20), (0, 64)] {
+            assert!(metadata_disjoint(&source, field, begin, end).is_err());
+        }
+        for (begin, end) in [(0, 8), (20, 64)] {
+            metadata_disjoint(&source, field, begin, end).unwrap();
+        }
+        // Inline values are covered by the separate directory-table check.
+        metadata_disjoint(&source, &source[8..12], 8, 20).unwrap();
+    }
+
     #[test]
     fn file_import_rejects_selection_and_stale_generation_before_reading() {
         let budget = MemoryBudget::new(1);

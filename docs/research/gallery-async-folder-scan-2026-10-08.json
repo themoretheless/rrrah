@@ -1,0 +1,41 @@
+{
+  "scope": "Move app folder enumeration and sibling cover discovery off event-loop thread",
+  "integration": [
+    "Initial CLI file gallery context",
+    "Open folder",
+    "Drop supported file",
+    "10ms event-loop polling while pending scan"
+  ],
+  "worker": "One dedicated thread; capacity-one pending and result channels; generation invalidation and serialized publication",
+  "cancellation": "Directory-entry checkpoints and pre/post sort; sibling-cover iteration checkpoints; no stale result publication",
+  "ordinary_app_tests_passed": 168,
+  "ordinary_app_ignored": 26,
+  "failed": 0,
+  "gallery_controls_passed": 32,
+  "real_directory_control": {
+    "entries": 100000,
+    "enumeration_seconds": 0.757244208,
+    "passed": 1
+  },
+  "logs": [
+    {
+      "path": "/tmp/rrrah-app-async-folder-all-20261008.log",
+      "sha256": "9634226ac7dededfa5a7f229d99bf6e62dfdc4271f56c953218d943cac1d09dc"
+    },
+    {
+      "path": "/tmp/rrrah-async-folder-scan-controls-20261008.log",
+      "sha256": "2d33c980fa8cf7c9d852b3dd1eaae312822f2423d1be022616b3b0fc75cb1ea5"
+    },
+    {
+      "path": "/tmp/rrrah-async-folder-100k-20261008.log",
+      "sha256": "08f5c7538d80ad4dc16c8f6d1660cd7a157b5d03de1464363981804cd229c983"
+    }
+  ],
+  "limitations": [
+    "Directory test uses empty PNG-named files; not decode or display qualification",
+    "No physical UI latency measurement",
+    "Sorting cannot be interrupted mid-sort, but occurs off UI thread",
+    "Path-list metadata memory grows with collection size",
+    "26 external app controls not rerun in ordinary suite"
+  ]
+}

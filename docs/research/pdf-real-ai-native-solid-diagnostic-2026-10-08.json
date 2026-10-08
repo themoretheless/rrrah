@@ -1,0 +1,77 @@
+{
+  "scope": "Bounded test-only native solid replay of pinned real AI pages",
+  "pages": [
+    {
+      "fixture": "VectorApple.ai",
+      "page": 0,
+      "width": 301,
+      "height": 246,
+      "peak_admitted_bytes": 48094328,
+      "final_admitted_bytes": 0,
+      "status": "native_diagnostic",
+      "native_completed": false,
+      "capture_failed": false,
+      "capture_ms": 1627.162083,
+      "native_replay_ms": 11.873333,
+      "deadline_expired": false,
+      "events": 2755,
+      "native_paints": 463,
+      "raster_events": 3,
+      "shading_events": 13,
+      "page_model": "Cmyk"
+    },
+    {
+      "fixture": "one.ai",
+      "page": 0,
+      "width": 1366,
+      "height": 768,
+      "peak_admitted_bytes": 168322584,
+      "final_admitted_bytes": 0,
+      "status": "native_diagnostic",
+      "native_completed": true,
+      "capture_failed": false,
+      "capture_ms": 1.581792,
+      "native_replay_ms": 972.622167,
+      "deadline_expired": false,
+      "events": 8,
+      "native_paints": 2,
+      "raster_events": 0,
+      "shading_events": 0,
+      "page_model": "Rgb"
+    },
+    {
+      "fixture": "one.ai",
+      "page": 1,
+      "width": 177,
+      "height": 175,
+      "peak_admitted_bytes": 4957320,
+      "final_admitted_bytes": 0,
+      "status": "native_diagnostic",
+      "native_completed": true,
+      "capture_failed": false,
+      "capture_ms": 0.045167000000000006,
+      "native_replay_ms": 3.525458,
+      "deadline_expired": false,
+      "events": 1,
+      "native_paints": 0,
+      "raster_events": 0,
+      "shading_events": 0,
+      "page_model": "Rgb"
+    }
+  ],
+  "source_manifest": "docs/research/ai-upstream-poppler-2026-10-06.json",
+  "source_hashes_verified": true,
+  "controls": {
+    "passed": 113,
+    "failed": 0,
+    "ignored": 10,
+    "log": "/tmp/rrrah-native-real-ai-diagnostic-controls.log"
+  },
+  "log": "/tmp/rrrah-real-ai-native-solid-20261008.log",
+  "limitations": [
+    "Native completion does not establish pixel correctness; no native raster output oracle compared in this diagnostic",
+    "VectorApple refused without capture failure or deadline; it contains three raster events and thirteen shadings; exact first refusal not yet traced",
+    "Test-only path, not production AI or Metal integration",
+    "Memory peak is tracked capture/replay credit, not total process RSS"
+  ]
+}

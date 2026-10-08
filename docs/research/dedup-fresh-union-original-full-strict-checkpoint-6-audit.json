@@ -1,0 +1,61 @@
+{
+  "status": "verified_original_union_prefix",
+  "verified_rows": 6,
+  "required_pairs": 229,
+  "counts": {
+    "local_supported": 5,
+    "miss": 1,
+    "native_error": 0
+  },
+  "summary": [
+    {
+      "query": "200001.jpg",
+      "outcome": "local_supported",
+      "matches": 288,
+      "inliers": 102,
+      "support_count": 80
+    },
+    {
+      "query": "200101.jpg",
+      "outcome": "local_supported",
+      "matches": 122,
+      "inliers": 50,
+      "support_count": 8
+    },
+    {
+      "query": "200102.jpg",
+      "outcome": "local_supported",
+      "matches": 2920,
+      "inliers": 2163,
+      "support_count": 53
+    },
+    {
+      "query": "200201.jpg",
+      "outcome": "local_supported",
+      "matches": 396,
+      "inliers": 209,
+      "support_count": 13
+    },
+    {
+      "query": "200301.jpg",
+      "outcome": "local_supported",
+      "matches": 17,
+      "inliers": 10,
+      "support_count": 47
+    },
+    {
+      "query": "200302.jpg",
+      "outcome": "miss",
+      "matches": 11,
+      "inliers": 0,
+      "support_count": 0
+    }
+  ],
+  "input_hashes": {
+    "docs/research/dedup-fresh-union-original-full-strict-checkpoint-6.json": "6b17fbd82a50315b2a8b7ec28057078cf2a47da18d23456daf6d40d4561586c6",
+    "scripts/verify-dedup-scale-similarity-diagnostic.py": "41a4c0583f4a99677e716bae43ed976cfda409703fe2ec6236da3de5d4f897e4",
+    "scripts/dedup_jpeg_domain.py": "a9986aabe3428100e1b061a70f6fb7f1f87e1b6c8552484b550e764a04746921",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-fresh-union-original-full-strict.py": "7b3a9a1b22a6717b965a2d4438343d6168fa339a5729598db4cbc69b3bb5add5"
+  },
+  "scope": "Source/archive hashes, ordered origin pairs, same-recipe positive parity, typed stdout, distinct locations, geometry residuals and regional arithmetic/domain bounds. Errors remain unresolved denominator rows. No whole identity, semantic precision, full-pixel resampling oracle or indexed full-collection proof."
+}

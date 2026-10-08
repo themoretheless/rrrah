@@ -1,0 +1,47 @@
+{
+  "status": "passed",
+  "input_hashes": {
+    "docs/research/dedup-native-screen-affine-color-grid-negatives-meanfix-checkpoint.json": "39951cbb9b3e15bbd68b4aacaf41e5ec2d7bad74cf40b32aa61dcf2e175a3bfc",
+    "scripts/verify-dedup-native-screen-affine-color-grid-negatives-domains.py": "1de8fd8d1946320a5bd5f3685bf4acd9b47f38c69e4ba082f5672d4fab51901c",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/test-dedup-affine-grid-negative-domain-auditor.py": "f00a8973f36449d1a25a5bf6f0e299940ac74eae5f62b69d1b10a2dd7ae53f86"
+  },
+  "controls": [
+    {
+      "case": "valid",
+      "returncode": 0
+    },
+    {
+      "case": "false_support",
+      "returncode": 1
+    },
+    {
+      "case": "source_digest",
+      "returncode": 1
+    },
+    {
+      "case": "radius",
+      "returncode": 1
+    },
+    {
+      "case": "domain",
+      "returncode": 1
+    },
+    {
+      "case": "matched_count",
+      "returncode": 1
+    },
+    {
+      "case": "duplicate_source",
+      "returncode": 1
+    },
+    {
+      "case": "shifted_nonempty_source",
+      "returncode": 1
+    },
+    {
+      "case": "missing_grid_cell",
+      "returncode": 1
+    }
+  ],
+  "scope": "Finite auditor mutation controls only, not pixel/copy precision evidence."
+}

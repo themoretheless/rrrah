@@ -1,0 +1,71 @@
+{
+  "status": "verified_native_independent_mesh_rank_count_parity",
+  "comparisons": 6,
+  "summary": [
+    {
+      "direction": "forward",
+      "filter_radius": 0,
+      "valid_sites": 193765,
+      "informative_pairs": 1322182,
+      "agreeing_pairs": 854033,
+      "agreement_fraction": 0.6459269601310561
+    },
+    {
+      "direction": "forward",
+      "filter_radius": 3,
+      "valid_sites": 187482,
+      "informative_pairs": 1209108,
+      "agreeing_pairs": 877302,
+      "agreement_fraction": 0.7255778640121477
+    },
+    {
+      "direction": "forward",
+      "filter_radius": 8,
+      "valid_sites": 177216,
+      "informative_pairs": 1048825,
+      "agreeing_pairs": 824638,
+      "agreement_fraction": 0.7862493742998117
+    },
+    {
+      "direction": "reverse",
+      "filter_radius": 0,
+      "valid_sites": 931352,
+      "informative_pairs": 5867362,
+      "agreeing_pairs": 3498657,
+      "agreement_fraction": 0.5962913145635125
+    },
+    {
+      "direction": "reverse",
+      "filter_radius": 3,
+      "valid_sites": 917582,
+      "informative_pairs": 5418882,
+      "agreeing_pairs": 3522314,
+      "agreement_fraction": 0.6500075107743627
+    },
+    {
+      "direction": "reverse",
+      "filter_radius": 8,
+      "valid_sites": 894840,
+      "informative_pairs": 4772827,
+      "agreeing_pairs": 3474444,
+      "agreement_fraction": 0.7279635318858194
+    }
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-folded-piecewise-pixel-diagnostic.json": "43d980a8c41e24908daffcc2e154dead3b5b2de3f75fd8cb62d3b79a2d9d6174",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-folded-native-mesh-rank.jsonl": "33b30d0b0d1311689077c05bbf079207aa00e4d3904f3ffe93c83245ff7f8757",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-native-mesh-rank.py": "b817357863dd5fb89a16787d6aefea765ed6090a4ec26710107be8f17e41c767",
+    "/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup/src/mesh_rank.rs": "7dc7aabc21e25fdb934e6dc6b7984671eba18bc3062c7470e87d61d3a5b55adf",
+    "/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup/src/mesh_grid.rs": "9eb86be46a941bcdbbfb6d3b8ca721f1e61c781730da77e830a9cd75b25e8000",
+    "/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup/examples/mesh_rank_probe.rs": "e9ef8047750806aae8950f080c12536420443c910d97e1e60065dd203e65dc19",
+    "/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup/src/rank_region.rs": "781bde7379e709db64b3b2b3f6e18036eb79cca2d06d5294bc8d7828c6df081a",
+    "/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup/src/triangulation.rs": "40e6769e5168d121092d3ff5b3e4071f35de56b5331e9296342047b2174d13a3",
+    "/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup/src/piecewise_warp.rs": "cdd8fd51e2012e4d0be0d42719d10003a3afaa3f92d8301256ba5d51ce50d8bd",
+    "/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup/src/lib.rs": "be8d748629c3668ce1b59f423ddc62ba4c50b5742276d9e960a6fa66ce8f5a94",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-rank-normalized-pixels.json": "b59195c2394bbcae1144bea50cc9b2053df07a9218120f6837de34476c13127f",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201700.jpg": "72a07e098b9628cf665612b9a9450da78cff914a06b08c403e56c7dc74d4b5ca",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/201702.jpg": "a2e4eaa90d3aba8cca4dc3382d710cc8564f07bea69eedf35ac550ecc0900a51",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/mesh-rank-probe-qualified": "6141ff164af99d457cc6ef43936ca509d7a7871365c0a90d6e8ac195f8073873"
+  },
+  "scope": "All native sites/coverage/valid/informative/agreement counts match offline independent whole-mesh math. Decoder shared with pixel dump oracle. Fixed156 correspondence union; no integrated retrieval, full negative precision or copy admission."
+}

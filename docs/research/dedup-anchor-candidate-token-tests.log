@@ -1,0 +1,27 @@
+   Compiling hayro-interpret v0.7.0 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret)
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+error: missing documentation for a variant
+   --> vendor/hayro-interpret/src/color.rs:207:26
+    |
+207 | pub enum BlendingModel { Gray, Rgb, Cmyk }
+    |                          ^^^^
+    |
+note: the lint level is defined here
+   --> vendor/hayro-interpret/src/lib.rs:29:9
+    |
+ 29 | #![deny(missing_docs)]
+    |         ^^^^^^^^^^^^
+
+error: missing documentation for a variant
+   --> vendor/hayro-interpret/src/color.rs:207:32
+    |
+207 | pub enum BlendingModel { Gray, Rgb, Cmyk }
+    |                                ^^^
+
+error: missing documentation for a variant
+   --> vendor/hayro-interpret/src/color.rs:207:37
+    |
+207 | pub enum BlendingModel { Gray, Rgb, Cmyk }
+    |                                     ^^^^
+
+error: could not compile `hayro-interpret` (lib) due to 3 previous errors

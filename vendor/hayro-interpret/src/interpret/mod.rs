@@ -1,3 +1,5 @@
+mod precise_fill;
+pub use precise_fill::{flatten_fill_bounded, flatten_fill_bounded_with_admission, flatten_fill_bounded_with_admission_and_cancel};
 use crate::FillRule;
 use crate::color::ColorSpace;
 use crate::context::Context;
@@ -93,6 +95,12 @@ pub struct InterpreterSettings {
     /// In certain cases, `hayro` will emit a warning in case an issue was encountered while interpreting
     /// the PDF file. Providing a callback allows you to catch those warnings and handle them, if desired.
     pub warning_sink: WarningSinkFn,
+    /// Optional fill-curve tolerance in transformed pixels; output is capped at 65536 elements.
+    pub fill_curve_tolerance: Option<f64>,
+    /// Optional exact temporary fill-path admission; the guard lives through drawing.
+    pub fill_curve_admission: Option<Arc<dyn Fn(usize) -> Option<Box<dyn std::any::Any + Send + Sync>> + Send + Sync>>,
+    /// Optional cancellation predicate polled during fill-curve subdivision.
+    pub fill_curve_cancelled: Option<Arc<dyn Fn() -> bool + Send + Sync>>,
     /// Whether annotations should be rendered as well.
     ///
     /// Note that this feature is currently not fully implemented yet, so some
@@ -115,6 +123,9 @@ impl Default for InterpreterSettings {
             #[cfg(not(feature = "embed-cmaps"))]
             cmap_resolver: Arc::new(|_| None),
             warning_sink: Arc::new(|_| {}),
+            fill_curve_tolerance: None,
+            fill_curve_admission: None,
+            fill_curve_cancelled: None,
             render_annotations: true,
         }
     }
@@ -129,17 +140,27 @@ pub enum InterpreterWarning {
     UnsupportedFont,
     /// An image failed to decode.
     ImageDecodeFailure,
+    /// Precise fill subdivision exceeded its geometry or resource bounds.
+    FillCurveLimit,
 }
 
 /// interpret the contents of the page and render them into the device.
 pub fn interpret_page<'a>(page: &Page<'a>, context: &mut Context<'a>, device: &mut impl Device<'a>) {
     let resources = page.resources();
+    if device.should_stop() { return; }
+    let space = crate::x_object::transparency_group_color_space(
+        page.raw().get::<Dict<'_>>(b"Group").as_ref(), context, resources,
+    );
+    device.set_page_group_color_space(&space);
+    if device.should_stop() { return; }
     interpret(page.typed_operations(), resources, context, device);
 
+    if device.should_stop() { return; }
     if context.settings.render_annotations
         && let Some(annot_arr) = page.raw().get::<Array<'_>>(ANNOTS)
     {
         for annot in annot_arr.iter::<Dict<'_>>() {
+            if device.should_stop() { break; }
             let flags = annot.get::<u32>(F).unwrap_or(0);
 
             // Annotation should be hidden.
@@ -219,7 +240,10 @@ pub fn interpret<'a>(
 
     context.save_state();
 
-    while let Some(op) = ops.next() {
+    loop {
+        if context.settings.fill_curve_cancelled.as_ref().is_some_and(|check| check())
+            || device.should_stop() { break; }
+        let Some(op) = ops.next() else { break; };
         match op {
             TypedInstruction::SaveState(_) => context.save_state(),
             TypedInstruction::StrokeColorDeviceRgb(s) => {
@@ -704,6 +728,7 @@ pub fn interpret<'a>(
                     st.graphics_state.non_stroke_pattern = Some(sp);
                     st.graphics_state.none_stroke_cs = ColorSpace::pattern();
 
+                    device.set_alpha_source(st.graphics_state.alpha_is_shape);
                     device.set_soft_mask(st.graphics_state.soft_mask.clone());
                     device.set_blend_mode(st.graphics_state.blend_mode);
 

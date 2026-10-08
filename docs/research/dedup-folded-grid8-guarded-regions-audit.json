@@ -1,0 +1,46 @@
+{
+  "status": "verified_folded_grid8_guarded_regions",
+  "report_sha256": "bbae5ab43eb3330eaea4a25265580ac14d70b091bee92a8249ec56f08315aa8c",
+  "verifier_sha256": "3ae5db609fd87df81630031460eceab1c98e55011404f63dbe5a563b7952739e",
+  "cases": 6,
+  "supports": 0,
+  "summary": [
+    {
+      "model_index": 0,
+      "status": "ok",
+      "supported": false,
+      "source_radius": 17
+    },
+    {
+      "model_index": 1,
+      "status": "ok",
+      "supported": false,
+      "source_radius": 17
+    },
+    {
+      "model_index": 2,
+      "status": "refusal:Region(Color(Bounds))",
+      "supported": false,
+      "source_radius": 18
+    },
+    {
+      "model_index": 3,
+      "status": "refusal:Region(Color(Bounds))",
+      "supported": false,
+      "source_radius": 17
+    },
+    {
+      "model_index": 4,
+      "status": "refusal:Region(Color(Bounds))",
+      "supported": false,
+      "source_radius": 17
+    },
+    {
+      "model_index": 5,
+      "status": "ok",
+      "supported": false,
+      "source_radius": 18
+    }
+  ],
+  "scope": "Exact model/domain/input membership, reconstructed mapped bounds/radii and successful sample counts. No pixel resampling, color fit oracle or broad copy precision."
+}

@@ -1,0 +1,190 @@
+[package]
+name = "rrrah-dedup"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[features]
+default = []
+raster = ["dep:rrrah-core"]
+decode = ["raster", "dep:rrrah-decode"]
+
+[dependencies]
+rrrah-decode = { path = "../rrrah-decode", optional = true }
+rrrah-core = { path = "../rrrah-core", optional = true }
+blake3.workspace = true
+thiserror.workspace = true
+tempfile.workspace = true
+
+[target.'cfg(windows)'.dependencies]
+winapi-util = "0.1.11"
+
+[target.'cfg(unix)'.dependencies]
+libc = "0.2"
+
+[build-dependencies]
+blake3.workspace = true
+
+[lints]
+workspace = true
+
+[[example]]
+name = "raw_probe"
+required-features = ["decode"]
+
+[[example]]
+name = "photo_probe"
+required-features = ["decode"]
+
+[[example]]
+name = "raw_raster_probe"
+required-features = ["decode"]
+
+[[example]]
+name = "presentation_scale_probe"
+required-features = ["decode"]
+
+[[example]]
+name = "cache_hit_scale_probe"
+required-features = ["decode"]
+
+[[example]]
+name = "raster_memory_scale_probe"
+required-features = ["decode"]
+
+[[example]]
+name = "alpha_memory_scale_probe"
+required-features = ["decode"]
+
+[[example]]
+name = "font_cache_probe"
+required-features = ["decode"]
+
+[[example]]
+name = "gradient_scales_probe"
+required-features = ["decode"]
+
+[[example]]
+name = "affine_color_image_probe"
+required-features = ["decode"]
+
+[[example]]
+name = "affine_color_clipped_image_probe"
+required-features = ["decode"]
+
+[[example]]
+name = "affine_color_footprint_image_probe"
+required-features = ["decode"]
+
+[[example]]
+name = "affine_color_roi_image_probe"
+required-features = ["decode"]
+
+[[example]]
+name = "affine_color_managed_image_probe"
+required-features = ["decode"]
+
+[[example]]
+name = "affine_color_grid_image_probe"
+required-features = ["decode"]
+
+[[example]]
+name = "affine_color_search_image_probe"
+required-features = ["decode"]
+
+[[example]]
+name = "affine_color_search_proof_probe"
+required-features = ["decode"]
+
+[[example]]
+name = "affine_color_guarded_roi_probe"
+required-features = ["decode"]
+
+[[example]]
+name = "affine_color_guarded_roi_radius24_probe"
+required-features = ["decode"]
+
+[[example]]
+name = "affine_color_common_footprint_roi_probe"
+required-features = ["decode"]
+
+[[example]]
+name = "affine_color_common_footprint_bounds_diagnostic"
+required-features = ["decode"]
+
+[[example]]
+name = "affine_color_training_diagnostic"
+required-features = ["decode"]
+
+[[example]]
+name = "rank_region_probe"
+required-features = ["decode"]
+
+[[example]]
+name = "filtered_rank_region_probe"
+required-features = ["decode"]
+
+[[example]]
+name = "rank_pixel_dump"
+required-features = ["decode"]
+
+[[example]]
+name = "regional_rank_region_probe"
+required-features = ["decode"]
+
+[[example]]
+name = "triangulation_probe"
+required-features = ["raster"]
+
+[[example]]
+name = "topology_probe"
+required-features = ["raster"]
+
+[[example]]
+name = "diagonal_triangulation_probe"
+required-features = ["raster"]
+
+[[example]]
+name = "mesh_grid_dump"
+required-features = ["raster"]
+
+[[example]]
+name = "mesh_rank_probe"
+required-features = ["decode"]
+
+[[example]]
+name = "mesh_refine_probe"
+required-features = ["raster"]
+
+[[example]]
+name = "mesh_refine_adoption_probe"
+required-features = ["raster"]
+
+[[example]]
+name = "projective_rank_pixels_probe"
+required-features = ["raster"]
+
+[[example]]
+name = "projective_rank_regions_probe"
+required-features = ["raster"]
+
+[[example]]
+name = "local_rank_pixels_probe"
+required-features = ["raster"]
+
+[[example]]
+name = "local_rank_resolution_probe"
+required-features = ["raster"]
+
+[[example]]
+name = "local_rank_cached_pixels_probe"
+required-features = ["raster"]
+
+[[example]]
+name = "local_rank_cached_large_points_probe"
+required-features = ["raster"]
+
+[[example]]
+name = "mesh_pixels_dimensions_probe"
+required-features = ["raster"]

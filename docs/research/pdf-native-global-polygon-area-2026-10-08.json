@@ -1,0 +1,74 @@
+{
+  "scope": "test-only globally anchored polygon area kernel; no production routing or GPU change",
+  "implementation": "vendor/hayro/src/polygon_coverage.rs",
+  "source_sha256": "41386d7ee3e94cf845a5f3753bc7143476cf1ab8fc049c5280d0337ce34d0548",
+  "approach": "Split pixel into horizontal slabs at polygon vertices, pixel-boundary intersections and edge crossings; sort scanline intersections and integrate filled span widths. All coordinates stay in global page space. Polygon regions intersect using independent winding/evenodd rules. Compensated f64 area summation.",
+  "independent_controls": [
+    "right triangle area1/2",
+    "evenodd nested square area3/4",
+    "nonzero nested square area1",
+    "overlapping rectangles nonzero area1/evenodd area1/2",
+    "triangle clipped by half-height rectangle area3/8",
+    "self-crossing bowtie area1/2",
+    "global positive and negative integer translations preserving triangle area1/2"
+  ],
+  "resource_controls": [
+    "admission refusal before scratch allocation",
+    "every cancellation checkpoint releases scratch credit",
+    "geometric work-budget exhaustion returns no partial area",
+    "invalid/nonfinite input refuses before admission"
+  ],
+  "limits": {
+    "regions": 64,
+    "active_nonhorizontal_edges": 1024,
+    "absolute_global_coordinate": 1048576,
+    "curves_accepted": false,
+    "maximum_worst_case_scratch_bytes_64_regions": 4280592
+  },
+  "half_area_reproducer": [
+    {
+      "kind": "rectangle",
+      "viewport": "whole",
+      "expected": 128,
+      "actual": 128
+    },
+    {
+      "kind": "rectangle",
+      "viewport": "translated_tile_with_gutter",
+      "expected": 128,
+      "actual": 128
+    },
+    {
+      "kind": "dash_outline",
+      "viewport": "whole",
+      "expected": 128,
+      "actual": 128
+    },
+    {
+      "kind": "dash_outline",
+      "viewport": "translated_tile_with_gutter",
+      "expected": 128,
+      "actual": 127
+    },
+    {
+      "kind": "native_global_polygon",
+      "viewport": "global_pixel",
+      "expected": 128,
+      "actual": 128,
+      "area": 0.5
+    }
+  ],
+  "focused_suite": "3 passed, 0 failed",
+  "prototype_suite": "test result: FAILED. 75 passed; 1 failed; 8 ignored; 0 measured; 1 filtered out; finished in 1.00s",
+  "qualification": {
+    "production_enabled": false,
+    "full_transform_gate_passed": false,
+    "certified_exact_predicates": false
+  },
+  "remaining": [
+    "Native coverage is not yet connected to buffered tile replay",
+    "Stroke preparation scratch still needs bounded admission",
+    "Large corpus throughput and memory need measurement",
+    "General transformed/shading/image/mask scenes remain unqualified"
+  ]
+}

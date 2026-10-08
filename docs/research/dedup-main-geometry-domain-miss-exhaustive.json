@@ -1,0 +1,131 @@
+{
+  "status": "complete_native_exhaustive_domain_geometry_misses",
+  "input_hashes": {
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/geometry-domain-miss-probe-qualified": "4b9e4158d44b0b4f85ec808babf207683ed8af760693722485ca9c6ffb06e9e3",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/prepared.json": "6ba843f8f09419efb8ccec9b5d84cc8f086d1dc74ec222f5aa2acae29f9fff01",
+    "docs/research/dedup-combined-domain-release-original-full.json": "e2f282391b1b5f0bef723c2d4575223a9ce6c41d2627c2efdfe7763b53d4e072",
+    "docs/research/dedup-main-geometry-miss-exhaustive.json": "68b11146db5987dd8b5802f29b469dd4893655145fb07e7630bc05a43d15a2d5",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-main-geometry-domain-misses.py": "e1d5047aa3176f8cbca9e8c7ea1c3d14c97de29132dfd2a1bd105df4251e3d0c",
+    "crates/rrrah-dedup/src/geometry.rs": "b7c7d1ef9c3a63b20d09a8171c9ac9e652327ff943fc2b70898dc8586bc6ce70",
+    "crates/rrrah-dedup/examples/geometry_domain_miss_probe.rs": "09e06f34bfbcb5c3443ce8f766ddc692194d7c98eb5739bad033562af7abbda0",
+    "docs/research/dedup-main-geometry-miss-200302-points.txt": "fa5f7f72b2c387f1d0bbbc6b490082bfb7b834cf6997ea9914bf3b9307e6c933",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200300.jpg": "0573729209c9ce6c109ea1175079960165b915dd5579121f0e15653d56f755d0",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200302.jpg": "bc4de3728d82839559134cc8155f87bdf7f8aeaca32b66bdea11f5a618420242",
+    "docs/research/dedup-main-geometry-miss-201303-points.txt": "bc43f510d6b856a43e87ddbd122bb51bee8b56e0c634934a8cbd07387314e6d9",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201300.jpg": "f2819f6d37def6b0dcc04c3f1670bb2b46318d2c451ee6ef0ebec59d8ce8c98d",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/201303.jpg": "162003ef18f481a33e8bb6713fe9169bc0af0675b8ce1b3d21508447032a9ae5",
+    "docs/research/dedup-main-geometry-miss-209401-points.txt": "c27bc764d116a401c76e1c13c8950429eedfbc24eb6bbc42e608d2fe32eff73a",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/209400.jpg": "d9caf92ca47a9047154bd987ee240832b1cc2a01b73fd83144043f181c127777",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/209401.jpg": "707f365de5031172ac067f8a156fd0972e5995e59a0d01326d21d4a50ae22704",
+    "docs/research/dedup-main-geometry-miss-210202-points.txt": "17ca111f810cf5dace7d9e7dc512499c5ee64ab3a22752722ef2f90ea6c086e7",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/210200.jpg": "3feb59f989569051b0665caf0bec8c905bc6b1fd06753eeb85861d91cd0585f0",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/210202.jpg": "e37e3bae5aa022e45b8cd1cc95f91ad1d0baa5bf8be23ed3d5df49eafdb2a696",
+    "docs/research/dedup-main-geometry-miss-211902-points.txt": "884391f4467bdd8bedca64e686592b818a8dd682ff5e7e2c11446754b2af7c84",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/211900.jpg": "81faa5e0860359aa092a5b1e04de4130acd1168182bb5fdf55c7dd73af9fd8fe",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/211902.jpg": "d0ad91669f6f857bcc8d305d1dd57abe0c96eaa447064894da21e5c19c436868"
+  },
+  "results": [
+    {
+      "query": "200302.jpg",
+      "dimensions": [
+        2048,
+        1536,
+        800,
+        600
+      ],
+      "returncode": 0,
+      "evidence": {
+        "status": "no_model",
+        "points": 11
+      }
+    },
+    {
+      "query": "201303.jpg",
+      "dimensions": [
+        2560,
+        1920,
+        675,
+        543
+      ],
+      "returncode": 0,
+      "evidence": {
+        "status": "no_model",
+        "points": 42
+      }
+    },
+    {
+      "query": "209401.jpg",
+      "dimensions": [
+        2560,
+        1920,
+        1024,
+        701
+      ],
+      "returncode": 0,
+      "evidence": {
+        "status": "no_model",
+        "points": 26
+      }
+    },
+    {
+      "query": "210202.jpg",
+      "dimensions": [
+        2048,
+        1536,
+        800,
+        600
+      ],
+      "returncode": 0,
+      "evidence": {
+        "status": "model",
+        "points": 32,
+        "matrix": [
+          [
+            0.4879559021440189,
+            0.020715905636228826,
+            -84.44841362386518
+          ],
+          [
+            -0.040291785035033965,
+            0.30583759555578405,
+            60.21786785531151
+          ],
+          [
+            -6.351612008923073e-05,
+            -0.0003532949355468245,
+            1.2955850833510558
+          ]
+        ],
+        "inliers": [
+          5,
+          6,
+          7,
+          9,
+          10,
+          11,
+          12,
+          14,
+          15,
+          16,
+          22
+        ],
+        "squared_error": 15.465576889817225
+      }
+    },
+    {
+      "query": "211902.jpg",
+      "dimensions": [
+        2560,
+        1920,
+        1845,
+        1431
+      ],
+      "returncode": 0,
+      "evidence": {
+        "status": "no_model",
+        "points": 30
+      }
+    }
+  ],
+  "scope": "Same sparse supplied points, exhaustive four-point hypotheses with full-domain eligibility before ranking/refinement, min10 target tolerance2. No descriptor retrieval, pixels/copy admission or independent no-model numerical oracle."
+}

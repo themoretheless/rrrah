@@ -1,0 +1,43 @@
+   Compiling rrrah-core v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-core)
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+warning: unused import: `compare_local_files_projective`
+ --> crates/rrrah-dedup/tests/five_lifecycle.rs:8:35
+  |
+8 |     local_scan::{LocalFilePolicy, compare_local_files_projective},
+  |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `LocalFileError`, `WarpError`, `compare_local_files_projective_complementary`, and `local::LocalError`
+  --> crates/rrrah-dedup/tests/five_lifecycle.rs:48:9
+   |
+48 |         local::LocalError,
+   |         ^^^^^^^^^^^^^^^^^
+49 |         local_scan::{
+50 |             LocalFileError, ProjectiveComplementaryFilePolicy, ProjectivePortfolioFilePolicy,
+   |             ^^^^^^^^^^^^^^
+51 |             ProjectivePyramidPhotometricFilePolicy, compare_local_files_projective_complementary,
+   |                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+56 |             ProjectiveRegistrationTrustPolicy, WarpError,
+   |                                                ^^^^^^^^^
+
+warning: unused variable: `unrelated`
+  --> crates/rrrah-dedup/tests/five_lifecycle.rs:68:9
+   |
+68 |     let unrelated = DecodeRequest::new(source.join("5495-base.png"));
+   |         ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_unrelated`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-dedup` (test "five_lifecycle") generated 3 warnings (run `cargo fix --test "five_lifecycle" -p rrrah-dedup` to apply 3 suggestions)
+    Finished `test` profile [optimized + debuginfo] target(s) in 10.94s
+     Running tests/five_lifecycle.rs (/Users/themoretheless/.codex/tmp/rrrah-dedup-atomic-20261006/target/debug/deps/five_lifecycle-cf739c88a28456e6)
+
+running 1 test
+test five_search_source_replacement_discards_prior_positives has been running for over 60 seconds
+test five_search_source_replacement_discards_prior_positives ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 63.48s
+

@@ -1,0 +1,56 @@
+{
+  "date": "2026-10-08",
+  "adapter": "Metal Apple M4 Max",
+  "source": "authored spatially varying 4000x3000 linear-sRGB RGBA32Float",
+  "payload_bytes": 192000000,
+  "root_limit_bytes": 768000000,
+  "initial_ram_bytes": 384000000,
+  "reduced_ram_bytes": 192000000,
+  "initial_count": 2,
+  "reduced_count": 1,
+  "reduced_ttl_seconds": 0,
+  "queue_bytes": 384000000,
+  "restore_bytes": 192000000,
+  "output_pixels_per_readback": 12000000,
+  "source_sha256": "dc462b0de6b6e2e6bfdc085722400c200db26b03539ef04c7bbd773c044f4b16",
+  "results": [
+    {
+      "test": "large_hdr_live_policy_preserves_every_component_and_metal_pixel",
+      "passed": true,
+      "duration_seconds": 9.29
+    },
+    {
+      "test": "live_count_size_and_ttl_changes_preserve_hdr_frames_through_swap",
+      "passed": true,
+      "cycles": 1,
+      "duration_seconds": 5.85
+    }
+  ],
+  "logs": [
+    {
+      "path": "/tmp/rrrah-metal-large-live-policy-20261008.log",
+      "sha256": "ab318df0c0112c95c5d2e32a08adb85fb75a2c637bba02653a072e406356b6d0"
+    },
+    {
+      "path": "/tmp/rrrah-metal-small-live-policy-regression-20261008.log",
+      "sha256": "37219c5c15bac2e5993afcafcfd654ea6395b25bc9451f8a54825f67e8993eea"
+    }
+  ],
+  "verified": [
+    "Combined size/count/TTL reduction refuses eviction of active lease and visible frame",
+    "Releasing lease allows actual file-backed asynchronous spill",
+    "All 48000000 source float components restored bit-exactly for each of original and replacement payloads",
+    "Negative zero, negative channels, HDR values above one, spatial variation and fractional alpha covered",
+    "Entire 4000x3000 Metal output equal before and after spill/restore",
+    "Background restore does not displace visible entry",
+    "Externally held replacement retains root credit after eviction",
+    "Final managed root bytes zero"
+  ],
+  "limitations": [
+    "Authored data, not a camera or codec corpus",
+    "Offscreen SDR readback checks stability, not physical HDR luminance or color accuracy",
+    "Single large cycle, not hours-long collection soak",
+    "Test oracle vectors and setup allocations are outside the managed payload budget",
+    "No NVIDIA hardware execution"
+  ]
+}

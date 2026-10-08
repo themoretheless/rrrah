@@ -202,11 +202,200 @@ impl ColorSpaceType {
     }
 }
 
+/// Native component layout for a legal PDF blending color space.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum BlendingModel {
+    /// One grayscale component.
+    Gray,
+    /// Red, green and blue components.
+    Rgb,
+    /// Cyan, magenta, yellow and black components.
+    Cmyk,
+}
+
 /// A PDF color space.
 #[derive(Debug, Clone)]
 pub struct ColorSpace(Arc<ColorSpaceType>, u128);
 
+/// An explicit floating-point conversion between two ICC blending spaces.
+/// Compile once and retain outside the pixel loop. Construction may allocate.
+pub struct BlendingTransform {
+    executor: Arc<TransformF32Executor>,
+    source_components: usize,
+    destination_components: usize,
+}
+
+impl BlendingTransform {
+    /// Convert one unpremultiplied native sample without display quantization.
+    /// Invalid component counts or nonfinite/out-of-range samples are rejected.
+    pub fn convert(&self, source: &[f32]) -> Option<[f32; 4]> {
+        if source.len() != self.source_components
+            || source.iter().any(|v| !v.is_finite() || !(0.0..=1.0).contains(v))
+        {
+            return None;
+        }
+        let mut destination = [0.0; 4];
+        self.executor.transform(source, &mut destination[..self.destination_components]).ok()?;
+        if destination[..self.destination_components]
+            .iter().any(|v| !v.is_finite() || !(0.0..=1.0).contains(v))
+        {
+            return None;
+        }
+        Some(destination)
+    }
+}
+
 impl ColorSpace {
+    /// Convert bare RGB to bare CMYK with explicit graphics-state BG/UCR.
+    /// Defaults/unresolved functions and unsupported bounded evaluators refuse.
+    pub fn rgb_sample_to_cmyk_with(
+        &self, destination: &Self, input: &[f32], functions: &DeviceConversionFunctions,
+        cancelled: &dyn Fn() -> bool,
+    ) -> Option<[f32; 4]> {
+        if cancelled() || !matches!(self.0.as_ref(), ColorSpaceType::DeviceRgb)
+            || !matches!(destination.0.as_ref(), ColorSpaceType::DeviceCmyk)
+            || input.len() != 3
+            || input.iter().any(|v| !v.is_finite() || !(0.0..=1.0).contains(v))
+        { return None; }
+        let c = 1.0 - input[0];
+        let m = 1.0 - input[1];
+        let y = 1.0 - input[2];
+        let k = c.min(m).min(y);
+        let DeviceConversionFunction::Function(bg) = &functions.black_generation else { return None; };
+        let DeviceConversionFunction::Function(ucr) = &functions.undercolor_removal else { return None; };
+        let black = bg.eval_scalar_bounded(k, cancelled)?;
+        let removal = ucr.eval_scalar_bounded(k, cancelled)?;
+        if cancelled() { return None; }
+        Some([(c-removal).clamp(0.0,1.0), (m-removal).clamp(0.0,1.0),
+            (y-removal).clamp(0.0,1.0), black.clamp(0.0,1.0)])
+    }
+    /// PDF 32000-1 section10.3 device conversions to Gray or Gray-to-CMYK.
+    /// RGB-to-CMYK is refused: its black-generation/undercolor-removal
+    /// functions belong to graphics state and must be supplied explicitly.
+    pub fn device_sample_to_gray_or_cmyk(&self, destination: &Self, input: &[f32]) -> Option<[f32; 4]> {
+        if input.len() != usize::from(self.num_components())
+            || input.iter().any(|v| !v.is_finite() || !(0.0..=1.0).contains(v))
+        { return None; }
+        let mut out = [0.0; 4];
+        match (self.0.as_ref(), destination.0.as_ref()) {
+            (ColorSpaceType::DeviceGray, ColorSpaceType::DeviceCmyk) => out[3] = 1.0 - input[0],
+            (source, ColorSpaceType::DeviceGray) => {
+                out[0] = match source {
+                    ColorSpaceType::DeviceGray => input[0],
+                    ColorSpaceType::DeviceRgb => 0.3 * input[0] + 0.59 * input[1] + 0.11 * input[2],
+                    ColorSpaceType::DeviceCmyk => 1.0 - (0.3 * input[0] + 0.59 * input[1] + 0.11 * input[2] + input[3]).min(1.0),
+                    _ => return None,
+                };
+            }
+            _ => return None,
+        }
+        Some(out)
+    }
+    /// Evaluate the renderer's calibrated-space display policy in float RGB.
+    /// Destination must be bare DeviceRGB. This preserves the current policy;
+    /// it does not qualify calibrated group-boundary conformance.
+    pub fn calibrated_sample_to_rgb(&self, destination: &Self, input: &[f32]) -> Option<[f32; 4]> {
+        if !matches!(destination.0.as_ref(), ColorSpaceType::DeviceRgb)
+            || input.len() != usize::from(self.num_components())
+            || input.iter().any(|v| !v.is_finite() || !(0.0..=1.0).contains(v))
+        { return None; }
+        let rgb = match self.0.as_ref() {
+            ColorSpaceType::CalRgb(cal) => cal.rgb_float(input)?,
+            ColorSpaceType::CalGray(cal) => {
+                if !cal.gamma.is_finite() || cal.gamma <= 0.0
+                    || cal.white_point.iter().any(|v| !v.is_finite() || *v <= 0.0)
+                    || cal.black_point.iter().any(|v| !v.is_finite())
+                { return None; }
+                let luminance = cal.white_point[1] * input[0].powf(cal.gamma);
+                if !luminance.is_finite() { return None; }
+                let gray = (295.8 * luminance.powf(0.333_333_34) - 40.8).max(0.0) / 255.0;
+                [gray.clamp(0.0, 1.0); 3]
+            }
+            _ => return None,
+        };
+        Some([rgb[0], rgb[1], rgb[2], 0.0])
+    }
+    /// Convert a bare device-space sample to bare DeviceRGB without RGBA8.
+    /// CMYK uses this renderer's existing CGATS/hybrid display policy.
+    /// This is not an ICC-coordinate equivalence or a calibrated-space transform.
+    pub fn device_sample_to_rgb(&self, destination: &Self, input: &[f32]) -> Option<[f32; 4]> {
+        if !matches!(destination.0.as_ref(), ColorSpaceType::DeviceRgb)
+            || input.len() != usize::from(self.num_components())
+            || input.iter().any(|v| !v.is_finite() || !(0.0..=1.0).contains(v))
+        {
+            return None;
+        }
+        let mut output = [0.0; 4];
+        match self.0.as_ref() {
+            ColorSpaceType::DeviceGray => output[..3].fill(input[0]),
+            ColorSpaceType::DeviceRgb => output[..3].copy_from_slice(input),
+            ColorSpaceType::DeviceCmyk => DEVICE_CMYK_FLOAT.transform(input, &mut output[..3]).ok()?,
+            _ => return None,
+        }
+        if output[..3].iter().any(|v| !v.is_finite() || !(0.0..=1.0).contains(v)) {
+            return None;
+        }
+        Some(output)
+    }
+    /// Compile a direct ICC-to-ICC native blending conversion.
+    /// Device/calibrated spaces require an explicit profile policy and are
+    /// refused here rather than assigning an implicit display profile.
+    pub fn blending_transform_to(&self, destination: &Self) -> Option<BlendingTransform> {
+        self.blending_model()?;
+        destination.blending_model()?;
+        let (ColorSpaceType::ICCBased(source), ColorSpaceType::ICCBased(target)) =
+            (self.0.as_ref(), destination.0.as_ref()) else { return None; };
+        let executor = source.0.src_profile.create_transform_f32(
+            source.0.src_layout,
+            &target.0.src_profile,
+            target.0.src_layout,
+            TransformOptions { prefer_fixed_point: false, ..TransformOptions::default() },
+        ).ok()?;
+        Some(BlendingTransform {
+            executor,
+            source_components: source.0.number_components,
+            destination_components: target.0.number_components,
+        })
+    }
+    /// Native layout; special/Lab spaces require conversion before blending.
+    pub fn blending_model(&self) -> Option<BlendingModel> {
+        match self.0.as_ref() {
+            ColorSpaceType::DeviceGray | ColorSpaceType::CalGray(_) => Some(BlendingModel::Gray),
+            ColorSpaceType::DeviceRgb | ColorSpaceType::CalRgb(_) => Some(BlendingModel::Rgb),
+            ColorSpaceType::DeviceCmyk => Some(BlendingModel::Cmyk),
+            ColorSpaceType::ICCBased(profile) => match profile.0.src_profile.color_space {
+                DataColorSpace::Gray => Some(BlendingModel::Gray),
+                DataColorSpace::Rgb => Some(BlendingModel::Rgb),
+                DataColorSpace::Cmyk => Some(BlendingModel::Cmyk),
+                _ => None,
+            },
+            _ => None,
+        }
+    }
+    /// True only when native components may be copied without color conversion.
+    /// Independently loaded ICC profiles conservatively require a transform.
+    pub fn shares_blending_coordinates(&self, other: &Self) -> bool {
+        if self.blending_model().is_none() || self.blending_model() != other.blending_model() {
+            return false;
+        }
+        if Arc::ptr_eq(&self.0, &other.0) {
+            return true;
+        }
+        match (self.0.as_ref(), other.0.as_ref()) {
+            (ColorSpaceType::DeviceGray, ColorSpaceType::DeviceGray)
+            | (ColorSpaceType::DeviceRgb, ColorSpaceType::DeviceRgb)
+            | (ColorSpaceType::DeviceCmyk, ColorSpaceType::DeviceCmyk) => true,
+            (ColorSpaceType::CalGray(a), ColorSpaceType::CalGray(b)) => a == b,
+            (ColorSpaceType::CalRgb(a), ColorSpaceType::CalRgb(b)) => a == b,
+            (ColorSpaceType::ICCBased(a), ColorSpaceType::ICCBased(b)) => Arc::ptr_eq(&a.0, &b.0),
+            _ => false,
+        }
+    }
+    /// Retained capacity of a plain device color-space Arc; profiles and
+    /// calibrated/spot spaces require a separately admitted capture path.
+    pub fn native_device_retained_capacity(&self) -> Option<usize> {
+        self.is_device().then_some(size_of::<ColorSpaceType>() + 2*size_of::<usize>())
+    }
     pub(crate) fn is_device(&self) -> bool {
         matches!(self.0.as_ref(), ColorSpaceType::DeviceGray | ColorSpaceType::DeviceRgb | ColorSpaceType::DeviceCmyk)
     }
@@ -252,6 +441,22 @@ impl ColorSpace {
     /// Return `true` if the current color space is the pattern color space.
     pub(crate) fn is_pattern(&self) -> bool {
         matches!(self.0.as_ref(), ColorSpaceType::Pattern(_))
+    }
+
+    /// Resolve one original sample into blending coordinates without RGB8.
+    /// Indexed palettes are expanded before interpolation. Unsupported base
+    /// spaces (e.g. Lab or spot coordinates) require a separate native transform.
+    pub fn native_sample_coordinates(&self, input: &[f32]) -> Option<(&Self,[f32;4])> {
+        if input.iter().any(|value| !value.is_finite()) { return None; }
+        let (space,values)=if let ColorSpaceType::Indexed(indexed)=self.0.as_ref() {
+            if input.len()!=1 { return None; }
+            let index=(input[0].clamp(0.,f32::from(indexed.hival))+0.5) as usize;
+            (indexed.base.as_ref(),indexed.values.get(index)?.as_slice())
+        } else { (self,input) };
+        space.blending_model()?;
+        let count=usize::from(space.num_components());
+        if count>4 || values.len()!=count || values.iter().any(|value| !value.is_finite() || !(0. ..=1.).contains(value)) { return None; }
+        let mut out=[0.;4];out[..count].copy_from_slice(values);Some((space,out))
     }
 
     /// Return `true` if the current color space is an indexed color space.
@@ -314,8 +519,11 @@ impl ColorSpace {
         matches!(self.0.as_ref(), ColorSpaceType::DeviceGray)
     }
 
+    pub(crate) fn valid_blending_space(&self) -> bool { self.blending_model().is_some() }
+
     /// Get the number of components of the color space.
-    pub(crate) fn num_components(&self) -> u8 {
+    /// Number of native components before conversion to display RGB.
+    pub fn num_components(&self) -> u8 {
         match self.0.as_ref() {
             ColorSpaceType::DeviceCmyk => 4,
             ColorSpaceType::DeviceGray => 1,
@@ -445,7 +653,7 @@ impl ToRgb for ColorSpace {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub(crate) struct CalGray {
     white_point: [f32; 3],
     black_point: [f32; 3],
@@ -492,7 +700,7 @@ impl ToRgb for CalGray {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub(crate) struct CalRgb {
     white_point: [f32; 3],
     black_point: [f32; 3],
@@ -628,39 +836,48 @@ impl CalRgb {
     }
 }
 
+impl CalRgb {
+    fn rgb_float(&self, input: &[f32]) -> Option<[f32; 3]> {
+        if input.len() != 3
+            || self.white_point.iter().any(|v| !v.is_finite() || *v <= 0.0)
+            || self.black_point.iter().chain(self.matrix.iter()).any(|v| !v.is_finite())
+            || self.gamma.iter().any(|v| !v.is_finite() || *v <= 0.0)
+        { return None; }
+        let input = [
+            input[0].clamp(0.0, 1.0),
+            input[1].clamp(0.0, 1.0),
+            input[2].clamp(0.0, 1.0),
+        ];
+
+        let [r, g, b] = input;
+        let [gr, gg, gb] = self.gamma;
+        let [agr, bgg, cgb] = [
+            if r == 1.0 { 1.0 } else { r.powf(gr) },
+            if g == 1.0 { 1.0 } else { g.powf(gg) },
+            if b == 1.0 { 1.0 } else { b.powf(gb) },
+        ];
+
+        let m = &self.matrix;
+        let x = m[0] * agr + m[3] * bgg + m[6] * cgb;
+        let y = m[1] * agr + m[4] * bgg + m[7] * cgb;
+        let z = m[2] * agr + m[5] * bgg + m[8] * cgb;
+        let xyz = [x, y, z];
+
+        let xyz_flat = self.normalize_white_point_to_flat(&self.white_point, &xyz);
+        let xyz_black = Self::compensate_black_point(&self.black_point, &xyz_flat);
+        let xyz_d65 = self.normalize_white_point_to_d65(&Self::FLAT_WHITEPOINT, &xyz_black);
+        let srgb_xyz = Self::matrix_product(&Self::SRGB_D65_XYZ_TO_RGB_MATRIX, &xyz_d65);
+
+        if srgb_xyz.iter().any(|v| !v.is_finite()) { return None; }
+        Some(srgb_xyz.map(Self::srgb_transfer_function))
+    }
+}
+
 impl ToRgb for CalRgb {
     fn convert_f32(&self, input: &[f32], output: &mut [u8], _: bool) -> Option<()> {
         for (input, output) in input.chunks_exact(3).zip(output.chunks_exact_mut(3)) {
-            let input = [
-                input[0].clamp(0.0, 1.0),
-                input[1].clamp(0.0, 1.0),
-                input[2].clamp(0.0, 1.0),
-            ];
-
-            let [r, g, b] = input;
-            let [gr, gg, gb] = self.gamma;
-            let [agr, bgg, cgb] = [
-                if r == 1.0 { 1.0 } else { r.powf(gr) },
-                if g == 1.0 { 1.0 } else { g.powf(gg) },
-                if b == 1.0 { 1.0 } else { b.powf(gb) },
-            ];
-
-            let m = &self.matrix;
-            let x = m[0] * agr + m[3] * bgg + m[6] * cgb;
-            let y = m[1] * agr + m[4] * bgg + m[7] * cgb;
-            let z = m[2] * agr + m[5] * bgg + m[8] * cgb;
-            let xyz = [x, y, z];
-
-            let xyz_flat = self.normalize_white_point_to_flat(&self.white_point, &xyz);
-            let xyz_black = Self::compensate_black_point(&self.black_point, &xyz_flat);
-            let xyz_d65 = self.normalize_white_point_to_d65(&Self::FLAT_WHITEPOINT, &xyz_black);
-            let srgb_xyz = Self::matrix_product(&Self::SRGB_D65_XYZ_TO_RGB_MATRIX, &xyz_d65);
-
-            output.copy_from_slice(&[
-                (Self::srgb_transfer_function(srgb_xyz[0]) * 255.0 + 0.5) as u8,
-                (Self::srgb_transfer_function(srgb_xyz[1]) * 255.0 + 0.5) as u8,
-                (Self::srgb_transfer_function(srgb_xyz[2]) * 255.0 + 0.5) as u8,
-            ]);
+            let rgb = self.rgb_float(input)?;
+            output.copy_from_slice(&rgb.map(|value| (value * 255.0 + 0.5) as u8));
         }
 
         Some(())
@@ -1051,14 +1268,61 @@ pub struct Color {
     color_space: ColorSpace,
     components: ColorComponents,
     opacity: f32,
+    conversion_functions: DeviceConversionFunctions,
+}
+
+/// A graphics-state black-generation or undercolor-removal function.
+#[derive(Debug, Clone, Default)]
+pub enum DeviceConversionFunction {
+    /// Device default; a concrete output policy must resolve this later.
+    #[default]
+    Default,
+    /// Explicit PDF function.
+    Function(Function),
+    /// Declared but invalid; native conversion must refuse it.
+    Unresolved,
+}
+
+/// Original graphics-state functions used for RGB-to-CMYK conversion.
+#[derive(Debug, Clone, Default)]
+pub struct DeviceConversionFunctions {
+    /// Function selecting generated black.
+    pub black_generation: DeviceConversionFunction,
+    /// Function selecting removed undercolor.
+    pub undercolor_removal: DeviceConversionFunction,
 }
 
 impl Color {
+    /// Original device conversion functions, before output-policy resolution.
+    pub fn conversion_functions(&self) -> &DeviceConversionFunctions {
+        &self.conversion_functions
+    }
+
+    pub(crate) fn with_conversion_functions(mut self, functions: DeviceConversionFunctions) -> Self {
+        self.conversion_functions = functions;
+        self
+    }
+    /// Original PDF color space, retained for transparency-group blending.
+    pub fn color_space(&self) -> &ColorSpace {
+        &self.color_space
+    }
+
+    /// Native PDF components, without display conversion or 8-bit quantization.
+    pub fn components(&self) -> &[f32] {
+        &self.components
+    }
+
+    /// Paint opacity, independent of native color components and geometric shape.
+    pub fn opacity(&self) -> f32 {
+        self.opacity
+    }
+
     pub(crate) fn new(color_space: ColorSpace, components: ColorComponents, opacity: f32) -> Self {
         Self {
             color_space,
             components,
             opacity,
+            conversion_functions: DeviceConversionFunctions::default(),
         }
     }
 
@@ -1075,6 +1339,7 @@ impl Color {
             color_space: ColorSpace::device_rgb(),
             components: smallvec![c[0], c[1], c[2]],
             opacity: c[3],
+            conversion_functions: DeviceConversionFunctions::default(),
         }
     }
 }
@@ -1180,5 +1445,170 @@ impl ColorSpace {
             _ => return self.clone(),
         };
         Self(Arc::new(replacement), crate::util::hash128(&(self.1, defaults.cache_key())))
+    }
+}
+
+#[cfg(test)]
+mod native_color_access_tests {
+    use super::*;
+
+    #[test]
+    fn preserves_native_components_and_opacity_across_display_conversion() {
+        for (space, components) in [
+            (ColorSpace::device_cmyk(), smallvec![0.17, 0.31, 0.53, 0.07]),
+            (ColorSpace::device_rgb(), smallvec![0.17, 0.31, 0.53]),
+            (ColorSpace::device_gray(), smallvec![0.17]),
+        ] {
+            let color = Color::new(space, components.clone(), 0.37);
+            assert_eq!(color.color_space().num_components() as usize, components.len());
+            assert_eq!(color.components(), components.as_slice());
+            assert_eq!(color.opacity(), 0.37);
+            // Display conversion currently quantizes opacity as well as color.
+            // Native access must retain the original samples regardless.
+            let _display = color.to_rgba();
+            assert_eq!(color.components(), components.as_slice());
+            assert_eq!(color.opacity(), 0.37);
+        }
+    }
+}
+
+#[cfg(test)]
+mod blending_coordinate_tests {
+    use super::*;
+    #[test]
+    fn explicit_bg_ucr_cmyk_conversion_is_bounded_and_cancellable() {
+        use hayro_syntax::object::{Dict, FromBytes};
+        let function = |bytes: &[u8]| DeviceConversionFunction::Function(
+            Function::new(&Object::Dict(Dict::from_bytes(bytes).unwrap())).unwrap()
+        );
+        let functions = DeviceConversionFunctions {
+            black_generation: function(b"<< /FunctionType 2 /Domain [0 1] /C0 [0.1] /C1 [0.3] /N 1 >>"),
+            undercolor_removal: function(b"<< /FunctionType 2 /Domain [0 1] /C0 [0] /C1 [1] /N 1 >>"),
+        };
+        let rgb = ColorSpace::device_rgb();
+        let cmyk = ColorSpace::device_cmyk();
+        let input = [0.2,0.4,0.6];
+        let result = rgb.rgb_sample_to_cmyk_with(&cmyk, &input, &functions, &|| false).unwrap();
+        for (actual, expected) in result.into_iter().zip([0.4,0.2,0.0,0.18]) {
+            assert!((actual-expected).abs() < 1e-7);
+        }
+        for stop in 1..=6 {
+            let polls = std::cell::Cell::new(0);
+            assert!(rgb.rgb_sample_to_cmyk_with(&cmyk, &input, &functions, &|| {
+                polls.set(polls.get()+1); polls.get() == stop
+            }).is_none());
+        }
+        assert!(rgb.rgb_sample_to_cmyk_with(&cmyk, &input, &DeviceConversionFunctions::default(), &|| false).is_none());
+        let mut invalid = functions.clone();
+        invalid.black_generation = function(b"<< /FunctionType 2 /Domain [0 1] /C0 [0 0] /C1 [1 1] /N 1 >>");
+        assert!(rgb.rgb_sample_to_cmyk_with(&cmyk, &input, &invalid, &|| false).is_none());
+    }
+    #[test]
+    fn device_gray_cmyk_boundaries_follow_independent_references() {
+        let gray = ColorSpace::device_gray();
+        let rgb = ColorSpace::device_rgb();
+        let cmyk = ColorSpace::device_cmyk();
+        for (input, expected) in [([1.,0.,0.],0.3),([0.,1.,0.],0.59),([0.,0.,1.],0.11),([0.2,0.4,0.6],0.362)] {
+            assert!((rgb.device_sample_to_gray_or_cmyk(&gray, &input).unwrap()[0] - expected).abs() < 1e-7);
+        }
+        assert!((cmyk.device_sample_to_gray_or_cmyk(&gray, &[0.2,0.4,0.6,0.1]).unwrap()[0] - 0.538).abs() < 1e-7);
+        assert_eq!(cmyk.device_sample_to_gray_or_cmyk(&gray, &[1.;4]).unwrap()[0],0.0);
+        assert_eq!(gray.device_sample_to_gray_or_cmyk(&cmyk, &[0.25]).unwrap(),[0.,0.,0.,0.75]);
+        assert!(rgb.device_sample_to_gray_or_cmyk(&cmyk, &[0.2,0.4,0.6]).is_none());
+        assert!(rgb.device_sample_to_gray_or_cmyk(&gray, &[f32::NAN;3]).is_none());
+    }
+    #[test]
+    fn calibrated_float_policy_retains_fractions_and_refuses_invalid_parameters() {
+        let rgb = ColorSpace::device_rgb();
+        let gray = ColorSpace(Arc::new(ColorSpaceType::CalGray(CalGray {
+            white_point: [1.0; 3], black_point: [0.0; 3], gamma: 1.0,
+        })), 0);
+        // Cube-root display policy has the independent reference 107.1/255
+        // at luminance1/8. This is a policy control, not a PDF conformance oracle.
+        let sample = gray.calibrated_sample_to_rgb(&rgb, &[0.125]).unwrap();
+        assert!((sample[0] - 107.1 / 255.0).abs() < 0.000001);
+        assert_eq!(sample[..3], [sample[0]; 3]);
+        assert_eq!(gray.calibrated_sample_to_rgb(&rgb, &[0.0]).unwrap()[..3], [0.0; 3]);
+        let calibrated = |gamma| ColorSpace(Arc::new(ColorSpaceType::CalRgb(CalRgb {
+            white_point: [1.0; 3], black_point: [0.0; 3],
+            matrix: [1.,0.,0.,0.,1.,0.,0.,0.,1.], gamma: [gamma; 3],
+        })), 0);
+        let cal = calibrated(1.0);
+        assert_eq!(cal.calibrated_sample_to_rgb(&rgb, &[0.0; 3]).unwrap()[..3], [0.0; 3]);
+        let input = [0.173123, 0.319876, 0.537654];
+        let converted = cal.calibrated_sample_to_rgb(&rgb, &input).unwrap();
+        assert!(converted[..3].iter().any(|v| (v*255.0 - (v*255.0).round()).abs() > 0.01));
+        let darker = calibrated(2.0).calibrated_sample_to_rgb(&rgb, &input).unwrap();
+        assert!(darker[1] < converted[1]);
+        assert!(calibrated(f32::NAN).calibrated_sample_to_rgb(&rgb, &input).is_none());
+        assert!(cal.calibrated_sample_to_rgb(&rgb, &[f32::NAN;3]).is_none());
+        assert!(cal.calibrated_sample_to_rgb(&gray, &input).is_none());
+    }
+    #[test]
+    fn device_rgb_policy_avoids_display_quantization() {
+        let rgb = ColorSpace::device_rgb();
+        let sample = [0.173123, 0.319876, 0.537654];
+        assert_eq!(rgb.device_sample_to_rgb(&rgb, &sample).unwrap()[..3], sample);
+        let gray = ColorSpace::device_gray();
+        assert_eq!(gray.device_sample_to_rgb(&rgb, &[0.371234]).unwrap()[..3], [0.371234; 3]);
+        let cmyk = ColorSpace::device_cmyk();
+        let input = [0.173123, 0.319876, 0.537654, 0.071234];
+        let converted = cmyk.device_sample_to_rgb(&rgb, &input).unwrap();
+        let display = cmyk.to_rgba(&input, 1.0, false).to_rgba8();
+        for i in 0..3 { assert_eq!(f32_to_u8(converted[i]), display[i]); }
+        assert!(converted[..3].iter().any(|v| (v * 255.0 - (v * 255.0).round()).abs() > 0.01));
+        assert!(gray.device_sample_to_rgb(&cmyk, &[0.5]).is_none());
+        assert!(rgb.device_sample_to_rgb(&rgb, &[f32::NAN, 0.0, 0.0]).is_none());
+        assert!(rgb.device_sample_to_rgb(&rgb, &[1.1, 0.0, 0.0]).is_none());
+    }
+    #[test]
+    fn explicit_icc_blending_transform_preserves_float_samples() {
+        let space = || ColorSpace(Arc::new(ColorSpaceType::ICCBased(
+            ICCProfile::new_from_src_profile(ColorProfile::new_srgb(), true, false, 3).unwrap()
+        )), 0);
+        let source = space();
+        let destination = space();
+        assert!(!source.shares_blending_coordinates(&destination));
+        let transform = source.blending_transform_to(&destination).unwrap();
+        let input = [0.173123, 0.319876, 0.537654];
+        let output = transform.convert(&input).unwrap();
+        for i in 0..3 {
+            // ICC matrix round trips are approximate; this is a sub-8-bit
+            // precision control, not an exact profile-equivalence assertion.
+            assert!((input[i] - output[i]).abs() < 0.5 / 255.0, "input={input:?} output={output:?}");
+            assert!((output[i] * 255.0 - (output[i] * 255.0).round()).abs() > 0.01);
+        }
+        assert!(transform.convert(&[0.5]).is_none());
+        assert!(transform.convert(&[f32::NAN, 0.0, 0.0]).is_none());
+        assert!(transform.convert(&[1.01, 0.0, 0.0]).is_none());
+        assert!(source.blending_transform_to(&ColorSpace::device_rgb()).is_none());
+        let gray = |gamma| ColorSpace(Arc::new(ColorSpaceType::ICCBased(
+            ICCProfile::new_from_src_profile(ColorProfile::new_gray_with_gamma(gamma), false, false, 1).unwrap()
+        )), 0);
+        let gamma_transform = gray(1.0).blending_transform_to(&gray(2.0)).unwrap();
+        let converted = gamma_transform.convert(&[0.25]).unwrap();
+        assert!((converted[0] - 0.5).abs() < 0.0002, "{converted:?}");
+    }
+    #[test]
+    fn device_calibration_and_shared_profile_coordinates_are_distinct() {
+        assert!(ColorSpace::device_rgb().shares_blending_coordinates(&ColorSpace::device_rgb()));
+        assert!(!ColorSpace::device_rgb().shares_blending_coordinates(&ColorSpace::device_cmyk()));
+        let calibrated = |gamma| ColorSpace(Arc::new(ColorSpaceType::CalRgb(CalRgb {
+            white_point:[0.9505,1.,1.089], black_point:[0.;3],
+            matrix:[1.,0.,0.,0.,1.,0.,0.,0.,1.], gamma:[gamma;3],
+        })),0);
+        let a=calibrated(1.);
+        assert!(a.shares_blending_coordinates(&calibrated(1.)));
+        assert!(!a.shares_blending_coordinates(&calibrated(2.2)));
+        assert!(!a.shares_blending_coordinates(&ColorSpace::device_rgb()));
+        let profile=CMYK_TRANSFORM.clone();
+        let p=ColorSpace(Arc::new(ColorSpaceType::ICCBased(profile.clone())),0);
+        let q=ColorSpace(Arc::new(ColorSpaceType::ICCBased(profile)),0);
+        assert_eq!(p.blending_model(),Some(BlendingModel::Cmyk));
+        assert!(p.shares_blending_coordinates(&q));
+        assert!(!p.shares_blending_coordinates(&ColorSpace::device_cmyk()));
+        let separate=ColorSpace(Arc::new(ColorSpaceType::ICCBased(ICCProfile::new(include_bytes!("../assets/CGATS001Compat-v2-micro.icc"),4).unwrap())),0);
+        assert!(!p.shares_blending_coordinates(&separate));
+        assert!(!ColorSpace::pattern().shares_blending_coordinates(&ColorSpace::pattern()));
     }
 }

@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-projective-domains-linux.py", line 10, in <module>
+    names=set(re.findall(r'#\[test\]\s*fn\s+(\w+)',(snapshot/'crates/rrrah-dedup/tests'/f'{name}.rs').read_text()));assert len(names)==count and not declared&names;declared|=names
+                                                                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

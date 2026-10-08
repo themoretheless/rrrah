@@ -1,0 +1,22 @@
+{
+  "status": "verified_native_linux_affine_work_radius",
+  "returncode": 0,
+  "tests": 11,
+  "verified_snapshot_files": 2859,
+  "input_hashes": {
+    "docs/research/dedup-affine-work-radius-linux-snapshot.json": "8563298a60d1a01698831d5fa6d27cd97fe35eb0ec5a7b87d6d874f0ade57cf1",
+    "docs/research/dedup-affine-work-radius-linux-native.log": "53037d608fa2a58e787271767baf7a750903254de1158a743fbbc8bce528251b",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-affine-work-radius-linux.py": "e1c0416fab1dfa35cb4977b90f13275c2a5df898906db24f9357830d6aa11716",
+    "scripts/run-dedup-linux-affine-work-radius.sh": "24d30203acbf76b40539a7639d4f94edbe72c1ec174a0cd3b44024287d6287c8"
+  },
+  "current_code_test_hashes": {
+    "crates/rrrah-dedup/src/affine_region.rs": "5334e39fab623782432388ae3270bc79e1872e67b1a4cb92c14678acca140977",
+    "crates/rrrah-dedup/src/affine_region_file.rs": "f7e31493a793bfcbcbc4ec770ea3ee95e745a036d5da099f4b2322aa896bca17",
+    "crates/rrrah-dedup/src/affine_region_grid.rs": "b01cb34cbed59e004ad42aa22bf604bc2e509eb71654033d8aacd60d95a464bf",
+    "crates/rrrah-dedup/tests/affine_region.rs": "aa6ca0c4b77795ec5d0c768954d62066d8807fe9b324010ce19698564908d189",
+    "crates/rrrah-dedup/tests/affine_region_file.rs": "0bbbd33ba58427ee2cc3c363ee580fcd0dbf289ab08ef354e6b5fc11126a8e1c",
+    "crates/rrrah-dedup/tests/affine_region_grid.rs": "d9fafcfc7df4f7709632a4ba40f491dad6602f8b4e3645257fc488f492fd3e03",
+    "crates/rrrah-dedup/tests/affine_region_input_contract.rs": "8c7b5641b12160d57502243fb48eaf0f6a9108a3bca7b520a6112054f5c30c22"
+  },
+  "scope": "Native Linux aarch64 input refusal and managed-credit contracts only. Unsupported HDR/alpha refusal is not HDR/alpha copy-search coverage."
+}

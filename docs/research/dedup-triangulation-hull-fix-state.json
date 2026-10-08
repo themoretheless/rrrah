@@ -1,0 +1,16 @@
+{
+  "status": "verified_native_hull_regression_fix",
+  "passed_tests": 7,
+  "seeded_cloud_cases": 24,
+  "regression": "Old finite supertriangle lost hull area on seeded case8. Enlarged normalized supertriangle and budgeted supporting-boundary validation added. Floating point predicates remain approximate; validation refuses invalid topology.",
+  "real_faces": 296,
+  "real_source_mesh_status": "Invalid",
+  "real_topology_unchanged": true,
+  "pins": {
+    "crates/rrrah-dedup/src/triangulation.rs": "4413a9c47fe81bad25d74b414dcbbdc6cb0eaa397adb323a3f78541dace723dc",
+    "crates/rrrah-dedup/tests/triangulation.rs": "8764d68baf9ea731b6d38f5134c42a13f4310248cf5c92d79d8458b10166e55e",
+    "docs/research/dedup-triangulation-hull-fix-tests.log": "aa176c6db156e92c70868e8e19ca4a00d04f32d3b55b1166a7177b7b0d5c13d4",
+    "docs/research/dedup-triangulation-oracle-tests.log": "bcfdccc0f90379b48176ed2d0a2b6473473fa0f81cfaa1492578a381b533d7f1",
+    "docs/research/dedup-folded-triangulation-hull-fix.json": "7e9d62f08bef478ad3d03bdaadcc2c1c712c9340bc676397a54b7ecae892e29c"
+  }
+}

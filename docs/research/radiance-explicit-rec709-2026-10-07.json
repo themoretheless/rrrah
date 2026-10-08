@@ -1,0 +1,58 @@
+{
+  "date": "2026-10-07",
+  "feature": "Radiance RGBE explicitly declared Rec.709 color preparation",
+  "reference": "https://discourse.radiance-online.org/t/question-about-header-information-of-hdri/1874",
+  "contract": [
+    "Only explicit Rec.709 primaries with RGBE format map to linear sRGB",
+    "Unknown or absent primaries remain unspecified",
+    "XYZE never interpreted as sRGB based on PRIMARIES",
+    "Malformed, duplicate, non-finite or invalid xy declarations rejected",
+    "One MiB header parsing bound",
+    "Encoded samples and exposure remain unchanged"
+  ],
+  "fixture": {
+    "path": "tests/fixtures/raster/rle-hdr-rec709-declared.hdr",
+    "sha256": "7054e40d167f8f6b66768df908b25997e6f3e02c60e1c2efe1e72d2a7ddaed96",
+    "construction": "Authored Rec.709 PRIMARIES line inserted into rle-hdr.hdr; pixel payload unchanged"
+  },
+  "tests": {
+    "focused_log": "/tmp/rrrah-hdr-color-final-test.log",
+    "full_log": "/tmp/rrrah-hdr-header-compatibility.log",
+    "checks": [
+      "all native sample bits unchanged",
+      "HDR values above one retained",
+      "prepared/native storage shared",
+      "managed RAM released after last owner",
+      "opaque non-UTF8 producer comments accepted by color parser",
+      "legacy whitespace around color field keys accepted",
+      "invalid UTF8 in color values rejected",
+      "truncated header rejected"
+    ],
+    "full_passed": 961,
+    "full_ignored": 65
+  },
+  "metal": {
+    "adapter": "Apple M4 Max",
+    "log": "/tmp/rrrah-radiance-declared-resident-view.log",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "stops": 1,
+    "warmup": 3,
+    "iterations": 15,
+    "p50_ms": 1.17,
+    "p95_ms": 2.457,
+    "cpu_peak_bytes": 428,
+    "gpu_peak_bytes": 1040,
+    "released_cpu_bytes": 0,
+    "released_gpu_bytes": 0
+  },
+  "limits": [
+    "Authored small fixture; no broad performance qualification",
+    "No arbitrary-primary or untagged Radiance color conversion",
+    "No physical HDR or CUDA qualification",
+    "Main-window compute routing remains pending"
+  ],
+  "status": "local, not pushed"
+}

@@ -1,0 +1,30 @@
+{
+  "status": "failed_exact_parity_assertion",
+  "required_pairs": 3,
+  "pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/anchor-geometry-smoothing-files-probe-qualified": "4ebdee4fa90bb84db34ba5d5392983f8442652991db4f0a775a0f01c39f52689",
+    "docs/research/dedup-anchor-fallback-recovered-real.json": "095f9a5f610b357ff2c128b5542d1ad5b7b70f8d12f65f55bb8530fc7c0db515",
+    "docs/research/dedup-anchor-geometry-smoothing-real-source.json": "47d9a2fe252ebe20cb6184480db03d27f396c538f644cc411a744c58da979d59",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-anchor-geometry-smoothing-real.py": "542e7f5e38e8a1b957ed5537657bfb8fd5d0f96aaed043a3af08d8c46c17c074",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201300.jpg": "f2819f6d37def6b0dcc04c3f1670bb2b46318d2c451ee6ef0ebec59d8ce8c98d",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/201303.jpg": "162003ef18f481a33e8bb6713fe9169bc0af0675b8ce1b3d21508447032a9ae5",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/207000.jpg": "394c1b4629b4b82b6d7b4fc5f4de4a7c363f1595e9f0c1494a765c0c889e3d5d",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/207002.jpg": "a7fad98180fa327a77ec5ced80b3058af1988ae7eab33c4b73c79153142d42e0",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/210200.jpg": "3feb59f989569051b0665caf0bec8c905bc6b1fd06753eeb85861d91cd0585f0",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/210202.jpg": "e37e3bae5aa022e45b8cd1cc95f91ad1d0baa5bf8be23ed3d5df49eafdb2a696"
+  },
+  "results": [],
+  "scope": "Three recovered real pairs; explicit asymmetric radii selected by prior frozen color-driven fallback, then fresh native geometry-only extraction and original-file anchors. Exact complete geometry/point/count parity, no borrowed points/model; no automatic rank-driven fallback, relative timing or broad precision claim.",
+  "failure": {
+    "query": "201303.jpg",
+    "scope": "First measurement failed before preserving native stdout; independent diagnostic repeated the same frozen inputs/executable and returned Search(Features(Budget)).",
+    "diagnostic": "docs/research/dedup-anchor-geometry-smoothing-real-first-mismatch.json",
+    "source_dimensions": [
+      2560,
+      1920
+    ],
+    "smoothing_radius": 4,
+    "required_smoothing_taps": 88473600,
+    "configured_taps": 64000000
+  }
+}

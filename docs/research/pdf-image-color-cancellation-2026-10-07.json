@@ -1,0 +1,33 @@
+{
+  "scope": "Cooperative cancellation of PDF image color conversion and interpretation",
+  "implementation": "RasterImage exposes with_rgba_and_cancel and propagates the renderer generation predicate into image decode. Check before/after decode-context setup, around image and alpha phases, and convert floating component data to RGB in blocks of 1024 pixels with checks before each block and before returning. Interpreter checks cancellation between content operations, including nested form/mask interpretation.",
+  "active_test": "x_object::image_color_cancellation_tests::block_conversion_preserves_pixels_and_refuses_partial_output",
+  "verified": {
+    "device_spaces": ["Gray", "RGB", "CMYK"],
+    "test_pixels_per_space": 6147,
+    "full_vs_block_conversion": "bit-identical output, including partial final block",
+    "cancellation": "Every observed conversion checkpoint refuses without returning a partial image.",
+    "unchanged_source_pixels_or_refusals": 61,
+    "decoder_library_passed": 973,
+    "decoder_library_ignored": 66,
+    "vendor_color_focused_passed": 1,
+    "pdf_viewer_metal_passed": 6,
+    "failed": 0
+  },
+  "real_ai_cancellation": {
+    "source": "VectorApple.ai, pinned source manifest ai-upstream-poppler-2026-10-06.json",
+    "samples": 90,
+    "signal_delays_ms": [1, 5, 20],
+    "cancelled": 90,
+    "managed_final_bytes": 0,
+    "observed_worst_signal_to_decoder_exit_ms": 2.657166,
+    "previous_observed_worst_ms": 39.323,
+    "measurement": "docs/research/ai-image-color-cancellation-latency-2026-10-07.json"
+  },
+  "logs": ["/tmp/rrrah-pdf-image-color-cancel.log", "/tmp/rrrah-pdf-image-color-cancel-unit.log", "/tmp/rrrah-pdf-image-color-cancel-metal.log"],
+  "limitations": [
+    "Observed timing includes OS scheduling and cleanup and is not a guaranteed upper bound or complete viewer switch latency.",
+    "Encoded-image filter decoding, component unpacking, u8 conversion, transfer-function evaluation and renderer flush are not all internally interruptible.",
+    "Complete allocation accounting and full PDF/AI fidelity remain incomplete."
+  ]
+}

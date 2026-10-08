@@ -1,0 +1,286 @@
+{
+  "gpu_backend": "metal",
+  "gpu_optional": false,
+  "storage_soak_seconds_per_mode": 0,
+  "gpu_policy_cycles": 0,
+  "full_sensor_compute": false,
+  "suites": [
+    {
+      "suite": "cache",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-cache",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target"
+      ],
+      "exit_code": 0,
+      "passed": 137,
+      "failed": 0,
+      "ignored": 3,
+      "ignored_tests": [
+        "test hundred_thousand_distinct_rasters_keep_swap_index_and_memory_bounded ... ignored, manual 100000 distinct-key real-file churn; small payloads isolate index retention",
+        "test sustained_byte_cap_evicts_without_count_or_ttl_pressure ... ignored, manual sustained independent byte-cap qualification",
+        "test sustained_large_keyspace_delayed_swap_pressure_and_retry ... ignored, manual sustained delayed-I/O pressure qualification; default 60 seconds"
+      ],
+      "log": "/private/tmp/rrrah-storage-metal-publication-refresh-20261008/cache.log",
+      "verified_execution": true,
+      "log_sha256": "fe3d69aadca63588dbb27aacf590d5351ccbc5bcc1442d4daa394e02fbf4a39e"
+    },
+    {
+      "suite": "cuda-host",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-cuda",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target"
+      ],
+      "exit_code": 0,
+      "passed": 5,
+      "failed": 0,
+      "ignored": 1,
+      "ignored_tests": [
+        "test tests::nvidia_full_output_boundaries_hdr_alpha_and_managed_limits ... ignored, requires CUDA-capable NVIDIA driver on 64-bit Linux/Windows; never a CPU fallback"
+      ],
+      "log": "/private/tmp/rrrah-storage-metal-publication-refresh-20261008/cuda-host.log",
+      "verified_execution": true,
+      "log_sha256": "e10317e14753cab979199aa1ef416b0ab0ab0ae824f5e85683fb75dfedb0c183"
+    },
+    {
+      "suite": "viewer",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--bin",
+        "rrrah",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target"
+      ],
+      "exit_code": 0,
+      "passed": 174,
+      "failed": 0,
+      "ignored": 27,
+      "ignored_tests": [
+        "test foreground_loader_tests::hundred_thousand_valid_sources_navigate_with_bounded_prefetch_and_pressure ... ignored, manual 100000 valid file paths with mixed-format cache navigation",
+        "test foreground_loader_tests::metal_upload_retains_raw_lease_until_submission_completion ... ignored, requires Metal device and RRRAH_SONY_SR2_CORPUS pinned source",
+        "test foreground_loader_tests::queued_navigation_cancels_x3f_preload_and_decodes_latest_raster ... ignored, requires external SD10 source",
+        "test foreground_loader_tests::raw_thumbnail_source_and_preview_share_managed_root ... ignored, requires external Sony DSC-F828 SRF fixture",
+        "test foreground_loader_tests::real_ai_pages_use_shared_ram_hits_and_independent_prefetch_keys ... ignored, requires pinned AI source corpus; set RRRAH_AI_CORPUS",
+        "test foreground_loader_tests::real_x3f_generation_cancellation_after_sensor_allocation_recovers ... ignored, requires external SD10 source",
+        "test foreground_loader_tests::real_x3f_neighbour_windows_preserve_visible_and_reuse_preload ... ignored, requires external SD10 source",
+        "test foreground_loader_tests::source_kind_pressure_preserves_visible_then_releases_unpinned_raw ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture",
+        "test fusion_warp_tests::fusion_warp_triggers_quality_and_changes_corrected_channels ... ignored, requires pinned official Fusion GPR",
+        "test gallery::tests::eip_prefetch_restores_exact_sensor_and_fingerprints_complete_package ... ignored, requires authored EIP pair and local EOS R8 CR3",
+        "test gallery::tests::folder_scan_retains_all_hundred_thousand_supported_files ... ignored, manual 100000 actual directory entries; enumeration without image decode",
+        "test gallery::tests::navigation_reversal_cancels_blocked_forward_and_warms_backward_raw ... ignored, manual real EOS R8 navigation reversal qualification",
+        "test gallery::tests::raster_selection_warms_real_crw_neighbour ... ignored, requires pinned EOS 10D via RRRAH_CRW_SOURCE",
+        "test gallery::tests::raster_selection_warms_real_raw_neighbour_without_nonraw_failures ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture",
+        "test gallery::tests::raw_prefetch_byte_limit_preserves_present_priority_neighbour ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture",
+        "test gallery::tests::raw_prefetch_count_limit_counts_retained_neighbours_after_missing_file ... ignored, requires external Sony DSC-F828 SRF fixture",
+        "test gallery::tests::raw_prefetch_count_limit_preserves_highest_priority_neighbour ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture",
+        "test gallery::tests::raw_prefetch_respects_shared_budget_and_recovers_after_release ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture",
+        "test gpr_development_tests::gpr_opcodes_trigger_default_quality_development ... ignored, requires pinned HERO9 GPR",
+        "test gpr_development_tests::navigation_cancels_gpr_quality_development_after_float_admission ... ignored, requires pinned HERO9 GPR",
+        "test gpr_preload_tests::gpr_neighbour_windows_preserve_visible_and_bound_count_and_bytes ... ignored, requires pinned HERO9 GPR",
+        "test gpr_preload_tests::gpr_preload_hits_ram_and_disk_and_cancels_stale_generation ... ignored, requires pinned HERO9 GPR",
+        "test raster_swap_viewer_tests::real_x3f_display_ram_hit_and_swap_restore_exact ... ignored, requires external SD10 source",
+        "test raw_load_policy::tests::real_3fr_decode_admission_refusal_recovers_disk_and_swap ... ignored, requires pinned Hasselblad X1D 3FR source",
+        "test raw_ram_preload_tests::idle_timer_spills_real_raw_and_restores_sensor_values ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture",
+        "test raw_ram_preload_tests::native_raw_preload_hits_ram_and_disk_without_transferring_visible_pin ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture",
+        "test thumbnail_retry_tests::thumbnail_budget_callbacks_progress_without_surface_redraw ... ignored, requires actual Metal device"
+      ],
+      "log": "/private/tmp/rrrah-storage-metal-publication-refresh-20261008/viewer.log",
+      "verified_execution": true,
+      "log_sha256": "d5a39a96823fc75ccfd26bf6a96f0fe33dd45d4c0d6034cdfd062f99f5a287f6"
+    },
+    {
+      "suite": "qoi-native",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-decode",
+        "--lib",
+        "qoi_bounds::tests",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target"
+      ],
+      "exit_code": 0,
+      "passed": 4,
+      "failed": 0,
+      "ignored": 1,
+      "ignored_tests": [
+        "test qoi_bounds::tests::large_qoi_framing_cost ... ignored, 12 MP QOI timing control; run locally with --ignored --nocapture"
+      ],
+      "log": "/private/tmp/rrrah-storage-metal-publication-refresh-20261008/qoi-native.log",
+      "verified_execution": true,
+      "log_sha256": "6497082228ffcab8edce00cd771dd7e83823d0e318d43d9a619ba6d237d945e7"
+    },
+    {
+      "suite": "qoi-reference",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-decode",
+        "--test",
+        "qoi_reference_corpus",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target"
+      ],
+      "exit_code": 0,
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/private/tmp/rrrah-storage-metal-publication-refresh-20261008/qoi-reference.log",
+      "verified_execution": true,
+      "log_sha256": "c8c3c55ba5afbf774cc8901179b9030029e3a7fdbee565af3e748b3d4f137ca6"
+    },
+    {
+      "suite": "model-gpu",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--test",
+        "model_readback",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target"
+      ],
+      "exit_code": 0,
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/private/tmp/rrrah-storage-metal-publication-refresh-20261008/model-gpu.log",
+      "verified_execution": true,
+      "log_sha256": "c46031825fb3f39211401fff1d2ede32c0adf37370ba8e39dc020211d06c5638"
+    },
+    {
+      "suite": "hdr-ttl-gpu",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--test",
+        "hdr_raster_swap",
+        "--test",
+        "ttl_swap_metal",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target"
+      ],
+      "exit_code": 0,
+      "passed": 15,
+      "failed": 0,
+      "ignored": 3,
+      "ignored_tests": [
+        "test pict_external_directbits_oracle_swap_pressure_and_metal ... ignored, requires actual GPU and external PICT/TwelveMonkeys corpus",
+        "test expired_eip_lease_and_swap_restore_match_original_cr3_metal_frame ... ignored, requires authored EIP and actual Metal GPU",
+        "test live_count_size_and_ttl_changes_preserve_hdr_frames_through_swap ... ignored, manual hardware qualification"
+      ],
+      "log": "/private/tmp/rrrah-storage-metal-publication-refresh-20261008/hdr-ttl-gpu.log",
+      "verified_execution": true,
+      "log_sha256": "11bd1796a3cd87d912688c3e469704ce919305600b7ed84420418985e80e79d1"
+    },
+    {
+      "suite": "camera-color-gpu",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-gpu",
+        "--test",
+        "camera_color_readback",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target",
+        "--",
+        "--nocapture"
+      ],
+      "exit_code": 0,
+      "passed": 12,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/private/tmp/rrrah-storage-metal-publication-refresh-20261008/camera-color-gpu.log",
+      "verified_execution": true,
+      "log_sha256": "2f5b4b2d3370681918b7620187e1f717fde700b1b6ab314c8958a09513059b68"
+    },
+    {
+      "suite": "gpu",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-gpu",
+        "--lib",
+        "--test",
+        "compute_readback",
+        "--test",
+        "readback",
+        "--test",
+        "raster_readback",
+        "--test",
+        "model_readback",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target"
+      ],
+      "exit_code": 0,
+      "passed": 80,
+      "failed": 0,
+      "ignored": 6,
+      "ignored_tests": [
+        "test full_sensor_linear_exposure_chunked_readback ... ignored, allocates about 0.8 GB of GPU buffers; full-resolution local qualification",
+        "test full_sensor_managed_exposure_budgets_and_checks_every_pixel ... ignored, full-resolution managed compute uses about 2 GB of tracked buffers",
+        "test fusion_back_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires corrected production Fusion linear dumps; display transport qualification",
+        "test fusion_front_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires corrected production Fusion linear dumps; display transport qualification",
+        "test hero9_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires production HERO9 scene-linear dump; transport qualification, not demosaic/color oracle",
+        "test qualified_sd10_linear_raster_full_frame_display_readback ... ignored, requires qualified X3F linear sRGB PPM and a physical GPU"
+      ],
+      "log": "/private/tmp/rrrah-storage-metal-publication-refresh-20261008/gpu.log",
+      "verified_execution": true,
+      "log_sha256": "7f040ffa4b0c38776f807bff23c89c28e7ad42e935774e004abfa87fb594b168"
+    }
+  ],
+  "complete_suite_execution": true,
+  "limitations": [
+    "Passing host CUDA tests does not qualify NVIDIA hardware.",
+    "Metal readback does not qualify physical HDR display.",
+    "Ignored tests are unverified, not passing.",
+    "These regression suites do not prove all 100 formats or sustained slow-disk workloads.",
+    "This default run excludes large external-camera/full-sensor ignored suites; separately recorded earlier results are not repeated here.",
+    "Pass counts represent harness executions, not a claim that every named format or unique pipeline is fully qualified."
+  ],
+  "external_viewer_inputs": {},
+  "all_executed_suites_verified": true,
+  "runner": {
+    "path": "scripts/qualify-viewer-storage-gpu.py",
+    "sha256": "ab6a44e8118bf29bae79f08f71b99642445c59c3c7d2bb5a59de1574be3edad4",
+    "change": "Replace partial prefetch/model-swap viewer filters with every ordinary viewer test; include native QOI and official-reference QOI suites."
+  }
+}

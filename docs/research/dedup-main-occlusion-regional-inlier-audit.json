@@ -1,0 +1,135 @@
+{
+  "status": "verified_regional_geometric_witnesses_for_rank_only_candidates",
+  "summary": [
+    {
+      "query": "214402.jpg",
+      "region_index": 41,
+      "filter_radius": 8,
+      "regional_inlier_indices": [
+        193,
+        219,
+        228,
+        233,
+        253,
+        294,
+        295
+      ],
+      "regional_inliers": 7,
+      "maximum_forward_residual": 1.686873934370898,
+      "axis_spans_relative_to_region": [
+        [
+          0.6231378509206451,
+          0.1826692518065253
+        ],
+        [
+          0.44758354766595293,
+          0.4957875132457403
+        ]
+      ],
+      "at_least_ten_regional_inliers": false
+    },
+    {
+      "query": "214402.jpg",
+      "region_index": 79,
+      "filter_radius": 8,
+      "regional_inlier_indices": [
+        151,
+        154,
+        162,
+        169,
+        183,
+        186,
+        192,
+        199,
+        203,
+        212,
+        231,
+        235,
+        247,
+        260
+      ],
+      "regional_inliers": 14,
+      "maximum_forward_residual": 1.9882544932221455,
+      "axis_spans_relative_to_region": [
+        [
+          0.8076923076923077,
+          0.6052601254600902
+        ],
+        [
+          0.7636753236814718,
+          0.956887920384936
+        ]
+      ],
+      "at_least_ten_regional_inliers": true
+    },
+    {
+      "query": "214402.jpg",
+      "region_index": 104,
+      "filter_radius": 8,
+      "regional_inlier_indices": [
+        127,
+        133,
+        144,
+        146,
+        161,
+        163,
+        175,
+        190,
+        197,
+        198
+      ],
+      "regional_inliers": 10,
+      "maximum_forward_residual": 1.8964399427117549,
+      "axis_spans_relative_to_region": [
+        [
+          0.6740741750814755,
+          0.39686344252650124
+        ],
+        [
+          0.7778174593052023,
+          0.5606584797322269
+        ]
+      ],
+      "at_least_ten_regional_inliers": true
+    },
+    {
+      "query": "214402.jpg",
+      "region_index": 105,
+      "filter_radius": 8,
+      "regional_inlier_indices": [
+        193,
+        217,
+        219,
+        227,
+        228,
+        229,
+        233,
+        252,
+        253,
+        294,
+        295,
+        301
+      ],
+      "regional_inliers": 12,
+      "maximum_forward_residual": 1.7371063598029277,
+      "axis_spans_relative_to_region": [
+        [
+          0.7826754448248048,
+          0.38674411705713246
+        ],
+        [
+          0.8414570696119915,
+          0.6882506003549057
+        ]
+      ],
+      "at_least_ten_regional_inliers": true
+    }
+  ],
+  "pins": {
+    "docs/research/dedup-main-occlusion-all-rank-regions.json": "4f52fef41df23c1b1e6b3575670626a5a1caa34d8d268140b59f1e848ad82184",
+    "docs/research/dedup-main-photometric-misses-radius8.json": "44cd6fd952aa649cacde53f2afeb166ee3024edd6d5859265396b557d9834847",
+    "docs/research/dedup-main-occlusion-best-rank-pixel-audit.json": "e73e85868511f5f6f010fa33599f6ac9cf20afd90c33c3736d66c95fc4356008",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-main-occlusion-regional-inliers.py": "e5beec6b74710491087872dadcb5e2f87549fabdaf966c11ca702028a3018e23"
+  },
+  "scope": "Global-model forward residual<=2 for original spatially distinct inliers contained in both region rectangles. Three candidates retain>=10 regional witnesses. No new local fit, independent selected holdout or negative precision/copy admission."
+}

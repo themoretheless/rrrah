@@ -1,0 +1,17 @@
+{
+  "scope": "Explicit cancellation at streamed PDF patch boundaries",
+  "implementation": "A lazy patch iterator checks cancellation before advancing and before allocating a new triangle chunk. Cancellation yields one explicit error and terminates the stream. The sampler refuses that error rather than treating cancellation as normal end-of-input. This preserves failure even when a synthetic predicate returns true only once.",
+  "active_test": "encode::sample_bounds_tests::patch_stream_cancellation_is_explicit_and_stops_generation",
+  "verified": [
+    "Every observed checkpoint across a three-patch stream cancels without accepting a partial map.",
+    "Early cancellation performs no patch generation; a cancelled iterator emits one error and then terminates.",
+    "Nine-component scratch reservations are released at every cancellation checkpoint and after successful sampling."
+  ],
+  "validation": {"decoder_library_passed": 973, "ignored": 66, "vendor_focused_passed": 4, "pdf_viewer_metal_passed": 6, "failed": 0},
+  "logs": ["/tmp/rrrah-pdf-stream-cancel.log", "/tmp/rrrah-pdf-stream-cancel-unit-final.log", "/tmp/rrrah-pdf-stream-cancel-metal.log"],
+  "limitations": [
+    "One fixed-size patch subdivision is still indivisible internally.",
+    "No measured wall-clock cancellation bound or complete viewer navigation race qualification.",
+    "The full 100-format, HDR and NVIDIA/CUDA objective remains incomplete."
+  ]
+}

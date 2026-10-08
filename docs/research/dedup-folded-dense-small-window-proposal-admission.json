@@ -1,0 +1,46 @@
+{
+  "status": "verified_spatial_distinct_proposal_admission",
+  "original_landmarks": 156,
+  "retained_proposals": 38,
+  "rejected_proposals": [
+    {
+      "target": [
+        400,
+        384
+      ],
+      "source": [
+        1148.7621772208522,
+        946.7204974094518
+      ],
+      "reason": "preexisting_or_prior_proposal_location_distance_le2",
+      "conflicts": [
+        {
+          "plane": "target",
+          "prior_index": 93
+        }
+      ]
+    },
+    {
+      "target": [
+        480,
+        464
+      ],
+      "source": [
+        1328.6505534219261,
+        1096.4234956350547
+      ],
+      "reason": "preexisting_or_prior_proposal_location_distance_le2",
+      "conflicts": [
+        {
+          "plane": "source",
+          "prior_index": 108
+        },
+        {
+          "plane": "target",
+          "prior_index": 108
+        }
+      ]
+    }
+  ],
+  "policy": "Both source and target locations must be distance>2 from every retained prior location; deterministic lattice order. This is proposal uniqueness before topology, not source geometry repair or fitting on final scores."
+}

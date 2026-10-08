@@ -1,0 +1,41 @@
+{
+  "status": "verified_native_sample_effort_miss",
+  "query": "201303.jpg",
+  "correspondences": 42,
+  "seed": 305441741,
+  "source_dimensions": [
+    2560,
+    1920
+  ],
+  "target_dimensions": [
+    675,
+    543
+  ],
+  "tolerance": 2,
+  "minimum_inliers": 10,
+  "results": [
+    {
+      "trials": 4096,
+      "matrix": null,
+      "inliers": []
+    },
+    {
+      "trials": 65536,
+      "matrix": null,
+      "inliers": []
+    },
+    {
+      "trials": 262144,
+      "matrix": null,
+      "inliers": []
+    }
+  ],
+  "scope": "Identical42 proposals, same seed as full recipe.64x sampling effort still no admissible geometry. Sampling is not exhaustive proof; no independent true-match labels or pixel recovery.",
+  "input_hashes": {
+    "docs/research/dedup-updated-additional-failures-checkpoint-1.json": "36b83a3d78edbaafd51a4feeb3a9589692927b0be6d4554536bd7e4e9764d671",
+    "docs/research/dedup-201303-geometry-points.txt": "bc43f510d6b856a43e87ddbd122bb51bee8b56e0c634934a8cbd07387314e6d9",
+    "docs/research/dedup-201303-geometry-effort-same-seed.log": "4c47d1b82618dd82ccc1d8c2ace25d30c2303a2a512bd8415ef4ea3a1ec7eb03",
+    "crates/rrrah-dedup/examples/geometry_effort_probe.rs": "09bbb3ff8bf098545964ca37d12c6f1ea1cd85fd2f6fa5b803d895121e52dbd5",
+    "crates/rrrah-dedup/src/geometry.rs": "d5a4cae5e9aaa9c7b8ade16ae385392ff50c1409ac9850b7fb98e1e9c1eca4d9"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "status": "verified_focused_native_mac",
+  "tests": 16,
+  "suites": {
+    "affine_region": 8,
+    "affine_region_file": 4,
+    "affine_region_grid": 2,
+    "affine_region_input_contract": 2
+  },
+  "input_hashes": {
+    "docs/research/dedup-affine-training-diagnostic-tests.log": "a1127caa6450262bd3b5234a887a0c9cf85f0576adf43c1412433861a62737b1",
+    "crates/rrrah-dedup/src/affine_region.rs": "77d3167e0b2fd56f4b7a5f603a4eb292922a1334f9e2369dc325be783a253ad5",
+    "crates/rrrah-dedup/tests/affine_region.rs": "3495ffc59f6bfeced22de75d1a3dae63da5f82ae45d4d15e8ad8743ca37463c0",
+    "crates/rrrah-dedup/src/affine_region_file.rs": "b1b7490ac3405427a7cef17980973fd2ee3431b0a6147b19eb201f1a13c8bb19",
+    "crates/rrrah-dedup/src/affine_region_grid.rs": "b01cb34cbed59e004ad42aa22bf604bc2e509eb71654033d8aacd60d95a464bf",
+    "crates/rrrah-dedup/tests/affine_region_file.rs": "1763e97e39bff64adc76e7e496ad4b74ff44c849357ca9906b21bcad9c8c0579",
+    "crates/rrrah-dedup/tests/affine_region_grid.rs": "d9fafcfc7df4f7709632a4ba40f491dad6602f8b4e3645257fc488f492fd3e03",
+    "crates/rrrah-dedup/tests/affine_region_input_contract.rs": "8c7b5641b12160d57502243fb48eaf0f6a9108a3bca7b520a6112054f5c30c22"
+  },
+  "scope": "Optional diagnostic separates training and heldout damage on authored pixels, exactly preserves original evidence/read counts, cancels during extra training pass and releases memory. Existing file/grid/input focused gates pass at this revision. No real-fold recovery, Linux revision or full corpus qualification."
+}

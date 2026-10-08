@@ -1,0 +1,41 @@
+{
+  "scope": "Eight QOI fixtures from pinned official C encoder/decoder versus production Rust decoding",
+  "upstream": "https://github.com/phoboslab/qoi",
+  "commit": "ffb2d2cb74a1de60819b21b939f7209aa53e91c1",
+  "header_sha256": "7de6fca1a285b1c20d38f2723dec8b774eb9f144edb9710800a95feeea09375a",
+  "driver_sha256": "09b81cd9e1be24f5c4e5fd8492ccf71bf1252e8a511e74b778b50853ad9e0965",
+  "fixtures": 8,
+  "reference_encoded": 6,
+  "authored_reference_decoder_verified": 2,
+  "pixel_samples": 4762,
+  "channels_header": [
+    3,
+    4
+  ],
+  "colorspace_flags": [
+    0,
+    1
+  ],
+  "opcode_families": [
+    "RGB",
+    "RGBA",
+    "INDEX",
+    "DIFF",
+    "LUMA",
+    "RUN"
+  ],
+  "passed": 1,
+  "failed": 0,
+  "all_native_bytes_exact": true,
+  "final_managed_bytes_each": 0,
+  "regeneration_byte_identical_files": 17,
+  "source_oracle_sha256_verified": true,
+  "manifest": "tests/fixtures/qoi/manifest.json",
+  "log": "/tmp/rrrah-qoi-reference-corpus-20261008.log",
+  "log_sha256": "dcb398158e182cfcbb4a7b7ba997d27ae8a95ac74101383f6ae5ba5a18b13198",
+  "limitations": [
+    "Authored patterns and official codec outputs, not independent photographic producer corpus",
+    "No malformed-input exhaustive gate or performance comparison",
+    "No Metal run of these eight particular corpus files yet; separate authored QOI swap/Metal control exists"
+  ]
+}

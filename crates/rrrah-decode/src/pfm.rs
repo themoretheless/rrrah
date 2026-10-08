@@ -7,7 +7,6 @@ use crate::{
     raster::{MAX_RASTER_BYTES, RasterDecodeError},
 };
 use rrrah_core::{DecodedRaster, RasterColorSpace, RasterPixels};
-use std::sync::Arc;
 
 fn line<'a>(bytes: &mut &'a [u8]) -> Result<&'a str, RasterDecodeError> {
     let end = bytes
@@ -22,6 +21,7 @@ fn line<'a>(bytes: &mut &'a [u8]) -> Result<&'a str, RasterDecodeError> {
 }
 
 pub(crate) fn decode(mut bytes: &[u8], request: &DecodeRequest) -> Result<DecodedRaster, RasterDecodeError> {
+    request.check_cancelled()?;
     let channels = match line(&mut bytes)? {
         "PF" => 3_usize,
         "Pf" => 1,
@@ -56,6 +56,12 @@ pub(crate) fn decode(mut bytes: &[u8], request: &DecodeRequest) -> Result<Decode
             "raster length does not match dimensions",
         ));
     }
+    let reservation = request
+        .memory_budget
+        .as_ref()
+        .map(|budget| budget.try_reserve(pixel_count as u64 * 16))
+        .transpose()
+        .map_err(|e| RasterDecodeError::Source(crate::DecodeError::Memory(e)))?;
     let mut pixels = Vec::new();
     pixels
         .try_reserve_exact(pixel_count * 4)
@@ -63,7 +69,10 @@ pub(crate) fn decode(mut bytes: &[u8], request: &DecodeRequest) -> Result<Decode
     let row_bytes = width as usize * channels * 4;
     for row in bytes.chunks_exact(row_bytes).rev() {
         request.check_cancelled()?;
-        for pixel in row.chunks_exact(channels * 4) {
+        for (index, pixel) in row.chunks_exact(channels * 4).enumerate() {
+            if index.is_multiple_of(4096) {
+                request.check_cancelled()?;
+            }
             let sample = |channel: usize| {
                 let start = channel * 4;
                 let raw = [pixel[start], pixel[start + 1], pixel[start + 2], pixel[start + 3]];
@@ -84,7 +93,7 @@ pub(crate) fn decode(mut bytes: &[u8], request: &DecodeRequest) -> Result<Decode
     Ok(DecodedRaster::new(
         width,
         height,
-        RasterPixels::Rgba32Float(Arc::new(pixels).into()),
+        RasterPixels::Rgba32Float(crate::raster::adopt_raster_output(pixels, reservation)?),
         request.qualify_linear_color(RasterColorSpace::LinearRgbUnspecified),
     )?
     .with_sample_scale(scale.abs())?)
@@ -93,6 +102,37 @@ pub(crate) fn decode(mut bytes: &[u8], request: &DecodeRequest) -> Result<Decode
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn output_is_admitted_before_allocation_and_released_with_last_owner() {
+        let mut bytes = b"PF\n1 1\n-1\n".to_vec();
+        for v in [8.0f32, -0.0, -2.0] {
+            bytes.extend(v.to_le_bytes());
+        }
+        let mut request = DecodeRequest::new("unused.pfm");
+        let short = rrrah_core::MemoryBudget::new(15);
+        request.memory_budget = Some(short.clone());
+        assert!(matches!(
+            decode(&bytes, &request),
+            Err(RasterDecodeError::Source(crate::DecodeError::Memory(_)))
+        ));
+        assert_eq!(short.used(), 0);
+        assert_eq!(short.peak(), 0);
+        let exact = rrrah_core::MemoryBudget::new(16);
+        request.memory_budget = Some(exact.clone());
+        let frame = decode(&bytes, &request).unwrap();
+        let RasterPixels::Rgba32Float(pixels) = frame.pixels() else {
+            panic!()
+        };
+        assert!(pixels.is_managed());
+        assert_eq!(pixels[0].to_bits(), 8.0f32.to_bits());
+        assert_eq!(pixels[1].to_bits(), (-0.0f32).to_bits());
+        assert_eq!(exact.used(), 16);
+        let retained = frame.clone();
+        drop(frame);
+        assert_eq!(exact.used(), 16);
+        drop(retained);
+        assert_eq!(exact.used(), 0);
+    }
 
     #[test]
     fn both_endians_reverse_rows_and_preserve_hdr_and_scale() {

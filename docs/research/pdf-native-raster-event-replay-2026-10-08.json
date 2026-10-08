@@ -1,0 +1,105 @@
+{
+  "scope": "Test-only native float raster event replay with clipping geometry and nested group composition",
+  "controls": {
+    "passed": 120,
+    "failed": 0,
+    "ignored": 10,
+    "seconds": 3.88,
+    "log": "/tmp/rrrah-native-raster-event-final.log"
+  },
+  "checks": [
+    "Original native color and float image alpha feed current group without RGB8",
+    "Image rectangle transformed into global coverage with retained clips",
+    "Inverse transform maps destination centers into original source sampling coordinates",
+    "Authored 16-bit RGB plus soft alpha matches analytic white-backdrop composition",
+    "Outside image rectangle retains backdrop",
+    "Every allocation refusal and cancellation checkpoint of native raster replay releases all tracked credit"
+  ],
+  "real_ai_pages": [
+    {
+      "fixture": "VectorApple.ai",
+      "page": 0,
+      "width": 301,
+      "height": 246,
+      "peak_admitted_bytes": 51228670,
+      "final_admitted_bytes": 0,
+      "status": "native_diagnostic",
+      "native_completed": false,
+      "capture_failed": false,
+      "capture_ms": 2830.995375,
+      "native_replay_ms": 73.611833,
+      "deadline_expired": false,
+      "events": 2755,
+      "native_paints": 463,
+      "raster_events": 3,
+      "raster_source_models": [
+        "event=3,model=None",
+        "event=1218,model=Some(Cmyk)",
+        "event=2298,model=Some(Cmyk)"
+      ],
+      "native_raster_components": [
+        "event=3,sample_count=Some(29488),refusal=None",
+        "event=1218,sample_count=Some(298224),refusal=None",
+        "event=2298,sample_count=Some(266084),refusal=None"
+      ],
+      "shading_events": 13,
+      "page_model": "Cmyk"
+    },
+    {
+      "fixture": "one.ai",
+      "page": 0,
+      "width": 1366,
+      "height": 768,
+      "peak_admitted_bytes": 168322584,
+      "final_admitted_bytes": 0,
+      "status": "native_diagnostic",
+      "native_completed": true,
+      "capture_failed": false,
+      "capture_ms": 1.609833,
+      "native_replay_ms": 4619.533125,
+      "deadline_expired": false,
+      "events": 8,
+      "native_paints": 2,
+      "raster_events": 0,
+      "raster_source_models": [],
+      "native_raster_components": [],
+      "shading_events": 0,
+      "page_model": "Rgb"
+    },
+    {
+      "fixture": "one.ai",
+      "page": 1,
+      "width": 177,
+      "height": 175,
+      "peak_admitted_bytes": 4957320,
+      "final_admitted_bytes": 0,
+      "status": "native_diagnostic",
+      "native_completed": true,
+      "capture_failed": false,
+      "capture_ms": 0.076541,
+      "native_replay_ms": 104.406875,
+      "deadline_expired": false,
+      "events": 1,
+      "native_paints": 0,
+      "raster_events": 0,
+      "raster_source_models": [],
+      "native_raster_components": [],
+      "shading_events": 0,
+      "page_model": "Rgb"
+    }
+  ],
+  "real_ai_trace_log": "/tmp/rrrah-real-ai-native-raster-events-20261008.log",
+  "VectorApple_progress": {
+    "raster_event_3_completed": true,
+    "next_refusal_event": 9,
+    "next_refusal_kind": "shading"
+  },
+  "source_hashes_verified": true,
+  "limitations": [
+    "Only first real raster reached before shading refusal; later two captured but not yet replayed",
+    "Strict external full-image pixel qualification remains open",
+    "Unsupported image mask types Matte transfer functions ICC/group conversion policies remain pending",
+    "Compressed stream/filter allocation outside output-buffer admission",
+    "Test-only compositor, no production AI or Metal integration qualification"
+  ]
+}

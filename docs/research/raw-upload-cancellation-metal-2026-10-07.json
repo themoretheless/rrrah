@@ -1,0 +1,42 @@
+{
+  "change": "Cancellable RAW atlas upload with old-frame preservation; app passes load generation token",
+  "checkpoints": [
+    "before validation",
+    "before atlas admission",
+    "after reservations and before texture creation",
+    "before each tile pack",
+    "after each tile pack and before enqueue",
+    "before uniform update and publication"
+  ],
+  "verification": [
+    "22 deterministic cancellation checkpoints across nine tiles preserve previous 64x64 Metal frame byte-for-byte",
+    "After GPU readback completes, atlas credit equals old resident size; CPU packing and queued-upload credit zero",
+    "Successful retry produces different frame; final renderer drop frees all roots"
+  ],
+  "adapter": "Metal Apple M4 Max",
+  "tests": {
+    "gpu_suites": [
+      [
+        "47",
+        "0",
+        "0"
+      ],
+      [
+        "11",
+        "0",
+        "0"
+      ]
+    ],
+    "app_units": "164 passed, zero failures, 25 ignored"
+  },
+  "logs": [
+    "/tmp/rrrah-raw-upload-cancel.log",
+    "/tmp/rrrah-raw-upload-cancel-all.log",
+    "/tmp/rrrah-raw-upload-cancel-app.log"
+  ],
+  "limitations": [
+    "Cancellation polls between tile packing stages, not within a tile row",
+    "Already enqueued GPU work completes with its reservations; cancellation is not device execution preemption",
+    "No NVIDIA/CUDA or physical HDR verification"
+  ]
+}

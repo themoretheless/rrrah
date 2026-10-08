@@ -1,0 +1,33 @@
+{
+  "scope": "Current native model swap and GPU transport validation",
+  "date": "2026-10-07",
+  "validation": {
+    "model_swap_unit": {
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0,
+      "log": "/tmp/rrrah-model-swap-current-validation.log"
+    },
+    "model_gpu_transport": {
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0,
+      "log": "/tmp/rrrah-model-current-validation.log"
+    }
+  },
+  "verified": [
+    "STL/OBJ/PLY/OFF managed payload support",
+    "Malformed all-model payloads refuse without large reservations",
+    "Independent model swap limits and no-cache disabling",
+    "Impossible restore cap does not evict existing unpinned models",
+    "Expired models spill and restore without invoking decoder",
+    "Consumer leases prevent background eviction; after release geometry and attributes restore exactly",
+    "Model GPU frame remains unchanged after swap, geometry budget returns to zero"
+  ],
+  "limitations": [
+    "Swap cancellation is observed through stream I/O; CPU work between I/O calls has no newly proven bound",
+    "This is temporary model swap evidence, not a persistent cross-process model-cache qualification",
+    "No new 3D formats/material support is established",
+    "Physical NVIDIA/CUDA and HDR output remain unqualified"
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "scope": "HERO9 independent Adobe camera-to-linear-sRGB matrix versus native combined WB and color transform",
+  "native": [
+    [
+      3.3591108639173317,
+      -0.3019327061524992,
+      -0.4528507302148841
+    ],
+    [
+      -0.6518323082925558,
+      1.6329748100569623,
+      -0.5851416764851017
+    ],
+    [
+      -0.07878318273000817,
+      -0.5128214885587986,
+      2.741640566493469
+    ]
+  ],
+  "adobe": [
+    [
+      3.111112788461,
+      -0.14249240839,
+      -0.531465203539
+    ],
+    [
+      -0.573327995961,
+      1.582402514522,
+      -0.56007711002
+    ],
+    [
+      -0.073554291016,
+      -0.516786056631,
+      2.744364805178
+    ]
+  ],
+  "maximum_element_error": 0.2479980754563318,
+  "camera_neutral": [
+    0.463768,
+    1.0,
+    0.565121
+  ],
+  "native_neutral_rgb": [
+    0.9999999634749484,
+    0.9999999947478032,
+    1.0000000509302265
+  ],
+  "adobe_neutral_rgb": [
+    0.9999999999998179,
+    0.9999999999995465,
+    1.000000000000088
+  ],
+  "log": "/tmp/rrrah-gpr-matrix-oracle.log",
+  "finding": "Both transforms preserve the specified camera neutral, but coefficients differ; camera color transform mismatch is independent of demosaic.",
+  "limitations": [
+    "One HERO9 profile; no universal color fix established.",
+    "Shader/renderer tone mapping excluded."
+  ],
+  "source_calibration_illuminants": [
+    3,
+    23
+  ],
+  "native_selection": "select_dng_xyz_to_camera chooses the second known illuminant and adapts to D65, independent of AsShotNeutral",
+  "adobe_selection": "FindXYZtoCamera interpolates matrices for the white point solved from CameraNeutral",
+  "next_fix": "Resolve the dual-illuminant DNG transform from the specified camera neutral; verify against independent matrices before replacing fixed selection"
+}

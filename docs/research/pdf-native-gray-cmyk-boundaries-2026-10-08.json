@@ -1,0 +1,38 @@
+{
+  "scope": "Native component bridge for bare RGB/CMYK-to-Gray and Gray-to-CMYK; test-only scene integration, production compositor unchanged",
+  "sources": {
+    "vendor/hayro-interpret/src/color.rs": "e6a7b5ef3d560507c9d7ce36ac65a6591cb89755de2d523970bf040a04e43145",
+    "vendor/hayro/src/native_paint.rs": "2bbd81de93f90c5d27e3cab031ddf5095af24ad4d4fe80ee151cbf7f84152958"
+  },
+  "reference": "ISO32000-1 section10.3; official Adobe search-index snippets supplied Gray/CMYK and RGB-to-CMYK BG/UCR formulas. Full Adobe PDF fetch returned404, so full specification reread not verified in this turn.",
+  "interpreter_suite": {
+    "passed": 73,
+    "failed": 0,
+    "filtered": 0,
+    "seconds": 0.17,
+    "log": "/tmp/rrrah-native-gray-cmyk-controls.log"
+  },
+  "renderer_suite": {
+    "passed": 101,
+    "failed": 0,
+    "ignored": 8,
+    "seconds": 2.64,
+    "log": "/tmp/rrrah-native-gray-cmyk-renderer-controls.log"
+  },
+  "controls": [
+    "RGB unit primaries gray0.3,0.59,0.11",
+    "RGB0.2,0.4,0.6 -> gray0.362",
+    "CMYK0.2,0.4,0.6,0.1 -> gray0.538",
+    "CMYK allones -> gray0",
+    "Gray0.25 -> CMYK0,0,0,0.75",
+    "RGB-to-CMYK refuses missing graphics-state BG/UCR",
+    "Nonfinite source rejected"
+  ],
+  "remaining": [
+    "Capture and honor graphics-state black generation/undercolor removal",
+    "ICC/Calibrated destination profiles",
+    "Admitted native transform cache and scene frame integration",
+    "Real AI pixel qualification"
+  ],
+  "production_enabled": false
+}

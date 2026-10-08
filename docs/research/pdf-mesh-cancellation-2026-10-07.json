@@ -1,0 +1,21 @@
+{
+  "scope": "Cooperative cancellation of PDF mesh encoding and sampling",
+  "implementation": "PDF RenderCache carries the request-generation predicate into the renderer and its nested image/tiling/glyph renderers. Shading encoding polls before work, between patches, and during triangle sampling: each triangle, each raster row, every 64 horizontal pixels, and every 64 normalization entries. Cancelled encoding returns no partial shading. The public PDF decoder checks its generation after rendering and returns DecodeError::Cancelled.",
+  "active_test": "encode::sample_bounds_tests::mesh_sampling_cancels_at_every_checkpoint_without_partial_result",
+  "verified": [
+    "Every checkpoint observed in a successful wide triangle sample is independently cancelled, with immediate refusal and no partial map returned.",
+    "Fractional texture bounds preserve bit-identical consumed samples.",
+    "Decoder library regression passes with the cancellation callback wired."
+  ],
+  "validation": {
+    "vendor_focused": {"passed": 2, "failed": 0},
+    "decoder_library": {"passed": 971, "failed": 0, "ignored": 66}
+  },
+  "logs": ["/tmp/rrrah-pdf-mesh-cancel-unit.log", "/tmp/rrrah-pdf-mesh-cancellation.log"],
+  "limitations": [
+    "No measured wall-clock latency bound or full viewer switching benchmark.",
+    "Coincident-patch inventory, each bounded patch subdivision, texture color sampling, and final renderer work are not internally cancellable yet.",
+    "Separately constructed soft-mask renderers do not yet inherit the predicate.",
+    "Complete shared-root accounting of mesh and renderer allocations remains incomplete."
+  ]
+}

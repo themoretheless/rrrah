@@ -1,0 +1,26 @@
+{
+  "scope": "RWZ implementation boundary; no new decoding qualification",
+  "source": "https://raw.githubusercontent.com/exiftool/exiftool/master/lib/Image/ExifTool/Rawzor.pm",
+  "observed": "Rawzor compressed wrapper with original size and metadata offsets; metadata bzip2 extraction zero-fills original image-data gaps. It is not a sensor pixel decompressor.",
+  "header": {
+    "minimum_bytes": 46,
+    "signature": "rawzor",
+    "byte_order": "little-endian",
+    "required_version_offset": 6,
+    "creator_version_offset": 8,
+    "stored_size_offset": 10,
+    "original_size_offset": 18,
+    "metadata_offset_field": 38
+  },
+  "next_requirements": [
+    "Independent original/RWZ producer pair with license and hashes",
+    "Native bounded pixel payload decompression with cancellation/admission",
+    "Byte-identical original reconstruction before normal image routing",
+    "Malformed sizes/offsets, unsupported versions and decompression bombs tested"
+  ],
+  "limitations": [
+    "No producer fixture found in current checkout inspection",
+    "No pixel codec implementation or header parser added",
+    "CAP is a separate pending format; existing IIQ directory code does not prove CAP support"
+  ]
+}

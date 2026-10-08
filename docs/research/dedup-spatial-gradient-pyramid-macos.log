@@ -1,0 +1,43 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: unused variable: `cancel`
+   --> crates/rrrah-dedup/src/local_index.rs:715:5
+    |
+715 |     cancel: impl Fn() -> bool,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_cancel`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-dedup` (lib) generated 1 warning (run `cargo fix --lib -p rrrah-dedup` to apply 1 suggestion)
+    Finished `test` profile [optimized + debuginfo] target(s) in 6.25s
+     Running tests/gradient.rs (target/debug/deps/gradient-198ec6f891455155)
+
+running 9 tests
+test gradient_matching_mutual_ties_admission_and_cancel ... ok
+test dominant_gradient_orientation_analytic_angles_flat_and_limits ... ok
+test gradient_affine_light_flat_refusals_and_cancel ... ok
+test independently_rotated_texture_and_alpha_refusal ... ok
+test rotated_uniform_patches_never_create_descriptors ... ok
+test managed_spatial_pyramid_matches_unmanaged_and_releases_last_owner ... ok
+test spatial_gradient_selection_preserves_recipe_and_cell_limits ... ok
+test extracted_gradients_identity_unrelated_work_and_cancel ... ok
+test gradient_pyramid_independent_double_size_coordinates_and_work ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+
+     Running tests/gradient_empty.rs (target/debug/deps/gradient_empty-f940568d5bbc1146)
+
+running 1 test
+test empty_gradient_inputs_honor_terminal_cancellation_and_retry ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/gradient_interpolated.rs (target/debug/deps/gradient_interpolated-f592364cfe85172b)
+
+running 4 tests
+test interpolated_recipe_flat_alpha_work_and_cancellation_refusals ... ok
+test interpolated_recipe_preserves_independent_quarter_turn_and_affine_light ... ok
+test interpolated_cells_reduce_one_pixel_edge_localization_error ... ok
+test explicit_recipe_pyramid_preserves_positions_limits_cancel_and_managed_ownership ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+

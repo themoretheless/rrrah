@@ -20,6 +20,8 @@ pub(crate) const MAX_RASTER_BYTES: u64 = 512 * 1024 * 1024;
 
 #[derive(Debug, Error)]
 pub enum RasterDecodeError {
+    #[error("invalid QOI: {0}")]
+    InvalidQoi(&'static str),
     #[error(transparent)]
     Eps(#[from] crate::EpsDocumentError),
     #[error("invalid or unsupported JPEG color: {0}")]
@@ -150,6 +152,14 @@ pub enum RasterDecodeError {
     InvalidPcx(&'static str),
     #[error("invalid or unsupported EXR color metadata: {0}")]
     InvalidExrColor(&'static str),
+    #[error("invalid Radiance color metadata: {0}")]
+    InvalidHdrColor(&'static str),
+    #[error("invalid Farbfeld framing")]
+    InvalidFarbfeld,
+    #[error("RPF requires explicit channel, alpha and color interpretation")]
+    RpfInterpretationRequired,
+    #[error("RPF raster import failed: {0:?}")]
+    Rpf(crate::RpfRasterReadError),
     #[error("invalid or unsupported DICOM: {0}")]
     InvalidDicom(&'static str),
     #[error("unsupported EXR alpha interpretation: {0}")]
@@ -169,8 +179,8 @@ pub fn decode_raster(request: &DecodeRequest) -> Result<DecodedRaster, RasterDec
     request.check_cancelled()?;
     // A small stack-only framing probe also handles renamed EPS. Keep the
     // existing unavailable-file/index error precedence on failed probes.
-    let eps_candidate = std::fs::File::open(&request.path).ok().and_then(|mut file| {
-        let mut prefix = [0u8; 256];
+    let (eps_candidate, rpf_candidate) = std::fs::File::open(&request.path).ok().and_then(|mut file| {
+        let mut prefix = [0u8; 740];
         let mut used = 0;
         while used < prefix.len() {
             match file.read(&mut prefix[used..]) {
@@ -180,14 +190,27 @@ pub fn decode_raster(request: &DecodeRequest) -> Result<DecodedRaster, RasterDec
                 Err(_) => return None,
             }
         }
-        Some(crate::eps::has_magic(&prefix[..used]))
-    }).unwrap_or(false);
-    decode_raster_inspected(request, eps_candidate)
+        Some((crate::eps::has_magic(&prefix[..used]), crate::rpf::has_magic(&prefix[..used])))
+    }).unwrap_or((false, false));
+    decode_raster_inspected(request, eps_candidate, rpf_candidate)
 }
 
 /// Reuse the router's bounded header probe instead of opening the source again.
-pub(crate) fn decode_raster_inspected(request: &DecodeRequest, eps_candidate: bool) -> Result<DecodedRaster, RasterDecodeError> {
+pub(crate) fn decode_raster_inspected(request: &DecodeRequest, eps_candidate: bool, rpf_candidate: bool) -> Result<DecodedRaster, RasterDecodeError> {
     request.check_cancelled()?;
+    if !eps_candidate && (rpf_candidate || request.path.extension().is_some_and(|ext| ext.eq_ignore_ascii_case("rpf"))) {
+        let interpretation = request.rpf_interpretation.as_ref()
+            .ok_or(RasterDecodeError::RpfInterpretationRequired)?;
+        let fallback = rrrah_core::MemoryBudget::new(MAX_RASTER_BYTES);
+        let budget = request.memory_budget.as_ref().unwrap_or(&fallback);
+        let limits = crate::RpfDecodeLimits {
+            max_node_names: 65536, max_node_name_bytes: 1024 * 1024,
+            max_row_layers: 1024 * 1024, max_total_layers: 16 * 1024 * 1024,
+            max_output_bytes: MAX_RASTER_BYTES,
+        };
+        return crate::decode_rpf_file_raster_with_budget(request, budget, limits, interpretation)
+            .map(|(raster, _)| raster).map_err(RasterDecodeError::Rpf);
+    }
     if eps_candidate {
         let fallback=rrrah_core::MemoryBudget::new(MAX_RASTER_BYTES);
         let budget=request.memory_budget.as_ref().unwrap_or(&fallback);
@@ -315,6 +338,9 @@ fn decode_raster_bytes_inner(
 ) -> Result<DecodedRaster, RasterDecodeError> {
     request.check_cancelled()?;
     let mut bytes = source.as_mut();
+    if bytes.starts_with(b"farbfeld") {
+        return decode_farbfeld(&bytes, request);
+    }
     if crate::xcf::has_magic(&bytes) {
         return crate::xcf::decode_raster(&bytes, request);
     }
@@ -492,17 +518,11 @@ fn decode_raster_bytes_inner(
     }
     let png_color = crate::png_color::declaration(&bytes)?;
     let exr_color = crate::exr_color::declaration(&bytes)?;
-    // QOI defines RGB as sRGB (0) or linear sRGB (1), while alpha is always
-    // linear coverage. The flag changes interpretation, never decoded bytes.
-    let declared_color = if bytes.starts_with(b"qoif") {
-        match bytes.get(13) {
-            Some(0) => Some(RasterColorSpace::Srgb),
-            Some(1) => Some(RasterColorSpace::LinearSrgb),
-            _ => None,
-        }
-    } else {
-        None
-    };
+    let hdr_color = crate::hdr_color::declaration(&bytes)?;
+    // QOI validates framing while decoding under the output reservation.
+    if bytes.starts_with(b"qoif") {
+        return crate::qoi_bounds::decode(&bytes, request);
+    }
     if bytes.starts_with(b"DDS ") {
         return crate::dds::decode(&bytes, request);
     }
@@ -679,8 +699,8 @@ fn decode_raster_bytes_inner(
                 png_color
                     .color
                     .or(avif_properties.color)
-                    .or(declared_color)
                     .or(exr_color)
+                    .or(hdr_color)
                     .unwrap_or(match format {
                         ImageFormat::Hdr => RasterColorSpace::LinearRgbUnspecified,
                         ImageFormat::Farbfeld => RasterColorSpace::AssumedSrgb,
@@ -813,7 +833,31 @@ fn normalize_avif_u16(
     Ok(())
 }
 
-fn adopt_raster_output<T: Copy>(
+fn decode_farbfeld(bytes: &[u8], request: &DecodeRequest) -> Result<DecodedRaster, RasterDecodeError> {
+    if request.image_index != 0 {
+        return Err(DecodeError::UnsupportedImageIndex { index: request.image_index }.into());
+    }
+    let invalid = || RasterDecodeError::InvalidFarbfeld;
+    let header = bytes.get(..16).ok_or_else(invalid)?;
+    let width = u32::from_be_bytes(header[8..12].try_into().unwrap());
+    let height = u32::from_be_bytes(header[12..16].try_into().unwrap());
+    let size = u64::from(width).checked_mul(u64::from(height)).and_then(|n| n.checked_mul(8))
+        .filter(|n| *n > 0 && *n <= MAX_RASTER_BYTES).ok_or(RasterDecodeError::OutputTooLarge)?;
+    if u64::try_from(bytes.len()).ok() != size.checked_add(16) { return Err(invalid()); }
+    let reservation = request.memory_budget.as_ref().map(|b| b.try_reserve(size))
+        .transpose().map_err(|e| RasterDecodeError::Source(DecodeError::Memory(e)))?;
+    let mut values = Vec::new();
+    values.try_reserve_exact(size as usize / 2).map_err(|_| RasterDecodeError::OutputTooLarge)?;
+    for chunk in bytes[16..].chunks(4096 * 8) {
+        request.check_cancelled()?;
+        values.extend(chunk.chunks_exact(2).map(|v| u16::from_be_bytes([v[0], v[1]])));
+    }
+    request.check_cancelled()?;
+    Ok(DecodedRaster::new(width, height,
+        RasterPixels::Rgba16(adopt_raster_output(values, reservation)?), RasterColorSpace::AssumedSrgb)?)
+}
+
+pub(crate) fn adopt_raster_output<T: Copy>(
     values: Vec<T>,
     reservation: Option<rrrah_core::Reservation>,
 ) -> Result<rrrah_core::PixelBuffer<T>, RasterDecodeError> {
@@ -1298,5 +1342,37 @@ mod output_budget_tests {
             drop(source);
             assert_eq!(budget.used(), 0);
         }
+    }
+}
+
+#[cfg(test)]
+mod native_farbfeld_tests {
+    use super::*;
+    #[test]
+    fn native_framing_precision_and_preallocation_budget_are_checked() {
+        let mut bytes = b"farbfeld".to_vec();
+        bytes.extend(2u32.to_be_bytes()); bytes.extend(1u32.to_be_bytes());
+        let samples = [0u16, 1, 32768, 65535, 65534, 12345, 54321, 2];
+        bytes.extend(samples.iter().flat_map(|v| v.to_be_bytes()));
+        let budget = rrrah_core::MemoryBudget::new(16);
+        let mut request = DecodeRequest::new("renamed.png");
+        request.memory_budget = Some(budget.clone());
+        let frame = decode_raster_bytes(bytes.clone(), &request).unwrap();
+        let RasterPixels::Rgba16(values) = frame.pixels() else { panic!() };
+        assert_eq!(&values[..], &samples);
+        assert_eq!(frame.color_space(), &RasterColorSpace::AssumedSrgb);
+        assert_eq!(budget.used(), 16);
+        drop(frame); assert_eq!(budget.used(), 0);
+        request.memory_budget = Some(rrrah_core::MemoryBudget::new(15));
+        assert!(decode_raster_bytes(bytes.clone(), &request).is_err());
+        assert_eq!(request.memory_budget.as_ref().unwrap().used(), 0);
+        request.memory_budget = Some(budget.clone());
+        for invalid in [bytes[..15].to_vec(), bytes[..31].to_vec(), [bytes.as_slice(), &[0]].concat()] {
+            assert!(decode_raster_bytes(invalid, &request).is_err());
+            assert_eq!(budget.used(), 0);
+        }
+        request.image_index = 1;
+        assert!(decode_raster_bytes(bytes, &request).is_err());
+        assert_eq!(budget.used(), 0);
     }
 }

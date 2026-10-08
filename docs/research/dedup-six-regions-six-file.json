@@ -1,0 +1,27 @@
+{
+  "status": "native_failed",
+  "input_hashes": {
+    "docs/research/dedup-managed-pair-counts-six-file-audit.json": "afeb4edd31728f5a43d21eb4cf523b9e2e7038147059c0e015b7b571fc3e9dcc",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/photo-probe-six-regions-multifile": "9b16ebb8a946a44a8dabf5132643e499fad7a7cf70132eca95d2b0e563a03e30",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/original/200000.png": "04b702e544dbcf4f34b5258d546ad24ef872fbb70ff648106a1dfc366862d0dd",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/strong/200001.png": "d79c537b125d6160fbd3657d519cf8f650c7f4941b0452de9271190ba5ea2dfc",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/original/207300.png": "98a844920106eb9f41ad57d9cfd548fd4e91af171186969cbc45cf3aeaa3a388",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/strong/207302.png": "9edaa0baea5ba1c4c01356579823236a6d5ef698a02671d80f7a15ef9a244b70",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/original/208100.png": "9da059a8cfd5c51674df8f9efea5f92d7ddf7ca924bae1741dfbce00ffba4785",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/strong/208102.png": "cec437081da60a76b924fc4b1b285af398b7adaacf7bc1ea4e3abbcf9ce509c9"
+  },
+  "paths": [
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/original/200000.png",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/strong/200001.png",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/original/207300.png",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/strong/207302.png",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/original/208100.png",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/strong/208102.png"
+  ],
+  "scope": "One six-source native collection, all proposals and complete regional decisions. No full386-source collection, accuracy, universal RSS ceiling or throughput claim.",
+  "returncode": 101,
+  "stdout": "",
+  "stderr": "\nthread 'main' (3659085) panicked at crates/rrrah-dedup/examples/photo_probe.rs:1710:199:\ncalled `Result::unwrap()` on an `Err` value: Budget\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n       63.47 real        33.79 user         0.29 sys\n            76496896  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n                4950  page reclaims\n                   8  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                   0  voluntary context switches\n               59792  involuntary context switches\n        387331454992  instructions retired\n        108723679124  cycles elapsed\n            71565792  peak memory footprint\n",
+  "maximum_resident_set_bytes": 76496896,
+  "failure_class": "Typed library Budget surfaced by probe unwrap; precise admission phase pending."
+}

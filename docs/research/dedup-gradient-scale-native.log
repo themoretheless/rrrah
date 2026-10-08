@@ -1,0 +1,45 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: unused variable: `cancel`
+   --> crates/rrrah-dedup/src/local_index.rs:715:5
+    |
+715 |     cancel: impl Fn() -> bool,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_cancel`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-dedup` (lib) generated 1 warning (run `cargo fix --lib -p rrrah-dedup` to apply 1 suggestion)
+    Finished `test` profile [optimized + debuginfo] target(s) in 10.26s
+     Running tests/gradient.rs (target/debug/deps/gradient-ea2397e81d19b05a)
+
+running 8 tests
+test gradient_matching_mutual_ties_admission_and_cancel ... ok
+test gradient_affine_light_flat_refusals_and_cancel ... ok
+test dominant_gradient_orientation_analytic_angles_flat_and_limits ... ok
+test independently_rotated_texture_and_alpha_refusal ... ok
+test rotated_uniform_patches_never_create_descriptors ... ok
+test spatial_gradient_selection_preserves_recipe_and_cell_limits ... ok
+test gradient_pyramid_independent_double_size_coordinates_and_work ... ok
+test extracted_gradients_identity_unrelated_work_and_cancel ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/gradient_interpolated.rs (target/debug/deps/gradient_interpolated-0b19b3b2b06e8a27)
+
+running 4 tests
+test interpolated_recipe_preserves_independent_quarter_turn_and_affine_light ... ok
+test interpolated_cells_reduce_one_pixel_edge_localization_error ... ok
+test interpolated_recipe_flat_alpha_work_and_cancellation_refusals ... ok
+test explicit_recipe_pyramid_preserves_positions_limits_cancel_and_managed_ownership ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/gradient_scale.rs (target/debug/deps/gradient_scale-03f6915e078ec21a)
+
+running 2 tests
+same_recipe_dyadic_matches=11
+test admission_and_cancellation_return_no_partial_features ... ok
+positive_matches=269 correct=264 negative_matches=0
+test intermediate_scale_recovers_authored_reduction_without_acceptance_relaxation ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.27s
+

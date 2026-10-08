@@ -1,0 +1,223 @@
+   Compiling hayro-interpret v0.7.0 (/workspace/vendor/hayro-interpret)
+   Compiling hayro v0.7.1
+   Compiling rrrah-decode v0.1.0 (/workspace/crates/rrrah-decode)
+   Compiling rrrah-dedup v0.1.0 (/workspace/crates/rrrah-dedup)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+warning: unused import: `LocalFileError`
+  --> crates/rrrah-dedup/tests/five_collection.rs:49:13
+   |
+49 |             LocalFileError, ProjectiveComplementaryFilePolicy, ProjectivePortfolioFilePolicy,
+   |             ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: linker stderr: /validation/sysroot/usr/bin/ld: /validation/target/debug/deps/libjpegxr-8d01a0594e000fc4.rlib(2e643c6506a180d9-strenc.o): in function `StrIOEncInit':
+         /validation/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/jpegxr-0.3.1/jxrlib/image/encode/strenc.c:485:(.text.StrIOEncInit+0xf0): the use of `tmpnam' is dangerous, better use `mkstemp'
+  |
+  = note: `#[warn(linker_messages)]` on by default
+
+warning: linker stdout: /validation/sysroot/usr/bin/ld: /validation/target/debug/deps/libjpegxr-8d01a0594e000fc4.rlib(2e643c6506a180d9-strenc.o): note: the message above does not take linker garbage collection into account
+
+warning: `rrrah-dedup` (test "five_collection") generated 3 warnings (run `cargo fix --test "five_collection" -p rrrah-dedup` to apply 1 suggestion)
+warning: unused import: `LocalFileError`
+  --> crates/rrrah-dedup/tests/five_region_admission.rs:49:13
+   |
+49 |             LocalFileError, ProjectiveComplementaryFilePolicy, ProjectivePortfolioFilePolicy,
+   |             ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `cell::Cell` and `io::Write`
+  --> crates/rrrah-dedup/tests/five_region_admission.rs:58:15
+   |
+58 |     use std::{cell::Cell, io::Write};
+   |               ^^^^^^^^^^  ^^^^^^^^^
+
+warning: unused import: `scan_projective_local_collection_five_searches`
+   --> crates/rrrah-dedup/tests/five_region_admission.rs:190:51
+    |
+190 |             ProjectiveFiveSearchCollectionPolicy, scan_projective_local_collection_five_searches,
+    |                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: variable does not need to be mutable
+   --> crates/rrrah-dedup/tests/five_region_admission.rs:194:9
+    |
+194 |     let mut files = vec![
+    |         ----^^^^^
+    |         |
+    |         help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `budget`
+   --> crates/rrrah-dedup/tests/five_region_admission.rs:145:9
+    |
+145 |     let budget = MemoryBudget::new(64 * 1024 * 1024);
+    |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_budget`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `files`
+   --> crates/rrrah-dedup/tests/five_region_admission.rs:194:9
+    |
+194 |     let mut files = vec![
+    |         ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_files`
+
+warning: `rrrah-dedup` (test "five_region_admission") generated 8 warnings (2 duplicates) (run `cargo fix --test "five_region_admission" -p rrrah-dedup` to apply 6 suggestions)
+warning: `rrrah-dedup` (test "local_index") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "visual") generated 2 warnings (2 duplicates)
+warning: taking a mutable reference to a `const` item
+   --> crates/rrrah-dedup/src/managed_metric.rs:145:73
+    |
+145 |                 let actual = index.search(query, radius, entries.len(), &mut usize::MAX, &budget, || false).unwrap().unwrap();
+    |                                                                         ^^^^^^^^^^^^^^^
+    |
+    = note: each usage of a `const` item creates a new temporary
+    = note: the mutable reference will refer to this temporary, not the original `const` item
+note: `const` item defined here
+   --> /rustc/88d9e12ae178fab0fb5cc050a94da85685d449ea/library/core/src/num/uint_macros.rs:51:8
+   --> /rustc/88d9e12ae178fab0fb5cc050a94da85685d449ea/library/core/src/num/mod.rs:1449:4
+   ::: /rustc/88d9e12ae178fab0fb5cc050a94da85685d449ea/library/core/src/num/mod.rs:1473:5
+    |
+    = note: in this macro invocation
+    = note: `#[warn(const_item_mutation)]` on by default
+    = note: this warning originates in the macro `uint_impl` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+warning: taking a mutable reference to a `const` item
+   --> crates/rrrah-dedup/src/managed_metric.rs:154:49
+    |
+154 |         assert!(matches!(index.search(0, 64, 0, &mut usize::MAX, &budget, || false), Err(IndexError::Budget)));
+    |                                                 ^^^^^^^^^^^^^^^
+    |
+    = note: each usage of a `const` item creates a new temporary
+    = note: the mutable reference will refer to this temporary, not the original `const` item
+note: `const` item defined here
+   --> /rustc/88d9e12ae178fab0fb5cc050a94da85685d449ea/library/core/src/num/uint_macros.rs:51:8
+   --> /rustc/88d9e12ae178fab0fb5cc050a94da85685d449ea/library/core/src/num/mod.rs:1449:4
+   ::: /rustc/88d9e12ae178fab0fb5cc050a94da85685d449ea/library/core/src/num/mod.rs:1473:5
+    |
+    = note: in this macro invocation
+    = note: this warning originates in the macro `uint_impl` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+warning: taking a mutable reference to a `const` item
+   --> crates/rrrah-dedup/src/managed_metric.rs:156:50
+    |
+156 |         assert!(matches!(index.search(0, 64, 96, &mut usize::MAX, &budget, || true), Err(IndexError::Cancelled)));
+    |                                                  ^^^^^^^^^^^^^^^
+    |
+    = note: each usage of a `const` item creates a new temporary
+    = note: the mutable reference will refer to this temporary, not the original `const` item
+note: `const` item defined here
+   --> /rustc/88d9e12ae178fab0fb5cc050a94da85685d449ea/library/core/src/num/uint_macros.rs:51:8
+   --> /rustc/88d9e12ae178fab0fb5cc050a94da85685d449ea/library/core/src/num/mod.rs:1449:4
+   ::: /rustc/88d9e12ae178fab0fb5cc050a94da85685d449ea/library/core/src/num/mod.rs:1473:5
+    |
+    = note: in this macro invocation
+    = note: this warning originates in the macro `uint_impl` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+warning: `rrrah-dedup` (lib test) generated 6 warnings (3 duplicates)
+    Finished `test` profile [optimized + debuginfo] target(s) in 10m 26s
+     Running unittests src/lib.rs (/validation/target/debug/deps/rrrah_dedup-f8a0a4530b8830a4)
+
+running 43 tests
+test cache::publication_tests::directory_sync_failure_reports_already_published_complete_cache ... ok
+test animated::timeline_key_tests::rational_sum_overflow_is_inconclusive_despite_direct_timeline_equality ... ok
+test animated::timeline_key_tests::zero_duration_timelines_ignore_pixels_but_retain_repetition ... ok
+test container::reuse_tests::candidate_collisions_and_signature_failures_cannot_replace_direct_evidence ... ok
+test container::reuse_tests::indexed_groups_remove_changed_sources_without_losing_healthy_edges ... ok
+test container::reuse_tests::retained_left_reuses_pixels_and_rejects_changed_source_and_cancellation ... ok
+test container::reuse_tests::retained_left_survives_memory_refusal_and_releases_before_row_change ... ok
+test container::reuse_tests::indexed_groups_keep_selected_pages_and_animation_scopes_separate ... ok
+test container::reuse_tests::signature_preparation_errors_remain_pair_issues_without_unique_classification ... ok
+test container::reuse_tests::stale_different_signatures_are_errors_and_equal_signatures_require_confirmation ... ok
+test container::reuse_tests::indexed_groups_keep_labels_under_collisions_failure_and_candidate_caps ... ok
+test exact::collision_tests::colliding_samples_and_full_hashes_still_partition_by_bytes ... ok
+test exact::collision_tests::final_content_validation_rejects_change_even_when_metadata_matches ... ok
+test exact::collision_tests::read_buffer_capacity_failure_is_explicit_and_retry_succeeds ... ok
+test exact::collision_tests::verified_observations_detect_metadata_invisible_pruned_mutations ... ok
+test exact::observed_snapshot_policy_tests::replacement_after_initial_metadata_cannot_bypass_observed_size_limit ... ok
+test local_index::managed_owner_slots_tests::binary_owner_table_parity_credit_lifetime_and_refusals ... ok
+test local_scan::feature_memory_tests::grayscale_admission_accounts_for_other_owners_and_releases_on_cancel ... ok
+test local_scan::feature_memory_tests::retained_feature_storage_keeps_credit_until_last_owner ... ok
+test local_scan::reflected_model_confirmation_tests::a_rejected_second_model_does_not_convert_first_fit_failure_to_a_negative ... ok
+test local_scan::reflected_model_confirmation_tests::alternative_confirmation_cancel_and_work_limits_remain_terminal ... ok
+test local_scan::reflected_model_confirmation_tests::coefficient_bounds_and_low_variance_failures_are_also_model_specific ... ok
+test local_scan::reflected_model_confirmation_tests::exhausted_model_fits_preserve_first_inconclusive_reason ... ok
+test local_scan::reflected_model_confirmation_tests::insufficient_fit_support_in_first_model_does_not_hide_second_verified_model ... ok
+test local_scan::reflected_model_confirmation_tests::ordinary_alternative_models_recover_photometric_range_and_display_fits ... ok
+test local_scan::reflected_model_confirmation_tests::reflected_ranged_models_recover_fit_and_preserve_selected_domain ... ok
+test local_scan::reflected_model_confirmation_tests::selected_encoded_filter_retains_auxiliary_linear_failure ... ok
+test managed_metric::tests::managed_tree_equals_exhaustive_and_retains_results_credit ... ok
+test managed_visual::tests::managed_complete_recipe_matches_independent_comparison_and_cancellation ... ok
+test pages::page_key_tests::key_retains_page_order_and_count_independently_of_first_page ... ok
+test pixel_index::tests::injected_constant_keys_still_require_direct_pixel_confirmation ... ok
+test tests::collision_membership_keeps_arbitrary_order_and_pair_identity ... ok
+test tests::empty_and_duplicate_fingerprints ... ok
+test tests::indexed_search_matches_independent_exhaustive_scan ... ok
+test tests::traversal_work_exhaustion_is_distinct_from_failure ... ok
+test visual::distinct_variant_tests::repeated_complete_variants_preserve_all_ids_and_exact_metric ... ok
+test warp::bounded_fit_tests::boundary_fit_matches_exhaustive_rectangle_and_beats_independent_clipping ... ok
+test warp::encoded_signal_tests::extended_srgb_landmarks_match_independent_decimal_oracle_without_clipping ... ok
+test warp::encoded_signal_tests::transfer_precedes_premultiplication_and_bilinear_sampling ... ok
+test warp::regional_reuse_tests::reused_whole_evidence_preserves_regions_and_reduces_observed_work ... ok
+test container::reuse_tests::reused_pair_latches_every_cancellation_checkpoint_and_generation_token ... ok
+test container::reuse_tests::whole_signature_pipeline_cancels_at_every_checkpoint_without_report_or_leaks ... ok
+test container::reuse_tests::indexed_groups_cancel_without_partial_output_at_every_normal_checkpoint ... ok
+
+test result: ok. 43 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 40.56s
+
+     Running tests/five_collection.rs (/validation/target/debug/deps/five_collection-0832d8bcdb9dbbed)
+
+running 1 test
+test five_search_collection_matches_direct_and_source_lifecycle has been running for over 60 seconds
+test five_search_collection_matches_direct_and_source_lifecycle ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 159.50s
+
+     Running tests/five_region_admission.rs (/validation/target/debug/deps/five_region_admission-9b9baaadbfbb94be)
+
+running 1 test
+test joined_cumulative_caps_refuse_before_source_io ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/local_index.rs (/validation/target/debug/deps/local_index-8350d7d3842f14f6)
+
+running 7 tests
+test collision_buckets_recipes_and_limits_never_return_partial_results ... ok
+test file_pair_storage_limits_preserve_sorted_complete_results ... ok
+test descriptor_index_equals_independent_exhaustive_variant_search ... ok
+test file_pair_retrieval_equals_exhaustive_distinct_query_feature_counts ... ok
+test reverse_matching_preserves_asymmetric_variant_metric_and_hit_limits ... ok
+test indexed_mutual_matching_equals_exhaustive_ratios_for_every_recipe ... ok
+test extracted_rotation_and_scale_features_keep_exhaustive_correspondences ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.18s
+
+     Running tests/visual.rs (/validation/target/debug/deps/visual-ddadd063a1051958)
+
+running 8 tests
+test cancellation_inside_large_collision_bucket_is_observed ... ok
+test duplicate_ids_budgets_and_cancel_do_not_return_partial_indexes ... ok
+test fallible_insert_enforces_total_ids_without_partial_mutation ... ok
+test fallible_search_result_caps_are_inconclusive_and_leave_index_unchanged ... ok
+test full_radius_direct_search_cancellation_never_returns_partial_matches ... ok
+test cancelled_insertions_preserve_collision_buckets_and_deep_trees ... ok
+test dense_adaptive_search_keeps_oracle_and_cancellation ... ok
+test complete_recipe_index_matches_exhaustive_oracle ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+

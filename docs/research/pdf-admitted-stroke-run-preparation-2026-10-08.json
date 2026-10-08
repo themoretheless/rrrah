@@ -1,0 +1,39 @@
+{
+  "scope": "test-only admitted original-metric stroke-run preparation; outline geometry and production routing still pending",
+  "implementation": "vendor/hayro/src/bounded_stroke.rs",
+  "source_sha256": "7b623b9f40cad35f3e99d68e3fbe6256a993c446f4ff1a804d1496a94c1b981e",
+  "storage": "Two-pass run planning after independently admitted bounded curve flattening. Exact-sized point/run/subpath vectors, retained output credit, no internal dash-pattern copy. Closed subpath metadata retained for subsequent seam-join processing.",
+  "controls": [
+    "dash[4,3] offset1 on line0..12 gives runs0..3 and6..10",
+    "dash[0,2] yields zero-length dot runs at0,2,4,6,8,10,12",
+    "odd dash[2,1,1] duplicates logically without allocation",
+    "negative dash offset matches independently authored intervals",
+    "closed subpath metadata preserves first run and run count",
+    "curved path endpoints remain authored coordinates under nonuniform transform tolerance planning",
+    "output credit remains until plan drop; flattened input credit is released before return",
+    "every admission refusal and every cancellation checkpoint releases all storage",
+    "dense one-millionth-unit dash refuses before run-plan allocation",
+    "work-budget exhaustion releases admitted flattened input",
+    "zero-period dash refuses before admission"
+  ],
+  "focused_suite": "4 passed,0 failed",
+  "prototype_suite": "test result: FAILED. 82 passed; 1 failed; 8 ignored; 0 measured; 1 filtered out; finished in 2.50s",
+  "limits": {
+    "points": 1000000,
+    "runs_or_subpaths": 1000000,
+    "dash_entries": 4096,
+    "flattening_max_depth": 32
+  },
+  "fidelity_limits": [
+    "Curve dash lengths currently use bounded flattened-polyline lengths; independent curved arc-length/dash-phase qualification remains",
+    "Run geometry does not yet create caps, joins, miter-limited outer contours or device-space hairline outlines",
+    "Closed seam joining still needs outline-stage qualification",
+    "The renderer still uses the old stroke path; no production stroker replacement claimed"
+  ],
+  "remaining": [
+    "Build admitted outline geometry from prepared runs",
+    "Connect bounded preparation to native polygon tile replay",
+    "Qualify caps, joins, miter limits, closed seams and curved dash phase with independent fixtures",
+    "Measure large AI/PDF throughput and memory; preserve full100-format/GPU/HDR/cache objective"
+  ]
+}

@@ -1,0 +1,46 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+    Checking rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+error[E0277]: `?` couldn't convert the error to `LocalFileError`
+    --> crates/rrrah-dedup/src/local_scan.rs:3766:115
+     |
+3766 |             let av=crate::linear::LinearRgbaView::new(aw,ah,&aa,gradient.search.local.decode.max_pixels,cancelled)?;
+     |                    -----------------------------------------------------------------------------------------------^ the trait `From<PixelError>` is not implemented for `LocalFileError`
+     |                    |
+     |                    this can't be annotated with `?` because it has type `Result<_, PixelError>`
+     |
+note: `LocalFileError` needs to implement `From<PixelError>`
+    --> crates/rrrah-dedup/src/local_scan.rs:114:1
+     |
+ 114 | pub enum LocalFileError {
+     | ^^^^^^^^^^^^^^^^^^^^^^^
+     = note: the question mark operation (`?`) implicitly performs a conversion on the error value using the `From` trait
+     = help: `LocalFileError` implements trait `From<T>`:
+               From<CachedError>
+               From<GeometryError>
+               From<LocalError>
+               From<SnapshotError>
+               From<WarpError>
+
+error[E0277]: `?` couldn't convert the error to `LocalFileError`
+    --> crates/rrrah-dedup/src/local_scan.rs:3767:115
+     |
+3767 |             let bv=crate::linear::LinearRgbaView::new(bw,bh,&bb,gradient.search.local.decode.max_pixels,cancelled)?;
+     |                    -----------------------------------------------------------------------------------------------^ the trait `From<PixelError>` is not implemented for `LocalFileError`
+     |                    |
+     |                    this can't be annotated with `?` because it has type `Result<_, PixelError>`
+     |
+note: `LocalFileError` needs to implement `From<PixelError>`
+    --> crates/rrrah-dedup/src/local_scan.rs:114:1
+     |
+ 114 | pub enum LocalFileError {
+     | ^^^^^^^^^^^^^^^^^^^^^^^
+     = note: the question mark operation (`?`) implicitly performs a conversion on the error value using the `From` trait
+     = help: `LocalFileError` implements trait `From<T>`:
+               From<CachedError>
+               From<GeometryError>
+               From<LocalError>
+               From<SnapshotError>
+               From<WarpError>
+
+For more information about this error, try `rustc --explain E0277`.
+error: could not compile `rrrah-dedup` (lib) due to 2 previous errors

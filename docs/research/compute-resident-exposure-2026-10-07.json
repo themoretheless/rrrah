@@ -1,0 +1,44 @@
+{
+  "date": "2026-10-07",
+  "feature": "LinearExposureCompute::execute_resident returns GPU-resident output without CPU readback or blocking device wait",
+  "ownership": "ResidentExposure clones share output reservation; resource_lease allows downstream consumers to retain accounting through submission completion; source/uniform and output in-flight reservations release on queue callback",
+  "validation": {
+    "adapter": "Metal Apple M4 Max",
+    "passed": 4,
+    "ignored": 2,
+    "log": "/tmp/rrrah-resident-exposure-full-metal.log",
+    "new_test": "resident_exposure_preserves_hdr_tail_and_budgeted_gpu_ownership",
+    "pixels": 8200,
+    "input": [
+      4,
+      -2,
+      0.125,
+      0.375
+    ],
+    "stops": 1,
+    "exact_output": [
+      8,
+      -4,
+      0.25,
+      0.375
+    ],
+    "cancel_checkpoints": 6,
+    "one_byte_short_admission_refuses": true,
+    "last_owner_and_downstream_lease_release": true,
+    "abandoned_inflight_output_releases_after_poll": true
+  },
+  "buffer_accounting": {
+    "resident_bytes": 131200,
+    "source_output_uniform_bytes": 262416,
+    "legacy_source_output_readback_uniform_bytes": 393616,
+    "production_readback_bytes": 0
+  },
+  "limits": [
+    "buffer sizes accounted; driver/pipeline/staging overhead excluded",
+    "nonempty finite RGBA32F inputs only",
+    "GPU resident output not yet connected to viewer raster renderer",
+    "no hardware NVIDIA/CUDA or physical HDR display proof",
+    "no latency speedup claim"
+  ],
+  "status": "local, not pushed"
+}

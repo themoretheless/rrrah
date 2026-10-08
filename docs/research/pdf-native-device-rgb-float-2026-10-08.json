@@ -1,0 +1,37 @@
+{
+  "scope": "Test-only native paint bridge with explicit bare-device to DeviceRGB float conversion policy; production scene replay unchanged",
+  "sources": {
+    "vendor/hayro-interpret/src/color.rs": "1b74bb19f2f194833782a3118451228615dbe83917005d1ae8a45a2688012904",
+    "vendor/hayro/src/native_paint.rs": "a6e024515743f5d4240636cec6c3af46dfb04babb0f44baba9c08cd69b092724",
+    "vendor/hayro/src/knockout_interpreter.rs": "acce1d578f69f913e1f601751618676ec79eeb242974561fe1e8f788d67a75c2"
+  },
+  "interpreter_controls": {
+    "passed": 3,
+    "failed": 0,
+    "log": "/tmp/rrrah-device-float-controls.log"
+  },
+  "renderer_controls": {
+    "passed": 101,
+    "failed": 0,
+    "ignored": 8,
+    "seconds": 2.81,
+    "log": "/tmp/rrrah-device-float-final-controls.log"
+  },
+  "verified": [
+    "RGB original fractions copied exactly",
+    "Gray original fraction replicated exactly across RGB",
+    "CMYK float conversion rounds to existing display output but retains non8bit fractions",
+    "Parsed authored PDF CMYK paint becomes native RGB pixel with shape0.5 and independent alpha0.5",
+    "Wrong destination, nonfinite and out-of-range input refused"
+  ],
+  "policy": "Bare DeviceCMYK uses existing CGATS001Compat/hybrid display transform, not a newly qualified universal device policy. No calibrated or ICC source inferred from component count.",
+  "allocation_limit": "CMYK shared LazyLock transform construction can allocate; admitted preparation/cache integration still required. Per-sample output stack-only.",
+  "remaining": [
+    "CalGray/CalRGB explicit conversion",
+    "RGB/Gray to CMYK and Gray destination conversion",
+    "Admitted transform preparation/cache",
+    "Native frame scene integration",
+    "Real AI oracle comparison"
+  ],
+  "production_enabled": false
+}

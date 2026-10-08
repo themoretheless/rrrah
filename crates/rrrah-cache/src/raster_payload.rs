@@ -42,6 +42,10 @@ fn descriptor(frame: &DecodedRaster) -> Result<([u8; HEADER], &[u8], u64), Raste
     }
     let mut h = [0u8; HEADER];
     h[..8].copy_from_slice(b"RRRAST1\0");
+    if let Some(aspect) = frame.pixel_aspect() {
+        h[..8].copy_from_slice(b"RRRAST2\0");
+        h[60..64].copy_from_slice(&aspect.to_bits().to_le_bytes());
+    }
     h[8..12].copy_from_slice(&frame.width().to_le_bytes());
     h[12..16].copy_from_slice(&frame.height().to_le_bytes());
     h[16] = kind;
@@ -161,16 +165,22 @@ fn read_raster_payload_impl(
 ) -> Result<DecodedRaster, RasterPayloadError> {
     let mut h = [0u8; HEADER];
     reader.read_exact(&mut h)?;
+    let aspect_version = &h[..8] == b"RRRAST2\0";
+    let extension_end = if aspect_version { 60 } else { 64 };
     let invalid_color_extension = if h[17] == 7 {
-        h[58] > 1 || h[59..].iter().any(|&b| b != 0)
+        h[58] > 1 || h[59..extension_end].iter().any(|&b| b != 0)
     } else {
-        h[52..].iter().any(|&b| b != 0)
+        h[52..extension_end].iter().any(|&b| b != 0)
     };
-    if &h[..8] != b"RRRAST1\0" || h[19] != 0 || invalid_color_extension || h[18] > 1 {
+    if (!aspect_version && &h[..8] != b"RRRAST1\0") || h[19] != 0 || invalid_color_extension || h[18] > 1 {
         return Err(RasterPayloadError::Invalid("header"));
     }
     let u32_at = |i| u32::from_le_bytes(h[i..i + 4].try_into().unwrap());
     let u64_at = |i| u64::from_le_bytes(h[i..i + 8].try_into().unwrap());
+    let aspect = aspect_version.then(|| f32::from_bits(u32_at(60)));
+    if aspect.is_some_and(|v| !v.is_finite() || v <= 0.0) {
+        return Err(RasterPayloadError::Invalid("pixel aspect"));
+    }
     let width = u32_at(8);
     let height = u32_at(12);
     let scale = f32::from_bits(u32_at(20));
@@ -256,6 +266,7 @@ fn read_raster_payload_impl(
     Ok(DecodedRaster::new(width, height, pixels, color)?
         .with_color_profile_reservation(profile_reservation)?
         .with_sample_scale(scale)?
+        .with_pixel_aspect(aspect)?
         .with_hotspot(hotspot)?
         .with_image_selection(index, images)?)
 }
@@ -564,6 +575,31 @@ mod block_boundary_tests {
             assert_eq!(budget.used(), expected.len() as u64);
             drop(restored);
             assert_eq!(budget.used(), 0);
+        }
+    }
+}
+
+#[cfg(test)]
+mod aspect_payload_tests {
+    use super::*;
+    #[test]
+    fn aspect_version_roundtrips_and_legacy_records_remain_readable() {
+        let base = DecodedRaster::new(1,1,RasterPixels::Rgba8(std::sync::Arc::new(vec![1,2,3,255]).into()), RasterColorSpace::Srgb).unwrap();
+        for aspect in [None, Some(2.0), Some(0.5)] {
+            let frame = base.clone().with_pixel_aspect(aspect).unwrap();
+            let mut bytes = Vec::new(); write_raster_payload(&mut bytes, &frame).unwrap();
+            assert_eq!(&bytes[..8], if aspect.is_some() { b"RRRAST2\0" } else { b"RRRAST1\0" });
+            let budget = MemoryBudget::new(4);
+            let restored = read_raster_payload_with_length(&mut bytes.as_slice(), bytes.len() as u64, &budget).unwrap();
+            assert_eq!(restored.pixel_aspect(), aspect);
+            drop(restored); assert_eq!(budget.used(), 0);
+            if aspect.is_some() {
+                for bad in [0.0f32, -1.0, f32::NAN, f32::INFINITY] {
+                    bytes[60..64].copy_from_slice(&bad.to_bits().to_le_bytes());
+                    assert!(read_raster_payload_with_length(&mut bytes.as_slice(), bytes.len() as u64, &budget).is_err());
+                    assert_eq!(budget.used(), 0);
+                }
+            }
         }
     }
 }

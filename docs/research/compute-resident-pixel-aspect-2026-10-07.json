@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-07",
+  "feature": "GPU resident exposure upload with explicit pixel aspect",
+  "api": "upload_resident_with_aspect; existing upload_resident remains square-pixel wrapper",
+  "integration": "raw_view_timing forwards prepared raster pixel aspect into resident GPU transfer",
+  "checks": [
+    "CPU-exposed reference frames match GPU resident frames exactly for aspect absent, 0.5 and 2.0",
+    "aligned and packed unaligned dimensions 7x3,16x3,64x257,7x257",
+    "all cancellation checkpoints including second row checkpoint and final submit gate preserve previous frame",
+    "zero,negative,NaN,infinite and overflowing physical widths refused before texture admission",
+    "texture and queue occupancy unchanged after invalid/cancelled transfer",
+    "all budgets release after completion and last renderer owner"
+  ],
+  "evidence": {
+    "adapter": "Apple M4 Max Metal",
+    "log": "/tmp/rrrah-resident-aspect-metal.log",
+    "compute_passed": 4,
+    "compute_ignored": 2,
+    "raster_passed": 10,
+    "raster_ignored": 1,
+    "example_build_log": "/tmp/rrrah-resident-aspect-example-check.log"
+  },
+  "limits": [
+    "Main-window compute policy still requires separate integration decision; ordinary viewer raster upload already preserves aspect",
+    "No physical HDR/NVIDIA qualification",
+    "No new speedup measurement"
+  ],
+  "status": "local, not pushed"
+}

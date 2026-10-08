@@ -1,0 +1,20 @@
+{
+  "status": "verified_native_linux_borrowed_gradients",
+  "tests": 25,
+  "suites": [
+    "gradient",
+    "gradient_interpolated",
+    "gradient_distinct_locations",
+    "gradient_empty",
+    "gradient_index"
+  ],
+  "current_dedup_drift": [
+    "crates/rrrah-dedup/src/gradient_index.rs"
+  ],
+  "pins": {
+    "docs/research/dedup-borrowed-gradients-linux-snapshot.json": "e8583e63b6e4258401815a0d066cf7d3ff114b00c7344560a3c74cde5a59bd07",
+    "docs/research/dedup-borrowed-gradients-linux.log": "03fac00724bc6987a70d705b23bbe814ec7ec40cbb1218e46582bcf59cb605c6",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-borrowed-gradients-linux.py": "b4b80df7b3a2f3ef45eecb7792422497f99a97542c161c3ce23965ac4223fb5f"
+  },
+  "scope": "Native aarch64 Linux five frozen current gradient suites over prior frozen dependencies. Exact index/boundary/collision/cancellation/budget and ordinary/interpolated/distinct matching regressions; no full package, Windows or real corpus claim."
+}

@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-07",
+  "feature": "Explicit RPF interpretation in common DecodeRequest and decode_image/decode_raster file entrypoints",
+  "contract": [
+    "RPF extension is a supported common raster candidate",
+    "No channel/color/alpha defaults are inferred",
+    "Missing settings produce RpfInterpretationRequired",
+    "Source and decoded storage share managed budget",
+    "Producer aspect is attached to returned raster",
+    "First image only; configured limits bound layers, names and output"
+  ],
+  "evidence": {
+    "decode_log": "/tmp/rrrah-rpf-common-final.log",
+    "passed": 963,
+    "ignored": 65,
+    "app_build_log": "/tmp/rrrah-rpf-request-app-check.log",
+    "checks": [
+      "Common request rejects missing interpretation without retained memory",
+      "Configured common routing yields raster",
+      "Both straight and associated alpha cases match explicit file importer sample bits",
+      "Aspect 1.5 retained",
+      "Root used returns to zero after result drops"
+    ]
+  },
+  "remaining": [
+    "App CLI and import policy wiring",
+    "Interpretation must be part of app cache identity before configured viewer requests are enabled",
+    "Renamed RPF content routing is not implemented",
+    "Real producer corpus and physical HDR/NVIDIA gates remain open"
+  ],
+  "status": "local, not pushed"
+}

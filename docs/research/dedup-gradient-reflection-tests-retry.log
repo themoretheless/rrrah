@@ -1,0 +1,72 @@
+    Blocking waiting for file lock on package cache
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 37.62s
+     Running tests/gradient.rs (target/debug/deps/gradient-0cabdb1d957f6416)
+
+running 9 tests
+test gradient_matching_mutual_ties_admission_and_cancel ... ok
+test dominant_gradient_orientation_analytic_angles_flat_and_limits ... ok
+test independently_rotated_texture_and_alpha_refusal ... ok
+test gradient_affine_light_flat_refusals_and_cancel ... ok
+test rotated_uniform_patches_never_create_descriptors ... ok
+test managed_spatial_pyramid_matches_unmanaged_and_releases_last_owner ... ok
+test spatial_gradient_selection_preserves_recipe_and_cell_limits ... ok
+test extracted_gradients_identity_unrelated_work_and_cancel ... ok
+test gradient_pyramid_independent_double_size_coordinates_and_work ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+
+     Running tests/gradient_distinct_locations.rs (target/debug/deps/gradient_distinct_locations-e67b51d9dcc2d0fd)
+
+running 4 tests
+test nearby_scale_duplicates_preserve_distinct_landmarks_and_reject_ambiguity ... ok
+test managed_distinct_match_admission_last_owner_and_cancellation ... ok
+test distinct_location_work_validation_and_atomic_cancellation ... ok
+test distinct_location_results_equal_independent_sorted_distance_oracle ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/gradient_index.rs (target/debug/deps/gradient_index-94217f8544145f6f)
+
+running 7 tests
+test admission_cancel_recipe_and_owned_reservation ... ok
+test invalid_vectors_exact_memory_and_build_cancellation ... ok
+test proposal_scratch_and_retained_report_admit_exact_peak ... ok
+test file_proposal_cancellation_never_returns_partial_pairs ... ok
+test file_proposals_equal_exhaustive_without_ambiguity_loss ... ok
+test repeated_descriptor_hits_retain_one_pair_with_bounded_memory ... ok
+test retrieval_equals_exhaustive_including_boundaries_and_collisions ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+     Running tests/gradient_interpolated.rs (target/debug/deps/gradient_interpolated-738809b54ec7059f)
+
+running 4 tests
+test interpolated_cells_reduce_one_pixel_edge_localization_error ... ok
+test interpolated_recipe_preserves_independent_quarter_turn_and_affine_light ... ok
+test interpolated_recipe_flat_alpha_work_and_cancellation_refusals ... ok
+test explicit_recipe_pyramid_preserves_positions_limits_cancel_and_managed_ownership ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+     Running tests/gradient_reflection.rs (target/debug/deps/gradient_reflection-3552194da16ffff2)
+
+running 1 test
+test canonical_reflection_matches_independently_mirrored_pixels ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

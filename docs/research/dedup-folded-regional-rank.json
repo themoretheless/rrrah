@@ -1,0 +1,673 @@
+{
+  "status": "complete_native_regional_rank_diagnostic",
+  "required_models": 8,
+  "input_hashes": {
+    "docs/research/dedup-folded-201702-regional-geometry.json": "540adafd643bb32fecef93927456c50b62ef08ec149d405b12cf5551da9fb8fe",
+    "docs/research/dedup-folded-201702-regional-geometry-audit.json": "32da626badf79147333ddf284cc2f19f652a429f6fefe51576834cb4d284f275",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/regional-rank-region-probe": "2c19b3fbeeb88affffc4f361f21f10c35629a836f21b40da3d81974c224c11ea",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201700.jpg": "72a07e098b9628cf665612b9a9450da78cff914a06b08c403e56c7dc74d4b5ca",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/201702.jpg": "a2e4eaa90d3aba8cca4dc3382d710cc8564f07bea69eedf35ac550ecc0900a51",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/prepared.json": "6ba843f8f09419efb8ccec9b5d84cc8f086d1dc74ec222f5aa2acae29f9fff01",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-folded-regional-rank.py": "30233e7498977ce06b1b5283b4731fe8e862412a527ecddb1f02c592744bb9d0",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/dedup_jpeg_domain.py": "a9986aabe3428100e1b061a70f6fb7f1f87e1b6c8552484b550e764a04746921",
+    "crates/rrrah-dedup/examples/regional_rank_region_probe.rs": "e258433f9fb7c365ae745ae4062c7d54d3efac68ab47b8ea229172b1d313fb72",
+    "crates/rrrah-dedup/src/rank_region.rs": "220bc0630249afac757858986a93c7dca535faaf80b168858a40e26d74f26212",
+    "crates/rrrah-dedup/src/geometry.rs": "d5a4cae5e9aaa9c7b8ade16ae385392ff50c1409ac9850b7fb98e1e9c1eca4d9",
+    "crates/rrrah-dedup/src/lib.rs": "060f497e7dee3dcf4f4fcbbf3ff1104cc341e25129e33d0cfef5ae511a60efe8"
+  },
+  "rows": [
+    {
+      "model_index": 0,
+      "matrix": [
+        [
+          0.48581964200990946,
+          0.0930093510242727,
+          -203.4802433603047
+        ],
+        [
+          -0.010950685734771924,
+          0.5354192822779489,
+          -95.27622858585684
+        ],
+        [
+          5.229940294598535e-05,
+          0.00021219483296483534,
+          0.8196623148912435
+        ]
+      ],
+      "target_domain": [
+        200,
+        150,
+        200,
+        150
+      ],
+      "native_inliers": [
+        64,
+        71,
+        84,
+        87,
+        91,
+        92,
+        94,
+        95,
+        96,
+        97,
+        98,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        110,
+        111,
+        112,
+        113,
+        114,
+        115,
+        116,
+        118,
+        119,
+        120,
+        121,
+        122,
+        124,
+        125,
+        127,
+        129,
+        130,
+        132,
+        135,
+        136,
+        137,
+        139,
+        140,
+        147,
+        152,
+        153,
+        156,
+        158,
+        161,
+        162,
+        163,
+        164,
+        165,
+        169,
+        173,
+        174
+      ],
+      "source_domain": [
+        692,
+        460,
+        442,
+        326
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-regional-rank-0.txt",
+      "input_sha256": "d45511cba0c358381adafb3fa4dafdc4454bab1fe40848d5d68ce844dad5a980",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":30000,\"valid_sites\":30000,\"informative_pairs\":162582,\"agreeing_pairs\":139769,\"pixel_reads\":390150000},{\"status\":\"ok\",\"sites\":144092,\"valid_sites\":130322,\"informative_pairs\":654461,\"agreeing_pairs\":551866,\"pixel_reads\":1694837610}],\"managed_used\":0,\"managed_peak\":62914560}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 30000,
+            "valid_sites": 30000,
+            "informative_pairs": 162582,
+            "agreeing_pairs": 139769,
+            "pixel_reads": 390150000
+          },
+          {
+            "status": "ok",
+            "sites": 144092,
+            "valid_sites": 130322,
+            "informative_pairs": 654461,
+            "agreeing_pairs": 551866,
+            "pixel_reads": 1694837610
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560
+      },
+      "status": "measured"
+    },
+    {
+      "model_index": 1,
+      "matrix": [
+        [
+          0.40531840878900416,
+          -0.06253017476040877,
+          -14.48893266740049
+        ],
+        [
+          0.021580735186859268,
+          0.495711741313623,
+          -109.89441863027369
+        ],
+        [
+          -0.00010766973558854811,
+          -9.353977604088054e-05,
+          1.191173807480807
+        ]
+      ],
+      "target_domain": [
+        400,
+        150,
+        200,
+        150
+      ],
+      "native_inliers": [
+        183,
+        187,
+        189,
+        190,
+        191,
+        192,
+        193,
+        199,
+        200,
+        201,
+        230,
+        236,
+        239
+      ],
+      "source_domain": [
+        1122,
+        450,
+        439,
+        325
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-regional-rank-1.txt",
+      "input_sha256": "3eefc017f5ab3f81aafd940ff1b3e5ce1d3cfb1844620730085438910cced372",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":30000,\"valid_sites\":30000,\"informative_pairs\":165041,\"agreeing_pairs\":121451,\"pixel_reads\":390150000},{\"status\":\"ok\",\"sites\":142675,\"valid_sites\":123318,\"informative_pairs\":632638,\"agreeing_pairs\":388764,\"pixel_reads\":1603750590}],\"managed_used\":0,\"managed_peak\":62914560}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 30000,
+            "valid_sites": 30000,
+            "informative_pairs": 165041,
+            "agreeing_pairs": 121451,
+            "pixel_reads": 390150000
+          },
+          {
+            "status": "ok",
+            "sites": 142675,
+            "valid_sites": 123318,
+            "informative_pairs": 632638,
+            "agreeing_pairs": 388764,
+            "pixel_reads": 1603750590
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560
+      },
+      "status": "measured"
+    },
+    {
+      "model_index": 2,
+      "matrix": [
+        [
+          0.39994950588111844,
+          -0.0039017179979530386,
+          -12.267311094824095
+        ],
+        [
+          -0.0013146879251100738,
+          0.4310195385407131,
+          -35.20669575146235
+        ],
+        [
+          -0.00012190582797479608,
+          -1.6409195963335502e-05,
+          1.2105841874933794
+        ]
+      ],
+      "target_domain": [
+        600,
+        150,
+        200,
+        150
+      ],
+      "native_inliers": [
+        243,
+        244,
+        245,
+        248,
+        251,
+        252,
+        255,
+        256,
+        258,
+        259,
+        261,
+        262
+      ],
+      "source_domain": [
+        1551,
+        423,
+        412,
+        365
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-regional-rank-2.txt",
+      "input_sha256": "c2cebcbd84b7d1eba94d31f80ac0e0908ed1715a0fffb69fb0f7372d2db057f0",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":30000,\"valid_sites\":27600,\"informative_pairs\":172622,\"agreeing_pairs\":104735,\"pixel_reads\":364290000},{\"status\":\"ok\",\"sites\":150380,\"valid_sites\":132463,\"informative_pairs\":723912,\"agreeing_pairs\":460043,\"pixel_reads\":1735565105}],\"managed_used\":0,\"managed_peak\":62914560}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 30000,
+            "valid_sites": 27600,
+            "informative_pairs": 172622,
+            "agreeing_pairs": 104735,
+            "pixel_reads": 364290000
+          },
+          {
+            "status": "ok",
+            "sites": 150380,
+            "valid_sites": 132463,
+            "informative_pairs": 723912,
+            "agreeing_pairs": 460043,
+            "pixel_reads": 1735565105
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560
+      },
+      "status": "measured"
+    },
+    {
+      "model_index": 3,
+      "matrix": [
+        [
+          0.44507182111568877,
+          -0.29071896704189293,
+          152.5599785839148
+        ],
+        [
+          0.03640514659829478,
+          0.2635152772698855,
+          84.55897598884792
+        ],
+        [
+          -0.00010694031282241659,
+          -0.0005864617054220371,
+          1.6554741516210176
+        ]
+      ],
+      "target_domain": [
+        200,
+        300,
+        200,
+        150
+      ],
+      "native_inliers": [
+        68,
+        75,
+        79,
+        109,
+        117,
+        126,
+        131,
+        138,
+        142,
+        143,
+        145,
+        149,
+        151,
+        155,
+        157,
+        166,
+        168,
+        176,
+        179,
+        181,
+        185
+      ],
+      "source_domain": [
+        691,
+        761,
+        476,
+        363
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-regional-rank-3.txt",
+      "input_sha256": "a0e12b5a49a7658495e849f9dbcdc40b508cef2930b89529da02a2478d087d69",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":30000,\"valid_sites\":30000,\"informative_pairs\":182756,\"agreeing_pairs\":144033,\"pixel_reads\":390150000},{\"status\":\"ok\",\"sites\":172788,\"valid_sites\":125253,\"informative_pairs\":687672,\"agreeing_pairs\":513037,\"pixel_reads\":1628915265}],\"managed_used\":0,\"managed_peak\":62914560}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 30000,
+            "valid_sites": 30000,
+            "informative_pairs": 182756,
+            "agreeing_pairs": 144033,
+            "pixel_reads": 390150000
+          },
+          {
+            "status": "ok",
+            "sites": 172788,
+            "valid_sites": 125253,
+            "informative_pairs": 687672,
+            "agreeing_pairs": 513037,
+            "pixel_reads": 1628915265
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560
+      },
+      "status": "measured"
+    },
+    {
+      "model_index": 4,
+      "matrix": [
+        [
+          0.45788391593275934,
+          0.009575945815321004,
+          -122.31251511778487
+        ],
+        [
+          -0.02381475077868528,
+          0.534473701531369,
+          -81.6290872996529
+        ],
+        [
+          -0.00011820222575719373,
+          7.643184057561249e-05,
+          1.0977292379096981
+        ]
+      ],
+      "target_domain": [
+        400,
+        300,
+        200,
+        150
+      ],
+      "native_inliers": [
+        188,
+        214,
+        224,
+        227,
+        228,
+        231,
+        232,
+        233,
+        234,
+        235
+      ],
+      "source_domain": [
+        1143,
+        768,
+        406,
+        315
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-regional-rank-4.txt",
+      "input_sha256": "8be4a7b440245e7bb0dcdcaedadab096cc827b546ebff5ffea4c08a1b27bc19b",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":30000,\"valid_sites\":30000,\"informative_pairs\":177024,\"agreeing_pairs\":152342,\"pixel_reads\":390150000},{\"status\":\"ok\",\"sites\":127890,\"valid_sites\":116592,\"informative_pairs\":630147,\"agreeing_pairs\":515030,\"pixel_reads\":1516278960}],\"managed_used\":0,\"managed_peak\":62914560}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 30000,
+            "valid_sites": 30000,
+            "informative_pairs": 177024,
+            "agreeing_pairs": 152342,
+            "pixel_reads": 390150000
+          },
+          {
+            "status": "ok",
+            "sites": 127890,
+            "valid_sites": 116592,
+            "informative_pairs": 630147,
+            "agreeing_pairs": 515030,
+            "pixel_reads": 1516278960
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560
+      },
+      "status": "measured"
+    },
+    {
+      "model_index": 5,
+      "matrix": [
+        [
+          0.7304497123843533,
+          -0.10517980744657837,
+          -495.8029085200634
+        ],
+        [
+          0.10681407625836833,
+          0.4666934556257426,
+          -270.8942911308267
+        ],
+        [
+          0.0004093829617926605,
+          -9.734189164564315e-05,
+          0.3588066019245073
+        ]
+      ],
+      "target_domain": [
+        600,
+        300,
+        200,
+        150
+      ],
+      "native_inliers": [
+        253,
+        260,
+        265,
+        266,
+        267,
+        269,
+        270,
+        274,
+        277,
+        278,
+        279,
+        280,
+        281,
+        283,
+        284,
+        285
+      ],
+      "source_domain": [
+        1545,
+        813,
+        475,
+        339
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-regional-rank-5.txt",
+      "input_sha256": "03843c0307c4ff7870cf6fdec1bdeb5af714227eced7adde434b741a43ebbd52",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":30000,\"valid_sites\":27600,\"informative_pairs\":180826,\"agreeing_pairs\":136021,\"pixel_reads\":364290000},{\"status\":\"ok\",\"sites\":161025,\"valid_sites\":127544,\"informative_pairs\":737431,\"agreeing_pairs\":553038,\"pixel_reads\":1670842600}],\"managed_used\":0,\"managed_peak\":62914560}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 30000,
+            "valid_sites": 27600,
+            "informative_pairs": 180826,
+            "agreeing_pairs": 136021,
+            "pixel_reads": 364290000
+          },
+          {
+            "status": "ok",
+            "sites": 161025,
+            "valid_sites": 127544,
+            "informative_pairs": 737431,
+            "agreeing_pairs": 553038,
+            "pixel_reads": 1670842600
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560
+      },
+      "status": "measured"
+    },
+    {
+      "model_index": 6,
+      "matrix": [
+        [
+          0.48660030692887596,
+          0.09426548618961346,
+          -303.2875823155443
+        ],
+        [
+          0.03927016115430926,
+          0.49484774402410137,
+          -157.7980069882709
+        ],
+        [
+          8.320174457317786e-05,
+          0.00015572921231016902,
+          0.7297076149663466
+        ]
+      ],
+      "target_domain": [
+        0,
+        450,
+        200,
+        150
+      ],
+      "native_inliers": [
+        21,
+        22,
+        24,
+        27,
+        35,
+        41,
+        45,
+        47,
+        48,
+        49,
+        50,
+        51,
+        58,
+        61
+      ],
+      "source_domain": [
+        334,
+        1141,
+        468,
+        362
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-regional-rank-6.txt",
+      "input_sha256": "eccb1a8236ba9eb5e3b29ba0ecb20e8f318f01f382867f51cb9f5e0ba2b76ea6",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":30000,\"valid_sites\":24656,\"informative_pairs\":154314,\"agreeing_pairs\":119532,\"pixel_reads\":338251040},{\"status\":\"ok\",\"sites\":169416,\"valid_sites\":132173,\"informative_pairs\":753028,\"agreeing_pairs\":547471,\"pixel_reads\":1759560080}],\"managed_used\":0,\"managed_peak\":62914560}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 30000,
+            "valid_sites": 24656,
+            "informative_pairs": 154314,
+            "agreeing_pairs": 119532,
+            "pixel_reads": 338251040
+          },
+          {
+            "status": "ok",
+            "sites": 169416,
+            "valid_sites": 132173,
+            "informative_pairs": 753028,
+            "agreeing_pairs": 547471,
+            "pixel_reads": 1759560080
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560
+      },
+      "status": "measured"
+    },
+    {
+      "model_index": 7,
+      "matrix": [
+        [
+          1.005197086326568,
+          0.13016419610203575,
+          -1024.4981085717573
+        ],
+        [
+          0.435695409702166,
+          0.5906053529930577,
+          -789.4525879459154
+        ],
+        [
+          0.0009769928665525562,
+          0.00033784608748670044,
+          -0.7245004555082324
+        ]
+      ],
+      "target_domain": [
+        400,
+        450,
+        200,
+        150
+      ],
+      "native_inliers": [
+        204,
+        205,
+        206,
+        209,
+        210,
+        211,
+        212,
+        213,
+        216,
+        218,
+        220,
+        221,
+        222,
+        223
+      ],
+      "source_domain": [
+        1204,
+        1067,
+        472,
+        469
+      ],
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/folded-regional-rank-7.txt",
+      "input_sha256": "0d5a35bcf552faf88eeeed403966d1f27a5c8741de6efa6453e689eaa4f4269c",
+      "returncode": 0,
+      "stdout": "{\"directions\":[{\"status\":\"ok\",\"sites\":30000,\"valid_sites\":26566,\"informative_pairs\":164701,\"agreeing_pairs\":119166,\"pixel_reads\":364026075},{\"status\":\"ok\",\"sites\":221368,\"valid_sites\":157914,\"informative_pairs\":784523,\"agreeing_pairs\":507800,\"pixel_reads\":2104024170}],\"managed_used\":0,\"managed_peak\":62914560}\n",
+      "stderr": "",
+      "evidence": {
+        "directions": [
+          {
+            "status": "ok",
+            "sites": 30000,
+            "valid_sites": 26566,
+            "informative_pairs": 164701,
+            "agreeing_pairs": 119166,
+            "pixel_reads": 364026075
+          },
+          {
+            "status": "ok",
+            "sites": 221368,
+            "valid_sites": 157914,
+            "informative_pairs": 784523,
+            "agreeing_pairs": 507800,
+            "pixel_reads": 2104024170
+          }
+        ],
+        "managed_used": 0,
+        "managed_peak": 62914560
+      },
+      "status": "measured"
+    }
+  ],
+  "scope": "Same eight native4x4 geometric models, full disjoint fitting-cell target domains, clipped mapped source bounds. Explicit neighbor/filter8, contrast.005/minpairs1000, two-million-site/read work caps. Records ordinal evidence, not automatic regional search or copy decisions."
+}

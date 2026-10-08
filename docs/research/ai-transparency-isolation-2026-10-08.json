@@ -1,0 +1,31 @@
+{
+  "scope": "Diagnostic derivatives only. Identical DefaultCMYK profile; disable soft masks or replace non-Normal blend modes with Normal while retaining opacity. Alters artwork semantics; cannot qualify source AI. Third variant removes four type-7 shading draw operations; remaining artwork is compared independently.",
+  "baseline_matched_profile_mean_absolute_channel_error": 1.872880821831474,
+  "variants": [
+    {
+      "mode": "no_softmask",
+      "pdf_sha256": "43aa2ee64a80ab68af60b75a8dce4cd7f71d9ee3e78e2edd5751cefbf2f27d76",
+      "different_pixels": 31131,
+      "max_channel_error": 212,
+      "mean_absolute_channel_error": 2.4886647039227867,
+      "pixels_above_32": 2081
+    },
+    {
+      "mode": "normal_blends",
+      "pdf_sha256": "a0fe6aba9892d7808ca60359a951f3e5472869fc952b888ecdaaba8345884071",
+      "different_pixels": 30253,
+      "max_channel_error": 212,
+      "mean_absolute_channel_error": 1.8576650550558662,
+      "pixels_above_32": 1346
+    },
+    {
+      "mode": "no_tensor_mesh",
+      "removed_type7_draws": 4,
+      "pdf_sha256": "d6a96b180871c18f8864b741e49661b2279bfdf280bc66b08199d7d3f4af7445",
+      "different_pixels": 9308,
+      "max_channel_error": 188,
+      "mean_absolute_channel_error": 1.0991815898225428,
+      "pixels_above_32": 767
+    }
+  ]
+}

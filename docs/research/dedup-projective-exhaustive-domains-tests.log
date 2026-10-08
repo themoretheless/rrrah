@@ -1,0 +1,50 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: unused variable: `cancel`
+   --> crates/rrrah-dedup/src/local_index.rs:715:5
+    |
+715 |     cancel: impl Fn() -> bool,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_cancel`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-dedup` (lib) generated 1 warning (run `cargo fix --lib -p rrrah-dedup` to apply 1 suggestion)
+    Finished `test` profile [optimized + debuginfo] target(s) in 13.12s
+     Running tests/projective_domains.rs (target/debug/deps/projective_domains-149d7e815fa60078)
+
+running 4 tests
+test supported_horizon_model_is_excluded_from_whole_domains ... ok
+test inverse_horizon_is_rejected_even_when_forward_domain_is_valid ... ok
+test admissible_model_matches_original_and_cancellation_is_atomic ... ok
+test valid_alternative_survives_a_stronger_horizon_consensus ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/projective_exhaustive_domains.rs (target/debug/deps/projective_exhaustive_domains-ff8bf2305b0363ba)
+
+running 3 tests
+test horizon_only_points_and_zero_domains_are_explicit ... ok
+test every_cancel_and_one_short_work_limit_refuse_partial_results ... ok
+test weaker_eligible_model_is_not_hidden_by_stronger_horizon_model ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/projective_geometry.rs (target/debug/deps/projective_geometry-d0822d8b1e5e6358)
+
+running 14 tests
+test perspective_pixels_hdr_edits_horizon_and_cancel ... ok
+test perspective_inverse_grid_catches_unsampled_edit ... ok
+test perspective_mapping_and_permutations ... ok
+test invalid_horizon_and_cancel_checkpoints ... ok
+test full_support_refinement_beats_minimal_hypotheses_on_noisy_points ... ok
+test sampled_projective_cancellation_discards_models_and_retry_is_deterministic ... ok
+test robust_perspective_outliers_budget_and_cancellation ... ok
+test sampled_projective_recovers_large_outlier_set_with_fixed_work ... ok
+test projective_filter_preserves_strict_edits_and_terminal_cancellation ... ok
+test registration_candidates_keep_independent_full_grid_evidence_and_shared_limits ... ok
+test registration_portfolio_admits_shared_work_and_discards_partial_models_on_cancel ... ok
+test perspective_photometric_fit_preserves_unfitted_errors_and_limits ... ok
+test photometric_registration_keeps_geometry_under_affine_encoded_light_change ... ok
+test pixel_registration_reduces_known_offset_and_obeys_terminal_limits ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+

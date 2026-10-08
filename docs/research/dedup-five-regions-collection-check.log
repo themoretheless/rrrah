@@ -1,0 +1,19 @@
+    Checking hayro-interpret v0.7.0 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret)
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+    Checking hayro v0.7.1
+    Checking rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+error[E0308]: mismatched types
+    --> crates/rrrah-dedup/src/local_collection.rs:2352:63
+     |
+2352 |     if comparisons>config.max_total_comparisons || hypotheses>config.max_total_hypotheses || samples>config.max_total_sample_pairs...
+     |                                                    ---------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `u64`, found `usize`
+     |                                                    |
+     |                                                    expected because this is `u64`
+     |
+help: you can convert a `usize` to a `u64` and panic if the converted value doesn't fit
+     |
+2352 |     if comparisons>config.max_total_comparisons || hypotheses>config.max_total_hypotheses.try_into().unwrap() || samples>config.max_total_sample_pairs{return Err(ScanError::Budget);}
+     |                                                                                          ++++++++++++++++++++
+
+For more information about this error, try `rustc --explain E0308`.
+error: could not compile `rrrah-dedup` (lib) due to 1 previous error

@@ -1,0 +1,26 @@
+{
+  "scope": "Metal RAW Bayer bilinear reconstruction of analytical affine color fields",
+  "backend": "Metal Apple M4 Max",
+  "passed": 9,
+  "failed": 0,
+  "ignored": 0,
+  "new_control": {
+    "cfa_patterns": [
+      "RGGB",
+      "BGGR",
+      "GRBG",
+      "GBRG"
+    ],
+    "checked_pixels": 14400,
+    "channel_checks": 43200,
+    "maximum_allowed_rgb8_error": 2,
+    "distinct_green_white_balance": true,
+    "oracle": "Analytical affine source fields and retained independent camera transform; no shader sampler reused"
+  },
+  "log": "/tmp/rrrah-metal-camera-color-affine-20261008.log",
+  "log_sha256": "d244533a2355c529e73e7ca549119e2ada4522deff099b99833291f02a89b56a",
+  "limitations": [
+    "Synthetic affine fields qualify interior bilinear reconstruction only, not arbitrary scene demosaic quality",
+    "Sensor boundary clamping, AHD GPU implementation, physical HDR luminance and all real-camera RAW layouts are not qualified by this control"
+  ]
+}

@@ -1,0 +1,105 @@
+{
+  "status": "complete_native_refinement",
+  "input_hashes": {
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/projective-refinement-work-probe-screen": "5519f549f0a6855b8aa3524fb5d26bfe74abb8fbddfe3576eed2037f062fbf08",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200500.jpg": "55d5ff8935ee354fd0d34e3db8346db2b79047db56d7543ce50617c95e0ba91f",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200501.jpg": "c9f9a86fe25fd5bba47af5130e2fcf441633355cc1d806039c86cc0d5bbde9a3",
+    "docs/research/dedup-screen-filter8.json": "24f2548d742443f4b6dfd8ae2a165174da65fefe84a5785d67fd927a27de7c18",
+    "docs/research/dedup-sift-oracle-geometry.json": "11c4daf3fcec605439279468326f8a1a220c2f675ea481a60ebee789e532f4f3",
+    "docs/research/dedup-sift-oracle-geometry-audit.json": "1c63ce889df3e68572cc84c35d18575c059bcd2fe2e187373226ee189c326ccb",
+    "docs/research/dedup-screen-original-refinement-work-input.txt": "2f8f6dd1732e7f17098600e6b51922898373db9e45326e01bccbc9af5c8dceac",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-screen-original-refinement-work.py": "d44910dcfe198f126e4379d568dfb18710c4fb310c755e2d0658baeced873db1",
+    "crates/rrrah-dedup/examples/projective_refinement_work_probe.rs": "74bd9243d00e8f428c6c3ba9fff6cdf5a486bf6e0f401cd83f60647f89e3448e",
+    "crates/rrrah-dedup/src/warp.rs": "1dee5d40b8fa2e4e4b9afb2f8899c64083f404686de6e08da476467c0ed57991"
+  },
+  "required_models": 2,
+  "registration_policy": {
+    "radius": 8,
+    "stride": 16,
+    "rounds": 16,
+    "max_sample_pairs": 180000000
+  },
+  "scope": "Original-resolution native pixel-based planar refinement of baseline and first SIFT model. Encoded fitted objective with unchanged gain/offset bounds, original final residual thresholds unchanged. No final acceptance, broad precision or complete allocation bound.",
+  "returncode": 0,
+  "stdout": "{\"status\":\"ok\",\"models\":[{\"initial\":[[0.04441793320268112, 0.6117250532426258, -414.4972910349516], [-0.5945530762879715, -0.010987752467103077, 1389.9820031340582], [7.815391532773926e-5, -8.755872165457562e-5, 0.9428672030801006]],\"refined\":[[2.413323735063919e-8, 3.3807010951464545e-7, -0.00022571667563645622], [-3.324850900806455e-7, -5.396891789105284e-9, 0.0007765532139336723], [4.868459115125547e-11, -4.7922453011189565e-11, 5.189144706225593e-7]]},{\"initial\":[[0.05822958979255827, 0.6499942365858253, -480.2412588879142], [-0.5826119404674589, 0.03580699866381392, 1318.7591730914833], [0.00013507855812889435, 8.351978017392844e-5, 0.657612202854362]],\"refined\":[[3.0844840859609273e-8, 3.3153478104447763e-7, -0.00024546230434280725], [-2.984787772672928e-7, 1.7624885277729643e-8, 0.0006764866633587375], [7.633860015341972e-11, 4.0610070590382705e-11, 3.284527983559988e-7]]}],\"managed_used\":0,\"managed_peak\":118947840}\n",
+  "stderr": "",
+  "evidence": {
+    "status": "ok",
+    "models": [
+      {
+        "initial": [
+          [
+            0.04441793320268112,
+            0.6117250532426258,
+            -414.4972910349516
+          ],
+          [
+            -0.5945530762879715,
+            -0.010987752467103077,
+            1389.9820031340582
+          ],
+          [
+            7.815391532773926e-05,
+            -8.755872165457562e-05,
+            0.9428672030801006
+          ]
+        ],
+        "refined": [
+          [
+            2.413323735063919e-08,
+            3.3807010951464545e-07,
+            -0.00022571667563645622
+          ],
+          [
+            -3.324850900806455e-07,
+            -5.396891789105284e-09,
+            0.0007765532139336723
+          ],
+          [
+            4.868459115125547e-11,
+            -4.7922453011189565e-11,
+            5.189144706225593e-07
+          ]
+        ]
+      },
+      {
+        "initial": [
+          [
+            0.05822958979255827,
+            0.6499942365858253,
+            -480.2412588879142
+          ],
+          [
+            -0.5826119404674589,
+            0.03580699866381392,
+            1318.7591730914833
+          ],
+          [
+            0.00013507855812889435,
+            8.351978017392844e-05,
+            0.657612202854362
+          ]
+        ],
+        "refined": [
+          [
+            3.0844840859609273e-08,
+            3.3153478104447763e-07,
+            -0.00024546230434280725
+          ],
+          [
+            -2.984787772672928e-07,
+            1.7624885277729643e-08,
+            0.0006764866633587375
+          ],
+          [
+            7.633860015341972e-11,
+            4.0610070590382705e-11,
+            3.284527983559988e-07
+          ]
+        ]
+      }
+    ],
+    "managed_used": 0,
+    "managed_peak": 118947840
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "scope": "Test-only native solid PDF replay; invalid soft-mask transfer declarations",
+  "passed": 110,
+  "failed": 0,
+  "ignored": 9,
+  "filtered": 1,
+  "seconds": 2.72,
+  "log": "/tmp/rrrah-native-invalid-mask-transfer-controls.log",
+  "checks": [
+    "Invalid declarations remain explicit and refuse native replay instead of using identity",
+    "Identity preserves valid replay",
+    "Refusal and successful output release all replay credit"
+  ],
+  "limitations": [
+    "Not production AI qualification or Metal compositor integration"
+  ]
+}

@@ -1,0 +1,97 @@
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/.codex/tmp/rrrah-dedup-result-growth-snapshot-20261008/crates/rrrah-dedup)
+warning: method `search_reflected` is never used
+   --> crates/rrrah-dedup/examples/../../../docs/research/dedup-gradient-index-before-bounded-result-growth.rs:100:12
+    |
+ 27 | impl<'a> GradientDescriptorIndex<'a> {
+    | ------------------------------------ method in this implementation
+...
+100 |     pub fn search_reflected(
+    |            ^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `gradient_file_pairs` is never used
+   --> crates/rrrah-dedup/examples/../../../docs/research/dedup-gradient-index-before-bounded-result-growth.rs:198:8
+    |
+198 | pub fn gradient_file_pairs(
+    |        ^^^^^^^^^^^^^^^^^^^
+
+warning: struct `GradientFilePairReport` is never constructed
+   --> crates/rrrah-dedup/examples/../../../docs/research/dedup-gradient-index-before-bounded-result-growth.rs:223:12
+    |
+223 | pub struct GradientFilePairReport {
+    |            ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `gradient_file_pair_report` is never used
+   --> crates/rrrah-dedup/examples/../../../docs/research/dedup-gradient-index-before-bounded-result-growth.rs:230:8
+    |
+230 | pub fn gradient_file_pair_report(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `gradient_file_pair_report_with_reflection` is never used
+   --> crates/rrrah-dedup/examples/../../../docs/research/dedup-gradient-index-before-bounded-result-growth.rs:246:8
+    |
+246 | pub fn gradient_file_pair_report_with_reflection(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `gradient_file_pair_report_selected` is never used
+   --> crates/rrrah-dedup/examples/../../../docs/research/dedup-gradient-index-before-bounded-result-growth.rs:261:4
+    |
+261 | fn gradient_file_pair_report_selected(
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: method `search_reflected` is never used
+   --> crates/rrrah-dedup/examples/../src/gradient_index.rs:100:12
+    |
+ 27 | impl<'a> GradientDescriptorIndex<'a> {
+    | ------------------------------------ method in this implementation
+...
+100 |     pub fn search_reflected(
+    |            ^^^^^^^^^^^^^^^^
+
+warning: function `gradient_file_pairs` is never used
+   --> crates/rrrah-dedup/examples/../src/gradient_index.rs:203:8
+    |
+203 | pub fn gradient_file_pairs(
+    |        ^^^^^^^^^^^^^^^^^^^
+
+warning: struct `GradientFilePairReport` is never constructed
+   --> crates/rrrah-dedup/examples/../src/gradient_index.rs:228:12
+    |
+228 | pub struct GradientFilePairReport {
+    |            ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `gradient_file_pair_report` is never used
+   --> crates/rrrah-dedup/examples/../src/gradient_index.rs:235:8
+    |
+235 | pub fn gradient_file_pair_report(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `gradient_file_pair_report_with_reflection` is never used
+   --> crates/rrrah-dedup/examples/../src/gradient_index.rs:251:8
+    |
+251 | pub fn gradient_file_pair_report_with_reflection(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `gradient_file_pair_report_selected` is never used
+   --> crates/rrrah-dedup/examples/../src/gradient_index.rs:266:4
+    |
+266 | fn gradient_file_pair_report_selected(
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `rrrah-dedup` (example "gradient_index_result_growth_bench") generated 12 warnings
+    Finished `dev` profile [optimized + debuginfo] target(s) in 7.76s

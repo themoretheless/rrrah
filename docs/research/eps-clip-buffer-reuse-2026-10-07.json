@@ -1,0 +1,18 @@
+{
+  "date": "2026-10-07",
+  "change": "Reuse mutable sample coverage buffer for EPS clip intersections; remove full-frame second allocation and copy after paint-mask construction",
+  "removed_transient_bytes": "8 * width * height per clipped paint during initial mask handoff",
+  "scope": "Subsequent clip mask still needs its own buffer; no general peak-memory or measured latency reduction claimed",
+  "validation": {
+    "decoder_passed": 957,
+    "decoder_ignored": 65,
+    "metal_lifecycle_passed": 1,
+    "independent_clip_cases": 10,
+    "exact_metal_pixels": 10240,
+    "logs": [
+      "/tmp/rrrah-eps-clip-buffer-reuse.log",
+      "/tmp/rrrah-eps-clip-buffer-metal.log"
+    ]
+  },
+  "status": "local, not pushed"
+}

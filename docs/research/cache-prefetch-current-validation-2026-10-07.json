@@ -1,0 +1,85 @@
+{
+  "scope": "Current cache and directional prefetch regression validation",
+  "date": "2026-10-07",
+  "cache": {
+    "unit_passed": 124,
+    "stress_passed": 5,
+    "failed": 0,
+    "ignored": 0,
+    "log": "/tmp/rrrah-cache-current-validation.log",
+    "coverage": [
+      "Independent RAM/disk byte, count, TTL and queue limits",
+      "Atomic combined limits with visible pins and leases",
+      "Pressure restore refusal retaining swap for retry",
+      "Cancellation releasing partial buffers and pending queue owners",
+      "Idle and continuously active TTL worker cleanup",
+      "Replacement races and concurrent restore budget accounting",
+      "Deterministic weighted LRU model with 50000 operations"
+    ]
+  },
+  "prefetch": {
+    "passed": 24,
+    "ignored": 6,
+    "filtered": 159,
+    "failed": 0,
+    "log": "/tmp/rrrah-prefetch-current-validation.log",
+    "coverage": [
+      "Forward/backward bounded windows and gallery edges",
+      "Byte and count priority under missing files",
+      "Shared memory pressure and recovery",
+      "Mixed gallery direction reversals",
+      "Worker lifetime cancellation and debounce"
+    ]
+  },
+  "limitations": [
+    "Filtered and ignored tests are not counted as passing.",
+    "These tests do not establish full large-collection, slow-disk, sustained-pressure or physical HDR/NVIDIA qualification.",
+    "Full 100-format correctness remains incomplete."
+  ],
+  "real_source_followup": {
+    "cr3": {
+      "passed": 8,
+      "failed": 0,
+      "log": "/tmp/rrrah-prefetch-real-cr3-validation.log",
+      "newly_exercised_ignored": 3
+    },
+    "ai": {
+      "passed": 1,
+      "failed": 0,
+      "log": "/tmp/rrrah-prefetch-real-ai-validation.log"
+    },
+    "navigation_reversal": {
+      "passed": 1,
+      "failed": 0,
+      "log": "/tmp/rrrah-prefetch-reversal-validation.log"
+    },
+    "remaining_unrun": "SRF and authored EIP prefetch tests were excluded from these runs."
+  },
+  "all_prefetch_followup": {
+    "passed": 30,
+    "failed": 0,
+    "ignored": 0,
+    "filtered": 159,
+    "log": "/tmp/rrrah-prefetch-all-real-validation.log",
+    "sources": [
+      {
+        "path": "/tmp/rrrah-sony-f828.srf",
+        "sha256": "07739f94bcab0c7e198d418ac65172d0dce04bb84a7683ecffd0bfe4b32f6d79"
+      },
+      {
+        "path": "/tmp/rrrah-app-first.eip",
+        "sha256": "c78041f5bcb2cd0935cad10da6b311ce5f239c62407060046037ad2bb28c3c06"
+      },
+      {
+        "path": "/tmp/rrrah-app-second.eip",
+        "sha256": "23e5e130e0a14c78bc661166a2c785ec4ea7df1782b9ac9bb32b89759a659cda"
+      }
+    ],
+    "verified": [
+      "Missing SRF neighbour does not consume retained-entry count",
+      "EIP forward/backward prefetch preserves every sensor sample and metadata",
+      "Equal-sized equal-mtime EIP packages have separate complete-package fingerprint keys",
+      "EIP one-entry disk limit and shared memory return-to-zero"
+    ]
+  }
+}

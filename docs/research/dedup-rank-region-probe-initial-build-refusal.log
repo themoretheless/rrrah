@@ -1,0 +1,44 @@
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+error[E0603]: struct `DecodeSourceSnapshot` is private
+  --> crates/rrrah-dedup/examples/rank_region_probe.rs:3:14
+   |
+ 3 |     decode::{DecodeSourceSnapshot, decode_selected_frame_bounded},
+   |              ^^^^^^^^^^^^^^^^^^^^ private struct
+   |
+note: the struct `DecodeSourceSnapshot` is defined here
+  --> crates/rrrah-dedup/src/decode.rs:12:1
+   |
+12 | pub(crate) struct DecodeSourceSnapshot {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0282]: type annotations needed
+  --> crates/rrrah-dedup/examples/rank_region_probe.rs:21:17
+   |
+21 |             let value = v[begin + i];
+   |                 ^^^^^
+22 |             assert!(value.is_finite() && value >= 0. && value <= f64::from(u32::MAX) && value.fract() == 0.);
+   |                     ----- type must be known at this point
+   |
+help: consider giving `value` an explicit type
+   |
+21 |             let value: /* Type */ = v[begin + i];
+   |                      ++++++++++++
+
+Some errors have detailed explanations: E0282, E0603.
+For more information about an error, try `rustc --explain E0282`.
+error: could not compile `rrrah-dedup` (example "rank_region_probe") due to 2 previous errors

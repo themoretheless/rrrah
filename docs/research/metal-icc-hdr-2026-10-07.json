@@ -1,0 +1,25 @@
+{
+  "scope": "ICC-profiled PNG/TIFF preparation, swap pressure and HDR float Metal readback",
+  "adapter": "Apple M4 Max",
+  "backend": "Metal",
+  "sources": [
+    "tests/fixtures/raster/pattern.profiled.png",
+    "tests/fixtures/raster/pattern.profiled.tif"
+  ],
+  "passed": 1,
+  "failed": 0,
+  "verified": [
+    "ICC transforms into linear sRGB before HDR upload",
+    "Float16 HDR render contains finite RGB values above SDR white after +1-stop exposure",
+    "Shared memory pressure refuses restore without losing disk entry",
+    "ICC profile survives swap byte-for-byte",
+    "Every float16 output bit matches before and after swap",
+    "Managed pixel and GPU credits release to zero"
+  ],
+  "log": "/tmp/rrrah-metal-icc-hdr.log",
+  "limitations": [
+    "Selected profile fixtures, not every ICC profile or source primary encoding",
+    "Does not identify the selected source behind the earlier live-window color-transform refusal",
+    "Offscreen numeric evidence does not measure physical screen luminance/calibration"
+  ]
+}

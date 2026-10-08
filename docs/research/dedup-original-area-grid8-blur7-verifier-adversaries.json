@@ -1,0 +1,51 @@
+{
+  "status": "verified_parser_adversaries",
+  "rejected_cases": [
+    {
+      "case": "invalid_inlier",
+      "rejected": true
+    },
+    {
+      "case": "impossible_pixel_counts",
+      "rejected": true
+    },
+    {
+      "case": "unsupported_acceptance",
+      "rejected": true
+    },
+    {
+      "case": "model_outlier",
+      "rejected": true
+    },
+    {
+      "case": "boolean_managed_used",
+      "rejected": true
+    },
+    {
+      "case": "unreleased_payload",
+      "rejected": true
+    },
+    {
+      "case": "over_budget_peak",
+      "rejected": true
+    },
+    {
+      "case": "changed_region_domain",
+      "rejected": true
+    },
+    {
+      "case": "false_source_pin",
+      "rejected": true
+    },
+    {
+      "case": "raw_output_disagreement",
+      "rejected": true
+    }
+  ],
+  "input_hashes": {
+    "docs/research/dedup-original-area-regions.json": "a10b654e5eaf923b427fa4a80b1bec45c57e8149c9b52fbf82004c4600cc9a8e",
+    "scripts/verify-dedup-original-area-grid8-blur7.py": "3f3bee7fd4bb4dfd9db89a784745cb7ccab4283fc6bceb3ec4704300d65c2e36",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/test-dedup-original-area-grid8-blur7-verifier.py": "4cdb602b233fc88968c5fcc19078793c9e2fbe1cabfe6810658be56e199ec11e"
+  },
+  "scope": "Audit parser control derives from existing area/radius3 native file evidence, not an8x8/radius7 run. Ten corrupted records rejected without publishing audit output."
+}

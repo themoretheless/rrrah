@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-07",
+  "feature": "Sensor prefetch worker classifies every candidate by bounded content before mosaic recipe/cache/decode",
+  "checks": [
+    "ordinary TIFF, TIFF renamed CR3, and authored valid RPF renamed NEF are skipped as rasters",
+    "each plan completes without decode failure, RAW cache store or hit",
+    "managed budget peak remains zero",
+    "disk mosaic cache membership remains zero"
+  ],
+  "evidence": {
+    "log": "/tmp/rrrah-raw-prefetch-content-filter.log",
+    "app_passed": 164,
+    "app_ignored": 24,
+    "test": "raw_worker_skips_rasters_even_with_raw_suffix_without_decoding_failure"
+  },
+  "limits": [
+    "Additional bounded header read for sensor candidates; large-folder latency not benchmarked",
+    "Unknown-extension folder discovery remains incomplete",
+    "No physical CUDA/NVIDIA qualification"
+  ],
+  "status": "local, not pushed"
+}

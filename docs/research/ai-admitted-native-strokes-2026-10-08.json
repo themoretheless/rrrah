@@ -1,0 +1,115 @@
+{
+  "scope": "Test-only real AI native polygon and admitted own-stroke capture/replay; production not qualified",
+  "settings": {
+    "global_contour": true,
+    "canonical_f32": true,
+    "native_polygon": true,
+    "admitted_strokes": true,
+    "tile_edge": 64,
+    "page_deadline_seconds": 30,
+    "admission_limit_bytes": 268435456
+  },
+  "rows": [
+    {
+      "fixture": "VectorApple.ai",
+      "page": 0,
+      "width": 301,
+      "height": 246,
+      "peak_admitted_bytes": 41438586,
+      "final_admitted_bytes": 0,
+      "status": "refused",
+      "capture_failed": true,
+      "events": 1012
+    },
+    {
+      "fixture": "one.ai",
+      "page": 0,
+      "width": 1366,
+      "height": 768,
+      "peak_admitted_bytes": 85453140,
+      "final_admitted_bytes": 0,
+      "status": "refused",
+      "capture_failed": false,
+      "events": 8
+    },
+    {
+      "fixture": "one.ai",
+      "page": 1,
+      "width": 177,
+      "height": 175,
+      "peak_admitted_bytes": 2602956,
+      "final_admitted_bytes": 0,
+      "status": "replayed",
+      "events": 1,
+      "knockout_groups": 0,
+      "whole_replay_ms": 0.28070900000000004,
+      "tile_edge": 64,
+      "tile_replay_ms": 0.319916,
+      "tile_different_pixels": 0,
+      "tile_peak_admitted_bytes": 592920,
+      "tile_retained_comparison_baseline_bytes": 124956
+    }
+  ],
+  "sources": {
+    "VectorApple.ai": "c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06",
+    "one.ai": "97786949c268233a446e1738fb9c2f941e4d109811bd2f972948cdb7a45d64b4"
+  },
+  "diagnostic_test": "1 passed; verifies final memory credit zero even on refused pages, not rendering qualification",
+  "total_test_seconds": 60.0,
+  "conclusion": "Direct stage metadata confirms both complex-page deadlines expired. VectorApple spent 30 seconds in capture, which includes eager soft-mask replay; one.ai page0 captured in 1.42975ms and expired during replay. No production qualification.",
+  "remaining": [
+    "Record capture/replay phase timings and deadline reason",
+    "Reuse admitted row geometry across pixels to remove repeated path scans",
+    "Reduce native strip/join outline preparation cost on complex pages",
+    "Retest all pinned pages and independent oracle before production integration"
+  ],
+  "stage_verified_rows": [
+    {
+      "fixture": "VectorApple.ai",
+      "page": 0,
+      "width": 301,
+      "height": 246,
+      "peak_admitted_bytes": 41438586,
+      "final_admitted_bytes": 0,
+      "status": "refused",
+      "capture_failed": true,
+      "capture_ms": 30000.236334,
+      "capture_deadline_expired": true,
+      "deadline_expired": true,
+      "events": 1012
+    },
+    {
+      "fixture": "one.ai",
+      "page": 0,
+      "width": 1366,
+      "height": 768,
+      "peak_admitted_bytes": 89640560,
+      "final_admitted_bytes": 0,
+      "status": "refused",
+      "capture_failed": false,
+      "capture_ms": 1.42975,
+      "capture_deadline_expired": false,
+      "deadline_expired": true,
+      "events": 8
+    },
+    {
+      "fixture": "one.ai",
+      "page": 1,
+      "width": 177,
+      "height": 175,
+      "peak_admitted_bytes": 2602956,
+      "final_admitted_bytes": 0,
+      "status": "replayed",
+      "events": 1,
+      "knockout_groups": 0,
+      "capture_ms": 0.037583000000000005,
+      "capture_deadline_expired": false,
+      "whole_replay_ms": 0.268708,
+      "tile_edge": 64,
+      "tile_replay_ms": 0.268959,
+      "tile_different_pixels": 0,
+      "tile_peak_admitted_bytes": 592920,
+      "tile_retained_comparison_baseline_bytes": 124956
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "status": "verified_native_collection_request_token_cancellation",
+  "tests": 1,
+  "token_owners": 2,
+  "checkpoints_per_owner": [
+    0,
+    1,
+    1000,
+    10000
+  ],
+  "pins": {
+    "docs/research/dedup-collection-token-snapshot.json": "4141ac53a4571ec6d27acdda865bac57cd70a1bb06cfadb34f52e6869fc6d229",
+    "docs/research/dedup-collection-token-tests.log": "e99ff536b713343cdad400955b3be8157a254a76672ff6bb9ec5d5a2a95812bb"
+  },
+  "scope": "Either request generation cancellation with global signal always false; entry and early/extraction callbacks; typed Cancelled and zero retained credit in all eight cases; entry peak zero. No late request-token, decoder-dependency, Linux or full real collection claim."
+}

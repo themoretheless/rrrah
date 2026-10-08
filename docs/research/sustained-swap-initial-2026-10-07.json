@@ -1,0 +1,19 @@
+{
+  "duration_seconds": 60.398786208,
+  "cycles": 237,
+  "pressure_refusals": 237,
+  "payload_bytes": 262144,
+  "root_limit_bytes": 2097152,
+  "root_peak_bytes": 2097152,
+  "queue_peak_bytes": 262144,
+  "final_managed_bytes": 0,
+  "failed": 0,
+  "log": "/tmp/rrrah-sustained-swap.log",
+  "scope": "Real swap files with codec I/O delayed 2ms per call and capped at 64KiB; full-buffer memory pressure on every restore, exact pixels/metadata and successful retry.",
+  "limitations": [
+    "237 unique objects exercised; 100000-key namespace is not 100000 tested objects.",
+    "One minute is an initial soak, not completed long-duration qualification.",
+    "Injected I/O delays do not reproduce all physical slow-disk semantics.",
+    "No new concurrent navigation or GPU presentation evidence."
+  ]
+}

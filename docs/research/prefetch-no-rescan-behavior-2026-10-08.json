@@ -1,0 +1,22 @@
+{
+  "scope": "Behavioral proof of no directory scan on known gallery navigation",
+  "changes": [
+    "Shared resolver used directly by production worker",
+    "Move bounded neighbour vector into execution rather than clone"
+  ],
+  "new_controls": [
+    "Known nonempty and empty windows use panic-on-scan callback proving scanner is not called",
+    "Unknown 100000-path context scans exactly once and selects exact backward nearest-first seven indices",
+    "Cancelled scan returns no neighbours"
+  ],
+  "passed": 172,
+  "failed": 0,
+  "ignored_external": 26,
+  "log": "/tmp/rrrah-prefetch-no-rescan-proof-20261008.log",
+  "log_sha256": "356658d8e2753704968577bd40d94a2c68d8fc0398bd22ecd8d55c2ff2b1dea6",
+  "limitations": [
+    "Callback-based control does not measure physical UI latency",
+    "Unknown initial context still scans the real filesystem",
+    "26 external application cases not rerun"
+  ]
+}

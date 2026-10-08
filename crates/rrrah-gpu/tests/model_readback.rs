@@ -149,3 +149,57 @@ fn raster_and_model_resources_share_parent_admission() {
     device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
     assert_eq!(parent.used(), 0);
 }
+
+#[test]
+fn model_linear_hdr_target_matches_analytic_material_and_releases_budget() {
+    let instance = common::headless_instance();
+    let adapter = pollster::block_on(common::request_adapter(&instance, &wgpu::RequestAdapterOptions::default())).unwrap();
+    let (device, queue) = pollster::block_on(adapter.request_device(&wgpu::DeviceDescriptor::default())).unwrap();
+    let budget = rrrah_core::MemoryBudget::new(65536);
+    let mut renderer = rrrah_gpu::ModelRenderer::new_with_budget(&device, wgpu::TextureFormat::Rgba16Float, budget.clone());
+    renderer.upload(&device, [[[-1f32, -1., 0.], [1., -1., 0.], [0., 1., 0.]]].into_iter()).unwrap();
+    renderer.resize(&device, [64, 64]).unwrap();
+    renderer.update_view(&queue, 1., 0., 0., 1.);
+    let target = device.create_texture(&wgpu::TextureDescriptor {
+        label: Some("model HDR target"), size: wgpu::Extent3d { width: 64, height: 64, depth_or_array_layers: 1 },
+        mip_level_count: 1, sample_count: 1, dimension: wgpu::TextureDimension::D2,
+        format: wgpu::TextureFormat::Rgba16Float,
+        usage: wgpu::TextureUsages::RENDER_ATTACHMENT | wgpu::TextureUsages::COPY_SRC, view_formats: &[],
+    });
+    let buffer = device.create_buffer(&wgpu::BufferDescriptor { label: None, size: 64 * 64 * 8,
+        usage: wgpu::BufferUsages::COPY_DST | wgpu::BufferUsages::MAP_READ, mapped_at_creation: false });
+    let mut encoder = device.create_command_encoder(&Default::default());
+    renderer.encode(&mut encoder, &target.create_view(&Default::default()));
+    encoder.copy_texture_to_buffer(wgpu::TexelCopyTextureInfo { texture: &target, mip_level: 0, origin: wgpu::Origin3d::ZERO, aspect: wgpu::TextureAspect::All },
+        wgpu::TexelCopyBufferInfo { buffer: &buffer, layout: wgpu::TexelCopyBufferLayout { offset: 0, bytes_per_row: Some(512), rows_per_image: Some(64) } },
+        wgpu::Extent3d { width: 64, height: 64, depth_or_array_layers: 1 });
+    let submitted = queue.submit([encoder.finish()]);
+    let (tx, rx) = std::sync::mpsc::channel();
+    buffer.slice(..).map_async(wgpu::MapMode::Read, move |result| tx.send(result).unwrap());
+    device.poll(wgpu::PollType::Wait { submission_index: Some(submitted), timeout: None }).unwrap();
+    rx.recv().unwrap().unwrap();
+    let mapped = buffer.slice(..).get_mapped_range().unwrap();
+    let pixel = |index: usize| -> [f32; 4] { std::array::from_fn(|channel| {
+        let offset = index * 8 + channel * 2;
+        let bits = u16::from_le_bytes([mapped[offset], mapped[offset + 1]]);
+        let exponent = ((bits >> 10) & 31) as i32;
+        let mantissa = (bits & 1023) as f32;
+        assert_eq!(bits & 0x8000, 0, "expected nonnegative model channel");
+        assert!(exponent < 31, "nonfinite model channel");
+        if exponent == 0 { mantissa * 2f32.powi(-24) }
+        else { (1. + mantissa / 1024.) * 2f32.powi(exponent - 15) }
+    }) };
+    let center = pixel(32 * 64 + 32);
+    let light = 0.2 + 0.8 / 1.34f32.sqrt();
+    for (actual, material) in center[..3].iter().zip([0.45, 0.55, 0.65]) {
+        assert!((actual - material * light).abs() < 0.001, "linear material changed: {center:?}");
+    }
+    assert_eq!(center[3], 1.);
+    let background = pixel(0);
+    for channel in &background[..3] { assert!((channel - 0.018).abs() < 0.0001); }
+    assert_eq!(background[3], 1.);
+    drop(mapped);
+    buffer.unmap();
+    drop(renderer);
+    assert_eq!(budget.used(), 0);
+}

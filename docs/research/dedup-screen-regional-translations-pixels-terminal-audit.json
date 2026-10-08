@@ -1,0 +1,61 @@
+{
+  "status": "verified_native_screen_local_model_pixel_experiments",
+  "verified_models": 4,
+  "summary": [
+    {
+      "target_domain": [
+        160.0,
+        0.0,
+        160.0,
+        120.0
+      ],
+      "outcome": "miss",
+      "local_support_count": 0,
+      "all_region_support_count": 0,
+      "best_eligible_inside_fraction": 0.110546875
+    },
+    {
+      "target_domain": [
+        160.0,
+        120.0,
+        160.0,
+        120.0
+      ],
+      "outcome": "miss",
+      "local_support_count": 0,
+      "all_region_support_count": 0,
+      "best_eligible_inside_fraction": 0.07546875
+    },
+    {
+      "target_domain": [
+        160.0,
+        240.0,
+        160.0,
+        120.0
+      ],
+      "outcome": "miss",
+      "local_support_count": 0,
+      "all_region_support_count": 0,
+      "best_eligible_inside_fraction": 0.03630208333333333
+    },
+    {
+      "target_domain": [
+        320.0,
+        240.0,
+        160.0,
+        120.0
+      ],
+      "outcome": "miss",
+      "local_support_count": 0,
+      "all_region_support_count": 0,
+      "best_eligible_inside_fraction": 0.006009694470642423
+    }
+  ],
+  "input_hashes": {
+    "docs/research/dedup-screen-regional-translations-pixels.json": "86d9d37ba5e67e605a0d4f6728df17c6dc0fd7fdde900c7d0810f739b4ce18c7",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-screen-regional-translations-pixels.py": "e5cddeb5ed06bb1f29248ead07e51b0e577ce93e41c509b68adab14a7592c251",
+    "docs/research/dedup-screen-regional-translations-audit.json": "892c050e28a2e5e740923fa8bef29b63ae9378bd5429cab21c24aea0b7b166ac",
+    "scripts/verify-dedup-scale-similarity-diagnostic.py": "41a4c0583f4a99677e716bae43ed976cfda409703fe2ec6236da3de5d4f897e4"
+  },
+  "scope": "Exact four native local models, input/source/Exif pins, regional original-pixel arithmetic and counts restricted to fitting target rectangles. Refusals retained. No independent resampling, true local geometry, negative precision or production integration proof."
+}
