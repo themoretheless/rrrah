@@ -784,41 +784,40 @@ pub(super) fn apply_list3(
     apply_list3_with_aspect(list, img, cancelled, 1.0)
 }
 
+#[cfg(test)]
 pub(super) fn apply_list3_with_aspect(
     list: &[Opcode],
     img: &mut Rgb32f,
     cancelled: &impl Fn() -> bool,
     pixel_aspect: f64,
 ) -> Result<(), super::DevelopError> {
+    apply_list3_with_clipping(list, img, cancelled, pixel_aspect, None)
+}
+
+/// Transform sensor-clipping provenance with the same per-channel geometry
+/// and nonzero bicubic support as the RGB image. Gain changes never create
+/// sensor-clipping evidence.
+pub(super) fn apply_list3_with_clipping(
+    list: &[Opcode],
+    img: &mut Rgb32f,
+    cancelled: &impl Fn() -> bool,
+    pixel_aspect: f64,
+    mut clipped: Option<&mut [[bool; 3]]>,
+) -> Result<(), super::DevelopError> {
+    if clipped.as_ref().is_some_and(|mask| mask.len() != img.data.len()) {
+        return Err(super::DevelopError::Invalid("warp clipping mask layout"));
+    }
     if list.is_empty() {
         return Ok(());
     }
     let (w, h) = (img.width, img.height);
+    if w.checked_mul(h) != Some(img.data.len()) {
+        return Err(super::DevelopError::Invalid("warp image layout"));
+    }
     for op in list {
         match op {
             Opcode::WarpRectilinear { planes, center } => {
-                if planes.iter().all(|p| *p == [1.0, 0.0, 0.0, 0.0, 0.0, 0.0]) {
-                    continue;
-                }
-                let source = img.data.clone();
-                for y in 0..h {
-                    if cancelled() {
-                        return Err(super::DevelopError::Cancelled);
-                    }
-                    for x in 0..w {
-                        for c in 0..3 {
-                            let coefficients = planes[if planes.len() == 1 { 0 } else { c }];
-                            let point = rectilinear_source_point_with_aspect(
-                                coefficients,
-                                *center,
-                                [w as u32, h as u32],
-                                [x as f64, y as f64],
-                                pixel_aspect,
-                            )?;
-                            img.data[y * w + x][c] = rectilinear_sample(&source, [w, h], point, c)?;
-                        }
-                    }
-                }
+                apply_warp_rectilinear(img, &mut clipped, planes, *center, pixel_aspect, cancelled)?;
             }
             Opcode::WarpFisheye { .. } | Opcode::TrimBounds { .. } | Opcode::Unknown { .. } => {}
             other => {
@@ -826,6 +825,238 @@ pub(super) fn apply_list3_with_aspect(
                 apply_list(std::slice::from_ref(other), &mut flat, w, h, 3, None, 1.0)?;
                 for (d, c) in img.data.iter_mut().zip(flat.as_chunks::<3>().0) {
                     *d = [c[0], c[1], c[2]];
+                }
+            }
+        }
+    }
+    Ok(())
+}
+
+fn apply_warp_rectilinear(
+    img: &mut Rgb32f,
+    clipped: &mut Option<&mut [[bool; 3]]>,
+    planes: &[[f64; 6]],
+    center: [f64; 2],
+    pixel_aspect: f64,
+    cancelled: &impl Fn() -> bool,
+) -> Result<(), super::DevelopError> {
+    if cancelled() {
+        return Err(super::DevelopError::Cancelled);
+    }
+    if planes.iter().all(|p| *p == [1.0, 0.0, 0.0, 0.0, 0.0, 0.0]) {
+        return Ok(());
+    }
+    let (w, h) = (img.width, img.height);
+    let source = img.data.clone();
+    let source_clipped = clipped.as_ref().map(|mask| mask.to_vec());
+
+    let chunk_rows = 32;
+    let num_chunks = h.div_ceil(chunk_rows);
+    let workers = std::thread::available_parallelism()
+        .map_or(1, usize::from)
+        .min(num_chunks)
+        .max(1);
+
+    if workers <= 1 {
+        for y in 0..h {
+            if cancelled() {
+                return Err(super::DevelopError::Cancelled);
+            }
+            warp_row(
+                &source,
+                source_clipped.as_deref(),
+                w,
+                h,
+                planes,
+                center,
+                pixel_aspect,
+                y,
+                &mut img.data[y * w..(y + 1) * w],
+                clipped.as_deref_mut().map(|c| &mut c[y * w..(y + 1) * w]),
+            )?;
+        }
+    } else {
+        use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
+        use std::sync::Mutex;
+
+        let is_cancelled = AtomicBool::new(false);
+        let error: Mutex<Option<super::DevelopError>> = Mutex::new(None);
+        let next = AtomicUsize::new(0);
+
+        let img_slots: Vec<_> = img
+            .data
+            .chunks_mut(chunk_rows * w)
+            .map(|chunk| Mutex::new(Some(chunk)))
+            .collect();
+
+        let clip_slots: Option<Vec<_>> = clipped.as_deref_mut().map(|c| {
+            c.chunks_mut(chunk_rows * w)
+                .map(|chunk| Mutex::new(Some(chunk)))
+                .collect()
+        });
+
+        let do_work = || loop {
+            if is_cancelled.load(Ordering::Relaxed) {
+                break;
+            }
+            let idx = next.fetch_add(1, Ordering::Relaxed);
+            if idx >= num_chunks {
+                break;
+            }
+            let mut img_guard = img_slots[idx].lock().unwrap();
+            let img_chunk = img_guard.take().unwrap();
+            let mut clip_guard = clip_slots.as_ref().map(|s| s[idx].lock().unwrap());
+            let mut clip_chunk = clip_guard.as_mut().and_then(|g| g.take());
+
+            let start_y = idx * chunk_rows;
+            let end_y = (start_y + chunk_rows).min(h);
+            for y in start_y..end_y {
+                let row_in_chunk = y - start_y;
+                let row_dest = &mut img_chunk[row_in_chunk * w..(row_in_chunk + 1) * w];
+                let row_clip = clip_chunk
+                    .as_deref_mut()
+                    .map(|c| &mut c[row_in_chunk * w..(row_in_chunk + 1) * w]);
+                if let Err(e) = warp_row(
+                    &source,
+                    source_clipped.as_deref(),
+                    w,
+                    h,
+                    planes,
+                    center,
+                    pixel_aspect,
+                    y,
+                    row_dest,
+                    row_clip,
+                ) {
+                    let mut err_guard = error.lock().unwrap();
+                    if err_guard.is_none() {
+                        *err_guard = Some(e);
+                    }
+                    is_cancelled.store(true, Ordering::Relaxed);
+                    break;
+                }
+            }
+        };
+
+        std::thread::scope(|scope| {
+            let shared_worker = &do_work;
+            for worker_index in 1..workers {
+                let _ = std::thread::Builder::new()
+                    .name(format!("rrrah-warp-{worker_index}"))
+                    .spawn_scoped(scope, shared_worker);
+            }
+            loop {
+                if cancelled() {
+                    is_cancelled.store(true, Ordering::Relaxed);
+                    break;
+                }
+                let idx = next.fetch_add(1, Ordering::Relaxed);
+                if idx >= num_chunks {
+                    break;
+                }
+                let mut img_guard = img_slots[idx].lock().unwrap();
+                let img_chunk = img_guard.take().unwrap();
+                let mut clip_guard = clip_slots.as_ref().map(|s| s[idx].lock().unwrap());
+                let mut clip_chunk = clip_guard.as_mut().and_then(|g| g.take());
+
+                let start_y = idx * chunk_rows;
+                let end_y = (start_y + chunk_rows).min(h);
+                for y in start_y..end_y {
+                    let row_in_chunk = y - start_y;
+                    let row_dest = &mut img_chunk[row_in_chunk * w..(row_in_chunk + 1) * w];
+                    let row_clip = clip_chunk
+                        .as_deref_mut()
+                        .map(|c| &mut c[row_in_chunk * w..(row_in_chunk + 1) * w]);
+                    if let Err(e) = warp_row(
+                        &source,
+                        source_clipped.as_deref(),
+                        w,
+                        h,
+                        planes,
+                        center,
+                        pixel_aspect,
+                        y,
+                        row_dest,
+                        row_clip,
+                    ) {
+                        let mut err_guard = error.lock().unwrap();
+                        if err_guard.is_none() {
+                            *err_guard = Some(e);
+                        }
+                        is_cancelled.store(true, Ordering::Relaxed);
+                        break;
+                    }
+                }
+            }
+        });
+
+        if let Some(e) = error.lock().unwrap().take() {
+            return Err(e);
+        }
+        if is_cancelled.load(Ordering::Relaxed) || cancelled() {
+            return Err(super::DevelopError::Cancelled);
+        }
+    }
+
+    Ok(())
+}
+
+#[inline]
+fn warp_row(
+    source: &[[f32; 3]],
+    source_clipped: Option<&[[bool; 3]]>,
+    w: usize,
+    h: usize,
+    planes: &[[f64; 6]],
+    center: [f64; 2],
+    pixel_aspect: f64,
+    y: usize,
+    row_dest: &mut [[f32; 3]],
+    mut row_dest_clipped: Option<&mut [[bool; 3]]>,
+) -> Result<(), super::DevelopError> {
+    if planes.len() == 1 {
+        let coefficients = planes[0];
+        for x in 0..w {
+            let point = rectilinear_source_point_with_aspect(
+                coefficients,
+                center,
+                [w as u32, h as u32],
+                [x as f64, y as f64],
+                pixel_aspect,
+            )?;
+            let (indices, weights) = rectilinear_footprint([w, h], point);
+            row_dest[x] = sample_footprint_rgb(source, indices, weights);
+            if let (Some(source_mask), Some(destination)) = (source_clipped, row_dest_clipped.as_deref_mut()) {
+                let mut mask = [false; 3];
+                for (index, &weight) in indices.into_iter().zip(weights) {
+                    if weight != 0.0 {
+                        let sm = source_mask[index];
+                        mask[0] |= sm[0];
+                        mask[1] |= sm[1];
+                        mask[2] |= sm[2];
+                    }
+                }
+                destination[x] = mask;
+            }
+        }
+    } else {
+        for x in 0..w {
+            for c in 0..3 {
+                let coefficients = planes[if planes.len() == 1 { 0 } else { c }];
+                let point = rectilinear_source_point_with_aspect(
+                    coefficients,
+                    center,
+                    [w as u32, h as u32],
+                    [x as f64, y as f64],
+                    pixel_aspect,
+                )?;
+                let (indices, weights) = rectilinear_footprint([w, h], point);
+                row_dest[x][c] = sample_footprint(source, indices, weights, c);
+                if let (Some(source_mask), Some(destination)) = (source_clipped, row_dest_clipped.as_deref_mut()) {
+                    destination[x][c] = indices
+                        .iter()
+                        .zip(weights)
+                        .any(|(&i, &weight)| weight != 0.0 && source_mask[i][c]);
                 }
             }
         }
@@ -864,6 +1095,28 @@ mod gain_map_bounds_tests {
 
 #[cfg(test)]
 mod gain_map_sdk_tests {
+    #[test]
+    #[ignore = "requires HERO9 sensor, gain maps and independent Adobe DNG SDK stage2"]
+    fn hero9_full_sensor_gain_maps_match_independent_stage2() {
+        let root = std::path::PathBuf::from(std::env::var_os("RRRAH_GPR_STAGE2_CORPUS").unwrap());
+        let sensor = std::fs::read(root.join("sensor.u16le")).unwrap();
+        let oracle = std::fs::read(root.join("stage2.u16le")).unwrap();
+        assert_eq!(sensor.len(), 5568 * 4176 * 2);
+        assert_eq!(oracle.len(), sensor.len());
+        let maps = super::parse_list(&std::fs::read(root.join("opcodes.bin")).unwrap()).unwrap();
+        assert_eq!(maps.len(), 4);
+        let mut samples: Vec<f32> = sensor.chunks_exact(2)
+            .map(|b| f32::from(u16::from_le_bytes([b[0], b[1]])) / 16383.0).collect();
+        super::apply_list(&maps, &mut samples, 5568, 4176, 1, None, 1.0).unwrap();
+        let mut maximum = 0.0f32;
+        for (actual, encoded) in samples.iter().zip(oracle.chunks_exact(2)) {
+            let expected = f32::from(u16::from_le_bytes([encoded[0], encoded[1]])) / 65535.0;
+            maximum = maximum.max((actual - expected).abs());
+        }
+        eprintln!("HERO9 stage2: 23251968 samples checked; maximum normalized error={maximum}");
+        assert!(maximum <= 2.0 / 65535.0, "stage2 gain-map mismatch: {maximum}");
+    }
+
     #[test]
     fn spatial_gains_match_independent_dng_sdk_interpolation() {
         let reference = include_bytes!("../../../../tests/fixtures/dng/gain-map-sdk.f32le");
@@ -1065,6 +1318,7 @@ static WARP_WEIGHTS: std::sync::LazyLock<[[f32; 16]; 1024]> = std::sync::LazyLoc
     })
 });
 /// Sample normalized RGB with the DNG 32-phase bicubic kernel and repeated edge pixels.
+#[cfg(test)]
 pub fn rectilinear_sample(
     source: &[[f32; 3]],
     extent: [usize; 2],
@@ -1080,25 +1334,49 @@ pub fn rectilinear_sample(
     {
         return Err(super::DevelopError::Invalid("invalid warp sampling layout"));
     }
+    let (indices, weights) = rectilinear_footprint(extent, point);
+    Ok(sample_footprint(source,indices,weights,channel))
+}
+
+fn sample_footprint(source: &[[f32; 3]], indices: [usize; 16], weights: &[f32; 16], channel: usize) -> f32 {
+    let mut total = 0.0_f32;
+    for (index, weight) in indices.into_iter().zip(weights) {
+        total += weight * source[index][channel];
+    }
+    total.clamp(0.0, 1.0)
+}
+
+#[inline]
+fn sample_footprint_rgb(source: &[[f32; 3]], indices: [usize; 16], weights: &[f32; 16]) -> [f32; 3] {
+    let mut total = [0.0_f32; 3];
+    for (index, &weight) in indices.into_iter().zip(weights) {
+        let s = source[index];
+        total[0] += weight * s[0];
+        total[1] += weight * s[1];
+        total[2] += weight * s[2];
+    }
+    [
+        total[0].clamp(0.0, 1.0),
+        total[1].clamp(0.0, 1.0),
+        total[2].clamp(0.0, 1.0),
+    ]
+}
+
+// Called only after the public sampler/geometry has validated its layout.
+fn rectilinear_footprint(extent: [usize; 2], point: [f64; 2]) -> ([usize; 16], &'static [f32; 16]) {
+    let [w, h] = extent;
     let px = point[0].clamp(-2.0, w as f64 + 1.0);
     let py = point[1].clamp(-2.0, h as f64 + 1.0);
-    let floor_x = px.floor();
-    let floor_y = py.floor();
-    let bx = floor_x as isize;
-    let by = floor_y as isize;
-    let fx = ((px - floor_x) * 32.0) as usize;
-    let fy = ((py - floor_y) * 32.0) as usize;
-    let weights = &WARP_WEIGHTS[fy * 32 + fx];
-    let columns: [usize; 4] =
-        std::array::from_fn(|x| (bx + x as isize - 1).clamp(0, w as isize - 1) as usize);
-    let mut total = 0.0f32;
-    for y in 0..4 {
-        let row = (by + y as isize - 1).clamp(0, h as isize - 1) as usize * w;
-        for x in 0..4 {
-            total += weights[y * 4 + x] * source[row + columns[x]][channel];
-        }
-    }
-    Ok(total.clamp(0.0, 1.0))
+    let bx = px.floor() as isize;
+    let by = py.floor() as isize;
+    let fx = ((px - px.floor()) * 32.0) as usize;
+    let fy = ((py - py.floor()) * 32.0) as usize;
+    let indices = std::array::from_fn(|i| {
+        let x = (bx + (i % 4) as isize - 1).clamp(0, w as isize - 1) as usize;
+        let y = (by + (i / 4) as isize - 1).clamp(0, h as isize - 1) as usize;
+        y * w + x
+    });
+    (indices, &WARP_WEIGHTS[fy * 32 + fx])
 }
 
 #[cfg(test)]
@@ -1387,5 +1665,96 @@ mod aspect_warp_sdk_tests {
                 .is_err()
             );
         }
+    }
+}
+
+#[cfg(test)]
+mod clipping_warp_tests {
+    use super::*;
+    fn image() -> Rgb32f {
+        Rgb32f {
+            width: 8,
+            height: 8,
+            data: vec![[0.0; 3]; 64],
+        }
+    }
+    #[test]
+    fn clipped_source_moves_to_destination_instead_of_staying_on_sensor() {
+        let mut rgb = image();
+        rgb.data[2 * 8 + 2] = [1.0; 3];
+        let mut mask = vec![[false; 3]; 64];
+        mask[2 * 8 + 2] = [true; 3];
+        let op = Opcode::WarpRectilinear {
+            planes: vec![[2.0, 0.0, 0.0, 0.0, 0.0, 0.0]],
+            center: [0.5; 2],
+        };
+        apply_list3_with_clipping(&[op], &mut rgb, &|| false, 1.0, Some(&mut mask)).unwrap();
+        assert_eq!(rgb.data[3 * 8 + 3], [1.0; 3]);
+        assert_eq!(mask[3 * 8 + 3], [true; 3]);
+        assert_eq!(rgb.data[2 * 8 + 2], [0.0; 3]);
+        assert_eq!(mask[2 * 8 + 2], [false; 3]);
+    }
+    #[test]
+    fn highlight_recovery_uses_warped_saturated_green_location() {
+        let mut rgb = image();
+        rgb.data.fill([0.25, 0.5, 0.25]);
+        rgb.data[2 * 8 + 2] = [0.7, 1.0, 0.7];
+        let mut mask = vec![[false; 3]; 64];
+        mask[2 * 8 + 2][1] = true;
+        let op = Opcode::WarpRectilinear {
+            planes: vec![[2.0, 0.0, 0.0, 0.0, 0.0, 0.0]],
+            center: [0.5; 2],
+        };
+        apply_list3_with_clipping(&[op], &mut rgb, &|| false, 1.0, Some(&mut mask)).unwrap();
+        for p in &mut rgb.data {
+            p[0] *= 2.0;
+            p[2] *= 2.0;
+        }
+        super::super::highlight::reconstruct(&mut rgb, [2.0, 1.0, 2.0], 0.999, &mask);
+        for value in rgb.data[3 * 8 + 3] {
+            assert!((value - 1.4).abs() < 1e-6, "warped neutral highlight {value}");
+        }
+        assert_eq!(rgb.data[2 * 8 + 2], [0.5; 3]);
+    }
+
+    #[test]
+    fn distinct_channel_geometry_keeps_channel_specific_clipping() {
+        let mut rgb = image();
+        rgb.data[2 * 8 + 2] = [1.0; 3];
+        let mut mask = vec![[false; 3]; 64];
+        mask[2 * 8 + 2] = [true; 3];
+        let op = Opcode::WarpRectilinear {
+            planes: [2.0, 1.0, 0.5].map(|k| [k, 0.0, 0.0, 0.0, 0.0, 0.0]).to_vec(),
+            center: [0.5; 2],
+        };
+        apply_list3_with_clipping(&[op], &mut rgb, &|| false, 1.0, Some(&mut mask)).unwrap();
+        assert_eq!(mask[3 * 8 + 3][0], true);
+        assert_eq!(mask[2 * 8 + 2][0], false);
+        assert_eq!(mask[2 * 8 + 2][1], true);
+        assert_eq!(mask[3 * 8 + 3][1], false);
+        assert_eq!(mask[0][2], true);
+        assert_eq!(mask[2 * 8 + 2][2], false);
+    }
+    #[test]
+    fn identity_and_cancel_preserve_clipping_provenance() {
+        let mut rgb = image();
+        let mut mask = vec![[false; 3]; 64];
+        mask[7] = [true, false, true];
+        let original = mask.clone();
+        let identity = Opcode::WarpRectilinear {
+            planes: vec![[1.0, 0.0, 0.0, 0.0, 0.0, 0.0]],
+            center: [0.5; 2],
+        };
+        apply_list3_with_clipping(&[identity], &mut rgb, &|| false, 1.0, Some(&mut mask)).unwrap();
+        assert_eq!(mask, original);
+        let warp = Opcode::WarpRectilinear {
+            planes: vec![[2.0, 0.0, 0.0, 0.0, 0.0, 0.0]],
+            center: [0.5; 2],
+        };
+        assert!(matches!(
+            apply_list3_with_clipping(&[warp], &mut rgb, &|| true, 1.0, Some(&mut mask)),
+            Err(super::super::DevelopError::Cancelled)
+        ));
+        assert_eq!(mask, original);
     }
 }

@@ -1176,7 +1176,7 @@ fn decode_scan(
 ) -> Result<(Marker, usize), LosslessJpegError> {
     let width = usize::from(frame.width);
     let height = usize::from(frame.height);
-    let mcu_count = width
+    let _mcu_count = width
         .checked_mul(height)
         .ok_or(LosslessJpegError::SampleCountOverflow)?;
     if restart_interval != 0 && !restart_interval.is_multiple_of(width) {
@@ -1194,44 +1194,47 @@ fn decode_scan(
     let mut interval_start_mcu = 0usize;
     let mut interval_start_row = 0usize;
 
-    for mcu in 0..mcu_count {
-        let x = mcu % width;
-        let y = mcu / width;
-        if (x == 0 || mcu.is_multiple_of(CANCELLATION_MCU_GRANULARITY)) && cancelled() {
-            return Err(LosslessJpegError::Cancelled { row: y });
-        }
-        if restart_interval != 0 && mcu != 0 && mcu.is_multiple_of(restart_interval) {
-            let marker = entropy.finish_marker()?;
-            let expected = RST0 + expected_restart;
-            if marker.code != expected {
-                return Err(LosslessJpegError::UnexpectedRestart {
-                    expected: expected_restart,
-                    actual: marker.code,
-                    offset: marker.offset,
-                });
+    let mut mcu = 0_usize;
+    for y in 0..height {
+        for x in 0..width {
+            if (x == 0 || mcu.is_multiple_of(CANCELLATION_MCU_GRANULARITY)) && cancelled() {
+                return Err(LosslessJpegError::Cancelled { row: y });
             }
-            expected_restart = (expected_restart + 1) & 7;
-            interval_start_mcu = mcu;
-            interval_start_row = y;
-        }
+            if restart_interval != 0 && mcu != 0 && mcu.is_multiple_of(restart_interval) {
+                let marker = entropy.finish_marker()?;
+                let expected = RST0 + expected_restart;
+                if marker.code != expected {
+                    return Err(LosslessJpegError::UnexpectedRestart {
+                        expected: expected_restart,
+                        actual: marker.code,
+                        offset: marker.offset,
+                    });
+                }
+                expected_restart = (expected_restart + 1) & 7;
+                interval_start_mcu = mcu;
+                interval_start_row = y;
+            }
 
-        for component in &scan.components {
-            let table = huffman_tables[usize::from(component.table_id)].as_ref().ok_or(
-                LosslessJpegError::MissingHuffmanTable {
-                    table_id: component.table_id,
-                },
-            )?;
-            let category = table.decode_symbol(&mut entropy)?;
-            let difference = decode_difference(category, &mut entropy)?;
-            let sample_index = mcu
+            let mcu_base = mcu
                 .checked_mul(frame_components)
-                .and_then(|index| index.checked_add(component.frame_index))
                 .ok_or(LosslessJpegError::SampleCountOverflow)?;
-            let predictor = if mcu == interval_start_mcu {
-                initial_predictor
-            } else if y == interval_start_row {
-                i32::from(samples[sample_index - frame_components])
-            } else if x == 0 {
+
+            for component in &scan.components {
+                let table = huffman_tables[usize::from(component.table_id)].as_ref().ok_or(
+                    LosslessJpegError::MissingHuffmanTable {
+                        table_id: component.table_id,
+                    },
+                )?;
+                let category = table.decode_symbol(&mut entropy)?;
+                let difference = decode_difference(category, &mut entropy)?;
+                let sample_index = mcu_base
+                    .checked_add(component.frame_index)
+                    .ok_or(LosslessJpegError::SampleCountOverflow)?;
+                let predictor = if mcu == interval_start_mcu {
+                    initial_predictor
+                } else if y == interval_start_row {
+                    i32::from(samples[sample_index - frame_components])
+                } else if x == 0 {
                 i32::from(samples[sample_index - width * frame_components])
             } else {
                 let left = i32::from(samples[sample_index - frame_components]);
@@ -1253,7 +1256,9 @@ fn decode_scan(
             samples[sample_index] =
                 u16::try_from(reconstructed).map_err(|_| LosslessJpegError::SampleCountOverflow)?;
         }
+        mcu += 1;
     }
+}
 
     if dcs_tail
         && entropy.bit_count == 11

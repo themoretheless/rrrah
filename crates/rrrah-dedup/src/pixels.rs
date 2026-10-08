@@ -50,20 +50,25 @@ impl Fingerprint {
     /// A caller must qualify thresholds with positive and negative fixtures.
     pub fn compare(&self, other: &Self, allow_transforms: bool) -> Comparison {
         let count = if allow_transforms { 8 } else { 1 };
-        let (distance, right_transform) = (0..count)
-            .map(|index| {
-                let distance = self.variants[0]
-                    .iter()
-                    .zip(other.variants[index])
-                    .map(|(&a, b)| (a ^ b).count_ones())
-                    .sum();
-                (distance, index)
-            })
-            .min()
-            .unwrap_or((0, 0));
+        let v0 = self.variants[0];
+        let mut min_distance = u32::MAX;
+        let mut best_transform = 0;
+        for (index, vi) in other.variants[..count].iter().enumerate() {
+            let distance = (v0[0] ^ vi[0]).count_ones()
+                + (v0[1] ^ vi[1]).count_ones()
+                + (v0[2] ^ vi[2]).count_ones()
+                + (v0[3] ^ vi[3]).count_ones();
+            if distance < min_distance {
+                min_distance = distance;
+                best_transform = index;
+                if min_distance == 0 {
+                    break;
+                }
+            }
+        }
         Comparison {
-            distance,
-            right_transform,
+            distance: if min_distance == u32::MAX { 0 } else { min_distance },
+            right_transform: best_transform,
             informative: self.luminance_stddev > 0.001 && other.luminance_stddev > 0.001,
         }
     }

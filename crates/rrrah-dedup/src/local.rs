@@ -56,6 +56,30 @@ pub fn extract(
     extract_selected(image, policy, None, &cancel, false)
 }
 
+/// Native corner/BRIEF extraction with an independent quota per spatial cell.
+/// Uses the same score ordering and suppression as `extract`; it performs no
+/// orientation reassignment. Grid admission precedes image allocation.
+///
+/// # Errors
+/// Invalid grid/policy, pixel/candidate/feature budgets or cancellation.
+pub fn extract_spatial(
+    image: &LinearRgbaView<'_>,
+    policy: LocalPolicy,
+    columns: usize,
+    rows: usize,
+    max_per_cell: usize,
+    cancel: impl Fn() -> bool,
+) -> Result<Vec<Feature>, LocalError> {
+    if columns == 0 || rows == 0 || max_per_cell == 0 {
+        return Err(LocalError::Invalid);
+    }
+    let cells = columns.checked_mul(rows).ok_or(LocalError::Budget)?;
+    if cells > policy.max_features {
+        return Err(LocalError::Budget);
+    }
+    extract_selected(image, policy, Some((columns, rows, max_per_cell)), &cancel, false)
+}
+
 /// Spatial quotas bound how many strong corners one region can contribute.
 /// Cells are normalized to image dimensions; source coordinates and BRIEF
 /// semantics are unchanged. Geometry/pixels must still confirm candidates.
@@ -303,12 +327,17 @@ pub fn match_features(
             );
             for av in left_variants {
                 for bv in std::iter::once(&b.descriptor).chain(&b.quarter_turns) {
-                    distance = distance.min(
-                        av.iter()
-                            .zip(bv)
-                            .map(|(&a, &b)| (a ^ b).count_ones())
-                            .sum::<u32>(),
-                    );
+                    let d = (av[0] ^ bv[0]).count_ones()
+                        + (av[1] ^ bv[1]).count_ones()
+                        + (av[2] ^ bv[2]).count_ones()
+                        + (av[3] ^ bv[3]).count_ones();
+                    distance = distance.min(d);
+                    if distance == 0 {
+                        break;
+                    }
+                }
+                if distance == 0 {
+                    break;
                 }
             }
             update(&mut l[i], distance, j);

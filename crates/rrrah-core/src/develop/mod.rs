@@ -129,6 +129,178 @@ fn quality_cfa(pattern: &CfaPattern) -> Result<Cfa, DevelopError> {
     })
 }
 
+fn compute_clipping_mask(
+    samples: &[f32],
+    w: usize,
+    h: usize,
+    cfa: &Cfa,
+    cancelled: &impl Fn() -> bool,
+) -> Result<Vec<[bool; 3]>, DevelopError> {
+    let n = w * h;
+    let mut clipped = vec![[false; 3]; n];
+    if w == 0 || h == 0 {
+        return Ok(clipped);
+    }
+
+    let chunk_rows = 64;
+    let num_chunks = h.div_ceil(chunk_rows);
+    let workers = std::thread::available_parallelism()
+        .map_or(1, usize::from)
+        .min(num_chunks)
+        .max(1);
+
+    if workers <= 1 {
+        for y in 0..h {
+            if cancelled() {
+                return Err(DevelopError::Cancelled);
+            }
+            compute_clipping_mask_row(samples, w, h, cfa, y, &mut clipped[y * w..(y + 1) * w]);
+        }
+    } else {
+        use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
+        use std::sync::Mutex;
+
+        let is_cancelled = AtomicBool::new(false);
+        let next = AtomicUsize::new(0);
+        let slots: Vec<_> = clipped
+            .chunks_mut(chunk_rows * w)
+            .map(|chunk| Mutex::new(Some(chunk)))
+            .collect();
+
+        let do_work = || loop {
+            if is_cancelled.load(Ordering::Relaxed) {
+                break;
+            }
+            let idx = next.fetch_add(1, Ordering::Relaxed);
+            if idx >= slots.len() {
+                break;
+            }
+            let mut guard = slots[idx].lock().unwrap();
+            let chunk = guard.take().unwrap();
+            let start_y = idx * chunk_rows;
+            let end_y = (start_y + chunk_rows).min(h);
+            for y in start_y..end_y {
+                let row_in_chunk = y - start_y;
+                compute_clipping_mask_row(
+                    samples,
+                    w,
+                    h,
+                    cfa,
+                    y,
+                    &mut chunk[row_in_chunk * w..(row_in_chunk + 1) * w],
+                );
+            }
+        };
+
+        std::thread::scope(|scope| {
+            let shared_worker = &do_work;
+            for worker_index in 1..workers {
+                let _ = std::thread::Builder::new()
+                    .name(format!("rrrah-clip-{worker_index}"))
+                    .spawn_scoped(scope, shared_worker);
+            }
+            loop {
+                if cancelled() {
+                    is_cancelled.store(true, Ordering::Relaxed);
+                    break;
+                }
+                let idx = next.fetch_add(1, Ordering::Relaxed);
+                if idx >= slots.len() {
+                    break;
+                }
+                let mut guard = slots[idx].lock().unwrap();
+                let chunk = guard.take().unwrap();
+                let start_y = idx * chunk_rows;
+                let end_y = (start_y + chunk_rows).min(h);
+                for y in start_y..end_y {
+                    let row_in_chunk = y - start_y;
+                    compute_clipping_mask_row(
+                        samples,
+                        w,
+                        h,
+                        cfa,
+                        y,
+                        &mut chunk[row_in_chunk * w..(row_in_chunk + 1) * w],
+                    );
+                }
+            }
+        });
+
+        if is_cancelled.load(Ordering::Relaxed) || cancelled() {
+            return Err(DevelopError::Cancelled);
+        }
+    }
+
+    Ok(clipped)
+}
+
+#[inline]
+fn compute_clipping_mask_row(
+    samples: &[f32],
+    w: usize,
+    h: usize,
+    cfa: &Cfa,
+    y: usize,
+    row_out: &mut [[bool; 3]],
+) {
+    if y >= 2 && y + 2 < h && w >= 5 {
+        for x in 0..2 {
+            compute_clipping_mask_pixel_reflected(samples, w, h, cfa, x, y, &mut row_out[x]);
+        }
+        let r0 = (y - 2) * w;
+        let r1 = (y - 1) * w;
+        let r2 = y * w;
+        let r3 = (y + 1) * w;
+        let r4 = (y + 2) * w;
+        for x in 2..w - 2 {
+            let mut mask = [false; 3];
+            for (dy, row_offset) in [(-2, r0), (-1, r1), (0, r2), (1, r3), (2, r4)] {
+                let sy = (y as isize + dy) as usize;
+                for dx in -2..=2 {
+                    let sx = (x as isize + dx) as usize;
+                    if samples[row_offset + sx] >= 0.999 {
+                        mask[cfa.color_at(sx, sy) as usize] = true;
+                    }
+                }
+            }
+            mask[cfa.color_at(x, y) as usize] = samples[r2 + x] >= 0.999;
+            row_out[x] = mask;
+        }
+        for x in (w - 2)..w {
+            compute_clipping_mask_pixel_reflected(samples, w, h, cfa, x, y, &mut row_out[x]);
+        }
+    } else {
+        for x in 0..w {
+            compute_clipping_mask_pixel_reflected(samples, w, h, cfa, x, y, &mut row_out[x]);
+        }
+    }
+}
+
+#[inline]
+fn compute_clipping_mask_pixel_reflected(
+    samples: &[f32],
+    w: usize,
+    h: usize,
+    cfa: &Cfa,
+    x: usize,
+    y: usize,
+    out: &mut [bool; 3],
+) {
+    let mut mask = [false; 3];
+    for dy in -2..=2 {
+        let sy = reflect(y as isize + dy, h);
+        let row_offset = sy * w;
+        for dx in -2..=2 {
+            let sx = reflect(x as isize + dx, w);
+            if samples[row_offset + sx] >= 0.999 {
+                mask[cfa.color_at(sx, sy) as usize] = true;
+            }
+        }
+    }
+    mask[cfa.color_at(x, y) as usize] = samples[y * w + x] >= 0.999;
+    *out = mask;
+}
+
 /// Develop full sensor data, then crop/orient. Admission covers output plus a
 /// conservative scratch bound (not allocator/driver overhead). Cancellation
 /// is observed between stages and at rows/tiles of the expensive kernels.
@@ -213,7 +385,8 @@ pub fn develop_raw(
     }
     // Peak full-resolution storage: samples (4), clipping (3), RGB (12),
     // and output RGBA (16) = 35 bytes/sample. Other stages peak lower:
-    // X-Trans adds green (4); list3 adds flattened RGB (12); highlight
+    // X-Trans adds green (4); list3 adds flattened RGB (12) or a
+    // warp RGB copy (12) plus a clipping-mask copy (3); highlight
     // reconstruction adds 13 bytes per coarse pyramid pixel. The sum of
     // ceil-halved pyramid areas is bounded by n plus logarithmic edge terms,
     // including one-dimensional sensors. The 8 MiB margin covers these terms,
@@ -255,27 +428,15 @@ pub fn develop_raw(
     }
     // Capture clipping in sensor units before gain maps or WB. Corrected HDR
     // above one is not evidence that the sensor clipped.
-    let mut clipped = vec![[false; 3]; n];
-    for y in 0..h {
-        if cancelled() {
-            return Err(DevelopError::Cancelled);
+    let mut clipped = if options.recover_highlights {
+        if samples.iter().any(|&s| s >= 0.999) {
+            compute_clipping_mask(&samples, w, h, &cfa, cancelled)?
+        } else {
+            vec![[false; 3]; n]
         }
-        for x in 0..w {
-            for dy in -2..=2 {
-                for dx in -2..=2 {
-                    let sx = reflect(x as isize + dx, w);
-                    let sy = reflect(y as isize + dy, h);
-                    let c = cfa.color_at(sx, sy) as usize;
-                    clipped[y * w + x][c] |= samples[sy * w + sx] >= 0.999;
-                }
-            }
-        }
-    }
-    for y in 0..h {
-        for x in 0..w {
-            clipped[y * w + x][cfa.color_at(x, y) as usize] = samples[y * w + x] >= 0.999;
-        }
-    }
+    } else {
+        Vec::new()
+    };
     opcodes::apply_list(&lists.list2, &mut samples, w, h, 1, Some(&cfa), 1.0)?;
     // Per-photosite WB, including G2, before demosaic. Do not clamp HDR.
     for y in 0..h {
@@ -315,11 +476,16 @@ pub fn develop_raw(
                 p[c] /= wb[c];
             }
         }
-        opcodes::apply_list3_with_aspect(
+        opcodes::apply_list3_with_clipping(
             &lists.list3,
             &mut rgb,
             cancelled,
             lists.pixel_aspect.unwrap_or(1.0),
+            if options.recover_highlights {
+                Some(clipped.as_mut_slice())
+            } else {
+                None
+            },
         )?;
         for p in &mut rgb.data {
             for c in 0..3 {

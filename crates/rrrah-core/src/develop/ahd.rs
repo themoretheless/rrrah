@@ -23,17 +23,109 @@ const MARGIN: usize = 6;
 pub(crate) fn ahd(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, DevelopError> {
     let (w, h) = (m.w, m.h);
     let mut out = Rgb32f::new(w, h);
-    for y0 in (0..h).step_by(TILE) {
-        for x0 in (0..w).step_by(TILE) {
-            if cancelled() {
-                return Err(DevelopError::Cancelled);
+    if w == 0 || h == 0 {
+        return Ok(out);
+    }
+    let num_bands = h.div_ceil(TILE);
+    let workers = std::thread::available_parallelism()
+        .map_or(1, usize::from)
+        .min(num_bands)
+        .max(1);
+
+    if workers <= 1 {
+        for y0 in (0..h).step_by(TILE) {
+            for x0 in (0..w).step_by(TILE) {
+                if cancelled() {
+                    return Err(DevelopError::Cancelled);
+                }
+                let (tw, th) = (TILE.min(w - x0), TILE.min(h - y0));
+                let px = tile(m, x0, y0, tw, th);
+                for y in 0..th {
+                    out.data[(y0 + y) * w + x0..(y0 + y) * w + x0 + tw]
+                        .copy_from_slice(&px[y * tw..(y + 1) * tw]);
+                }
             }
-            let (tw, th) = (TILE.min(w - x0), TILE.min(h - y0));
-            let px = tile(m, x0, y0, tw, th);
-            for y in 0..th {
-                out.data[(y0 + y) * w + x0..(y0 + y) * w + x0 + tw]
-                    .copy_from_slice(&px[y * tw..(y + 1) * tw]);
+        }
+    } else {
+        use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
+        use std::sync::Mutex;
+
+        let is_cancelled = AtomicBool::new(false);
+        let next = AtomicUsize::new(0);
+        let slots: Vec<_> = out
+            .data
+            .chunks_mut(TILE * w)
+            .map(|chunk| Mutex::new(Some(chunk)))
+            .collect();
+
+        let do_work = || loop {
+            if is_cancelled.load(Ordering::Relaxed) {
+                break;
             }
+            let band_idx = next.fetch_add(1, Ordering::Relaxed);
+            if band_idx >= num_bands {
+                break;
+            }
+            let band = slots[band_idx]
+                .lock()
+                .expect("unit slot lock is never poisoned")
+                .take()
+                .expect("each band is claimed exactly once");
+            let y0 = band_idx * TILE;
+            let th = TILE.min(h - y0);
+            for x0 in (0..w).step_by(TILE) {
+                if is_cancelled.load(Ordering::Relaxed) {
+                    break;
+                }
+                let tw = TILE.min(w - x0);
+                let px = tile(m, x0, y0, tw, th);
+                for y in 0..th {
+                    band[y * w + x0..y * w + x0 + tw]
+                        .copy_from_slice(&px[y * tw..(y + 1) * tw]);
+                }
+            }
+        };
+
+        std::thread::scope(|scope| {
+            let shared_worker = &do_work;
+            for worker_index in 1..workers {
+                let _ = std::thread::Builder::new()
+                    .name(format!("rrrah-ahd-{worker_index}"))
+                    .spawn_scoped(scope, shared_worker);
+            }
+            loop {
+                if cancelled() {
+                    is_cancelled.store(true, Ordering::Relaxed);
+                    break;
+                }
+                let band_idx = next.fetch_add(1, Ordering::Relaxed);
+                if band_idx >= num_bands {
+                    break;
+                }
+                let band = slots[band_idx]
+                    .lock()
+                    .expect("unit slot lock is never poisoned")
+                    .take()
+                    .expect("each band is claimed exactly once");
+                let y0 = band_idx * TILE;
+                let th = TILE.min(h - y0);
+                for x0 in (0..w).step_by(TILE) {
+                    if cancelled() {
+                        is_cancelled.store(true, Ordering::Relaxed);
+                        break;
+                    }
+                    let tw = TILE.min(w - x0);
+                    let px = tile(m, x0, y0, tw, th);
+                    for y in 0..th {
+                        band[y * w + x0..y * w + x0 + tw]
+                            .copy_from_slice(&px[y * tw..(y + 1) * tw]);
+                    }
+                }
+            }
+        });
+
+        if cancelled() || is_cancelled.load(Ordering::Relaxed) {
+            return Err(DevelopError::Cancelled);
         }
     }
     Ok(out)

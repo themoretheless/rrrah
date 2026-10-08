@@ -928,6 +928,71 @@ fn decode_lsb_packed_row(
     bits_per_sample: u8,
 ) -> Result<(), DecodeError> {
     debug_assert!(matches!(bits_per_sample, 9..=15));
+    if bits_per_sample == 12 {
+        let groups = row_output.len() / 2;
+        let grouped_samples = groups * 2;
+        let grouped_bytes = groups * 3;
+        if row_bytes.len() >= grouped_bytes {
+            let (grouped_output, tail_output) = row_output.split_at_mut(grouped_samples);
+            for (bytes, samples) in row_bytes[..grouped_bytes]
+                .chunks_exact(3)
+                .zip(grouped_output.chunks_exact_mut(2))
+            {
+                let b0 = u16::from(bytes[0]);
+                let b1 = u16::from(bytes[1]);
+                let b2 = u16::from(bytes[2]);
+                samples[0] = b0 | ((b1 & 0x0f) << 8);
+                samples[1] = (b1 >> 4) | (b2 << 4);
+            }
+            if tail_output.is_empty() {
+                return Ok(());
+            }
+            return decode_lsb_packed_bytewise(
+                &row_bytes[grouped_bytes..],
+                tail_output,
+                bits_per_sample,
+            );
+        }
+    } else if bits_per_sample == 14 {
+        let groups = row_output.len() / 4;
+        let grouped_samples = groups * 4;
+        let grouped_bytes = groups * 7;
+        if row_bytes.len() >= grouped_bytes {
+            let (grouped_output, tail_output) = row_output.split_at_mut(grouped_samples);
+            for (bytes, samples) in row_bytes[..grouped_bytes]
+                .chunks_exact(7)
+                .zip(grouped_output.chunks_exact_mut(4))
+            {
+                let b0 = u16::from(bytes[0]);
+                let b1 = u16::from(bytes[1]);
+                let b2 = u16::from(bytes[2]);
+                let b3 = u16::from(bytes[3]);
+                let b4 = u16::from(bytes[4]);
+                let b5 = u16::from(bytes[5]);
+                let b6 = u16::from(bytes[6]);
+                samples[0] = b0 | ((b1 & 0x3f) << 8);
+                samples[1] = (b1 >> 6) | (b2 << 2) | ((b3 & 0x0f) << 10);
+                samples[2] = (b3 >> 4) | (b4 << 4) | ((b5 & 0x03) << 12);
+                samples[3] = (b5 >> 2) | (b6 << 6);
+            }
+            if tail_output.is_empty() {
+                return Ok(());
+            }
+            return decode_lsb_packed_bytewise(
+                &row_bytes[grouped_bytes..],
+                tail_output,
+                bits_per_sample,
+            );
+        }
+    }
+    decode_lsb_packed_bytewise(row_bytes, row_output, bits_per_sample)
+}
+
+fn decode_lsb_packed_bytewise(
+    row_bytes: &[u8],
+    row_output: &mut [u16],
+    bits_per_sample: u8,
+) -> Result<(), DecodeError> {
     let mut reservoir = 0_u64;
     let mut reservoir_bits = 0_u8;
     let mut next_byte = 0_usize;
