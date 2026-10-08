@@ -110,11 +110,29 @@ impl<'a> Rgba8View<'a> {
         hash.update(&PIXEL_RECIPE_VERSION.to_le_bytes());
         hash.update(&self.width.to_le_bytes());
         hash.update(&self.height.to_le_bytes());
-        for (index, pixel) in self.bytes.as_chunks::<4>().0.iter().enumerate() {
-            if index.is_multiple_of(4096) && cancel() {
+        let chunks = self.bytes.as_chunks::<4>().0;
+        let mut buffer = [0_u8; 4096 * 4];
+        for (chunk_idx, chunk) in chunks.chunks(4096).enumerate() {
+            if cancel() {
                 return Err(PixelError::Cancelled);
             }
-            hash.update(if pixel[3] == 0 { &[0, 0, 0, 0] } else { pixel });
+            let byte_start = chunk_idx * 4096 * 4;
+            let byte_end = byte_start + chunk.len() * 4;
+            let has_transparent = chunk.iter().any(|p| p[3] == 0);
+            if has_transparent {
+                let mut buf_idx = 0;
+                for pixel in chunk {
+                    if pixel[3] == 0 {
+                        buffer[buf_idx..buf_idx + 4].copy_from_slice(&[0, 0, 0, 0]);
+                    } else {
+                        buffer[buf_idx..buf_idx + 4].copy_from_slice(pixel);
+                    }
+                    buf_idx += 4;
+                }
+                hash.update(&buffer[..buf_idx]);
+            } else {
+                hash.update(&self.bytes[byte_start..byte_end]);
+            }
         }
         if cancel() {
             return Err(PixelError::Cancelled);
@@ -132,6 +150,9 @@ impl<'a> Rgba8View<'a> {
         }
         if self.width != other.width || self.height != other.height {
             return Ok(false);
+        }
+        if self.bytes == other.bytes {
+            return Ok(true);
         }
         for (index, (a, b)) in self
             .bytes

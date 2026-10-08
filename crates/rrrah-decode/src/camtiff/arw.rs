@@ -666,39 +666,49 @@ fn decode_arw2_row(row_bytes: &[u8], row_output: &mut [u16]) -> Result<(), Decod
     let width = row_output.len();
     debug_assert!(width >= 32 && width.is_multiple_of(32));
     debug_assert_eq!(row_bytes.len(), width);
-    let mut bits = LsbBitReader::new(row_bytes);
+    if row_bytes.len() < width {
+        return Err(error("ARW 2.x row shorter than expected"));
+    }
     let mut col = 0_usize;
+    let mut byte_offset = 0_usize;
     while col < width {
-        let max = bits.get_bits(11)?;
-        let min = bits.get_bits(11)?;
-        let imax = bits.get_bits(4)?;
-        let imin = bits.get_bits(4)?;
+        if byte_offset + 16 > row_bytes.len() {
+            return Err(error("ARW 2.x unexpected EOF"));
+        }
+        let block_bytes: [u8; 16] = row_bytes[byte_offset..byte_offset + 16]
+            .try_into()
+            .map_err(|_| error("ARW 2.x block slice failed"))?;
+        byte_offset += 16;
+        let block = u128::from_le_bytes(block_bytes);
+        let max = (block & 0x7ff) as u32;
+        let min = ((block >> 11) & 0x7ff) as u32;
+        let imax = ((block >> 22) & 0xf) as usize;
+        let imin = ((block >> 26) & 0xf) as usize;
         if imax == imin {
             return Err(error(
                 "ARW 2.x block names the same pixel as both min and max (corrupt payload)",
             ));
         }
-        let imax = usize::try_from(imax).map_err(|_| error("ARW 2.x block index overflows usize"))?;
-        let imin = usize::try_from(imin).map_err(|_| error("ARW 2.x block index overflows usize"))?;
         // Exponent from the block spread, exactly as dcraw/rawspeed.
-        let spread = i32::try_from(max).map_err(|_| error("ARW 2.x block max overflows i32"))?
-            - i32::try_from(min).map_err(|_| error("ARW 2.x block min overflows i32"))?;
+        let spread = (max as i32) - (min as i32);
         let mut shift = 0_u32;
         while shift < 4 && (0x80_i32 << shift) <= spread {
             shift += 1;
         }
+        let mut delta_idx = 0_u32;
         for index in 0..16_usize {
             let value = if index == imax {
                 max
             } else if index == imin {
                 min
             } else {
-                ((bits.get_bits(7)? << shift) + min).min(0x7ff)
+                let delta = ((block >> (30 + delta_idx * 7)) & 0x7f) as u32;
+                delta_idx += 1;
+                ((delta << shift) + min).min(0x7ff)
             };
             // 11-bit values scaled to 12 bits; the tone curve dcraw/LibRaw
             // apply here is the identity for Sony files.
-            row_output[col + 2 * index] =
-                u16::try_from(value << 1).map_err(|_| error("ARW 2.x pixel overflows u16"))?;
+            row_output[col + 2 * index] = (value << 1) as u16;
         }
         col += if col & 1 == 1 { 31 } else { 1 };
     }
@@ -1022,42 +1032,6 @@ fn packed_row_bytes(width: usize, bits_per_sample: u8) -> Result<usize, DecodeEr
         .ok_or_else(|| error("packed row byte length overflows"))
 }
 
-/// Continuous LSB-first bit reader over one ARW 2.x row.
-#[derive(Debug)]
-struct LsbBitReader<'a> {
-    bytes: &'a [u8],
-    bit_position: usize,
-}
-
-impl<'a> LsbBitReader<'a> {
-    const fn new(bytes: &'a [u8]) -> Self {
-        Self {
-            bytes,
-            bit_position: 0,
-        }
-    }
-
-    fn get_bits(&mut self, count: u8) -> Result<u32, DecodeError> {
-        debug_assert!(count <= 32);
-        let mut value = 0_u32;
-        let mut filled = 0_u8;
-        while filled < count {
-            let byte_index = self.bit_position / 8;
-            let bit_index = u8::try_from(self.bit_position % 8).expect("a remainder modulo 8 fits u8");
-            let byte = self
-                .bytes
-                .get(byte_index)
-                .copied()
-                .ok_or_else(|| error("truncated ARW 2.x row bit stream"))?;
-            let take = (8 - bit_index).min(count - filled);
-            let mask = (1_u16 << take) - 1;
-            value |= u32::from(u16::from(byte >> bit_index) & mask) << filled;
-            self.bit_position += usize::from(take);
-            filled += take;
-        }
-        Ok(value)
-    }
-}
 
 #[cfg(test)]
 mod tests {
